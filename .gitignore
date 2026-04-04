@@ -1,0 +1,34 @@
+# Allie — Private Repository
+# What stays local and never goes to GitHub
+
+# Inbox folder is eliminated — see readmes/path-list.md for document index
+inbox/
+
+# Large local knowledge base (too big for repo; path-list.md points to files)
+knowledge/
+
+# Raw source material and archives
+sources/
+archive/
+
+# Allie's runtime internals — session state, logs, workspace, scratchpad
+allie/carryon/
+allie/inbox/
+allie/logs/
+allie/workspace/
+allie/index/
+
+# Athena's private key — NEVER commits
+athena_private.pem
+**/athena_private.pem
+
+# macOS
+.DS_Store
+**/.DS_Store
+~$*
+**/.Spotlight-V100/
+**/.fseventsd/
+**/.Trashes/
+
+# Backup snapshots (large; Athena keeps these locally)
+**/agents_backup/
