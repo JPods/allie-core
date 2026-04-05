@@ -85,6 +85,27 @@ Full extracts and deep research files live in `/Volumes/Allie/knowledge/`. They 
 
 ---
 
+## Encrypted Secure Files
+
+Files encrypted with Athena's key. Stored in `/Volumes/Allie/`. Decrypt with:
+```bash
+/Users/williamjames/.athena_venv/bin/python3 -c "
+import base64, hashlib, json
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.fernet import Fernet
+priv = load_pem_private_key(open('/Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/athena/athena_private.pem','rb').read(), password=None)
+fern = Fernet(base64.urlsafe_b64encode(hashlib.sha256(priv.private_bytes_raw()).digest()))
+bundle = json.load(open('/Volumes/Allie/leftear.enc'))
+print(fern.decrypt(base64.b64decode(bundle['ciphertext'])).decode())
+"
+```
+
+| File | Source | Contents |
+|------|--------|----------|
+| `leftear.enc` | `01_WebClerk/DesktopHosting/leftear.txt` | Master credential and password reference |
+
+---
+
 ## How to Add
 
 Append a row to the relevant section. Format:
