@@ -131,6 +131,43 @@ disown
 
 ---
 
+## Step 6 — Issue Card Binding
+
+Every pod must be bound to its hardware before it can run normally. The binding is an HMAC-SHA256 signature that ties the SD card to the Pi's MAC address. If the card is moved to a different Pi, the pod enters observer mode and cannot move.
+
+**Run from Mac (after pod is on the network):**
+```bash
+python3 /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/issue_binding.py <podNumber>
+```
+
+Example for POD_3:
+```bash
+python3 /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/issue_binding.py 3
+```
+
+This:
+1. Reads the fleet JSON (`fleet/pod_3.json`) — gets the MAC, podColor
+2. Computes HMAC-SHA256 over `MAC:podNumber:podColor:timestamp` using the fleet secret
+3. Writes `card_binding.json` locally and scps it to the pod
+4. Pushes `.fleet_secret` to the pod (needed for binding verification on boot)
+5. Records the issuance in `pod_3.json` under `agent_notes.Allie`
+
+**Dry run (compute but don't push):**
+```bash
+python3 /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/issue_binding.py 3 --dry-run
+```
+
+**What happens on the pod at boot:**
+- `BOUND_OK` — MAC matches, HMAC valid → normal operation
+- `BOUND_MISMATCH` — card moved to a different Pi → observer mode (MQTT only, no movement, RED flash 10×)
+- `HMAC_INVALID` — binding file tampered → observer mode
+- `UNBOUND` — no binding yet → runs normally, reports to Allie for issuance
+- `ERROR` — cannot read MAC → observer mode
+
+**Allie is the only authority that can issue a valid binding.** The fleet secret lives at `fleet/.fleet_secret` — never commit it to git.
+
+---
+
 ## Hard-Won Lessons (2026-04-05)
 
 These took significant time to discover. Do not skip them.
@@ -257,3 +294,6 @@ MQTT broker: **192.168.1.252** (Bill's Mac)
 | Multi-colored NeoPixels on boot | launcher.py running — kill it before blinking manually |
 | SSH permission denied | Clear known_hosts entry for that IP |
 | mosquitto connection refused | Add `listener 1883` + `allow_anonymous true` to mosquitto.conf |
+| Pod visible in Presenter but won't move | Check card binding status — BOUND_MISMATCH or HMAC_INVALID means observer mode; re-run `issue_binding.py` |
+| `issue_binding.py` says no lastSeenIP | Run `update_pod_ips.sh` first so the fleet JSON has the current IP |
+| UNBOUND after binding was issued | Fleet secret not on pod — re-run `issue_binding.py` (it pushes the secret too) |
