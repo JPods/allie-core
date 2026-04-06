@@ -18,9 +18,14 @@ allie/logs/
 allie/workspace/
 allie/index/
 
-# Athena's private key — NEVER commits
+# Athena's private key and trustee documents — NEVER commit
 athena_private.pem
 **/athena_private.pem
+**/athena/escrow/
+**/cred_names.txt
+
+# credentials.enc IS committed — it is Athena-encrypted and safe in the private repo
+# cred_names.txt IS committed — plaintext names only, no values
 
 # macOS
 .DS_Store

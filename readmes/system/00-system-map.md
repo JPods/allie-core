@@ -221,12 +221,16 @@ flowchart LR
 
 Patent US 6,810,817. Three behavioral roles; every device on the network can manifest any role.
 
+A JPods deployment is a **federation of Local Area Networks**. Each LAN is a physically bounded guideway section with its own MQTT broker, its own pod fleet, and its own Natalie. Natalies negotiate peer-to-peer at LAN boundaries — no central dispatcher above them.
+
+**Today:** one LAN (scale model). **Tomorrow:** many LANs, boundary negotiation between Natalies.
+
 ```mermaid
 flowchart TB
-    subgraph PATENT["US Patent 6,810,817 — Distributed Intelligent Transport"]
+    subgraph LAN_A["LAN A — e.g. Campus Loop\n(and every future LAN follows this same pattern)"]
         direction TB
 
-        subgraph NATALIE_BOX["Natalie — Router / Scheduler\nClaims 8, 9, 11, 12, 13"]
+        subgraph NATALIE_BOX["Natalie — Router / Scheduler\nClaims 8, 9, 11, 12, 13\nRuns on Mac · podPresenter · today: one Natalie per deployment"]
             direction LR
             REQ["Receive\ntrip request"]
             NEG["Negotiate\navailability"]
@@ -252,16 +256,30 @@ flowchart TB
             EZONE --- ACCUM --- PREPOS
         end
 
-        MQTT_BUS(["MQTT Bus\nAll state is distributed"])
+        MQTT_BUS(["MQTT Bus — one per LAN\nAll state is distributed"])
 
         NATALIE_BOX <-->|"START · ACTION\nRESEND"| MQTT_BUS
         NORA_BOX <-->|"telemetry\nezone events"| MQTT_BUS
         NOELLE_BOX <-->|"ezone state\navailability"| MQTT_BUS
     end
 
+    subgraph LAN_B["LAN B — e.g. Hub Station\n(future — same structure)"]
+        NATALIE_B["Natalie B\nRouter"]
+        MQTT_B(["MQTT Bus B"])
+        NATALIE_B <--> MQTT_B
+    end
+
+    BOUNDARY(["Boundary Point\nphysical junction\nbetween LANs"])
+
+    NATALIE_BOX <-->|"peer negotiation\ntrip handoff\nno dispatcher above"| BOUNDARY
+    NATALIE_B <-->|"peer negotiation"| BOUNDARY
+
     PEC["PEC Formula\nvehicle mass efficiency\nPEC = (vehicle+payload)² / payload²\nCar: 676 · JPod target: <10"]
     NATALIE_BOX -.->|"trip logs · billing\nPOST /wcapi/save/"| WCAPI3["WebClerk\nwcapi"]
     NORA_BOX -.-> PEC
+
+    ALLIE_NET["🤖 Allie\nMac discovery layer\nupdate_pod_ips.sh → podIP.json\ntells Natalie who is on the network\nbefore every launch"]
+    ALLIE_NET -->|"MAC discovery\nnetwork handoff"| NATALIE_BOX
 ```
 
 ---

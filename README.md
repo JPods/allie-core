@@ -32,18 +32,36 @@ Any agent may edit any file in `readmes/agents/` at any time for anything that a
 
 ---
 
-## Athena's Integrity Protocol
+## Athena's Backup Protocol
 
-After any editing session, Athena runs:
+Athena backs up to four locations automatically every night at 11pm:
+
+| Location | Path |
+|----------|------|
+| Local | `athena/agents_backup/TIMESTAMP/` |
+| iCloud | `~/Library/Mobile Documents/com~apple~CloudDocs/Allie/` |
+| Google Drive | auto-detected, `Allie/TIMESTAMP/` |
+| GitHub | this repo, signed commit |
+
+**Install the schedule (run once):**
 ```bash
 cd /Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/athena
-./backup_agents.sh
+./install_schedule.sh
 ```
-This hashes all agent files, signs the manifest with Athena's Ed25519 private key, and updates `readmes/agents/athena_hashes.json`. That signed file is committed to this repo.
 
-To verify the current state of agent files:
+**Run manually at any time:**
 ```bash
-./verify_agents.sh           # report changes
+./full_backup.sh
+```
+
+**Check backup status:**
+```bash
+./full_backup.sh --status
+```
+
+**Verify agent file integrity:**
+```bash
+./verify_agents.sh           # report changes since last signed backup
 ./verify_agents.sh --merge   # show diffs
-./verify_agents.sh --restore # restore from signed backup
+./verify_agents.sh --restore # restore from Athena's signed backup
 ```

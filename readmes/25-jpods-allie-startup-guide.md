@@ -3,8 +3,9 @@
 When Bill says "help me start the robots" or "let's set up for a demo" — follow this sequence.
 Run each diagnostic step yourself, report what you find, and tell Bill exactly what to do next.
 
-**Pi password: `1111pass`** (all pods, all demos)
+**Pi password: `123456`** (all pods)
 **Pi username: `pi`**
+**Fleet files:** `/Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/`
 
 ---
 
@@ -29,6 +30,12 @@ brew services list | grep mosquitto
 - Whether mosquitto is running (start it if not: `brew services start mosquitto`)
 
 **If Pi already appears in arp -a:** skip to Phase 3.
+
+**Run the IP updater** — always do this before launching podPresenter:
+```bash
+bash /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/update_pod_ips.sh
+```
+This scans the network, matches Pi MACs to known pods, updates `lastSeenIP` in each fleet JSON, and rewrites `podIP.json` in podPresenter with the current IPs. Works on any network.
 
 ---
 

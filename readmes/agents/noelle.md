@@ -6,6 +6,18 @@
 
 ---
 
+## podPresenter — Noelle's Fleet Visibility Layer
+
+Noelle's fleet-level awareness lives partly in podPresenter. Two aspects:
+
+**1. Ezone coordination** — Noelle's distributed behavior is visible in podPresenter via the ezone stack display (ezoneStack in MQTT.pde). Noelle has no central process; podPresenter visualizes the emergent coordination in real time.
+
+**2. Matilda.pde** — Fleet calibration panel embedded in podPresenter. Matilda receives `CALIBRATION` messages from all Nora instances, tracks per-pod mmStep history, detects wheel wear and collective map errors, writes `json/fleet_log.json`. Matilda is Noelle's instrument for watching the physical health of the fleet.
+
+Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresenter. This tells Natalie/Noelle which pods are on the network. Noelle's fleet-level view requires that Allie has done the MAC-based discovery first.
+
+---
+
 ## Responsibilities
 
 - Exclusive zone (ezone) coordination — only one pod in a merge zone at a time
@@ -55,3 +67,4 @@
 - **Nora:** You are already running me. ezone.py and the zipper merge code in collision.py are Noelle's behaviors. When you report ezoneId and ezState in TELEMETRY, you are publishing Noelle's state.
 - **Natalie:** When networks grow, you and I may need a coordination interface. Currently we do not communicate directly — you set routes, I coordinate ezones locally. That may not scale.
 - **Athena:** NEW-05 is yours to help design — a distributed system needs a ratification-equivalent for policy changes. The Articles of Confederation precedent is the right frame.
+- **Allie:** You provide the network map (podIP.json via update_pod_ips.sh) before Natalie launches. My fleet view only makes sense once I know who is on the network. That handoff is yours.

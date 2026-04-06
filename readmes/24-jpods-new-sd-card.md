@@ -2,7 +2,7 @@
 
 How to build a JPods Pi Zero from a blank SD card to a running pod.
 
-**If you're doing this after time away — ask Allie.** She has the full system context and can walk you through it.
+**If you're doing this after time away — ask Allie.** She has the full system context and can walk you through it. Fleet state files are at `/Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/`.
 
 ---
 
@@ -13,217 +13,235 @@ How to build a JPods Pi Zero from a blank SD card to a running pod.
 | SD card | 16GB minimum, Class 10 or faster |
 | SD card reader | Built-in Mac slot or USB adapter |
 | Raspberry Pi Imager | Free — download from raspberrypi.com/software |
-| Mac on 192.168.1.x WiFi | Same network as the MQTT broker |
-| JPods OS files | `/Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/jpod_OS/` |
+| Mac on JPods WiFi (2.4GHz) | Pi Zero W is 2.4GHz only — do NOT use JPods_5G |
+| JPods OS files | `/Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/` |
 
 ---
 
 ## Step 1 — Flash the SD Card
 
-**Download and open Raspberry Pi Imager.**
+Open Raspberry Pi Imager.
 
-- **Device:** Raspberry Pi Zero / Zero W (use Zero 2W if that's the model)
-- **OS:** Raspberry Pi OS Lite (32-bit) — no desktop needed, saves memory
-  - Choose OS → Raspberry Pi OS (other) → Raspberry Pi OS Lite (32-bit)
+- **Device:** Raspberry Pi Zero / Zero W
+- **OS:** Raspberry Pi OS Lite (32-bit)
 - **Storage:** Select your SD card
 
-**Before clicking Write — click the gear icon (Advanced Settings):**
+**Before clicking Write — click the gear (Advanced Settings):**
 
 | Setting | Value |
 |---------|-------|
-| Hostname | `jpods-pod1` (or pod2, pod3...) |
-| Enable SSH | ✓ — Use password authentication |
+| Hostname | `raspberrypi` |
+| Enable SSH | ✓ — password authentication |
 | Username | `pi` |
-| Password | `1111pass` — standard demo password for all JPods pods |
-| WiFi SSID | your network name |
-| WiFi Password | your network password |
+| Password | `123456` |
+| WiFi SSID | `JPods` |
+| WiFi Password | `Pinkcoconut637` |
 | WiFi Country | US |
-| Timezone | America/New_York (or your zone) |
 
-Click **Save** then **Write**. Takes 3-5 minutes.
+Click **Save** then **Write**.
 
 ---
 
-## Step 2 — Configure USB Gadget Mode
+## Step 2 — Write the Provision File
 
-After flashing, eject and reinsert the SD card. The `boot` partition will mount on your Mac.
+After flashing, eject and reinsert. The `bootfs` partition mounts on Mac.
 
-The partition mounts as `/Volumes/bootfs` on Mac.
-
-**Add USB gadget overlay to config.txt:**
+**Write jpods_provision.json:**
 ```bash
-echo "dtoverlay=dwc2" >> /Volumes/bootfs/config.txt
+cat > /Volumes/bootfs/jpods_provision.json << 'EOF'
+{
+  "podNumber": 3,
+  "MQTTHost":  "192.168.1.252",
+  "podColor":  "YELLOW",
+  "upgrade":   true
+}
+EOF
 ```
 
-**Add gadget module to cmdline.txt** (appends to the single line):
+Colors: `RED=0, GREEN=1, BLUE=2, YELLOW=3, MAGENTA=4, CYAN=5, ORANGE=6`
+
+**Copy upgrade files:**
 ```bash
-sed -i '' 's/$/ modules-load=dwc2,g_ether/' /Volumes/bootfs/cmdline.txt
+mkdir -p /Volumes/bootfs/jpods_upgrade
+cp /Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/*.py /Volumes/bootfs/jpods_upgrade/
+cp /Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/*.json /Volumes/bootfs/jpods_upgrade/
 ```
 
-**Enable SSH:**
-```bash
-touch /Volumes/bootfs/ssh
-```
-
-**Verify before ejecting:**
-```bash
-tail -3 /Volumes/bootfs/config.txt        # should show dtoverlay=dwc2
-cat /Volumes/bootfs/cmdline.txt           # should end with modules-load=dwc2,g_ether
-ls /Volumes/bootfs/ssh                    # should exist
-```
-
-**Eject both partitions** before removing the SD card.
+**Eject and insert into pod.**
 
 ---
 
 ## Step 3 — First Boot
 
-1. Insert SD card into Pi Zero
-2. Plug USB data cable into Pi Zero **USB port** (center port — not PWR IN)
-3. Plug other end into Mac
-4. Wait **60 seconds** — Pi Zero boots slowly
+The Pi Imager WiFi config applies on first boot. When the pod joins the network:
 
-**Find the Pi:**
 ```bash
-arp -a | grep "192.168.1"
-# or
-ping -c1 jpods-pod1.local
-```
-
-**SSH in:**
-```bash
-ssh pi@jpods-pod1.local
-# or
-ssh pi@192.168.1.XXX
+# Scan for Pi devices (b8:27:eb MAC prefix)
+for i in $(seq 1 254); do ping -c1 -W1 192.168.1.$i &>/dev/null & done
+wait
+arp -a | grep -i "b8:27:eb"
 ```
 
 ---
 
-## Step 4 — Install Dependencies
+## Step 4 — Bootstrap jpod_OS
 
-On the Pi, run the JPods setup script. First, copy it or run directly:
+If the pod is a fresh flash, jpod_OS may not exist. Push it directly:
 
 ```bash
-# Update system first
-sudo apt update && sudo apt upgrade -y
-
-# Run JPods setup
-cd /home/pi
-bash EasySetup.sh
+sshpass -p '123456' ssh pi@<IP> "mkdir -p /home/pi/JPodsSM_RPi/jpod_OS/hardware"
+sshpass -p '123456' scp /Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/*.py pi@<IP>:/home/pi/JPodsSM_RPi/jpod_OS/
+sshpass -p '123456' scp /Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/*.json pi@<IP>:/home/pi/JPodsSM_RPi/jpod_OS/
+sshpass -p '123456' scp /Volumes/Allie/allie/inbox/JPodsSM_RPi/jpod_OS/hardware/*.json pi@<IP>:/home/pi/JPodsSM_RPi/jpod_OS/hardware/
 ```
 
-Or install manually:
+Then run provision and configure rc.local:
+
 ```bash
-sudo apt install python3 python3-pip i2c-tools python3-smbus -y
-sudo pip install rpi_ws281x adafruit-circuitpython-neopixel
-sudo pip install adafruit-blinka
-sudo pip install adafruit-circuitpython-vl6180x
-sudo pip install pyserial pypng
-sudo pip install paho-mqtt==1.6.1
+sshpass -p '123456' ssh pi@<IP> "
+  cd /home/pi/JPodsSM_RPi/jpod_OS && sudo python3 -c 'import sys; sys.path.insert(0,\".\"); import provision; print(provision.apply())'
+  sudo sed -i '/launcher/d' /etc/rc.local
+  sudo sed -i 's|^exit 0|cd /home/pi/JPodsSM_RPi/jpod_OS \&\& sudo python3 launcher.py N \"192.168.1.252\" \&\nexit 0|' /etc/rc.local
+"
 ```
 
-**Enable I2C:**
+Replace `N` with the pod number.
+
+---
+
+## Step 5 — Identify the Pod
+
+Blink the NeoPixels to confirm which physical pod you're talking to:
+
 ```bash
-sudo raspi-config
-# Interface Options → I2C → Enable
+sshpass -p '123456' ssh pi@<IP> "
+  sudo python3 -c \"
+import board, neopixel
+from time import sleep, time
+px = neopixel.NeoPixel(board.D12, 8, brightness=0.5)
+end = time() + 20
+while time() < end:
+    px.fill((255,255,255)); px.show(); sleep(0.4)
+    px.fill((0,0,0)); px.show(); sleep(0.2)
+px.fill((0,0,0)); px.show()
+\" &
+disown
+"
 ```
 
 ---
 
-## Step 5 — Copy JPods OS Files
+## Hard-Won Lessons (2026-04-05)
 
-From your Mac, copy the jpod_OS folder to the Pi:
+These took significant time to discover. Do not skip them.
 
+### WiFi on Previously-Used Cards
+
+Cards that have been in a running pod already have `/etc/wpa_supplicant/wpa_supplicant.conf` on the rootfs. They will join WiFi without any extra steps. Just write provision.json and eject.
+
+Cards that have NEVER connected need WiFi written to their rootfs. Two methods — use the one that works for the card's Pi OS version:
+
+**Method A — wpa_supplicant.conf on /boot (most reliable):**
 ```bash
-scp -r /Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/jpod_OS/ pi@jpods-pod1.local:/home/pi/jpod_OS/
-```
+cat > /Volumes/bootfs/wpa_supplicant.conf << 'EOF'
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
 
----
-
-## Step 6 — Configure the Pod
-
-On the Pi, edit the hardware spec file for this pod:
-
-```bash
-nano /home/pi/jpod_OS/hardware/1.json
-```
-
-Key fields to verify:
-
-```json
-{
-  "podName": "POD_1",
-  "MQTTHost": "192.168.1.252",
-  ...
+network={
+    ssid="JPods"
+    psk="Pinkcoconut637"
+    key_mgmt=WPA-PSK
 }
+EOF
+```
+dhcpcd picks this up on boot and copies it to `/etc/wpa_supplicant/`. **This is the method that actually worked on 2026-04-05.**
+
+**Method B — firstrun.sh via systemd.run:**
+Write `firstrun.sh` to `/boot` and add `systemd.run=/boot/firstrun.sh` to `cmdline.txt`. Works on Pi OS Bullseye with a sentinel file to prevent re-runs:
+```bash
+cat > /Volumes/bootfs/firstrun.sh << 'SCRIPT'
+#!/bin/bash
+set +e
+[ -f /var/lib/jpods-firstrun.done ] && exit 0
+touch /var/lib/jpods-firstrun.done
+rfkill unblock wifi 2>/dev/null || true
+cat > /etc/wpa_supplicant/wpa_supplicant.conf << 'WPAEOF'
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
+network={
+    ssid="JPods"
+    psk="Pinkcoconut637"
+    key_mgmt=WPA-PSK
+}
+WPAEOF
+chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf
+systemctl restart dhcpcd || true
+wpa_cli -i wlan0 reconfigure || true
+SCRIPT
+chmod +x /Volumes/bootfs/firstrun.sh
+```
+**Do NOT use `systemd.run_success_action=reboot`** — causes infinite boot loop.
+
+### PARTUUID is Unique Per Card
+
+Never hardcode PARTUUID. Always read it from the card:
+```bash
+PARTUUID=$(grep -o 'PARTUUID=[^ ]*' /Volumes/bootfs/cmdline.txt)
 ```
 
-Update `podName` to match this pod (POD_1, POD_2, etc.).
-`MQTTHost` is Bill's Mac — `192.168.1.252`.
+### The Bootstrap Problem
+
+`provision.py` runs inside `launcher.py` which runs from `rc.local`. But if jpod_OS doesn't exist on the Pi, none of that runs. Solution: always `scp provision.py` directly first if the pod is fresh.
+
+### Fresh Pi OS Cards Need NeoPixel Libraries
+
+Cards flashed with Raspberry Pi Imager do not have adafruit libraries pre-installed. After first boot, SSH in and run:
+```bash
+sudo apt-get install -y python3-pip
+sudo pip3 install adafruit-circuitpython-neopixel rpi_ws281x adafruit-blinka
+```
+
+### Mac Must Be on JPods (2.4GHz), Not JPods_5G
+
+Pi Zero W is 2.4GHz only. If your Mac is on the 5GHz network the Pi will connect fine but you may be on a different subnet or have routing issues. Stick to `JPods` (2.4GHz) at 192.168.1.x.
+
+### Mosquitto 2.0 Defaults to Localhost Only
+
+After any mosquitto restart on the Mac:
+```bash
+cat /opt/homebrew/etc/mosquitto/mosquitto.conf
+# Must contain:
+# listener 1883
+# allow_anonymous true
+```
+
+### SSH Known Hosts Conflicts
+
+Multiple pods share the same hostname (`raspberrypi`). Clear stale entries:
+```bash
+ssh-keygen -R <IP>
+# or
+sed -i '' '/<IP>/d' ~/.ssh/known_hosts
+```
 
 ---
 
-## Step 7 — Verify Hardware
+## Pod Fleet Reference
 
-**Check I2C bus:**
-```bash
-i2cdetect -y 1
-```
+Fleet state files with history and notes: `/Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/`
 
-Expected:
-- `0x0A` — Romeo BLE motor controller
-- `0x32` — HuskyLens camera
+| Pod | Color | MAC | Typical IP |
+|-----|-------|-----|-----------|
+| POD_1 | RED | b8:27:eb:cf:a4:2d | 192.168.1.155 |
+| POD_2 | CYAN | b8:27:eb:ee:a4:64 | 192.168.1.25 |
+| POD_3 | YELLOW | b8:27:eb:d6:93:62 | 192.168.1.44 |
+| POD_4 | MAGENTA | b8:27:eb:e8:99:69 | 192.168.1.245 |
+| POD_5 | ORANGE | b8:27:eb:a1:e0:c7 | 192.168.1.121 |
+| POD_6 | BLUE | b8:27:eb:bd:fc:ba | 192.168.1.39 |
 
-If missing — check ribbon cables before going further.
-
----
-
-## Step 8 — First Run
-
-```bash
-cd /home/pi/jpod_OS
-sudo python launcher.py 1 "192.168.1.252"
-```
-
-You should see:
-```
-MQTT Connected
->>BOOT: POD_1 | DIST: 100 | LINE: 1
-```
-
-On the Mac with mosquitto running:
-```bash
-mosquitto_sub -h 192.168.1.252 -t "#" -v
-```
-You should see TELEMETRY messages arriving.
-
----
-
-## Step 9 — Auto-start on Boot (optional)
-
-To have the pod start automatically when powered on:
-
-```bash
-sudo nano /etc/rc.local
-```
-
-Add before `exit 0`:
-```bash
-cd /home/pi/jpod_OS && sudo python launcher.py 1 "192.168.1.252" &
-```
-
----
-
-## Pod Naming Convention
-
-| Pod | Hostname | Hardware file | podName |
-|-----|----------|--------------|---------|
-| 1 | jpods-pod1 | hardware/1.json | POD_1 |
-| 2 | jpods-pod2 | hardware/2.json | POD_2 |
-| 3 | jpods-pod3 | hardware/3.json | POD_3 |
-| 4 | jpods-pod4 | hardware/4.json | POD_4 |
-| 5 | jpods-pod5 | hardware/5.json | POD_5 |
-| 6 | jpods-pod6 | hardware/6.json | POD_6 |
+MQTT broker: **192.168.1.252** (Bill's Mac)
 
 ---
 
@@ -231,9 +249,11 @@ cd /home/pi/jpod_OS && sudo python launcher.py 1 "192.168.1.252" &
 
 | Symptom | Fix |
 |---------|-----|
-| Pi doesn't appear on network | Check WiFi credentials in Imager advanced settings; re-flash |
-| USB gadget not working | Verify `dtoverlay=dwc2` in config.txt and `modules-load=dwc2,g_ether` in cmdline.txt |
-| SSH refused | Create empty `ssh` file in boot partition and reboot |
-| I2C devices missing | Enable I2C via `sudo raspi-config`; check ribbon cables |
-| paho-mqtt import error | `sudo pip install paho-mqtt==1.6.1` — version matters |
-| Permission denied running launcher | Use `sudo python launcher.py ...` |
+| Pi not on network after boot | Write wpa_supplicant.conf to /boot partition |
+| systemd.run not triggering | Use wpa_supplicant.conf method instead |
+| Boot loop | Remove `systemd.run_success_action=reboot` from cmdline.txt |
+| provision.py not found | scp it directly before running launcher |
+| NeoPixel import error on fresh card | apt install python3-pip + pip3 install adafruit-blinka |
+| Multi-colored NeoPixels on boot | launcher.py running — kill it before blinking manually |
+| SSH permission denied | Clear known_hosts entry for that IP |
+| mosquitto connection refused | Add `listener 1883` + `allow_anonymous true` to mosquitto.conf |

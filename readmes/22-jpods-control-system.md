@@ -79,6 +79,86 @@ PEC = (vehicle_mass + payload_mass)²
 
 ---
 
+## JPods LAN Architecture — The Mesh of Bounded Networks
+
+A JPods deployment is a **federation of Local Area Networks**. Each LAN is a physically bounded section of guideway — a station loop, a campus segment, a city block. Each LAN governs itself.
+
+### LAN Boundaries
+
+A boundary is any point where one LAN's guideway meets another's — a hub station, a merge junction, a transfer loop. Boundaries are managed, not dissolved. A pod crossing a boundary is a guest on the next LAN; it follows that LAN's rules while it is there.
+
+### What Each LAN Contains
+
+| Resource | Owned by |
+|----------|---------|
+| Guideway and pods | LAN's local operator |
+| MQTT broker | Mac or station controller — one per LAN |
+| Natalie instance | Routes within the LAN; negotiates at boundaries |
+| Noelle behavior | Distributed across all Noras on the LAN |
+| Fleet JSON | Allie maintains on her drive; matches MAC to LAN |
+
+### How Natalies Coordinate at Boundaries
+
+Natalies do not have a central dispatcher above them. They negotiate peer-to-peer:
+
+1. Natalie A receives a trip request that exits her LAN
+2. She contacts Natalie B at the boundary: *"can you accept a pod at boundary point X at time T?"*
+3. Natalie B checks her network's availability and responds
+4. Both Natalies book the boundary handoff in their own devices' records
+5. The pod travels A's LAN, crosses the boundary, and runs under B's routing without interruption
+
+No central Natalie. No dispatcher. Boundaries are agreed, not commanded.
+
+### Today — Single LAN, Scale Model
+
+The scale model is **one LAN**. One Natalie (podPresenter on Mac). One MQTT broker (Mac). All pods on the same WiFi network. No boundaries to manage yet.
+
+This is the correct starting state. The protocol does not need to change as more LANs are added. What needs to be built when the second LAN appears:
+- Inter-Natalie messaging channel (MQTT federation, or HTTP between broker hosts)
+- Boundary point definitions (which line IDs are the handoff points)
+- Cross-LAN trip scheduling (Natalie A negotiates with Natalie B before confirming the trip)
+
+The scale model proves the within-LAN protocol. Every additional LAN replicates the same structure at the next physical boundary.
+
+### Connection to Patent Claims
+
+- **Claim 11e — regional accumulators:** The multi-LAN architecture IS this claim. Each Natalie is a regional accumulator for her LAN. Boundary negotiation is accumulator-to-accumulator coordination.
+- **Claim 12 — network scheduler:** The trip scheduler that spans LANs — the peer negotiation protocol between Natalies — is not yet implemented.
+- **Claims 8, 9 — availability negotiation:** Already implemented within a single LAN; the boundary version is the same algorithm run across a network connection.
+
+### Sovereignty Note
+
+Each LAN is locally governed. No external authority can command a Natalie. A pod from another LAN is a guest, operating under the receiving LAN's rules, same as a car crossing from one state highway onto another. The boundary negotiation protocol is bottom-up: peer agreement, not top-down dispatch.
+
+---
+
+## podPresenter — The Current Implementation
+
+podPresenter (`/Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/podPresenter/`) is the scale-model instantiation of Natalie + Noelle + Matilda running on the Mac.
+
+**Files:**
+| File | Agent | What it does |
+|------|-------|-------------|
+| `podPresenter.pde` | Natalie | Map render, SSH terminal launch, MQTT broker connection, IP detection |
+| `MQTT.pde` | Natalie | START/TELEMETRY/ACTION/FAULT/CALIBRATION message handlers |
+| `Pod.pde` | Natalie | Per-pod state: position, speed, ezone, path |
+| `GUI.pde` | Natalie | Fleet control panel — run/stop/speed/reset per pod |
+| `Controller.pde` | Natalie | Aggregate fleet controls |
+| `Matilda.pde` | Matilda/Noelle | Fleet calibration panel — mmStep drift, line bias, fleet_log.json |
+| `Map.pde` | — | Map geometry rendering |
+| `GraphLog.pde` | — | Per-pod telemetry graph |
+
+**Network handoff — Allie tells Natalie/Noelle who is on the network:**
+1. Allie runs `update_pod_ips.sh` → scans ARP for `b8:27:eb:*` MACs → writes `podPresenter/json/podIP.json` `"current"` key with live pod IPs
+2. podPresenter reads `podIP.json` at launch → detects subnet → opens SSH terminals to each pod
+3. Natalie now knows the fleet; Noelle has the calibration data from fleet_log.json
+
+This is the design intent: Allie does MAC-based discovery (the only stable identity), then hands off to Natalie. IPs change at every venue. MACs do not.
+
+**podPresenter is the seed.** The START/ACTION/TELEMETRY protocol does not change as the network grows. A JPods station controller at a real hub will be another Natalie instance reading the same message types. A hub-to-hub network will be multiple Natalies coordinating across an IP fabric. The scale model is the first correct instance of that architecture.
+
+---
+
 ## What Is Not Yet Implemented
 
 | Gap | Patent Claim | Notes |
@@ -87,7 +167,7 @@ PEC = (vehicle_mass + payload_mass)²
 | Billing computers | Claim 13 | Not in scale model |
 | Solar/wind integration | Claims 10, 19 | Scale model uses wired power |
 | Storage rails and dispatch | Claims 5, 20 | No storage rails in scale model |
-| Regional accumulators | Claim 11e | Single network, not needed yet |
+| Inter-LAN boundary negotiation | Claim 11e, 12 | LAN architecture defined; boundary protocol not yet implemented; needs inter-Natalie channel design |
 | Historical demand prepositioning | Claim 18 | Requires accumulated data over time |
 | MyCarryOn integration | — | Passenger identity and trip preferences |
 

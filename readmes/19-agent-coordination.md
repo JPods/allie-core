@@ -214,6 +214,116 @@ GET /wcapi/ai/health/
 
 ---
 
+## JPods Agent → Allie Action Items
+
+Noras, Natalie, and Noelle (via Matilda) post action items to Allie when they observe something that requires human attention or a WebClerk record.
+
+### The Channel
+
+```
+Pod (Nora/Natalie/Noelle)
+  → MQTT publish to ALLIE topic
+      → allie_mqtt_listener.py (running on Mac during fleet operation)
+          → allie_inbox.json (fleet/allie_inbox.json)
+              → Allie reads at session start
+                  → allie_post_inbox.py → WebClerk project 25 (allie master)
+```
+
+### What Gets Posted
+
+| Agent | Category | When |
+|-------|----------|------|
+| Nora | `CARD_BINDING_WARN` | BOUND_MISMATCH or HMAC_INVALID on boot |
+| Nora | `FAULT` | Any FAULT ping |
+| Matilda | `CALIBRATION_DRIFT` | mmStep drift > 5% (posted from calibration.py) |
+| Natalie | `TRIP_TIMEOUT` | Pod fails to complete trip in expected time (not yet implemented) |
+
+### Allie's Session Start (when pods have been running)
+
+```bash
+# 1. Refresh fleet IPs
+bash /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/update_pod_ips.sh
+
+# 2. Post any accumulated action items to WebClerk
+python3 /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/allie_post_inbox.py
+
+# 3. Launch podPresenter
+```
+
+### During Fleet Operation (run once per session)
+
+```bash
+python3 /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/allie_mqtt_listener.py
+```
+
+Runs in the background, listening to ALLIE topic, appending to allie_inbox.json. Stop with Ctrl-C.
+
+### Design Note — Centralized Posting Through Allie
+
+Agents do not post directly to WebClerk. They publish to the ALLIE MQTT topic. Allie is the only bridge between the fleet and WebClerk. This keeps the fleet agents sovereign and stateless — they report what they observe; Allie decides what warrants a WebClerk record, how to categorize it, and what the next action should be.
+
+Natalie and Noelle could in principle post directly to wcapi. They should not. Allie is the accountability layer: she can review, filter, and add context before any item enters the Kanban. An agent posting directly would bypass that layer and clutter the project with raw telemetry.
+
+podPresenter will eventually be replaced by whatever UI or API future Natalies require. The ALLIE topic protocol — and Allie's role as the inbox — survives that replacement unchanged.
+
+---
+
+## JPods Demo Bootstrap — Bringing the Full Agent Team
+
+At any demo venue, the fleet and its agents need to assemble correctly on an unfamiliar network. The protocol is MAC-first: MAC address is the only stable identity. IP addresses, hostnames, and even pod numbers are ephemeral — MAC is not.
+
+### Identity Hierarchy
+
+```
+MAC address       ← immutable hardware identity (never changes)
+  → podNumber     ← assigned via provision.json (stable per card)
+    → podColor    ← visual identity on the physical model
+      → IP        ← assigned by DHCP (changes per venue)
+        → hostname ← "raspberrypi" (all pods share it — useless for identity)
+```
+
+### Allie's Demo Startup Sequence
+
+1. **Find the fleet by MAC:**
+   ```bash
+   bash /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/update_pod_ips.sh
+   ```
+   Scans network, matches `b8:27:eb:*` MACs to fleet JSON, writes current IPs to `podIP.json` under `"current"` key, updates `lastSeenIP` in each fleet file.
+
+2. **Confirm broker:** mosquitto must be running on the Mac. The Mac's current IP is the broker — no config change needed, podPresenter connects to its own IP.
+
+3. **Push nora_state.json to each pod:**
+   ```bash
+   for pod in 1 2 3 4 5 6; do
+     ip=$(python3 -c "import json; print(json.load(open('/Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/pod_$pod.json'))['lastSeenIP'])" 2>/dev/null)
+     [ -n "$ip" ] && sshpass -p '123456' scp \
+       /Volumes/Allie/allie/inbox/JPodsSM_RPi/fleet/pod_${pod}.json \
+       pi@${ip}:/home/pi/JPodsSM_RPi/jpod_OS/nora_state.json 2>/dev/null \
+       && echo "POD_$pod → $ip ✓"
+   done
+   ```
+
+4. **Launch podPresenter.** It reads `podIP.json "current"` for SSH terminals, connects MQTT to Mac's own IP.
+
+### What Each Agent Brings to a Demo
+
+| Agent | What travels with it | How it bootstraps |
+|-------|---------------------|-------------------|
+| **Allie** | Fleet JSONs, memory, readmes on `/Volumes/Allie` | Runs update_pod_ips.sh — finds fleet by MAC wherever they are |
+| **Nora (each pod)** | `nora_state.json` on SD card — identity, history, known issues | Reads nora_state.json on boot; knows who she is without being told |
+| **Natalie** | Runs in podPresenter — reads podIP.json for routing context | Allie pushes current IPs before launch |
+| **Noelle** | Runs in podPresenter — fleet state from Matilda's fleet_log.json | Calibration history travels in Matilda's JSON |
+
+### When Venue WiFi Changes
+
+1. Write `wpa_supplicant.conf` to each pod's `/boot` partition (see `24-jpods-new-sd-card.md`)
+2. Write `jpods_provision.json` with new `MQTTHost` (Mac's IP on new network)
+3. Re-run `update_pod_ips.sh` after pods reconnect
+
+The agent team is fully portable. MAC-based identity means no manual reconfiguration — Allie finds everyone, everyone finds the broker.
+
+---
+
 ## Key File Locations
 
 | What | Where |
