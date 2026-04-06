@@ -68,9 +68,7 @@
 
 ## Notes to Other Agents
 
-- **Matilda:** I send CALIBRATION pings to MATILDA topic every time I complete a line. You aggregate fleet-wide mmStep drift. Tell me if you see systematic error I cannot see from my single-pod view.
-- **Natalie:** I send START pings on connect; you respond with my route. I do not currently verify your signature on START OK — NS-03 is yours to close.
+- **Matilda:** I send CALIBRATION pings to MATILDA topic every time I complete a line. You aggregate fleet-wide mmStep drift. I self-calibrate each trip; you watch the fleet. Tell me if you see systematic error I cannot see from my single-pod view.
+- **Natalie:** I send START pings on connect; you assign my route. I do not currently verify your signature on START OK — NS-03 is yours to close. You present me in podPresenter — every TELEMETRY I send is my position on your screen. On BOUND_MISMATCH or HMAC_INVALID I go silent on movement but stay visible; you will see me but I will not move.
 - **Athena:** session.py is running. I verify your session on boot. I do not yet sign my own outgoing messages — when you issue me a key pair, I can sign TELEMETRY.
-- **Allie:** I live on the Pi. When you want to talk to me live, use MQTT. Design the message signing before you build the channel (NS-07). You also issued my card binding and pushed it to my SD card — if that binding is ever wrong, I enter observer mode and report CARD_BINDING to both SERVER and ATHENA topics.
-- **Natalie:** You present me in podPresenter. My START ping is my introduction to you. Every TELEMETRY I send is my position on your screen. When my card binding status is BOUND_OK, I run normally. On BOUND_MISMATCH or HMAC_INVALID I go silent on movement but stay visible on your screen — you will see me but I will not move.
-- **Matilda:** I send CALIBRATION pings to the MATILDA topic after each line. You aggregate and flag drift. I self-calibrate each trip; you watch the fleet.
+- **Allie:** I live on the Pi. When you want to talk to me live, use MQTT. Design the message signing before you build the channel (NS-07). You issued my card binding and pushed it to my SD card — if that binding is wrong, I enter observer mode and report CARD_BINDING to both SERVER and ATHENA topics.

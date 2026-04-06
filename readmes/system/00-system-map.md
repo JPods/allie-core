@@ -1,5 +1,5 @@
 # System Map — Bill James Ecosystem
-**Last Updated:** 2026-04-04
+**Last Updated:** 2026-04-05
 **Purpose:** Visual reference for the full system of software, agents, and data flows
 
 Render in VS Code (Mermaid preview) or GitHub. Source text is readable without rendering.
@@ -281,6 +281,47 @@ flowchart TB
     ALLIE_NET["🤖 Allie\nMac discovery layer\nupdate_pod_ips.sh → podIP.json\ntells Natalie who is on the network\nbefore every launch"]
     ALLIE_NET -->|"MAC discovery\nnetwork handoff"| NATALIE_BOX
 ```
+
+---
+
+### Card Binding — Hardware Identity
+
+Every pod carries a `card_binding.json` signed with HMAC-SHA256. Allie is the sole issuer. On every boot, `launcher.py` checks the binding before the OS starts.
+
+| State | Meaning | Behavior |
+|-------|---------|----------|
+| `BOUND_OK` | MAC matches, HMAC valid | Normal operation |
+| `BOUND_MISMATCH` | MAC does not match authorized MAC | Observer mode — MQTT only, no movement, RED flash 10× |
+| `HMAC_INVALID` | Binding file tampered | Observer mode — same as above |
+| `UNBOUND` | No binding file (new card) | Normal operation; reports to Allie for binding issuance |
+| `ERROR` | Cannot read MAC or binding file | Observer mode |
+
+**Allie's binding authority:** `issue_binding.py` reads the fleet JSON (pod MAC, number, color), computes HMAC-SHA256 against the fleet secret, writes `card_binding.json`, and pushes it to the pod via scp. Allie records the issuance in the fleet JSON under `agent_notes.Allie`. No other agent can issue a valid binding.
+
+**Observer mode:** Pod connects to MQTT and reports CARD_BINDING status to both the SERVER and ATHENA topics, then loops on WiFi/MQTT only. It is visible in podPresenter but does not move.
+
+---
+
+### Issue Channel — Pod → Allie Routing
+
+Two channels exist for pods to reach Allie. They route differently:
+
+```
+sendIssue()   → MQTT ISSUE topic
+                  → allie_mqtt_listener.py (Mac, running during fleet op)
+                      → issue_log.json (all raw events)
+                          → issue_consolidator.py (patterns only)
+                              → allie_inbox.json
+                                  → Allie reviews at session start
+                                      → WebClerk Kanban (patterns that need action)
+
+sendAllieItem() → MQTT ALLIE topic
+                  → allie_mqtt_listener.py
+                      → allie_inbox.json directly (bypasses consolidation)
+                          → Allie reviews at session start
+```
+
+`sendIssue()` is for high-frequency routine observations (faults, calibration drift, ezone anomalies). Do not filter at the source — filter at the consolidator. `sendAllieItem()` is for immediately critical events (CARD_BINDING_WARN) that must reach Allie regardless of pattern frequency.
 
 ---
 
