@@ -11,13 +11,25 @@ Continuity lives in files — CarryOn, alice_log, WhatIf store, session logs. Wi
 
 ## Allie — Startup
 
-### Step 1: Mount and Launch
-```bash
-# Plug in Allie SSD, verify mount
-ls /Volumes/Allie
+### Step 1: Allie is always running
 
-# Open Claude Code from the drive
-cd /Volumes/Allie && claude
+Allie runs from `/Users/williamjames/Allie/` — no external drive required. Three LaunchAgents start automatically on login:
+
+| Service | What it does |
+|---------|-------------|
+| `com.allie.watcher` | File change monitoring + app detection; logs to `today/YYYY-MM-DD-activity.log` |
+| `com.allie.sync` | Backs up to `/Volumes/Allie/` when external drive is mounted |
+| `com.webclerk.server` | Starts Django + Celery + Ollama via `runserver.sh local`; serves on port 8000 |
+
+Open a session simply with:
+```bash
+cd /Users/williamjames/Allie && claude
+```
+
+To reload a service after a plist change:
+```bash
+launchctl unload ~/Library/LaunchAgents/com.allie.watcher.plist
+launchctl load   ~/Library/LaunchAgents/com.allie.watcher.plist
 ```
 
 ### Step 2: Orient (Allie does this automatically on first message)
@@ -73,18 +85,33 @@ She will:
    - Resolve any actioned `alice_pending` items
 3. Move completed workspace files to knowledge directories
 4. Archive anything retired
-5. Prompt Bill to backup if significant work was done:
+5. Prompt Bill to backup if significant work was done.
 
-```bash
-rsync -av --delete /Volumes/Allie/ /Volumes/Allie-Backup-1/
-```
+   The sync agent (`com.allie.sync`) runs automatically when a drive mounts. To trigger manually:
+
+   ```bash
+   # See which Allie drives are mounted
+   /Users/williamjames/Allie/scripts/allie-sync.sh status
+
+   # Bidirectional sync: internal ↔ all mounted drives (newest file wins; nothing deleted)
+   /Users/williamjames/Allie/scripts/allie-sync.sh auto
+
+   # Push only: internal → all mounted drives
+   /Users/williamjames/Allie/scripts/allie-sync.sh push
+   ```
+
+   Three drives:
+   | Drive | Path | Role |
+   |-------|------|------|
+   | Internal | `~/Allie` | Working copy — always available |
+   | 5TB | `/Volumes/Allie` | Home base archive |
+   | Lexar | `/Volumes/Allie_Lexar` | Travel companion |
+
+   Sync log: `~/Allie/today/YYYY-MM-DD-sync.log`
 
 6. Confirm CarryOn is written
 
-Then:
-```bash
-diskutil eject /Volumes/Allie
-```
+The external drives are backup targets. No need to eject between sessions — Allie runs locally regardless.
 
 ---
 
@@ -173,9 +200,20 @@ Alice has no physical shutdown. At the end of any maintenance session:
 
 ## Troubleshooting
 
-**Allie drive not mounting:**
+**Watcher not running:**
+- Check: `cat /tmp/allie-watcher.pid` — if missing, watcher exited
+- Reload: `launchctl unload ~/Library/LaunchAgents/com.allie.watcher.plist && launchctl load ~/Library/LaunchAgents/com.allie.watcher.plist`
+- Tail log: `tail -f /Users/williamjames/Allie/today/$(date +%Y-%m-%d)-activity.log`
+
+**WebClerk not starting:**
+- Check: `lsof -ti:8000` — if empty, Django did not start
+- Check logs: `tail -50 /tmp/webclerk-stderr.log`
+- Reload: `launchctl unload ~/Library/LaunchAgents/com.webclerk.server.plist && launchctl load ~/Library/LaunchAgents/com.webclerk.server.plist`
+
+**External drive not mounting (backup only — Allie still runs without it):**
 - Check USB-C cable; try a different port
 - Verify drive is named `Allie` in Disk Utility
+- Sync will catch up automatically when drive is available
 
 **CarryOn missing or corrupted:**
 - Check `allie/carryon/carryon.json` directly

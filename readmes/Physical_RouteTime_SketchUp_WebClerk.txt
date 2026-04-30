@@ -1,0 +1,133 @@
+I want you to have access to read and write to all files we are working on in these projects. Append issues instead of cut and replace.
+
+I want Allie to be omni present on my computer. I want her knowing everything I do, unless I specifically turn her off. I want her to turn on, when the machine turns on.
+
+WebClerk database has a local version. Allie needs to be able to turn this on when she needs to record something into a database. She can also store times in her folder and mark them to be posted to a database when action is required by others. She should be allowed to post action model records to assign me, her, and others tasks.
+
+Framework: 
+The Why of JPods, Mission: change economic lifeblood from oil to ingenuity.
+
+The What of JPods:
+Use JPods solar-powered, grade-separated networks of self-driving vehicles to replace 60% of car-miles in cities by JPods trips in the Middle-mile (.5 to 50 miles) and walking/biking/proximity in the last-mile (www.library.JPods.com, and www.JPods.com)
+WebClerk is our enterprise software and database program to build and manage JPods networks.
+JPodsSM is our physical world implementation on full JPods, scale models, 4wd models, SkyRide.
+Route-Time is our travel time estimate that helps design networks on maps.
+SketchUp Plugin is a 3D rendering and modeling program for segments of networks.
+5x5FreeMarket.com defines the regulatory framework for cities. Privately funded networks 5 times more efficient than roads, pay 5% of gross transport revenues to use the airspace over approved public Rights of Way and are regulated by the 3,000 times better safety record of theme park rides.
+
+The How of JPods: 
+Start small, iterate relentlessly.
+Mass is a Principle of War. Create mass by polishing, then giving away WebClerk, JPodsSM, Route-Time, and SketchUp applications so vast numbers of people (Wisdom of the Many) can get their city to adopt 5x5FreeMarket. Viable networks designed by people, JPods will form a company, fund construction, share equity, build and operate the network. Parallel example is AOL massively sending out "You've got mail" disks to trigger a tipping point in email adoption.
+
+Following are notes made by agents in each of the applications. Please review and consolidate a plan. Here is a link to all the Allie readmes. We are focused at this moment on 
+
+/Users/williamjames/Allie/readmes/30-allie-universal-parallel.md /Users/williamjames/Allie/readmes/30-allie-universal.md /Users/williamjames/Allie/readmes/31-allie-route-time-parallel.md /Users/williamjames/Allie/readmes/31-allie-route-time.md /Users/williamjames/Allie/readmes/32-allie-sketchup-CC.md /Users/williamjames/Allie/readmes/32-allie-sketchup-parallel.md /Users/williamjames/Allie/readmes/32-allie-sketchup-su-parallel.md /Users/williamjames/Allie/readmes/32-allie-sketchup.md /Users/williamjames/Allie/readmes/33-allie-physical-parallel.md /Users/williamjames/Allie/readmes/33-allie-physical.md
+
+Findings first:
+
+The main structural gap across the four drafts is that they define Allie’s role, but not where that role becomes accountable work. WebClerk is missing as the operating database for actions, WhatIf routing, and cross-session coordination.
+The SketchUp draft especially needed a cleaner authority boundary: the Ruby/plugin model is sovereign for geometry and export correctness; WebClerk stores follow-up and coordination but does not validate the model.
+The existing SketchUp parallel draft also needed to stop implying “consult at start/end” and instead treat Allie as continuously present during the session, with explicit handoff rules into WebClerk.
+I updated the parallel SketchUp copy at 32-allie-sketchup-parallel.md. The revision now makes WebClerk explicit as Allie’s structured persistence layer, adds concrete use of project 25, project 24, action, and Alice note records, and clarifies what belongs in the model, what belongs in readmes, and what belongs in WebClerk. I left the original comparison documents untouched.
+
+Validation: the revised parallel draft now passes workspace diagnostics with no markdown errors.
+
+Natural next steps:
+
+Apply the same WebClerk/database layer to the universal, Route-Time, and physical drafts as separate parallel copies.
+Diff this parallel SketchUp version against the main SketchUp draft and merge only the parts Bill wants kept.
+
+
+I finished the review and found a few cross-document mismatches; I’m now creating an SU parallel draft that includes both a clean SU version and explicit deltas for the universal, route-time, and physical docs so you can compare side-by-side.
+
+Created 32-allie-sketchup-su-parallel.md
+
+I reviewed all four documents and created an SU parallel draft with recommended changes and a clean comparison version.
+
+Created:
+
+32-allie-sketchup-su-parallel.md
+Top findings from the review:
+
+Participation boundary ambiguity: SU text says Allie is start/end only, but also implies continuous in-session guidance.
+No common comparison artifact: the four docs do not enforce one shared end-of-session evidence format, which makes side-by-side comparison harder.
+Cross-domain contradiction handling is under-specified: when Physical disagrees with SU or Route-Time, correction ownership is not consistently declared.
+Promotion criteria to universal knowledge need tighter rules to avoid premature generalization.
+SU export quality needs a stronger blocking checklist artifact, not just descriptive guidance.
+What the new SU parallel draft includes:
+
+Explicit changes needed in Universal, Route-Time, SketchUp, and Physical docs from the SU perspective.
+A full SU candidate copy with clearer authority boundaries.
+A required SU readiness gate before export.
+A required SU session evidence packet for clean three-way comparison.
+A comparison protocol for SU vs Route-Time vs Physical.
+Open questions to drive final polish.
+If you want, I can now generate matching parallel drafts for Route-Time and Physical in the same style so you have a full three-document comparison set.
+
+
+I have the gap. The universal seed draft still has the older taxonomy core, but it does not yet reflect the stronger boundary now present in all three environment parallels: Allie always present, explicit AI-substrate role, explicit WebClerk role, and a cleaner separation between runtime truth, long-form memory, and structured operating records.
+
+Created 30-allie-universal-parallel.md
+
+The universal parallel draft is written. I’m doing one readback pass now to make sure it matches the style and scope of the three environment parallels.
+
+Read 30-allie-universal-parallel.md
+
+I created the universal comparison draft at 30-allie-universal-parallel.md.
+
+It now matches the newer direction of the three environment parallels:
+
+Allie is always present across all environments
+Allie is the AI substrate for Noelle, Natalie, and Nora until standalone processors exist
+runtime authority, long-form memory, and structured operating records are explicitly separated
+WebClerk is stated clearly as the operating database, not as runtime authority
+cross-domain transfer is framed as explicit mapping and scoped promotion, not silent bleed
+I also did a readback pass after writing it; no corrections were needed.
+
+At this point you have a full parallel set for comparison:
+
+30-allie-universal-parallel.md
+31-allie-route-time-parallel.md
+32-allie-sketchup-parallel.md
+33-allie-physical-parallel.md
+If you want, I can now produce a tight compare summary of the four original drafts versus the four parallel drafts so you can polish one merged set faster.
+Or I can start merging the best parts from the parallel set back into the original numbered files.
+
+
+What I pulled from 32-allie-sketchup-parallel.md (kept because it's right):
+
+Allie always present, AI substrate framing
+Definition gate stated at actual code level
+Station contract as 4 clear conditions
+Stricter cross-domain mapping table (with Invariant column)
+What I added that's missing from both prior drafts:
+
+Actual plugin path — /Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods/ and git workflow from jpods-plugin.md
+
+Full critical files — jpod_constants.rb, jpod_network.rb, jpod_guideway.rb, jpod_path_builder.rb, jpod_network_editor.rb, templates/ — the actual plugin architecture, not just the agent files
+
+Seven critical rules (from jpods-plugin.md) — definitions.load crash, face normal for pushpull, T_ARM_OFFSET, adaptive Bezier, CP label refresh, etc. These are empirical findings that will be rediscovered if not recorded
+
+Gap log quick reference — P1–P5 patterns as a fast-lookup table pointing to the full log
+
+Export artifact workflow — what produces what, who consumes it, how it flows to physical and podPresenter
+
+network.json format — the connection declaration schema
+
+Open question on network.jpd — flagged as unknown: what's the .jpd file in the JPodsSM workspace?
+
+
+Findings first:
+
+The main structural gap across the four drafts is that they define Allie’s role, but not where that role becomes accountable work. WebClerk is missing as the operating database for actions, WhatIf routing, and cross-session coordination.
+The SketchUp draft especially needed a cleaner authority boundary: the Ruby/plugin model is sovereign for geometry and export correctness; WebClerk stores follow-up and coordination but does not validate the model.
+The existing SketchUp parallel draft also needed to stop implying “consult at start/end” and instead treat Allie as continuously present during the session, with explicit handoff rules into WebClerk.
+I updated the parallel SketchUp copy at 32-allie-sketchup-parallel.md. The revision now makes WebClerk explicit as Allie’s structured persistence layer, adds concrete use of project 25, project 24, action, and Alice note records, and clarifies what belongs in the model, what belongs in readmes, and what belongs in WebClerk. I left the original comparison documents untouched.
+
+Validation: the revised parallel draft now passes workspace diagnostics with no markdown errors.
+
+Natural next steps:
+
+Apply the same WebClerk/database layer to the universal, Route-Time, and physical drafts as separate parallel copies.
+Diff this parallel SketchUp version against the main SketchUp draft and merge only the parts Bill wants kept.
+

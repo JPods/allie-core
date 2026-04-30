@@ -64,6 +64,37 @@ The 5X5 Standard does for transportation what the 1982 AT&T breakup did for comm
 
 ---
 
+## SM Robot — Control System Architecture Lessons
+
+The SM robot (Raspberry Pi Zero testbed) has produced design lessons that carry forward to full-size JPods and SkyRide.
+
+### I2C Is Not a Parallel Bus
+
+All three I2C devices were originally on a single bus (`/dev/i2c-1`, GPIO 2/3). This caused safety failures:
+
+- **HuskyLens** (K210 AI chip) clock-stretches up to 50ms during inference — holding the bus for every other device
+- **Arduino motor driver** clock-stretches on every transaction (ISR latency)
+- **BCM2835 silicon bug** (all Pi Zero/3/4): does not honor clock-stretch; corrupts transfers mid-byte
+
+Result: motor stop commands were delayed or corrupted by AI inference latency on the same wire.
+
+**Fix: three independent buses.**
+
+| Bus | GPIO | Device | Why isolated |
+|-----|------|--------|--------------|
+| `/dev/i2c-1` hardware | GPIO 2/3 | VL6180X TOF only | Only non-stretching device; Blinka library requires this bus |
+| `/dev/i2c-3` software bit-bang | GPIO 23/24 | Arduino motor driver | Safety-critical; no AI latency in its path |
+| `/dev/i2c-4` software bit-bang | GPIO 27/22 | HuskyLens | AI latency contained; cannot block motor or collision bus |
+
+Software I2C (`dtoverlay=i2c-gpio`) handles clock-stretch correctly; the BCM2835 hardware I2C does not.
+
+**The architectural principle for all future vehicles:** safety-critical actuators (motor, brake) get a dedicated bus. Sensors with variable latency (cameras, AI inference) get their own bus. These must never share. This scales directly to CAN bus architecture on full-size pods.
+
+*Full post*: `JPodsSM_RPi/readmes/i2c-parallel-bus-post.md`  
+*Technical detail*: `JPodsSM_RPi/readmes/fixes-log.md` — BCM2835 clock-stretch bug section
+
+---
+
 ## Connection to WebClerk
 
 CargoPods™ solve the **Middle Mile™** problem: streaming cargo from railheads and airports to neighborhoods in packets. This directly enables WebClerk's local commerce model:

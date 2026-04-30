@@ -24,12 +24,26 @@ athena_private.pem
 **/athena/escrow/
 **/cred_names.txt
 
+# Google OAuth credentials — NEVER commit (permanent tokens on Allie drive only)
+credentials/gmail_credentials.json
+credentials/gmail_token.json
+
 # credentials.enc IS committed — it is Athena-encrypted and safe in the private repo
 # cred_names.txt IS committed — plaintext names only, no values
+
+# Python virtual environments
+.venv/
+venv/
+__pycache__/
+*.pyc
 
 # macOS
 .DS_Store
 **/.DS_Store
+._*
+**/._*
+.TemporaryItems
+**/.TemporaryItems
 ~$*
 **/.Spotlight-V100/
 **/.fseventsd/

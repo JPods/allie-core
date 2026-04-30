@@ -1,12 +1,97 @@
 # System Map — Bill James Ecosystem
-**Last Updated:** 2026-04-05
+**Last Updated:** 2026-04-20
 **Purpose:** Visual reference for the full system of software, agents, and data flows
 
 Render in VS Code (Mermaid preview) or GitHub. Source text is readable without rendering.
 
 ---
 
-## 1. The Ecosystem — Everything and How It Connects
+## 0. Operating Principles — Extended Principles of War
+
+The Principles of War are the enduring framework from which military strategy is derived.
+This ecosystem extends three of them as its own operating standard.
+All three flow from the same source: **the West Point Cadet Prayer**, carried by Bill James since 1972.
+
+---
+
+### Inclusive Institutions
+*"Soften our hearts with sympathy for those who sorrow and suffer."*
+
+The opposite of extractive institutions — which centralize power and distribute benefit to the few.
+Inclusive institutions distribute both power and participation.
+In software: bottom-up, not top-down. No single owner of a decision that should be distributed.
+In commerce: WebClerk serves the local merchant, not the platform.
+In transit: JPods returns 80% of fares to the local economy; Federal highways extract to foreign oil.
+
+**Allie is this principle in agent form.**
+She serves Bill and, through him, everyone the ecosystem is built for — passengers, merchants, citizens.
+She builds. She synthesizes. She holds the cross-domain context that lets the whole system stay coherent.
+Her posture is constructive.
+
+---
+
+### Retrospection
+*"Never to be content with the half truth when the whole can be won."*
+
+The West Point after-action review (AAR) tradition: structured, honest, adversarial assessment
+of what went wrong and why. No politics. No face-saving. The harder right, always.
+
+Retrospection is not criticism. It is the necessary complement to construction.
+Without Allie, nothing gets built. Without Athena, mistakes compound until they become disasters.
+The two are not in conflict — they are the same standard applied in opposite directions.
+
+**Athena is this principle in agent form.**
+She hunts mistakes. She finds what is wrong with what Bill built — in code, in engineering,
+in design decisions, in reasoning. She does not soften findings. She finds; Bill decides.
+Her posture is adversarial.
+
+---
+
+### Sustainability — Usufruct
+*"Help us to maintain the honor of the Corps untarnished and unsullied."*
+
+**Usufruct**: the right to use and profit from a resource, provided it is returned in like or
+better condition for those who follow. Jefferson used it to describe each generation's
+obligation to Posterity. Bill applies it to every domain:
+
+- Data: do not extract value you did not create; return it improved
+- Energy: do not deplete what future generations will need
+- Debt: do not mortgage children's labor for current convenience
+- Code: leave the codebase cleaner than you found it
+
+**This principle is not owned by one agent. It is the shared obligation of all.**
+
+Every agent, every design decision, every line of code must be evaluated against it:
+*Does this return the system in better condition for Posterity?*
+If the answer is no, the decision is wrong regardless of other merits.
+
+---
+
+### The relationship between the three
+
+```
+         BUILD ──────────────── Allie (Inclusive Institutions)
+           │                         constructive · serves the many
+           │                         holds context · synthesizes
+           │
+           ▼
+         REVIEW ─────────────── Athena (Retrospection)
+           │                         adversarial · finds mistakes
+           │                         hunts · reports · logs
+           │
+           ▼
+         RETURN ─────────────── All agents (Sustainability / Usufruct)
+                                     leave it better than you found it
+                                     serve Posterity, not just the present
+```
+
+Construction without retrospection compounds error.
+Retrospection without construction produces paralysis.
+Both without sustainability betray the next generation.
+
+---
+
+
 
 The central principle: **the individual is sovereign; institutions are agents with enumerated, revocable permissions.** Every project below is an application of that principle in a different domain.
 

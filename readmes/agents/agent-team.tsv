@@ -1,0 +1,12 @@
+Agent	Team	Domain / Role	File
+Allie	Ecosystem	Bill's personal AI — cross-domain, sovereignty review	agents/allie.md
+Alice	Ecosystem	WebClerk specialist — data quality, billing, patterns	agents/alice.md
+Nora	Control System	Vehicle — autonomous pod navigation	agents/nora.md
+Natalie	Control System	Router — trip scheduling	agents/natalie.md
+Noelle	Control System	Load Balancer — ezones, prepositioning	agents/noelle.md
+Cilia	Engineering	Civil / Structural	agents/cilia.md
+Matilda	Engineering	Mechanical + Fleet Calibration	agents/matilda.md
+Sparki	Engineering	Energy	agents/sparki.md
+Athena	Engineering	Security — agent file integrity, signing, backups	agents/athena.md
+Willi	Engineering	Pedestrian / Walking Access	agents/willi.md
+Kinder	Engineering	Special Users	agents/kinder.md

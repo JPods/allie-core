@@ -47,10 +47,22 @@ Every agent file uses this structure. Add sections as needed; do not remove them
 
 ## Ecosystem Agents
 
-| Agent | Role | File |
-|-------|------|------|
-| Alice | WebClerk specialist — data quality, billing, patterns | [alice.md](alice.md) |
-| Allie | Bill's personal AI — cross-domain, sovereignty review | [allie.md](allie.md) |
+| Agent | Role | File | WC Connection |
+|-------|------|------|---------------|
+| Alice | WebClerk specialist — data quality, billing, patterns | [alice.md](alice.md) | 24 |
+| Allie | Bill's personal AI — cross-domain, sovereignty review | [allie.md](allie.md) | 22 |
+| Athena | Adversarial reviewer — security, privacy, action gate | [athena.md](athena.md) | 23 |
+
+## Allie — Cross-Environment Architecture
+
+These documents define Allie's role in each environment and the three-layer knowledge taxonomy that governs what knowledge transfers across environments. Every AI working in any environment should read the universal document and their environment-specific document.
+
+| Document | Scope | File |
+|----------|-------|------|
+| Universal — Allie role + knowledge taxonomy | All environments | [../../30-allie-universal.md](../../readmes/30-allie-universal.md) |
+| Route-Time — user guide + AI instructions | Python/Flask/Leaflet simulation | [../../31-allie-route-time.md](../../readmes/31-allie-route-time.md) |
+| SketchUp Plugin — user guide + AI instructions | Ruby/SketchUp 3D modeling | [../../32-allie-sketchup.md](../../readmes/32-allie-sketchup.md) |
+| Physical JPods — user guide + AI instructions | RPi/MQTT/physical scale model | [../../33-allie-physical.md](../../readmes/33-allie-physical.md) |
 
 ---
 

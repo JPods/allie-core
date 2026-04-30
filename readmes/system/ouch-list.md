@@ -1,13 +1,32 @@
-# Ouch List — JPods Risk Register
-**Last Updated:** 2026-04-04 (Allie sovereignty review added)
-**Purpose:** Every risk we can see, no matter how long-tail, that we cannot address now. Flags, not blockers. Better here than surprising us later.
+# Ouch List (OSL) — JPods Risk Register
+**Last Updated:** 2026-04-20
+**Purpose:** Every risk we can see, no matter how long-tail. Flags, not blockers. Better here than surprising us later.
+
+Bill's framing: *"OSL — Oh Shit List. Things we must address."*
 
 **Format:**
 - **Owner** = which design agent's primary domain
 - **Severity** = Existential · High · Medium · Low (our best guess now — can be revised)
-- **Status** = Unaddressed · Watching · Deferred · Resolved
+- **Status** = Must Fix · Unaddressed · Watching · Deferred · Resolved
+
+**Must Fix** = already in code or design; reaches someone if not corrected. Everything else is a risk we can see but cannot yet address.
 
 Add to this list freely. Removing an item requires either a resolution or a conscious decision that the risk does not apply to our design.
+
+---
+
+## Must Fix Now — Athena's Domain
+
+These are mistakes already in the code or design. They are not future risks. They are present debts.
+
+| # | What is wrong | Owner | Severity | Status | Fix by |
+|---|---------------|-------|----------|--------|--------|
+| OSL-01 | `meeting.sh` records all voices with no consent prompt — violates two-party consent law in CA and other states | Claude | High | Resolved — consent_gate() added 2026-04-20 | Before first meeting recorded |
+| OSL-02 | JPods privacy doctrine six promises have no code enforcement — policy only, not architecture | Claude / Athena | High | Must Fix | Before any booking or routing code is written |
+| OSL-03 | A-06 (trip logs expose movement patterns) listed on ouch-list but has no mitigation | Athena / Claude | High | Must Fix | Before any ride booking system is built |
+| OSL-04 | No booking token design exists — "your identity is not required" has no implementation path | Claude / Bill | High | Must Fix | Before first deployment planning session |
+| OSL-05 | `meeting.sh` transcripts had no auto-purge — accumulated indefinitely | Claude | Medium | Resolved — purge_old_recordings() added 2026-04-20 | Before next meeting recorded |
+| OSL-06 | Athena's privacy calibration corpus is Bill only — not representative of vulnerable passengers | Athena | Medium | Must Fix | Before first public deployment |
 
 ---
 
@@ -134,6 +153,14 @@ These risks were identified by Allie during her first cross-domain sovereignty r
 | NEW-08 | Demo Pi password is intentionally weak (`1111pass`, shared across all pods) | Athena | Accepted tradeoff — demo robots are on isolated WiFi, hacking risk is low, operational simplicity wins for demos; **must be changed before any passenger-carrying deployment**; same risk as A-01 (unauthenticated MQTT) at production scale | Low (demo) / High (production) | Deferred — acceptable for demos, blocker for passengers |
 | NEW-09 | Telemetry MQTT traffic is plaintext and unencrypted | Athena | Any device on the same WiFi network can read all pod telemetry and inject commands; frequency hopping and payload encryption are planned for full-scale systems but not implemented in demo hardware | Low (demo isolated WiFi) / High (production) | Deferred — planned: Ed25519-signed payloads + frequency hopping for SkyRide/FullScale |
 | NEW-10 | Pod count growth (kids building cities) overwhelms Natalie's single-node routing | Natalie, Noelle | Natalie currently runs on the Mac; as fleet exceeds ~8 pods, routing becomes a bottleneck; Noelle (load balancer) is not yet implemented; distributed Natalie instances have no consensus mechanism — same structural flaw as Articles of Confederation | Medium (demos) / High (city-scale) | Unaddressed — Noelle design needed before city-scale deployment |
+
+### I2C Bus Risks — Identified 2026-04-07
+
+| # | Risk | Why it could bite us | Severity | Status |
+|---|------|----------------------|----------|--------|
+| I2C-01 | Three I2C libraries share bus 1 with no locking: `smbus` (motor), `busio` (TOF), `HuskyLensLibrary` (camera) | Interleaved transactions corrupt device state mid-transfer; one garbled command can lock SDA low and freeze the entire bus; requires physical power cycle to recover | High | Partially addressed — signal handler added to main.py; threading.Lock pending |
+| I2C-02 | Hard kill of launcher.py (SIGKILL or SIGTERM without handler) leaves Romeo BLE firmware frozen mid-I2C-transaction | I2C bus lock survives Pi reboot because TOF sensor stays powered from 3.3V rail; only full power cycle recovers | High | Partially addressed — SIGTERM/SIGINT handler added to main.py 2026-04-07; SIGKILL still dangerous |
+| I2C-03 | No bus recovery mechanism: once SDA is held low, software cannot release it | Linux i2c_bcm2835 driver has no bus recovery command; recovery requires either GPIO bit-bang (bypasses hardware I2C) or physical power cycle | Medium | Unaddressed — consider adding GPIO-based 9-pulse recovery on boot |
 
 ### Status Updates from Pod Admission Protocol (2026-04-04)
 
