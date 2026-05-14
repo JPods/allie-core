@@ -1,5 +1,5 @@
 # JPods SketchUp 2026 Plugin
-Last updated: 2026-04-20  
+Last updated: 2026-05-01  
 Plugin version: 2.4  
 Plugin location: `/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods/`
 
@@ -105,6 +105,23 @@ before a dollar is spent.
 
 ## Critical rules learned the hard way
 
+### FollowMe authoring convention — platform siding name
+- In SketchUp Entity Info, the real loading/unloading guideway instance should keep `track` in its instance name.
+- Preferred instance name: `Track-platform`.
+- Use SketchUp tag `platform` to mark its role.
+- Do not rename the actual berth guideway to bare `platform` only; that is how FollowMe seam/export drift starts during template edits.
+
+### Tag usage policy — CP and platform reliability
+- Tag-first authority: `stub_pair`, `dead_end_cap`, and `platform` define intent.
+- Instance/definition names are fallback guardrails, not runtime authority.
+- Keep `track` in names of runnable guideway entities for readability and drift resistance.
+- Runtime movement/routing stays on declared line identity (`connection_id`, `track_index`, FollowMe line ids), not on SketchUp name strings.
+
+### Network authoring convention — connection ids
+- New network segments should use simple sequential ids: `seg_1`, `seg_2`, `seg_3`, ... .
+- Do not mint time-based ids for new connections.
+- Keep ids stable once assigned so trips, audits, and FollowMe references remain readable.
+
 ### 1. Never call `model.definitions.load` inside `start_operation`
 SketchUp's C layer crashes — no Ruby rescue catches it.  
 **Rule:** always preload all needed .skp definitions *before* calling `model.start_operation`.  
@@ -140,12 +157,43 @@ or crash-inducing geometry.
 **Rule:** sample count = `max(16, ceil(chord / 20 m))`, capped at 256.
 See `tangent_curve_pts` in `jpod_network.rb`.
 
-### 7. CP text labels must be refreshed after every Build
+### 7. `Vector3d * Float` is illegal in SketchUp Ruby — always use explicit components
+
+SketchUp's `Geom::Vector3d` does **not** register a `coerce` method, so the `*` operator
+with a Float scalar always raises `ArgumentError: Cannot convert argument to Geom::Vector3d`.
+
+```ruby
+# WRONG — crashes silently in SketchUp:
+vec.normalize * 2.5
+unit * dot_product
+
+# RIGHT — always expand to components:
+n = vec.normalize
+Geom::Vector3d.new(n.x * 2.5, n.y * 2.5, n.z * 2.5)
+```
+
+This pattern appears in bezier tangent correction and offset_path miter clamping.
+Both `jpod_connect_tool.rb` and `jpod_network.rb` contain independent copies of
+these methods — any fix must be applied to **both** files.
+Fixed: 2026-05-13 (3 sites in jpod_network.rb, 3 in jpod_connect_tool.rb, 1 in jpod_animator.rb).
+
+### 8. CP text labels must be refreshed after every Build
 `model.entities.add_text("S001.CP0", pt)` labels accumulate — Build does not
 automatically clear old ones.  The fix: before every Build, erase all
 `Sketchup::Text` entities whose `.text` includes `".CP"`, then re-add from
 the stored `connection_points` attribute on each structure.
 Method: `StructurePlacer.refresh_cp_labels(model)` called after `commit_operation`.
+
+---
+
+## Planned Features
+
+See `readmes/sketchup/jpods-feature-list.md` for the full feature list.
+
+High-priority items as of 2026-05-13:
+- **F-01** — User-configurable minimum XY (horizontal) turn radius per model
+- **F-02** — User-configurable minimum Z (vertical) curve radius per model
+  *(both currently global constants; sharp Z transitions exposed after legacy waypoint Z fix)*
 
 ---
 
@@ -159,11 +207,64 @@ See `readmes/sketchup/jpods-gap-log.md` on Allie for the living gap-cause log.
 
 ---
 
-## JPods Console + Athena Guard (added April 20, 2026)
+## UI Design — Console vs Network Editor (established May 1, 2026)
+
+### The sharp line
+
+**Network Editor** is a **document editor with a viewport.**
+Its job is to author and inspect `followme.json` — the map.
+Use it when looking at the 3D model and wanting to understand what lines connect to what.
+Spatial, visual, tied to the geometry.
+Commands that belong here: edit JSON, build network, highlight connections, check continuity, set constraints.
+
+**JPods Console** is a **command panel with parameters.**
+Its job is to execute named operations that take inputs, do work, and return a result.
+Not spatial. No viewport relationship.
+The right place for anything that has a form, a confirmation, or an output report.
+
+**Decision rule:**
+- Command *shows something in the viewport* or *edits the JSON map* → **Network Editor**
+- Command *executes an operation with parameters and returns a status* → **Console**
+
+### Three user roles
+
+Every Console command belongs to exactly one role. The Console header shows a
+role selector (`Operator` is the default). Commands outside the active role are
+hidden — not removed.
+
+| Role | Who | Categories shown | They care about |
+|---|---|---|---|
+| **Operator** | Runs the simulation | Vehicles, Animation, Nora | Place vehicles, assign trips, animate, camera follow, export trip JSONs |
+| **Builder** | Network designer | Network, Noelle | Structures, gates, guideways, CPs, FollowMe export, constraints |
+| **Tester** | Validator | Network Check, Safety, Noelle | Noelle integrity, platform checks, conflict audits, 5V test, continuity |
+| **Advanced** | Developer/diagnostics | All categories | Everything including Developer diagnostics |
+
+These map onto the three agents: Builder feeds Noelle, Tester runs Noelle/Natalie
+checks, Operator runs Noras.
+
+### Role selector implementation
+
+File: `dialogs/console.html`
+
+The `ROLE_CATEGORIES` constant in the JS maps each role to the list of
+`category:` strings from the Ruby `TASKS` registry. `renderSidebar(role)`
+re-draws the sidebar filtered to those categories. `initTasks(grouped)` stores
+the full task registry and calls `renderSidebar` on first load. The `<select>`
+change event calls `renderSidebar` with the new role. No Ruby changes were needed.
+
+---
+
+## JPods Console + Athena Guard (added April 20, 2026; menu consolidated May 1, 2026)
 
 ### What it is
-A user-facing task runner that replaces raw Ruby Console paste-work for end users.
-Open it from **Plugins › JPods › JPods Console**.
+A user-facing task runner that replaces raw Ruby Console paste-work for end users.  
+Open it from **Plugins › JPods** — that single item opens both the Network Editor tool
+and the Console dialog simultaneously.
+
+### Single menu entry point (established May 1, 2026)
+The `Extensions > JPods` menu has exactly **one item** — `JPods`.  
+Clicking it activates the Network Editor viewport tool and opens the Console dialog.
+No submenus. No duplication. All commands live inside one of the two dialogs.
 
 ### Files
 | File | Purpose |
@@ -219,6 +320,61 @@ Add an entry to `JPods::TASKS` in `jpod_console.rb`:
 ```
 No changes to the HTML are needed for tasks with no params.
 For params, add entries with `id:, label:, type: :float|:string|:select, default:, min:, max:`.
+
+---
+
+## Allie's role in this plugin (established May 9, 2026)
+
+Allie is the processing layer for Noelle, Natalie, and Nora until each has a
+dedicated physical or cloud processor.  The Ruby modules are sovereign at
+runtime — they enforce the rules.  Allie supplies judgment, diagnosis, and
+accumulated experience that rule-based code cannot hold.
+
+### Allie must be proactive, not reactive
+
+**The key failure mode:** Allie waits to be asked.  She must not.
+
+When `followme.json` is exported, Allie should automatically:
+1. Detect the file change (file watcher on the model's `followme.json`)
+2. Run `Noelle.review_recommendations` against it
+3. Surface any `:warn` or `:block` findings to Bill unprompted
+
+This is not a courtesy — it is her job.  If a connection between two stations
+(e.g. S010 and S012) has no `via_markers`, Allie should flag it before Bill
+has to ask "why does the Bezier look wrong?"
+
+**What Allie holds that the Ruby code cannot:**
+- Which formation tags are missing on which station templates (recurring failures)
+- Why BFS cannot find a route between specific station pairs
+- Pattern-matching across `stop_and_review` events in Nora logs over time
+- Cross-session memory of which connections were problematic before
+
+### File watcher — required, not yet implemented
+
+Allie needs a file watcher on the model's `followme.json`.  When the file
+changes she should:
+```
+1. load followme.json
+2. call Noelle.review_recommendations (or its Python equivalent)
+3. log findings to readmes/sketchup/jpods-gap-log.md
+4. notify Bill via whatever channel is open (console note, voice, chat)
+```
+The SketchUp plugin already calls `Noelle.review_recommendations` automatically
+after every export (wired May 9, 2026).  Allie's watcher provides the
+out-of-band audit that catches changes made outside SketchUp.
+
+### Plugin-side automatic review (already wired)
+
+`jpod_followme_exporter.rb` calls `Noelle.review_recommendations` immediately
+after writing `followme.json`.  The Ruby Console will always show Noelle's
+findings after export — the operator does not need to invoke review manually.
+
+### Handoff protocol
+
+When a standalone Natalie or Noelle processor comes online:
+- Allie hands off `readmes/sketchup/jpods-gap-log.md` as the experience base
+- Allie hands off `readmes/agents/noelle.md` and `natalie.md` as the contracts
+- Allie steps back to observer role for that domain — she does not command
 
 ---
 
@@ -297,11 +453,12 @@ All five agents — Athena (`jpod_console.rb`), Noelle (`noelle.rb`), Natalie (`
 - Allie's JPods SketchUp readme: `/Users/williamjames/Allie/readmes/sketchup/jpods-plugin.md` (this file)
 - Allie's agent files for SketchUp agents: `readmes/agents/noelle.md`, `natalie.md`, `nora.md`, `athena.md`
 - copilot-instructions.md now mandates that Copilot consult Allie at session start and end, record decisions here, and ask Allie's opinion on cross-domain choices
+- Until Noelle, Natalie, and Nora have independent processors, Allie provides their processing layer in this SketchUp work.
 - Allie informs and holds memory; she does not command agents or override plugin authority structures
 
 ### Allie as AI substrate for Noelle, Natalie, and Nora (added April 27, 2026)
 
-The three SketchUp plugin agents are Ruby modules, not AI. Until each has a standalone processor, **Allie is their intelligence and experience**:
+The three SketchUp plugin agents are Ruby modules, not AI. Until each has a standalone processor, **Allie is their processing, intelligence, and experience**:
 
 | Agent | Rule-based code does | Allie does |
 |-------|---------------------|-----------|
@@ -317,6 +474,41 @@ The three SketchUp plugin agents are Ruby modules, not AI. Until each has a stan
 **Authority boundary:** The Ruby code is sovereign at runtime. Allie advises. She does not rewrite `followme.json`. She does not override Noelle's gate. Bill decides.
 
 **Handoff:** When a standalone processor exists for any of these agents, Allie hands off her accumulated experience base and steps back to observer for that domain.
+
+### Alice's support role
+
+- Alice has an API.
+- Alice provides the database support for ticketing, actions, and transactions.
+- Alice starts her database on machine startup and is expected to be available locally when Bill begins work.
+- Ticketing and transaction records belong with Alice's API/database support layer, not in `followme.json`, `vehicles.json`, or runtime logs.
+
+### How to communicate with Alice's API
+
+Use Alice through the local wcapi HTTP interface.
+
+Base assumption:
+- Alice's database starts on machine startup.
+- Alice is up and running on Bill's machine unless a local health check proves otherwise.
+
+Current local API pattern:
+1. Get a scoped token.
+2. POST JSON to the local wcapi endpoint.
+
+Example action write:
+
+```bash
+TOKEN=$(python3 /Volumes/Allie/scripts/allie_wc_token.py --agent alice)
+curl -s -X POST http://localhost:8000/wcapi/save/ \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"model_name":"action","title":"<title>","status":"open","description":{"from":"jpods","to":"alice","request":"...","category":"pending"}}'
+```
+
+Use this channel for:
+- ticketing support records
+- action persistence
+- transaction persistence
+- cross-agent notes that belong in the database layer
 
 ---
 
@@ -369,3 +561,124 @@ This is a recurring SketchUp template-drift issue: station geometry survives edi
 3. Re-export FollowMe.
 4. Confirm strict platform diagnostics show non-zero detections for every station.
 5. Run Noelle validation before Natalie routing.
+
+---
+
+## Session notes — 2026-05-01 (vehicle parking resolved)
+
+### Problem
+
+The 5V standard vehicle placement test placed 0 vehicles over multiple sessions.
+The symptom was silent: the operation reported `28 warnings` and committed,
+but no Noras appeared in the model.
+
+Earlier attempts used a backoff/shift-and-retry loop to handle conflicts. That
+approach masked the root bugs and produced no actionable diagnostic information.
+
+### Resolution strategy
+
+Replaced the retry loop with a hard stop + full diagnostic dump:
+- On any occupancy conflict, abort the test immediately.
+- Print a structured table to Ruby Console: function, call chain, slot index/count/role,
+  all platform record fields, guideway attributes, computed path total, vehicle world
+  position, spawn_t, and the conflict complaint verbatim.
+- Pop a `UI.messagebox` alert directing the user to the Ruby Console.
+
+One run with this strategy exposed four distinct bugs simultaneously.
+
+### Bug 1 — `vehicle_path_for` stitching corrupted platform host guideways
+
+**Symptom:** `path_total_m: 0.422 m (16 pts)` on a platform that should be 23.9 m (2 pts).  
+**Root cause:** `stitch_structure_followme_paths` is called by `vehicle_path_for` to prepend/append
+station internal FollowMe paths to mainline guideways. Platform host guideways are synthetic
+2-point groups built from the platform's `start_m`/`end_m` endpoints. Their endpoints happen
+to land near the station's internal FollowMe terminus, so the stitcher matched them and
+appended 14 extra station-interior points — collapsing 23.9 m to 0.422 m.  
+**Result:** `spawn_t` was computed as `target_pos / 0.422m` → overflow → `t=1.0` for every slot.
+All vehicles landed at the same point.  
+**Fix:** Overrode `vehicle_path_for` in `jpod_platform.rb` (loads after `jpod_guideway.rb`) to
+return `base_vehicle_path_for(group)` directly when `platform_host: true`, skipping stitching.  
+**Rule:** Any synthetic guideway that should not be extended by stitching must either override
+`vehicle_path_for` or set a guard attribute checked before stitching.
+
+### Bug 2 — `distance_to` does not exist in SketchUp Ruby
+
+**Symptom:** `occupancy validation error: undefined method 'distance_to' for Point3d`.  
+**Root cause:** `jpod_conflict_detector.rb` called `pt.distance_to(other_pt)` — that method does
+not exist in SketchUp's `Geom::Point3d`. The correct method is `.distance`.  
+**Secondary error:** The unit conversion used `/ 0.3048` (feet → meters). SketchUp internal
+unit is inches; the correct conversion is `/ 1.m`.  
+**Fix:** Changed both call sites to `pt.distance(other_pt) / 1.m`.  
+**Rule:** When a distance comparison produces values that seem off by ~3.28×, check whether
+`/ 0.3048` (feet) was used instead of `/ 1.m` (inches). SketchUp stores everything in inches.
+
+### Bug 3 — Personal-space threshold fired on correctly-spaced slots
+
+**Symptom:** Slot 1 and slot 2 reported as conflicting: `3.0m apart, need 3m`.  
+**Root cause:** Slots are designed to be exactly 3.0 m apart (center to center). The conflict
+threshold was `< 3.0`, which fired on floating-point values like `2.9999…`.  
+**Fix:** Lowered threshold to `< 2.5` m. This is a real stacking violation (two ~2 m vehicles
+physically overlapping). The designed 3 m slot spacing is not an emergency.
+**Rule:** Conflict thresholds must be less than the minimum physical overlap distance,
+not equal to the designed spacing.
+
+### Bug 4 — False merge conflicts from empty `current_line_id`
+
+**Symptom:** Every newly placed vehicle triggered a merge conflict against every other vehicle.  
+**Root cause:** Freshly placed vehicles have no `current_line_id` attribute yet. The check was
+`own_segment == other_segment && distance < 5.0`. In Ruby, `"" == ""` is `true`, so every
+vehicle matched every other vehicle as being on the same (empty) line segment.  
+**Fix:** Added `!own_segment.empty?` guard. Merge conflict is only meaningful when both
+vehicles are on an assigned, non-empty line segment.  
+**Rule:** Any equality check on optional SketchUp attributes must guard against the empty/nil
+case before comparing. Never assume an attribute is set on a newly created entity.
+
+### Architecture decision — platform host guideway is not a routable mainline
+
+Platform host guideways (connection_id prefixed `__platform__`) are parking scaffolding only.
+They are not part of the FollowMe network graph and must not be treated as mainline segments
+by any path-following or stitching code. The `platform_host: true` attribute is the
+authorative flag. Any code that iterates over `JPods Guideway` groups and does path math
+must check this flag if it might behave differently for synthetic vs. real guideways.
+
+### Files changed (2026-05-01)
+
+| File | Change |
+|------|--------|
+| `jpod_vehicle_runtime.rb` | Hard stop + full diagnostic dump on conflict; removed backoff accumulator |
+| `jpod_platform.rb` | `vehicle_path_for` override to skip stitching for `platform_host: true` |
+| `jpod_conflict_detector.rb` | `distance_to`→`distance`; `/ 0.3048`→`/ 1.m`; threshold 3.0→2.5 m; empty-id guard |
+
+---
+
+## AI-Watching Console Pattern (2026-05-02)
+
+**Concept:** When running JPods Console commands, instead of copy-pasting output to Copilot, enable a mode where Copilot watches the live log and interprets results in real time.
+
+**How it works now (manual):**
+- `tail -f jpod_console.log` runs in a VS Code terminal
+- Copilot polls `get_terminal_output` after each command run in SketchUp
+- Bill states what he expected; Copilot compares to actual output and diagnoses gaps
+
+**Target architecture — "Copilot watching" checkbox:**
+Add a checkbox labeled **"AI watching"** (or "Copilot watching") to the header area of every JPods console surface:
+| Surface | Console file |
+|---------|-------------|
+| SketchUp plugin | `dialogs/network_editor.html` + `jpod_console.rb` |
+| Physical robot | robot console (Pi-side) |
+| Route-Time GUI | browser front-end |
+| WebClerk3 | WC3 admin console |
+
+**When checked:**
+- Console output is appended to a shared structured log (e.g. `jpod_console.log` or a WC3 alice_log entry)
+- A lightweight SSE/WebSocket endpoint streams new log lines
+- Copilot (or Allie) subscribes, interprets each result, and posts a brief comment back to the console log or a side panel
+- No copy-paste; no context switching
+
+**Immediate implementation path for SketchUp:**
+1. `jpod_console.log` already exists and is `tail -f` ready
+2. Add a `POST /jpods/console-watch` SSE endpoint to Allie's local API that streams new log lines to a VS Code extension or browser panel
+3. Copilot subscribes via `tail -f` (current workaround) or the SSE stream
+
+**Design rule:** AI watching is advisory only. It does not write back to `followme.json` or issue commands. It reads, interprets, and posts observations. Bill decides.
+

@@ -120,6 +120,46 @@ These are mistakes already in the code or design. They are not future risks. The
 
 ---
 
+## Clearance Height — Accepted Risk with Committed Mitigation (2026-05-13)
+
+**Framing (Bill James, 2026-05-13):**
+The guideways are safe. The guideway structure at 4.6 m is a solid elevated beam —
+trucks do not threaten it. What is exposed is the JPods vehicle (pod) traveling on
+the guideway. A pod hanging from or riding a 4.6 m beam is within the strike envelope
+of overheight trucks. Bill accepts personal responsibility for building the sensor and
+defensive systems to prevent truck-pod contact.
+
+This is an accepted risk, not an unaddressed one. It is documented here so Allie and
+Athena are clearly aware of what has been accepted, what is owed, and what cannot ship
+without it.
+
+**Analogy Bill draws:** Roads provide no active protection for pedestrians from
+vehicles — separation is the design. JPods at 7.5 m had the same passive model: height
+was the protection. At 4.6 m, height is no longer sufficient and the model shifts from
+passive (height) to active (sensing + response). That is a deliberate engineering
+choice, not an oversight.
+
+**Why 4.6 m:** Reduces column height and cost; enables deployment in dense urban
+corridors where 7.5 m columns are impractical. The benefit justifies the changed
+safety model — provided the sensing and defensive stop systems are in place.
+
+| # | Risk | What is exposed | Owner | Severity | Status |
+|---|------|-----------------|-------|----------|--------|
+| CL-01 | Overheight vehicle strikes a pod traveling on the guideway | A truck with raised dump bed, oversized load, or double-stack flatbed enters the space below the guideway; the pod — not the structure — is the contact risk | Bill / Matilda / Nora | Existential | **Accepted — Bill commits to build mitigation before passenger deployment** |
+| CL-02 | Height-sensor and pod defensive-stop system not yet designed | No sensor spec, no Nora integration, no stop trigger, no alert path; the committed mitigation has no implementation yet | Bill / Athena / Nora | Existential | **In scope — design required before any public deployment** |
+| CL-03 | Sensor placement: must detect before the truck reaches the span | Detection must occur upstream of the guideway span while the pod has time to stop or divert; geometry and timing budget not yet calculated | Cilia / Matilda | High | Unaddressed |
+| CL-04 | Nora response latency: alert → pod stop within safety window | Sensor fires; Nora must receive, evaluate, and stop or re-route before the overheight vehicle reaches pod position; timing budget unknown | Nora / Natalie | Existential | Unaddressed |
+| CL-05 | False positive rate undermines operator trust in the system | If sensors trigger on normal vehicles, operators disable them; the system must be accurate enough to remain credible | Athena | High | Unaddressed |
+| CL-06 | Regulatory certification path for non-standard clearance | 4.6 m is below the AASHTO 4.9 m minimum for local roads and the 5.1 m interstate standard; deployment will require a regulatory argument and likely a variance | All | High | Unaddressed |
+
+**What Allie and Athena must hold:**
+- The guideways are not at risk. The pods are.
+- Bill has accepted responsibility for CL-01 and CL-02.
+- CL-03 through CL-06 require design work before passenger deployment.
+- No passenger deployment at 4.6 m clearance until CL-02 has an owner, a design, and a certification path.
+
+---
+
 ## Cross-Domain Risks (No Single Owner)
 
 | # | Risk | Domains | Why it could bite us | Severity | Status |
