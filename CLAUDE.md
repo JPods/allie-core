@@ -239,7 +239,7 @@ git -C ~/Allie pull origin main
 ```
 Run this at session start to get the latest handoff and recall files.
 
-**If local drive is NOT mounted** (fallback — requires public repo):
+**If local drive is NOT mounted** (fallback):
 ```
 WebFetch: https://raw.githubusercontent.com/JPods/allie-core/main/handoff/handoff.md
 WebFetch: https://raw.githubusercontent.com/JPods/allie-core/main/CLAUDE.md
