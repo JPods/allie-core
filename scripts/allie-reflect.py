@@ -651,6 +651,38 @@ def main():
         "output":         str(out_path),
     })
 
+    # Push intelligence layer to allie-core so Claude can reach it from any session.
+    # Stages only handoff/, process/, and readmes/wisdom/ — never credentials or logs.
+    try:
+        import subprocess
+        result = subprocess.run(
+            ["git", "add",
+             "handoff/",
+             "process/snippets/",
+             "process/inbox/",
+             "readmes/wisdom/"],
+            cwd=str(ALLIE), capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            commit = subprocess.run(
+                ["git", "commit", "-m",
+                 f"Allie nightly — {date_str} (auto)"],
+                cwd=str(ALLIE), capture_output=True, text=True
+            )
+            if commit.returncode == 0:
+                push = subprocess.run(
+                    ["git", "push", "origin", "main"],
+                    cwd=str(ALLIE), capture_output=True, text=True
+                )
+                status = "pushed" if push.returncode == 0 else f"push failed: {push.stderr.strip()}"
+            else:
+                status = "nothing to commit"
+        else:
+            status = f"add failed: {result.stderr.strip()}"
+        print(f"  GitHub sync: {status}")
+    except Exception as e:
+        print(f"  GitHub sync warning: {e}")
+
 
 if __name__ == "__main__":
     main()
