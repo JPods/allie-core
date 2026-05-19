@@ -249,6 +249,37 @@ def gather_new_process_narratives() -> str:
     return combined[:2000] if combined else ""
 
 
+def gather_snippets() -> dict:
+    """
+    Index process/snippets/ by domain.
+    Returns {domain: [(filename, header_comment), ...]}
+    where header_comment is the # When / # Why lines — not the full code.
+    """
+    snippets_dir = ALLIE / "process" / "snippets"
+    if not snippets_dir.exists():
+        return {}
+
+    by_domain: dict = {}
+    for f in sorted(snippets_dir.iterdir()):
+        if not f.is_file():
+            continue
+        # Domain prefix: su-, rt-, ph-, wc-, sys-
+        parts = f.name.split("-", 1)
+        domain = parts[0].upper() if len(parts) == 2 else "OTHER"
+        try:
+            lines = f.read_text().splitlines()
+            # Extract SNIPPET name and When/Why header lines only
+            name_line = next((l for l in lines if l.startswith("# SNIPPET:")), f.name)
+            when_line = next((l for l in lines if l.startswith("# When:")), "")
+            why_line  = next((l for l in lines if l.startswith("# Why:")), "")
+            summary   = f"{name_line}  {when_line}  {why_line}".strip()
+            by_domain.setdefault(domain, []).append((f.name, summary[:200]))
+        except Exception:
+            by_domain.setdefault(domain, []).append((f.name, ""))
+
+    return by_domain
+
+
 def gather_prior_reflect() -> str:
     """Read the most recent allie-reflect from handoff/."""
     if not HANDOFF_DIR.exists():
@@ -517,6 +548,16 @@ def write_claude_recall(date_str: str) -> pathlib.Path:
         lines.append("\n## Recent TFTS Principles (pre-loaded for next tx)")
         lines.extend(recent_principles)
 
+    # ── Section 4: Snippet index by domain ──────────────────────────────────
+    snippets = gather_snippets()
+    if snippets:
+        lines.append("\n## Code Snippet Index (process/snippets/)")
+        lines.append("*When Bill types tx:, check this index for relevant patterns.*\n")
+        for domain in sorted(snippets):
+            lines.append(f"### {domain}")
+            for fname, summary in snippets[domain]:
+                lines.append(f"- `{fname}`: {summary}")
+
     out_path.write_text("\n".join(lines) + "\n")
     return out_path
 
@@ -556,13 +597,16 @@ def main():
     recent_events      = gather_recent_events(args.days)
     process_narratives = gather_new_process_narratives()
     sum_reflect        = gather_sum_reflect()
+    snippets           = gather_snippets()
 
+    snippet_count = sum(len(v) for v in snippets.values())
     print(f"  harvests: {len(harvests)}  retrospections: {len(retrospections)}  "
           f"prior-reflect: {'yes' if prior_reflect else 'none'}  "
           f"sum-reflect: {'yes' if sum_reflect else 'none'}  "
           f"wisdom: {'yes' if wisdom_context else 'none'}  "
           f"events: {'yes' if recent_events else 'none'}  "
-          f"process: {'yes' if process_narratives else 'none'}")
+          f"process: {'yes' if process_narratives else 'none'}  "
+          f"snippets: {snippet_count}")
 
     # Write claude-recall.md first — mechanical, no LLM needed
     recall_path = write_claude_recall(date_str)
