@@ -589,6 +589,18 @@ def main():
 
     print(f"[allie-reflect] {date_str} | model: {args.model} | window: {args.days}d")
 
+    # Pull latest from allie-core before reading context — keeps Allie current
+    # if another machine or Claude session pushed since the last nightly run.
+    try:
+        import subprocess
+        pull = subprocess.run(
+            ["git", "pull", "--ff-only", "origin", "main"],
+            cwd=str(ALLIE), capture_output=True, text=True
+        )
+        print(f"  GitHub pull: {pull.stdout.strip() or pull.stderr.strip() or 'ok'}")
+    except Exception as e:
+        print(f"  GitHub pull warning: {e}")
+
     harvests           = gather_harvests(args.days)
     retrospections     = gather_retrospections(args.days)
     memory_index       = gather_memory_index()

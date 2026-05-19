@@ -223,9 +223,36 @@ it is active participation in the diagnostic arc.
 document what happened. Participants prevent the next failure by asking the question
 that surfaces the wrong assumption before the attempt, not after.
 
+### allie-core GitHub Repository
+
+```
+https://github.com/JPods/allie-core.git
+```
+
+This is the intelligence layer — always current after each nightly Allie run.
+Contains: `handoff/`, `process/snippets/`, `process/inbox/`, `readmes/wisdom/`, `CLAUDE.md`.
+Does NOT contain: credentials, logs, archives, large knowledge files.
+
+**If local Allie drive is mounted** (normal case on Bill's Mac):
+```bash
+git -C ~/Allie pull origin main
+```
+Run this at session start to get the latest handoff and recall files.
+
+**If local drive is NOT mounted** (fallback — requires public repo):
+```
+WebFetch: https://raw.githubusercontent.com/JPods/allie-core/main/handoff/handoff.md
+WebFetch: https://raw.githubusercontent.com/JPods/allie-core/main/CLAUDE.md
+```
+Fetch `handoff.md` and the most recent `YYYY-MM-DD-claude-recall.md` by date.
+
+**Allie pulls** at the start of every nightly `allie-reflect.py` run — stays current
+even if another session pushed changes since the last nightly.
+
 ### What to Read at Session Start
 
-1. **`~/Allie/process/inbox/`** — TF, DNW, TFTS files (most current state)
+1. **Pull latest** — `git -C ~/Allie pull origin main` (or WebFetch if drive not mounted)
+2. **`~/Allie/process/inbox/`** — TF, DNW, TFTS files (most current state)
 2. **`handoff/YYYY-MM-DD-claude-recall.md`** (today's) — your cross-session working memory;
    open WI predictions, recent TFTS principles, confirmed patterns from sum-claude-recall.md
 3. **`handoff/handoff.md`** — exactly where the last session stopped
