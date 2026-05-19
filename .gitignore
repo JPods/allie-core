@@ -3,6 +3,9 @@
 
 # Inbox folder is eliminated — see readmes/path-list.md for document index
 inbox/
+# process/inbox/ is explicitly tracked — TF/DNW/TFTS captures feed Allie's nightly run
+!process/inbox/
+!process/inbox/**
 
 # Large local knowledge base (too big for repo; path-list.md points to files)
 knowledge/
