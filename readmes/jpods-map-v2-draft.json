@@ -1,0 +1,164 @@
+{
+  "_schema_note": "jpods-map-v2 DRAFT — 2026-05-20. Full physical network document. Written by Noelle on every Build/Validate. One source of truth for all consumers: SketchUp visualizer, TripPlanner, Nora (Pi), Alice (billing), Route-Time, Dispatcher. All distances in mm. All coordinates in mm (x=east, y=north, z=up from model origin). Converges SketchUp and podPresenter formats. Allie and Noelle: annotate _innovation fields with observations and candidates for next iteration.",
+
+  "schema":       "jpods-map-v2",
+  "mapId":        "CA_Gilroy_Clean",
+  "generated_at": "2026-05-20T00:00:00Z",
+  "generated_by": "Noelle",
+
+  "_innovation_global": [
+    "ALLIE: what cross-domain data belongs at the map level vs. line level? (e.g. solar capacity of the whole network, CO2 offset, cargo throughput ceiling)",
+    "NOELLE: should mapId carry a hash of the followme.json it was derived from, so Nora can detect stale maps?",
+    "NOELLE: add a 'last_physical_survey' timestamp — date/time Nora last traversed every line and confirmed physical.json is current",
+    "ALLIE: Route-Time needs O-D travel times. Should map.json carry nominal_time_s per line at nominal speed, so Route-Time never recalculates fixed geometry?"
+  ],
+
+  "lines": {
+
+    "_note": "Every guideway segment — intra-station (gw_*) and inter-station (seg_*) — is a complete self-contained record. Consumers never re-derive geometry from SketchUp entities. Key: same id used in trip.json segments.",
+
+    "S048.gw_platform": {
+      "_note": "Intra-station line. Role = gw_platform means this is the loading/unloading track. Pods dwell here for passenger exchange.",
+      "id":        "S048.gw_platform",
+      "type":      "intra_station",
+      "station":   "S048",
+      "role":      "gw_platform",
+      "direction": "internal",
+      "length_mm": 11371,
+      "speedMin":  50,
+      "speedMax":  200,
+      "startPoint": { "x": 18046, "y": 189037, "z": 5442 },
+      "endPoint":   { "x": 13079, "y": 199266, "z": 5442 },
+      "segments": [
+        {
+          "id": 1,
+          "xs": 18046, "ys": 189037, "zs": 5442,
+          "xe": 13079, "ye": 199266, "ze": 5442,
+          "len": 11371, "lenCum": 11371,
+          "radius": 0,
+          "dx": -0.437, "dy": 0.900, "dz": 0.0,
+          "grade_pct": 0.0,
+          "_note": "grade_pct = dz/len * 100. Zero here — flat platform. Uphill positive, downhill negative. Nora adjusts motor power by grade."
+        }
+      ],
+      "markers": [],
+      "_note_markers": "AprilTag markers on this line. Each marker: {id, dist_mm, x_mm, y_mm, z_mm, value}. dist_mm = distance from startPoint where marker is mounted on guideway structure. Physical Nora reads AprilTag value to confirm position.",
+      "successors":   ["S048.gw_platform_out"],
+      "predecessors": ["S048.gw_platform_in", "S048.gw_platform_parking"],
+      "platform_capacity": 3,
+      "_note_platform_capacity": "INNOVATION CANDIDATE: how many pods can occupy gw_platform simultaneously without collision. Derived from length_mm / nominal_pod_length_mm. Noelle can calculate; Dispatcher reads.",
+      "dwell_time_s": 30,
+      "_note_dwell_time": "INNOVATION CANDIDATE: nominal passenger exchange time. Alice uses for schedule. Nora uses for departure timer. Could be template-declared in noelle_features.json and overridden per instance.",
+      "cargo_direction": "bidirectional",
+      "_note_cargo_direction": "INNOVATION CANDIDATE: inbound | outbound | bidirectional | none. Platform handles both arriving cargo and departing cargo when bidirectional. Alice routes cargo by direction."
+    },
+
+    "S048.gw_platform_out": {
+      "id":        "S048.gw_platform_out",
+      "type":      "intra_station",
+      "station":   "S048",
+      "role":      "gw_platform_out",
+      "direction": "outbound",
+      "length_mm": 8200,
+      "speedMin":  50,
+      "speedMax":  150,
+      "startPoint": { "x": 13079, "y": 199266, "z": 5442 },
+      "endPoint":   { "x": 10200, "y": 205100, "z": 5442 },
+      "segments": [
+        {
+          "id": 1,
+          "xs": 13079, "ys": 199266, "zs": 5442,
+          "xe": 10200, "ye": 205100, "ze": 5442,
+          "len": 8200, "lenCum": 8200,
+          "radius": 0,
+          "dx": -0.33, "dy": 0.94, "dz": 0.0,
+          "grade_pct": 0.0
+        }
+      ],
+      "markers": [],
+      "successors":   ["S048.gw_stub_pair_1_out"],
+      "predecessors": ["S048.gw_platform"]
+    },
+
+    "seg_S048_cp1_S050_cp0": {
+      "_note": "Inter-station line. Bezier path with waypoints — multiple segments. grade_pct per segment captures vertical profile for Nora motor control and Route-Time energy model.",
+      "id":        "seg_S048_cp1_S050_cp0",
+      "type":      "inter_station",
+      "from":      { "station": "S048", "stub": 1 },
+      "to":        { "station": "S050", "stub": 0 },
+      "direction": "outbound",
+      "length_mm": 452100,
+      "speedMin":  50,
+      "speedMax":  200,
+      "startPoint": { "x": 43041, "y": -6289, "z": 7886 },
+      "endPoint":   { "x": -24902, "y": -6289, "z": 7886 },
+      "segments": [
+        {
+          "_note": "Segments subdivide the Bezier path at ~2m intervals. Populated by Noelle from followme.json track geometry.",
+          "id": 1,
+          "xs": 43041, "ys": -6289, "zs": 7886,
+          "xe": 42500, "ye": -6100, "ze": 7890,
+          "len": 600, "lenCum": 600,
+          "radius": 0,
+          "dx": -0.9, "dy": 0.31, "dz": 0.007,
+          "grade_pct": 0.67
+        }
+      ],
+      "_note_segments": "Full segment array omitted from draft — Noelle generates from followme.json path data at Build time. Each 2m step becomes one segment record.",
+      "markers": [
+        {
+          "_note": "Waypoint marker 1 on this connection. Physical: AprilTag mounted on guideway column. dist_mm from startPoint.",
+          "id": 1,
+          "dist_mm": 45000,
+          "x": 0, "y": 0, "z": 0,
+          "_note_xy": "x/y/z in mm from model origin — Noelle populates from marker entity position at Build time.",
+          "value": 1,
+          "color": "YELLOW"
+        }
+      ],
+      "successors":   ["S050.gw_stub_pair_0_in"],
+      "predecessors": ["S048.gw_stub_pair_1_out"],
+      "energy_model": {
+        "_note": "INNOVATION CANDIDATE: per-line energy estimate. Route-Time and Alice use this. Noelle calculates from grade profile + length. Physical Nora logs actual vs. estimated for calibration.",
+        "estimated_wh": 12.4,
+        "grade_penalty_factor": 1.05,
+        "method": "grade_adjusted_flat_rate"
+      }
+    }
+  },
+
+  "ezones": [
+    {
+      "_note": "Merge/diverge points where collision risk exists. Nora must check ezone clearance before entering. Same structure as podPresenter — converged.",
+      "id": 1,
+      "type": "merge",
+      "inPoint1": { "lineId": "seg_S049_cp0_S048_cp0", "distFrom": 0,    "distTo": 3000 },
+      "inPoint2": { "lineId": "seg_S048_cp1_S050_cp0", "distFrom": 0,    "distTo": 3000 },
+      "outPoint":  { "lineId": "S048.gw_stub_pair_0_in","distFrom": 0,    "distTo": 3000 },
+      "ezMaxSpeed":   120,
+      "curveRadius":  8000,
+      "maxLateralG":  0.3,
+      "approach_decel_mm": 30000,
+      "_note_approach_decel_mm": "INNOVATION CANDIDATE: distance before ezone entry where Nora begins deceleration ramp. Derived from ezMaxSpeed and normal speed. Noelle can calculate; Nora reads."
+    }
+  ],
+
+  "dead_end_nodes": [
+    {
+      "_note": "Lines that terminate without a successor — line-end stations. Nora must stop before these. Noelle flags them.",
+      "lineId": "S050.gw_platform",
+      "endPoint": { "x": 0, "y": 0, "z": 0 }
+    }
+  ],
+
+  "network_summary": {
+    "_note": "INNOVATION CANDIDATE: top-level network stats. Alice uses for capacity planning. Route-Time uses for network-wide metrics. Noelle calculates at Build.",
+    "total_lines": 17,
+    "total_length_mm": 980000,
+    "station_count": 4,
+    "inter_station_connections": 3,
+    "estimated_cycle_time_s": 480,
+    "solar_panel_count": 0,
+    "_note_solar": "Noelle counts solar panel component instances at Build. Alice uses for energy offset calculation."
+  }
+}
