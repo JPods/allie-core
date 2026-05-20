@@ -39,6 +39,33 @@ This is Allie telling Natalie where everyone is. No manual configuration needed 
 
 ---
 
+## Processor Handoff Protocol (May 9, 2026)
+
+Allie currently carries Natalie's physical routing judgment (podPresenter runs on
+the Mac; Allie feeds it the pod IP map before every demo). When a dedicated
+Natalie Pi comes online:
+
+1. **Allie exports the bootstrap package** to the Natalie Pi:
+   - `readmes/agents/natalie.md` — this file
+   - `readmes/sketchup/jpods-gap-log.md` — routing failure patterns
+   - Current `followme.json` — the map Natalie will route on
+   - `pods.json` and `podIP.json` — current fleet identity and IP map
+
+2. **The Natalie Pi runs its own first route plan** on a known origin/destination
+   pair. Allie compares the output to her prior routing. Divergence → Bill.
+
+3. **Allie hands off `update_pod_ips.sh`** execution to the Natalie Pi's startup
+   sequence. Allie no longer runs MAC discovery before demos — Natalie Pi owns it.
+
+4. **Allie steps back to observer** — watches MQTT `START` acknowledgments, flags
+   any trip that looks inconsistent with the followme.json she holds.
+
+5. **SketchUp Natalie (`natalie.rb`) is NOT handed off** — it stays as a Ruby
+   module in SketchUp. Self-contained, fast, no network dependency. The Pi Natalie
+   and SketchUp Natalie are separate instances of the same role in different domains.
+
+---
+
 ## Design Decisions
 
 | Date | Decision | Reasoning |
@@ -60,6 +87,10 @@ This is Allie telling Natalie where everyone is. No manual configuration needed 
 | 2026-04-27 | Explicit destination existence check added to `route()` | Silent failure when a destination structure ID is not in the FollowMe graph caused hard-to-diagnose no-route returns |
 | 2026-04-27 | `@route_failure_streak` hash keyed by `origin->destination`; escalates at 3 consecutive failures | Same route failing 3 times in a row is a signal the network or definition state needs operator review, not just a retry |
 | 2026-04-27 | Streak cleared on any successful route for that key | Prevents stale escalation after a legitimate fix resolves the root cause |
+| 2026-05-09 | `origin_int` L-prefix stripping fixed in `route()` | Ruby `.to_i` on `"L5"` returns `0`; regex case now strips the prefix correctly so BFS starts from the right line |
+| 2026-05-09 | Route failure streak now escalates to `Noelle.review_recommendations` at threshold | Repeated routing failure is a network integrity signal; Natalie now asks Noelle to review the map rather than just printing a stop-and-review message |
+| 2026-05-09 | Trip authority chain documented in all three agent headers | Noelle certifies → Natalie plans → Nora travels; Nora does not re-query Noelle during travel |
+| 2026-05-13 | **Edge-driven routing — line endpoints are stub edges, not centerpoints** | A line ID's start and end are the physical stub edges where guideways connect to stations. Route plans are sequences of edge-to-edge transitions. Natalie never interpolates a centerpoint to define a junction — the edge IS the junction. Routing failures caused by centerline assumptions (e.g., a midpoint that falls inside a station bounding box instead of at its gate edge) are silent; edge-defined endpoints give Natalie an unambiguous handoff that Nora can sense directly. |
 
 ---
 
@@ -89,6 +120,34 @@ The within-LAN protocol (START/ACTION/TELEMETRY) is already correct and does not
 
 ---
 
+## Mission Staging — Natalie's Development Roadmap
+
+Natalie must be developed in stages. Each stage adds a mission type and the
+dispatch logic required to serve it. Do not build stage N+1 until stage N is
+stable and observable in simulation.
+
+| Stage | Mission(s) | What Natalie learns |
+|-------|-----------|---------------------|
+| 1 | `passenger` | Platform-to-platform trip assignment; one-way trip.json; origin must be `platform` (not `platform_in`) |
+| 2 | `shuffle` | Intra-platform slot advancement; 7-second delay; triggered by departure vacating a higher slot |
+| 3 | `dead_head` | Preemptive platform clearing for an inbound vehicle; `triggered_by` inbound nora_id |
+| 4 | `station_loop` | Vehicle loops back to own station's `platform_in` queue when no other clearing option |
+| 5 | `rebalance` | Proactive network balancing using time-of-day patterns and demand signals |
+| 6 | **Cargo** | Goods inbound from warehouse; pre-sorted by destination station; cargo mission type |
+| 7 | **Waste** | Continuous waste outbound streaming; sorted by category at station; waste mission type |
+| 8 | **Demand-aware dispatch** | Cellphone density, weather factor, price factor, app bookings inform preposition decisions |
+
+**What does not change across stages:** the trip.json schema. Every mission type
+uses the same `{nora_id, mission, payload, origin_platform, dest_platform, triggered_by, trip}`
+structure. See `readmes/sketchup/jpods-trip-schema.md`.
+
+**Cargo and waste are Middle-Mile missions, not edge cases.** They are the other
+half of the Physical Internet. A JPods network that only moves passengers is running
+at half capacity. The cargo and waste missions are where the network becomes a
+circulatory system — continuous flow, not scheduled batch.
+
+---
+
 ## Open Questions
 
 - Boundary protocol channel: MQTT federation (brokers bridged) or HTTP between broker hosts? Both are viable — the right answer depends on the boundary topology.
@@ -96,6 +155,8 @@ The within-LAN protocol (START/ACTION/TELEMETRY) is already correct and does not
 - Emergency vehicle pre-emption: what is the protocol for clearing the network when an ambulance needs priority? (X-01)
 - Billing: how does Natalie securely post trip records to wcapi? NS-05 is the risk; the design is not yet written.
 - As fleet grows beyond ~8 pods on a single LAN, does Natalie on the Mac need dedicated hardware? Or does a LAN stay small by design (and the answer is more LANs, not a bigger Natalie)?
+- **Approach-curve-limited speed in zipper merge (open):** `planZipperApproach()` in `ezone.py` currently uses the segment's nominal speed. It should use the curve-limited arrival speed for merge segments whose approach radius < MIN_APPROACH_CURVE_RADIUS. The followme.json does not yet carry per-segment curve radius — Noelle must emit it at export time, and Natalie/Nora must read it. Design not yet started.
+- **Segment throughput weighting by approach curve (open):** Route-Time's Dijkstra weights segments by congestion ratio. Segments with tight approach curves carry a structural throughput penalty independent of current congestion — but this is not yet reflected in the weight formula. Needs a `curve_penalty` term in `engine/network.py`.
 
 ---
 
@@ -154,6 +215,7 @@ The within-LAN protocol (START/ACTION/TELEMETRY) is already correct and does not
 | No direct south exit from station — northbound turnabout adds ~160m | Physical geometry present in SketchUp model, Route-Time graph, and physical navigation map |
 | Origin and destination are always platform nodes | Trips begin and end at real boarding locations across all implementations |
 | 3 consecutive failures on same pair → escalate, do not retry | "Retry is not diagnosis" — applies in SketchUp, Route-Time, and physical equally |
+| Approach curve radius constrains segment throughput — weight accordingly | A segment whose approach zone has curve radius below MIN_APPROACH_CURVE_RADIUS forces pods to slow before the merge point. The zipper merge algorithm computes gap based on arrival speed; if that speed is unpredictably low (curve-forced), the gap estimate is wrong. In Route-Time, such segments carry a throughput penalty in Dijkstra weights. In physical, Natalie must know each merge point's expected arrival speed when computing headway. A segment that looks short on paper but has a tight approach curve is slower in practice than its length implies. |
 
 ---
 
@@ -200,6 +262,10 @@ Once Natalie gives Nora a route, Nora follows exactly. Natalie recalculates only
 **U-PH-001 [Physical — Scale/4WD] parseStartPing must accept `msg.length >= 7`, not `== 7`**
 Nora's START ping added a `version` field at index 7. Strict equality caused Natalie to silently ignore every START ping — pods entered an endless RESEND loop. Version field is optional. This is the single largest silent failure mode discovered in physical testing.
 *Provenance: Design decision 2026-04-07.*
+
+**U-PH-003 [Cross-domain] Approach curve radius, zipper merge gap, and personal space are one constraint in three forms**
+The zipper merge calculates the gap Nora must maintain: `personal_space ≥ (V × reaction_time) + braking_distance(V, mass)`. V is the arrival speed at the merge point. Arrival speed is set by the approach curve radius — a curve below MIN_APPROACH_CURVE_RADIUS forces V below nominal before the merge window begins. The merge calculation then runs on the wrong V, producing a gap that is either too tight (collision risk) or too wide (throughput loss). The three forms of the same constraint: (1) MIN_APPROACH_CURVE_RADIUS in the SketchUp design enforces the speed floor; (2) the zipper merge algorithm in ezone.py must use the actual curve-limited speed, not the nominal segment speed; (3) Natalie's segment weights in Route-Time must reflect the throughput penalty of approach-curve-limited segments. A network that passes all three consistently cannot have a merge collision caused by approach geometry.
+*Provenance: Bill's explicit connection, 2026-05-16.*
 
 **U-PH-002 [Physical] podPresenter is scaffolding; the MQTT protocol is the architecture**
 The Processing sketch will be replaced. `START/ACTION/TELEMETRY` protocol does not change. Future Natalies inherit the protocol, not the UI.

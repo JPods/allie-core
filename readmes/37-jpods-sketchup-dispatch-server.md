@@ -1,6 +1,9 @@
 # JPods — SketchUp Dispatch Server (WEBrick)
-**Last updated:** 2026-04-29
-**Status:** Ruby code ready — integrate into SketchUp plugin
+**Last updated:** 2026-05-14
+**Status:** Implemented — `dispatch_server.rb` running in plugin on port 5051
+
+**Trip JSON schema:** `su_jpods/readmes/trip-json-schema.md` — all three trip file formats
+(per-Nora trip file, fleet observation log, dispatch payload) with field reference and invariants.
 
 The SketchUp plugin starts a WEBrick HTTP server on port 5051 when it loads.
 Django's `TravelView` POSTs a trip command to it after posting the invoice to Alice.

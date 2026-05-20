@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.allie.watcher</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/williamjames/Library/Scripts/allie-watcher-launcher.sh</string>
+  </array>
+
+  <!-- Start at login. If /Users/williamjames/Allie is not mounted, the script exits cleanly. -->
+  <key>RunAtLoad</key>
+  <true/>
+
+  <!-- Restart if it crashes; but not if it exits cleanly (drive unmounted). -->
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+
+  <!-- Throttle respawn to avoid tight loop if drive repeatedly unmounts -->
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/allie-watcher-stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/allie-watcher-stderr.log</string>
+
+  <!-- Only run when logged in as this user -->
+  <key>ProcessType</key>
+  <string>Interactive</string>
+</dict>
+</plist>

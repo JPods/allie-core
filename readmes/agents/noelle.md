@@ -38,6 +38,65 @@ Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresente
 
 ---
 
+## Noelle as Slime Mold — Sensor-Driven Network Optimization
+
+Physarum polycephalum (slime mold) finds optimal paths through a network by
+sending exploratory tendrils toward food sources, reinforcing paths that reach
+food, and letting paths that do not reach food atrophy. The result is a minimum-
+cost network that adapts continuously to where food is.
+
+**Noelle is the slime mold of the JPods network.**
+She does not plan routes (that is Natalie). She evaluates the network itself —
+where demand is, where capacity is underused, where sensors are needed to see
+what she cannot currently see — and recommends network topology changes.
+
+### What Noelle hunts (food sources = demand)
+
+| Signal | What it reveals | Sensor required |
+|--------|----------------|-----------------|
+| Passenger trip density by segment | Which connections carry the most load | Trip log (already available) |
+| Dead-head trip frequency by station | Which stations are poorly located or undersized | Trip log + mission field |
+| Cargo volume by station | Which stations serve logistics demand | Cargo mission trips |
+| Waste volume by station | Which stations serve residential density | Waste mission trips |
+| Cellphone density at pedestrian speeds | Latent demand not yet served by any station | Carrier aggregate data feed |
+| Bike/pedestrian counts at guideway cameras | Last-Mile mode activity; weather/price calibration | Cameras on guideway structure |
+| Time-of-day demand curves | When and where demand peaks | Trip log aggregated by hour |
+| Weather factor (1–5) | How mode shift responds to conditions | Weather API |
+| Price factor (1–5) | Whether pricing is at equilibrium | Trip log + camera counts |
+
+### What Noelle concludes (path reinforcement)
+
+- **High passenger density on a segment** → recommend adding a station midpoint
+  or a parallel connection to increase capacity
+- **High dead-head frequency at a station** → station is in the wrong place or
+  too small; recommend relocating or adding platforms
+- **Cargo/waste volume concentrated at specific stations** → logistics hub
+  opportunity; recommend dedicated cargo platform
+- **Camera shows high bike activity near a station** → Last-Mile is healthy;
+  station placement is correct
+- **Camera shows low bike activity despite good weather** → Last-Mile gap;
+  recommend bike infrastructure investment near that station
+- **Segment unused for >N hours** → candidate for atrophy; flag to Bill for
+  consideration of rerouting or decommissioning
+
+### What Noelle cannot yet see (sensor gaps)
+
+- Physical cargo weights per pod (requires onboard scale or weight sensor)
+- Actual passenger count per pod (requires seat sensors or app check-in)
+- Waste category composition at station (requires sorting sensors)
+- Intersection-level pedestrian counts (requires street-level cameras, not just guideway)
+
+These sensor gaps are Noelle's open questions — she knows what she would learn
+if she could see them, and she flags them as investment priorities as the network
+grows.
+
+**The slime mold principle applied:**
+Noelle does not need a master plan. She reinforces what works and flags what does
+not. The network topology that emerges from her sensor-driven recommendations over
+time is the optimal network for actual demand — not the network a planner predicted.
+
+---
+
 ## Open Questions
 
 - Network-wide parameter changes (speed limits, weight limits, headway): how does a distributed system adopt a new parameter simultaneously? No governance mechanism exists (NEW-05 — "Articles of Confederation flaw")
@@ -68,8 +127,17 @@ Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresente
 |------|----------|-----------|
 | 2026-04-27 | `component_definition_faults()` fail-fast gate added | A lost week was caused by stations not properly defined (no Sxxx ID, no platform tag) — silent degradation was worse than a loud failure |
 | 2026-04-27 | Stations missing `platform_guideways` are flagged immediately | Natalie cannot route to a platform that Noelle cannot find; better to fail at definition time than at route time |
+| 2026-05-09 | `define_network` 5-phase hard gate added to `noelle.rb` | Schema, model dict, connection structure refs, successor/predecessor graph, and platform line_id must all pass before Natalie may plan any trip |
+| 2026-05-09 | `normalize_network` re-sequences all line_ids in canonical order after gate passes | Canonical IDs make followme.json deterministic across rebuilds; logs any renumbering so operator can verify trip files are still valid |
+| 2026-05-09 | `review_recommendations` auto-runs after every followme.json export | Noelle speaks without being asked — flags isolated tracks, missing CPs, u_turn ambiguity, no-guideway connections, via_markers gaps, and connectivity between stations |
+| 2026-05-09 | 1-CP station check added to `component_definition_faults` | S010 had 1 CP — could be a terminus or a missing stub_pair tag; Noelle now demands the operator confirm intent by adding `travel_routes: ['u_turn']` if it is a terminus |
+| 2026-05-09 | `review_recommendations` via_markers audit falls back to connections dict if `network_definition` absent | Defensive — some older v2 exports may lack the authoring block; Noelle still audits what she can |
+| 2026-05-10 | `purge_stale_trip_files` runs after every followme export | No legacy support — stale trip files (missing or mismatched `followme_generated_at`) are deleted and operator is alerted immediately. Trip files must be rebuilt. |
+| 2026-05-10 | Internal connection naming: `"#{sid}_#{conn_name}"` replaces `"#{sid}_internal_N"` | Ordinal naming breaks when station templates gain new internal routes; connection_id-based naming is stable. |
+| 2026-05-10 | Direction strings: `"out"` / `"in"` / `"u_turn"` replace unicode arrow strings | Arrow strings were ambiguous about which structure is the reference. `out` = forward (index 1), `in` = return (index 0). |
 | 2026-04-27 | `STOP_REVIEW_THRESHOLD = 3` — streak counter escalates after 3 consecutive validation fault runs | Repeated validation failures without escalation let bad state persist invisibly; 3-strike rule forces explicit operator review |
 | 2026-04-27 | `definition_hunt_instruction()` returns canonical corrective message | Consistent language across all agents so operators always know what action to take |
+| 2026-04-30 | Platform siding guideway instance name should include `track` (preferred `Track-platform`) | FollowMe structure export is more resilient when the real berth guideway still identifies itself as a track in Entity Info; the `platform` tag marks role, `track` marks geometry source |
 
 ---
 
@@ -112,6 +180,99 @@ distL, distR, battVolt, mmDistTotal, encTotalL, encTotalR
 
 ---
 
+## Physical Observation Layer — `{model}.physical.json`
+
+**Why it is separate from feature.json:**
+`feature.json` is regenerated by Noelle on every Build and Validate — it is a
+routing declaration, not a log. Physical observations accumulate over time and must
+survive rebuilds. They live in a separate file: `{model}.physical.json`.
+
+**Who writes it:** Nora writes per-line observations during and after each trip.
+Field team may add entries manually. Noelle reads it and flags routes where
+observations exceed severity threshold.
+
+**Schema: `jpods-physical-v1`**
+
+```json
+{
+  "schema": "jpods-physical-v1",
+  "model_id": "CA_Gilroy_Clean",
+  "note": "Per-line physical observations. Accumulated by Nora over trips. Not overwritten by Build or Validate.",
+  "lines": {
+    "seg_S048_cp1_S050_cp0": {
+      "observations": [
+        {
+          "type": "bump",
+          "location_t": 0.34,
+          "severity": "minor",
+          "description": "column joint at ~34% of segment",
+          "logged_at": "2026-05-17T14:32:00Z",
+          "logged_by": "NORA_0001"
+        }
+      ]
+    },
+    "S048.gw_uturn_1": {
+      "observations": [
+        {
+          "type": "alignment_issue",
+          "location_t": 0.5,
+          "severity": "moderate",
+          "description": "pod yaws right at apex — track seam visible",
+          "logged_at": "2026-05-17T14:33:00Z",
+          "logged_by": "NORA_0001"
+        }
+      ]
+    }
+  }
+}
+```
+
+**Line IDs in physical.json match trip.json exactly:**
+- Inter-station: `seg_S048_cp1_S050_cp0` (from `network_definition.connections`)
+- Intra-station: `S048.gw_uturn_1`, `S048.gw_far_main`, etc. (sid.tag from feature.json)
+
+`trip.json` provides the canonical list of all segment IDs for any O-D pair.
+Iterating over `trip['segments']` gives the complete set of lines that need
+physical observation records for that route.
+
+**Observation types:**
+
+| Type | Source | Example |
+|------|--------|---------|
+| `bump` | Nora IMU / encoder spike | Column joint, expansion gap, debris |
+| `obstruction` | Nora TOF / HuskyLens | Low branch, signage encroachment |
+| `speed_anomaly` | Nora encoder vs expected | Grade steeper than modeled, drag |
+| `alignment_issue` | Nora yaw sensor | Track seam causing pod to yaw |
+| `vibration` | Nora IMU | Resonance frequency at a specific segment |
+| `debris` | Nora or field team | Leaves, ice, standing water |
+| `weather` | Field team | Wind exposure, solar glare, ice formation |
+| `other` | Any source | Free-text description |
+
+**`location_t`** — parametric position along the segment: 0.0 = start end,
+1.0 = far end. Allows pinpointing the physical location for maintenance.
+
+**Severity scale:**
+
+| Severity | Meaning | Noelle response |
+|----------|---------|-----------------|
+| `minor` | Pod completes trip; degraded comfort or efficiency | Log; report at next review |
+| `moderate` | Pod completes trip; requires attention before next run | Flag route; notify operator |
+| `severe` | Pod may not complete trip safely | Block route; require operator sign-off to re-enable |
+
+**Noelle's use of physical.json:**
+Before confirming a route is clear, Noelle scans physical.json for the segments in
+that trip. Any `severe` observation blocks the route. Any `moderate` observation
+generates a warning. `minor` observations are aggregated and reported at review
+intervals. This is how the physical network self-documents: every bump Nora feels
+becomes a maintenance record Noelle can act on.
+
+**Not yet implemented:** Physical.json writing is designed but not yet coded in
+`main.py`. Nora currently writes `nora.json` trip summaries with `anomalies: []`
+reserved. The first implementation step is populating `anomalies` from IMU/encoder
+spikes and writing them to physical.json in the segment format above.
+
+---
+
 ## Three Domains at a Glance
 
 | Domain | What Noelle IS here | Key file / tool |
@@ -136,6 +297,8 @@ These hold across all three domains. A rule that appears violated is an implemen
 | One-way guideways — Red = inbound, Blue = outbound | Physical track is one-way; simulation and design must match |
 | Capacity limits are real — congestion is a signal, not an error | Physical queueing, simulation queueing, and design reviews all surface this |
 | No half-connections — CPs connect to CPs, both lines or neither | Boundary abstraction holds in all three tools |
+| **Edge-driven specs, sensors, and metrics — no calculated centerlines** | All position references, ezone boundaries, clearance specs, and sensor targets are defined on hard physical edges (beam bottom face, platform edge, stub end edge). Never on a computed midpoint or centerline. SketchUp proved this definitively: FollowMe walks edges natively; attempts to feed it a derived centerline caused animation failures. Sensors must also reference edges — a TOF reads distance to an edge; an AprilTag is mounted on an edge surface. If a centerline is needed for display, derive it from two known edges — never store it as the authoritative reference. |
+| **Approach curves are mandatory before every station CP and merge point — inter-station guideways only** | In the last APPROACH_CHECK_DEPTH metres before each station CP or ezone merge point, every inter-station guideway must maintain a curve radius ≥ MIN_APPROACH_CURVE_RADIUS (currently 8 m). This is a momentum rule, not an aesthetic one. Approach curve radius sets the floor on the speed at which Nora arrives at a junction. That arrival speed is the input to the zipper merge gap calculation: `personal_space ≥ (speed × reaction_time) + braking_distance`. A sharp curve forces a speed reduction the zipper algorithm did not plan for, producing an incorrect gap estimate and potential collision risk. **Enforcement boundary:** curves below MIN_APPROACH_CURVE_RADIUS are required inside features — U-turns, traffic circles, platform loops. These tight curves are built into the feature geometry, executed at reduced station-entry speed under the feature's own ezone speed limit, and never at cruise speed. `check_approach_curves()` explicitly skips internal-connection and platform-host guideways. **Responsibility:** it is the network designer's responsibility to accommodate the geometric requirements of features in the surrounding layout — providing sufficient approach distance, orienting stations to face their connections, and placing waypoint markers to guide gentle curves. Noelle flags violations; she does not move stations. Cross-domain: same rule governs ezone entry speed (physical), segment throughput weighting (Route-Time), and CP placement (SketchUp). |
 
 ---
 
@@ -150,6 +313,52 @@ These hold across all three domains. A rule that appears violated is an implemen
 | Noelle's body | `noelle.rb` validation functions | `engine/network.py` Network object | Distributed across all `ezone.py` instances |
 
 **Does NOT transfer:** Jam threshold (7.17m) is Route-Time only. `ezoneId`/`ezState` TELEMETRY fields are physical only. `component_definition_faults()` is SketchUp only.
+
+---
+
+## Processor Handoff Protocol (May 9, 2026)
+
+Allie currently carries Noelle's judgment in all three domains. As dedicated
+processors come online, Allie hands off and steps back. The protocol is:
+
+### When a new Noelle processor comes online
+
+1. **Allie exports the bootstrap package** to the new processor:
+   - `readmes/agents/noelle.md` — this file; the accumulated experience base
+   - `readmes/sketchup/jpods-gap-log.md` — recurring failure patterns
+   - Current `followme.json` — the live map the new processor will validate
+   - `readmes/agents/allie.md` cross-reference for any cross-domain decisions still held by Allie
+
+2. **The new processor runs its own first-pass validation** of `followme.json`.
+   Output goes to Allie for comparison. Any divergence from Allie's prior findings
+   is flagged to Bill — not resolved automatically.
+
+3. **Allie moves to observer role** for that domain:
+   - She watches the processor's outputs
+   - She flags divergence between processor findings and her expectation
+   - She does NOT duplicate the processor's reasoning or override its decisions
+   - She continues to hold cross-domain context (SketchUp ↔ Physical ↔ Route-Time)
+
+4. **Handoff is declared complete** when the new processor has run independently
+   through at least one full export → validate → review cycle without Allie
+   compensating for gaps.
+
+### Domain priority for handoff (do these in order)
+
+| Priority | Domain | Current body | Target processor |
+|----------|--------|-------------|------------------|
+| 1 | Physical Natalie | podPresenter (Mac Processing sketch) | Dedicated Pi — Natalie Pi |
+| 2 | Physical Noelle | Distributed ezone.py (already on Nora Pis) | Already distributed — no handoff needed |
+| 3 | Route-Time Noelle | `engine/network.py` on Mac | Could move to Pi if Route-Time becomes real-time |
+| 4 | SketchUp Noelle | `noelle.rb` Ruby module — stays on Mac | **Do not move.** SketchUp must remain self-contained. |
+
+### SketchUp stays local — always
+
+Moving SketchUp's Noelle or Natalie to a Pi adds a network dependency to the
+authoring tool. If the Pi is offline, SketchUp breaks. The Ruby modules are fast,
+self-contained, and correct. Do not offload them. The burden Allie carries in
+SketchUp is the SketchUp-specific judgment (gap log, tag failure patterns) —
+not the Ruby validation logic, which is already sovereign.
 
 ---
 
@@ -175,9 +384,45 @@ One pod hitting the threshold stops. The pod behind reaches threshold distance a
 If station B (farther) shows shorter travel time than C (closer) under significant demand, the direct segment is jammed — pods are routing around it. Check `line_stats.congestion` first before inspecting topology.
 *Provenance: Route-Time readme 28; diag_grid.py verification 2026-04-27.*
 
+**U-SK-005 [Cross-domain] Approach curve radius is a momentum constraint, not a geometry preference**
+The minimum curve radius before a station CP or ezone merge point is derived from physics, not aesthetics. A pod arriving at speed V needs `reaction_distance = V × reaction_time` before a merge decision, plus braking distance after. If the approach curve has forced V below nominal before that window begins, the zipper gap calculation runs on the wrong speed — producing an incorrect gap and potential collision risk. The fix is always layout: move the station further away, rotate it to face the connection, or add waypoint markers to force a longer approach. `check_approach_curves(model)` enforces MIN_APPROACH_CURVE_RADIUS = 8 m over the last 12 m of each guideway end. The 2 m straight lead-in in the bezier handles seam tangent continuity — a different, narrower constraint. Same law governs: ezone entry speed (physical), segment throughput weighting (Route-Time), CP placement (SketchUp).
+*Provenance: Build session 2026-05-16; Bill's explicit requirement.*
+
 **U-PH-001 [Physical — Scale/4WD] `blockedByEZ = True` means two pods collided at ezone entry**
 Normal zipper merge should never block. If blocked, two pods arrived at the entry point simultaneously with no reachable gap. RESET the slower pod.
 *Provenance: `readmes/agents/noelle.md` operational notes.*
+
+**U-SK-006 [SketchUp] `gw_far_out` is a departure track segment, not the platform**
+`gw_far_out` appears only in `1cp_line_end` departure paths: `gw_platform → gw_uturn_1 → gw_far_main → gw_far_out → gw_stub_pair_0_out`. It is never the arrival destination. All station types — including `1cp_simple` — reach the platform via `gw_platform_in → gw_platform_parking → gw_platform`. Noelle station type classification: if a 1-CP station has `gw_uturn_1` or `gw_far_main` internal tags → `1cp_line_end`. If not → `1cp_simple`. A station classified `1cp_simple` that has `gw_far_main` or `gw_uturn_1` is a classification fault — log it.
+*Provenance: Bill's trip.json review 2026-05-17; TripPlanner ROUTES_1CP_SIMPLE corrected.*
+
+**U-SK-007 [Cross-domain] Two code paths producing the same output from the same input is a design defect**
+`build_platform_round_trip` and `TripPlanner` were independently computing trips. Bill's rule: one source of truth. The fix was not to reconcile outputs but to make one delegate to the other. When duplication is found, eliminate it — do not patch.
+*Provenance: Bill's direct instruction 2026-05-17.*
+
+**U-ALL-002 [Cross-domain] Physical observations are a separate file from routing behaviors — never merge them**
+`feature.json` is Noelle's routing declaration — regenerated on every Build/Validate, overwriting the prior version. Physical observations (bumps, trees, obstructions, alignment issues) accumulate over time and must survive rebuilds. They live in `{model}.physical.json`. Noelle reads both files; she writes only `feature.json`. Nora writes only `physical.json`. If physical observations were stored in `feature.json`, every Build would erase them. The separation is not incidental — it is the architectural boundary between what the design says and what the physical world reveals.
+*Provenance: Bill's instruction 2026-05-17.*
+
+**U-SK-008 [SketchUp] Explicit model datum beats derived reference — cap_pt first, cluster last — 2026-05-18**
+When computing CP tangent direction, use `cap_pt` (the `dead_cap_end` entity, placed explicitly by the model author) if present. If the computed tangent points away from `cap_pt`, reverse it. Do not trust cluster centroids or bounding box centers as primary references — both can misclassify for asymmetric templates. Three fixes failed before this principle was applied. The hierarchy: explicit tagged entity → hard edge endpoint → radial distance from formation center → cluster centroid. Read process/inbox/ for the S050.CP0 narrative.
+*Provenance: Build session 2026-05-18; three failed fixes documented in scars.md.*
+
+**U-SK-009 [SketchUp] Hermite terminal tangent must be reversed for arriving CP — 2026-05-18**
+`bezier_pts_via` uses the Hermite formulation where the endpoint tangent = curve velocity. For the TO endpoint (arriving pod), velocity is inward: use `to_cp[:tangent].normalize.reverse`. The ene_railroad handle convention in `bezier_pts`/`tangent_curve_pts` is different and already correct — never mix the two in the same function without confirming which convention applies.
+*Provenance: Connect tool preview fix 2026-05-18; `bezier_spline_pts` in network.rb was already correct.*
+
+**U-SK-010 [SketchUp] Skipped guideways in FollowMe export = missing reverse connection declarations — 2026-05-18**
+`JPods followme: skipping undeclared guideway cid=seg_*` means a guideway exists with built geometry but no entry in `network_definition.connections`. These are always the missing reverse-direction declarations. Parse from/to/stub from the segment ID and add the entry. A network without reverse declarations produces `[Natalie/block] No route found` even though the physical guideways exist.
+*Provenance: CA_Gilroy_Clean build 2026-05-18.*
+
+**U-SK-011 [SketchUp] Noelle BLOCK recommendations are demands — Allie must surface them to Bill — 2026-05-18**
+Noelle's `[BLOCK]` level recommendations are not advisory. They represent physical constraints (approach curve radius = momentum constraint, not aesthetics; disconnected topology = no routing). Allie must not let them pass silently into the console. When Noelle BLOCKs, Allie names the specific stations and the specific remediation: rotate, move, or add waypoints. Approach curve violations require the DESIGNER to fix layout — the code is correctly detecting a physical safety constraint.
+*Provenance: Bill's instruction 2026-05-18: "Noelle needs to demand attention to the parameters. Allie needs to listen to Noelle."*
+
+**U-ALL-001 [Cross-domain] Noelle feature.json applies to all environments — SketchUp, Physical, Route-Time**
+Station behaviors (allowed segment sequences per template) are physical facts. They are declared once in `noelle_features.json` (plugin folder, keyed by component definition name). Noelle generates `{model}.feature.json` on every Build and Validate. TripPlanner, Natalie, Nora, and Route-Time all read from it — none recalculate. This is how large networks stay manageable: behaviors are enumerated once, looked up everywhere. Adding a new station template means one entry in `noelle_features.json`, not code changes across multiple files.
+*Provenance: Bill's direct instruction 2026-05-17.*
 
 ---
 

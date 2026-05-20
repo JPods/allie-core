@@ -1,6 +1,22 @@
 # Allie — Private Repository
 # What stays local and never goes to GitHub
 
+# API keys and live credentials — NEVER commit
+config/allie_api_keys.json
+config/wc_credentials.json
+
+# Operational per-day logs — stay local
+today/
+logs/
+
+# Non-repo files that landed in working directory
+*.pdf
+*.exe
+LexarDataShield*/
+
+# Training Modelfiles — local build artifacts
+training/
+
 # Inbox folder is eliminated — see readmes/path-list.md for document index
 inbox/
 # process/inbox/ is explicitly tracked — TF/DNW/TFTS captures feed Allie's nightly run
@@ -28,8 +44,7 @@ athena_private.pem
 **/cred_names.txt
 
 # Google OAuth credentials — NEVER commit (permanent tokens on Allie drive only)
-credentials/gmail_credentials.json
-credentials/gmail_token.json
+credentials/
 
 # credentials.enc IS committed — it is Athena-encrypted and safe in the private repo
 # cred_names.txt IS committed — plaintext names only, no values

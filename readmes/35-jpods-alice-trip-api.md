@@ -11,19 +11,21 @@ identity, applies their pricing tier and discounts, and posts the invoice to Web
 ## Architecture
 
 ```
-User selects trip (UI)
-  → Natalie: POST /wcapi/jpods/price/   (price query)
-  ← Alice: { price, display, contact_id, item_id }
-  → User sees price, confirms
-  → Nora executes trip
-  → Natalie: POST /wcapi/jpods/invoice/ (trip complete, passes item_id back)
+Customer presents my_carry_on at station (phone/kiosk)
+  → selects origin + destination
+  → Natalie: negotiates fare directly with customer
+  → Customer accepts
+  → Natalie dispatches Nora (trip file carries customer + my_carry_on)
+  → Nora executes trip; uses my_carry_on.preferences (temp, requirements)
+  → Natalie: POST /wcapi/jpods/invoice/  (commerce record after trip)
   ← Alice: { invoice_id, status: complete }
 ```
 
 **Authority boundaries:**
-- Natalie owns routing and dispatch. She calls Alice for price and invoice only.
-- Alice owns pricing, discounts, and commerce records. She does not route pods.
-- Nora owns pod execution. She does not touch Alice directly.
+- **Natalie** owns fare negotiation and dispatch. Fees are between Natalie and the customer.
+- **Alice** is the ledger. She posts the commerce record after the trip is confirmed. She does not quote fares or route pods.
+- **Nora** owns pod execution. She reads `my_carry_on` preferences from the trip file. She does not touch Alice directly.
+- **Customer** owns their CarryOn. The trip file carries a working copy; mycarryon.io is the authoritative store.
 
 ---
 

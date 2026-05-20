@@ -1,0 +1,215 @@
+{
+  "profile": {
+    "name": "Bill James",
+    "mode": "unified",
+    "note": "mode: unified = everything is work. mode: divided = work and personal are separate contexts."
+  },
+
+  "monitoring": {
+    "projects": [
+      {
+        "id": "jpods-plugin",
+        "label": "JPods SketchUp Plugin",
+        "path": "~/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods",
+        "enabled": true,
+        "stagnation_alert_days": 2
+      },
+      {
+        "id": "jpods-docs",
+        "label": "JPods Documents",
+        "path": "~/Documents/08_JPods",
+        "enabled": true,
+        "stagnation_alert_days": 5
+      },
+      {
+        "id": "webclerk3",
+        "label": "WebClerk3",
+        "path": "~/Documents/CommerceExpert/webClerk3",
+        "enabled": true,
+        "stagnation_alert_days": 3
+      },
+      {
+        "id": "react2025",
+        "label": "React2025 Frontend",
+        "path": "~/Documents/CommerceExpert/React2025",
+        "enabled": true,
+        "stagnation_alert_days": 5
+      },
+      {
+        "id": "allie",
+        "label": "Allie Infrastructure",
+        "path": "/Volumes/Allie",
+        "enabled": true,
+        "stagnation_alert_days": 7
+      },
+      {
+        "id": "politics",
+        "label": "Divided Sovereignty / Writing",
+        "path": "~/Documents/Politics",
+        "enabled": true,
+        "stagnation_alert_days": 7
+      }
+    ],
+    "apps": [
+      { "process": "SketchUp",      "label": "SketchUp",      "enabled": true },
+      { "process": "Code",          "label": "VS Code",        "enabled": true },
+      { "process": "zoom.us",       "label": "Zoom",           "enabled": true },
+      { "process": "Google Chrome", "label": "Chrome",         "enabled": true }
+    ],
+    "harvest_lookback_days": 7
+  },
+
+  "priorities": [
+    {
+      "rank": 1,
+      "project": "jpods-plugin",
+      "goal": "Build guideways from network.json — dual beams along Bezier centerlines",
+      "deadline": "2026-05-15",
+      "status": "in-progress"
+    },
+    {
+      "rank": 2,
+      "project": "webclerk3",
+      "goal": "WebClerk3 — critical path items from 00-DEFECTList.txt",
+      "deadline": null,
+      "status": "ongoing"
+    },
+    {
+      "rank": 3,
+      "project": "politics",
+      "goal": "Divided Sovereignty — Report of 2026 series",
+      "deadline": null,
+      "status": "ongoing"
+    }
+  ],
+
+  "must_fix": [
+    {
+      "id": "OSL-02",
+      "severity": "HIGH",
+      "project": "jpods-plugin",
+      "description": "Privacy doctrine has no code enforcement — jpod_privacy.rb not written",
+      "owner": "Bill",
+      "deadline": "2026-05-01",
+      "resolved": false
+    },
+    {
+      "id": "OSL-03",
+      "severity": "HIGH",
+      "project": "allie",
+      "description": "Athena privacy calibration corpus not representative",
+      "owner": "Bill",
+      "deadline": "2026-05-15",
+      "resolved": false
+    },
+    {
+      "id": "OSL-04",
+      "severity": "HIGH",
+      "project": "jpods-plugin",
+      "description": "A-06 trip log exposure — no mitigation design",
+      "owner": "Bill",
+      "deadline": "2026-05-01",
+      "resolved": false
+    },
+    {
+      "id": "OSL-05",
+      "severity": "HIGH",
+      "project": "jpods-plugin",
+      "description": "No booking token design — unforgeable + unlinkable",
+      "owner": "Bill",
+      "deadline": "2026-05-15",
+      "resolved": false
+    },
+    {
+      "id": "OSL-06",
+      "severity": "MEDIUM",
+      "project": "allie",
+      "description": "Vulnerable user threat modeling not done",
+      "owner": "Bill",
+      "deadline": "2026-06-01",
+      "resolved": false
+    }
+  ],
+
+  "audit": {
+    "interval_hours": 24,
+    "note": "Bill must review pending-audit items at least once per interval. harvest.py flags overdue items.",
+    "ui_command": "python3 /Volumes/Allie/scripts/audit.py",
+    "cli_command": "python3 /Volumes/Allie/scripts/audit.py --cli"
+  },
+
+  "athena": {
+    "models": {
+      "triage": "athena-triage",
+      "deep":   "athena",
+      "reason": "athena-reason"
+    },
+    "note": "Three specialized LLMs. Triage (llama3.2) classifies fast. Deep (gpt-oss:20b) reviews security. Reason (deepseek-r1:8b) models threats.",
+    "review_script": "python3 /Volumes/Allie/scripts/athena_review.py propose",
+    "external_probes": {
+      "enabled": false,
+      "note": "Set enabled:true and configure at least one provider. API keys from environment variables — never stored here.",
+      "auto_trigger": ["BLOCK", "model-disagreement", "probe-requested"],
+      "note_auto_trigger": "BLOCK=any model flags block; model-disagreement=triage and deep disagree by 2+ levels; probe-requested=athena-reason outputs PROBE: YES",
+      "providers": [
+        {
+          "id": "openai",
+          "label": "OpenAI GPT-4o",
+          "endpoint": "https://api.openai.com/v1/chat/completions",
+          "model": "gpt-4o",
+          "api_key_env": "OPENAI_API_KEY",
+          "enabled": false
+        },
+        {
+          "id": "anthropic",
+          "label": "Anthropic Claude",
+          "endpoint": "https://api.anthropic.com/v1/messages",
+          "model": "claude-opus-4-5",
+          "api_key_env": "ANTHROPIC_API_KEY",
+          "enabled": false
+        }
+      ]
+    }
+  },
+
+  "assessment": {
+    "checks": [
+      {
+        "id": "attention-distribution",
+        "label": "Attention Distribution",
+        "enabled": true,
+        "description": "Flag any priority-1 or priority-2 project inactive beyond its stagnation_alert_days",
+        "action": "List in harvest under ATTENTION ALERT"
+      },
+      {
+        "id": "osl-resolution-rate",
+        "label": "OSL Resolution Rate",
+        "enabled": true,
+        "description": "Count unresolved must_fix items; flag any past deadline",
+        "alert_if_count_exceeds": 5,
+        "action": "List overdue items with days-overdue count"
+      },
+      {
+        "id": "cross-domain-debt",
+        "label": "Cross-Domain Debt",
+        "enabled": true,
+        "description": "When multiple projects active in same session, flag decisions in one that may affect another",
+        "action": "Prompt: check for consequences across active projects"
+      },
+      {
+        "id": "stagnation",
+        "label": "Project Stagnation",
+        "enabled": true,
+        "description": "Per-project inactivity based on stagnation_alert_days; uses multi-day harvest lookback",
+        "action": "List stale projects with last-seen date"
+      },
+      {
+        "id": "priority-alignment",
+        "label": "Priority Alignment",
+        "enabled": true,
+        "description": "Compare where time actually went vs. stated priority ranking",
+        "action": "Show ranked priority list alongside actual activity; flag mismatches"
+      }
+    ]
+  }
+}

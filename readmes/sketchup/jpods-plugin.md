@@ -177,7 +177,129 @@ Both `jpod_connect_tool.rb` and `jpod_network.rb` contain independent copies of
 these methods — any fix must be applied to **both** files.
 Fixed: 2026-05-13 (3 sites in jpod_network.rb, 3 in jpod_connect_tool.rb, 1 in jpod_animator.rb).
 
-### 8. CP text labels must be refreshed after every Build
+### 8. Edge-driven geometry — no calculated centerlines as authoritative references
+
+SketchUp processes geometry on **edges**. FollowMe walks edges. Transformations operate on edges. When a centerline is computed and treated as the authoritative position reference, SketchUp loses the thread — the calculated point does not correspond to any real edge, so face sweeps, offsets, and animation paths drift or collapse.
+
+**The rule:** Every position reference in the JPods plugin anchors to a hard geometric edge:
+- Guideway beam elevation = bottom face edge of beam (not centerline)
+- Connection point location = stub edge endpoint (not stub midpoint)
+- Clearance height = from terrain surface to beam bottom edge
+- Waypoint Z = zeroed before PathBuilder; PathBuilder assigns the edge-referenced floor
+
+**In PathBuilder:** `center_pts` Z values are zeroed before the build so PathBuilder's
+`floor_z = terrain_z + CLEARANCE_HEIGHT` establishes every point from a real surface edge.
+The anchor_zs = `[terrain + CLEARANCE_HEIGHT at from_CP, terrain + CLEARANCE_HEIGHT at to_CP]` pin
+the endpoints to the exact beam-bottom-face elevation above the terrain edge at each CP.
+
+**Do not:** compute a centerline and store it as a position; derive a "midpoint" of a CP stub as the connection reference; use `bounding_box.center` Z as a beam height.
+
+**Do:** read the edge endpoint directly (`edge.start.position`, `edge.end.position`); use `bounds.min.z` or `bounds.max.z` to get a face level; raycast to terrain surface edge.
+
+This is a cross-domain axiom — see `readmes/agents/noelle.md` Universal Rules, and each agent file Design Decisions entry for 2026-05-13.
+
+### 9. Waypoint marker Z behavior — CONFIRMED 2026-05-14
+
+> **Change control:** Do not modify marker Z placement, geometry, or attribute storage without a
+> written plan reviewed against this rule. The approach below was confirmed working after a session
+> of failures from alternative approaches. The two failure modes to avoid: (1) using `elevation_at`
+> instead of `ground_z_at` → marker stems cause double-CLEARANCE_HEIGHT stacking; (2) passing
+> marker `beam_z` attribute as absolute Z without reading `terrain_z` → circles appear at wrong level.
+
+Waypoint markers default to `terrain_z + CLEARANCE_HEIGHT`. The user can drag the marker up/down
+to adjust Z. The `beam_z` attribute is the authoritative routing elevation.
+
+**Code locations:**
+| What | File | Method |
+|------|------|--------|
+| Initial drop | `jpod_connect_tool.rb` | `drop_marker_at_cursor` |
+| Live drag | `jpod_connect_tool.rb` | `onMouseMove` |
+| Drag commit | `jpod_connect_tool.rb` | `commit_marker_move` |
+| Routing read | `jpod_connect_tool.rb` | `collect_markers_live` |
+| Terrain detection (skips stems) | `jpod_terrain.rb` | `Terrain.ground_z_at` |
+| Span floor_z (skips stems) | `jpod_terrain.rb` | `Terrain.snap_to_terrain` |
+
+**Placement algorithm (`drop_marker_at_cursor`, `onMouseMove`):**
+```ruby
+# jpod_connect_tool.rb
+terrain_pt = Terrain.ground_z_at(view.model, pt.x, pt.y)
+pt = Geom::Point3d.new(pt.x, pt.y, terrain_pt.z + Constants::CLEARANCE_HEIGHT)
+```
+`ground_z_at` (not `elevation_at`) is mandatory — marker stems are solid geometry from terrain to
+beam level. `elevation_at` hits the stem top face and returns beam_z instead of terrain_z, causing
+the next marker placed nearby to stack an additional CLEARANCE_HEIGHT above the stem.
+
+**Attributes stored on every marker group (`jpod_connect_tool.rb → drop_marker_at_cursor`):**
+- `JPods / beam_z` (inches) — routing elevation; used by `collect_markers_live` and PathBuilder
+- `JPods / terrain_z` (inches) — terrain level; used by draw overlay for reference circle Z
+- `JPods / marker_number` — identity key; also signals `ground_z_at` to skip this marker in future raycasts
+
+**Geometry layers, bottom to top:**
+- 1 m circle at terrain_pt — anchor reference
+- 5 m circle at terrain_pt — curve radius visual aid
+- 10 m circle at terrain_pt — curve radius visual aid
+- Dark thin stem from terrain_pt to beam_pt
+- Orange cap post at beam_pt
+
+**`snap_to_terrain` along spans (`jpod_terrain.rb → Terrain.snap_to_terrain`):**
+Calls `ground_z_at` (not `elevation_at`) so marker stems along a span do not corrupt
+PathBuilder's `floor_z` computation when the beam path runs near existing markers.
+
+---
+
+### 10. CP anchor height — CONFIRMED 2026-05-14
+
+> **Change control:** Do not modify the anchor_zs calculation in `build_segment` without a
+> written plan reviewed against this rule and `readmes/sketchup/jpods-cp-regression-guard.md`.
+> Three alternative approaches were tested and failed in this session before the committed code
+> was restored. The working algorithm is: `from_cp[:center].z + BEAM_DEPTH` (non-traffic-circle)
+> or `+ BEAM_DEPTH / 2` (traffic circle). Do not replace this with terrain raycasts.
+
+**Code location:** `jpod_network.rb` → `Network.build_segment` → anchor_zs block (~line 514)
+
+```ruby
+# jpod_network.rb — build_segment
+is_traffic_circle = lambda do |ent|
+  fid = ent&.get_attribute("JPods", "formation_id", "").to_s.downcase
+  fid.include?("traffic_circle")
+end
+from_z = from_cp[:center].z + (is_traffic_circle.call(from_entity) ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+to_z   = to_cp[:center].z   + (is_traffic_circle.call(to_entity)   ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+cp_anchor_zs = [from_z, to_z]
+```
+
+**How it works:**
+- `from_cp[:center].z` = stub bottom face Z, computed by `centroid_min_z` in
+  `jpod_structure_tool.rb → scan_stub_pair_tips` (minimum Z of gate-end vertex cluster)
+- Non-traffic stations: stub bottom + `BEAM_DEPTH` (0.5 m) = beam top face Z — PathBuilder
+  path runs along beam top; beam extrusion hangs downward so bottom face lands at stub bottom
+- Traffic circles: stub bottom + `BEAM_DEPTH / 2` (0.25 m) — historical seam-height compensation
+  for the traffic circle template geometry
+
+**What was tried and failed (2026-05-14):**
+1. `Terrain.elevation_at(CP_xy) + CLEARANCE_HEIGHT` — hits different station geometry at each CP;
+   S012.CP1 off by 0.6 m, S044.CP0 off by 1.2 m depending on station template and terrain slope
+2. `Terrain.ground_z_at(CP_xy) + CLEARANCE_HEIGHT` — skips station geometry entirely, returns
+   raw terrain; same error magnitudes, different direction
+3. `from_cp[:center].z` directly (no + BEAM_DEPTH) — places beam 0.5 m below stub bottom
+
+**Source of from_cp[:center].z:**
+```ruby
+# jpod_structure_tool.rb — centroid_min_z
+def self.centroid_min_z(verts)
+  n = verts.size.to_f
+  Geom::Point3d.new(verts.sum(&:x) / n, verts.sum(&:y) / n, verts.map(&:z).min)
+end
+# called at: scan_stub_pair_tips → outer_pt = centroid_min_z(clusters[:outer])
+# CP center Z = midpoint(outer_pt_a.z, outer_pt_b.z) ≈ outer_pt.z (they share beam bottom Z)
+```
+
+**F-07 note:** When station templates are redesigned at 4.6 m stub height, revisit this calculation.
+Until then: `from_cp[:center].z + BEAM_DEPTH` is the only confirmed-working anchor.
+
+---
+
+### 11. CP text labels must be refreshed after every Build
 `model.entities.add_text("S001.CP0", pt)` labels accumulate — Build does not
 automatically clear old ones.  The fix: before every Build, erase all
 `Sketchup::Text` entities whose `.text` includes `".CP"`, then re-add from
@@ -681,4 +803,133 @@ Add a checkbox labeled **"AI watching"** (or "Copilot watching") to the header a
 3. Copilot subscribes via `tail -f` (current workaround) or the SSE stream
 
 **Design rule:** AI watching is advisory only. It does not write back to `followme.json` or issue commands. It reads, interprets, and posts observations. Bill decides.
+
+
+---
+
+## skp_jpods — Project Folder Management (added 2026-05-15)
+
+### Purpose
+
+Students working on JPods networks tend to scatter files across Downloads, Desktop,
+and random project folders. The plugin guides them toward a single, consistent layout:
+
+```
+~/Documents/skp_jpods/
+  README.md                      ← agreement doc / user guide
+  utilities/
+    projects.json                ← registry of all known project locations
+    organize.sh                  ← last-used file-move script (inspectable)
+  CA_Gilroy_Casino2/             ← one folder per .skp, named to match
+    CA_Gilroy_Casino2.skp
+    CA_Gilroy_Casino2.followme.json
+    CA_Gilroy_Casino2.vehicles.json
+    CA_Gilroy_Casino2.map.json
+    trips/
+```
+
+### First-run agreement — two chances, then hands off
+
+The plugin stores the user's choice in SketchUp preferences
+(`Sketchup.read_default("JPods", "skp_jpods_setup")`).
+
+| Moment | Status before | Action |
+|---|---|---|
+| Plugin loads (3 s timer) | nil | First offer: YES sets up folder; NO records "offered_once" |
+| First Build click | "offered_once" | Second offer: YES sets up; NO records "declined" + creates utilities/ only |
+| Any model open | "agreed" + outside skp_jpods | Prompt to move (see below) |
+| Any subsequent open | "declined" | Silent; registry updated only |
+
+After two NO answers the plugin never prompts again. "Declined" users still get their
+file locations recorded in `utilities/projects.json` on every Connect Guideways commit.
+
+### Open-model location check
+
+Fires via the AppObserver `onOpenModel` / `onNewModel` hook (1.5 s deferred timer).
+Conditions for prompt:
+- Status = "agreed"
+- Model has a saved path
+- `File.dirname(model.path)` does not start with `SKP_JPODS_ROOT`
+
+Dialog offers three choices:
+- **YES** — Write `utilities/organize.sh`, launch it in background, quit SketchUp.
+  Script waits for SketchUp to exit, moves all project files, reopens the model.
+- **NO** — Quit SketchUp. User moves files manually.
+- **CANCEL** — Keep working here; no action.
+
+### Finder button (Network Editor toolbar)
+
+| Model location | Button behavior |
+|---|---|
+| Already in skp_jpods | `open -R followme.json` — Finder opens with file selected |
+| Outside skp_jpods | Shows move dialog (same YES/NO/CANCEL as open-model check) |
+| Model unsaved | Message: save first |
+
+### organize.sh
+
+Written to `~/Documents/skp_jpods/utilities/organize.sh` (not /tmp).
+Persistent and inspectable. Content pattern:
+```bash
+#!/bin/bash
+# JPods project organizer — generated YYYY-MM-DD HH:MM
+# Moves: <base> → <dest_dir>
+while pgrep -x "SketchUp" > /dev/null 2>&1; do sleep 1; done
+sleep 1
+mkdir -p <dest_dir>
+mv <file1> <dest_dir>/
+mv <file2> <dest_dir>/
+...
+open -a 'SketchUp' <dest_dir>/<base>.skp
+```
+
+### Standing Rule — Every Track Formation Template Must Have line.json
+
+`templates/track_formations/<folder>/line.json` is required for every template.
+It is the authoritative declaration of what Track groups exist and their routing role.
+
+**Schema: `jpods-template-lines-v1`**
+
+Each entry in `"lines"` has:
+- `name` — SketchUp group entity name
+- `layer` — SketchUp tag (layer) name (the actual distinguishing field for identically-named groups)
+- `role` — `"routing"` | `"parking"` | `"slop"`
+- `notes` — optional explanation
+
+The routing engine reads `role` from line.json to decide which structure tracks to
+include in route/trip overlays. Never use heuristic name-pattern filters as a
+substitute — the layer name is the ground truth.
+
+| Role | Meaning |
+|------|---------|
+| `routing` | Vehicle travel path — included in route and trip overlays |
+| `parking` | Vehicle storage bay or approach — excluded from routing |
+| `slop` | Dead-end transition piece — excluded from routing |
+
+**Checklist for new templates:**
+1. Create `line.json` in the template folder using the schema above
+2. Populate `name` + `layer` from SketchUp Entity Info (select each Track group)
+3. Set `role` for every track
+4. Run Create > Export Template Library to verify and add `length_m`
+5. Commit `line.json` with the `.skp`
+
+See `templates/track_formations/README.md` for the full schema and folder index.
+
+---
+
+### Connect Guideways commit — canonical JSON path rule
+
+`commit()` in `jpod_connect_tool.rb` uses `default_json_path(model)` (canonical path
+beside the .skp) unless `saved_json_path` is in the **same directory** as the model.
+This prevents copy-saved models from silently writing back to the original model's
+followme.json. On first commit, `CA_Gilroy_Casino2.followme.json` is created beside
+the .skp automatically.
+
+### Key files
+
+| File | Role |
+|---|---|
+| `jpod_project.rb` | `SKP_JPODS_ROOT`, `offer_setup`, `perform_setup`, `check_model_location`, `collect_project_files`, `note_unmanaged_project` |
+| `jpod_network_editor.rb` | Finder button callback, `show_in_finder_or_organize`, `launch_organize_script`; `collect_project_files` delegated to `jpod_project.rb` |
+| `boot.rb` | 3 s startup offer timer; AppObserver `check_model_location_deferred` call |
+| `jpod_connect_tool.rb` | `commit()` canonical JSON path rule; `note_unmanaged_project` call |
 

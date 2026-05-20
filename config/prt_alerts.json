@@ -1,0 +1,9 @@
+{
+  "_instructions": "Add Google Alert RSS feed URLs here. In Google Alerts, set Delivery=RSS and copy the feed URL.",
+  "feeds": [
+    {
+      "label": "Google Alert \u2014 personal rapid transit (example)",
+      "url": "https://www.google.com/alerts/feeds/REPLACE_WITH_YOUR_FEED_ID"
+    }
+  ]
+}

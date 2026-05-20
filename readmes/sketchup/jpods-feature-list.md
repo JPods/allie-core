@@ -22,6 +22,8 @@ to the student workflow tool.
 | F-02 | User-configurable minimum Z (vertical) curve radius per model | `MIN_Z_CHANGE_DIAMETER` is currently a global constant. Fixing legacy 7.6 m waypoint Z values exposed that the vertical profile produces grade transitions that are too sharp when a significant vertical drop occurs over a short horizontal distance. Students need to be able to smooth this out without touching code. | `jpod_constants.rb`, `jpod_path_builder.rb`, Network Editor Constraints panel | High | Idea |
 | F-03 | Per-connection XY and Z radius override | Beyond the model-wide default, individual connections (especially tight urban segments) may need their own radius settings. Would appear as fields in the Network Editor connection card. | `jpod_network_editor.rb`, `jpod_network.rb`, followme JSON schema | Medium | Idea |
 
+| F-07 | Update station structure templates to place stubs at 4.6 m, and add `platform_in` guideway | Station .skp models (station_thru_lift, station_line_end, traffic_circle) were designed with stubs at 7.5 m (old clearance). Build now anchors guideway to terrain + CLEARANCE_HEIGHT = 4.6 m, so the physical stub geometry no longer aligns with the built beam. Students see a vertical gap at the station connection. Fix requires redesigning the .skp templates. Additionally: each station template needs a second guideway tagged `platform_in` (vehicles waiting to depart) alongside the existing `platform` guideway (loading/unloading). Current models have 1 platform per station; correct design has 2. The code already supports both tags — `PLATFORM_TAGS = %w[platform platform_in]` in `jpod_structure_tool.rb`. | Station template .skp files | High | Idea |
+
 **Root cause note for F-01 / F-02 (2026-05-13):**
 Both constants are already in `PRIMARY_CONSTRAINT_DEFAULTS` and exposed in the Network
 Editor Constraints panel — but they are model-wide only and require a Build to take
@@ -49,4 +51,32 @@ at waypoints became visible as tight kinks.
 | # | Feature | Why | Domain | Priority | Status |
 |---|---------|-----|--------|----------|--------|
 | F-06 | Per-connection grade profile graph | Show a small elevation cross-section in the connection card: terrain line, grade-limit envelope, and beam Z line. Helps students identify where columns will be tall or where the grade is at its limit. | `jpod_network_editor.rb` | Medium | Idea |
+
+---
+
+## Console — Trip Analytics
+
+| # | Feature | Why | Domain | Priority | Status |
+|---|---------|-----|--------|----------|--------|
+| F-09 | JPods Console trip-category graph | Bar or pie chart of trips by mission: `passenger`, `dead_head`, `station_loop`, `rebalance` (graphed) + `shuffle` count displayed separately. The `passenger:dead_head` ratio is the primary network health signal — high dead_head means stations are in the wrong places or demand is asymmetric. Valuable for both simulation and real network design: guides station placement, platform count, and connection sizing before construction. Shuffle excluded from graph — too frequent on busy networks (outnumbers passenger trips 2:1+), would collapse the signal into noise. | `jpod_console.rb` | High | Idea |
+
+**Design notes for F-09 (2026-05-16):**
+- Read mission field from all trip.json files in the trips/ directory.
+- Aggregate counts by mission. Display `passenger`, `dead_head`, `station_loop`, `rebalance` on graph.
+- Show `shuffle` count as a plain number below the graph: "Shuffle moves: N".
+- Update live during animation — poll every 2–3 seconds or hook into Natalie trip-write events.
+- Schema: `readmes/sketchup/jpods-trip-schema.md`.
+
+## Animation — Parking
+
+| # | Feature | Why | Domain | Priority | Status |
+|---|---------|-----|--------|----------|--------|
+| F-08 | Parking guideway animation — enter, lower, back out | Parking guideways are currently excluded from routing (status='internal' in followme). When a vehicle is dispatched to park: (1) it travels the parking guideway to the end, (2) lowers vertically from beam height (4.6 m) to ground level, (3) backs out in reverse along the same guideway to return to the mainline. Two spaces per parking guideway end — vehicles park sequentially. | `jpod_animator.rb`, `jpod_vehicle_runtime.rb`, `natalie.rb` | Medium | Idea |
+
+**Design notes for F-08 (2026-05-14):**
+- Vehicles back out — no separate exit guideway needed. Reverse the feature sequence and animate the vehicle component backward along the bezier path.
+- Vertical descent/ascent: linear Z interpolation on the vehicle transform matrix from 4.6 m to `Terrain.ground_z_at(parking_end_xy)`. ~30 lines of Ruby.
+- Two spaces: sequential. Pod 1 parks at the far end (lowers), pod 2 parks at the near end (lowers). On departure, reverse order: pod 2 raises and backs out first, then pod 1.
+- Parking guideways remain excluded from `Natalie.route()` BFS — they are dispatched only by explicit Natalie parking commands, never discovered through path search.
+- Dependency: parking guideways must have a correctly-tagged internal connection in the followme so Natalie can look them up by station ID.
 

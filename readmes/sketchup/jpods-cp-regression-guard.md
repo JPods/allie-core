@@ -6,6 +6,36 @@
 
 ---
 
+## stub_pair Geometry Model
+
+**One `stub_pair` component = one complete gate = BOTH parallel beam stubs.**
+
+Not one side. A station with two gates has two `stub_pair` component instances. A station with one gate (line-end) has one.
+
+Inside the `stub_pair` component definition:
+- Geometry for both parallel beam stubs (left and right, ~3.5 m apart / `DUAL_TRACK_SPACING`)
+- `dead_end_cap` entities as **direct children** of the stub_pair definition — not nested inside sub-groups or sub-components
+
+The `stub_pair` tag is applied to the component **instance** inside the station component definition. The definition itself carries no special tag. Sub-entities inside the stub_pair component carry no `stub_pair` tag — tagging at multiple levels stops the scanner at the outermost match.
+
+```
+Station Component (no stub_pair tag)
+  ├── StubPair_Gate0 (instance, tag="stub_pair")   ← gate 0: both beams
+  │     [definition contains:]
+  │     ├── left stub beam geometry
+  │     ├── right stub beam geometry
+  │     ├── dead_end_cap  ← direct child, left beam seam
+  │     └── dead_end_cap  ← direct child, right beam seam
+  └── StubPair_Gate1 (instance, tag="stub_pair")   ← gate 1: both beams
+        [definition contains:]
+        ├── left stub beam geometry
+        ├── right stub beam geometry
+        ├── dead_end_cap  ← direct child, left beam seam
+        └── dead_end_cap  ← direct child, right beam seam
+```
+
+---
+
 ## The Invariant
 
 **A CP must sit at the midpoint between the two guideway bottom-centerlines at the gate seam.**
@@ -133,6 +163,36 @@ After clicking Build:
 | Gap at seam but CP circle is centered correctly | Failure 4 — cap compensation | Check `extend_path_ends` in `jpod_network.rb`. Cap extension should be applied to path endpoints only, not to `gate_ctr`. |
 | CP direction flips after model save/reload | Failure 1 — `inward_ref` at wrong location | Print `inward_ref` during Recompute. It must be the centroid of stub tips, not `(0,0,0)`. |
 | `Recompute CPs` shows `CPs from cap seams` not `stub_pair tags` | Tag missing or misspelled | Open the station SKP, check every gate stub entity for `stub_pair` tag (exact name, lowercase, no spaces). |
+
+---
+
+## Anchor Z for Guideway Endpoints at CP — CONFIRMED 2026-05-14
+
+> **Change control:** Do not change the anchor_zs formula in `build_segment` without a written plan.
+> Three alternatives were tested on 2026-05-14 and all failed. See Rule 10 in
+> `readmes/sketchup/jpods-plugin.md` for the failure log.
+
+**Code location:** `jpod_network.rb` → `Network.build_segment` → anchor_zs block
+
+**Working formula:**
+```ruby
+is_traffic_circle = lambda do |ent|
+  fid = ent&.get_attribute("JPods", "formation_id", "").to_s.downcase
+  fid.include?("traffic_circle")
+end
+from_z = from_cp[:center].z + (is_traffic_circle.call(from_entity) ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+to_z   = to_cp[:center].z   + (is_traffic_circle.call(to_entity)   ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+cp_anchor_zs = [from_z, to_z]
+```
+
+`from_cp[:center].z` = stub bottom face Z from `centroid_min_z` in `scan_stub_pair_tips`
+(`jpod_structure_tool.rb`). PathBuilder path runs at beam TOP face; beam depth hangs downward
+so the bottom face lands flush with the stub bottom seam.
+
+**Failed alternatives (2026-05-14, do not retry without written plan):**
+- `Terrain.elevation_at(CP_xy) + CLEARANCE_HEIGHT` — inconsistent per-station (0.6–1.2 m errors)
+- `Terrain.ground_z_at(CP_xy) + CLEARANCE_HEIGHT` — skips station geometry, same magnitude errors
+- `from_cp[:center].z` alone (no + BEAM_DEPTH) — beam lands 0.5 m below stub seam
 
 ---
 

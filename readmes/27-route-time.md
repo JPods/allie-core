@@ -95,6 +95,21 @@ Uses OpenStreetMap Nominatim geocoder — no API key required.
 
 ---
 
+## Structure Naming
+
+Stations and traffic circles are assigned sequential human-readable IDs:
+
+| Type | Format | Example |
+|------|--------|---------|
+| Station | `s#` | `s1`, `s2`, `s32` |
+| Traffic circle | `c#` | `c1`, `c2`, `c36` |
+
+Numbering starts at 1 and is unique per network. Internal nodes are named `{sid}.PLATFORM`, `{sid}.NB_N`, etc.  Old hex-style IDs (`ST_XXXXXX`, `TC_XXXXXX`) in legacy `.jpd` files are still loaded and reconstructed correctly.
+
+When hovering over a station or circle in **Locked** mode, the tooltip shows the structure ID (`s3`, `c7`, etc.) and its center latitude/longitude — e.g., `s3 · 37.31234, -121.87345`. Not the internal CP node IDs.
+
+---
+
 ## Grid Generator
 
 Toolbar button: `⊹ Grid…` — opens a modal dialog.
@@ -113,7 +128,7 @@ for quick capacity exploration — not a designed network.
 
 **Topology built:**
 - Circles at every intersection
-- N-S stations (heading=0°) mid-block between row pairs; connected circle south arm ↔ station CP_N, station CP_S ↔ next circle north arm
+- N-S stations (heading=0°) mid-block between row pairs; connected circle south arm ↔ station `CP_near_far`, station `CP_far_near` ↔ next circle north arm
 - E-W stations (heading=90°) mid-block between column pairs; connected similarly
 - `Replace existing network` checkbox clears everything before generating
 
@@ -141,13 +156,82 @@ Ctrl-click a guideway line to remove the entire pair.
 - 4 CPs (one per arm); arm headings rotatable
 
 ### Station (US/CCW, right-side loading)
-- ~70 m between north and south turnabouts; ~7 m wide
-- NB guideway east, SB guideway west
-- Siding east of NB — always traversed northward
-- PLATFORM node is the station identity (node_id ends in `.PLATFORM`)
-- North turnabout: NB → SB; South turnabout: SB → NB
-- 2 CPs: CP_N (north stub-pair) and CP_S (south stub-pair)
-- Heading configurable (default 0° = north-south)
+- ~70 m between the two U-turns; ~7 m wide
+- **near** side = side of the station where the platform is located
+- **far** side = opposite side, no platform
+- `platform_parking` node is the station identity (node_id ends in `.platform_parking`)
+- `uturn_near_far`: near-side → far-side (at the `platform_out` / `guideway_near_out` end)
+- `uturn_far_near`: far-side → near-side (at the `platform_in` / `guideway_near_in` end)
+- 2 CPs: `CP_near_far` (stub-pair at the uturn_near_far end) and `CP_far_near` (stub-pair at the uturn_far_near end)
+- Heading configurable (default 0°)
+
+**Station fishbone diagram** — vehicles flow left to right on guideway_near, right to left on guideway_far:
+
+```
+CP_far_near                                               CP_near_far
+  ↓  ↑                                                     ↓  ↑
+  ↓  guideway_far_out ←←←← guideway_far_main ←←←← guideway_far_in  ↑
+  ↓         ↑ uturn_far_near                  uturn_near_far ↓       ↑
+  ↓  guideway_near_in →→→→ guideway_near_main →→→→ guideway_near_out ↑
+        ↘  platform_in                    platform_out  ↗
+              ↘                                  ↗
+          platform_parking_a → [platform_parking] → platform_parking_b
+```
+
+`platform_parking` is a single node. `platform_parking_a` and `platform_parking_b` are the line segments connecting into and out of it. The physical system supports multiple parking spots per platform; Route-Time does not model individual spots.
+
+**Line vocabulary (13 lines per station):**
+
+| Line | Direction | Role |
+|------|-----------|------|
+| `guideway_near_in` | → | vehicles entering guideway_near from CP_far_near |
+| `guideway_near_main` | → | through-travel on near side |
+| `guideway_near_out` | → | vehicles exiting guideway_near to CP_near_far |
+| `guideway_far_in` | ← | vehicles entering guideway_far from CP_near_far |
+| `guideway_far_main` | ← | through-travel on far side |
+| `guideway_far_out` | ← | vehicles exiting guideway_far to CP_far_near |
+| `platform_in` | siding | guideway_near_in_end → platform siding entry |
+| `platform_parking_a` | siding | platform_in_end → platform_parking node |
+| `platform_parking_b` | siding | platform_parking node → platform_out_end |
+| `platform_out` | siding | platform_out_end → guideway_near_out_end |
+| `uturn_near_far_a` | arc | guideway_near_out_end → midpoint |
+| `uturn_near_far_b` | arc | midpoint → guideway_far_in_end |
+| `uturn_far_near_a` | arc | guideway_far_out_end → midpoint |
+| `uturn_far_near_b` | arc | midpoint → guideway_near_in_end |
+
+Vehicles only slow for siding entry/exit — through-traffic on guideway_near and guideway_far is unaffected by station stops.
+
+**Departure paths (two exits from platform_parking):**
+
+| Destination direction | Path |
+|-----------------------|------|
+| Near (aligned with station flow) | `platform_out → guideway_near_main → guideway_near_out → CP_near_far` |
+| Far (opposite station flow) | `platform_out → guideway_near_main → uturn_near_far → guideway_far_main → guideway_far_out → CP_far_near` |
+
+**Arrival paths (two entries to platform_parking):**
+
+| From | Path |
+|------|------|
+| CP_far_near (near direction) | `guideway_near_in → guideway_near_in_end → platform_in → platform_parking` |
+| CP_near_far (far direction) | `guideway_far_in → guideway_far_main → guideway_far_out_end → uturn_far_near → guideway_near_in_end → platform_in → platform_parking` |
+
+**Rule:** `uturn_far_near` is arrival-only. `uturn_near_far` is departure-only (for far-direction trips). No vehicle path traverses both uturns in sequence — a pod exiting via `uturn_near_far → guideway_far → guideway_far_out` exits the station at CP_far_near and does not return through `uturn_far_near`.
+
+**Through-routing paths (vehicle not stopping at this station):**
+
+The near guideway is continuous through every station. Vehicles that are stopping peel off to the siding; vehicles passing through continue on `guideway_near_main` or `guideway_far_main` without touching either uturn.
+
+| Vehicle intent | Path | Uturns used |
+|----------------|------|-------------|
+| Through — near direction | `guideway_near_in → guideway_near_main → guideway_near_out` | none |
+| Through — far direction | `guideway_far_in → guideway_far_main → guideway_far_out` | none |
+| Stopping — arriving from near (via CP_far_near) | `guideway_near_in_end → platform_in → platform_parking` | none |
+| Stopping — arriving from far (via CP_near_far) | `guideway_far_main → uturn_far_near → guideway_near_in_end → platform_in → platform_parking` | uturn_far_near |
+
+In the animation, pod color distinguishes through-traffic from stopping traffic:
+- **Orange** — pod is on a siding line (entering or leaving the platform); it is stopping here
+- **Yellow** — pod is on approach to its destination station
+- **Red→Green** — pod is on a through-guideway; it is passing through
 
 ---
 
@@ -166,20 +250,17 @@ Network must be **unlocked** (🔓 Edit) to move structures.
 
 ---
 
-## Known Issue — Island Isolation in Travel Time
+## Known Issue — Island Isolation
 
-**Symptom:** Travel time results show anomalous values (very long, zero, or missing) between
-some station pairs. Structures that are not connected to the main network graph form
-isolated islands — Dijkstra routing finds no path between them and the unconnected stations.
+**Symptom:** Isochrone shows grey dots (no ride data) for some stations even after simulation.
 
-**Common cause:** Grid generator or AutoConnect leaves some CP pairs open. Any structure
-with no connected CPs (orphan) is an island. Orphans pulse in the editor view.
+**Common cause:** Open CPs — structures not connected to the main network graph. Any structure with unconnected CPs cannot be reached by routing. Orphaned structures pulse in the editor view.
 
-**To diagnose:** After generating a grid or running AutoConnect, check for orphaned
-structures (pulsing CP markers) and manually connect open CPs before simulating.
+**To diagnose:** After generating a grid, check for pulsing CP markers (orphans). Manually connect open CPs before simulating.
 
-**Next step (pending):** Investigate simulation engine handling of unreachable O-D pairs —
-ensure missing paths produce a graceful skip rather than polluting aggregate stats.
+**Simulation behavior:** When `find_path()` returns no route for an O-D pair, the passenger is silently dropped. The pair will not appear in `trip_stats`. The isochrone analytical fallback (`/api/network/travel_times`) also returns no entry for unreachable stations.
+
+**Fix:** Connect all open CPs before running. Use AutoConnect as a starting point, then manually complete any remaining open CPs.
 
 ---
 
@@ -216,16 +297,33 @@ Saved by the Demand panel to `demand.json` alongside `settings.json`.
 
 ## Simulation Engine
 
+**Three-phase run (guarantees full O-D coverage):**
+
+| Phase | What happens |
+|-------|-------------|
+| **Sweep 1** | One vehicle dispatched from every station to every other station. Runs until all trips complete. Establishes a baseline travel time for every reachable O-D pair. |
+| **Sweep 2 + Random demand** | A second full O-D sweep is queued simultaneously with normal gravity-model passengers. Simulation stops when the last Sweep 2 vehicle arrives. Sweep 2 times reflect real congestion from the mixed load. |
+
+The simulation auto-locks the network on completion (Edit → Locked). Press `▶▶ Replay` to view the animation; it does not auto-start.
+
+**Result:** every reachable O-D pair has ≥ 2 completed trips; `trip_stats` is complete for isochrone use.
+
 **Discrete-tick model:**
-- 360 slots × 10 ticks/slot = 3,600 ticks per simulated hour
+- 360 slots × 90 ticks/slot = 32,400 ticks per simulated hour
 - Tick resolution: `1 / timeResolutionPerSec` seconds (default 9 ticks/sec → 0.111 s/tick)
-- Passengers generated every 10 ticks (one slot)
+- Passengers generated every 90 ticks (one slot = 10 simulated seconds)
 
 **Physics:**
 - Cruise speed: `maxVelocityInKMPH / 3.6` m/s × `tick_s` m/tick
 - Jam threshold: `min_spacing_m = velocity_ms × minHeadwaySec + podLen`
   - At 60 km/h, 0.25 s headway, 3 m pod: threshold = 7.17 m
   - Jammed lines → infinite routing weight → pods route around congestion
+
+**Pod fleet:**
+- `podsPerStation` pods (default 4) pre-created in a global depot at simulation start
+- Vehicles only originate at stations — never at traffic circles
+- Surplus pods (station has more than `podsPerStation` queued with no waiting passengers) return to the global depot for redistribution
+- **Physical networks** will have many pod depots scattered around the network. The current simulation uses a single global depot as a simplification. Future work: assign depot locations as structures on the network map and restrict pod draw to the nearest depot.
 
 **Routing:**
 - Dijkstra from origin `.PLATFORM` node to destination `.PLATFORM` node
@@ -234,7 +332,7 @@ Saved by the Demand panel to `demand.json` alongside `settings.json`.
 
 **Output — SimResult:**
 - `summary`: throughput/hr, avg/longest trip time, avg velocity, network stats
-- `trip_stats`: per O-D pair — median/mean/p90 trip_ms, route_line_ids for animation
+- `trip_stats`: per O-D pair — median/mean/p90 trip_ms, sample_count, route_line_ids for animation
 - `line_stats`: per line — pods transited, avg transit time, congestion ratio
 - `station_stats`: per station — passengers boarded/alighted/waiting
 
@@ -266,11 +364,11 @@ Saved by the Demand panel to `demand.json` alongside `settings.json`.
 
 ---
 
-## Walk-Ride-Walk Coverage Circles
+## Isochrone (Walk-Ride-Walk Coverage)
 
-**Toolbar button:** `⊙ Coverage` (in Simulate section of palette)
+**Toolbar button:** `⊙ Isochrone` (in Simulate section of palette)
 
-Click any map point → colored overlay circles showing total journey reachability.
+Click any map point → colored overlay polygons showing total journey reachability within each time budget.
 
 **Colors (match Java TimeColor):**
 
@@ -283,20 +381,26 @@ Click any map point → colored overlay circles showing total journey reachabili
 
 **Algorithm (matches Java `TimeGraph.java`):**
 1. Find closest station to clicked point = boarding station
-2. For each destination station and each budget:
+2. Fetch analytical Dijkstra travel times from server for the boarding station
+3. For each destination station and each budget:
    - `fixed = walk_to_boarding + ride_time(boarding → dest)`
    - `remaining = budget − fixed`
    - `radius = remaining × walk_speed_m/min`
-3. Also draw pure-walk circle at clicked point for each budget
-4. All circles of same color → `turf.union()` → single merged polygon rendered as `L.geoJSON()`
+4. Also draw pure-walk circle at clicked point for each budget
+5. All circles of same color → `turf.union()` → single merged polygon rendered as `L.geoJSON()`
    - Only outer boundary visible; no interior circle lines
 
-**Requires:** Simulation must be run first for ride-time circles to appear.
-Walk-only circles (from clicked point) always show.
+**Ride time sources (in priority order):**
+1. **Simulation median** — from `trip_stats` after running simulation; includes station overhead and real congestion. Tooltip: `X.X min ride (sim)`
+2. **Analytical estimate** — Dijkstra over network graph weighted by line length ÷ cruise speed; fetched from `GET /api/network/travel_times`. Tooltip: `~X.X min ride (est)`
 
-**Settings:** Transparency adjustable in Settings → Coverage circles → Opacity (default 0.15).
+**Station dots:** A colored dot at each station shows ride time and total journey time on hover. Color matches the isochrone budget (green/blue/yellow/red/grey). Grey = beyond 30-min budget or no route data.
 
-**Exit:** `⊙ Coverage` button again, or press Esc.
+**Does not require simulation** — analytical estimates provide full coverage immediately. Run simulation for congestion-accurate times.
+
+**Settings:** Transparency adjustable in Settings → Isochrone → Opacity (default 0.15).
+
+**Exit:** `⊙ Isochrone` button again, or press Esc.
 
 ---
 
@@ -311,6 +415,33 @@ Walk-only circles (from clicked point) always show.
 - White = parked at platform (15% of cycle at each end)
 - Red → green = velocity bell curve during travel (70% of cycle)
 - Speed set by `simSpeedMultiplier` (360× default = 10-second loop = 1 simulated hour)
+
+**Large-network rendering limits:**
+
+| Constant | Value | Location | Behavior |
+|----------|-------|----------|---------|
+| `MAX_ANIM_ROUTES` | 400 | `simulator.js` | Animation replay sub-samples to this many routes via uniform stride — keeps frame-build under ~1 s for any network size |
+| `MAX_GRID_STATIONS` | 50 | `simulator.js` | Route grid (station×station travel-time table) is hidden above this count — an N²-cell DOM table locks the browser thread for large networks |
+
+For networks above 50 stations the Results panel shows a notice: *"N stations — grid hidden above 50. Use the Isochrone tab to explore travel times."* The Isochrone tool works at any network size.
+
+To change the caps: edit the two constants near the top of `simulator.js`.
+
+---
+
+## Route Grid
+
+The Results panel (after simulation) includes a **station×station travel-time matrix** showing the median ride time (minutes) for every reachable O-D pair.
+
+**Reading the grid:**
+- Rows = origin station, columns = destination station
+- Cell value = median ride time in minutes (from `trip_stats`)
+- Diagonal = grey (no self-trip)
+- Unreachable pairs = grey (no route found by Dijkstra)
+
+**Scale:** Hidden automatically when the network has more than 50 stations — a 50×50 table = 2,500 cells is manageable; a 138×138 table = 19,044 cells locks the browser thread. The threshold is `MAX_GRID_STATIONS = 50` in `simulator.js`.
+
+For large networks, use the **Isochrone** tool instead — click any station to see walk-ride-walk reachability at all scales with no table-size limit.
 
 ---
 
@@ -338,6 +469,24 @@ Route-Time predicts. Robots run. Allie records. Discrepancies teach.
 
 Map zoom and position saved to browser `localStorage`. Never resets during editing —
 only auto-fits on explicit file open.
+
+---
+
+## Network Clipboard
+
+**Toolbar button:** `📋 Clipboard…` (in File section of palette)
+
+Opens a dialog with:
+- A textarea auto-populated with the full `.jpd` XML of the current network
+- **Copy** button — writes the text to the system clipboard
+- **Load** button — reads whatever is in the textarea and loads it as a new network
+
+**Use cases:**
+- Copy a network designed for one city, navigate to a different city, paste and load to transfer the layout with all lat/lon positions intact
+- Share a network by pasting the text into email, Slack, or a document — recipient pastes it back and clicks Load
+- Duplicate a network without using the file system
+
+All station and circle positions include latitude and longitude in the `.jpd` XML. No server changes required — uses existing `/api/network/download` and `/api/network/load_text` endpoints.
 
 ---
 
@@ -384,8 +533,9 @@ route_time/
 | GET | `/api/network` | GeoJSON of current network |
 | POST | `/api/network/new` | New empty network |
 | POST | `/api/network/load` | Load file by server path |
-| POST | `/api/network/load_text` | Load file content from browser |
-| POST | `/api/network/save` | Save as .jpd |
+| POST | `/api/network/load_text` | Load file content from browser (or pasted text) |
+| GET | `/api/network/download` | Download current network as .jpd bytes (used by Clipboard and Save) |
+| POST | `/api/network/save` | Save as .jpd to server-side path |
 | POST | `/api/network/node` | Add switch node |
 | POST | `/api/network/station` | Add full station structure |
 | POST | `/api/network/circle` | Add traffic circle structure |
@@ -401,6 +551,7 @@ route_time/
 | POST | `/api/network/structure/<id>/rotate` | Rotate structure in place |
 | POST | `/api/network/structure/<id>/move` | Translate structure by dlat/dlon |
 | POST | `/api/network/grid` | Generate grid mesh (circles + stations) |
+| GET | `/api/network/travel_times` | Dijkstra travel times from origin station to all reachable stations (`?origin=s1.PLATFORM`) |
 | POST | `/api/simulation/run` | Run simulation; returns SimResult |
 | GET/POST | `/api/settings` | Simulation settings |
 | GET/POST | `/api/demand` | Demand config |

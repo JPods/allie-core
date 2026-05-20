@@ -74,6 +74,61 @@ every Build — it erases all `.CP` text entities and re-adds from stored attrib
 
 ---
 
+### P6 — Vehicle placement test places 0 vehicles (silent failure)
+
+**Symptom:** 5V standard test reports `28 warnings` and commits the operation, but no Noras
+appear in the model. No error dialog. No clear indication of where the failure occurred.
+
+**Cause:** A compound of four bugs, all masking each other:
+
+**P6a — `stitch_structure_followme_paths` corrupts platform host guideways**  
+Platform host guideways are synthetic 2-point groups (connection_id prefixed `__platform__`).
+Their endpoints land near the station's internal FollowMe terminus coordinates.
+`stitch_structure_followme_paths` matched those endpoints and appended 14 extra station-interior
+points, collapsing a 23.9 m path to 0.422 m. This caused `spawn_t = target_pos / 0.422m` to
+overflow to `t=1.0` for every slot, placing all vehicles at the path end.  
+**Fix (2026-05-01):** Overrode `vehicle_path_for` in `jpod_platform.rb` to return
+`base_vehicle_path_for(group)` directly when `platform_host: true`, bypassing stitching.  
+**Rule:** Any synthetic guideway that should not be stitched must override `vehicle_path_for`
+or be guarded by `platform_host: true` check before stitching is called.
+
+**P6b — `distance_to` does not exist; wrong unit conversion**  
+`jpod_conflict_detector.rb` called `pt.distance_to(other_pt)` — SketchUp's `Geom::Point3d`
+has `.distance`, not `.distance_to`. This threw a `NoMethodError` and was rescued into
+a complaint string, making the conflict check always fail and always stop the test.
+Secondary: conversion used `/ 0.3048` (feet→meters). SketchUp internal unit is inches;
+correct conversion is `/ 1.m`.  
+**Fix (2026-05-01):** Changed to `pt.distance(other_pt) / 1.m`.
+
+**P6c — Personal-space threshold fired on correctly-spaced slots**  
+Threshold was `< 3.0` m. Slots are designed exactly 3.0 m apart. Floating-point gave
+`2.9999…` which crossed the threshold, flagging every adjacent slot pair as a conflict.  
+**Fix (2026-05-01):** Lowered threshold to `< 2.5` m. Real stacking = vehicles physically
+overlapping (~2 m body length). Designed spacing is not the threshold.
+
+**P6d — Empty `current_line_id` caused universal merge conflicts**  
+Freshly placed vehicles have no `current_line_id`. The merge conflict check was
+`own_segment == other_segment` — in Ruby, `"" == ""` is `true`, so every vehicle
+matched every other as being on the same (empty) segment.  
+**Fix (2026-05-01):** Added `!own_segment.empty?` guard.
+
+**How it was found:**  
+Replaced the backoff retry loop with a hard stop + full diagnostic dump. One run printed
+function, call chain, all platform record fields, guideway attributes, path total,
+vehicle world position, spawn_t, and conflict complaint verbatim. All four bugs were
+visible simultaneously.
+
+**Lesson:** When a test silently places 0 items, stop retrying. Add a hard stop that dumps
+every variable involved. Three sessions of backoff/shuffle loops produced nothing.
+One stop-and-dump run resolved it.
+
+**Files changed:**  
+- `jpod_vehicle_runtime.rb` — hard stop + dump; removed backoff accumulator  
+- `jpod_platform.rb` — `vehicle_path_for` override for `platform_host: true`  
+- `jpod_conflict_detector.rb` — method name, unit, threshold, empty-id guard
+
+---
+
 ## Session Log
 
 ### 2026-04-29
