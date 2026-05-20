@@ -573,6 +573,22 @@ def log_event(entry: dict):
         print(f"  [log error: {e}]", file=sys.stderr)
 
 
+def _allie_capture(event: str, message: str = "", data: dict | None = None):
+    """Fire-and-forget capture to Allie's own inbox — Allie logging herself."""
+    import subprocess
+    capture = ALLIE / "scripts" / "allie-capture.py"
+    if not capture.exists():
+        return
+    try:
+        args = ["python3", str(capture),
+                "--source", "ALLIE", "--event", event, "--message", message[:200]]
+        if data:
+            args += ["--data", json.dumps(data)]
+        subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
@@ -588,6 +604,10 @@ def main():
     date_str = datetime.date.today().isoformat()
 
     print(f"[allie-reflect] {date_str} | model: {args.model} | window: {args.days}d")
+
+    # Tool boundary: reflection starting. Captures context window before synthesis.
+    _allie_capture("reflection_start", f"Allie reflect {date_str} model={args.model}",
+                   {"date": date_str, "model": args.model, "days": args.days})
 
     # Pull latest from allie-core before reading context — keeps Allie current
     # if another machine or Claude session pushed since the last nightly run.
@@ -662,6 +682,13 @@ def main():
         "elapsed_s":      round(elapsed, 1),
         "output":         str(out_path),
     })
+
+    # Tool boundary: reflection complete. Arc closes — Allie has synthesized.
+    _allie_capture("reflection_complete",
+                   f"Allie reflect {date_str} done in {elapsed:.0f}s",
+                   {"date": date_str, "model": args.model,
+                    "harvests": len(harvests), "elapsed_s": round(elapsed, 1),
+                    "response_chars": len(response), "output": str(out_path)})
 
     # Push intelligence layer to allie-core so Claude can reach it from any session.
     # Stages only handoff/, process/, and readmes/wisdom/ — never credentials or logs.

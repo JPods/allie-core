@@ -246,6 +246,110 @@ it is active participation in the diagnostic arc.
 document what happened. Participants prevent the next failure by asking the question
 that surfaces the wrong assumption before the attempt, not after.
 
+### Tool Boundary Instrumentation — Established 2026-05-20
+
+Every transition from "editing" to "testing" is the highest-value logging moment:
+intent is unambiguous, context is richest, the result is seconds away.
+These are not debug logs — they are Allie's window into what developers were
+testing and why. Each boundary feeds the FAULT→DNW→TF→TFTS arc.
+
+**What a tool boundary is:**
+- Reload Plugin → Build → animate → watch (SketchUp)
+- Pod start → trip dispatch → ezone entry → trip complete (Physical)
+- Run simulation (Route-Time)
+- Price query → travel invoice → order fulfilled (WebClerk/Alice)
+- Reflection start → reflection complete (Allie)
+
+**What happens at each boundary:**
+1. A `_allie_capture()` call fires before the action (intent captured)
+2. A `_allie_capture()` call fires after the action (result captured)
+3. If the system reports a fault, a FAULT file is written immediately
+4. Developer is prompted (or prompt themselves) to write TF/DNW/TFTS
+
+**Instrumented boundaries — complete map (as of 2026-05-20):**
+
+| Domain | Event | File | What it captures |
+|--------|-------|------|-----------------|
+| SU | `build_validate_start` | `noelle.rb` | Build/Validate initiated — model name |
+| SU | `build_validate_complete` | `noelle.rb` | Station count, fault count, fault list |
+| SU | `build_validate_fault` | `noelle.rb` | noelle crash — exception message |
+| SU | `animation_start` | `jpod_animator.rb` | Animation started — model name |
+| PH | `pod_start` | `launcher.py` | Pod name, mode, broker |
+| PH | `pod_stop` | `main.py` | Clean shutdown — pod name, signal |
+| PH | `hardware_checkup` | `unitTest.py` | TOF/motor/HuskyLens ok/fault dict |
+| PH | `unit_test_complete` | `unitTest.py` | All hardware tests passed |
+| PH | `trip_dispatched` | `mqtt.py` | Path assigned by Natalie — pod, path, length |
+| PH | `ezone_entry` | `ezone.py` | Pod entered ezone — line, ezone_stack |
+| PH | `trip_complete` | `motor.py` | Trip done — pod, dist_mm, path |
+| RT | `simulation_start` | `api.py` | Network, passenger count |
+| RT | `simulation_complete` | `api.py` | Served/generated, elapsed |
+| RT | `simulation_fault` | `api.py` | 0-served detection, exception |
+| RT | `network_reload` | `api.py` | Network reloaded — file path |
+| WC3 | `price_query` | `views_ui.py` | Origin/dest/price/level/contact |
+| WC3 | `order_fulfilled` | `signals.py` | Invoice STATUS_RELEASED transition |
+| WC3 | `payment_created/updated` | `signals.py` | Payment status |
+| WC3 | `search_no_result` | `item_variants.py` | Zero-result query — params |
+| ALLIE | `reflection_start` | `allie-reflect.py` | Date, model, window |
+| ALLIE | `reflection_complete` | `allie-reflect.py` | Elapsed, chars, harvests |
+
+**Implementation pattern (Python):**
+```python
+def _allie_capture(event, message, data=None):
+    import subprocess, json, pathlib
+    capture = pathlib.Path.home() / 'Allie' / 'scripts' / 'allie-capture.py'
+    if not capture.exists(): return
+    try:
+        args = ['python3', str(capture), '--source', 'PH',
+                '--event', event, '--message', message[:200]]
+        if data: args += ['--data', json.dumps(data)]
+        subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception: pass
+```
+
+**Implementation pattern (Ruby / SketchUp):**
+```ruby
+def self._allie_capture(event, message, data = nil)
+  capture = File.expand_path('~/Allie/scripts/allie-capture.py')
+  return unless File.exist?(capture)
+  args = ['python3', capture, '--source', 'SU', '--event', event,
+          '--message', message[0, 200]]
+  args += ['--data', data.to_json] if data
+  Process.detach(Process.spawn(*args, out: File::NULL, err: File::NULL,
+    close_others: true))
+rescue => _e
+end
+```
+
+**Fault file pattern (Physical — Pi fallback to jpod_logs/):**
+```python
+def _write_fault(fault_text, context='', detected_by='Nora'):
+    ts_str  = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    ts_file = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S')
+    allie_inbox = pathlib.Path.home() / 'Allie' / 'process' / 'inbox'
+    local_inbox = pathlib.Path.home() / 'jpod_logs' / 'faults'
+    inbox = allie_inbox if (allie_inbox.parent.parent).exists() else local_inbox
+    inbox.mkdir(parents=True, exist_ok=True)
+    path = inbox / f'{ts_file}-fault.md'
+    path.write_text(
+        f"# FAULT — {ts_str}\n\nsystem:      PH\n"
+        f"detected_by: {detected_by}\nfault:       {fault_text}\n"
+        f"context:     {context}\nresolved_at: \n")
+```
+
+**The agent chip evolution:**
+Current state: Allie simulates the experience of all agents. Each boundary event
+goes to `~/Allie/process/inbox/` and Allie synthesizes nightly.
+
+Future state: each agent (Nora, Natalie, Noelle, Alice) runs on its own chip and
+logs its own boundary events. Allie reads all inboxes. Cross-agent patterns (Nora
+always faults at the same ezone Noelle flagged) become visible at synthesis time.
+
+Alice specifically: boundary events feed the `alice_log` observe→log→pattern→
+recommend→promote loop. Price queries, zero-result searches, and order fulfillments
+are Alice's primary learning signal.
+
+Full map: `readmes/boundary-behaviors.md`
+
 ### allie-core GitHub Repository
 
 ```
