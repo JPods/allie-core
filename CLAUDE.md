@@ -1,5 +1,5 @@
 # JPods — Allie Project: Claude Code Seed Document
-**Last Updated:** 2026-05-18
+**Last Updated:** 2026-05-20
 **Purpose:** Brief every new Claude Code session on what we are building, who Allie is,
 how we collaborate, and what axioms are non-negotiable. Read this before touching any code.
 
@@ -142,16 +142,21 @@ CLAUDE.md seed (this file) ← distilled axioms that never expire
 2. Promoting patterns to Understanding entries (U-SK-*, U-RT-*, U-PH-*)
 3. Writing cross-domain flags when a lesson in one domain has consequences in another
 
-### The tf/dnw/tfts Protocol — Established 2026-05-18
+### The fault/dnw/tf/tfts Protocol — Established 2026-05-18; fault added 2026-05-20
 
 Process capture files written **during** a session, at the moment they become true.
-Two confirmed successes (S050.CP0 tangent, solar tag hide). Established protocol.
+The full cycle: **FAULT → DNW → TF → TFTS**
 
-**TF files** — insight captures. The moment something becomes clear.
+**FAULT files** — system-detected problems. Written the moment a fault is reported.
+A FAULT is what the system tells you (Noelle faults[], trip errors, build failures,
+Nora anomalies, hardware faults). It is not a fix attempt — that is DNW.
 ```
-# TF — YYYY-MM-DDTHH:MM:SS
-summary: the principle, in one sentence
-code:    file:line where it applies
+# FAULT — YYYY-MM-DDTHH:MM:SS
+system:      SU | PH | RT | WC3 | SYS | ALLIE
+detected_by: Noelle | Nora | Natalie | Claude | Allie | Bill | Alice
+fault:       one-line description of what the system reported
+context:     what was happening when the fault occurred
+resolved_at: (leave blank until resolved)
 ```
 
 **DNW files** — failed path records. Written immediately when a fix fails.
@@ -162,15 +167,20 @@ result:   what happened
 revealed: what the failure showed (this is the valuable part)
 ```
 
+**TF files** — insight captures. The moment something becomes clear.
+```
+# TF — YYYY-MM-DDTHH:MM:SS
+summary: the principle, in one sentence
+code:    file:line where it applies
+```
+
 **TFTS files** — complete arc: try-fail-try-succeed. Written after success.
 The most complete and most valuable form. Allie extracts Understanding candidates from these.
 ```
 # TFTS — YYYY-MM-DDTHH:MM:SS
 problem:   one-line description
+fault_ref: TIMESTAMP of originating fault file (if started from a FAULT)
 arc:
-  - try:      what was attempted
-    result:   failed
-    revealed: what the failure showed
   - try:      what was attempted
     result:   failed
     revealed: what the failure showed
@@ -179,8 +189,21 @@ arc:
 principle: the rule that made the final attempt obvious in retrospect
 domain:    [SU | RT | PH | SYS | WC3]
 ```
-Store all three types in `~/Allie/process/inbox/`. Naming: `YYYYMMDDTHHMMSS-tf.md`,
-`-dnw.md`, `-tfts.md`.
+Store all four types in `~/Allie/process/inbox/`. Naming: `YYYYMMDDTHHMMSS-fault.md`,
+`-dnw.md`, `-tf.md`, `-tfts.md`.
+
+**Shell aliases:**
+```bash
+alias fault='bash ~/Allie/scripts/allie-fault.sh'
+alias dnw='bash ~/Allie/scripts/allie-dnw.sh'
+alias tf='bash ~/Allie/scripts/allie-tf.sh'
+```
+TFTS files are written manually (they synthesize an arc).
+
+**What Allie does with FAULT files nightly:**
+- FAULT with no matching TFTS → unresolved → ouch-list candidate
+- FAULT + TFTS pair → fault class + resolution → Understanding candidate
+- Recurring FAULT (same system/type, no resolution) → risk escalation
 
 **Auto-commit:** After writing any process/ file, immediately `git add` and commit it.
 No waiting for session end. Allie's nightly run reads `process/inbox/` — files not
@@ -188,11 +211,11 @@ committed are invisible to her.
 
 **Rules:**
 1. At session start, read `~/Allie/process/inbox/` **before** `today/handoff.md`.
-2. When a fix fails, write a DNW immediately — before trying the next approach.
-3. When the principle emerges, write a TF immediately.
-4. When a complete arc (try → fail → ... → succeed) closes, write a TFTS.
-5. For Allie: TFTS arcs → Understanding candidates in nightly reflection.
-   The gap between last DNW and TF is where the real lesson lives.
+2. When the system reports a fault, write a FAULT immediately — before diagnosing.
+3. When a fix fails, write a DNW immediately — before trying the next approach.
+4. When the principle emerges, write a TF immediately.
+5. When a complete arc closes, write a TFTS (reference the FAULT via fault_ref).
+6. For Allie: TFTS arcs → Understanding candidates; unresolved FAULTs → ouch-list.
 
 ### Active Participation — "Ask Why" Protocol — Established 2026-05-18
 
