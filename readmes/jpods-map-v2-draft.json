@@ -1,32 +1,64 @@
 {
-  "_schema_note": "jpods-map-v2 DRAFT — 2026-05-20. Full physical network document. Written by Noelle on every Build/Validate. One source of truth for all consumers: SketchUp visualizer, TripPlanner, Nora (Pi), Alice (billing), Route-Time, Dispatcher. All distances in mm. All coordinates in mm (x=east, y=north, z=up from model origin). Converges SketchUp and podPresenter formats. Allie and Noelle: annotate _innovation fields with observations and candidates for next iteration.",
+  "_schema_note": "jpods-map-v2 — 2026-05-20 rev 2. Full physical network document. Written by Noelle on every Build/Validate. One source of truth for all consumers: SketchUp visualizer, TripPlanner, Nora (Pi), Alice (billing), Route-Time, Dispatcher. All distances in mm. All coordinates in mm (x=east, y=north, z=up from model origin). Converges SketchUp and podPresenter formats. Deliberation: 2026-05-20. Field renames applied: stub→cp_index. Added: followme_hash, last_physical_survey, nominal_time_s per line, stations block, ezone_status.",
 
-  "schema":       "jpods-map-v2",
-  "mapId":        "CA_Gilroy_Clean",
-  "generated_at": "2026-05-20T00:00:00Z",
-  "generated_by": "Noelle",
+  "schema":            "jpods-map-v2",
+  "mapId":             "CA_Gilroy_Clean",
+  "generated_at":      "2026-05-20T00:00:00Z",
+  "generated_by":      "Noelle",
+  "followme_hash":     null,
+  "_note_followme_hash": "SHA-256 of the followme.json file this map was derived from. Noelle writes at Build time. Nora and TripPlanner compare against the followme.json hash at dispatch — if different, the map is stale and must not be used. null means not yet computed (draft).",
+  "last_physical_survey": null,
+  "_note_last_physical_survey": "ISO-8601 timestamp of the most recent complete Nora traversal that confirmed physical.json is current for all lines. Null if no survey has been run. Dispatcher can block trip assignments if this is too old or null.",
 
   "_innovation_global": [
-    "ALLIE: what cross-domain data belongs at the map level vs. line level? (e.g. solar capacity of the whole network, CO2 offset, cargo throughput ceiling)",
-    "NOELLE: should mapId carry a hash of the followme.json it was derived from, so Nora can detect stale maps?",
-    "NOELLE: add a 'last_physical_survey' timestamp — date/time Nora last traversed every line and confirmed physical.json is current",
-    "ALLIE: Route-Time needs O-D travel times. Should map.json carry nominal_time_s per line at nominal speed, so Route-Time never recalculates fixed geometry?"
+    "PROMOTED — followme_hash: required field at top level. Safety: stale map detection. Noelle writes SHA at Build.",
+    "PROMOTED — last_physical_survey: required field. Dispatcher uses to age-gate physical.json. Nora writes after full survey run.",
+    "PROMOTED — nominal_time_s per line: required field on every line. Route-Time reads; never recalculates fixed geometry.",
+    "PROMOTED — stations block: top-level index of all stations with capacity and template. Dispatcher and Alice read; Noelle writes at Build.",
+    "PROMOTED — ezone_status on each ezone: runtime field set by Dispatcher. Nora reads before entry.",
+    "OPEN — ALLIE: what cross-domain data belongs at the map level vs. line level? (solar capacity, CO2 offset, cargo throughput ceiling)",
+    "OPEN — ALLIE: should map.json carry solar_panel_count per line (not just network_summary) so Alice can calculate per-trip solar offset credit?"
   ],
+
+  "stations": {
+    "_note": "Top-level station index. Noelle writes at Build from followme.json models and noelle_features.json. Dispatcher reads to check platform availability before assigning trips. Alice reads for fare zone lookup.",
+    "S048": {
+      "station_id":    "S048",
+      "template":      "station_standard_v1",
+      "_note_template": "Component definition name from noelle_features.json. Drives platform capacity, dwell_time_s, allowed segment sequences.",
+      "platform_capacity": 3,
+      "_note_platform_capacity": "Max pods on gw_platform simultaneously. Derived from length_mm / nominal_pod_length_mm by Noelle.",
+      "dwell_time_s":  30,
+      "cargo_direction": "bidirectional",
+      "cp_count":      2,
+      "_note_cp_count": "Number of stub_pairs (connection points) on this station. Noelle counts from followme.json."
+    },
+    "S050": {
+      "station_id":    "S050",
+      "template":      "station_line_end_v1",
+      "platform_capacity": 3,
+      "dwell_time_s":  30,
+      "cargo_direction": "inbound",
+      "cp_count":      1
+    }
+  },
 
   "lines": {
 
-    "_note": "Every guideway segment — intra-station (gw_*) and inter-station (seg_*) — is a complete self-contained record. Consumers never re-derive geometry from SketchUp entities. Key: same id used in trip.json segments.",
+    "_note": "Every guideway segment — intra-station (gw_*) and inter-station (seg_*) — is a complete self-contained record. Consumers never re-derive geometry from SketchUp entities. Key: same id used in trip.json segments. Distances mm. Coordinates mm.",
 
     "S048.gw_platform": {
       "_note": "Intra-station line. Role = gw_platform means this is the loading/unloading track. Pods dwell here for passenger exchange.",
-      "id":        "S048.gw_platform",
-      "type":      "intra_station",
-      "station":   "S048",
-      "role":      "gw_platform",
-      "direction": "internal",
-      "length_mm": 11371,
-      "speedMin":  50,
-      "speedMax":  200,
+      "id":             "S048.gw_platform",
+      "type":           "intra_station",
+      "station":        "S048",
+      "role":           "gw_platform",
+      "direction":      "internal",
+      "length_mm":      11371,
+      "speedMin":       50,
+      "speedMax":       200,
+      "nominal_time_s": 57,
+      "_note_nominal_time_s": "Nominal travel time = length_mm / speedMax (mm/s). Route-Time reads; never recalculates. Noelle computes at Build from speedMax.",
       "startPoint": { "x": 18046, "y": 189037, "z": 5442 },
       "endPoint":   { "x": 13079, "y": 199266, "z": 5442 },
       "segments": [
@@ -46,22 +78,20 @@
       "successors":   ["S048.gw_platform_out"],
       "predecessors": ["S048.gw_platform_in", "S048.gw_platform_parking"],
       "platform_capacity": 3,
-      "_note_platform_capacity": "INNOVATION CANDIDATE: how many pods can occupy gw_platform simultaneously without collision. Derived from length_mm / nominal_pod_length_mm. Noelle can calculate; Dispatcher reads.",
       "dwell_time_s": 30,
-      "_note_dwell_time": "INNOVATION CANDIDATE: nominal passenger exchange time. Alice uses for schedule. Nora uses for departure timer. Could be template-declared in noelle_features.json and overridden per instance.",
-      "cargo_direction": "bidirectional",
-      "_note_cargo_direction": "INNOVATION CANDIDATE: inbound | outbound | bidirectional | none. Platform handles both arriving cargo and departing cargo when bidirectional. Alice routes cargo by direction."
+      "cargo_direction": "bidirectional"
     },
 
     "S048.gw_platform_out": {
-      "id":        "S048.gw_platform_out",
-      "type":      "intra_station",
-      "station":   "S048",
-      "role":      "gw_platform_out",
-      "direction": "outbound",
-      "length_mm": 8200,
-      "speedMin":  50,
-      "speedMax":  150,
+      "id":             "S048.gw_platform_out",
+      "type":           "intra_station",
+      "station":        "S048",
+      "role":           "gw_platform_out",
+      "direction":      "outbound",
+      "length_mm":      8200,
+      "speedMin":       50,
+      "speedMax":       150,
+      "nominal_time_s": 55,
       "startPoint": { "x": 13079, "y": 199266, "z": 5442 },
       "endPoint":   { "x": 10200, "y": 205100, "z": 5442 },
       "segments": [
@@ -82,14 +112,16 @@
 
     "seg_S048_cp1_S050_cp0": {
       "_note": "Inter-station line. Bezier path with waypoints — multiple segments. grade_pct per segment captures vertical profile for Nora motor control and Route-Time energy model.",
-      "id":        "seg_S048_cp1_S050_cp0",
-      "type":      "inter_station",
-      "from":      { "station": "S048", "stub": 1 },
-      "to":        { "station": "S050", "stub": 0 },
-      "direction": "outbound",
-      "length_mm": 452100,
-      "speedMin":  50,
-      "speedMax":  200,
+      "id":             "seg_S048_cp1_S050_cp0",
+      "type":           "inter_station",
+      "from":           { "station": "S048", "cp_index": 1 },
+      "to":             { "station": "S050", "cp_index": 0 },
+      "_note_cp_index": "cp_index is the stub_pair number (0-based) on this station. Renamed from 'stub' (deliberation 2026-05-20). Matches noelle_features.json stub_pair numbering.",
+      "direction":      "outbound",
+      "length_mm":      452100,
+      "speedMin":       50,
+      "speedMax":       200,
+      "nominal_time_s": 2261,
       "startPoint": { "x": 43041, "y": -6289, "z": 7886 },
       "endPoint":   { "x": -24902, "y": -6289, "z": 7886 },
       "segments": [
@@ -119,7 +151,7 @@
       "successors":   ["S050.gw_stub_pair_0_in"],
       "predecessors": ["S048.gw_stub_pair_1_out"],
       "energy_model": {
-        "_note": "INNOVATION CANDIDATE: per-line energy estimate. Route-Time and Alice use this. Noelle calculates from grade profile + length. Physical Nora logs actual vs. estimated for calibration.",
+        "_note": "Per-line energy estimate. Route-Time and Alice use this. Noelle calculates from grade profile + length. Physical Nora logs actual vs. estimated for calibration.",
         "estimated_wh": 12.4,
         "grade_penalty_factor": 1.05,
         "method": "grade_adjusted_flat_rate"
@@ -132,6 +164,8 @@
       "_note": "Merge/diverge points where collision risk exists. Nora must check ezone clearance before entering. Same structure as podPresenter — converged.",
       "id": 1,
       "type": "merge",
+      "ezone_status": "clear",
+      "_note_ezone_status": "Runtime field. Values: clear | occupied | blocked. Dispatcher sets before Nora enters. Nora reads; if not 'clear', holds and retries. Map.json carries last-known state; Dispatcher owns writes.",
       "inPoint1": { "lineId": "seg_S049_cp0_S048_cp0", "distFrom": 0,    "distTo": 3000 },
       "inPoint2": { "lineId": "seg_S048_cp1_S050_cp0", "distFrom": 0,    "distTo": 3000 },
       "outPoint":  { "lineId": "S048.gw_stub_pair_0_in","distFrom": 0,    "distTo": 3000 },
@@ -139,26 +173,26 @@
       "curveRadius":  8000,
       "maxLateralG":  0.3,
       "approach_decel_mm": 30000,
-      "_note_approach_decel_mm": "INNOVATION CANDIDATE: distance before ezone entry where Nora begins deceleration ramp. Derived from ezMaxSpeed and normal speed. Noelle can calculate; Nora reads."
+      "_note_approach_decel_mm": "Distance before ezone entry where Nora begins deceleration ramp. Derived from ezMaxSpeed and normal speed. Noelle calculates at Build."
     }
   ],
 
   "dead_end_nodes": [
     {
       "_note": "Lines that terminate without a successor — line-end stations. Nora must stop before these. Noelle flags them.",
-      "lineId": "S050.gw_platform",
+      "lineId":   "S050.gw_platform",
       "endPoint": { "x": 0, "y": 0, "z": 0 }
     }
   ],
 
   "network_summary": {
-    "_note": "INNOVATION CANDIDATE: top-level network stats. Alice uses for capacity planning. Route-Time uses for network-wide metrics. Noelle calculates at Build.",
-    "total_lines": 17,
-    "total_length_mm": 980000,
-    "station_count": 4,
-    "inter_station_connections": 3,
-    "estimated_cycle_time_s": 480,
-    "solar_panel_count": 0,
+    "_note": "Top-level network stats. Alice uses for capacity planning. Route-Time uses for network-wide metrics. Noelle calculates at Build.",
+    "total_lines":                 17,
+    "total_length_mm":             980000,
+    "station_count":               4,
+    "inter_station_connections":   3,
+    "estimated_cycle_time_s":      480,
+    "solar_panel_count":           0,
     "_note_solar": "Noelle counts solar panel component instances at Build. Alice uses for energy offset calculation."
   }
 }

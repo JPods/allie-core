@@ -1,49 +1,77 @@
 {
-  "_schema_note": "jpods-trip-v2 DRAFT — 2026-05-20. Complete navigation package. Written by TripPlanner after reading map.json v2. Self-contained: Nora never opens map.json mid-trip. Same format for SketchUp simulator and physical Pi dispatch. Allie and Noelle: annotate _innovation fields with observations and candidates for next iteration.",
+  "_schema_note": "jpods-trip-v2 — 2026-05-20 rev 2. Complete navigation package. Written by TripPlanner after reading map.json v2. Self-contained: Nora never opens map.json mid-trip. Same format for SketchUp simulator and physical Pi dispatch. Deliberation: 2026-05-20. Field renames applied: action→segment_action, ezones→ezone_entries, stub→cp_index. Added: trip_id (UUID), route_id, expires_at, trip_hash, map_generated_at, billing fields (passenger_count, cargo_kg, carryon_uuid, station_pair).",
 
-  "schema":       "jpods-trip-v2",
-  "model_id":     "CA_Gilroy_Clean",
-  "generated_at": "2026-05-20T00:00:00Z",
-  "generated_by": "TripPlanner",
-  "map_version":  "jpods-map-v2",
-  "_note_map_version": "TripPlanner records the schema of the map.json it read. Nora can detect if trip was built from a different map version than the current map.json.",
+  "schema":           "jpods-trip-v2",
+  "model_id":         "CA_Gilroy_Clean",
+  "generated_at":     "2026-05-20T00:00:00Z",
+  "generated_by":     "TripPlanner",
+  "map_version":      "jpods-map-v2",
+  "map_generated_at": null,
+  "_note_map_generated_at": "The generated_at timestamp of the map.json this trip was built from. TripPlanner copies it at generation time. Nora and Dispatcher compare against current map.json.generated_at — if different, the trip is stale.",
 
   "_innovation_global": [
-    "ALLIE: trip.json is also Alice's billing input. Should it carry passenger_count, cargo_kg, requested_by (carryon_uuid)?",
-    "ALLIE: a trip.json generated in SketchUp and transferred to the Pi is a pre-computed route. Should it carry an 'expires_at' field so stale pre-computed trips are not executed?",
-    "NOELLE: should TripPlanner validate that every segment in the trip exists in the current map.json before writing? Catch topology drift before Nora sees it.",
-    "NOELLE: consider a 'trip_hash' field — SHA of the segment id sequence. Nora can verify the trip she received matches what Dispatcher sent. Tamper detection.",
-    "ALLIE: Route-Time needs O-D matrices. trip.json is the natural source — TripPlanner writes one file per O-D pair, Route-Time reads the set. No separate route computation needed."
+    "PROMOTED — trip_id (UUID): dispatch-assigned unique ID. Separate from route_id. Dispatcher writes; Alice and Nora reference for billing and telemetry correlation.",
+    "PROMOTED — route_id: the canonical station-pair route label (e.g. S048_to_S050). Separate from trip_id. Route-Time uses for O-D matrix aggregation.",
+    "PROMOTED — expires_at: stale trip guard. TripPlanner sets now+TTL. Nora refuses to execute if clock > expires_at.",
+    "PROMOTED — trip_hash: SHA of ordered segment_id list. Tamper detection. Nora verifies before departure.",
+    "PROMOTED — billing fields: passenger_count, cargo_kg, carryon_uuid, station_pair. Alice reads from trip; no separate billing record needed.",
+    "PROMOTED — map_generated_at: stale map detection. TripPlanner copies from map.json at generation time.",
+    "PROMOTED — segment_action (was 'action'): renamed to avoid collision with generic 'action' in dispatch protocol.",
+    "PROMOTED — ezone_entries (was 'ezones'): renamed to reflect per-trip nature vs. network-wide ezone registry.",
+    "PROMOTED — cp_index (was 'stub'): renamed to match noelle_features.json stub_pair numbering.",
+    "OPEN — ALLIE: multi-hop trips (more than one inter-station connection). Current hops:1 only. Route-Time O-D matrix needs multi-hop. Add hops[] array with one entry per inter-station connection?",
+    "OPEN — NOELLE: should TripPlanner validate that every segment_id exists in the current map.json before writing trip.json? Catch topology drift before Nora sees it.",
+    "OPEN — ALLIE: Route-Time O-D matrix population. TripPlanner writes one trip.json per O-D pair; Route-Time reads the set. No separate route computation needed — confirm this is the intended architecture."
   ],
 
   "trips": [
     {
-      "id":   "S048_to_S050",
-      "from": "S048",
-      "to":   "S050",
-      "hops": 1,
-      "total_length_mm": 486000,
-      "_note_total_length": "Sum of all segment length_mm values. TripPlanner calculates at write time. Nora uses for progress reporting (mm_traveled / total_length_mm).",
-      "estimated_time_s": 145,
-      "_note_estimated_time": "INNOVATION CANDIDATE: nominal travel time at average speed. TripPlanner calculates from segment length_mm / speedMax for each segment. Alice uses for schedule. Dispatcher uses for headway planning.",
-      "estimated_energy_wh": 13.8,
-      "_note_estimated_energy": "INNOVATION CANDIDATE: sum of energy_model.estimated_wh across all segments from map.json. Alice bills by energy. Solar offset credited against this.",
+      "trip_id":    null,
+      "_note_trip_id": "UUID assigned by Dispatcher at dispatch time. Null in pre-computed route files. Alice and Nora use this as the billing and telemetry correlation key.",
+      "route_id":   "S048_to_S050",
+      "_note_route_id": "Canonical route label: {origin}_{to}_{destination}. TripPlanner writes. Route-Time aggregates by route_id for O-D matrix. Stable across multiple dispatches of the same route.",
+      "from":       "S048",
+      "to":         "S050",
+      "hops":       1,
+      "_note_hops": "Count of inter-station connections in this trip. hops=1 = direct. hops>1 = multi-hop (not yet implemented). Multi-hop requires a hops[] array; see _innovation_global.",
+
+      "expires_at": null,
+      "_note_expires_at": "ISO-8601 expiry. TripPlanner sets to generated_at + TTL (e.g. 4 hours for pre-computed; 30 minutes for live dispatch). Nora refuses to execute if current time > expires_at. Null = no expiry (SketchUp simulator only).",
+
+      "trip_hash": null,
+      "_note_trip_hash": "SHA-256 of the concatenated ordered segment IDs (e.g. SHA('S048.gw_platform|S048.gw_platform_out|...')). Nora verifies before departure. Tamper detection. Null = not yet computed (draft).",
+
+      "total_length_mm":      486000,
+      "_note_total_length":   "Sum of all segment length_mm values. TripPlanner calculates at write time. Nora uses for progress reporting (mm_traveled / total_length_mm).",
+      "estimated_time_s":     145,
+      "_note_estimated_time": "Nominal travel time at average speed. TripPlanner sums nominal_time_s from map.json lines. Alice uses for schedule. Dispatcher uses for headway planning.",
+      "estimated_energy_wh":  13.8,
+      "_note_estimated_energy": "Sum of energy_model.estimated_wh across all segments from map.json. Alice bills by energy. Solar offset credited against this.",
+
       "passenger_capacity": 6,
-      "_note_passenger_capacity": "From station template — declared in noelle_features.json. Alice enforces booking limit.",
+      "_note_passenger_capacity": "From station template in noelle_features.json. Alice enforces booking limit.",
+      "passenger_count":    null,
+      "_note_passenger_count": "Actual passengers on this dispatch. Dispatcher or booking API writes at dispatch time. Alice bills by this count. Null in pre-computed route files.",
+      "cargo_kg":           null,
+      "_note_cargo_kg": "Actual cargo weight in kg on this dispatch. Affects energy cost calculation and fare. Dispatcher writes at dispatch time. Null = no cargo / not yet assigned.",
+      "carryon_uuid":       null,
+      "_note_carryon_uuid": "MyCarryOn UUID of the trip requestor. Alice links billing record to this identity. Null in pre-computed route files and internal maintenance trips.",
+      "station_pair":       "S048:S050",
+      "_note_station_pair": "Canonical fare-zone key for Alice. Format: origin_station_id:destination_station_id. Alice looks up base fare from this key. Always populated — even in pre-computed files.",
 
       "segments": [
 
         {
           "_note": "First intra-station segment. Pod departs S048 platform. All physical data embedded from map.json — Nora reads this record, navigates, never queries map.json.",
-          "id":        "S048.gw_platform",
-          "type":      "intra_station",
-          "station":   "S048",
-          "role":      "gw_platform",
-          "length_mm": 11371,
-          "cumulative_mm": 0,
+          "id":             "S048.gw_platform",
+          "type":           "intra_station",
+          "station":        "S048",
+          "role":           "gw_platform",
+          "length_mm":      11371,
+          "cumulative_mm":  0,
           "_note_cumulative_mm": "Distance from trip start to beginning of this segment. Nora reports position as cumulative_mm + mm_into_segment.",
-          "speedMin":  50,
-          "speedMax":  200,
+          "speedMin":       50,
+          "speedMax":       200,
           "startPoint": { "x": 18046, "y": 189037, "z": 5442 },
           "endPoint":   { "x": 13079, "y": 199266, "z": 5442 },
           "segments": [
@@ -58,21 +86,21 @@
             }
           ],
           "markers": [],
-          "action": "depart",
-          "_note_action": "INNOVATION CANDIDATE: depart | transit | arrive | dwell. Nora uses to trigger door open/close, passenger notification, cargo lock/unlock. TripPlanner derives from role.",
+          "segment_action": "depart",
+          "_note_segment_action": "depart | transit | arrive | dwell. Nora uses to trigger door open/close, passenger notification, cargo lock/unlock. TripPlanner derives from role. Renamed from 'action' (deliberation 2026-05-20) to avoid collision with dispatch protocol 'action' field.",
           "dwell_time_s": 0,
           "_note_dwell_time_s": "Non-zero only for gw_platform at origin (boarding) and destination (alighting). TripPlanner sets from noelle_features.json dwell_time_s."
         },
 
         {
-          "id":        "S048.gw_platform_out",
-          "type":      "intra_station",
-          "station":   "S048",
-          "role":      "gw_platform_out",
-          "length_mm": 8200,
-          "cumulative_mm": 11371,
-          "speedMin":  50,
-          "speedMax":  150,
+          "id":             "S048.gw_platform_out",
+          "type":           "intra_station",
+          "station":        "S048",
+          "role":           "gw_platform_out",
+          "length_mm":      8200,
+          "cumulative_mm":  11371,
+          "speedMin":       50,
+          "speedMax":       150,
           "startPoint": { "x": 13079, "y": 199266, "z": 5442 },
           "endPoint":   { "x": 10200, "y": 205100, "z": 5442 },
           "segments": [
@@ -87,18 +115,18 @@
             }
           ],
           "markers": [],
-          "action": "transit"
+          "segment_action": "transit"
         },
 
         {
-          "id":        "S048.gw_stub_pair_1_out",
-          "type":      "intra_station",
-          "station":   "S048",
-          "role":      "gw_stub_pair_1_out",
-          "length_mm": 3500,
-          "cumulative_mm": 19571,
-          "speedMin":  50,
-          "speedMax":  120,
+          "id":             "S048.gw_stub_pair_1_out",
+          "type":           "intra_station",
+          "station":        "S048",
+          "role":           "gw_stub_pair_1_out",
+          "length_mm":      3500,
+          "cumulative_mm":  19571,
+          "speedMin":       50,
+          "speedMax":       120,
           "startPoint": { "x": 10200, "y": 205100, "z": 5442 },
           "endPoint":   { "x": 43041, "y": -6289,  "z": 7886 },
           "_note_endPoint": "Stub pair tip — this is the CP. Connects to inter-station segment startPoint.",
@@ -115,18 +143,19 @@
             }
           ],
           "markers": [],
-          "action": "transit"
+          "segment_action": "transit"
         },
 
         {
-          "id":        "seg_S048_cp1_S050_cp0",
-          "type":      "inter_station",
-          "from":      { "station": "S048", "stub": 1 },
-          "to":        { "station": "S050", "stub": 0 },
-          "length_mm": 452100,
-          "cumulative_mm": 23071,
-          "speedMin":  50,
-          "speedMax":  200,
+          "id":             "seg_S048_cp1_S050_cp0",
+          "type":           "inter_station",
+          "from":           { "station": "S048", "cp_index": 1 },
+          "to":             { "station": "S050", "cp_index": 0 },
+          "_note_cp_index": "cp_index is the stub_pair number (0-based) on this station. Renamed from 'stub' (deliberation 2026-05-20).",
+          "length_mm":      452100,
+          "cumulative_mm":  23071,
+          "speedMin":       50,
+          "speedMax":       200,
           "startPoint": { "x": 43041, "y": -6289, "z": 7886 },
           "endPoint":   { "x": -24902, "y": -6289, "z": 7886 },
           "segments": [
@@ -144,81 +173,82 @@
             { "id": 1, "dist_mm": 45000, "value": 1, "color": "YELLOW",
               "x": 0, "y": 0, "z": 0 }
           ],
-          "action": "transit",
-          "ezones": [
+          "segment_action": "transit",
+          "ezone_entries": [
             {
-              "_note": "INNOVATION CANDIDATE: ezones relevant to this segment, copied from map.json at plan time. Nora checks these without opening map.json.",
-              "ezone_id": 1,
-              "entry_dist_mm": 420100,
+              "_note": "Ezone entries relevant to this segment, copied from map.json at plan time. Nora checks these without opening map.json. Renamed from 'ezones' (deliberation 2026-05-20) to reflect per-trip nature.",
+              "ezone_id":          1,
+              "entry_dist_mm":     420100,
+              "_note_entry_dist_mm": "Distance along this segment where the ezone begins. Nora starts deceleration ramp at entry_dist_mm - approach_decel_mm.",
               "approach_decel_mm": 30000,
-              "ezMaxSpeed": 120
+              "ezMaxSpeed":        120
             }
           ]
         },
 
         {
-          "id":        "S050.gw_stub_pair_0_in",
-          "type":      "intra_station",
-          "station":   "S050",
-          "role":      "gw_stub_pair_0_in",
-          "length_mm": 3500,
-          "cumulative_mm": 475171,
-          "speedMin":  50,
-          "speedMax":  120,
+          "id":             "S050.gw_stub_pair_0_in",
+          "type":           "intra_station",
+          "station":        "S050",
+          "role":           "gw_stub_pair_0_in",
+          "length_mm":      3500,
+          "cumulative_mm":  475171,
+          "speedMin":       50,
+          "speedMax":       120,
           "startPoint": { "x": -24902, "y": -6289, "z": 7886 },
           "endPoint":   { "x": 0, "y": 0, "z": 0 },
           "_note_endPoint": "Populated by Noelle from map.json. Placeholder zeros here in draft.",
           "segments": [],
           "markers": [],
-          "action": "transit"
+          "segment_action": "transit"
         },
 
         {
-          "id":        "S050.gw_platform_in",
-          "type":      "intra_station",
-          "station":   "S050",
-          "role":      "gw_platform_in",
-          "length_mm": 6000,
-          "cumulative_mm": 478671,
-          "speedMin":  50,
-          "speedMax":  150,
+          "id":             "S050.gw_platform_in",
+          "type":           "intra_station",
+          "station":        "S050",
+          "role":           "gw_platform_in",
+          "length_mm":      6000,
+          "cumulative_mm":  478671,
+          "speedMin":       50,
+          "speedMax":       150,
           "startPoint": { "x": 0, "y": 0, "z": 0 },
           "endPoint":   { "x": 0, "y": 0, "z": 0 },
           "segments": [],
           "markers": [],
-          "action": "transit"
+          "segment_action": "transit"
         },
 
         {
-          "id":        "S050.gw_platform_parking",
-          "type":      "intra_station",
-          "station":   "S050",
-          "role":      "gw_platform_parking",
-          "length_mm": 4000,
-          "cumulative_mm": 484671,
-          "speedMin":  20,
-          "speedMax":  80,
+          "id":             "S050.gw_platform_parking",
+          "type":           "intra_station",
+          "station":        "S050",
+          "role":           "gw_platform_parking",
+          "length_mm":      4000,
+          "cumulative_mm":  484671,
+          "speedMin":       20,
+          "speedMax":       80,
           "startPoint": { "x": 0, "y": 0, "z": 0 },
           "endPoint":   { "x": 0, "y": 0, "z": 0 },
           "segments": [],
           "markers": [],
-          "action": "arrive"
+          "segment_action": "arrive"
         },
 
         {
-          "id":        "S050.gw_platform",
-          "type":      "intra_station",
-          "station":   "S050",
-          "role":      "gw_platform",
-          "length_mm": 11371,
-          "cumulative_mm": 488671,
-          "speedMin":  0,
-          "speedMax":  50,
+          "id":             "S050.gw_platform",
+          "type":           "intra_station",
+          "station":        "S050",
+          "role":           "gw_platform",
+          "length_mm":      11371,
+          "cumulative_mm":  488671,
+          "speedMin":       0,
+          "speedMax":       50,
           "startPoint": { "x": 0, "y": 0, "z": 0 },
           "endPoint":   { "x": 0, "y": 0, "z": 0 },
           "segments": [],
           "markers": [],
-          "action": "dwell",
+          "segment_action": "dwell",
           "dwell_time_s": 30,
           "_note": "Terminal segment. Pod stops here. speedMax 50 = slow crawl into platform. dwell_time_s 30 = passenger alighting + boarding window."
         }
@@ -226,7 +256,7 @@
       ],
 
       "physical_json_check": {
-        "_note": "INNOVATION CANDIDATE: before Dispatcher assigns this trip to Nora, check physical.json for known anomalies on any segment. Noelle reads physical.json; if severity >= moderate on any segment in the trip, block the assignment and flag to operator.",
+        "_note": "Before Dispatcher assigns this trip to Nora, check physical.json for known anomalies on any segment. Noelle reads physical.json; if severity >= moderate on any segment in the trip, block the assignment and flag to operator.",
         "segments_with_anomalies": [],
         "checked_at": null
       }
