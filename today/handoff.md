@@ -1,85 +1,48 @@
-# Handoff — 2026-05-13
+# Handoff — 2026-05-20
 
-## Where We Left Off
+## Where We Stopped
 
-JPods SketchUp plugin (`su_jpods`). Two rounds of fixes completed this session:
+TripPlanner v2 rewrite complete and committed (`cd4ef76` in su_jpods_claude branch). Vehicle animator v2 compat fix committed in the same commit. All schema readmes written.
 
-1. **Waypoint UX** — cursor now changes (grab hand near marker, 4-arrow during drag,
-   crosshair for placement, pencil for gate selection). Bezier curve now tracks the
-   marker in real time during drag because the draw method reads from `d[:paths]`
-   (rebuilt live by `rebuild_draft_paths`) instead of the stale `@edit_preview_pts`.
+## What Is Done (This Session)
 
-2. **Build crash fixed** — `Extensions > JPods > Create > Build` was failing with
-   `ArgumentError: Cannot convert argument to Geom::Vector3d` in `jpod_network.rb`.
-   Root cause: SketchUp's `Vector3d` does not support `* Float`. Fixed 3 sites in
-   `jpod_network.rb` and 1 in `jpod_animator.rb` (same pattern already fixed in
-   `jpod_connect_tool.rb` earlier).
+- **map-v2 + trip-v2 schemas finalized** — deliberation recommendations applied; schemas at `su_jpods/readmes/jpods-map-v2.md` and `jpods-trip-v2.md`
+- **Noelle `generate_map_json` rewritten** — produces jpods-map-v2; unified `lines{}` with dot-notation IDs, followme_hash, stations{} block, energy model, grade
+- **UTC Axiom 14** — 9 local-time data fields fixed; CLAUDE.md updated; memory written; `jpods-utc-standard.md` written
+- **Schema readmes** — feature-v3, map-v2, trip-v2, utc-standard in `su_jpods/readmes/`; jpods-design-review.md in `readmes/`
+- **TripPlanner v2** — `jpod_trip_planner.rb` complete rewrite; loads map.json v2, embeds full segment records, assigns segment_action, computes ezone_entries, trip_hash, energy estimates
+- **Vehicle animator** — `resolve_gw_segs_from_map` handles v2 Hash segments and v1 String segments
 
-Build now completes. Bill said "looks great" and is continuing to test.
+## Next Steps (Priority Order)
 
-## Do This First Next Session
+1. **Test the pipeline in SketchUp** — reload files, run Build on CA_Gilroy_Clean, then Plan Trips, then Animate. Expect map.json v2 output and trip.json v2 output.
+2. **generate_feature_json** — verify Noelle writes feature-v3 format with faults[] and connections{} block. Run Validate.
+3. **physical.json (jpods-physical-v1)** — not yet implemented. First step: flush IMU/encoder spikes from `anomalies: []` in nora.json to physical.json at trip end.
+4. **Station template F-07** — stubs at 7.5m need structural redesign, not code change.
 
-1. **Test full student workflow** — geolocate → place structures → calculate CPs →
-   connect guideways (with waypoints) → Build → confirm guideways appear in model.
-   The build pipeline should now work end-to-end.
+## Files Changed This Session (su_jpods)
 
-2. **Verify waypoint drag precision** — Bill flagged that students knit guideways
-   between buildings where 1-2 m matters. Drag a waypoint slowly and confirm the
-   Bezier follows continuously, not in jumps.
+- `noelle.rb` — generate_map_json rewrite + reviewed_at UTC fix
+- `jpod_vehicle_anim.rb` — build_map_lookup v2 + resolve_gw_segs_from_map v2 compat
+- `jpod_vehicle_runtime.rb` — created_at UTC fix
+- `jpod_animator.rb` — created_at UTC fix
+- `jpod_structure_tool.rb` — generated_at full UTC ISO-8601
+- `jpod_followme_exporter.rb` — 4x strftime UTC fix
+- `jpod_network_editor.rb` — _generated UTC fix
+- `jpod_oversight.rb` — ran_at UTC fix
+- `jpod_console.rb` — generate_map_json result message updated for v2
+- `jpod_trip_planner.rb` — complete v2 rewrite
+- New readmes: `jpods-feature-v3.md`, `jpods-map-v2.md`, `jpods-trip-v2.md`, `jpods-utc-standard.md`
 
-3. **Check Noelle warnings** — the build console showed stations S013, S044 flagged
-   as "missing detectable platform guideways." These are structural model issues,
-   not plugin bugs, but worth flagging to Bill.
+## Commits (su_jpods)
 
-4. **Animation test** — after a successful build, test `Start Animation` to confirm
-   the `jpod_animator.rb` Vector3d fix (arrow rendering) doesn't surface any new crash.
+5 commits ahead of origin on `su_jpods_claude` branch. Not pushed — wait for Bill's review of the test results.
 
-5. **Commit this session's work** — files changed: `jpod_connect_tool.rb`,
-   `jpod_network.rb`, `jpod_animator.rb`. Use a message like
-   "Fix Vector3d multiply crashes in build pipeline and connect tool; live bezier drag".
+## Key Design Decisions
 
-## Clearance Height (4.6 m) — Active Safety Debt
-
-The clearance change from 7.5 m → 4.6 m is documented and risk-registered (CL-01 to CL-07
-in ouch-list.md). The design rule is: **4.6 m cannot be deployed without active height
-sensing and pod defensive stop**. Those systems do not yet exist.
-
-Before any deployment discussion, CL-02 (height sensor design) must move from Unaddressed
-to a design spec with an owner, timeline, and certification path.
-
-## Open Problems
-
-- Noelle reports stations S013, S044 missing platform guideways — may be a model
-  definition issue in the Gilroy Casino file, not a code issue.
-- `refresh_structure_connection_points: undefined method 'each' for nil:NilClass`
-  appears on load when a Geolocation Content component is present — harmless but
-  should be guarded.
-- Full animation cycle not yet retested after today's fixes.
-
-## What Was Decided (and Why)
-
-- **`@@draft_connections` is the single source of truth for all bezier rendering.**
-  JSON is write-only during a session. Never read JSON in the draw loop — it will
-  always be stale relative to live drag state.
-
-- **`@edit_preview_pts` is now unused in draw.** The cyan edit state draws `d[:paths]`
-  and `d[:center_pts]` directly from the draft. `@edit_preview_pts` is still computed
-  in `onMouseMove` but not consumed. Could be removed in a cleanup pass.
-
-- **`Vector3d * Float` is illegal in SketchUp Ruby.** Any geometry code ported from
-  standard Ruby or other environments must be audited for this pattern before use.
-  The correct form is always explicit: `Geom::Vector3d.new(v.x*s, v.y*s, v.z*s)`.
-
-- **Both `jpod_connect_tool.rb` and `jpod_network.rb` have their own copies of the
-  bezier and offset_path methods.** They must always be kept in sync.
-
-## Files Changed This Session
-
-- `su_jpods/jpod_connect_tool.rb` — cursor states (648/643/671/280); `@hover_marker`
-  tracking in onMouseMove; draw reads `d[:paths]` not `@edit_preview_pts`;
-  Vector3d fixes in bezier_pts_via (2 locations) and offset_path (1 location)
-- `su_jpods/jpod_network.rb` — Vector3d fixes in bezier method (2 locations)
-  and offset_path (1 location)
-- `su_jpods/jpod_animator.rb` — Vector3d fix in arrow rendering (~line 3404)
-- `readmes/retrospections/2026-05-13.md` — full session retrospection
-- `today/handoff.md` — this file
+| Decision | Rationale |
+|---|---|
+| `seg['id']` in v2 animator | trip_segs are Hashes in v2, not Strings; single guard handles both |
+| followme_hash = SHA-256 | mtime alone can't detect file replacement at same timestamp |
+| dot notation in map v2 IDs | avoids ambiguity when station IDs and role names both contain underscores |
+| deliberation before implementation | 11 regressions caught before code written; protocol now standing |
