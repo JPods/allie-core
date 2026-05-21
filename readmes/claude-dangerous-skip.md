@@ -25,13 +25,16 @@ it cannot be turned off per-path, only globally.
 
 ## How It Is Set
 
-An alias in `~/.zshrc`:
+An alias in `~/.zshrc` (`/Users/williamjames/.zshrc`):
 
 ```bash
 alias claude='claude --dangerously-skip-permissions'
 ```
 
 Every `claude` invocation from a terminal automatically includes the flag.
+
+**To view the file:** In Terminal: `open ~/.zshrc`  
+**To find it in Finder:** Cmd+Shift+G → paste `/Users/williamjames/.zshrc` → Enter
 
 ---
 
@@ -45,7 +48,7 @@ sed -i '' '12d' ~/.zshrc              # delete that line (replace 12 with actual
 source ~/.zshrc                       # reload
 ```
 
-Or open `~/.zshrc` in any editor, delete the alias line, and save.
+Or: `open ~/.zshrc`, delete the alias line, save, then `source ~/.zshrc`.
 
 ---
 
