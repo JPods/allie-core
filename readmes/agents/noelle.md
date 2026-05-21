@@ -97,6 +97,36 @@ time is the optimal network for actual demand — not the network a planner pred
 
 ---
 
+## Noelle's Role in the Routing Intelligence Stack
+
+Noelle is the capacity layer in Natalie's three-layer routing decision. She does not route and she does not price. She provides one thing: **time-projected segment load**.
+
+```
+Natalie queries Noelle at dispatch time:
+  "Segment X — what is projected occupancy in T+2 minutes?"
+
+Noelle answers from her load map:
+  "Currently 2 pods, 3 more en route, arrives full at T+1:45"
+
+Natalie weights X accordingly.
+```
+
+**Why time-projected, not current:** A segment clear *now* but with 3 pods already routed to it is a worse choice than a segment with 1 pod that has low demand. Current occupancy is a lagging indicator. Noelle's projection accounts for pods already en route — it is the leading indicator.
+
+**How Noelle builds the projection:**
+- All pods on the network report their current segment and speed (TELEMETRY)
+- Noelle knows each pod's remaining travel time on its current segment
+- Projected occupancy = current count + inbound pods arriving before T+window
+- Window = configurable headway buffer (start with 2× pod headway)
+
+**What Noelle does NOT do:** price incentives (Alice owns that), route selection (Natalie owns that), or demand forecasting beyond the current trip pool. Noelle sees pods, not passengers.
+
+**Current state:** Not yet implemented. `@@anim_state` in the SketchUp animator tracks live positions but does not project forward. Route-Time's congestion weights are a static ratio, not a time-projected load. The segment-load API Natalie needs is the first implementation step.
+
+**Connection to slime mold:** Noelle's real-time load map is the short-term version of her long-term topology recommendations. Both are the same mechanism at different time scales: reinforce what flows, flag what stalls.
+
+---
+
 ## Open Questions
 
 - Network-wide parameter changes (speed limits, weight limits, headway): how does a distributed system adopt a new parameter simultaneously? No governance mechanism exists (NEW-05 — "Articles of Confederation flaw")
@@ -298,6 +328,7 @@ These hold across all three domains. A rule that appears violated is an implemen
 | Capacity limits are real — congestion is a signal, not an error | Physical queueing, simulation queueing, and design reviews all surface this |
 | No half-connections — CPs connect to CPs, both lines or neither | Boundary abstraction holds in all three tools |
 | **Edge-driven specs, sensors, and metrics — no calculated centerlines** | All position references, ezone boundaries, clearance specs, and sensor targets are defined on hard physical edges (beam bottom face, platform edge, stub end edge). Never on a computed midpoint or centerline. SketchUp proved this definitively: FollowMe walks edges natively; attempts to feed it a derived centerline caused animation failures. Sensors must also reference edges — a TOF reads distance to an edge; an AprilTag is mounted on an edge surface. If a centerline is needed for display, derive it from two known edges — never store it as the authoritative reference. |
+| **Noelle reads structure identity from placed instances — never writes it** | `structure_type` is declared by the model author inside every template `model.skp`. Noelle reads it; she does not create or backfill it. She reads from four sources in priority order: (1) JPods attribute on the placed instance (written by StructurePlacer), (2) entity tag (layer name) on the placed instance, (3) instance name, (4) definition name prefix. A missing type after all four checks = placement fault. The model author is responsible for setting the tag and naming correctly. |
 | **Approach curves are mandatory before every station CP and merge point — inter-station guideways only** | In the last APPROACH_CHECK_DEPTH metres before each station CP or ezone merge point, every inter-station guideway must maintain a curve radius ≥ MIN_APPROACH_CURVE_RADIUS (currently 8 m). This is a momentum rule, not an aesthetic one. Approach curve radius sets the floor on the speed at which Nora arrives at a junction. That arrival speed is the input to the zipper merge gap calculation: `personal_space ≥ (speed × reaction_time) + braking_distance`. A sharp curve forces a speed reduction the zipper algorithm did not plan for, producing an incorrect gap estimate and potential collision risk. **Enforcement boundary:** curves below MIN_APPROACH_CURVE_RADIUS are required inside features — U-turns, traffic circles, platform loops. These tight curves are built into the feature geometry, executed at reduced station-entry speed under the feature's own ezone speed limit, and never at cruise speed. `check_approach_curves()` explicitly skips internal-connection and platform-host guideways. **Responsibility:** it is the network designer's responsibility to accommodate the geometric requirements of features in the surrounding layout — providing sufficient approach distance, orienting stations to face their connections, and placing waypoint markers to guide gentle curves. Noelle flags violations; she does not move stations. Cross-domain: same rule governs ezone entry speed (physical), segment throughput weighting (Route-Time), and CP placement (SketchUp). |
 
 ---

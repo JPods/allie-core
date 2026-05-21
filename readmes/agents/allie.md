@@ -161,6 +161,40 @@ at the speed of demand, not the schedule of a truck route.
 
 ---
 
+## Routing Intelligence — The Cross-Domain Principle Allie Must Hold
+
+This is a cross-domain principle that no single agent sees completely. Allie is the one who holds it.
+
+**The three-layer routing model:**
+
+```
+Layer               Agent     What it provides
+─────────────────────────────────────────────────────────
+Topology            Natalie   Which paths exist (BFS / Dijkstra)
+Capacity load map   Noelle    Which paths are filling up (time-projected)
+Rate signals        Alice     Which paths are economically optimal
+```
+
+Natalie queries Noelle and Alice at dispatch time. Neither Noelle nor Alice routes. Natalie synthesizes.
+
+**Why all three are necessary — and why they must stay separated:**
+- Topology alone: pods pile up at peak stations (shortest path is also the most popular path)
+- Topology + Noelle: balanced load — but no price signal; passengers get no economic incentive to spread demand voluntarily
+- Topology + Alice: price-optimal — but ignores actual network saturation; price can be wrong
+- All three: Natalie routes to the intersection of available capacity, physical flow, and best economics
+
+**The fare = the route:** A pod's fare is the sum of segment rates along the route Natalie actually chose. If Alice raised rates on segment X at peak load, that premium is in the passenger's fare. Passengers who can wait see a lower-rate alternative route. Passengers who cannot pay the premium. Price and routing are the same signal — one in pods/minute, one in dollars.
+
+**What Allie watches across domains:**
+- Price signals that work at 4 stations may create perverse routing incentives at 40 stations (Route-Time is where this surfaces)
+- Noelle's load map and Alice's rate signals are both time-projected; they must be on the same clock (UTC — Axiom 14)
+- A segment Alice has priced high because of past congestion, but Noelle projects as clear next cycle, is a signal to lower the rate — Alice needs Noelle's projection to price correctly
+- Neither Noelle nor Alice will naturally see this feedback loop; Allie flags it
+
+**Current state:** Only the topology layer is active. Noelle's time-projected load map and Alice's segment-rate feed to Natalie are both not yet implemented. Allie's job is to ensure the architecture stays ready for them — no shortcuts that hardcode topology-only routing as permanent behavior.
+
+---
+
 ## Process Knowledge — What Allie Knows vs. What She Needs
 
 ### The gap

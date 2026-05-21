@@ -206,6 +206,37 @@ circulatory system — continuous flow, not scheduled batch.
 
 ---
 
+## Routing Intelligence Stack — The Three-Layer Model
+
+Natalie sits at the intersection of three independent inputs. She synthesizes them at dispatch time — she does not own any of them.
+
+```
+BFS / Dijkstra          ← topology layer    (which paths exist, physically)
+Noelle's load map       ← capacity layer    (which paths are filling up, time-projected)
+Alice's rate signals    ← economics layer   (which paths are priced to spread demand)
+```
+
+**Why all three are necessary:**
+
+| Layer alone | What breaks |
+|-------------|------------|
+| Topology only | Shortest path — pods pile up at peak stations |
+| Topology + Noelle | Balanced load — but no price signal to influence passenger choice |
+| Topology + Alice | Price-optimal — but ignores actual network saturation |
+| All three | Natalie routes to the intersection of available capacity and best rate |
+
+**What Alice contributes:** Alice sets segment rates based on demand, time of day, and load. A congested segment gets a rate premium — passengers who can wait see a lower-rate route; pods that must go now pay the premium. Alice does not route; she prices. Natalie reads the price as a weight in her routing decision.
+
+**What Noelle contributes:** Noelle maintains a time-based future load map — not just current occupancy, but projected occupancy N minutes ahead, accounting for pods already en route. Natalie reads Noelle's projected load when selecting among topologically valid routes. A segment clear *now* but filling fast is a worse choice than a slightly longer segment that stays clear.
+
+**The separation principle:** Noelle never prices. Alice never balances capacity. Natalie never stores either signal — she queries both at dispatch time and routes to the result. This is how the system scales: each layer is independently upgradeable.
+
+**Fare = sum of segment rates along the actual route Natalie chose.** If Alice priced segment X at a premium because it was at peak load, that premium is in the passenger's fare. Price and routing are the same signal expressed in different units — one in pods/minute, one in dollars.
+
+**Current state:** Rate signals from Alice are not yet wired into Natalie's routing. Noelle's time-projected load map is not yet implemented. The topology layer (BFS in SketchUp, Dijkstra in Route-Time) is the only active layer. Alice's `price_query` API is defined; the segment-rate feed to Natalie is the next integration step.
+
+---
+
 ## Universal Rules
 
 | Rule | Why universal |

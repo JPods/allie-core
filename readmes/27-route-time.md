@@ -445,6 +445,28 @@ For large networks, use the **Isochrone** tool instead — click any station to 
 
 ---
 
+## Routing Intelligence Stack — Route-Time's Role
+
+Route-Time is where the three-layer routing intelligence is most fully visible, because the simulation runs at network scale over time.
+
+**The three layers in Route-Time:**
+
+| Layer | Route-Time implementation | Current state |
+|-------|--------------------------|---------------|
+| **Topology** | Dijkstra over the network graph | Active — `engine/routing.py` |
+| **Noelle's load map** | Congestion ratio weights segments by predicted future occupancy | Partial — static ratio today; time-projected not yet implemented |
+| **Alice's rate signals** | Price factor (1–5) weights segments by economics | Stub — `price_factor` field exists in settings; not yet wired to Alice's `price_query` API |
+
+**Why Dijkstra (not BFS) in Route-Time:** Route-Time asks "what is the optimal path?" under congestion across a large network. BFS answers "does a path exist?" — correct for SketchUp's small design-validation graphs. Dijkstra weights edges by segment cost (time + congestion + price). On a network with 50+ stations and real pricing, the optimal path is rarely the shortest one.
+
+**The price-routing connection:** When Alice raises rates on a congested segment, Route-Time's Dijkstra will route around it — not because of physical congestion, but because the economic cost exceeds the time savings. This is the correct behavior: passengers who can take a slightly longer route pay less and reduce load on the premium segment. Price is a congestion signal expressed in dollars.
+
+**Segment throughput weighting (open):** Segments with tight approach curves carry a structural throughput penalty independent of congestion. A `curve_penalty` term in `engine/network.py` Dijkstra weights is not yet implemented. Natalie's open question on approach-curve-limited speed (in `natalie.md`) and Route-Time's Dijkstra weights are the same problem in two domains.
+
+**What Route-Time validates that SketchUp cannot:** At network scale, the interaction between Noelle's load balancing and Alice's pricing becomes visible — a price signal that works at 4 stations may create perverse routing incentives at 40 stations. Route-Time is where those emergent behaviors surface before any physical network is built.
+
+---
+
 ## Physical Feedback Loop (Allie's role)
 
 **The design intent:**

@@ -43,9 +43,31 @@ PEC = (vehicle_mass + payload_mass)²
 
 ---
 
+## Routing Intelligence Stack — How Natalie, Noelle, and Alice Coordinate
+
+Natalie does not route alone. She synthesizes three independent inputs at dispatch time:
+
+```
+Layer               Agent     What it provides
+─────────────────────────────────────────────────────────────────
+Topology            Natalie   Which paths exist — BFS (design) or Dijkstra (network scale)
+Capacity load map   Noelle    Which paths are filling up — time-projected N minutes ahead
+Rate signals        Alice     Which paths are economically optimal — segment rates
+```
+
+**The separation is the design.** Noelle never prices. Alice never balances capacity. Natalie never stores either signal — she queries both at dispatch time and routes to the result.
+
+**The fare connection:** A pod's fare is the sum of segment rates along the route Natalie chose. If Alice raised the rate on a congested segment, that premium appears in the passenger's fare. Passengers who can wait are routed to lower-rate alternatives. Price and load are the same signal in different units.
+
+**Feedback loop Allie must watch:** Noelle's forward load projection and Alice's rate signal must agree on the same time horizon. A segment Alice priced high based on current congestion but Noelle projects as clearing in 90 seconds should trigger a rate reduction. Neither agent sees this automatically — Allie holds the cross-domain view.
+
+**Current state:** Topology layer only is active. Noelle's time-projected load map and Alice's segment-rate feed to Natalie are not yet implemented. The architecture must stay ready for them — no shortcuts that hardcode topology-only routing as permanent.
+
+---
+
 ## Natalie — Router Behavior
 
-**What Natalie does:** Receives START pings from pods. Assigns routes (`myPath` — ordered sequence of line IDs). Negotiates availability across the network. Schedules trips against accumulated device availability. Records routes in each participating device's database. Manages trip timeouts. Billing.
+**What Natalie does:** Receives START pings from pods. Assigns routes (`myPath` — ordered sequence of line IDs). Queries Noelle's load map and Alice's segment rates at dispatch time. Negotiates availability across the network. Records routes in each device's database. Manages trip timeouts. Billing.
 
 **Trip lifecycle (Claims 8, 9):**
 1. Requester sends trip request
