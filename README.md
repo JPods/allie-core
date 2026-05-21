@@ -1,10 +1,20 @@
-# Allie — Private Repository
+# Allie — Bill James's Personal AI Repository
 
 **Owner:** Bill James  
-**Secured by:** Athena (Ed25519 signed manifests)  
-**Purpose:** The agent team's shared knowledge base — design decisions, open questions, sovereignty architecture, and the living record of who does what.
+**Purpose:** Persistent intelligence layer across all of Bill's projects — JPods, WebClerk, Divided Sovereignty, MyCarryOn, and the physical robot fleet.
 
-This repository is the gathering point for all agent inputs. Allie curates cross-domain context. Athena maintains integrity.
+---
+
+## Start Here
+
+**New session? Read in this order:**
+
+1. **[`CLAUDE.md`](CLAUDE.md)** — the authoritative seed document. Covers what we're building, the agent team, non-negotiable design axioms, and the full session protocol. Read this before touching any code.
+2. **[`handoff/handoff.md`](handoff/handoff.md)** — exactly where the last session stopped.
+3. **`handoff/YYYY-MM-DD-claude-recall.md`** (today's date) — open WhatIf predictions, recent TFTS principles, confirmed patterns.
+4. **`thoughts/YYYY-MM-DD-allie-reflect.md`** (most recent) — Allie's nightly synthesis.
+
+Pull latest before reading: `git -C ~/Allie pull origin main`
 
 ---
 
@@ -12,56 +22,69 @@ This repository is the gathering point for all agent inputs. Allie curates cross
 
 | Path | Contents |
 |------|----------|
-| `readmes/agents/` | Agent team READMEs — one per agent; edit freely |
-| `readmes/system/` | System map, ouch list (risk register) |
-| `readmes/*.md` | Project context files (00–25) |
-| `readmes/path-list.md` | Document index — pointers to important files on local machine and external systems |
-
-## What Does Not Live Here
-
-- `inbox/` — eliminated; see `readmes/path-list.md`
-- `knowledge/` — large local files; path-list.md points to them
-- `allie/` runtime internals — session state, logs, workspace
-- `athena_private.pem` — Athena's signing key; never leaves the Mac
-
----
-
-## Editing Rights
-
-Any agent may edit any file in `readmes/agents/` at any time for anything that affects their domain. Athena signs the manifest after each session. See `readmes/agents/README.md`.
+| `CLAUDE.md` | Session seed — axioms, agent team, build protocols, file map |
+| `handoff/` | Cross-session working memory — handoff.md, claude-recall, allie-reflect |
+| `sessions/` | Full session logs (one per day) |
+| `process/inbox/` | FAULT, DNW, TF, TFTS process-capture files — Allie reads nightly |
+| `readmes/` | Project context files (00–42), agent files, wisdom layer |
+| `readmes/agents/` | One file per agent — Nora, Natalie, Noelle, Alice, Allie, Athena |
+| `readmes/wisdom/` | bill.md, scars.md, rejected-paths.md, whatif.md, whatif-weekly/ |
+| `readmes/retrospections/` | Daily retrospections with Lessons for Allie |
+| `readmes/sketchup/` | SketchUp plugin engineering rules and audit docs |
+| `scripts/` | allie-reflect.py, allie-capture.py, allie-whatif.py, and the full agent script library |
+| `thoughts/` | Allie's nightly reflection outputs |
+| `today/` | Operational files — activity logs, sync logs, handoff.md |
+| `knowledge/` | Deep knowledge files — large, not synced to GitHub |
+| `config/` | API keys and credentials — never synced to cloud unencrypted |
 
 ---
 
-## Athena's Backup Protocol
+## The Four JPods Programs
 
-Athena backs up to four locations automatically every night at 11pm:
+| Program | What it does | Key files |
+|---------|-------------|-----------|
+| **SketchUp Plugin** (`su_jpods`) | 3D student design tool | `~/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/` |
+| **JPodsSM_RPi** | Physical scale model vehicles | `~/Documents/08_JPods/03_Technology/00_working_code/JPodsSM_RPi/` |
+| **Route-Time** | Network planner + travel simulator | `~/Documents/08_JPods/03_Technology/route_time/` |
+| **WebClerk / Alice** | Commerce layer + ticketing | `~/Documents/CommerceExpert/webClerk3/` |
 
-| Location | Path |
-|----------|------|
-| Local | `athena/agents_backup/TIMESTAMP/` |
-| iCloud | `~/Library/Mobile Documents/com~apple~CloudDocs/Allie/` |
-| Google Drive | auto-detected, `Allie/TIMESTAMP/` |
-| GitHub | this repo, signed commit |
+---
 
-**Install the schedule (run once):**
-```bash
-cd /Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi/athena
-./install_schedule.sh
+## The Agent Team
+
+| Agent | Role |
+|-------|------|
+| **Nora** | Vehicle — navigation, encoders, telemetry |
+| **Natalie** | Router — trip plans, route sequences |
+| **Noelle** | Network validator + load balancer |
+| **Alice** | WebClerk — data quality, billing, patterns |
+| **Athena** | Security reviewer — signs non-standing actions |
+| **Allie** | Cross-domain persistent intelligence — this repo |
+
+Full agent files: `readmes/agents/`
+
+---
+
+## Backup and Sync
+
+Three copies at all times:
+
+| Copy | Location | How |
+|------|----------|-----|
+| Internal | `~/Allie/` | Working copy — always source of truth |
+| iCloud | `~/Library/Mobile Documents/com~apple~CloudDocs/Allie/` | Auto — launchd, 60s after change |
+| 5TB | `/Volumes/Allie/` | Manual — `scripts/allie-sync.sh` |
+
+Never synced to cloud: `credentials/`, `config/allie_api_keys.json`, `config/wc_credentials.json`. The `.enc` files are safe.
+
+Full detail: `readmes/41-allie-backup-sync.md`
+
+---
+
+## GitHub
+
+```
+https://github.com/JPods/allie-core.git
 ```
 
-**Run manually at any time:**
-```bash
-./full_backup.sh
-```
-
-**Check backup status:**
-```bash
-./full_backup.sh --status
-```
-
-**Verify agent file integrity:**
-```bash
-./verify_agents.sh           # report changes since last signed backup
-./verify_agents.sh --merge   # show diffs
-./verify_agents.sh --restore # restore from Athena's signed backup
-```
+Intelligence layer — always current after each nightly Allie run. Does NOT contain credentials, logs, archives, or large knowledge files.
