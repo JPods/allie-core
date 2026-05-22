@@ -184,3 +184,55 @@ NCC employees may hold standard employee equity per the NCC's own structure. NCC
 - Employee vesting: standard schedule, or LMC-defined?
 - NCC certification timeline: how long does JPods LLC certification take? What is the failure path if a network fails certification the week it was expected to sell?
 - Supply chain certification: component-level certification, or vendor-level? What happens when a certified component is discontinued?
+
+---
+
+## TODO — Board Size Study
+
+**Research question:** What is the optimum board size for each company type in the JPods ecology, given their distinct missions?
+
+Bill's gut: 4–8 seats. Secondary question: should the chairman vote only to break ties (primus inter pares model)?
+
+**Research directions:**
+
+*Military unit sizes — proven group performance thresholds:*
+- Fireteam: ~4–5 (direct action, tight coordination)
+- Squad: ~8–10 (independent mission execution)
+- Platoon: ~30–50 (multi-element coordination)
+- Company: ~150 (Dunbar's layer — stable social group with shared identity)
+
+*Organizational science:*
+- Scrum teams: 5–9 (Jeff Sutherland); Amazon "two pizza rule" ~6–8
+- Corporate governance research (Lipton & Lorsch, 1992): boards above 8–9 members show measurably worse decision quality — social loafing, diffusion of accountability
+- Optimal ranges vary by mission: oversight boards (larger, more perspectives) vs. operating boards (smaller, faster decisions)
+
+*Questions specific to each company type:*
+- **JPods LLC**: standards and technology — needs technical depth + legal + operator perspective. Likely larger (7–9?).
+- **LMC**: ongoing utility operations — customer board seat + employee board seat are fixed. What investor/operator complement? Likely 5–7 total.
+- **NCC**: build-and-sell on weekly cycle — speed matters more than breadth. Likely 3–5.
+- **Supply chain**: conventional company structure — not mandated by JPods; left to market.
+
+*Chairman tie-break only:*
+The "primus inter pares" model (first among equals) concentrates no authority in the chair. The chairman facilitates but does not dominate. Votes only to break a deadlock. This fits the sovereignty principle — no single person holds decisive authority by position alone. Worth researching whether this model produces better outcomes in small boards (4–7 range) vs. larger ones.
+
+**Status:** Open — study before finalizing LMC and NCC governance documents.
+
+---
+
+## Note — Individual Shares vs. Community Equity Block
+
+**The historical failure mode:**
+Every attempt to distribute equity broadly to individuals as transferable shares has been captured by predators:
+- **Revolutionary War Continentals**: soldiers and farmers sold depreciated paper for survival cash; speculators accumulated at pennies on the dollar; Hamilton's par redemption rewarded the predators, not the original holders
+- **Russian voucher privatization (1991–1994)**: every citizen received a privatization voucher; most sold for vodka or immediate cash; oligarchs aggregated millions of vouchers; state industries worth billions concentrated in ~50 hands within a few years
+
+**The failure mechanism in both cases was transferability.** The equity was real; the holder just needed cash more than they needed a long-term stake. The predator had cash and patience. Concentration was inevitable.
+
+**Why the JPods community equity model is structurally different:**
+The current design already contains the key protection: **tokens are non-transferable, bound to the CarryOn UUID at issuance.** A predator cannot buy your token. They cannot offer you cash for your voting rights. The token is yours and only yours — it cannot move.
+
+The block is also held at the class level (all customers collectively own 10%, all employees collectively own 10%), not as individual tradeable shares. This is closer to a cooperative membership right than a share certificate. You cannot sell your membership; you can only ride.
+
+**The remaining risk:** Coercion of votes, not transfer of tokens. A predator cannot buy your token but might organize to pressure a bloc of voters. This is a governance design question — minimum participation thresholds, secret ballot, election administration — rather than a token design question.
+
+**Conclusion:** The non-transferable encrypted token model is the right protection against the Continental/voucher failure. The risk to study is governance capture through organized voting pressure, not token aggregation. Add to board size study above: what election mechanisms are most resistant to organized bloc voting while remaining accessible to ordinary riders?
