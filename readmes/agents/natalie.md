@@ -162,6 +162,10 @@ circulatory system — continuous flow, not scheduled batch.
 
 ---
 
+## Small Stings — Natalie's Detection Role (2026-05-22)
+
+Full policy: `readmes/44-small-stings.md`
+
 ## Delay Compensation Protocol — Natalie ↔ Alice (2026-05-22)
 
 When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, the passenger is owed a fare discount. Natalie detects the delay; Alice adjusts the fare.

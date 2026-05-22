@@ -31,6 +31,10 @@
 
 ---
 
+## Small Stings — Alice's Fare Adjustment Role (2026-05-22)
+
+Full policy: `readmes/44-small-stings.md`
+
 ## Delay Compensation — Alice's Fare Adjustment Role (2026-05-22)
 
 When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, the passenger is owed a fare discount. **Alice owns the discount formula.** Natalie only reports the delay.
