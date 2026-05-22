@@ -71,34 +71,21 @@ Customer's phone carries their CarryOn identity (UUID + payment token). The app 
 
 ---
 
-### 2. QR Code Card (Physical)
+### 2. Face Recognition (Biometric Identity)
 
-A physical card purchasable at retail stores — grocery stores, pharmacies, convenience stores, anywhere that sells transit passes or gift cards.
-
-**Why retail distribution matters:** Not everyone has a smartphone. Not everyone wants to install an app. A card in a wallet is sovereign — the customer controls it, it works offline, it requires no registration. This is the same principle as cash applied to transit.
-
-**Card types:**
-- **Value card:** pre-loaded with a dollar amount. Tap or scan at the station kiosk. Fare deducted per trip. Balance shown on kiosk.
-- **Pass card:** unlimited rides for a time period (day, week, month). No fare calculation per trip.
-- **Anonymous card:** no registration required. Lost card = lost balance. Customer accepts this tradeoff.
-- **Registered card:** customer optionally links the card to their identity (phone number or CarryOn UUID). Lost card can be replaced; balance transferred.
-
-**Station kiosk:** Each station has a QR reader. Customer scans card on arrival, selects destination, kiosk shows fare, trip executes. No app needed.
-
-**Retail integration:** Cards sold through Alice's WebClerk integration. Retail stores scan a QR at point of sale; Alice activates the card and records the initial value. The retailer earns a small commission. This is the same model used by prepaid phone cards and gift cards — well understood by retailers.
-
----
-
-### 3. Face Recognition (Biometric Identity)
-
-Station cameras recognize the passenger. Face links to their account. No phone, no card needed.
+Station cameras recognize the passenger. Face links to their account. No phone, no card needed. Expected to be the most common payment path alongside the phone — fast, frictionless, nothing to carry.
 
 **How it works:**
 1. Customer registers their face once — in the app, at a kiosk, or at a customer service point
 2. Face is stored as a biometric hash linked to their CarryOn UUID (the actual image is not retained after hash generation — only the hash)
 3. On arrival at a station, the camera identifies the customer
 4. Fare is charged to their linked payment method
-5. If payment fails → account balance (see below)
+5. If payment fails → community account (see below)
+
+**Biometric hash retention:**
+- **Registered face** (linked to phone/CarryOn account): hash retained as long as the account is active. Customer can delete at any time.
+- **Anonymous face** (no account, QR pass only): hash retained for **24–48 hours** after the trip, then purged. This window is long enough to respond to a law enforcement query if an incident is reported on or near the network; short enough that JPods is not a surveillance database. Policy is posted publicly at every station.
+- No travel history is reconstructed from anonymous face hashes. The hash exists for incident response only.
 
 **Privacy constraints:**
 - The biometric hash is stored on the customer's CarryOn, not on a central server. The station camera computes the hash locally and queries CarryOn for a match.
@@ -107,6 +94,27 @@ Station cameras recognize the passenger. Face links to their account. No phone, 
 - No face data is shared with third parties. This is a JPods-only payment identifier.
 
 **ADA note:** Face recognition must work reliably for customers with physical differences that affect camera angle or framing. A wheelchair user's face is at a different height than a standing passenger. Cameras must cover a range of heights. Failure to identify is not a trip denial — fall back to QR code or phone.
+
+---
+
+### 3. QR Code Pass (Anonymous Transit Account)
+
+For customers who want to travel without identification. Functionally identical to a metro or transit pass — loaded with value at a station kiosk or via the phone app, scanned at departure to deduct the fare.
+
+**Why this exists:** Some customers will not use face recognition or a phone app. A QR pass requires no registration, no phone, no identity. It is the cash equivalent for the network.
+
+**How it works:**
+- Customer loads value onto a QR pass at any station kiosk (cash or card) or via the phone app
+- At boarding, customer scans QR code at kiosk, selects destination, kiosk shows fare, trip executes
+- Fare deducted from pass balance; remaining balance shown on kiosk
+- Pass is anonymous by default — no registration required. Lost pass = lost balance.
+- Customer may optionally link a pass to their CarryOn UUID (via app or kiosk); linked passes can be replaced if lost
+
+**Pass types:**
+- **Value pass:** pre-loaded dollar amount; fare deducted per trip
+- **Period pass:** unlimited rides for a defined window (day, week, month); no per-trip calculation
+
+**No retail distribution.** JPods does not operate a retail card distribution network. Transit Oriented Development around stations — the natural commerce that grows up around a network — will find its own equilibrium. Customers load passes at station kiosks or by phone.
 
 ---
 
@@ -127,6 +135,12 @@ If a customer cannot pay at the moment of the trip — no phone, no card, no fac
 **Hardship cases:** Customers with documented hardship (social services connection, community organization voucher) may qualify for extended terms or fee waivers. This is handled at the operator level, not by Alice automatically. Alice flags the account; a human operator makes the determination.
 
 **No interest, no penalty fees.** The balance is what the fare was. Alice does not add fees for late payment on community accounts — that would be a small sting in reverse, penalizing people for not having money in the moment. The network absorbs the short-term cost as a community service function.
+
+**Balance warning — honest, not punitive.** When a community account balance is outstanding and the window is approaching, Alice notifies the customer clearly:
+
+> *"Your JPods balance of $X is due by [date]. You can pay at any station kiosk, by app, or by card. If the balance is not resolved, your account will be paused — but you can always walk or bike, and JPods offers low-cost bike loans at every station."*
+
+The tone matters. This is not a threat. It is a statement of the practical reality — the network cannot carry unlimited unpaid balances, but the customer is never stranded. Walking and biking are real, viable options, and JPods actively supports them (see Last-Mile section below). The warning acknowledges this: the network is a convenience, not a necessity you are trapped inside.
 
 ---
 
@@ -159,6 +173,49 @@ Alice is the fare engine and the payment processor. She does not handle physical
 
 ---
 
+## Last-Mile — Bike Loans at Every Station
+
+JPods is Middle-Mile. It moves people efficiently between stations — neighborhood to neighborhood, district to district. It does not pretend to go to your front door. The Last-Mile gap — from the station to your actual destination — is bridged by walking, cycling, and other short-range modes.
+
+JPods actively supports Last-Mile by offering low-cost bike loans at every station.
+
+**Two loan tiers:**
+
+| Tier | Type | Who it serves | Cost model |
+|------|------|--------------|------------|
+| Basic | Mechanical bike | Anyone who can ride; no charging needed; lowest cost | Lowest loan rate; simple deposit |
+| Premium | Electric bike | Longer last-mile distances; hills; passengers with limited stamina | Slightly higher loan rate; charged at station |
+
+**Loan, not rental.** The word "loan" is deliberate. A rental implies a transaction between strangers. A loan implies a community relationship — the bike is available because someone in the network made it available, and you return it in the same or better condition. This is usufruct applied to bikes: use for profit without harm; return in better condition for the next person.
+
+**Loan mechanics:**
+- Bikes available at station storage racks, adjacent to the JPods platform
+- Customer checks out via app, QR card, or face — same identity as their JPods account
+- Loan fee is small and time-based (suggested: first 30 minutes free with any JPods trip, modest hourly rate after)
+- Bike returned to any JPods station — not required to return to origin
+- Mechanical damage beyond normal wear → deposit held; operator inspects; excess returned to customer if fault is wear, not neglect
+- Electric bikes recharge at station automatically when racked
+
+**Why every station:**
+A JPods network where bikes are available at every station converts the network from a point-to-point service into a door-to-door service. The customer does not need a car for the Last-Mile gap. This is the Physical Internet completing its circuit: Middle-Mile (JPods) + Last-Mile (bike) = any origin to any destination without a private vehicle.
+
+**Cargo bikes:**
+Some stations will have cargo bikes — for small deliveries, grocery runs, or moving goods from the station to a home or business. Cargo bike loans follow the same model as standard loans. This is the outbound half of JPods cargo service: goods arrive at the station via JPods pod, travel the last mile by cargo bike.
+
+**The redundancy is the design:**
+A customer whose JPods account is paused (outstanding balance) can still borrow a bike with a cash deposit at the kiosk. They are never stranded. The network acknowledges that transit is infrastructure, not a luxury to be withheld.
+
+**Connection to weather and Natalie:**
+Natalie uses a weather factor (1–5) when dispatching. In good weather, Last-Mile by bike is easy — Natalie can route more efficiently knowing many customers will not need a pod all the way to the station exit. In bad weather, bike loan demand drops; pod demand increases. Natalie and Noelle adjust preposition decisions accordingly.
+
+**Not yet implemented:**
+- Bike inventory management system (Alice tracks bike count per station)
+- Loan checkout via station kiosk
+- Cargo bike fleet (post-initial deployment)
+- Bike-to-station return routing (customer can see which nearby stations have available racks)
+
+---
+
 ## Integration Points
 
 | System | What it contributes |
@@ -169,7 +226,6 @@ Alice is the fare engine and the payment processor. She does not handle physical
 | Noelle | Network load signal → rate multiplier |
 | Station kiosk | QR reader, face camera, display, cash-out |
 | WebClerk / Alice | Rate table, payment processing, account management, receipt |
-| Retail stores | QR card activation and distribution |
 
 ---
 
@@ -181,6 +237,6 @@ Alice is the fare engine and the payment processor. She does not handle physical
 - Community account window: 30 days is a proposal. What does the local operator want?
 - Community account cap: $10–20 is a proposal. What is the practical maximum before the network absorbs meaningful risk?
 - Face registration: in-app only, or can a customer register at a station kiosk without an app?
-- QR card retail distribution: which retail chains? Regional variation? JPods works with local operators — the retail network will differ by city.
+- Anonymous face retention window: 24–48 hours is the working policy. Confirm with legal/operator before deployment.
 - Cargo fare table: same formula as passenger, different rates? Volume discounts for regular shippers?
 - Lift convenience fee (if any): see `readmes/44-small-stings.md` — still undecided
