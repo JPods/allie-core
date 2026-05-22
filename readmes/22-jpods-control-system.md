@@ -1,6 +1,6 @@
-# JPods Control System — Nora, Natalie, Noelle
+# JPods Control System — Nora, Natalie, Noelle, Sally
 **Action:** Reference when building or extending JPods vehicle, routing, or load balancing code
-**Function:** System architecture for the three control behaviors defined in US Patent 6,810,817
+**Function:** System architecture for the control behaviors defined in US Patent 6,810,817
 **Frequency:** Read at start of any JPods control system session
 **Process:** Build against patent claims; keep behaviors separated by agent spec
 
@@ -10,13 +10,14 @@
 
 US Patent 6,810,817 (granted 2004, inventor: William James) defines a distributed intelligent transport system with **no centralized control**. Devices coordinate via protocol — no master controller, no dispatcher.
 
-The patent maps to three behavioral roles:
+The patent maps to behavioral roles. Sally is a station-level specialization of the station/storage behavior in Claims 3–5:
 
 | Agent | Role | Patent Claims |
 |-------|------|--------------|
 | **Nora** | Vehicle — autonomous transit pod | 1, 6, 7, 12a, 17 |
 | **Natalie** | Router — trip scheduling and routing | 8, 9, 11, 12, 13 |
 | **Noelle** | Load Balancer — switches, stations, storage, prepositioning | 3, 4, 5, 11e, 14g, 14l, 18, 20 |
+| **Sally** | Station Processor — per-station slot registry and parking queue | 3, 4, 5 (station storage) |
 
 These are behavioral roles, not processes. Any device on the network can manifest one or more roles.
 
@@ -82,6 +83,37 @@ Rate signals        Alice     Which paths are economically optimal — segment r
 **Current code:** `podPresenter/` (visualization + control), `web_server/` (Node.js), MQTT START/RESEND/ACTION handlers
 
 **Agent spec:** `allie/agent/natalie-agent.md`
+
+---
+
+## Sally — Station Processor
+
+**What Sally does:** Manages who parks where at each station. Sally owns two zones:
+
+- **`gw_platform`** — the parking track. Slots 1–N numbered from entrance to departure end. Sally assigns the **highest available empty slot** to each arriving pod, keeping the departure end populated and the entrance open for incoming vehicles. Capacity = arc-length ÷ 2.5m.
+- **`gw_platform_parking`** — the holding lane before the platform junction. Pods waiting for a gw_platform slot queue here. Natalie may assign pods to this lane; she cannot place pods on gw_platform without Sally's slot number. Capacity = arc-length ÷ 2.5m.
+
+**Arrival protocol:**
+1. Pod arrives (trip_complete) → Natalie calls `Sally.reserve_slot(station_id, nora_id)`
+2. Sally returns highest empty slot → Natalie positions pod
+3. If gw_platform full → pod's `station_full_policy` applies:
+   - `'wait'`: Sally queues pod in gw_platform_parking; re-checks each tick
+   - `'reroute'`: Natalie BFS-routes pod to next station with open capacity
+4. If both zones full → pod holds, retries next cycle
+
+**Departure protocol:**
+1. Pod departs → Natalie calls `Sally.release_slot(station_id, nora_id)`
+2. If a pod is queued in gw_platform_parking, Sally immediately assigns it the freed slot
+3. Returns `{next_pod:, next_slot:}` → Natalie advances the queued pod in the same event
+
+**Where Sally runs:**
+- **SketchUp simulation:** `JPods::Sally` module in `jpod_sally.rb` — all station instances in one Ruby module
+- **Physical hardware:** small processor embedded at each station (same API, MQTT messaging)
+- **Allie simulation:** Allie simulates all Sally instances the same way she simulates Nora, Natalie, and Noelle
+
+**Key separation:** Natalie knows the network. Sally knows only her station. This matches the patent's no-central-dispatcher requirement — Sally cannot become a chokepoint because her domain is strictly local.
+
+**Agent spec:** `readmes/agents/sally.md`
 
 ---
 

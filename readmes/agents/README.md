@@ -44,6 +44,7 @@ Every agent file uses this structure. Add sections as needed; do not remove them
 | Nora | Vehicle — autonomous pod | [nora.md](nora.md) |
 | Natalie | Router — trip scheduling | [natalie.md](natalie.md) |
 | Noelle | Load Balancer — ezones, prepositioning | [noelle.md](noelle.md) |
+| Sally | Station Processor — per-station slot registry, parking queue | [sally.md](sally.md) |
 
 ## Ecosystem Agents
 

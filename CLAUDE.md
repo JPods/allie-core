@@ -90,6 +90,7 @@ Each step has a dedicated tool. The Build step runs `NoelleNetworkBuilder.from_j
 | **Nora** | Vehicle — navigation, encoders, telemetry | `nora.rb` (SketchUp), `main.py` (Pi) |
 | **Natalie** | Router — trip plans, route sequences | `natalie.rb` (SketchUp), `podPresenter` (Mac) |
 | **Noelle** | Network validator + load balancer | `noelle.rb` (SketchUp), `ezone.py` (Pi) |
+| **Sally** | Station processor — per-station slot registry and parking queue | `jpod_sally.rb` (SketchUp), station chip (Pi) |
 | **Alice** | WebClerk — data quality, billing, patterns | WC3 on Mac; wcapi bridge |
 | **Athena** | Security reviewer — signs non-standing actions | `athena_review.py` |
 | **Allie** | Cross-domain persistent intelligence | This repo; local LLM (allie:latest) |

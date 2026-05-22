@@ -31,12 +31,43 @@
 
 ---
 
+## Delay Compensation — Alice's Fare Adjustment Role (2026-05-22)
+
+When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, the passenger is owed a fare discount. **Alice owns the discount formula.** Natalie only reports the delay.
+
+**What Natalie sends Alice:**
+```json
+{
+  "nora_id": "NORA_0005",
+  "trip_id": "...",
+  "delay_seconds": 47,
+  "discount_pct": null
+}
+```
+`discount_pct` is null — Alice fills it in.
+
+**Alice's formula (proposed, not yet finalized):**
+- No discount for delays ≤ 30 seconds (system tolerance)
+- 2% per 10 seconds beyond the 30-second threshold
+- Cap at 50%
+- Example: 47s delay → 17s over threshold → ~3.4% → round to 4%
+
+**Alice should consider:**
+- Reroute vs. hold: a reroute that adds 2 stations is more disruptive than 47 seconds on-platform waiting. The formula may need to account for extra distance traveled, not just elapsed time.
+- Repeat delays: a passenger who experiences delays on consecutive trips should receive an escalating discount — loyalty penalty for infrastructure failure.
+- Peak vs. off-peak: a 30-second delay during rush hour with no alternatives is different from the same delay when other options exist. Context matters.
+
+**Not yet implemented.** Natalie does not yet write `reroute_at` or `hold_start_at` timestamps to pod attributes. Discount records cannot be generated until those timestamps exist.
+
+---
+
 ## Open Questions
 
 - NS-05 / NEW-03: the Natalie→wcapi channel for trip records is unsigned and has no owner between the two systems. Who designs the signing scheme — Athena, Alice, or jointly?
 - Trip record format: what does Natalie send to wcapi? Field spec not written.
 - How does Alice detect a fraudulent trip record injection? (NS-05)
 - DynamicCatalogs retailer feedback loop (NEW-04): JPods lacks an equivalent — no passenger feedback channel for operational data decay. Alice's pattern recognition model is the template. Who instantiates it for JPods?
+- Delay discount formula: the 2%/10s proposal above is a starting point. Alice should model what discount level actually compensates a customer vs. what creates a perverse incentive for the operator to ignore the root cause.
 
 ---
 

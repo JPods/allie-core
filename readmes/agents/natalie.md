@@ -79,6 +79,20 @@ Natalie Pi comes online:
 
 ---
 
+## Design Decisions — SketchUp Animation (parking cycle + Sally)
+
+| Date | Decision | Reasoning |
+|------|----------|-----------|
+| 2026-05-22 | Natalie calls Sally.reserve_slot at trip_complete; never assigns gw_platform positions herself | Sally owns slot state; Natalie owns routing. Separation matches patent distributed-control requirement |
+| 2026-05-22 | station_full_policy='wait': pod holds in gw_platform_parking; Sally re-checks each dwell tick | Holding lane is the natural physical buffer before the platform junction; no trip cancellation needed |
+| 2026-05-22 | station_full_policy='reroute': BFS to next station with open capacity; falls back to 'wait' | Keeps pods circulating rather than stacking at full stations; reduces deadlock risk on saturated networks |
+| 2026-05-22 | natalie_dispatch_eligible? uses Sally.max_occupied_slot (O(1)) not @@pods scan | O(n) pod scan was redundant once Sally's registry existed; same answer, no iteration |
+| 2026-05-22 | Compact-toward-exit rule: Sally assigns highest empty slot so departure end stays populated | Pods nearest exit depart first; entrance stays open for arrivals; never move a pod backward |
+| 2026-05-22 | Overlap threshold < 2.49m (was < 2.5m) — 1 cm tolerance for float boundary | Vehicles placed at exactly slot_spacing apart produce distance_m = 2.4999... due to SU inches→meters conversion; threshold must leave room for floating-point representation |
+| 2026-05-22 | compact_platform_static uses uncapped arc-length slot_count (removed STANDARD_TEST_MAX_PARKING_SPACES_PER_PLATFORM cap) | Parking cycle assigns slots from arc-length; compact must match or it treats slots above the cap as "already correct" and refuses to rearrange them |
+
+---
+
 ## Design Decisions — SketchUp Plugin (jpods-plugin context only)
 
 | Date | Decision | Reasoning |
@@ -145,6 +159,34 @@ structure. See `readmes/sketchup/jpods-trip-schema.md`.
 half of the Physical Internet. A JPods network that only moves passengers is running
 at half capacity. The cargo and waste missions are where the network becomes a
 circulatory system — continuous flow, not scheduled batch.
+
+---
+
+## Delay Compensation Protocol — Natalie ↔ Alice (2026-05-22)
+
+When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, the passenger is owed a fare discount. Natalie detects the delay; Alice adjusts the fare.
+
+**Trigger conditions:**
+- Pod rerouted (`station_full_policy = 'reroute'`): Natalie logs `reroute_at` timestamp on the pod entity
+- Pod held in gw_platform_parking: Natalie logs `hold_start_at` timestamp when `awaiting_slot` is set
+
+**At trip completion**, Natalie computes total delay:
+```
+delay_s = (hold_duration_s + reroute_overhead_s) — 0
+```
+If `delay_s > 30`, Natalie posts a `delay_discount` record to Alice via wcapi:
+```json
+{
+  "nora_id": "NORA_0005",
+  "trip_id": "...",
+  "delay_seconds": 47,
+  "discount_pct": <Alice's formula>
+}
+```
+
+**Alice's formula (TBD):** Discount scales with delay. Suggested starting point: 2% per 10 seconds beyond the 30-second threshold, capped at 50%. Alice owns the formula — Natalie only reports the delay.
+
+**Not yet implemented.** Timestamps are not yet written to pod attributes at hold/reroute events. This is the prerequisite.
 
 ---
 
