@@ -3,6 +3,7 @@
 **Owner:** Alice (formula + application), Natalie (detection + reporting)
 **Action:** Reference when designing service quality rules, billing logic, or Natalie delay handling
 **Frequency:** Read when adding any new service failure mode or extending the fare calculation
+**Related:** `readmes/45-fare-and-payment.md` — base fare structure, payment methods, courtesy discount
 
 ---
 

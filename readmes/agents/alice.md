@@ -11,7 +11,10 @@
 - WebClerk data quality: contact, action, communication, connection, setting, document models
 - Pattern recognition loop: observe → log → pattern → recommend → promote (alice_log; features promote to Setting)
 - Database support for JPods actions and transactions
-- API support for JPods ticketing and transaction workflows
+- **Fare engine:** minimum_fee + per-km rate; courtesy discount; peak/off-peak multipliers — see `readmes/45-fare-and-payment.md`
+- **Payment processing:** CarryOn token, QR card balance, community account ledger
+- **Small-stings adjustment:** post-trip discounts applied before final charge — see `readmes/44-small-stings.md`
+- API support for JPods ticketing and transaction workflows (price_query, invoice)
 - Keep the local API/database path documented so Bill and the agents know how to reach Alice when she is already running at machine startup
 - Trip record ingestion from Natalie: validate, post to WebClerk billing project
 - wcapi bridge integrity: the channel between Natalie (JPods control network) and WebClerk has no designated owner and no signing — NEW-03 and NS-05
