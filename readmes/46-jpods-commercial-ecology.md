@@ -140,6 +140,8 @@ The record is the rider's, on their device. The LMC sees a CarryOn with X credit
 
 **Board seat election:** Registered CarryOn holders vote by accumulated voting weight. Privacy-preserving voting (blind signatures or zero-knowledge proof) tabulates the result without revealing individual voter identity or travel history.
 
+**Encrypted tokens — all equity instruments:** Voting rights and dividend benefits are issued and redeemed as encrypted tokens. The token encodes the right and the issuing LMC, but not the holder's identity. The LMC verifies the token is valid and unspent without learning who holds it. Tokens are non-transferable (bound to the CarryOn UUID at issuance) and marked spent on redemption — cannot be double-used.
+
 See `readmes/09-carryon.md` — Equity Ledger section for the full schema.
 
 ---
