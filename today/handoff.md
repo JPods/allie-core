@@ -1,61 +1,62 @@
-# Handoff — 2026-05-20 (Session 2)
+# Handoff — 2026-05-22
 
-## Where We Stopped
+## What was fixed this session
 
-Two bugs fixed and confirmed working in the SketchUp plugin. Committed to `su_jpods_claude` branch (commit `14f743f`). Two TFTS files written and committed to `~/Allie`.
+### Vehicle placement on gw_platform (confirmed working)
 
-## What Is Done (This Session)
+**Root cause:** `ensure_platform_host_guideway` built its synthetic host guideway from
+`platform['start_m']`/`['end_m']` — these are CP stub endpoints (~40000,-4800mm), not
+the parking track. Vehicles were placed at CP0 area, not on gw_platform (-1018mm Y).
 
-### 1. Approach Curve False Violations — Fixed
+**Fix:** `ensure_platform_host_guideway` now loads `{sid}.gw_platform` from map.json via
+`RubyNatalie.build_line_lookup`. These pts are the authoritative parking track. Vehicle-level
+pts are stored as beam_top (add BEAM_DEPTH before storing in beam_path attribute).
 
-Noelle was reporting 5 BLOCK violations at ~1.2m radius on inter-station connections at S048, S050, S051. Visual inspection showed radii of 3.5m+.
+Files changed: `jpod_animator.rb`, `jpod_platform.rb` — both copies of `ensure_platform_host_guideway`.
 
-Root cause: `check_approach_curves` in `noelle.rb` was calling `vehicle_path_for`, which stitches station-internal U-turn geometry (genuine ~3.5m radius curves) onto the inter-station path for animation continuity. The station-internal geometry caused false circumradius readings.
+**Track direction fix:** Platform hash `track_index` was 0 (entrance=pts.last = exit/gw_platform_out1
+end), placing slot 1 at t≈0.94 right next to gw_platform_out1. Fixed by forcing `track_index=1`
+on all synthetic guideways built from map.json gw_platform (entrance=pts[0]=inbound end).
+Tier 2 in `spawn_t_for_platform_slot_on_guideway` now reads track_index from the guideway
+group (not platform hash) for platform_host guideways.
 
-Fix: Changed to `base_vehicle_path_for` — reads only the guideway's own `beam_path` attribute, no stitching.
+**Safety net (build_fleet):** If entity is >1m from first maneuver at animation start,
+snap it to the slot position on that maneuver. `_point_along_polyline` helper added to
+`jpod_vehicle_anim.rb`.
 
-Result: "Noelle approach curves: all guideways approved (min radius >= 8.0 m)." All 5 violations gone.
+### Result
+- S001 vehicle: placed at t≈0.06 on gw_platform (1.5m from inbound end)
+- S002 vehicle: unchanged (was already placing correctly)
+- Animation: no jump at start; vehicles depart and loop correctly
 
-Two intermediate attempts failed first (chord filter, skip depth) — documented in TFTS `20260520T232624-tfts.md`.
+## Open items
 
-### 2. Waypoint (via_markers) Dropping — Fixed
+### Platform shuffle — Natalie's next task (Bill requested 2026-05-22)
+Vehicles parked on a platform that are NOT involved in an active trip should be shuffled
+forward to the highest-numbered open slot. This is the "compact toward exit" rule.
+- Natalie detects idle parked vehicles (no trip_id or trip_assigned_at expired)
+- Identifies the highest open slot on the platform
+- Issues a move order: vehicle travels gw_platform pts from current slot to target slot
+- This is a short intra-platform move, not a full trip
+- Existing shuffle infrastructure: `run_5v_shuffle_forward` in `jpod_vehicle_runtime.rb`,
+  `shuffle_forward_all_platforms` in `jpod_animator.rb`
+- Key difference from existing shuffle: triggered by idle detection, not by 5V test
 
-The 3 waypoints placed between S048 and S050 were being dropped during Build. Guideways built as a straight pair; columns appeared at waypoint locations separately.
+### Vehicle doors
+Bill will tag left/right door geometry in the pod component models. Once tagged,
+`vehicle_transform_for` should orient the vehicle so doors face the platform loading area.
+Door orientation = perpendicular to forward, toward the "inner" side of the curve.
+No code change needed yet — waiting for model work.
 
-Root cause: `generate_feature_json` was creating TWO separate `cp_` entries — one for each direction of each bidirectional connection. `build_from_config` called `build_segment` twice for the same physical guideway pair. The second call (with `via_markers=[]`) erased and rebuilt what the first call had placed, dropping all waypoints.
+### gw_lift TODO
+Both `ensure_platform_host_guideway` copies have a TODO comment. Lift-equipped stations
+need a gw_lift segment type. Affects: beam_path lookup key, slot math, possibly track_index.
 
-Fix: Modified `generate_feature_json` to check if the reverse `cp_` key already exists before creating a new one. Both directional `seg_` entries now nest inside ONE `cp_` entry per physical pair.
+### FALLBACK in slot log
+Tier 2 (FALLBACK) still used because platform_endpoint_points returns nil for S001.
+Tier 2 with track_index=1 gives correct results — low priority to fix to Tier 1.
 
-Result: feature.json dropped from 6 cp_ entries to 3. Trip S048→S050 grew from 465m to 556m (waypoints being routed). `via_markers: [1,2,3]` confirmed on the S048-S050 pair.
-
-TFTS `20260520T234607-tfts.md` written, then amended to add warning: future single-guideway (one-way) connections require revisiting the merge logic before implementing.
-
-### 3. TFTS Files Committed
-
-Both process/inbox files written and committed immediately per protocol.
-
-## Next Steps (Priority Order)
-
-1. **Next Build** — the "Perfect" build ran against the OLD 6-entry feature.json. The new 3-entry feature.json is now on disk. Run Build again to confirm via_markers=[1,2,3] stamps correctly on both guideways (topology log should show [1,2,3] not [1,2]).
-2. **Pipeline test** (carried from Session 1) — Build → generate_map_json v2 → generate_feature_json → TripPlanner v2 → Animate. Expect map.json v2 output, trip.json v2 output.
-3. **"Trip" → "Route" terminology** — mentioned at session start, tool call rejected, never implemented. Confirm with Bill before starting.
-4. **physical.json (jpods-physical-v1)** — not yet implemented; staging area is `anomalies: []` in nora.json.
-5. **Station template F-07** — stubs at 7.5m need structural redesign.
-
-## Files Changed This Session (su_jpods)
-
-- `noelle.rb` — `check_approach_curves`: changed `vehicle_path_for` → `base_vehicle_path_for`
-- `noelle.rb` — `generate_feature_json`: ONE cp_ entry per physical pair; both seg_ directions nested inside
-- `jpod_constants.rb` — added `APPROACH_SKIP_DEPTH = 2.0.m`
-
-## Commits
-
-`14f743f` on `su_jpods_claude` branch. Not pushed — wait for Bill's verification of next build.
-
-## Key Design Principles (This Session)
-
-| Principle | Where it applies |
-|-----------|-----------------|
-| `base_vehicle_path_for` for per-guideway spatial analysis; `vehicle_path_for` for animation only | `noelle.rb` approach curve checks |
-| ONE cp_ entry per physical guideway pair in feature.json | `generate_feature_json` in `noelle.rb` |
-| `build_segment` builds BOTH tracks in one call — duplicate cp_ entries cause double-build and via_markers erasure | `noelle.rb` + `jpod_noelle_bridge.rb` |
+## Files changed this session
+- `jpod_vehicle_anim.rb` — snap in build_fleet, _point_along_polyline helper
+- `jpod_animator.rb` — ensure_platform_host_guideway (map.json gw_platform path + track_index=1)
+- `jpod_platform.rb` — ensure_platform_host_guideway (same), Tier 2 track_index from guideway
