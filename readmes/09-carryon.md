@@ -65,9 +65,9 @@ This is the difference between an AI assistant and an AI companion.
 
 ---
 
-## Schema Overview (v1.1)
+## Schema Overview (v1.2)
 
-CarryOn v1.1 has these top-level sections:
+CarryOn v1.2 has these top-level sections:
 
 | Section | Contents |
 |---|---|
@@ -85,6 +85,7 @@ CarryOn v1.1 has these top-level sections:
 | `recent` | Recently accessed files and projects |
 | `settings` | Allie config, privacy, display |
 | `sync` | GitHub repos, backup strategy |
+| `equity` | Transit equity ledger — voting rights + dividend credits from LMC ridership |
 | `custom` | Free-form extension space |
 
 ---
@@ -277,6 +278,53 @@ Full contact data (email, phone, company, history) lives in the WebClerk contact
 If offline, Allie queues writes in `pending` with `dt_processed: 0` and processes them on the next online session.
 
 See `05-webclerk-integration.md` for the full wcapi access pattern.
+
+---
+
+## Equity Ledger — Transit Ownership via CarryOn
+
+CarryOn v1.2 adds an `equity` section. This section holds the holder's accumulated voting rights and dividend credits from JPods Local Mobility Companies (LMCs). It turns every JPods rider into a partial owner of the network they use.
+
+**Why CarryOn holds this, not the LMC:**
+JPods ridership privacy policy prohibits central tracking of individual travel. The LMC cannot maintain a ridership database that maps person → trips → equity. Instead, the LMC credits the rider's CarryOn after each trip. The record is the rider's, on their device. The LMC sees only that a CarryOn with accumulated credits is presenting a dividend claim — not who that person is or where they traveled.
+
+**How credits accumulate:**
+1. Rider completes a trip (phone, face, or QR pass)
+2. LMC posts a credit to the rider's CarryOn (or QR pass token if anonymous)
+3. CarryOn increments `equity.holdings[].credits` and `equity.holdings[].voting_weight`
+4. On dividend declaration, rider presents CarryOn; LMC pays without learning travel history
+
+**Schema:**
+```json
+"equity": {
+  "holdings": [
+    {
+      "issuer_id": "LMC-Gilroy-001",
+      "issuer_name": "Gilroy Mobility LLC",
+      "class": "customer",
+      "credits": 847,
+      "dividend_pending_usd": 12.40,
+      "voting_weight": 847,
+      "first_credit_at": "2027-03-15T14:00:00Z",
+      "last_credit_at": "2027-09-22T09:14:00Z"
+    }
+  ]
+}
+```
+
+**Anonymous QR riders:**
+Credits accumulate on the QR pass token, not a named CarryOn. The rider can claim their dividend only if they link the pass to a CarryOn (via app or kiosk). The credits are real; the anonymity defers the claim. At linkage time, accumulated credits transfer to the CarryOn.
+
+**Board seat voting:**
+When an LMC calls a customer board seat election, CarryOn holders vote. Voting weight = `credits`. The vote is tabulated without revealing individual voter identity — privacy-preserving voting (blind signatures or zero-knowledge proof). The LMC sees the aggregate result, not who voted how.
+
+**Employee equity:**
+Employee equity is held on the employee's CarryOn under the same `equity.holdings` structure, with `"class": "employee"`. Vesting schedule and dividend rights are identical in structure to customer equity, with terms set at employment.
+
+**Non-diluteable guarantee:**
+The LMC's 10% customer block and 10% employee block are non-diluteable. Future capital raises maintain these blocks at 10% each. The credits in CarryOn represent a proportional share of a class that cannot be washed out. Investors know this at the time they invest.
+
+See `readmes/46-jpods-commercial-ecology.md` for the full five-company structure.
 
 ---
 
