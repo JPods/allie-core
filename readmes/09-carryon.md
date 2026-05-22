@@ -313,7 +313,11 @@ JPods ridership privacy policy prohibits central tracking of individual travel. 
 ```
 
 **Anonymous QR riders:**
-Credits accumulate on the QR pass token, not a named CarryOn. The rider can claim their dividend only if they link the pass to a CarryOn (via app or kiosk). The credits are real; the anonymity defers the claim. At linkage time, accumulated credits transfer to the CarryOn.
+Anonymous QR passes receive **no equity credits, no voting rights, and no dividends.** Equity requires a registered CarryOn UUID.
+
+Reason: an anonymous equity path is a governance attack vector. A wealthy actor could purchase QR passes in volume, accumulate voting rights without identification, and capture the customer board seat. The non-diluteable customer block exists to protect riders — not to be captured by proxy. Equity is tied to the person, not the transaction.
+
+If a QR rider wants equity participation, they register: link their pass to a CarryOn UUID via app or kiosk. From that point forward, trips credit their CarryOn. Prior anonymous trips do not backfill.
 
 **Board seat voting:**
 When an LMC calls a customer board seat election, CarryOn holders vote. Voting weight = `credits`. The vote is tabulated without revealing individual voter identity — privacy-preserving voting (blind signatures or zero-knowledge proof). The LMC sees the aggregate result, not who voted how.

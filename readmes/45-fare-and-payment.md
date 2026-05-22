@@ -109,6 +109,7 @@ For customers who want to travel without identification. Functionally identical 
 - Fare deducted from pass balance; remaining balance shown on kiosk
 - Pass is anonymous by default — no registration required. Lost pass = lost balance.
 - Customer may optionally link a pass to their CarryOn UUID (via app or kiosk); linked passes can be replaced if lost
+- **Anonymous passes carry no equity rights** — no voting weight, no dividends. Equity requires a registered CarryOn UUID. An anonymous equity path would allow bulk QR purchase to capture the customer board seat without identification. Riders who want ownership register.
 
 **Pass types:**
 - **Value pass:** pre-loaded dollar amount; fare deducted per trip
