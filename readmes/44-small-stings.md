@@ -156,6 +156,35 @@ Thresholds:
 
 ---
 
+## Lift Service — Fee Design (Undecided)
+
+Some JPods stations will have a `gw_lift` segment — a mechanism that lowers a vehicle from the elevated guideway to ground level (grade) for boarding and alighting. This is distinct from the standard station platform, which is at beam height.
+
+**Two lift use cases with different fee logic:**
+
+**ADA compliance — no fee, ever.**
+A passenger who cannot climb stairs to a standard platform has no alternative. The lift is their only path to the network. Charging for it is both a legal violation and a sovereignty violation — the network would be pricing accessibility based on physical ability. ADA lift access is unconditional and free.
+
+**Convenience lift — fee undecided.**
+A passenger who is physically capable of using the stairs but prefers not to is using a premium service option. There is a reasonable argument for a small convenience fee. There is also an argument that adding friction to ground-level access discourages ridership and hurts overall network utilization. Bill is still thinking about this.
+
+**Design constraints regardless of fee decision:**
+- ADA status must be determinable at booking time — not on arrival, not by asking the passenger to self-declare under pressure.
+- If a convenience fee exists, it must be transparent at booking (Alice shows it in the price_query response) — no surprise charges.
+- Lift slots are separate from `gw_platform` slots in Sally's registry. A lift pod occupying a lift slot does not consume a standard platform slot.
+- Lift capacity is derived from the `gw_lift` segment arc-length, same as `gw_platform`. Sally initializes `lift_capacity` alongside `platform_capacity` when the segment exists.
+- A lift malfunction that forces an ADA user to wait is ST-01 territory with a higher multiplier — the passenger had no alternative.
+
+**What is not yet implemented:**
+- `gw_lift` segment type in SketchUp (`jpod_sally.rb` has a TODO for this)
+- Sally's lift slot registry (separate from platform slots)
+- ADA flag on passenger/carryon identity record
+- Lift fee logic in Alice's price_query
+
+**Open question for Bill:** Is the convenience fee a flat add-on per trip (like a premium seat), a per-use toll, or a subscription tier (unlimited lift access for a monthly fee)? The subscription model may encourage ADA-like users to self-identify without pressure.
+
+---
+
 ## Open Items
 
 - ST-01: `hold_start_at` and `reroute_at` timestamps not yet written by Natalie — prerequisite
