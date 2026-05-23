@@ -209,6 +209,7 @@ Bill's gut: 4–8 seats. Secondary question: should the chairman vote only to br
 *Questions specific to each company type:*
 - **JPods LLC**: standards and technology — needs technical depth + legal + operator perspective. Likely larger (7–9?).
 - **LMC**: ongoing utility operations — customer board seat + employee board seat are fixed. What investor/operator complement? Likely 5–7 total.
+  - **Children's committee seat (2026-05-23):** One LMC board vote is controlled by a committee of children. Children are a largely ignored customer group with an open mind and no institutional inertia. Legal structure TBD (a guardian-supervised advisory committee votes, result is binding on the designated seat). This seat is not elected by the general customer pool — it is reserved for the under-18 constituency. Research needed: minimum age, committee size, how the committee deliberates, guardian role, legal form that makes the vote binding.
 - **NCC**: build-and-sell on weekly cycle — speed matters more than breadth. Likely 3–5.
 - **Supply chain**: conventional company structure — not mandated by JPods; left to market.
 
