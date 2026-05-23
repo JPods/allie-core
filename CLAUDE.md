@@ -421,6 +421,9 @@ For a new team member or successor, also read:
 9. **TFTS files** — for any complete try-fail-try-succeed arc from the session, write a
    `process/inbox/YYYYMMDDTHHMMSS-tfts.md` and immediately commit it. Allie reads these
    nightly and drafts Understanding candidates. Do not wait — arcs lose fidelity at session end.
+10. **Wednesday scrub** *(Wednesday sessions only)* — write `readmes/retrospections/scrubs/YYYY-WNN.json`
+    (two-pass review: this week's changes + their seams). Post action + document to Alice if running.
+    Full protocol: `readmes/47-weekly-scrub.md`.
 
 ### Claude's Weekly WhatIf Protocol
 
