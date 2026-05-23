@@ -212,7 +212,16 @@
       "Bash(sed -n '660,665p' \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/noelle.rb\")",
       "Bash(sed -n '1002,1008p' \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_vehicle_runtime.rb\")",
       "Bash(sed -n '1138,1143p' \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_animator.rb\")",
-      "Bash(sed -n '2307,2313p' \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_structure_tool.rb\")"
+      "Bash(sed -n '2307,2313p' \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_structure_tool.rb\")",
+      "Bash(rm:*)",
+      "Bash(ps:*)",
+      "Bash(cp \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/ene_railroad.rb.zip\" .)",
+      "Bash(unzip -l ene_railroad.rb.zip)",
+      "Bash(unzip -l ene_railroad.zip)",
+      "Bash(unzip -p ene_railroad.rb.zip ene_railroad.rb)",
+      "Bash(unzip -l \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/ene_railroad.zip\")",
+      "Bash(unzip -p \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/ene_railroad.zip\" ene_railroad/track.rb)",
+      "Bash(awk NR>=640 && NR<=660:*)"
     ]
   }
 }

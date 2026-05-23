@@ -525,10 +525,48 @@ Three SketchUp tags are now required on every formation SKP. The plugin fails fa
 | `dead_end_cap` | Each removable end cap entity | Routing — vehicles must not traverse beyond capped endpoints |
 | `platform` | Loading/unloading siding guideway inside station | Natalie uses platform positions for berth routing; Noelle flags stations missing this tag |
 
+### Template Model Specification — Required Naming (Noelle reads these)
+
+Every template `model.skp` in `templates/track_formations/<formation_id>/` must carry
+the following naming so Noelle can identify `structure_type` without guessing:
+
+| What to set | Where | Value | Example |
+|-------------|-------|-------|---------|
+| **Tag (layer name)** on the top-level component | SketchUp Tags panel → assign to the outer component | `station` or `traffic_circle` | tag = `station` |
+| **Instance name** | Entity Info → Name field on the top-level component | Same as tag | name = `station` |
+| **Definition name** | Must start with the type | `station_*` or `traffic_circle*` | `station_line_end`, `traffic_circle7` |
+
+These three are redundant by design. Noelle reads them in priority order:
+
+1. `JPods.structure_type` attribute on the placed instance (written at placement by StructurePlacer)
+2. Entity tag (layer name) on the placed instance itself
+3. Instance name of the placed instance
+4. Definition name prefix (`station` or `traffic_circle`)
+
+**Why redundant:** A placed instance created before the placement fix will not have the
+JPods attribute. Noelle still reads the entity tag and instance name from what SketchUp
+provides. The model author controls the truth — Noelle reads it, does not invent it.
+
+**Adding a new structure type** (e.g., `junction`, `depot`):
+1. Set the tag, instance name, and definition name prefix in `model.skp`
+2. Add the type to the priority-read list in `noelle.rb` (`%w[station traffic_circle junction depot]`)
+3. Add the template entry to `noelle_features.json`
+4. Define the routing behaviors (landing/originating/pass) in the entry
+
+**Noelle never writes `structure_type` — she reads it from what the model author placed.**
+
+**Testing this — close template models first:**
+`Sketchup.active_model.definitions.load(path)` fails or returns stale data if the
+target `model.skp` is currently open in SketchUp. Before running any structure_type
+verification script, close all template models (`File > Close` or quit and reopen with
+only the network model open). The traffic_circle7 load failure in earlier tests was
+caused by the model being open at the time.
+
 ### Station identity contract
-- Instance name: `station` (lowercase, exact)
-- Definition name: unique `Sxxx` ID (e.g. `S097`) — this is how Noelle and Natalie identify the structure
-- `station` tag: optional (show/hide visibility only; not required for routing)
+- Tag: `station` (set on the top-level component in the template model.skp)
+- Instance name: `station` (set in Entity Info on the top-level component)
+- Definition name: starts with `station_` (e.g. `station_line_end`, `station_thru_dip`)
+- On placement, StructurePlacer writes `structure_type='station'` to the JPods attribute
 - A station without a `platform`-tagged guideway inside it will cause Noelle's definition gate to fail fast with an explicit message
 
 ### April 29, 2026 — Guideway alignment + FollowMe bridge lesson (do not lose)
