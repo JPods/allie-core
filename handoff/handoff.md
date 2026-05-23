@@ -1,97 +1,70 @@
 ---
-date: 2026-05-18
-status: HANDED OFF
+date: 2026-05-23
+status: HANDED OFF — Bill restarting computer
 ---
 
-# Handoff — 2026-05-18
-
-## What Was Done This Session
-
-**map.json as single geometry authority — complete.** The JPods Console and animation
-system are fully migrated from the old JPodFollowMeTool geometry-scan approach to map.json.
-
-### Files Changed
-
-| File | Change |
-|------|--------|
-| `su_jpods/jpod_vehicle_anim.rb` | Rewritten `build_pods` — reads map.json, no SketchUp scan |
-| `su_jpods/jpod_animator.rb` | All display via map.json; ~350 lines of GL/BFS methods deleted |
-| `su_jpods/jpod_followme_tool.rb` | Deleted `JPodTripOverlayTool` (GL overlay replaced by permanent geometry) |
-| `su_jpods/jpod_console.rb` | 27 tasks archived; 16 core workflow tasks remain (1406→962 lines) |
-| `su_jpods/jpod_console_archive.rb` | NEW — all 27 archived task lambdas, restorable |
-| `su_jpods/noelle.rb` | `generate_map_json` — writes `{model}.map.json` from followme.json |
-| `readmes/sketchup/jpods-console-archived-tasks.md` | NEW — archive index with rationale per task |
+# Handoff — 2026-05-23
+**Branch:** su_jpods_claude (JPods/sketchup.git)
+**Last commit:** 944316c — "Natalie 6s idle dispatch; per-station trip cap at 3 vehicles"
 
 ---
 
-## Current Architecture
+## Where We Stopped
 
-```
-followme.json (Noelle writes on Build)
-    ↓ generate_map_json
-{model}.map.json
-    ├── features: { S048: { lines: [...] } }   station-internal paths
-    └── segments: { seg_S048_cp1_S050_cp0: {...} }   inter-station, per direction
-
-Animation:   JPodVehicleAnim.build_pods → build_map_lookup → resolve_gw_segs_from_map → NoraPod
-FollowMe:    show_followme_json_overlay → red/blue polylines, orange gap flags
-Trip path:   show_trip_path_for_vehicle → gold path, red gap flags
-Route:       show_route_followme_overlay → green route, orange gap flags
-```
+Individual vehicle placement on S001 and S002 is fully working. Natalie 6s idle dispatch is written and committed but **NOT YET TESTED** — Bill restarted before we could animate with 6+ vehicles.
 
 ---
 
-## 16 Tasks in Console (clean list)
+## First Thing Tomorrow
 
-| Category | Tasks |
-|----------|-------|
-| Network | Network Editor, Show FollowMe Overlay, Clear FollowMe Overlay, Generate map.json |
-| Builder | Calculate CPs, Place Marker, Build Network, Validate Network + Show, Show Route, Clear Route |
-| Vehicles | Show Trip Path, List Vehicles, Set Vehicle Destination |
-| Animation | Export FollowMe JSON, Start Animation, Stop Animation |
-
----
-
-## Open Issues
-
-### Station-internal Build gaps (known, deferred)
-All `{STATION}.gw_*` paths (`gw_platform_out`, `gw_stub_pair_N_out`, etc.) still log
-as map gaps at animation time. Build pipeline generates them as structure tracks without
-`connection_id` — so `generate_map_json` cannot include them.
-
-Symptom: orange gap flags at station entry/exit; vehicle jumps from station to inter-station beam.
-
-**Fix path:** Noelle writes `connection_id` on station-internal gw groups at Build time.
-Not yet scheduled.
-
-### Station looping (deferred ~2026-05-15)
-Pods accumulate at station U-turns. Probably animation artifact, not routing.
-Investigate after map.json animation is confirmed stable.
-
-### Arc decomposition
-map.json segments are straight-line (`radius: 0`). Future: decompose SketchUp beam
-group points into sub-segments for true arc interpolation.
+1. Reload:
+   ```
+   load Sketchup.find_support_file('jpod_console.rb', 'Plugins/su_jpods')
+   load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
+   ```
+2. Place 6 vehicles on S001 — vehicles 1-3 show `→ S002`, vehicles 4-6 show `(idle — Natalie dispatches)`
+3. Animate — look for `[Natalie dispatch] NORA_XXXX → S002 from S001 psN` every 6 seconds
+4. Verify idle vehicles join fleet and complete trips
 
 ---
 
-## To Test When Resuming
+## What Was Solved This Session
 
-```ruby
-load '/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_vehicle_anim.rb'
-load '/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_animator.rb'
-load '/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_console.rb'
-```
+### Ghost vehicle / infinite compact-retry loop (FIXED)
+- `compact_platform_static` returned void → retry always fired even when nothing moved
+- Ghost vehicles (empty `parking_platform_id`) sat at entrance, invisible to compact, infinite loop
+- **Fix:** compact returns move count; retry gates on `moves_made > 0`; `clear_all_vehicles` deep-scans recursively
 
-1. Console > Generate map.json — confirm features + segments counts
-2. Console > Show FollowMe Overlay — confirm red/blue polylines, orange flags at station gaps
-3. Console > Set Vehicle Destination → Start Animation — confirm vehicle moves on inter-station beams
-4. Console > Show Route — confirm green route between two stations
+### Vehicle 3 freeze at insertion point (FIXED)
+- `cmd_add_vehicle` used `existing_count < 2` (total model). Vehicle 3 got `dest_platform = nil` → `destination_platform['id']` → NoMethodError → vehicle placed but not attributed (stayed as ghost)
+- **Fix:** Guard nil destination in `place_vehicle_at_platform`; per-station count, cap 3
+
+### Sally slot registry (WORKING)
+- `Sally.init_from_model` at animation start
+- Stale slot release for initially-dispatched pods
+- `compact_platform_idle` uses `Sally.capacity_for` as authoritative slot count
+
+### Natalie clock (WORKING)
+- `NATALIE_REPORT_N = 1` — logs every 2s sweep
+- Clock log fires BEFORE sweep
 
 ---
 
-## Next Steps
+## Confirmed Working
+- Individual placement S001 and S002: 6 vehicles each, correct slot assignment
+- NORA_0001→ps9, NORA_0002→ps8 ... NORA_0006→ps4 — exact 2.5m spacing throughout
 
-1. Test in SketchUp — confirm all 4 display paths work with map.json
-2. Fix station-internal Build gaps (Noelle writes connection_id on station gw groups)
-3. Station looping investigation
-4. Arc decomposition for map.json (low priority until geometry is proven correct)
+---
+
+## Untested / Open
+1. `natalie_dispatch_idle` — written, not tested
+2. Full animation with 6+ vehicles and Sally arrival tracking
+3. S002 single vehicle "1m then freeze" (reported earlier, not debugged — may resolve once dispatch working)
+
+---
+
+## What Is Lost on Restart
+- Ruby Console log (all `[Natalie]`, `[Sally]` output from today)
+- SketchUp model in-memory state — **save the .skp file before restarting**
+- Animation state (`@@pods`, `@@lookup_cache`) — rebuilt on next Animate click
+- Natalie parking cycle timer — resets cleanly on next placement
