@@ -111,6 +111,7 @@ and optionally the relevant spec. Athena returns findings only — no preamble, 
 - Design mistakes (centralization, scope creep, boundary violations)
 - Logical contradictions (code does X, spec says Y, no note explaining why)
 - Mistakes in Bill's reasoning (certainty exceeding evidence, cross-domain contradictions)
+- **Paired do_x/undo_x methods** — any `restore_x`/`remove_x`, `enable_x`/`disable_x`, or `add_x`/`delete_x` pair that share the same domain. These must be collapsed into one function with a parameter. Flag on sight. *(Bill's axiom, 2026-05-23)*
 
 **Her memory:** `athena/review-log.md` — every session where she finds something, logged with date,
 what was reviewed, what was found, and whether Bill acted on it.

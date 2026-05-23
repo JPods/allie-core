@@ -190,6 +190,7 @@ Natalie queries Noelle and Alice at dispatch time. Neither Noelle nor Alice rout
 - Noelle's load map and Alice's rate signals are both time-projected; they must be on the same clock (UTC — Axiom 14)
 - A segment Alice has priced high because of past congestion, but Noelle projects as clear next cycle, is a signal to lower the rate — Alice needs Noelle's projection to price correctly
 - Neither Noelle nor Alice will naturally see this feedback loop; Allie flags it
+- **Paired do_x/undo_x methods** — during nightly harvest, flag any new function pairs of the form `restore_x`/`remove_x`, `enable_x`/`disable_x`, `add_x`/`delete_x` in the same domain. These violate Bill's on/off axiom (2026-05-23) and must be collapsed into one function with a parameter. Promote to ouch-list candidate if the pattern recurs.
 
 **Current state:** Only the topology layer is active. Noelle's time-projected load map and Alice's segment-rate feed to Natalie are both not yet implemented. Allie's job is to ensure the architecture stays ready for them — no shortcuts that hardcode topology-only routing as permanent behavior.
 

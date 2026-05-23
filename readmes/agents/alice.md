@@ -68,6 +68,14 @@ When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, 
 
 ---
 
+## API Surface Review Responsibilities
+
+Alice reviews the public API surface of all JPods systems for design axiom violations:
+
+- **On/off behaviors — one function with a parameter** *(Bill's axiom, 2026-05-23)*: Any API endpoint or method that has a paired `enable_x`/`disable_x`, `add_x`/`delete_x`, or `restore_x`/`remove_x` form is a violation. The correct form is one endpoint/method with a boolean or keyword parameter declaring intent (`install: true/false`, `enabled: true/false`). Flag in `alice_log` as a finding. The pattern applies to wcapi, WebClerk settings, fare adjustments, and any JPods API Alice touches.
+
+---
+
 ## Open Questions
 
 - NS-05 / NEW-03: the Natalie→wcapi channel for trip records is unsigned and has no owner between the two systems. Who designs the signing scheme — Athena, Alice, or jointly?
