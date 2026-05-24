@@ -1,70 +1,67 @@
 ---
 date: 2026-05-23
-status: HANDED OFF — Bill restarting computer
+status: HANDED OFF — session end
 ---
 
-# Handoff — 2026-05-23
+# Handoff — 2026-05-23 (Session 2)
 **Branch:** su_jpods_claude (JPods/sketchup.git)
-**Last commit:** 944316c — "Natalie 6s idle dispatch; per-station trip cap at 3 vehicles"
+**Last commit:** 05aba93 — "Add Station Names — rename Routes category, editable friendly names"
 
 ---
 
 ## Where We Stopped
 
-Individual vehicle placement on S001 and S002 is fully working. Natalie 6s idle dispatch is written and committed but **NOT YET TESTED** — Bill restarted before we could animate with 6+ vehicles.
+Trip Simulator phone UI is complete and committed. Station Names feature added. All changes pushed.
+
+The session started by carrying forward CP boundary fixes and parking fixes from session 1, then built the entire trip simulation UI from scratch:
+- JPods brand-colored SVG logo
+- WEBrick endpoints (future phone use) → discovered WEBrick not available → switched to UI::HtmlDialog callbacks
+- Phone hotspot support (0.0.0.0 bind, auto-detect host in JS)
+- Plugins → JPods → Trip Simulator… menu item
+- Full event logging at booked/boarding/dispatched/arrived transitions
+- Station Names: Console "Station" category, editable S### friendly names, entity attribute storage
 
 ---
 
-## First Thing Tomorrow
+## Untested at Session End
 
-1. Reload:
+1. **Station Names table** — Bill was reloading to test when context ran out. Reload and try Console → Station → Station Names.
+2. **Trip Simulator end-to-end** — HtmlDialog opens, callbacks wire to DispatchServer, but actual animation trigger from trip UI not tested in this session.
+3. **Camera follow** — `follow_camera_tick`, `zoom_vehicle`, `zoom_network` implemented but not live-tested.
+4. **Natalie 6s idle dispatch** — carried from session 1, still untested.
+
+---
+
+## First Thing Next Session
+
+1. Reload (one line, no breaks):
    ```
-   load Sketchup.find_support_file('jpod_console.rb', 'Plugins/su_jpods')
-   load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
+   $jpods_registered = nil; $jpods_main_loaded = nil; load Sketchup.find_support_file('main.rb', 'Plugins/su_jpods')
    ```
-2. Place 6 vehicles on S001 — vehicles 1-3 show `→ S002`, vehicles 4-6 show `(idle — Natalie dispatches)`
-3. Animate — look for `[Natalie dispatch] NORA_XXXX → S002 from S001 psN` every 6 seconds
-4. Verify idle vehicles join fleet and complete trips
+2. Console → Station → Station Names — confirm S### table + save
+3. Plugins → JPods → Trip Simulator… — confirm dialog opens, stations load
+4. Book a trip and watch console for `[JPods TripUI] trip booked` / `dispatched` / `arrived` messages
+5. Test Natalie idle dispatch — place 6 vehicles, animate, watch for `[Natalie dispatch]` every 6s
 
 ---
 
-## What Was Solved This Session
+## Open Issues
 
-### Ghost vehicle / infinite compact-retry loop (FIXED)
-- `compact_platform_static` returned void → retry always fired even when nothing moved
-- Ghost vehicles (empty `parking_platform_id`) sat at entrance, invisible to compact, infinite loop
-- **Fix:** compact returns move count; retry gates on `moves_made > 0`; `clear_all_vehicles` deep-scans recursively
-
-### Vehicle 3 freeze at insertion point (FIXED)
-- `cmd_add_vehicle` used `existing_count < 2` (total model). Vehicle 3 got `dest_platform = nil` → `destination_platform['id']` → NoMethodError → vehicle placed but not attributed (stayed as ghost)
-- **Fix:** Guard nil destination in `place_vehicle_at_platform`; per-station count, cap 3
-
-### Sally slot registry (WORKING)
-- `Sally.init_from_model` at animation start
-- Stale slot release for initially-dispatched pods
-- `compact_platform_idle` uses `Sally.capacity_for` as authoritative slot count
-
-### Natalie clock (WORKING)
-- `NATALIE_REPORT_N = 1` — logs every 2s sweep
-- Clock log fires BEFORE sweep
+1. Natalie 6s idle dispatch — committed 944316c, not tested
+2. S002 single vehicle "1m then freeze" — reported, not debugged
+3. Camera follow — implemented, untested
+4. Station template stubs at 7.5m height — structural redesign needed (F-07)
 
 ---
 
-## Confirmed Working
-- Individual placement S001 and S002: 6 vehicles each, correct slot assignment
-- NORA_0001→ps9, NORA_0002→ps8 ... NORA_0006→ps4 — exact 2.5m spacing throughout
+## Key File Locations (this session's changes)
 
----
-
-## Untested / Open
-1. `natalie_dispatch_idle` — written, not tested
-2. Full animation with 6+ vehicles and Sally arrival tracking
-3. S002 single vehicle "1m then freeze" (reported earlier, not debugged — may resolve once dispatch working)
-
----
-
-## What Is Lost on Restart
-- Ruby Console log (all `[Natalie]`, `[Sally]` output from today)
-- SketchUp model in-memory state — **save the .skp file before restarting**
-- Animation state (`@@pods`, `@@lookup_cache`) — rebuilt on next Animate click
-- Natalie parking cycle timer — resets cleanly on next placement
+| File | What changed |
+|------|-------------|
+| `su_jpods/ui/trip/index.html` | Brand SVG logo, HtmlDialog callback wrappers, auto-detect API host |
+| `su_jpods/dispatch_server.rb` | get_stations, register_trip_ui, get_trip_status, enter_trip_ui, camera actions, _allie_capture |
+| `su_jpods/jpod_trip_dialog.rb` | New — UI::HtmlDialog wrapper, 4 action callbacks |
+| `su_jpods/main.rb` | jpod_trip_dialog in load list, Trip Simulator… menu item |
+| `su_jpods/jpod_console.rb` | Routes → Station, station_names task, cmd_set_station_names callback |
+| `su_jpods/jpod_animator.rb` | all_stations_in_model class method added |
+| `su_jpods/dialogs/console.html` | .sn-table CSS, stationNameChanged + saveStationNames JS |
