@@ -1,62 +1,82 @@
-# Handoff — 2026-05-22
+# Handoff — 2026-05-24
 
-## What was fixed this session
+## Session summary
 
-### Vehicle placement on gw_platform (confirmed working)
+Three areas worked today (2026-05-23 session 3 continuation):
 
-**Root cause:** `ensure_platform_host_guideway` built its synthetic host guideway from
-`platform['start_m']`/`['end_m']` — these are CP stub endpoints (~40000,-4800mm), not
-the parking track. Vehicles were placed at CP0 area, not on gw_platform (-1018mm Y).
+### 1. Station Names dialog (complete)
+Standalone `jpod_station_names_dialog.rb` opened via Plugins → JPods → Station Names…
+Stores friendly names as `JPods.station_name` entity attributes. Survives Build.
+Gilroy names: S048=Gilroy Inn, S049=AppleBees, S050=Garlic City, S051=Outlets.
 
-**Fix:** `ensure_platform_host_guideway` now loads `{sid}.gw_platform` from map.json via
-`RubyNatalie.build_line_lookup`. These pts are the authoritative parking track. Vehicle-level
-pts are stored as beam_top (add BEAM_DEPTH before storing in beam_path attribute).
+### 2. Trip Simulator phone app (complete)
+Single-screen accordion layout: myCarryOn | Preferences | Stations.
+Fixed SketchUp HtmlDialog callback pattern: `ctx.resolve` is undefined in SU 2026.
+All callbacks now use `execute_script("window._suCb(id, data)")` bridge.
+textContent used for all station rendering (prevents Network Editor HTML injection).
 
-Files changed: `jpod_animator.rb`, `jpod_platform.rb` — both copies of `ensure_platform_host_guideway`.
+### 3. Vehicle dispatch from phone app (partially complete — see below)
 
-**Track direction fix:** Platform hash `track_index` was 0 (entrance=pts.last = exit/gw_platform_out1
-end), placing slot 1 at t≈0.94 right next to gw_platform_out1. Fixed by forcing `track_index=1`
-on all synthetic guideways built from map.json gw_platform (entrance=pts[0]=inbound end).
-Tier 2 in `spawn_t_for_platform_slot_on_guideway` now reads track_index from the guideway
-group (not platform hash) for platform_host guideways.
+**Fixed:**
+- `find_pod_entity` was looking for `nora_id` attribute; vehicles store `vehicle_id` → fixed
+- `find_parking_slot_for` same wrong key → fixed
+- `find_idle_nora_at` now scans model entities as fallback when Natalie not active
+- `enter_trip_ui` now dispatches animation trip (build_platform_round_trip → assign → start_animation)
 
-**Safety net (build_fleet):** If entity is >1m from first maneuver at animation start,
-snap it to the slot position on that maneuver. `_point_along_polyline` helper added to
-`jpod_vehicle_anim.rb`.
+**Screen locked on Step In — root cause found:**
+`follow_camera_tick` runs every 0.25s, calls `cam.set + view.camera = cam` → locks viewport.
+Removed follow camera timer entirely. Replaced with scene activation (`model.pages.selected = page`).
+Scene lookup tries station ID ("S048"), friendly name ("Gilroy Inn"), or prefix match.
+TF written: `20260524T042254-tf.md`
 
-### Result
-- S001 vehicle: placed at t≈0.06 on gw_platform (1.5m from inbound end)
-- S002 vehicle: unchanged (was already placing correctly)
-- Animation: no jump at start; vehicles depart and loop correctly
+**Not yet tested:** Animation dispatch path was coded but not confirmed working.
+Bill's session ended before re-testing. Pickup tomorrow.
 
-## Open items
+---
 
-### Platform shuffle — Natalie's next task (Bill requested 2026-05-22)
-Vehicles parked on a platform that are NOT involved in an active trip should be shuffled
-forward to the highest-numbered open slot. This is the "compact toward exit" rule.
-- Natalie detects idle parked vehicles (no trip_id or trip_assigned_at expired)
-- Identifies the highest open slot on the platform
-- Issues a move order: vehicle travels gw_platform pts from current slot to target slot
-- This is a short intra-platform move, not a full trip
-- Existing shuffle infrastructure: `run_5v_shuffle_forward` in `jpod_vehicle_runtime.rb`,
-  `shuffle_forward_all_platforms` in `jpod_animator.rb`
-- Key difference from existing shuffle: triggered by idle detection, not by 5V test
+## TODO for tomorrow's session
 
-### Vehicle doors
-Bill will tag left/right door geometry in the pod component models. Once tagged,
-`vehicle_transform_for` should orient the vehicle so doors face the platform loading area.
-Door orientation = perpendicular to forward, toward the "inner" side of the curve.
-No code change needed yet — waiting for model work.
+### A. Confirm vehicle dispatch from phone app
+1. Reload: `load Sketchup.find_support_file('dispatch_server.rb', 'Plugins/su_jpods')`
+2. Open Trip Simulator, book a trip from Gilroy Inn → Garlic City, tap Step In
+3. Watch Ruby Console for:
+   - `[JPods TripUI] animation dispatched NORA_XXXX  S048 → S050`
+   - `[JPods Camera] activated scene 'Gilroy Inn' for S048`  (or fallback message)
+4. If entity not found: run `JPods::JPodGuideway.start_animation(Sketchup.active_model)` first to place vehicles
 
-### gw_lift TODO
-Both `ensure_platform_host_guideway` copies have a TODO comment. Lift-equipped stations
-need a gw_lift segment type. Affects: beam_path lookup key, slot math, possibly track_index.
+### B. Create SketchUp scenes for Gilroy stations
+Position camera at each station, then View → Scenes → Add Scene. Name each scene the
+station friendly name: "Gilroy Inn", "AppleBees", "Garlic City", "Outlets".
+Step In will then activate the correct scene automatically.
 
-### FALLBACK in slot log
-Tier 2 (FALLBACK) still used because platform_endpoint_points returns nil for S001.
-Tier 2 with track_index=1 gives correct results — low priority to fix to Tier 1.
+### C. map.json → su_jpods folder (TONIGHT — see below)
+Build now writes `{model}.map.json` to `su_jpods/` plugin folder.
+`RubyNatalie.load_map` reads from same location.
+Confirm: after Build, file appears at `su_jpods/CA_Gilroy_Clean.map.json`.
+
+---
+
+## map.json path change (tonight)
+
+**Problem:** map.json was written to `File.dirname(model.path)` — wherever the student saved their .skp.
+This path drifts. Build reads map.json for stub_tips on subsequent builds; if the file is missing
+(first build, or model moved), stub_tips is empty and beam endpoint Z is wrong.
+
+**Fix:** Write to `__dir__` (su_jpods plugin folder). One canonical location per model name.
+Files changed:
+- `noelle.rb:1928-1931` — write path
+- `jpod_vehicle_anim.rb:59-62` — read path (RubyNatalie.load_map)
+
+**Debug once at model level:** `su_jpods/CA_Gilroy_Clean.map.json` is the single file to inspect
+for all network topology questions. Open it in VS Code after Build to confirm lines/stations/ezones.
+
+---
 
 ## Files changed this session
-- `jpod_vehicle_anim.rb` — snap in build_fleet, _point_along_polyline helper
-- `jpod_animator.rb` — ensure_platform_host_guideway (map.json gw_platform path + track_index=1)
-- `jpod_platform.rb` — ensure_platform_host_guideway (same), Tier 2 track_index from guideway
+- `dispatch_server.rb` — find_pod_entity, find_parking_slot_for, find_idle_nora_at, enter_trip_ui, handle_camera_action, find_station_scene
+- `jpod_trip_dialog.rb` — su_respond bridge (execute_script replacing ctx.resolve)
+- `jpod_station_names_dialog.rb` — new file
+- `main.rb` — loads station names dialog, adds menu item
+- `ui/trip/index.html` — accordion layout, _suCb bridge, scene hint on boarding screen
+- `noelle.rb` — map.json write path → su_jpods/ (tonight)
+- `jpod_vehicle_anim.rb` — RubyNatalie.load_map read path → su_jpods/ (tonight)
