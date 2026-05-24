@@ -143,6 +143,43 @@ CLAUDE.md seed (this file) ← distilled axioms that never expire
 2. Promoting patterns to Understanding entries (U-SK-*, U-RT-*, U-PH-*)
 3. Writing cross-domain flags when a lesson in one domain has consequences in another
 
+### Logging Authority — Established 2026-05-23
+
+**Claude Code, Allie, and Alice each have standing authority to:**
+
+1. **Write logs** to `~/Allie/process/inbox/` (FAULT, DNW, TF, TFTS files) and domain
+   problem folders (`process/sk/`, `process/ph/`, `process/rt/`) at any time during work —
+   not only at session end. Write at the moment of the event; context evaporates.
+
+2. **Clean the inbox** — move processed files to `process/inbox/archive/` when:
+   - A TFTS exists that covers them (DNW/TF files from that arc are absorbed)
+   - Files are older than 7 days and Allie has already processed them nightly
+   - A file is clearly superseded by a newer, better record of the same event
+
+3. **Create and maintain domain problem folders** (`process/sk/<symptom>/`) for any
+   sustained debugging arc. The folder name is the symptom, not the solution.
+   `narrative.md` inside is the reasoning chain — the most valuable file.
+
+4. **Add `_allie_capture` calls** to any code boundary that needs runtime observation.
+   These fire asynchronously; no SketchUp performance impact.
+
+5. **Add structured log lines** (the `puts "[Agent]..."` pattern) to new code paths.
+   Logs go to jpod_console.log via SketchUp's Ruby console.
+
+**Logs become useless once bugs are fixed.** Delete or archive active debugging records
+(xyz positions, timing data, specific payloads) as soon as the bug is resolved.
+The TFTS is the permanent artifact — it captures the principle, not the specific values.
+Specific values may be noted in the TFTS body if they explain the principle; otherwise discard.
+
+**What NOT to keep:**
+- Debugging specifics after the bug is fixed
+- Stack traces without the insight the crash produced
+- Entries that restate the outcome (the code is the outcome; the log is the reasoning)
+
+**Cleaning rule:** Archive inbox files when a TFTS covers them or when they are older
+than 7 days and Allie has already harvested them. Delete domain problem folder debug
+data once it is absorbed into a TFTS. The narrative.md stays; the scratch data goes.
+
 ### The fault/dnw/tf/tfts Protocol — Established 2026-05-18; fault added 2026-05-20
 
 Process capture files written **during** a session, at the moment they become true.

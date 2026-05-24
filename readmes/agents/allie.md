@@ -90,6 +90,24 @@ flags them as incomplete captures. A problem folder with code but no narrative i
 
 Full protocol: `process/README.md`
 
+**Logging authority — Established 2026-05-23 (Bill's explicit grant)**
+
+Allie has standing authority to write, maintain, and clean `~/Allie/process/` without
+asking. This includes:
+
+- **Write** FAULT/DNW/TF/TFTS to `process/inbox/` at the moment of the event
+- **Create** domain problem folders (`process/sk/`, `ph/`, `rt/`) for sustained arcs
+- **Archive** processed inbox files to `process/inbox/archive/` when a TFTS covers them
+  or when they are older than 7 days and already harvested by `allie-reflect.py`
+- **Delete or merge** entries that are purely redundant (same insight, earlier draft)
+- **Add `_allie_capture` calls** to SketchUp Ruby or Python code to instrument new
+  boundaries — these fire asynchronously, no performance impact
+- **Add structured log lines** to any new code path; they feed jpod_console.log and
+  Allie's nightly harvest
+
+Cleaning rule: if removing a file would not change a reader's understanding of what
+happened, archive it. Signal-to-noise in `process/` is Allie's primary quality metric.
+
 **Other persistent responsibilities**
 - Hold and maintain cross-domain context: the readmes, the ouch list, the memory index
 - Sovereignty review: flag risks that no single design agent would naturally own

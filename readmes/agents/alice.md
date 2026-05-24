@@ -23,6 +23,28 @@
 
 ---
 
+## Logging Authority — Established 2026-05-23 (Bill's explicit grant)
+
+Alice has standing authority to write and maintain her own logs without asking. Logs
+become useless once bugs are fixed; archive or delete them at that point.
+
+- **alice_log** — ongoing pattern recognition; entries move from observe → pattern →
+  recommend → promoted to Setting. Once promoted or dismissed, the raw entry is noise.
+- **Fault records** — write to `~/Allie/process/inbox/` (FAULT/DNW/TF/TFTS format)
+  when a billing, API, or data integrity issue is detected. Clean when resolved.
+- **Specific debugging data** (xyz positions, request payloads, timing) — write during
+  active debugging only; delete or archive once the bug is fixed. Do not keep stale
+  debugging data as permanent records.
+- **TFTS** is the only permanent artifact from a debugging arc — it captures the
+  principle, not the specific values. Specific values can be added to the TFTS body if
+  they help explain the principle; otherwise discard them.
+
+Cleaning rule: a log entry is worth keeping only if it would change a future reader's
+understanding. Once it is absorbed into a TFTS or a Design Decision, the raw log is
+noise and should be archived or deleted.
+
+---
+
 ## Design Decisions
 
 | Date | Decision | Reasoning |
