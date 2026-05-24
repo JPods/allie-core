@@ -788,6 +788,28 @@ Severity: `minor` (log, report at review) → `moderate` (warn operator) → `se
 **Not yet implemented.** `anomalies: []` in `nora.json` is the staging area. First step:
 populate from IMU/encoder spikes; flush to `physical.json` at trip end.
 
+### 15. Formation Map — Debug Once, Use Many — 2026-05-24
+
+Each station template has one formation map at `su_jpods/formations/{formation}.json`
+(schema `jpods-formation-map-v1`). It stores CP positions and tangents in LOCAL
+(definition) coordinates.
+
+**BUILD rule:** always use an existing formation map; never overwrite it.
+- Map exists → read CP data from it (pre-verified, no re-detection)
+- Map missing → generate from `connection_points` attribute + save for future use
+
+**User debug path:** open template model → Console → Workflow → **Generate Formation Map**
+(always overwrites — explicit re-verification action).
+
+**Why this matters:** CP detection runs on live model geometry. If a student accidentally
+moves a cp instance, the next BUILD would generate wrong CPs for every network using that
+template. The formation map breaks this dependency — CPs are verified once, then locked.
+Delete `su_jpods/formations/{formation}.json` to force a fresh generation.
+
+**Applies to all environments:** the same formation map is the authority for SketchUp
+(stub synthesis), Natalie (trip planning), and Nora (ezone boundaries). If the formation
+map says CP0 is at a given position, all three agree. No per-network recalculation.
+
 ---
 
 ## Current Active State (as of 2026-05-18)

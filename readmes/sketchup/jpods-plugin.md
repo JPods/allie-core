@@ -47,6 +47,34 @@ before a dollar is spent.
 - Edit or load a `network.json` file defining which structure stubs connect to which
 - Click **▶ Build** — builds dual parallel guideways between all connections
 - Option+Build = add mode (keeps existing guideways)
+
+#### BUILD output files (all written automatically)
+| File | Location | What it contains |
+|------|----------|-----------------|
+| `{model}.followme.json` | model folder | All guideway lines for Build pipeline |
+| `{model}.feature.json` | model folder | Station routing behaviors (Noelle's authority) |
+| `{model}.map.json` | `su_jpods/` plugin folder | Network map — consumed by all agents |
+| `formations/{formation}.json` | `su_jpods/formations/` | Per-template CP map — debug once, use many |
+
+#### Formation maps — debug once, use many
+Each station template has exactly one formation map in `su_jpods/formations/{formation}.json`.
+
+**Rule: BUILD always uses an existing formation map and never overwrites it.**
+
+- Formation map exists → BUILD reads CP positions from it (pre-verified)
+- Formation map missing → BUILD generates it from `connection_points` attribute and saves it
+- To re-verify a template: open the template `.skp` → Console → Workflow → **Generate Formation Map** (overwrites)
+
+This is the "debug once, use many" principle: verify CP positions once per template, then every network that uses that template inherits the verified map. Users never need to re-debug CP positions across networks.
+
+**Workflow for a new template:**
+1. Open `templates/track_formations/{formation}/model.skp`
+2. Verify cp instances are placed at all 4 CP gates
+3. Console → Workflow → **Generate Formation Map**
+4. Inspect `su_jpods/formations/{formation}.json` — confirm CP positions and tangents
+5. Build any network using that template — it will use the verified map
+
+**To force regeneration:** delete `su_jpods/formations/{formation}.json` then run Generate Formation Map.
 - The JSON format:
 ```json
 {
