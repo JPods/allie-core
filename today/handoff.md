@@ -2,81 +2,74 @@
 
 ## Session summary
 
-Three areas worked today (2026-05-23 session 3 continuation):
+Continued from 2026-05-23 session. Primary work: fix visual raggedness at gate connections
+in the SketchUp plugin Build pipeline. Three separate arc investigations.
 
-### 1. Station Names dialog (complete)
-Standalone `jpod_station_names_dialog.rb` opened via Plugins → JPods → Station Names…
-Stores friendly names as `JPods.station_name` entity attributes. Survives Build.
-Gilroy names: S048=Gilroy Inn, S049=AppleBees, S050=Garlic City, S051=Outlets.
+## Where we stopped
 
-### 2. Trip Simulator phone app (complete)
-Single-screen accordion layout: myCarryOn | Preferences | Stations.
-Fixed SketchUp HtmlDialog callback pattern: `ctx.resolve` is undefined in SU 2026.
-All callbacks now use `execute_script("window._suCb(id, data)")` bridge.
-textContent used for all station rendering (prevents Network Editor HTML injection).
+### The raggedness problem — still open
 
-### 3. Vehicle dispatch from phone app (partially complete — see below)
+**Symptom:** inter-station beams connect to station stubs with a visible seam/step.
+User calls it "raggedy." Persists after multiple fixes.
 
-**Fixed:**
-- `find_pod_entity` was looking for `nora_id` attribute; vehicles store `vehicle_id` → fixed
-- `find_parking_slot_for` same wrong key → fixed
-- `find_idle_nora_at` now scans model entities as fallback when Natalie not active
-- `enter_trip_ui` now dispatches animation trip (build_platform_round_trip → assign → start_animation)
+**Root cause per TFTS 20260523:** `dead_cap_end` geometry at stub outer faces.
+The inter-station beam's end cap face z-fights with the station stub cap face.
+TFTS said: remove dead_cap_end from templates (user action), code already cleaned.
 
-**Screen locked on Step In — root cause found:**
-`follow_camera_tick` runs every 0.25s, calls `cam.set + view.camera = cam` → locks viewport.
-Removed follow camera timer entirely. Replaced with scene activation (`model.pages.selected = page`).
-Scene lookup tries station ID ("S048"), friendly name ("Gilroy Inn"), or prefix match.
-TF written: `20260524T042254-tf.md`
+**What happened this session:**
+1. CP position: added outer-face projection (bounding box corners projected along outward
+   tangent). Outward_ext = 111–296mm across different stations — inconsistent, suggesting
+   the cp component bounding box is not a reliable gate reference.
+2. Added `origin=` to CP detection log so next build shows origin, bounds.center, AND
+   outer_face — to determine which reference the cp component was designed to use.
+3. Changed `draw_beam` in `jpod_entities_builder.rb` and `jpod_animator.rb`:
+   cap faces now **erased** (not hidden). Hidden faces z-fight; erased faces do not.
+   This is the ene_railroad open-tube approach.
 
-**Not yet tested:** Animation dispatch path was coded but not confirmed working.
-Bill's session ended before re-testing. Pickup tomorrow.
+**Next action — requires build output:**
+Run Build, paste `JPods cp refs:` log lines. Look at origin= vs. bounds.center= vs.
+outer_face=. The correct gate reference is whichever one lines up with the stub
+outer tip (the endPoint from line.json: e.g. station_thru_dip CP0 outer tip is at
+x=43041.4mm in local coords). That tells us which cp reference to use.
 
----
+**If cap erase fixed the visual problem** (seam gone): we're done on visual side.
+Remaining: user removes dead_cap_end from templates.
 
-## TODO for tomorrow's session
+**If seam still visible:** the cp component origin may be the right reference.
+The 1.5m-off measurement from 2026-05-23 session may have been on OLD template
+geometry before cp instances were added in commit 37b7bd9.
 
-### A. Confirm vehicle dispatch from phone app
-1. Reload: `load Sketchup.find_support_file('dispatch_server.rb', 'Plugins/su_jpods')`
-2. Open Trip Simulator, book a trip from Gilroy Inn → Garlic City, tap Step In
-3. Watch Ruby Console for:
-   - `[JPods TripUI] animation dispatched NORA_XXXX  S048 → S050`
-   - `[JPods Camera] activated scene 'Gilroy Inn' for S048`  (or fallback message)
-4. If entity not found: run `JPods::JPodGuideway.start_animation(Sketchup.active_model)` first to place vehicles
+### noelle.rb generate_map_json — FIXED
 
-### B. Create SketchUp scenes for Gilroy stations
-Position camera at each station, then View → Scenes → Add Scene. Name each scene the
-station friendly name: "Gilroy Inn", "AppleBees", "Garlic City", "Outlets".
-Step In will then activate the correct scene automatically.
+**Bug:** `undefined local variable or method 'nf_templates'` at noelle.rb:1736.
+**Fix:** Added `nf_templates` load block before the `model.entities.each` loop.
+Also updated `stub_pair_length_mm` 2000.0 → 5000.0 (matches user's 5m stubs).
 
-### C. map.json → su_jpods folder (TONIGHT — see below)
-Build now writes `{model}.map.json` to `su_jpods/` plugin folder.
-`RubyNatalie.load_map` reads from same location.
-Confirm: after Build, file appears at `su_jpods/CA_Gilroy_Clean.map.json`.
+### Files changed this session
 
----
+| File | Change |
+|------|--------|
+| `jpod_entities_builder.rb` | Cap faces erased (not hidden) in `draw_beam` |
+| `jpod_animator.rb` | Same cap erase fix |
+| `jpod_structure_tool.rb` | Origin + bounds.center + outer_face logged; outer-face projection |
+| `noelle.rb` | nf_templates missing variable fixed; stub_pair_length_mm 2000→5000 |
 
-## map.json path change (tonight)
+## Reload sequence
 
-**Problem:** map.json was written to `File.dirname(model.path)` — wherever the student saved their .skp.
-This path drifts. Build reads map.json for stub_tips on subsequent builds; if the file is missing
-(first build, or model moved), stub_tips is empty and beam endpoint Z is wrong.
+```
+load Sketchup.find_support_file('jpod_entities_builder.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('jpod_animator.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('noelle.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('jpod_structure_tool.rb', 'Plugins/su_jpods')
+```
 
-**Fix:** Write to `__dir__` (su_jpods plugin folder). One canonical location per model name.
-Files changed:
-- `noelle.rb:1928-1931` — write path
-- `jpod_vehicle_anim.rb:59-62` — read path (RubyNatalie.load_map)
+## Open issues
 
-**Debug once at model level:** `su_jpods/CA_Gilroy_Clean.map.json` is the single file to inspect
-for all network topology questions. Open it in VS Code after Build to confirm lines/stations/ezones.
-
----
-
-## Files changed this session
-- `dispatch_server.rb` — find_pod_entity, find_parking_slot_for, find_idle_nora_at, enter_trip_ui, handle_camera_action, find_station_scene
-- `jpod_trip_dialog.rb` — su_respond bridge (execute_script replacing ctx.resolve)
-- `jpod_station_names_dialog.rb` — new file
-- `main.rb` — loads station names dialog, adds menu item
-- `ui/trip/index.html` — accordion layout, _suCb bridge, scene hint on boarding screen
-- `noelle.rb` — map.json write path → su_jpods/ (tonight)
-- `jpod_vehicle_anim.rb` — RubyNatalie.load_map read path → su_jpods/ (tonight)
+1. **Raggedness at gates** — may clear after cap erase; if not, check origin= log values.
+2. **Station templates** — stubs now 5m but line.json still says 2m. Run Populate
+   Template Geometry after stub resize to regenerate line.json.
+3. **dead_cap_end in templates** — user action still pending (per TFTS 20260523T231508).
+4. **Formation maps** — `su_jpods/formations/` directory empty; no formation maps yet.
+5. **CP reference question** — bounds.center vs. origin vs. outer_face unresolved.
+   The 1.5m error from yesterday may be invalid now that cp instances were placed in
+   commit 37b7bd9 (2026-05-24 morning). The new cp instances may have origin at gate face.
