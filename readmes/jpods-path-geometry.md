@@ -113,7 +113,7 @@ trip.json, not in structure lines.json. lines.json only contains intra-station p
 
 ## The Authoring Rule
 
-**Scan to discover. Math to declare.**
+**Scan to discover. Math to declare. Debug once, use many.**
 
 - Use `MapFeatureTool.run_from_template` to scan complex or unknown station geometry
   (traffic circles, parking stations with many segments)
@@ -121,7 +121,21 @@ trip.json, not in structure lines.json. lines.json only contains intra-station p
 - Once declared from math, lines.json is the authority. The scan is for verification only.
 - Never let a scan overwrite a mathematically-verified lines.json without a written plan
 
-**Why:** SketchUp arcs are many short edges. Scanning chains those edges correctly only
+**Debug once, use many** — when a value is found to be wrong and corrected by math,
+that correction propagates to every lines.json that uses it, once, permanently.
+No station template re-derives arc length at build time. No agent recomputes a known
+constant. The correct value lives in lines.json; everyone reads it from there.
+
+This session: `gw_uturn` arc length was 4872.9mm (scan walked inner arc at r≈1551mm)
+in four template files. Corrected once to 5497.8mm (π × 1750mm), applied to all four.
+That correction is now the permanent record. Next session does not re-examine it.
+
+Applies to: arc lengths, radii, segment lengths, CP separations, CLEARANCE_HEIGHT —
+any physical constant that is derived once from geometry or measurement.
+
+See also: Axiom 15 (CLAUDE.md) — Formation Map, Debug Once Use Many.
+
+**Why scanning introduces error:** SketchUp arcs are many short edges. Scanning chains those edges correctly only
 if the geometry is clean and isolated. For known structures — especially arcs with
 known radii — the chain algorithm introduces error (it walked the inner arc at r≈1551mm
 instead of the centerline at r=1750mm, producing 4872.9mm instead of 5497.8mm).
