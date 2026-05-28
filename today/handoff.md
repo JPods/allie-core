@@ -1,74 +1,67 @@
-# Handoff — 2026-05-24 (session 2)
+# Handoff — 2026-05-27
 
-## Session summary
+## Where We Stopped
 
-Resolved CP detection and visual raggedness at gate connections — the primary arc
-spanning the last two sessions.
+Working on lines.json for station templates — math declaration, not scan output.
 
-## What was fixed
+station_line_end scan returned nil: zero gw_* tagged entities in model.skp.
+Model was fixed today (structural changes, 19:15) but tags were never applied to the geometry.
+Next step before anything else: apply gw_* tags to station_line_end geometry in SketchUp.
 
-### 1. CP hub vertex detection — RESOLVED
-`detect_cps_from_top_level_cp` in `jpod_structure_tool.rb`.
+## State of Each Template
 
-The cp component has 4 edges: [177mm, 222mm, 1750mm, 1750mm]. Hub vertex =
-vertex shared by the 222mm tangent edge and both 1750mm rail edges. That vertex
-is the CP center; the 222mm edge points outward = tangent direction.
+### cpu / cps (structures/)
+- Written from math. 5497.8mm uturns, 3500mm Y separation, 2500mm leads.
+- **Pending:** Bill needs to verify coordinates against actual model geometry.
+- TF checklist: `process/inbox/20260527T024859-tf.md`
 
-**Fix:** vertex-degree counting via Ruby object identity — `vertex_count[v] += 1`
-for all key edges, `max_by { |_, cnt| cnt }.first`. Replaced `rv.position == tv.position`
-comparison which was unreliable for separate Vertex objects at the same location.
+### JPods_station_parking (track_formations/)
+- Topology fully understood: CCW oval, CP0 at BOTTOM, CP1 at TOP.
+- Naming convention: suffix _0/_1 (e.g., gw_cp_in_0, gw_uturn_0).
+- **Not yet written.** Ready to write immediately — topology is resolved.
+- Existing lines.json has MODEL_ERRORs from scan; uturn corrected to 5497.8mm in prior session.
 
-**Result:** No WARN fallback for any of the 4 station types. All CPs detected
-via hub vertex.
+### station_line_end (track_formations/)
+- Old lines.json deleted (was world-space scan from S005 in station_test.skp — wrong).
+- Model fixed today but zero gw_* tags on geometry.
+- **Blocked:** needs tagging before scan or math declaration can proceed.
+- Known segments: gw_platform, gw_platform_parking, gw_platform_in, gw_lift, gw_lift_in,
+  gw_lift_parking, gw_far_main, gw_far_out, gw_uturn_0, gw_uturn_1,
+  gw_stub_pair_0_in/out, gw_stub_pair_1_in/out.
 
-### 2. BEAM_DEPTH/2 for traffic circle — RESOLVED
-`compute_anchor_zs` in `jpod_network.rb:77-78`.
+### traffic_circle7 (track_formations/)
+- MODEL_ERRORs from scan: connector arcs (gw_c_0_1 etc.) are 1000mm, chord 996mm < PROX_TOL_MM=1500mm.
+- Root cause understood. Needs lines.json written from math.
+- **Not yet written.** Bill needs to describe topology using TRBL before writing.
 
-Old code used `+ BEAM_DEPTH/2` for TC, `+ BEAM_DEPTH` for others. This was
-confirmed correct on 2026-05-14 with OLD template geometry. After commit 37b7bd9
-placed new cp instances, TC hub vertex Z = 7.75m (0.25m lower than old reference).
-BEAM_DEPTH/2 produced 8.0m; should be 8.25m.
+### station_thru_dip (track_formations/)
+- Not touched this session. Old predecessors/successors schema. Needs rewrite.
 
-**Fix:** removed is_tc distinction; use `+ BEAM_DEPTH` for all station types.
+## Naming Convention Established
 
-**Result:** All 4 inter-station connections flat at 8.25m. No step at gates.
-User confirmed: "Looks good."
+Multi-CPU templates use suffix _N on segment names:
+- gw_cp_in_0, gw_cp_in_lead_0, gw_uturn_0, gw_cp_out_lead_0, gw_cp_out_0
+- User (model author) assigns 0/1 via CPU component instance name (cpu_0, cpu_1).
+- Noelle reads instance name suffix and propagates to segment names.
+- **Noelle code change required** — current code matches exact segment names.
 
-## Current state
+## Key Principle — Math Over Scan
 
-Build succeeds. 4 segments built. All beam endpoints consistent at 8.25m.
-No visual raggedness at gate connections.
+TFTS: process/inbox/20260527T025100-tfts.md
+README: readmes/jpods-path-geometry.md
 
-## Remaining open issues
+For fixed-geometry structures: lines.json is a mathematical declaration, not a scan output.
+gw_uturn = pi x 1750mm = 5497.8mm. Always.
 
-1. **TripPlanner: map.json not found** — `station_test.map.json` IS written
-   (confirmed in log), but TripPlanner immediately after says it can't find it.
-   Path issue or file-not-flushed-before-read race. Not investigated this session.
+## Open Tasks (Priority Order)
 
-2. **"CP not in map" for all stub pairs** — Formation maps exist ("using verified
-   formation map") but report "(CP not in map)" for every stub pair. The formation
-   map stores CP positions but the map.json synthesis isn't finding them by key.
-   Not investigated this session.
+1. Apply gw_* tags to station_line_end geometry
+2. Write JPods_station_parking/lines.json (topology ready)
+3. Write traffic_circle7/lines.json (need Bill's TRBL topology description)
+4. Bill verify cpu/cps coordinates
+5. Noelle code: handle _N suffix in multi-CPU segment names
+6. station_thru_dip schema conversion
 
-3. **line.json missing for 3 templates** — JPods_station_parking, station_line_end,
-   station_thru_dip all missing line.json. Noelle reports as faults in feature.json.
-   User action: run Populate Template Geometry on each template to generate line.json.
+## WhatIf
 
-4. **JPods_station_parking CP Z = 4.956m** — anomalously low vs other stations
-   (7.75m, 7.886m, 7.702m). Beam endpoint Z correctly calculated at 8.25m by
-   PathBuilder terrain anchoring. Not causing visual problems currently but the
-   cp instance Z in the parking template may be wrong.
-
-## Files changed this session
-
-| File | Change |
-|------|--------|
-| `jpod_structure_tool.rb` | Hub vertex detection via vertex-degree counting (replaces position == comparison) |
-| `jpod_network.rb` | Removed BEAM_DEPTH/2 special case for TC; use BEAM_DEPTH for all |
-
-## Reload sequence
-
-```
-load Sketchup.find_support_file('jpod_structure_tool.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('jpod_network.rb', 'Plugins/su_jpods')
-```
+C-W22-6 through C-W22-9 posted to readmes/wisdom/whatif-weekly/2026-W22.md.
