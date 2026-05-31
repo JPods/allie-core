@@ -1,76 +1,62 @@
-# Handoff — 2026-05-27 (Session 2)
+# Handoff — 2026-05-31
 
 ## What Was Done This Session
 
-### traffic_circle7/lines.json — COMPLETE
-Written from math. All MODEL_ERRORs resolved.
-- 18 EPs: 4 MERGE + 4 DIVERGE (ring junctions), 2 STRAIGHT (CP stub inner), 8 OPEN (outer ends)
-- 18 segments: 8 ring arcs, 8 approach arms, 2 CP stubs
-- Ring: 4 long arcs 11011.3mm, 4 corner arcs 1000.0mm, approach arms 8583.2mm, CP stubs 2500.0mm
-- gw_cp_in direction CORRECTED vs. scan (flows outer→inner; scan had it reversed)
-- Committed: e352f12 in su_jpods repo
+### Sally chain system — discovered_chains added to all 6 templates — COMPLETE
 
-### JPods Console — Models Category — COMPLETE (prior session)
-8 tasks added with step numbers and su_command breadcrumbs. Committed.
+All template `lines.json` files now have `chains_header` and `discovered_chains` in the
+numbered `[pos, "track"]` pair format. CCW ordering follows CP-unit grouping:
+out_lead → uturn → out_stub → in_stub → in_lead as a unit, then interior tracks, then CP1 group.
 
-## Blocked / Needs Input
+| Template | Tracks | Notes |
+|---|---|---|
+| `cpu` | 5 | CP-unit positions 1–5 |
+| `cps` | 2 | Positions 1–2 of traffic_circle CP pair |
+| `JPods_station_parking` | 19 | gw_lift_parking removed (not in model); EP7+EP8 collapsed to EP7; eps renumbered |
+| `station_line_end` | 14 | Two errors in Bill's draft corrected: gap at pos 6 closed, gw_far_out→gw_far_ramp_out |
+| `station_thru_dip` | 19 | EP5 diverge added (gw_cp_in_lead_0 → {gw_near_main_1, gw_lift_in}); landing chains updated |
+| `traffic_circle7` | 24 | BFS ordering; all 16 pass_chains computed by Sally DFS |
 
-### JPods_station_parking/lines.json — NEEDS BILL'S TOPOLOGY
+### Console sidebar — COMPLETE (this session's prior context)
+- Stations task group nested under Models category
+- Model info panel in right frame (shows template/formation/chains approval when Models task selected)
+- numbered [pos, track] pairs in discovered_chains display
 
-The scan has 6 MODEL_ERROR EPs. The correct topology cannot be safely derived from
-coordinates alone because the model_error cascade distorts all multi-segment junctions.
-
-**Need Bill to describe:**
-1. Flow direction on gw_near_main — does it flow LEFT (x=39945→x=-23618) or RIGHT?
-2. Flow direction on gw_far_main — same question
-3. How the uturn connects near_main and far_main at which end
-4. Where platform_in1 and platform_in2 branch FROM (is there a junction on near_main?)
-5. Where platform_out1 and platform_out2 rejoin far_main
-
-Reliable (scan non-error) observations:
-- EP4: straight — platform_in2 → platform
-- EP6: straight — platform → platform_out1
-- EP10: straight — cp_in → cp_in_lead (at [42445.4, -4539.3])
-- EP8: open — far_main terminal at [-23618.2, -8039.3] (LEFT end)
-- EP11: open — cp_in outer at [44945.4, -4539.3]
-- EP12: open — cp_out outer at [44945.4, -8039.3]
-
-Uturn corrected length: 5497.8mm (π × 1750mm). Scan value 25172.5mm is wrong.
+### Pushed to GitHub
+Branch: `su_jpods_claude` at JPods/sketchup.git
+5 commits pushed: a8c0535 → 7be92b2
 
 ## State of Each Template
 
-### traffic_circle7 (track_formations/) — DONE
-Math declaration complete. No model_errors.
+### chains_header.approved_by status
+All 6 templates: `approved_by: ""` — chains not yet approved.
+Bill must review and set `approved_by` before Noelle will allow Build on those templates.
 
-### cpu / cps (structures/) — PENDING BILL VERIFY
-Written from math. Pending: Bill verifies Y separation (3500mm), uturn endpoints.
-TF checklist: process/inbox/20260527T024859-tf.md
+### Landing/exit chains
+**Not yet authored** for station_parking, station_line_end, station_thru_dip.
+These require Bill to define which track sequences a vehicle follows when:
+- entering the station (landing_chains)
+- departing the station (exit_chains)
 
-### JPods_station_parking (track_formations/) — BLOCKED (see above)
-6 model_error EPs need topology description.
-
-### station_line_end (track_formations/) — BLOCKED
-Needs gw_* tags applied in SketchUp first.
-
-### station_thru_dip (track_formations/) — NOT STARTED
-Old predecessors/successors schema. Needs topology description before rewrite.
+cpu and cps are component templates — no landing/exit chains (wired by Noelle at Build time).
+traffic_circle7 uses pass_chains (already complete).
 
 ## Open Tasks (Priority Order)
 
-1. **Bill describe** JPods_station_parking topology (flow directions, junctions)
-2. Write JPods_station_parking/lines.json (blocked on #1)
-3. Apply gw_* tags to station_line_end geometry in SketchUp
-4. Bill verify cpu/cps coordinates
-5. Noelle code: handle _N suffix in multi-CPU segment names
-6. station_thru_dip schema conversion
-7. traffic_circle7: verify gw_cp_in direction is correct in SketchUp (scan had it reversed — manual check recommended)
+1. **Author landing/exit chains** for station_parking, station_line_end, station_thru_dip
+   — Bill defines the paths; Claude Code writes them into lines.json
+2. **Set chains_header.approved_by** on each template once chains are verified
+3. **Noelle pass_chains processing**: pass_chains not yet handled in feature.json generation
+   (chain_mm/chain_switches for traffic circles)
+4. **Sally draft_chains CCW ordering**: currently generates BFS backward order, not CP-unit grouping.
+   Should match Bill's CP-unit pattern (fix jpod_sally.rb)
+5. **traffic_circle7**: verify gw_cp_in direction is correct in SketchUp (noted in prior session —
+   scan had it reversed; manual check recommended)
 
-## Key Math Established
+## Key Decisions Made This Session
 
-- gw_uturn = π × 1750mm = 5497.8mm (always)
-- traffic_circle7 ring: radius 7517mm, long arcs 82.4° = 11011mm, corner arcs 7.6° = 1000mm
-- Approach arms: 8583mm, CP stubs: 2500mm at Z=8250, ring at Z=8000
-
-## WhatIf
-
-C-W22-6 through C-W22-9 posted to readmes/wisdom/whatif-weekly/2026-W22.md.
+- Numbered pair format `[pos, "track"]` confirmed correct JSON (Bill initially used `{1, "track"}`)
+- CCW = CP-unit grouping, not BFS traversal — established by Bill's descriptions
+- `alpha` key (not `alphabetical`) — established this session
+- gw_lift_parking: confirmed not in station_parking model; removed from lines{} and eps[]
+- station_line_end has no intentional gaps — all were authoring errors; corrected to contiguous 1–14
