@@ -113,13 +113,17 @@ trip.json, not in structure lines.json. lines.json only contains intra-station p
 
 ## The Authoring Rule
 
-**Scan to discover. Math to declare. Debug once, use many.**
+**You declare topology. The tool measures geometry. Math overrides the scanner.**
 
-- Use `MapFeatureTool.run_from_template` to scan complex or unknown station geometry
-  (traffic circles, parking stations with many segments)
-- Use math to declare fixed-geometry structures (cpu, cps, uturn)
-- Once declared from math, lines.json is the authority. The scan is for verification only.
-- Never let a scan overwrite a mathematically-verified lines.json without a written plan
+- Write `eps[]` by hand in lines.json — declare every junction type and its in/out segments
+- Run `Models › Lines JSON Build` — it reads your eps[], scans gw_* geometry for
+  coordinates, and writes the complete lines.json
+- Uturn arc lengths are always overridden to π×1750=5497.8mm regardless of scanner output
+- Once declared from math, lines.json is the authority. Never let a scan overwrite it
+  without a written plan
+
+Full authoring rules (segment naming, merge/diverge constraints, physical equivalence):
+`readmes/sketchup/jpods-lines-json-authoring.md`
 
 **Debug once, use many** — when a value is found to be wrong and corrected by math,
 that correction propagates to every lines.json that uses it, once, permanently.

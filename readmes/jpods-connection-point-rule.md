@@ -1,4 +1,4 @@
-# JPods Connection Point Rule — April 22, 2026
+# JPods Connection Point Rule — updated 2026-05-30
 
 ## Color Standard — Red Inbound, Blue Outbound
 
@@ -9,264 +9,134 @@
 | 🔴 **Red** | Inbound — hot end — vehicle or flow arriving |
 | 🔵 **Blue** | Outbound — cool end — vehicle or flow departing |
 
-This applies to guideway lines, CP stub-pair dots, station siding lines, and any future directional indicators. Never reverse. Never monochrome for directional elements.
+This applies to guideway lines, CP rings, station siding lines, and any future directional indicators. Never reverse. Never monochrome for directional elements.
 
 ---
 
 ## The Rule
 
-> **The Connection Point (CP) is the midpoint between the two seam points where the two parallel guideways meet their removable ending caps.**
+> **The Connection Point (CP) is defined by a placed `cp` component instance in the formation template. The hub vertex of that component is the CP center; the 222 mm edge gives the outward tangent.**
 
-Formally:
-$$CP_{center} = \frac{seam_{left} + seam_{right}}{2}$$
-
-where:
-- Each guideway is a 0.5 m × 0.5 m beam, built by the `upright_extrude` function ported from ene_railroad v23
-- The seam is the 3D point where the main beam extrusion ends (the `end_face` created by `upright_extrude`)
-- The ending cap is the removable ene_railroad geometry placed after extrusion
-- Left and right beams are `DUAL_TRACK_SPACING = 3.5 m` apart on the CP centerline
-
-## Why This Matters
-
-**System integration points:**
-
-1. **At structure placement time** (`jpod_structure_tool.rb`): CPs anchor the connection marker circles visible in the model — the user clicks these circles to define which structures connect.
-
-2. **At network build time** (`jpod_network.rb`, method `build_segment`): The CP center + tangent tells the build system:
-   - Where to call `JPodGuideway.remove_structure_endcaps(entity, cp_point)` to erase the ending geometry
-   - Where the seam point is for joining two guideway segments end-to-end
-   - The outbound travel direction (from the tangent)
-
-3. **In the network editor** (`jpod_network_editor.rb`): CPs are the visual connection targets. Hovering shows a Bezier preview flowing from one CP's outbound tangent to the next CP's inbound approach.
-
-4. **In the finished model**: CP circles sit exactly at the gate opening — the seam where caps meet beams — so the visual representation matches where network links actually form.
-
-## Problem Fixed (April 20–22, 2026)
-
-### Symptom
-
-Traffic-circle connection points were placed at the **wrong end** of the dual-guideway pair — at the ring-junction end (~13.5 m from formation center) instead of the gate/cap end (~22.5 m).
-
-### Root Cause
-
-Each traffic-circle arm track, drawn from ring-center outward, produced **two external stubs** in the formation data:
-
-| Stub | Location | Role |
-|------|----------|------|
-| **Outer stub** (correct) | Arm tip, ~13.5 m radius | The true external endpoint; connects to the outside world |
-| **Ring-junction stub** (phantom) | Where arm meets ring, ~7.5 m radius | An artifact: the ring endpoint doesn't exactly match the arm track start due to positional gap tolerance |
-
-The old pairing algorithm could not distinguish them:
-- It treated all external stubs as equally valid
-- Sometimes it paired ring-junction stubs with each other instead of outer stubs
-- This placed the CP midpoint at the inner ring junction (wrong location by ~9 meters)
-
-### Solution Implemented
-
-**Step 1: Stub normalization** (in `pair_stubs()`)
-
-For each stub, always ensure `point = outer tip` (the endpoint farther from the formation centroid). If a stub was drawn inbound (companion = outer tip), reverse it:
-
-```ruby
-stubs = stubs.map do |s|
-  if s[:point].distance(centroid) >= s[:companion].distance(centroid)
-    s  # already outer
-  else
-    { point: s[:companion], tangent: s[:tangent].reverse, companion: s[:point] }
-  end
-end
-```
-
-**Step 2: Deduplication** (in `pair_stubs()`)
-
-Remove redundant stubs — if two stubs share the same outer tip (one is real, one is the phantom ring-junction stub), keep only the first:
-
-```ruby
-seen_pts = {}
-stubs = stubs.reject do |s|
-  key = [s[:point].x.round(2), s[:point].y.round(2), s[:point].z.round(2)]
-  if seen_pts[key]
-    true  # duplicate, discard
-  else
-    seen_pts[key] = true
-    false  # keep
-  end
-end
-```
-
-**Step 3: Geometric seam location** (in `pair_stubs()`)
-
-After normalizing and deduplicating, pair stubs by distance. For each valid pair:
-
-```ruby
-pd_outer = Geom::Point3d.linear_combination(0.5, sa[:point], 0.5, sb[:point])
-pd_inner = Geom::Point3d.linear_combination(0.5, sa[:companion], 0.5, sb[:companion])
-out_dir  = (pd_outer - pd_inner).normalize
-```
-
-Then, **for traffic circles only**, apply a radial outward offset:
-
-```ruby
-if outward_offset > 0.0  # traffic_circle branch
-  radial_out = Geom::Vector3d.new(pd_outer.x - centroid.x,
-                                  pd_outer.y - centroid.y, 0)
-  radial_out = radial_out.normalize
-  shifted = pd_outer.offset(radial_out, outward_offset)  # 9.m for traffic circles
-  gate_ctr = Geom::Point3d.new(shifted.x, shifted.y, pd_outer.z)
-end
-```
-
-This places the CP at:
-$$CP = pd_{outer} + 9.m \cdot \frac{(pd_{outer} - centroid)}{|(pd_{outer} - centroid)|} \quad \text{[in XY plane; Z from } pd_{outer}]$$
-
-### Validation
-
-**Visual confirmation** (April 22, 2026): Bill opened the SketchUp model after running Recompute Connection Points. The CP circles now sit exactly where they should — at the interface between the guideway beams and the ending caps. The 9-meter offset moved them from the wrong end (ring-junction) to the correct end (cap seam).
-
-**Geometric confirmation**: The distance from `pd_outer` (paired outer-tips midpoint) to the true seam is exactly 9 meters, matching the experimental offset. This is the distance the Bezier curves must travel before hitting the cap geometry.
-
-## Implementation
-
-### File: [jpod_structure_tool.rb](../../../Library/Application%20Support/SketchUp%202026/SketchUp/Plugins/JPods/jpod_structure_tool.rb)
-
-**Key methods:**
-
-| Method | Lines | Purpose |
-|--------|-------|---------|
-| `collect_all_endpoints` | ~150 | Extract all track endpoints + tangents from placement_data |
-| `detect_external_stubs` | ~170 | Filter to endpoints not shared with another track (open ends) |
-| `pair_stubs` | ~600–670 | Normalize stubs, deduplicate, pair by distance, apply seam offset |
-| `resolve_connection_points` | ~680–695 | Route: traffic_circle → pair_stubs(offset=9m); others → try endings, fall back to pair_stubs(offset=0) |
-
-**The critical offset application** (pair_stubs, ~lines 650–660):
-
-```ruby
-# Paired CP sits at the midpoint of the two outer guideway ends.
-gate_ctr = pd_outer
-if outward_offset > 0.0
-  radial_out = Geom::Vector3d.new(pd_outer.x - centroid.x,
-                                  pd_outer.y - centroid.y, 0)
-  radial_out = radial_out.length > 0.01 ? radial_out.normalize : out_dir
-  shifted = gate_ctr.offset(radial_out, outward_offset)
-  gate_ctr = Geom::Point3d.new(shifted.x, shifted.y, gate_ctr.z)
-end
-
-pairs << {
-  index:       pairs.size,
-  center:      gate_ctr,  # <-- the CP, now at correct seam location
-  tangent:     out_dir,
-  half_offset: best_dist / 2.0,
-}
-```
-
-### Usage in JPods Plugin
-
-1. **At structure placement**: `resolve_connection_points(formation_id, defn, placement_data)` is called; CPs are computed and stored in the structure instance's `"JPods"` attribute as JSON.
-
-2. **At network build**: `jpod_network.rb` reads the stored CP data, transforms it to world coordinates, and passes the CP center + tangent to `JPodGuideway.remove_structure_endcaps()`.
-
-3. **When user clicks Recompute**: All structures are scanned; `resolve_connection_points` is called for each; CP circles are re-rendered at the stored centers.
-
-## Next Phase: Explicit Seam Anchors
-
-The current system works (empirically validated), but the 9-meter offset is a transitional solution. 
-
-**Long-term goal**: Replace the hardcoded offset with explicit seam anchors in the formation templates.
-
-**Three approaches:**
-
-### 1. Best: Seam anchor component (recommended)
-
-Add a tiny marker/group inside each ene_railroad ending definition at the exact seam point.
-
-**Advantages:**
-- Explicit, not inferred
-- Survives template changes
-- Different formations can have different seam geometries
-
-**Implementation sketch:**
-```ruby
-def self.detect_seam_anchors(defn)
-  anchors = []
-  scan_components(defn.entities) do |comp|
-    next unless comp.name.include?("CapSeam") || comp.name.include?("Seam")
-    anchors << {
-      point:   comp.transformation.origin,
-      tangent: comp.transformation.yaxis  # or z-axis for inward direction
-    }
-  end
-  anchors
-end
-
-# In pair_stubs, use seam anchors if present:
-if seam_anchors && !seam_anchors.empty?
-  seam_left  = defn.entities ... find_seam_anchor_for(stub_a)
-  seam_right = defn.entities ... find_seam_anchor_for(stub_b)
-  gate_ctr = (seam_left + seam_right) / 2
-end
-```
-
-### 2. Good: Verify ene_railroad v23 invariant
-
-Check whether ene_railroad v23 consistently places the ending instance origin at the guideway/cap seam in all templates.
-
-**Advantages:**
-- No template changes needed
-- Uses existing ene_railroad structure
-
-**Risk:**
-- If v23 doesn't have this invariant, won't work
-- Depends on ene_railroad's continued design
-
-**Investigation needed:**
-- Test: create a simple track in ene_railroad v23 with one ending
-- Measure: ending instance origin position relative to the track extrusion end
-- Repeat for different track angles, lengths, formations
-- If origin == seam for all cases, enable `detect_connection_points_from_endings` for traffic circles
-
-### 3. Current pragmatic: Ship with 9.m offset
-
-Document the offset as transitional; commit to anchors in v2.4.
-
-**Advantages:**
-- Works now, fully tested
-- No template changes
-- Ship on schedule
-
-**Disadvantage:**
-- Fragile if traffic-circle template geometry changes
-- Will need recalibration then
-
-## References
-
-### JPods Plugin
-
-- **Repo**: `/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods/`
-- **Rule definition**: [jpod_structure_tool.rb](../../../Library/Application%20Support/SketchUp%202026/SketchUp/Plugins/JPods/jpod_structure_tool.rb) (file header + pair_stubs + resolve_connection_points)
-- **Design spec**: [readmes/basics.md](../../../Library/Application%20Support/SketchUp%202026/SketchUp/Plugins/JPods/readmes/basics.md) — "Current Status — April 22, 2026"
-- **CP rendering**: [jpod_connect_tool.rb](../../../Library/Application%20Support/SketchUp%202026/SketchUp/Plugins/JPods/jpod_connect_tool.rb) — draws circles from stored CP attributes
-- **Network build**: [jpod_network.rb](../../../Library/Application%20Support/SketchUp%202026/SketchUp/Plugins/JPods/jpod_network.rb) method `build_segment()` — uses CPs for segment linking
-
-### ene_railroad v23
-
-- **Location**: `/Users/williamjames/Library/Application Support/SketchUp 2023/Plugins/ene_railroad/`
-- **Upright extrusion**: `upright_extruder.rb` — miter-scale extrusion, Z-aligned profile, XY rotation
-- **Ending geometry**: `track.rb` method `draw_endings()` (~lines 1054–1070) — places removable caps
-- **Seam location**: Ending instance origin is intended to mark the seam (verify in v23)
-
-### History and Discussion
-
-- **Repo memory**: `/memories/repo/connection-point-rule.md` — full derivation and code locations
-- **Initial discovery**: Bill observed traffic-circle CPs at wrong end (April 20)
-- **Debugging**: 3 failed approaches (stub filtering, outer_tip lambda, ending_scanner bypass)
-- **Breakthrough**: 9-meter radial offset places CPs at visually correct location (April 22)
-- **Validation**: Bill confirmed in SketchUp; network build now connects segments correctly
+This is an explicit model-author datum (Axiom 10 — explicit beats derived). No geometry inference, no stub pairing, no offset calculation.
 
 ---
 
-**Version**: JPods v2.3, April 22, 2026
+## The cp Component
 
-**Status**: Rule is defined, implemented, and validated. Offset is pragmatic (9.m); anchor system planned for v2.4.
+Every formation template contains one `cp` component instance per gate. The definition contains three edges:
 
-**Next reviewer**: When traffic-circle template changes, verify that 9.m offset still places CPs at the seam. If not, either (a) recalibrate the offset, or (b) implement seam anchor approach.
+| Edge | Length | Purpose |
+|------|--------|---------|
+| Tang edge | 222 mm | Outward tangent from CP center |
+| Rail edges (×2) | 1750 mm | Half of DUAL_TRACK_SPACING (3500 mm) — one to each guideway CL |
 
+**Hub vertex** = the vertex shared by the tang edge and both rail edges. This is the CP center — the midpoint between the two guideway bottom-centerlines at the gate face.
+
+**Naming convention:**
+- Definition name: `cp`, `cp0`, `cp1`, `cp2`, `cp3` (or `cp#0`, `cp#1` …)
+- Tag or instance name: `cp_marker_0`, `cp_marker_1` … (also recognized)
+
+The scanner matches: `tag == 'cp'`, `tag.start_with?('cp_marker')`, definition name `cp`, `cpN`, or `cp#N`.
+
+---
+
+## Why This Matters
+
+1. **At structure placement** (`jpod_structure_tool.rb`): CPs are read from the placed cp instance, stored as JSON on the structure entity, and rendered as colored rings in the viewport.
+
+2. **At network build** (`jpod_network.rb → build_segment`): CP center + tangent tells the build system where to remove the ending cap geometry and where the seam point is for joining two guideway segments.
+
+3. **In the Connect Guideways tool**: CP rings drawn from stored CP data. User clicks rings to wire connections. Bezier curves flow from one CP's outward tangent to the next CP's inward approach.
+
+4. **In the formation map** (`formations/{formation}.json`): CP data stored in definition-local coordinates once per template (debug-once-use-many). BUILD reads from the map; never re-detects at build time.
+
+---
+
+## Detection Priority
+
+`detect_cps_from_stub_pair_tags` (called from `resolve_connection_points`) runs this chain:
+
+| Priority | Method | When it fires |
+|----------|--------|---------------|
+| 1 | `detect_cps_from_top_level_cp` — cp instances at any depth ≤ 4 | **Current approach — all templates** |
+| 2 | `detect_cps_from_cp_instances` — cp nested inside gw_stub_pair_N_in | Legacy templates |
+| 3 | `detect_cps_from_arm_pairs` — gw_N_in / gw_N_out pairs | Traffic circle legacy |
+| 4 | Vertex clustering | Oldest fallback |
+
+Priority 1 fires for all current templates (traffic_circle7, station_line_end, JPods_station_parking, station_thru_dip). The lower priorities are fallbacks for older models that predate cp component placement.
+
+---
+
+## CP Index Assignment
+
+After cp instances are found, indices are assigned by one of two methods:
+
+1. **Proximity to gw_stub_pair_N_in groups** (preferred) — if the template has `gw_stub_pair_N_in` groups, each cp is matched to the nearest one. The stub_pair N becomes the CP index.
+
+2. **atan2 angular sort** (fallback) — if no gw_stub_pair groups exist, cp instances are sorted by angle from the formation center. This fires a WARN in the console: `stub_pair count 0 ≠ cp count N`.
+
+**Implication for model authors:** To get deterministic CP index ordering that matches lines.json, either add `gw_stub_pair_N_in` groups (one per gate), or name cp components `cp0`, `cp1`, etc. and place them in the order lines.json expects. The atan2 sort produces CCW order from South (−90°) which may not match the intended CP0.
+
+---
+
+## Formation Map
+
+`formations/{formation}.json` (schema `jpods-formation-map-v1`) stores verified CP data in definition-local coordinates.
+
+**BUILD always uses the formation map — never regenerates it.**
+
+To update: open the template model → Console → Models → Generate Formation Map. This overwrites the map from the current cp instance positions.
+
+---
+
+## Implementation
+
+**Key methods in `jpod_structure_tool.rb`:**
+
+| Method | Purpose |
+|--------|---------|
+| `collect_cp_instances` | Recursive scan (depth ≤ 4) — finds cp instances by tag or definition name |
+| `detect_cps_from_top_level_cp` | Reads hub vertex (center) and 222 mm edge (tangent); assigns indices |
+| `detect_cps_from_stub_pair_tags` | Priority chain dispatcher |
+| `resolve_connection_points` | Outer router: tries cp detection first, falls back to pair_stubs |
+
+**Recognized names (in `collect_cp_instances`):**
+```ruby
+ct == 'cp' || ct.start_with?('cp_marker') ||
+dname == 'cp' || dname.match?(/\Acp(#?\d+)?\z/)
+```
+
+---
+
+## Legacy: pair_stubs + 9 m Offset (archived)
+
+Prior to 2026-05-30, the primary detection used `pair_stubs` — geometric stub endpoint pairing from placement_data. For traffic circles it applied a hardcoded 9 m radial offset to compensate for a phantom ring-junction stub artifact.
+
+This approach is still in the code as the `resolve_connection_points` Priority 2 fallback (after all cp-instance methods fail). It is not used by any current template. Do not remove it — it handles models built before cp components were added.
+
+Historical problem log: `readmes/sketchup/jpods-cp-regression-guard.md`.
+
+---
+
+## Anchor Z for Guideway Endpoints at CP — CONFIRMED 2026-05-14
+
+> **Change control:** Do not change the anchor_zs formula in `build_segment` without a written plan.
+> Three alternatives were tested on 2026-05-14 and all failed.
+
+**Code location:** `jpod_network.rb → Network.build_segment → anchor_zs block`
+
+```ruby
+is_traffic_circle = lambda do |ent|
+  fid = ent&.get_attribute("JPods", "formation_id", "").to_s.downcase
+  fid.include?("traffic_circle")
+end
+from_z = from_cp[:center].z + (is_traffic_circle.call(from_entity) ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+to_z   = to_cp[:center].z   + (is_traffic_circle.call(to_entity)   ? Constants::BEAM_DEPTH / 2.0 : Constants::BEAM_DEPTH)
+```
+
+`from_cp[:center].z` = hub vertex Z from the cp component (bottom-centerline of beam at gate face). PathBuilder path runs at beam TOP; beam depth hangs downward so the bottom face lands flush with the stub seam.
+
+**Failed alternatives (2026-05-14, do not retry without written plan):**
+- `Terrain.elevation_at(CP_xy) + CLEARANCE_HEIGHT` — 0.6–1.2 m errors per station
+- `Terrain.ground_z_at(CP_xy) + CLEARANCE_HEIGHT` — skips station geometry, same magnitude
+- `from_cp[:center].z` alone (no + BEAM_DEPTH) — beam lands 0.5 m below stub seam
