@@ -48,13 +48,20 @@ before a dollar is spent.
 - Click **▶ Build** — builds dual parallel guideways between all connections
 - Option+Build = add mode (keeps existing guideways)
 
-#### BUILD output files (all written automatically)
+#### BUILD prerequisites (must exist before Build runs)
+| File | Location | Who authors it |
+|------|----------|---------------|
+| `lines.json` | `templates/track_formations/{formation}/` | Model designer authors eps[] + eps_header; build_from_eps fills geometry. Noelle refuses the template if either is absent. |
+| `formations/{formation}.json` | `su_jpods/formations/` | Generated once by Noelle via Generate Formation Map; never overwritten by BUILD. |
+
+#### BUILD output files (all written automatically, world coordinates)
 | File | Location | What it contains |
 |------|----------|-----------------|
 | `{model}.followme.json` | model folder | All guideway lines for Build pipeline |
 | `{model}.feature.json` | model folder | Station routing behaviors (Noelle's authority) |
 | `{model}.map.json` | `su_jpods/` plugin folder | Network map — consumed by all agents |
-| `formations/{formation}.json` | `su_jpods/formations/` | Per-template CP map — debug once, use many |
+
+**map.json and path.json are always per-network.** They are world-coordinate files — they depend on where each station instance is placed. lines.json (local coords + topology) is the template-level pre-build that BUILD reads and transforms. There is no template-level map.json and there should never be one.
 
 #### Formation maps — debug once, use many
 Each station template has exactly one formation map in `su_jpods/formations/{formation}.json`.

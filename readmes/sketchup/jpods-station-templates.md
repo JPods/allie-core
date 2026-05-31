@@ -21,16 +21,32 @@ Natalie (trip planning), Nora (ezone boundaries and travel distance), Alice (far
 
 ---
 
+## Division of Authority
+
+Before touching any template file, understand who owns what:
+
+| Owner | What they own | Enforcement |
+|-------|--------------|-------------|
+| **Model designer** | `eps[]` — the topological contract of the station | `eps_header` signs the contract; `run_from_template` is blocked once eps_header exists |
+| **build_from_eps tool** | Geometry — fills start_point/end_point from model scan, preserves eps_header | The only legitimate tool for updating a signed lines.json |
+| **Noelle** | Reports topology defects; refuses to route through unsigned templates | Fault issued if eps_header or eps[] is absent; eps[] never modified |
+| **BUILD** | World-transforms local lines.json coords into map.json/path.json per network instance | Never touches lines.json; reads it as pre-built template topology |
+
+**map.json and path.json are always per-network, never per-template.** lines.json (local coords + topology) is the template-level pre-build. BUILD reads it, applies the instance world transform, and emits world-coordinate network files. Adding a template-level map.json would duplicate lines.json at a different coordinate level with no benefit.
+
+---
+
 ## What lines.json Declares
 
 A station template's `lines.json` is the **math declaration** — the authoritative record of:
 
-1. **Topology (eps[])** — which segments connect to which, and the type of each junction
-2. **Geometry (lines{})** — each segment's start_point, end_point, and length_mm
+1. **eps_header** — who approved the topology, when, and from which source
+2. **eps[]** — the topological contract: which segments connect to which, and the junction type
+3. **lines{}** — geometry: each segment's start_point, end_point, and length_mm
 
-You write #1. The Lines JSON Build tool fills in #2 from the model geometry.
-Once written and verified, lines.json is the authority. Never overwrite it with raw scanner
-output without a written plan.
+You write #2 and sign with #1. The Lines JSON Build tool fills in #3 from the model geometry.
+Once signed, lines.json is the authority. `run_from_template` is blocked. Only `build_from_eps`
+may update geometry while preserving the signed eps.
 
 **lines.json is not a SketchUp concept.** The same segment names and topology appear in:
 - SketchUp tags on guideway edges
@@ -139,6 +155,7 @@ Write `lines.json` with an `eps[]` array before running.
 - [ ] Every diverge has exactly 1 in `in[]`, 2 in `out[]`
 - [ ] Terminal stubs appear in only one EP as `out`
 - [ ] Source stubs appear in only one EP as `out` with empty `in`
+- [ ] `eps_header` added to lines.json with approved_by, dt, and note after verification
 
 ---
 

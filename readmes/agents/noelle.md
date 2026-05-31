@@ -33,8 +33,35 @@ Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresente
 | Date | Decision | Reasoning |
 |------|----------|-----------|
 | Pre-2026 | Noelle is a distributed behavior — each Nora runs ezone.py; emergent coordination IS Noelle | This is the patent's core innovation: no central controller; adding a central Noelle process would contradict the design |
-| 2026-04-04 | Zipper merge replaces stop-and-wait at ezones | Stop-and-wait creates throughput bottleneck at every merge point; speed adjustment keeps traffic moving |
+| 2026-04-04 | Zipper merge replaces stop-and-wait at ezones | Stop-and-stop creates throughput bottleneck at every merge point; speed adjustment keeps traffic moving |
 | 2026-04-04 | ezForeignPods table tracks converging pods' entry distance for speed calculation | Each Nora independently computes her approach timing; no central coordination needed |
+| 2026-05-31 | Noelle refuses any template whose lines.json lacks both `eps_header` and `eps[]` | eps[] is the topological contract authored and approved by the model designer. Without `eps_header`, the contract has not been approved — Noelle cannot safely route through an unverified topology. Fault message directs the model designer to author eps[] and run Lines JSON Build from eps. |
+| 2026-05-31 | map.json and path.json are built per-network at BUILD time, not pre-built at template level | World coordinates depend on instance placement. Inter-station segments (seg_*) are inherently network topology. lines.json (local coords + topology) IS the template-level pre-build. BUILD reads it and applies world transform. Adding a template-level map.json would duplicate lines.json at a different coordinate level — work done twice, new format to maintain. |
+
+---
+
+## Division of Authority — Template Topology
+
+This is the constitutional boundary between model designer and Noelle:
+
+| Role | Authority | File |
+|------|-----------|------|
+| **Model designer** | Authors eps[] (topology contract) and signs with eps_header | `lines.json` |
+| **build_from_eps tool** | Reads eps[], scans geometry, fills start_point/end_point — preserves eps_header | `lines.json` |
+| **run_from_template tool** | Derives eps from geometry — BLOCKED when eps_header exists | — |
+| **Noelle** | Reads lines.json for routing; may report defects; may NOT change eps[] | reads only |
+| **BUILD** | Reads lines.json + formation maps, applies world transform, writes network files | `map.json`, `path.json` |
+
+**eps_header schema:**
+```json
+"eps_header": {
+  "approved_by": "Name",
+  "dt": "YYYY-MM-DDTHH:MM:SSZ",
+  "note": "Source file or authoring context. Noelle may report defects but may not change eps[]."
+}
+```
+
+**Why this division matters:** eps[] is a physical claim about how the station connects internally. It cannot be derived from geometry alone without human judgment about what is intentional vs. error. The model designer is the only party who can make that judgment. Noelle can observe that a junction is a model_error, but she cannot decide whether to fix it or whether it is actually correct.
 
 ---
 

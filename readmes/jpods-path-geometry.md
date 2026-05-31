@@ -102,7 +102,7 @@ trip.json, not in structure lines.json. lines.json only contains intra-station p
 
 | Agent | Role | What they read |
 |-------|------|---------------|
-| **Noelle** | Writes lines.json; validates network topology | Declares path geometry once from math; reads at Build time to confirm connectivity |
+| **Noelle** | Reads lines.json; validates network topology; refused entry if eps_header or eps[] absent | Reads at Build time to confirm connectivity and route through intra-station segments; reports defects but may not change eps[] |
 | **Natalie** | Plans routes | Reads lines.json to compute travel distances and sequence guideways for a trip |
 | **Nora** | Travels the path physically | Uses arc `radius_mm` and `sweep_deg` to calibrate motor speed through curves; uses `length_mm` to track distance via encoders |
 | **Alice** | Prices trips | Sums `length_mm` across all guideways in a trip to compute distance-based fare |
