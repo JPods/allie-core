@@ -1,6 +1,6 @@
 # Sally — Station Processor
 
-**One-liner:** Local parking manager at each JPods station — assigns slots on gw_platform, manages the gw_platform_parking holding lane, and advances queued pods on departure.
+**One-liner:** Local parking manager at each JPods station — assigns slots on gw_platform, manages empty-pod holding lanes, and signals Natalie to balance pod distribution across the network.
 
 **Ouch-list items I own:** Multi-platform stations (S001 P1–P5 share one physical platform — one registry per physical platform, not per platform record); gw_lift slot numbering (arc-length calc needs adjustment for vertical lift segments); physical comms protocol (slot assignment back-channel to Natalie not yet defined).
 
@@ -10,21 +10,27 @@
 
 ## Responsibilities
 
-Sally is the station processor. Her domain is entirely local: she manages who parks where at a single station. She does not know about the rest of the network.
+Sally is the station processor. Her domain is entirely local: she manages who parks where at a single station. She signals Natalie when the station needs network-level rebalancing, but does not choose routes or destinations — Natalie does.
 
-**Two zones per station:**
+**Zones per station:**
 
 1. **gw_platform** — the parking track. Slots numbered 1–N where slot 1 = entrance end (inbound) and slot N = departure end (highest). Sally always assigns the **highest available empty slot** to each arriving pod so the departure end stays populated and entrance slots remain free for incoming vehicles. Capacity = `arc_length_of_gw_platform / 2.5m` (slot spacing). Passengers are directed to the **highest empty slot** so they board as close to the departure end as possible.
 
-2. **gw_platform_parking** — the holding lane before the platform junction. Pods waiting for a gw_platform slot queue here. Natalie may place pods in this lane; she cannot place pods directly on gw_platform without a Sally slot assignment. Capacity = `arc_length_of_gw_platform_parking / 2.5m`.
+2. **Empty-pod holding lanes** — any track whose name contains `platform_parking` (e.g. `gw_platform_parking`, `gw_platform_parking_east`). Sally may park **empty pods only** in these lanes. Payload-carrying pods may not be held here. Capacity per lane = `arc_length / 2.5m`. A station may have more than one such lane; Sally manages all of them as a combined holding pool.
 
-**Protocol at arrival:**
-1. Pod arrives at station (trip_complete) — Natalie calls `Sally.reserve_slot(station_id, nora_id)`
-2. Sally returns highest empty slot number → Natalie positions pod at that slot
-3. If gw_platform full: Natalie checks pod's `station_full_policy` attribute
-   - `'wait'`: `Sally.enqueue_parking` → pod holds in gw_platform_parking; Sally re-checks each tick
-   - `'reroute'`: Natalie BFS-routes pod to next station with open capacity; falls back to `'wait'` if none found
-4. If both zones full: pod holds, retries next dwell cycle
+**Protocol at arrival — empty pod:**
+1. Pod arrives empty (trip_complete, no payload) — Natalie calls `Sally.reserve_slot`
+2. Sally assigns highest available gw_platform slot
+3. If gw_platform full: Sally places pod in any available `*platform_parking*` lane
+4. If all holding lanes also full: Sally signals Natalie `dispatch_empty_away(station_id, count: 1)` — Natalie selects a destination and routes the excess pod out; then Sally re-checks
+
+**Protocol at arrival — payload pod:**
+1. Pod arrives with payload (passengers or cargo, trip_complete) — **highest priority**
+2. If gw_platform has an empty slot → assign directly
+3. If gw_platform full:
+   a. Sally identifies empty pods parked on gw_platform
+   b. Sally instructs them to **station loop** one at a time (sequential, highest slot first) until enough slots are freed for the payload pod to land and unload
+   c. If all gw_platform pods carry payload (none can be station-looped): Sally signals Natalie `dispatch_empty_away` for empty pods currently in `*platform_parking*` lanes, clearing those lanes so station-looping payload pods have somewhere to go — not yet implemented; escalation path TBD
 
 **Protocol at departure:**
 1. Pod departs — Natalie calls `Sally.release_slot(station_id, nora_id)`
@@ -87,12 +93,44 @@ When the departure-end vehicle (highest slot) leaves, Sally advances all remaini
 
 ---
 
-**Protocol at departure (revised):**
+**Protocol at departure:**
 1. Pod departs — Natalie calls `Sally.release_slot(station_id, nora_id)`
 2. Sally frees the slot
 3. Sally shuffles forward: vehicles advance from highest occupied slot upward
-4. If a pod is queued in gw_platform_parking, Sally assigns it the lowest freed slot and returns `{ next_pod:, next_slot: }` to Natalie
-5. Natalie moves the dequeued pod from gw_platform_parking to gw_platform at the assigned slot
+4. If a pod is queued in a `*platform_parking*` lane, Sally assigns it the lowest freed slot and returns `{ next_pod:, next_slot: }` to Natalie
+5. Natalie moves the dequeued pod from holding lane to gw_platform at the assigned slot
+6. Sally recalculates occupancy percentage → triggers Natalie balance signals if thresholds crossed (see Network Balance below)
+
+---
+
+## Network Balance — Sally ↔ Natalie
+
+Sally monitors her own occupancy continuously and signals Natalie in two directions. **Sally never chooses destinations or sources — that is Natalie's domain.**
+
+### Too full — dispatch empty pods away
+
+**Trigger:** A payload pod needs to land but gw_platform is full and local station loops cannot free enough space.
+
+Sally signals: `dispatch_empty_away(station_id, count: N)`
+- `count` = number of empty pods Sally needs removed to make room
+- Natalie selects destination stations and routes the pods
+- Sally does not know or care where they go
+
+### Too empty — request empty pods
+
+**Trigger:** Sally's combined gw_platform occupancy drops below **50%** of capacity.
+
+Sally signals: `request_empty_pods(station_id, count: N)`
+- `count` = number of pods needed to reach 50% occupancy
+- Natalie selects source stations (those above 50%) and routes empty pods to Sally's station
+- Sally does not choose the source
+
+**Why 50%:** Keeps every station at minimum half-full so departing passengers always find a pod without waiting. A station below 50% is supply-constrained; a station above 50% is surplus. Natalie continuously flows surplus to shortage.
+
+**The invariant Natalie maintains:**
+Every station's gw_platform occupancy ≥ 50% of capacity at steady state. Transient dips (burst departures) are acceptable; Sally signals as soon as occupancy drops below threshold and Natalie routes to restore it.
+
+---
 
 **Where Sally runs:**
 - **Real hardware:** small processor embedded at each station. When Nora reports trip_complete via MQTT, the station's Sally processor runs reserve_slot and sends the slot assignment back to Nora.
@@ -124,6 +162,10 @@ When the departure-end vehicle (highest slot) leaves, Sally advances all remaini
 | 2026-06-02 | hold_loop_chain, station_loop_chain, parking_chain authored in lines.json | Previously hold_loop was derived at runtime from CCW list + filter. Runtime derivation means every session re-derives the same answer. Moving to lines.json: debug once, verify once, read forever. Same principle as formation maps. |
 | 2026-06-02 | Sequential station loops for yield (not parallel) | If multiple blocking vehicles loop simultaneously they occupy the outer ring concurrently — collision risk, and slot registry becomes ambiguous. Sequential (highest slot first) is unambiguous: one vehicle loops and returns before the next starts. |
 | 2026-06-02 | Passengers directed to highest empty slot | Keeps departure end populated with occupants ready to board immediately. Matches slot assignment direction: pods assigned highest first, passengers board highest first. Entry end stays clear for new arrivals. |
+| 2026-06-02 | Empty pods only in `*platform_parking*` lanes | Payload pods must unload at gw_platform — that is the passenger/cargo interface. Holding lanes are staging only. Mixing payload pods into holding lanes would require unload-in-place logic and complicates slot accounting. |
+| 2026-06-02 | Payload pod has priority over empty pod at gw_platform | A pod carrying passengers or cargo has a committed obligation. An empty pod is available inventory. Displacing inventory to fulfill a commitment is the correct priority. |
+| 2026-06-02 | 50% occupancy threshold for pod requests | Below 50%: station is supply-constrained — passengers will wait for a pod. Above 50%: station has surplus — pods wait for passengers. 50% is the crossover point. Natalie continuously flows surplus to shortage to maintain this floor network-wide. |
+| 2026-06-02 | Sally signals Natalie; Natalie chooses destinations | Sally knows her station's occupancy. She does not know which other stations have surplus or deficit — that is Natalie's view. Separating the signal (Sally) from the routing decision (Natalie) keeps Sally stateless about the rest of the network. Matches the patent's no-central-dispatcher requirement: each station is autonomous; Natalie is a load balancer, not a controller. |
 
 ---
 
@@ -155,6 +197,9 @@ When the departure-end vehicle (highest slot) leaves, Sally advances all remaini
 | `Sally.start_station_loop` | `(station_id, nora_id)` | `Array` or `nil` | Returns station_loop_chain track list. Vehicle will return to platform after one loop. |
 | `Sally.shuffle_forward` | `(station_id)` | `Array<Hash>` | Returns ordered list of `{nora_id:, from_slot:, to_slot:}` moves for Natalie to execute. |
 | `Sally.yield_order` | `(station_id, blocked_id)` | `Array<String>` | Returns ordered list of nora_ids that must station_loop before blocked_id can advance. Highest slot first. |
+| `Sally.occupancy_pct` | `(station_id)` | `Float` | Current gw_platform occupancy as 0.0–1.0. Used for balance threshold checks. |
+| `Sally.needs_pods?` | `(station_id)` | `Boolean` | True when occupancy < 50%. Natalie polls this to decide whether to route empty pods here. |
+| `Sally.dispatch_request` | `(station_id)` | `Hash` or `nil` | Returns `{ action: :dispatch_away, count: N }` or `{ action: :request_pods, count: N }` or `nil` if balanced. Natalie calls this after each arrival/departure event. |
 
 ### Integration points in animation
 
@@ -175,7 +220,7 @@ When the departure-end vehicle (highest slot) leaves, Sally advances all remaini
 
 ## Notes to Other Agents
 
-**Natalie:** I own slot assignments. Never position a pod on gw_platform without asking me first. You route; I park. You may place pods in gw_platform_parking — that is the holding lane and is yours to manage. But the moment a pod crosses from holding lane to platform, that crossing requires my slot number.
+**Natalie:** I own slot assignments. Never position a pod on gw_platform without asking me first. You route; I park. You may place empty pods in any `*platform_parking*` lane — those are holding lanes and are yours to manage. But the moment a pod crosses from holding lane to platform, that crossing requires my slot number. I will signal you via `dispatch_request` after every arrival and departure — `dispatch_away` means I need you to route empty pods out of here; `request_pods` means I need you to send empty pods to me. You choose the destinations and sources; I just tell you the count and direction.
 
 **Nora:** When you arrive, Natalie will tell you your slot number. Park at exactly that position. Do not improvise your parking spot. I track occupancy by slot — a pod at the wrong slot position corrupts my registry silently.
 
