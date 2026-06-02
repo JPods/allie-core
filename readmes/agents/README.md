@@ -79,6 +79,33 @@ The only constraint is honesty: write what you know, date design decisions, mark
 
 ---
 
+## Physical Processor Architecture
+
+Every entity in a deployed JPods network has **one or more dedicated processors** tracking and timing its own events. No entity depends on a central clock.
+
+| Entity | Physical processor | Events it tracks |
+|--------|--------------------|-----------------|
+| **Nora** (each pod) | Raspberry Pi (one per vehicle) | Encoder ticks, ToF range, IMU, AprilTag, MQTT START/ACTION |
+| **Sally** (each station) | Station chip (ESP32-class or equivalent) | trip_complete arrival, slot assignment, occupancy threshold, dispatch signals |
+| **Natalie** (router) | Dedicated Pi or server | Route requests, trip_complete confirmations, balance signals from all Sallys, emergency pre-emption |
+| **Noelle** (validator) | Design-time only (SketchUp) | Not a runtime agent — runs at Build/Validate, not during operation |
+| **Each CP** (switch) | Embedded controller at the physical switch | Diverge/merge commands from Natalie, pod detection, fault reporting |
+
+**Consequence for simulation:** The SketchUp simulation has one master animation tick (`onNextFrame`). This tick stands in for each agent's independent clock. Each agent is called from the master tick but owns its own internal tick counter and cadence — it decides whether to act on any given tick. The code structure is:
+
+```ruby
+# In jpod_animator.rb onNextFrame:
+Nora.on_tick(n)     # every tick — position interpolation
+Sally.on_tick(n)    # slow poll + event callbacks
+Natalie.on_tick(n)  # route and balance checks, slower cadence
+```
+
+Each agent also exposes `on_event(type, payload)` for event-driven callbacks (arrival, departure, fault). In physical deployment, `on_event` is called by MQTT message receipt on the agent's own processor — no master tick involved. The same agent logic runs in both contexts; the difference is only in who calls it and when.
+
+**"1 or more processors" means fault tolerance is possible.** A station chip can have a primary and a standby. A pod can have a nav processor and a separate sensor-fusion processor. The protocol does not assume single-processor agents. Each processor publishes on MQTT; the other agents read without caring whether it came from a primary or backup.
+
+---
+
 ## Cross-Cutting Rules
 
 1. **Payload is always readable.** Sign for authenticity; never encrypt to obscure. Debugging must remain possible without Athena's tooling.
