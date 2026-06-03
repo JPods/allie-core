@@ -810,6 +810,30 @@ Delete `su_jpods/formations/{formation}.json` to force a fresh generation.
 (stub synthesis), Natalie (trip planning), and Nora (ezone boundaries). If the formation
 map says CP0 is at a given position, all three agree. No per-network recalculation.
 
+### 16. Minimum In-Station Arc Radius = 3.5 m — Hard Physical Limit — 2026-06-03
+
+**Rule:** Every arc-geometry track in a station template (`gw_uturn_*` and any future
+arc `gw_*` track) must have a turning radius ≥ 3500 mm (3.5 m). No arc may be tighter.
+Chord between arc endpoints must be ≥ 7000 mm (chord = 2r).
+
+**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 3500.0`
+
+**Enforced at three checkpoints:**
+1. `_generate_uturn_arc_pts_mm` — prints violation, refuses to silently compensate
+2. `populate_from_open_template` — checks chord/2 before writing pts_mm; prints `🚫 FIX MODEL`
+3. `proof_lines` — SEVERE status; blocks animation
+
+**Why this keeps reappearing:** arc generation used a fixed CCW (+π) sweep. For uturns
+at the far end of a station, CCW sweeps *through the station interior* (wrong half-circle).
+The correct arc always bows *outward* — away from the station interior:
+- Far-end uturn (e.g. `gw_uturn_1`): sweep toward more-negative Y (outside the cap)
+- Near-end uturn (e.g. `gw_uturn_0`, CP side): sweep toward less-negative Y (toward CPs)
+
+**For designers:** if proof reports `TURN RADIUS VIOLATION`, move the arc endpoints
+farther apart in the model. The code will not pad a tight arc. The minimum chord is 7 m.
+
+**Full rule:** `readmes/sketchup/jpods-plugin.md` Rule 12.
+
 ---
 
 ## Current Active State (as of 2026-05-18)

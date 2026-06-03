@@ -341,6 +341,30 @@ automatically clear old ones.  The fix: before every Build, erase all
 the stored `connection_points` attribute on each structure.
 Method: `StructurePlacer.refresh_cp_labels(model)` called after `commit_operation`.
 
+### 12. Minimum in-station arc radius = 3.5 m — enforced at three checkpoints
+
+**Rule:** Every arc track in a station template (`gw_uturn_*` and any future arc-geometry `gw_*` track) must have a radius ≥ 3500 mm (3.5 m). No arc may be tighter.
+
+**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 3500.0`
+
+**Why it keeps reappearing:**
+- `_generate_uturn_arc_pts_mm` always swept CCW (+π). For uturns at the far end of a station, CCW produces the *inner* arc (bowing toward the CP end — wrong). The pod cuts through the station interior instead of rounding the outside cap.
+- `populate_from_open_template` did not check the computed radius before writing.
+- No proof check existed — bad arcs reached animation silently.
+
+**Three enforcement points (as of 2026-06-03):**
+
+| Where | File | What it does |
+|-------|------|-------------|
+| Arc generation | `_generate_uturn_arc_pts_mm` | Prints violation if chord/2 < 3500 mm; does not silently compensate |
+| Populate | `populate_from_open_template` | Checks chord/2 before writing pts_mm; prints `🚫 FIX MODEL` |
+| Proof | `proof_lines` | Checks declared `radius_m` and computed chord/2; SEVERE status; blocks animation |
+
+**For template designers:**
+- U-turn endpoint pairs must be ≥ 7000 mm apart (chord = 2r → r = 3500 mm requires chord = 7000 mm).
+- If proof prints `TURN RADIUS VIOLATION`, fix the model — move endpoints farther apart. The code will not pad a bad arc.
+- Far-end uturns (`gw_uturn_1`) must sweep *outward* around the outside cap. Near-end uturns (`gw_uturn_0`, CP side) must sweep *outward* toward the CPs. The correct arc always bows *away* from the station interior.
+
 ---
 
 ## Planned Features
