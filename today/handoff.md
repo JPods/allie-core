@@ -2,51 +2,97 @@
 
 ## What Was Done This Session
 
-### 1. populate_from_open_template — Hash format crash fixed
-- `lines_raw.is_a?(Hash)` branch converts Hash-keyed lines.json to Array before iteration
-- Write-back preserves original format (Hash or Array)
+### 1. Sally — Intersection-based landing routing
 
-### 2. `_validate_connectivity` — redesigned + argument fix
-- Argument count fixed (3 args: template_data, formation_id, gw_index)
-- Walks DECLARED chains only; landing_chains format detection (Hash vs Array)
-- Feedback: ✓/⚠/🚫 per junction; explicit warnings for empty/missing/malformed chains
+`_final_approach_tracks(hl_loop, landing_chain)` implemented in `jpod_sally.rb`.
+Finds the first track shared between the outer hold loop and the landing_chain (O(1)
+Set lookup). Returns `hl_loop[0..exit_idx] + landing_chain[(lc_exit_idx+1)..]`.
+ONE algorithm for all station templates.
 
-### 3. Sally — chain feedback
-- Empty hold_loop_chain segments get ⚠ warnings
-- landing_chains/exit_chains: explicit format detection + warnings in init_sequencer_for_station
+Priority order in `on_maneuver_complete` promote branch:
+1. Direct-park (`hl_to_platform == []`) → `:land` with empty tracks
+2. Intersection approach (landing_chains defined + intersection found) → `:land` with partial loop + chain tail
+3. Declared `to_platform` (non-empty Array) → `:land` with declared tracks
+4. Legacy nil → `landing_chains[cp]` directly
+5. No path → continue looping
 
-### 4. MIN_STATION_ARC_RADIUS_MM = 3500.0
-- Added to jpod_constants.rb
-- Enforced: _generate_uturn_arc_pts_mm / populate / proof_lines (3 checkpoints)
-- Documented: CLAUDE.md Axiom 16, jpods-plugin.md Rule 12
+### 2. station_parking/lines.json — landing_chains added
 
-### 5. Exterior arc fix — `_generate_uturn_arc_pts_mm`
-- Accepts `station_centroid_mm:` keyword arg
-- Centroid computed from all gw_* endpoints after gw_index built (both populate functions)
-- CCW vs CW: whichever arc midpoint is FARTHER from centroid = exterior arc
-- Fixes gw_uturn_1 wrong half-circle (was always CCW → interior for far-end uturns)
+```json
+"landing_chains": {
+  "in_cp0": {
+    "tracks": ["gw_cp_in_lead_0", "gw_platform_in1", "gw_platform_in2"]
+  }
+}
+```
 
-### 6. station_line_end hold_loop_chain.loop corrected (lines.json data fix)
-- Root cause: loop ended at gw_cp_in_lead_0; no physical path back to gw_uturn_1 without platform tracks
-- 43,000mm gap caused animator to cross via gw_platform, skipping gw_platform_in + gw_platform_parking
-- Fix: loop = 8 tracks (added gw_platform_in, gw_platform_parking after gw_cp_in_lead_0)
-- to_platform changed to ["gw_platform"] (final slot assignment)
-- Rule: station_line_end has no platform bypass — approach tracks ARE the loop connection
+Intersection at `gw_cp_in_lead_0` (index 6 in hl_loop). Final approach = 7 partial
+loop + 2 platform approach = 9 tracks total.
+
+### 3. Platform departure fix — `_pts_tail_from_near`
+
+Added to `module RubyNatalie` in `jpod_vehicle_anim.rb`. Projects pod's current position
+onto the platform polyline, returns forward tail only (never reverses). Used by
+`build_maneuver_from_tracks` when `clip_start: true` — hold_loop departure now
+passes this flag. Pod at slot N exits forward directly; never reverses to slot 1.
+
+### 4. Two crash fixes
+
+- `LIFT_RE = /gw_lift/i` inside method → renamed to local `lift_re` (Ruby forbids
+  constant assignment in method bodies)
+- `_pts_tail_from_near` was in `module JPodVehicleAnim` but called from `module RubyNatalie`
+  → moved to RubyNatalie; call site updated from `JPodGuideway._pts_tail_from_near` to plain `_pts_tail_from_near`
+
+### 5. Trip Sequence preview — expanded JSON format
+
+`preview_hold_loop_sequence` output changed from 4-phase labeled text to flat
+`{"trip":[...]}` JSON with loops fully expanded (target_loops repetitions).
+Warnings become `//` comments. Header shows total distance.
+
+### 6. Trip Sequence task + console panel
+
+- New console task: Models > Stations > "Show Trip" button. No vehicle required.
+  Returns `__TRIPSEQ__:` prefix → dispatched by `cmd_execute` to `showTripSequence()`.
+- `showTripSequence(text, label)` creates persistent `<div id="trip-sequence-panel">`
+  below task controls. Green monospace, ✕ close, 55vh max-height. Clears on nav away.
+- `_TRIP_PANEL_TASK_IDS` controls which tasks keep the panel visible.
+
+### 7. All work committed + pushed
+
+6 commits to su_jpods_claude branch, JPods/sketchup.git.
 
 ## Status
 
-### Done ✓
-All items above committed to su_jpods_claude, pushed to JPods/sketchup.git (9050f19)
+S002 (JPods_station_parking) hold_loop animation working end-to-end:
+- Pod enters loop → traverses outer ring → takes intersection branch → parks at slot N
+- Departure: pod clips gw_platform at slot position → exits forward only
 
-### Still Open
-1. **Direction preservation**: populate writes pts_mm in arbitrary mesh order. proof shows gw_platform, gw_far_main, gw_lift, gw_platform_parking REVERSED (end_delta ≈ full length). Fix: after extracting sp/ep from model, compare against declared startPoint in lines.json; swap if reversed.
-2. **Inverse transform in proof_lines**: Z offsets (312.5mm, 62.5mm) are coordinate system artifacts — populate wrote local coords, proof reads world coords. Fix: apply inverse instance transform before comparison.
-3. **First maneuver event not logged**: trajectory starts with tick data for hold_loop[7/7] but no preceding maneuver event. Logging gap in animator.
+## Still Open
+
+1. **Arc undersampling** — gw_uturn_0/gw_uturn_1 in station_parking are 2-pt chord
+   (not 56-pt arc). Fix: reopen station_parking template in SketchUp → Workflow > Generate
+   Template Data. Sally's `_generate_uturn_arc_pts_mm` will produce the arc; `populate_from_open_template` writes it.
+
+2. **Hold Loop task trip preview** — Hold Loop task run lambda does not yet emit
+   `__TRIPSEQ__:` prefix. Add it so the trip panel fires automatically when the task runs,
+   not only from the Trip Sequence task.
+
+3. **Vehicle trip detail in panel** — `showTripSequence` ready for vehicle trips.
+   When a vehicle is selected and animating, show its actual maneuver sequence in the panel.
+   Add vehicle task ID(s) to `_TRIP_PANEL_TASK_IDS` when built.
+
+4. **S007 / S008 geometry drift** — proof shows SEVERE on multiple tracks. Not yet addressed.
 
 ## Next Session Start
 
-1. Reload: `load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')`
-2. Run: `JPods::PathJSON.populate_from_open_template` on station_line_end model
-3. Verify console: centroid printed, arc sweep CW for gw_uturn_1, 8-track loop in Sally
-4. Animate — verify no jump from gw_cp_in_lead_0; pod traverses gw_platform_in + gw_platform_parking on every loop
-5. Next fix: direction preservation for straight tracks (biggest remaining proof SEVERE)
+```
+load Sketchup.find_support_file('jpod_sally.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
+```
+
+1. Open station_parking template model
+2. Workflow > Generate Template Data → verify gw_uturn_0/gw_uturn_1 get 56-pt arcs
+3. Close template; reload plugin; open network model
+4. Run Trip Sequence task on S002 → verify expanded JSON in trip panel
+5. Run Hold Loop on S002 → verify pod exits platform forward, arcs exterior, parks at slot N
+6. Add `__TRIPSEQ__:` output to Hold Loop task run lambda
