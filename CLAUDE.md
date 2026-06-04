@@ -810,27 +810,34 @@ Delete `su_jpods/formations/{formation}.json` to force a fresh generation.
 (stub synthesis), Natalie (trip planning), and Nora (ezone boundaries). If the formation
 map says CP0 is at a given position, all three agree. No per-network recalculation.
 
-### 16. Minimum In-Station Arc Radius = 3.5 m — Hard Physical Limit — 2026-06-03
+### 16. Minimum In-Station Arc Diameter = 3.5 m — Hard Physical Limit — Updated 2026-06-04
 
-**Rule:** Every arc-geometry track in a station template (`gw_uturn_*` and any future
-arc `gw_*` track) must have a turning radius ≥ 3500 mm (3.5 m). No arc may be tighter.
-Chord between arc endpoints must be ≥ 7000 mm (chord = 2r).
+**Rule:** Every arc-geometry track in a station template (`gw_uturn_*`, `gw_c_*`, and
+any future arc `gw_*` track) must have a turning **radius ≥ 1750 mm (diameter ≥ 3.5 m)**.
+No arc may be tighter. `gw_uturn_*` arcs are exactly at this limit (chord = 3.5 m,
+radius = 1.75 m). Updated 2026-06-04: rule is minimum DIAMETER 3.5 m, not radius 3.5 m.
 
-**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 3500.0`
+**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 1750.0`
 
 **Enforced at three checkpoints:**
 1. `_generate_uturn_arc_pts_mm` — prints violation, refuses to silently compensate
-2. `populate_from_open_template` — checks chord/2 before writing pts_mm; prints `🚫 FIX MODEL`
-3. `proof_lines` — SEVERE status; blocks animation
+2. `populate_from_open_template` — checks ArcCurve radius and chord/2; prints `🚫 FIX MODEL`
+3. `proof_lines` — checks extracted.json segment radius; prints `🚫 ARC DIAMETER VIOLATION`
 
-**Why this keeps reappearing:** arc generation used a fixed CCW (+π) sweep. For uturns
-at the far end of a station, CCW sweeps *through the station interior* (wrong half-circle).
-The correct arc always bows *outward* — away from the station interior:
-- Far-end uturn (e.g. `gw_uturn_1`): sweep toward more-negative Y (outside the cap)
-- Near-end uturn (e.g. `gw_uturn_0`, CP side): sweep toward less-negative Y (toward CPs)
+**gw_cp_in_* direction standard — established 2026-06-04:**
+Every `gw_cp_in_*` component must contain a 172mm edge on the `vector_in` tag at the
+component local origin, pointing in pod travel direction. This is the explicit model datum
+(Axiom 10). `populate_from_open_template` and `proof_lines` both warn when it is missing.
 
-**For designers:** if proof reports `TURN RADIUS VIOLATION`, move the arc endpoints
-farther apart in the model. The code will not pad a tight arc. The minimum chord is 7 m.
+**ArcCurve extraction — established 2026-06-04:**
+`populate_from_open_template` now checks for SketchUp ArcCurve edges first (Priority 1)
+before falling back to bounding-box extraction (Priority 2). ArcCurve gives exact
+connected pts, correct radius, and ordered vertex chain — essential for traffic-circle-style
+stations where bounding-box extraction gives disconnected endpoints.
+
+**For designers:** if proof reports `ARC DIAMETER VIOLATION`, the arc was drawn too tight.
+Move endpoints farther apart or increase the arc radius in the SketchUp model. Minimum
+chord for a uturn (semicircle) is 3.5 m (chord = 2r = diameter).
 
 **Full rule:** `readmes/sketchup/jpods-plugin.md` Rule 12.
 
