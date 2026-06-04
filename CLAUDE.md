@@ -810,19 +810,22 @@ Delete `su_jpods/formations/{formation}.json` to force a fresh generation.
 (stub synthesis), Natalie (trip planning), and Nora (ezone boundaries). If the formation
 map says CP0 is at a given position, all three agree. No per-network recalculation.
 
-### 16. Minimum In-Station Arc Diameter = 3.5 m — Hard Physical Limit — Updated 2026-06-04
+### 16. Minimum In-Station Arc — Updated 2026-06-04
 
-**Rule:** Every arc-geometry track in a station template (`gw_uturn_*`, `gw_c_*`, and
-any future arc `gw_*` track) must have a turning **radius ≥ 1750 mm (diameter ≥ 3.5 m)**.
-No arc may be tighter. `gw_uturn_*` arcs are exactly at this limit (chord = 3.5 m,
-radius = 1.75 m). Updated 2026-06-04: rule is minimum DIAMETER 3.5 m, not radius 3.5 m.
+**Three concentric radii — beam width = 500 mm (250 mm each side):**
+- Inside rail: 1500 mm — ArcCurve in SketchUp; what `MIN_STATION_ARC_RADIUS_MM` enforces
+- Centerline:  1750 mm — pod travel path; physical minimum for vehicle dynamics
+- Outside rail: 2000 mm — outer envelope
 
-**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 1750.0`
+No arc may have inside-rail radius < 1500 mm. `gw_uturn_*` arcs are exactly at this limit
+(inside chord = 3.0 m, inside radius = 1.5 m, centerline = 1.75 m, outside = 2.0 m).
+
+**Source of truth:** `jpod_constants.rb` → `MIN_STATION_ARC_RADIUS_MM = 1500.0`
 
 **Enforced at three checkpoints:**
 1. `_generate_uturn_arc_pts_mm` — prints violation, refuses to silently compensate
 2. `populate_from_open_template` — checks ArcCurve radius and chord/2; prints `🚫 FIX MODEL`
-3. `proof_lines` — checks extracted.json segment radius; prints `🚫 ARC DIAMETER VIOLATION`
+3. `proof_lines` — checks extracted.json segment radius; prints `🚫 ARC RADIUS VIOLATION`
 
 **gw_cp_in_* direction standard — established 2026-06-04:**
 Every `gw_cp_in_*` component must contain a 172mm edge on the `vector_in` tag at the
@@ -834,10 +837,6 @@ component local origin, pointing in pod travel direction. This is the explicit m
 before falling back to bounding-box extraction (Priority 2). ArcCurve gives exact
 connected pts, correct radius, and ordered vertex chain — essential for traffic-circle-style
 stations where bounding-box extraction gives disconnected endpoints.
-
-**For designers:** if proof reports `ARC DIAMETER VIOLATION`, the arc was drawn too tight.
-Move endpoints farther apart or increase the arc radius in the SketchUp model. Minimum
-chord for a uturn (semicircle) is 3.5 m (chord = 2r = diameter).
 
 **Full rule:** `readmes/sketchup/jpods-plugin.md` Rule 12.
 

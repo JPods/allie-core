@@ -1,0 +1,57 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-03T22:13:28Z",
+  "model": "animation2",
+  "stations": [
+    {
+      "station_id": "S002",
+      "formation_id": "JPods_station_parking",
+      "ok": 17,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 1,
+      "arc": 2,
+      "file": "20260603T221328-proof-S002.json"
+    },
+    {
+      "station_id": "S004",
+      "formation_id": "station_line_end",
+      "ok": 0,
+      "warn": 9,
+      "severe": 5,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 0,
+      "file": "20260603T221328-proof-S004.json"
+    },
+    {
+      "station_id": "S007",
+      "formation_id": "station_thru_dip",
+      "ok": 6,
+      "warn": 5,
+      "severe": 4,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 4,
+      "file": "20260603T221328-proof-S007.json"
+    },
+    {
+      "station_id": "S008",
+      "formation_id": "traffic_circle7",
+      "ok": 10,
+      "warn": 1,
+      "severe": 13,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 0,
+      "file": "20260603T221328-proof-S008.json"
+    }
+  ],
+  "total_ok": 33,
+  "total_warn": 15,
+  "total_severe": 22,
+  "total_missing": 0,
+  "total_undeclared": 1,
+  "total_arc": 6
+}
