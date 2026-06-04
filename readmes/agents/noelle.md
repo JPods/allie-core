@@ -65,6 +65,77 @@ This is the constitutional boundary between model designer and Noelle:
 
 ---
 
+## Noelle's Two Modes — Model and Network
+
+Noelle operates in exactly two modes. She never mixes them. Debugging done in
+model_mode produces no artifacts visible to network_mode, and vice versa.
+
+---
+
+### model_mode — Template Authoring
+
+**When:** The designer opens a template `model.skp` directly in SketchUp.
+
+**What Noelle does:**
+- Scans live SketchUp geometry for gw_* tagged entities
+- Extracts CP positions from cp_marker_* components → writes `cp.json`
+- Extracts track geometry (pts_mm, tangents, arc radii) → writes `extracted.json`
+- Validates arc diameters, vector_in edges, connectivity within the template
+
+**What Noelle reads:** live SketchUp model geometry (no network files needed)
+
+**What Noelle writes:**
+- `templates/track_formations/{formation}/cp.json` — CP positions in template-local coordinates
+- `templates/track_formations/{formation}/extracted.json` — track geometry in template-local coordinates
+
+**Entry point:** `Models › Extract Template` (console step 3)
+
+**The contract:** When model_mode finishes cleanly, the template is ready for network deployment. cp.json and extracted.json are the handoff artifacts. They are never written by network_mode.
+
+---
+
+### network_mode — Network Operations
+
+**When:** A network model (with placed station instances) is the active model.
+
+**What Noelle does:**
+- Reads `lines.json` (designer-authored topology) for routing declarations
+- Reads `extracted.json` (Noelle-authored geometry) for track pts_mm
+- Reads `cp.json` (Noelle-authored) for CP world positions after transform
+- Builds `map.json` + `path.json` at Build time (world coordinates)
+- Runs `Network Geometry` check to verify all placed stations have complete extracted.json
+- Validates, routes, animates
+
+**What Noelle reads:** `lines.json`, `extracted.json`, `cp.json`, SketchUp inter-station beam_path attributes
+
+**What Noelle writes:** `map.json`, `path.json` (network-scope, world coordinates, rebuilt on every Build)
+
+**What Noelle never writes in network_mode:** `cp.json`, `extracted.json` — those belong to model_mode
+
+**Entry points:**
+- `Models › Network Geometry` (step 4) — read-only validation
+- `Models › Build` — generates map.json + path.json
+
+**If extracted.json is missing:** BUILD fails immediately with a loud error naming the template. The fix is always: open the template model and run Extract Template. Network_mode never extracts geometry from a placed instance as a fallback.
+
+---
+
+### Data Ownership Summary
+
+| File | Authored by | Read by | Never written by |
+|------|-------------|---------|------------------|
+| `lines.json` | Model designer | Noelle network_mode | Noelle (either mode) |
+| `cp.json` | Noelle model_mode | Noelle network_mode | Noelle network_mode |
+| `extracted.json` | Noelle model_mode | Noelle network_mode | Noelle network_mode |
+| `map.json` | Noelle network_mode | Natalie, Nora, Alice | Noelle model_mode |
+| `path.json` | Noelle network_mode | Nora animator | Noelle model_mode |
+
+**lines.json contains only topology — never coordinates.**
+pts_mm, startPoint, endPoint, length_mm, segments are extracted.json fields.
+If coordinates appear in lines.json, they are legacy contamination — remove them.
+
+---
+
 ## Noelle as Slime Mold — Sensor-Driven Network Optimization
 
 Physarum polycephalum (slime mold) finds optimal paths through a network by
