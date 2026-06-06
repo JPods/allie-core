@@ -37,6 +37,8 @@ Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresente
 | 2026-04-04 | ezForeignPods table tracks converging pods' entry distance for speed calculation | Each Nora independently computes her approach timing; no central coordination needed |
 | 2026-05-31 | Noelle refuses any template whose lines.json lacks both `eps_header` and `eps[]` | eps[] is the topological contract authored and approved by the model designer. Without `eps_header`, the contract has not been approved — Noelle cannot safely route through an unverified topology. Fault message directs the model designer to author eps[] and run Lines JSON Build from eps. |
 | 2026-05-31 | map.json and path.json are built per-network at BUILD time, not pre-built at template level | World coordinates depend on instance placement. Inter-station segments (seg_*) are inherently network topology. lines.json (local coords + topology) IS the template-level pre-build. BUILD reads it and applies world transform. Adding a template-level map.json would duplicate lines.json at a different coordinate level — work done twice, new format to maintain. |
+| 2026-06-06 | Segment IDs are permanent — assigned once in `{model}.segment_registry.json`, never reused | map.json schema v4 adds `id` field to every line entry. Once a segment is built and assigned an ID, that ID is permanent across all future rebuilds. Retired segments (deleted/renamed) get `retired_at` timestamp — their ID is never reassigned. This allows history tracking, telemetry correlation, and maintenance records to key on a stable integer. Sequential-on-every-Build IDs broke all prior correlation. |
+| 2026-06-06 | Proof Lines scopes to active template formation; never crosses CP boundaries | `populate_from_open_template` sets `@active_template_formation`; `proof_lines` filters to that formation only. When the template model is active OR Extract Template was run in the current session, Proof shows only that template. Station label is `{formation} (to_be_assigned)` — no network S-ID until placed. Running Proof from the full network model (with no active template set) shows all stations. |
 
 ---
 
@@ -129,6 +131,7 @@ model_mode produces no artifacts visible to network_mode, and vice versa.
 | `extracted.json` | Noelle model_mode | Noelle network_mode | Noelle network_mode |
 | `map.json` | Noelle network_mode | Natalie, Nora, Alice | Noelle model_mode |
 | `path.json` | Noelle network_mode | Nora animator | Noelle model_mode |
+| `{model}.segment_registry.json` | Noelle network_mode (Build) | Noelle network_mode | model_mode |
 
 **lines.json contains only topology — never coordinates.**
 pts_mm, startPoint, endPoint, length_mm, segments are extracted.json fields.

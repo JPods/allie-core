@@ -367,6 +367,46 @@ Method: `StructurePlacer.refresh_cp_labels(model)` called after `commit_operatio
 
 ---
 
+### 13. Proof Lines — behavior rules (established 2026-06-06)
+
+**Template-model scope:**
+- When `populate_from_open_template` (Extract Template) runs, it sets `PathJSON.@active_template_formation`.
+- `proof_lines` reads this and restricts the scan to stations with that `formation_id` only.
+- Other stations are silently excluded — Proof never crosses CP boundaries into a different template.
+- Template station label: `{formation} (to_be_assigned)`. No network S-ID until the template is placed.
+- Running Proof from the full network model (without a recent Extract Template) shows all stations.
+
+**end_delta comparison:**
+- `delta = min(dist(dec_ep, fnd_ep), dist(dec_ep, fnd_sp))` — scanner has no direction guarantee.
+- `↺` is printed when scanner returned pts reversed relative to extracted.json; this is a scanner limitation, not a geometry error. Animation uses extracted.json (correctly directed by `vector_in`).
+- Genuine SEVERE: delta is large in both directions — endpoint is physically at the wrong location.
+
+**Synthetic arc (ARC status):**
+- Any track with `radius_mm > 0` and `pts > 2` is classified ARC, not SEVERE.
+- The scanner cannot recover the centerline from a FollowMe solid beam — endpoint comparison is meaningless.
+- ARC tracks are excluded from the SEVERE counter. Animation uses the declared synthetic arc pts.
+- `gw_uturn_*` is always ARC.
+
+**bbox sanity bounds — Priority 1.5 (Extract) and Priority 2 (Scanner):**
+- Extract Priority 1.5 edge-trace: rejected if `traced_len < bbox_diag * 0.6` (cross-section noise).
+  - ene_railroad solid components have cross-sectional edges that trace a short rectangle (~4pts).
+  - Rejection falls through to Priority 2 (endpoint extraction from bounding box).
+- Scanner Priority 2 edge-trace: same lower bound plus `> bbox_diag * 2.0` upper bound.
+  - Rejects solid-beam perimeter traversal (gw_uturn solid was returning 56pts/25173mm).
+  - Rejection falls through to Priority 3 (bounding-box span endpoints).
+
+**Status thresholds:**
+| Status | Condition |
+|--------|-----------|
+| ✓ OK | delta < 50mm |
+| ⚠ WARN | 50mm ≤ delta < 500mm |
+| 🚫 SEVERE | delta ≥ 500mm |
+| ARC | synthetic arc — scanner comparison skipped |
+| MISSING | declared in lines.json, not found in model |
+| UNDECLARED | found in model, not in lines.json |
+
+---
+
 ## Planned Features
 
 See `readmes/sketchup/jpods-feature-list.md` for the full feature list.
