@@ -1,67 +1,76 @@
----
-date: 2026-05-23
-status: HANDED OFF — session end
----
-
-# Handoff — 2026-05-23 (Session 2)
-**Branch:** su_jpods_claude (JPods/sketchup.git)
-**Last commit:** 05aba93 — "Add Station Names — rename Routes category, editable friendly names"
-
----
+# Handoff — 2026-06-06
 
 ## Where We Stopped
 
-Trip Simulator phone UI is complete and committed. Station Names feature added. All changes pushed.
+Working through the template data pipeline. traffic_circle7 extracted and Proof clean (4 OK, 20 WARN, 0 SEVERE). The other 3 templates need Extract Template + Proof run with the same fixes now in place.
 
-The session started by carrying forward CP boundary fixes and parking fixes from session 1, then built the entire trip simulation UI from scratch:
-- JPods brand-colored SVG logo
-- WEBrick endpoints (future phone use) → discovered WEBrick not available → switched to UI::HtmlDialog callbacks
-- Phone hotspot support (0.0.0.0 bind, auto-detect host in JS)
-- Plugins → JPods → Trip Simulator… menu item
-- Full event logging at booked/boarding/dispatched/arrived transitions
-- Station Names: Console "Station" category, editable S### friendly names, entity attribute storage
+## What Was Completed This Session
 
----
+### 1. Permanent Segment ID Registry (noelle.rb)
+- `{model}.segment_registry.json` alongside `.skp`
+- IDs increment only upward; retired segments get `retired_at`, never reassigned
+- Map schema v4 — `id` field on every line entry
+- jpod_vehicle_anim.rb comments updated for v4
 
-## Untested at Session End
+### 2. Proof Lines — 3 Major Fixes (jpod_path_json.rb)
 
-1. **Station Names table** — Bill was reloading to test when context ran out. Reload and try Console → Station → Station Names.
-2. **Trip Simulator end-to-end** — HtmlDialog opens, callbacks wire to DispatchServer, but actual animation trigger from trip UI not tested in this session.
-3. **Camera follow** — `follow_camera_tick`, `zoom_vehicle`, `zoom_network` implemented but not live-tested.
-4. **Natalie 6s idle dispatch** — carried from session 1, still untested.
+**Template-model scope:**
+- `populate_from_open_template` sets `@active_template_formation`
+- `proof_lines` reads it; shows ONLY that template (other stations excluded)
+- Label: `traffic_circle7 (to_be_assigned)` — no S-prefix until placed in network
+- Summary line uses formation name, not station_id
 
----
+**bbox sanity check — Priority 1.5 (Extract) and Priority 2 (Scanner):**
+- Extract Priority 1.5: rejects edge_trace when `traced_len < bbox_diag * 0.6`
+  - Eliminates cross-section noise (gw_in_*/gw_c_* at ~1232mm vs ~9539mm diagonal)
+  - Accepts gw_cp_in_* (ratio ~1.0)
+- Scanner Priority 2: same lower bound + upper `> bbox_diag * 2.0` rejects solid perimeter traversal
+  - gw_uturn was 56pts/25173mm (solid perimeter walk); now falls to Priority 3 bbox → 2pts
 
-## First Thing Next Session
+**min-delta endpoint comparison:**
+- `delta = min(dist(dec_ep, fnd_ep), dist(dec_ep, fnd_sp))`
+- Scanner has no direction guarantee; position verified regardless of order
+- `↺` flag when scanner direction reversed (informational only — animation uses extracted.json)
 
-1. Reload (one line, no breaks):
-   ```
-   $jpods_registered = nil; $jpods_main_loaded = nil; load Sketchup.find_support_file('main.rb', 'Plugins/su_jpods')
-   ```
-2. Console → Station → Station Names — confirm S### table + save
-3. Plugins → JPods → Trip Simulator… — confirm dialog opens, stations load
-4. Book a trip and watch console for `[JPods TripUI] trip booked` / `dispatched` / `arrived` messages
-5. Test Natalie idle dispatch — place 6 vehicles, animate, watch for `[Natalie dispatch]` every 6s
+**Synthetic arc handling:**
+- `radius_mm > 0 && pts > 2` → ARC status, not SEVERE
+- gw_uturn_* correctly classified as ARC
 
----
+### 3. Results — traffic_circle7
 
-## Open Issues
+```
+SUMMARY: 4 OK | 20 WARN | 0 SEVERE | 0 ARC
+```
+- 4 OK: gw_cp_in_0/1/2/3 (3pts, 2672mm, edge_trace, direction corrected via vector_in)
+- 20 WARN: ↺ scanner-direction noise + small endpoint deltas (≤313mm) — not blocking
 
-1. Natalie 6s idle dispatch — committed 944316c, not tested
-2. S002 single vehicle "1m then freeze" — reported, not debugged
-3. Camera follow — implemented, untested
-4. Station template stubs at 7.5m height — structural redesign needed (F-07)
+## What Needs to Be Done Next
 
----
+### Immediate: Extract remaining 3 templates
+Each: open template model → [3] Extract Template → [5] Proof Lines
 
-## Key File Locations (this session's changes)
+1. **JPods_station_parking** — `templates/track_formations/JPods_station_parking/model.skp`
+   - gw_lift_parking had 898mm SEVERE from network scan; Extract may fix it
+   - gw_cp_in_* will gain 3rd pt once extracted with Priority 1.5
 
-| File | What changed |
-|------|-------------|
-| `su_jpods/ui/trip/index.html` | Brand SVG logo, HtmlDialog callback wrappers, auto-detect API host |
-| `su_jpods/dispatch_server.rb` | get_stations, register_trip_ui, get_trip_status, enter_trip_ui, camera actions, _allie_capture |
-| `su_jpods/jpod_trip_dialog.rb` | New — UI::HtmlDialog wrapper, 4 action callbacks |
-| `su_jpods/main.rb` | jpod_trip_dialog in load list, Trip Simulator… menu item |
-| `su_jpods/jpod_console.rb` | Routes → Station, station_names task, cmd_set_station_names callback |
-| `su_jpods/jpod_animator.rb` | all_stations_in_model class method added |
-| `su_jpods/dialogs/console.html` | .sn-table CSS, stationNameChanged + saveStationNames JS |
+2. **station_thru_dip** — `templates/track_formations/station_thru_dip/model.skp`
+
+3. **station_line_end** — `templates/track_formations/station_line_end/model.skp`
+
+### After all 4 templates extracted:
+4. [2] Lines Build from Template on each (sync declared lengths)
+5. Open network → Noelle Build → writes map.json with permanent IDs (first registry)
+6. Animate → verify S002→S003 trip
+
+## Open Known Issues
+
+- **gw_uturn ARC**: 13-pt synthetic arc at 4699mm; ARC status suppresses SEVERE. Functionally acceptable for animation.
+- **↺ direction warnings**: scanner-side only. extracted.json is correctly directed. Not blocking.
+- **gw_lift_parking S002**: 898mm SEVERE from network scan — will re-check after Extract Template on JPods_station_parking.
+
+## Reload Commands
+
+```
+load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('noelle.rb', 'Plugins/su_jpods')
+```
