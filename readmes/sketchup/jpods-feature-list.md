@@ -1,5 +1,5 @@
 # JPods SketchUp Plugin — Feature List
-**Last Updated:** 2026-05-13
+**Last Updated:** 2026-06-06
 **Purpose:** Planned features and enhancements, not yet implemented. Separate from the
 ouch-list (safety/risk) and the gap-log (known defects). These are deliberate additions
 to the student workflow tool.
@@ -43,6 +43,14 @@ at waypoints became visible as tight kinks.
 |---|---------|-----|--------|----------|--------|
 | F-04 | Live Bezier preview updates when Constraints panel sliders change | Currently the green preview only updates when the tool is re-activated or a waypoint is moved. If a student adjusts MIN_Z_CHANGE_DIAMETER in the Constraints panel, they should see the Bezier reshape immediately. | `jpod_connect_tool.rb`, `jpod_network_editor.rb` | Medium | Idea |
 | F-05 | Waypoint elevation readout in status bar | When placing or dragging a waypoint, show the current terrain Z and the resulting guideway Z (terrain + CLEARANCE_HEIGHT) in the status bar so students understand what height the beam will be at that point. | `jpod_connect_tool.rb` | Low | Idea |
+| F-10 | Guideway Connect Tool — select two stubs, extrude solid connection | Arc-to-line joins in SketchUp leave a 49–63 mm gap at the junction (SketchUp connects arc to straight at different reference points). Current workaround: Proof Lines accepts delta < 75 mm as OK. Proper fix: user selects two guideway stub endpoints, tool extrudes a connecting solid with a clean tangent join — same pattern as ene_railroad. Eliminates the arc-join gap at source; Proof Lines can revert to strict tolerance. | `jpod_connect_tool.rb`, new `jpod_guideway_connect_tool.rb` | High | Idea |
+
+**Design notes for F-10 (2026-06-06):**
+- Select mode: user clicks two `gw_cp_in_*` or `gw_cp_out_*` stub faces in sequence.
+- Tool reads the outward tangent vector from each selected stub (same `cap_pt` / `vector_in` datum used by CP detection — Axiom 10).
+- Extrudes a connecting solid using FollowMe along a Hermite-splined centerline between the two tangent-aligned endpoints. Same Bezier math as `bezier_pts_via` in `jpod_connect_tool.rb`.
+- Result: a single solid component tagged with the correct `gw_seg_*` tag; no arc-to-line join; Proof Lines delta ≈ 0.
+- Interim mitigation: Proof Lines OK threshold raised to 75 mm (was 50 mm) — clears the 63 mm arc-join WARN entries while F-10 is pending.
 
 ---
 

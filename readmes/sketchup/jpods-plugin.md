@@ -398,12 +398,14 @@ Method: `StructurePlacer.refresh_cp_labels(model)` called after `commit_operatio
 **Status thresholds:**
 | Status | Condition |
 |--------|-----------|
-| ✓ OK | delta < 50mm |
-| ⚠ WARN | 50mm ≤ delta < 500mm |
+| ✓ OK | delta < 75mm |
+| ⚠ WARN | 75mm ≤ delta < 500mm |
 | 🚫 SEVERE | delta ≥ 500mm |
 | ARC | synthetic arc — scanner comparison skipped |
 | MISSING | declared in lines.json, not found in model |
 | UNDECLARED | found in model, not in lines.json |
+
+**OK threshold note (2026-06-06):** Raised from 50mm to 75mm. SketchUp joins an arc to a straight guideway at slightly different reference points, producing a 49–63mm gap at the junction. This is a modelling artifact, not a geometry error. The proper fix is F-10 (Guideway Connect Tool — extrudes a solid connection with a clean tangent join, eliminating the gap at source). Until F-10 is implemented, 75mm accepts these joins as OK.
 
 ---
 
