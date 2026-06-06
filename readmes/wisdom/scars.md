@@ -250,6 +250,38 @@ and dnw." tf/dnw is now an **established protocol**, not an experiment.
 
 ---
 
+## Beam Solid Trace Beats Centerline Arc — 2026-06-06
+
+**Cost:** Multiple sessions of chaotic gw_uturn_1 animation. Y values oscillating
+past the ±1500mm semicircle endpoints to ±2000mm. Z jumping between two values.
+Pod appearing to loop the outer rail circle rather than traverse the centerline.
+cp_lead tracks traversed instantaneously with wrong endpoints (300mm chord instead
+of 2500mm horizontal). Each symptom was individually diagnosable but the root cause
+was not visible until anim-coords.jsonl was read to check the `source` field.
+
+**What was hard to see:** The animator has a three-source lookup assembly
+(path.json → map.json → edge_lookup). path.json was loading the correct 13-pt
+centerline arc. The merge was then replacing it with the edge_lookup entry — which
+had 56 pts (more!) and source=edge_attr. "More pts = better arc" is a reasonable
+assumption for upgrading chords. It is wrong when the edge_lookup reads the FollowMe
+beam solid instead of the original ArcCurve. The FollowMe solid has many more edges
+than the centerline arc — outer rail full circle, inner rail, top and bottom face
+edges with Z jumps — all of which are "edges" and all of which are wrong for animation.
+
+The second rule (extracted→edge_attr) had inverted semantics. "extracted" means
+*we already got the centerline from the ArcCurve during Build*. ":edge_attr" means
+*we read the live beam solid now*. The rule read it as "stored attribute beats
+computed extraction" — the opposite of what the names mean.
+
+**The rule it produced:** edge_lookup may only upgrade a chord (≤2 pts). If path.json
+already has a multi-pt extracted centerline, edge_lookup loses. Check `source` in
+anim-coords.jsonl first — source=edge_attr on an arc track means the merge fired wrong.
+
+**Where the rule lives:** `readmes/agents/natalie.md` Design Decisions 2026-06-06;
+`jpod_vehicle_anim.rb` edge_lookup merge comment (lines ~1826-1834).
+
+---
+
 ## [Scars not yet paid — watching]
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |

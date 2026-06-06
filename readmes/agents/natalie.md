@@ -90,6 +90,7 @@ Natalie Pi comes online:
 | 2026-05-22 | Compact-toward-exit rule: Sally assigns highest empty slot so departure end stays populated | Pods nearest exit depart first; entrance stays open for arrivals; never move a pod backward |
 | 2026-05-22 | Overlap threshold < 2.49m (was < 2.5m) — 1 cm tolerance for float boundary | Vehicles placed at exactly slot_spacing apart produce distance_m = 2.4999... due to SU inches→meters conversion; threshold must leave room for floating-point representation |
 | 2026-05-22 | compact_platform_static uses uncapped arc-length slot_count (removed STANDARD_TEST_MAX_PARKING_SPACES_PER_PLATFORM cap) | Parking cycle assigns slots from arc-length; compact must match or it treats slots above the cap as "already correct" and refuses to rearrange them |
+| 2026-06-06 | **Three-source lookup assembly: path.json wins over map.json; edge_lookup only upgrades chords (≤2 pts)** | path.json stores centerline arcs extracted from ArcCurve entities during Build — this is authoritative geometry. map.json fills gaps. edge_lookup may only replace an entry when json_entry has ≤2 pts (a chord needing arc promotion). build_edge_lookup_from_model reads FollowMe beam solid edges — more pts than path.json but wrong shape (50+ face edges vs. 12-24 centerline arc pts). Diagnostic: check source field in anim-coords.jsonl first; source=edge_attr on an arc track means the merge fired incorrectly. |
 
 ---
 
