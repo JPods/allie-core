@@ -259,3 +259,16 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Promote to active work** when a risk crosses from "long-tail" to "immediate" — create an Action in WebClerk project 25 and link back to this entry.
 - **Severity is a starting guess.** Revise it as we learn more. Do not anchor to the first estimate.
 - **Ownership is primary domain.** Any agent can flag a cross-domain dimension. That is not overstepping — that is the protocol.
+
+### OL-SU-09 — gw_lift_parking endpoint error (3D ramp, bbox Z wrong)
+- **Symptom:** Proof Lines SEVERE 898mm on gw_lift_parking in JPods_station_parking
+- **Root cause:** bbox Priority 3 sets `z_top = zs.max` for BOTH endpoints of a 3D ramp. The lower end of the lift gets the wrong Z. After world_xf rotation, extractor and scanner drift apart by ~898mm in Z.
+- **Resolved 2026-06-06:** Adding `_track_endpoints_mm` cap clustering as Priority 4 in the scanner fixed this. gw_lift_parking now reads 0mm delta (direction corrected via 222mm indicator, `✓ OK`).
+- **Closed.**
+
+### OL-SU-10 — Proof Lines 250mm WARN on inner platform/lift tracks (scanner measurement limitation)
+- **Symptom:** `gw_platform_in2`, `gw_platform_out2`, `gw_lift_in` in JPods_station_parking show ⚠ WARN 250mm (2 declared pts / 14 found pts)
+- **Root cause:** `populate_from_open_template` uses `_track_endpoints_mm` cap-face centroid clustering to extract 2 endpoint pts (the track centerline). The Proof Lines scanner also tries `_track_endpoints_mm` but `_walk_edge_vertices` returns kmap.size < 4 for these component instances at scan time (different entity traversal context), so it falls through to edge-trace. Edge-trace finds 14 pts but its endpoint lands on the outer cap face edge (250mm from centerline = half beam width) rather than the centroid.
+- **Effect:** False-positive WARNs in Proof Lines only. Animation uses extracted.json (from populate) which has correct cap-centroid endpoints — animation is not affected.
+- **Fix path (long term):** F-10 Guideway Connect Tool — extruded connection with clean tangent join eliminates the cap-face geometry ambiguity. Alternatively: write `path` attribute to these components during Extract Template (scanner Priority 1 reads it, no measurement needed).
+- **Status:** Known, deferred. Not a model error — extracted.json is correct.

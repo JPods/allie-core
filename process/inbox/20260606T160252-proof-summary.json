@@ -1,0 +1,25 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-06T16:02:52Z",
+  "model": "trail4",
+  "formation_filter": "JPods_station_parking",
+  "stations": [
+    {
+      "station_id": "to_be_assigned",
+      "formation_id": "JPods_station_parking",
+      "ok": 8,
+      "warn": 9,
+      "severe": 1,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260606T160252-proof-to_be_assigned.json"
+    }
+  ],
+  "total_ok": 8,
+  "total_warn": 9,
+  "total_severe": 1,
+  "total_missing": 0,
+  "total_undeclared": 0,
+  "total_arc": 2
+}
