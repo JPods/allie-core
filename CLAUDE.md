@@ -840,6 +840,38 @@ stations where bounding-box extraction gives disconnected endpoints.
 
 **Full rule:** `readmes/sketchup/jpods-plugin.md` Rule 12.
 
+### 17. All JPods Curves Are Cubic Bezier — Established 2026-06-07
+
+**Design axiom:** Every curve in the JPods network — station-interior (`gw_platform_out`,
+`gw_c_0_0`, `gw_uturn`) and inter-station (`seg_*`) — is a **cubic Bezier curve**.
+No circular arc approximation. No circular-arc-from-tangent fitting. No edge-trace heuristics.
+
+**What this means for path extraction (`populate_from_open_template`):**
+- When start point, end point, and outward tangent vectors at both ends are available,
+  use `_bezier_pts_from_tangents_mm` to reconstruct the exact curve.
+- Tangent convention (Axiom 11 / ene_railroad): `sv` = outward at start (departure direction);
+  `ev` = outward at end (arrival direction reversed, i.e., `-ev` is travel direction at end).
+  Bezier handles: B1 = sp + sv, B2 = ep + ev.
+- If cross-product of tangent directions ≈ 0 (parallel), it is a straight track — return nil
+  and use the 2-pt endpoint line.
+- Short arcs where straight-line deviation is negligible (user-judged) may use 2-pt line.
+
+**What this means for `show_route_followus_overlay`:**
+- The ribbon draws from `anim_lookup`, which comes from path.json.
+- Correct Bezier pts in path.json (written by extraction) → correct ribbon. No runtime curve generation needed.
+
+**What to NEVER do:**
+- Walk FollowMe beam solid edges to extract path geometry. The solid cross-section perimeter
+  is longer than the track on short straight tracks (ratio ≈ 42×) and the edge chain algorithm
+  cannot distinguish spine from cross-section reliably.
+- Use circular arc approximation (`_arc_pts_from_tangents_mm`) for new track extraction.
+  It remains in the codebase as historical fallback; do not promote it.
+- Assume a track is straight because it is not named `uturn`. Tracks like `gw_platform_out`
+  have Bezier exit curves that matter for vehicle dynamics and followus ribbon accuracy.
+
+**Implementation:** `jpod_path_json.rb` → `_bezier_pts_from_tangents_mm` (Priority A in
+`populate_from_open_template`). Replaces `_arc_pts_from_tangents_mm` in Priority A.
+
 ---
 
 ## Current Active State (as of 2026-05-18)
