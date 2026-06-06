@@ -872,6 +872,45 @@ No circular arc approximation. No circular-arc-from-tangent fitting. No edge-tra
 **Implementation:** `jpod_path_json.rb` → `_bezier_pts_from_tangents_mm` (Priority A in
 `populate_from_open_template`). Replaces `_arc_pts_from_tangents_mm` in Priority A.
 
+### 18. Every Coordinate Must Declare Its Frame of Reference — Established 2026-06-07
+
+JPods geometry crosses three distinct frames of reference. Code that silently mixes them
+produces bugs that are invisible at the call site and only manifest as wrong behavior
+(wrong radius, wrong Z, wrong ribbon position, wrong vehicle path).
+
+**The three frames:**
+
+| Frame | What it measures | Key values |
+|-------|-----------------|-----------|
+| **Structural** | Inside rail edge — what SketchUp ArcCurves and FollowMe paths are built on | inside radius = 1500mm (`MIN_STATION_ARC_RADIUS_MM`) |
+| **Vehicle path** | Pod centerline — where the vehicle actually travels | centerline = inside + 250mm (`BEAM_WIDTH/2`) |
+| **Vertical** | Beam center (mid-beam), beam top face, or terrain surface | varies by ±250mm (`BEAM_DEPTH/2`) |
+
+**Conversions (all explicit, all named):**
+- Structural inside rail → vehicle centerline: scale radially outward +`BEAM_WIDTH/2` (250mm)
+- Beam center → beam top: +`BEAM_DEPTH/2` (250mm)
+- Beam center → beam bottom: −`BEAM_DEPTH/2` (250mm)
+- Terrain → beam bottom: +`CLEARANCE_HEIGHT` (4600mm)
+- Terrain → beam center: +`CLEARANCE_HEIGHT` + `BEAM_DEPTH/2` (4850mm)
+
+**Frame declarations for established data stores:**
+- `extracted.json` pts_mm → LOCAL TEMPLATE frame, beam center Z, **vehicle path** (after arc correction)
+- `path.json` pts → WORLD frame, beam center Z, **vehicle path**
+- `followus ribbon_z` → display only, lifted above beam top; not a vehicle path coordinate
+- `CLEARANCE_HEIGHT` → terrain surface → beam bottom edge (structural)
+
+**The rule:** Every function signature, comment, or variable that holds a coordinate must
+name its frame. "arc correction" is not enough — write "structural inside rail → vehicle
+centerline (+250mm)". When a coordinate crosses a frame boundary, the conversion is
+explicit, named, and in one place.
+
+**Why this matters:** Three separate bugs in this session (gw_uturn inside rail, Z-disconnected
+ribbon, arc radius check against wrong reference) all had the same root cause: a coordinate
+was created in one frame and consumed in another with no conversion and no documentation
+of which frame applied. The followus ribbon was lifted "above pts" — but pts were sometimes
+beam center, sometimes beam top. The arc correction assumed "extracted pts are in structural
+frame" without verifying. Challenge every coordinate: which frame is this in?
+
 ---
 
 ## Current Active State (as of 2026-05-18)
