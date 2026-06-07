@@ -302,6 +302,47 @@ def gather_sum_reflect() -> str:
 
 # ── Prompt construction ────────────────────────────────────────────────────────
 
+def gather_os_list(days: int = 7) -> str:
+    """Return a summary of unjustified OS entries and unresolved Red Flags."""
+    os_dir = ALLIE / "process" / "os-list"
+    if not os_dir.exists():
+        return ""
+    cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=days)).strftime('%Y-%m-%d')
+    files = sorted(os_dir.glob("*.jsonl"))
+    files = [f for f in files if f.stem >= cutoff]
+    red_flags = []
+    os_pending = []
+    for fp in files:
+        for line in fp.read_text(encoding='utf-8').splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                e = json.loads(line)
+                t = e.get('type', 'os')
+                if t == 'red_flag' and not e.get('resolved_at'):
+                    red_flags.append(e)
+                elif t == 'os' and not e.get('justified_at'):
+                    os_pending.append(e)
+            except Exception:
+                pass
+    if not red_flags and not os_pending:
+        return ""
+    parts = []
+    if red_flags:
+        parts.append(f"**{len(red_flags)} unresolved Red Flag(s):**")
+        for e in red_flags[-5:]:
+            parts.append(f"  🚩 [{e.get('agent','?')}] {e.get('condition','')} — Demand: {e.get('demand','')}")
+    if os_pending:
+        high = [e for e in os_pending if e.get('risk_level') == 'high']
+        med  = [e for e in os_pending if e.get('risk_level') == 'medium']
+        parts.append(f"**{len(os_pending)} unjustified OS entries** ({len(high)} high, {len(med)} medium):")
+        for e in sorted(os_pending, key=lambda x: {'high':0,'medium':1,'low':2}.get(x.get('risk_level','low'),9))[:8]:
+            parts.append(f"  [{e.get('agent','?')}/{e.get('risk_level','?')}] {e.get('action','')} — Risk: {e.get('risk','')}")
+    parts.append("Run: `python3 ~/Allie/scripts/allie-os-review.py --days 7`")
+    return "\n".join(parts)
+
+
 def build_prompt(harvests: list, retrospections: list, memory_index: str,
                  prior_reflect: str, wisdom_context: str,
                  recent_events: str = "", process_narratives: str = "",
@@ -355,6 +396,10 @@ Rules:
 
     if process_narratives:
         parts.append(f"## Process Narratives (error→insight→function chains)\n\n{process_narratives}\n")
+
+    os_list = gather_os_list(days=7)
+    if os_list:
+        parts.append(f"## OS List — Agent Autonomous Fixes Requiring Review\n\n{os_list}\n")
 
     parts.append(f"## Current Memory Index\n\n{memory_index}\n")
 
