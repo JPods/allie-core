@@ -872,6 +872,18 @@ No circular arc approximation. No circular-arc-from-tangent fitting. No edge-tra
 **Implementation:** `jpod_path_json.rb` → `_bezier_pts_from_tangents_mm` (Priority A in
 `populate_from_open_template`). Replaces `_arc_pts_from_tangents_mm` in Priority A.
 
+**Curve sampling — domain split (established 2026-06-07):**
+
+| Domain | How curves are represented | Why |
+|--------|--------------------------|-----|
+| **SketchUp (SU)** | Polyline: one pt per ~1000mm of arc length, min 4 pts | Human visual perception — smooth appearance at station scale; chord deviation <10mm at 15m radius |
+| **Physical (PH)** | True analog — continuous motor control follows the actual curve | Discrete waypoints produce jerky motion; the vehicle must track the real curve, not a polyline approximation |
+
+The 1000mm spacing rule applies to: `extracted.json` pts_mm, `path.json` pts, followus ribbon,
+and any SketchUp visualization. It does NOT apply to Nora's motor control, ezone boundaries,
+or any Pi firmware curve-following. Physical curve following is a separate problem (smooth
+velocity profile on the arc, not waypoint-to-waypoint stepping).
+
 ### 18. Every Coordinate Must Declare Its Frame of Reference — Established 2026-06-07
 
 JPods geometry crosses three distinct frames of reference. Code that silently mixes them
