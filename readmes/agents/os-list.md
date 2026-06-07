@@ -12,35 +12,59 @@ Agents encounter problems during operation. They have two responses and only two
 
 | Mode | Condition | Agent does | Records to |
 |------|-----------|-----------|-----------|
-| **OS List** | Risk is low; fix is reversible; agent is confident in the rule | Fix it autonomously, document what was done and what could be wrong | `process/os-list/YYYY-MM-DD.jsonl` |
-| **Red Flag** | Risk is high; fix is irreversible; or agent cannot determine the right answer | Stop everything, demand human resolution, block further operation | `process/os-list/YYYY-MM-DD.jsonl` (type=red_flag) + console |
+| **OS List** | Agent has a rule that handles the situation; rule involves judgment | Fix autonomously. Document the judgment **once** when the fix is designed, not at runtime. | `process/os-list/decisions.json` |
+| **Red Flag** | Agent encounters a condition it cannot safely resolve; rule does not apply | Stop everything, demand human resolution, block further operation | `process/os-list/YYYY-MM-DD.jsonl` (type=red_flag) + console |
 
 **There is no silent third mode.** An agent that encounters a problem and does
 nothing, says nothing, and leaves no record is not operating correctly.
 
+**The OS List is a retrospective design record, not a runtime event log.**
+Each entry is written once when the autonomous fix is coded — it documents the
+judgment made, the risk accepted, and the path to making the judgment explicit.
+Once documented, the entry does not repeat. Daily review asks: is each judgment
+still valid? Has anything changed that would make it wrong?
+
 ---
 
-## OS List Entry
+## Files
 
-An agent took autonomous action. It documented what it did, what could be wrong,
-and why it judged the risk acceptable. Bill reviews and confirms or countermands.
+| File | What it is |
+|------|-----------|
+| `process/os-list/decisions.json` | Static design record — one entry per autonomous fix. Written once when the fix is coded. Updated on review or promotion. |
+| `process/os-list/YYYY-MM-DD.jsonl` | Runtime Red Flag events only — written by agents when they stop and refuse. |
+
+---
+
+## OS Decision Entry
+
+One entry per autonomous fix. Lives in `decisions.json`. Written once when the fix is designed.
 
 ```json
 {
-  "type":         "os",
-  "ts":           "2026-06-07T14:30:00Z",
-  "agent":        "Natalie",
-  "domain":       "SU",
-  "action":       "reversed s001.gw_c_1_1 (proximity flip)",
-  "risk":         "pts stored backward intentionally; reversal makes animation wrong",
-  "why":          "pts.last 85mm from prev_end, pts.first 406mm — closer endpoint = departure",
-  "risk_level":   "low",
-  "context":      { "route": "s002→s004", "segment": "s001.gw_c_1_1", "gap_fwd_mm": 406, "gap_rev_mm": 85 },
-  "model":        "trial5",
-  "justified_at": null,
-  "justified_by": null
+  "id":             "OS-001",
+  "agent":          "Natalie",
+  "domain":         "SU",
+  "code_location":  "jpod_vehicle_anim.rb:build_maneuvers_from_ids ~line 404",
+  "action":         "Proximity flip — reverse segment when pts.last closer to prev_end_pt than pts.first",
+  "risk":           "pts stored end→start intentionally; reversal breaks that consumer",
+  "why":            "Animation requires pts in travel order. Closer endpoint to prior track's exit is departure end.",
+  "risk_level":     "low",
+  "added":          "2026-06-07",
+  "last_reviewed":  null,
+  "status":         "active",
+  "promotion_path": "Zero OS entries when all ring arcs declared CCW in lines.json and flip becomes no-op"
 }
 ```
+
+| Field | Notes |
+|-------|-------|
+| `id` | Sequential, permanent: OS-001, OS-002, … |
+| `code_location` | File + method + approximate line — enough to find it |
+| `action` | What the agent does autonomously |
+| `risk` | What could be wrong about this rule |
+| `why` | Why the judgment is sound |
+| `status` | `active` / `promoted` (judgment made explicit in code) |
+| `promotion_path` | What explicit code change removes the need for this fix |
 
 ---
 

@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """
-allie-os-review.py — Daily review of agent OS List and Red Flag entries.
+allie-os-review.py — Daily review of agent OS List decisions and Red Flags.
+
+The OS List is a retrospective design record — one entry per autonomous fix
+built into the code. Entries are not written at runtime; they are written once
+when the fix is designed and removed when the underlying judgment is made explicit.
+
+Red Flags ARE runtime events — written by agents when they stop and refuse to proceed.
+
+Sources:
+  process/os-list/decisions.json      — static design decisions (OS entries)
+  process/os-list/YYYY-MM-DD.jsonl    — runtime Red Flag events
 
 Usage:
-  python3 allie-os-review.py                    # today's unjustified/unresolved
-  python3 allie-os-review.py --days 7           # last 7 days
-  python3 allie-os-review.py --all              # all unjustified, all time
-  python3 allie-os-review.py --justify TS --by bill
-  python3 allie-os-review.py --code-fix TS --note "reason"
-  python3 allie-os-review.py --resolve TS --resolution "what was done"
+  python3 allie-os-review.py                     # all active decisions + recent red flags
+  python3 allie-os-review.py --days 7            # red flags from last 7 days
+  python3 allie-os-review.py --review OS-001     # mark a decision reviewed today
+  python3 allie-os-review.py --promote OS-007    # mark decision promoted to explicit code
+  python3 allie-os-review.py --resolve TS        # resolve a Red Flag by timestamp ID
+  python3 allie-os-review.py --resolution TEXT   # (use with --resolve)
   python3 allie-os-review.py --summary           # counts only
 """
 
@@ -18,81 +28,179 @@ import json
 import pathlib
 import sys
 
-OS_DIR = pathlib.Path.home() / 'Allie' / 'process' / 'os-list'
-RISK_ORDER = {'high': 0, 'medium': 1, 'low': 2}
+OS_DIR       = pathlib.Path.home() / 'Allie' / 'process' / 'os-list'
+DECISIONS_FILE = OS_DIR / 'decisions.json'
+RISK_ORDER   = {'high': 0, 'medium': 1, 'low': 2}
 
 
-def load_entries(days=None):
+# ── Decision file (static OS entries) ──────────────────────────────────────
+
+def load_decisions():
+    if not DECISIONS_FILE.exists():
+        return []
+    try:
+        return json.loads(DECISIONS_FILE.read_text(encoding='utf-8'))
+    except Exception as e:
+        print(f'[warn] could not read decisions.json: {e}', file=sys.stderr)
+        return []
+
+def save_decisions(decisions):
+    DECISIONS_FILE.write_text(
+        json.dumps(decisions, indent=2), encoding='utf-8')
+
+
+# ── Runtime Red Flag events (daily JSONL) ──────────────────────────────────
+
+def load_red_flags(days=7):
     if not OS_DIR.exists():
         return []
-    files = sorted(OS_DIR.glob('*.jsonl'), reverse=True)
-    if days is not None:
-        cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=days)
-        cutoff_str = cutoff.strftime('%Y-%m-%d')
-        files = [f for f in files if f.stem >= cutoff_str]
-    entries = []
+    cutoff = (datetime.datetime.now(datetime.timezone.utc) -
+              datetime.timedelta(days=days)).strftime('%Y-%m-%d')
+    files  = sorted(OS_DIR.glob('*.jsonl'))
+    files  = [f for f in files if f.stem >= cutoff]
+    flags  = []
     for fp in files:
-        try:
-            for line in fp.read_text(encoding='utf-8').splitlines():
-                line = line.strip()
-                if not line:
-                    continue
-                entry = json.loads(line)
-                entry['_file'] = str(fp)
-                entries.append(entry)
-        except Exception as e:
-            print(f'[warn] could not read {fp}: {e}', file=sys.stderr)
-    return entries
+        for line in fp.read_text(encoding='utf-8').splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                e = json.loads(line)
+                if e.get('type') == 'red_flag':
+                    e['_file'] = str(fp)
+                    flags.append(e)
+            except Exception:
+                pass
+    return flags
 
 
-def ts_key(entry):
-    return entry.get('ts', '')
+# ── Display ────────────────────────────────────────────────────────────────
+
+def print_decision(d):
+    status = d.get('status', 'active')
+    rl     = d.get('risk_level', 'low')
+    icon   = {'high': '🔴', 'medium': '🟡', 'low': '🟢'}.get(rl, '⚪')
+    reviewed = d.get('last_reviewed') or 'never'
+    print(f'\n{icon} {d["id"]}  [{d["agent"]}/{d["domain"]}]  risk={rl}  reviewed={reviewed}  status={status}')
+    print(f'   Action: {d["action"]}')
+    print(f'   Risk:   {d["risk"]}')
+    print(f'   Why:    {d["why"]}')
+    print(f'   Code:   {d["code_location"]}')
+    if d.get('promotion_path'):
+        print(f'   Path:   {d["promotion_path"]}')
 
 
-def is_unresolved(entry):
-    t = entry.get('type', 'os')
-    if t == 'red_flag':
-        return entry.get('resolved_at') is None
-    return entry.get('justified_at') is None
-
-
-def print_entry(entry, verbose=True):
-    t    = entry.get('type', 'os')
-    ts   = entry.get('ts', '')[:19].replace('T', ' ')
-    agent = entry.get('agent', '?')
-    domain = entry.get('domain', '?')
-    model = entry.get('model', '')
-    ts_id = entry.get('ts', '').replace('-', '').replace(':', '').replace('T', 'T')[:15]
-
-    if t == 'red_flag':
-        print(f'\n🚩 RED FLAG [{agent}/{domain}] {ts}  model={model}  id={ts_id}')
-        print(f'   Condition: {entry.get("condition", "")}')
-        print(f'   Demand:    {entry.get("demand", "")}')
-        print(f'   Blocked:   {entry.get("blocked", "")}')
-        if entry.get('resolved_at'):
-            print(f'   ✅ Resolved {entry["resolved_at"][:19]}: {entry.get("resolution", "")}')
-        else:
-            print(f'   ⏳ UNRESOLVED — run: allie-os-review.py --resolve {ts_id} --resolution "..."')
-        if verbose and entry.get('context'):
-            print(f'   Context:   {json.dumps(entry["context"])}')
+def print_red_flag(e):
+    ts   = e.get('ts', '')[:19].replace('T', ' ')
+    ts_id = e.get('ts', '').replace('-','').replace(':','').replace('T','T')[:15]
+    resolved = e.get('resolved_at')
+    print(f'\n🚩 RED FLAG [{e.get("agent","?")}]  {ts}  id={ts_id}')
+    print(f'   Condition: {e.get("condition","")}')
+    print(f'   Demand:    {e.get("demand","")}')
+    print(f'   Blocked:   {e.get("blocked","")}')
+    if resolved:
+        print(f'   ✅ Resolved {resolved[:19]}: {e.get("resolution","")}')
     else:
-        rl = entry.get('risk_level', 'low')
-        icon = {'high': '🔴', 'medium': '🟡', 'low': '🟢'}.get(rl, '⚪')
-        print(f'\n{icon} OS [{agent}/{domain}] {ts}  risk={rl}  model={model}  id={ts_id}')
-        print(f'   Action: {entry.get("action", "")}')
-        print(f'   Risk:   {entry.get("risk", "")}')
-        print(f'   Why:    {entry.get("why", "")}')
-        if entry.get('justified_at'):
-            print(f'   ✅ Justified {entry["justified_at"][:19]} by {entry.get("justified_by", "?")}')
-        else:
-            print(f'   ⏳ UNJUSTIFIED — run: allie-os-review.py --justify {ts_id} --by bill')
-        if verbose and entry.get('context'):
-            print(f'   Context: {json.dumps(entry["context"])}')
+        print(f'   ⏳ UNRESOLVED — run: allie-os-review.py --resolve {ts_id} --resolution "..."')
+    if e.get('context'):
+        print(f'   Context:   {json.dumps(e["context"])}')
 
 
-def update_entry(ts_prefix, update_fn):
-    """Find all entries matching ts_prefix across all files and update them."""
-    files = sorted(OS_DIR.glob('*.jsonl'))
+# ── Commands ───────────────────────────────────────────────────────────────
+
+def cmd_review(args):
+    decisions = [d for d in load_decisions() if d.get('status') == 'active']
+    red_flags = load_red_flags(days=args.days)
+    open_flags = [f for f in red_flags if not f.get('resolved_at')]
+
+    never_reviewed = [d for d in decisions if not d.get('last_reviewed')]
+    stale_days     = 30
+    today          = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+    stale = [d for d in decisions
+             if d.get('last_reviewed') and
+             (datetime.datetime.fromisoformat(d['last_reviewed']).date() <
+              (datetime.datetime.now(datetime.timezone.utc) -
+               datetime.timedelta(days=stale_days)).date())]
+
+    if open_flags:
+        print(f'\n{"="*60}')
+        print(f'RED FLAGS — {len(open_flags)} unresolved (last {args.days} days)')
+        print('='*60)
+        for e in open_flags:
+            print_red_flag(e)
+
+    if never_reviewed or stale:
+        print(f'\n{"="*60}')
+        needs = never_reviewed + stale
+        print(f'OS DECISIONS — {len(needs)} need review ({len(never_reviewed)} never, {len(stale)} stale >{stale_days}d)')
+        print('='*60)
+        for d in sorted(needs, key=lambda x: RISK_ORDER.get(x.get('risk_level','low'), 9)):
+            print_decision(d)
+    elif decisions:
+        print(f'\n✅ All {len(decisions)} active OS decisions reviewed within {stale_days} days')
+        most_recent = max((d.get('last_reviewed') or '') for d in decisions) if decisions else ''
+
+    if not open_flags and not never_reviewed and not stale:
+        print('\n✅ Nothing to review.')
+        return
+
+    print(f'\n{"-"*60}')
+    print(f'Commands:')
+    print(f'  Mark reviewed:  allie-os-review.py --review OS-NNN')
+    print(f'  Promote to code: allie-os-review.py --promote OS-NNN')
+    print(f'  Resolve red flag: allie-os-review.py --resolve TS --resolution "text"')
+
+
+def cmd_summary(args):
+    decisions = load_decisions()
+    active  = [d for d in decisions if d.get('status') == 'active']
+    promoted = [d for d in decisions if d.get('status') == 'promoted']
+    flags   = load_red_flags(days=7)
+    open_f  = [f for f in flags if not f.get('resolved_at')]
+    print(f'OS List summary')
+    print(f'  Active decisions:   {len(active)} ({sum(1 for d in active if d.get("risk_level")=="high")} high, {sum(1 for d in active if d.get("risk_level")=="medium")} medium)')
+    print(f'  Promoted to code:   {len(promoted)}')
+    print(f'  Red Flags (7 days): {len(open_f)} unresolved / {len(flags)} total')
+    for d in active:
+        reviewed = d.get('last_reviewed') or 'never'
+        print(f'  {d["id"]} [{d["agent"]}] {d["action"][:60]}  reviewed={reviewed}')
+
+
+def cmd_mark_reviewed(args):
+    decisions = load_decisions()
+    today = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+    updated = 0
+    for d in decisions:
+        if d['id'] == args.review:
+            d['last_reviewed'] = today
+            updated += 1
+    if updated:
+        save_decisions(decisions)
+        print(f'Marked {args.review} reviewed on {today}')
+    else:
+        print(f'Decision {args.review} not found', file=sys.stderr)
+
+
+def cmd_promote(args):
+    decisions = load_decisions()
+    today = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
+    updated = 0
+    for d in decisions:
+        if d['id'] == args.promote:
+            d['status']       = 'promoted'
+            d['last_reviewed'] = today
+            d['promotion_note'] = args.note or ''
+            updated += 1
+    if updated:
+        save_decisions(decisions)
+        print(f'Promoted {args.promote} — judgment is now explicit in code. Remove the OS entry after confirming.')
+    else:
+        print(f'Decision {args.promote} not found', file=sys.stderr)
+
+
+def cmd_resolve_flag(args):
+    now_utc = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    files   = sorted(OS_DIR.glob('*.jsonl'))
     updated = 0
     for fp in files:
         lines = fp.read_text(encoding='utf-8').splitlines()
@@ -104,121 +212,44 @@ def update_entry(ts_prefix, update_fn):
                 new_lines.append(line)
                 continue
             try:
-                entry = json.loads(line)
-                ts_id = entry.get('ts', '').replace('-', '').replace(':', '').replace('T', 'T')[:15]
-                if ts_id == ts_prefix or entry.get('ts', '').startswith(ts_prefix[:8]):
-                    if ts_id == ts_prefix:
-                        update_fn(entry)
-                        new_lines.append(json.dumps(entry))
-                        changed = True
-                        updated += 1
-                        continue
+                e = json.loads(line)
+                ts_id = e.get('ts','').replace('-','').replace(':','').replace('T','T')[:15]
+                if ts_id == args.resolve and e.get('type') == 'red_flag':
+                    e['resolved_at'] = now_utc
+                    e['resolution']  = args.resolution or ''
+                    new_lines.append(json.dumps(e))
+                    changed = True
+                    updated += 1
+                    continue
             except Exception:
                 pass
             new_lines.append(line)
         if changed:
             fp.write_text('\n'.join(new_lines) + '\n', encoding='utf-8')
-    return updated
+    print(f'Resolved {updated} Red Flag(s) — id={args.resolve}')
 
 
-def cmd_review(args):
-    days = args.days if not args.all else None
-    entries = load_entries(days=days)
-    if args.all:
-        entries = load_entries()
-
-    red_flags = [e for e in entries if e.get('type') == 'red_flag' and is_unresolved(e)]
-    os_pending = [e for e in entries if e.get('type', 'os') == 'os' and is_unresolved(e)]
-    os_pending.sort(key=lambda e: (RISK_ORDER.get(e.get('risk_level', 'low'), 9), e.get('ts', '')))
-
-    if not red_flags and not os_pending:
-        scope = f'last {days} day(s)' if days else 'all time'
-        print(f'✅ No unjustified OS entries or unresolved Red Flags ({scope})')
-        return
-
-    if red_flags:
-        print(f'\n{"="*60}')
-        print(f'RED FLAGS — {len(red_flags)} unresolved')
-        print('="*60')
-        for e in red_flags:
-            print_entry(e)
-
-    if os_pending:
-        print(f'\n{"="*60}')
-        print(f'OS LIST — {len(os_pending)} unjustified')
-        print('="*60')
-        for e in os_pending:
-            print_entry(e)
-
-    print(f'\n{"-"*60}')
-    print(f'Total: {len(red_flags)} red flag(s), {len(os_pending)} OS entr(ies) pending review')
-
-
-def cmd_summary(args):
-    entries = load_entries(days=7)
-    rf_open = sum(1 for e in entries if e.get('type') == 'red_flag' and not e.get('resolved_at'))
-    rf_total = sum(1 for e in entries if e.get('type') == 'red_flag')
-    os_open = sum(1 for e in entries if e.get('type', 'os') == 'os' and not e.get('justified_at'))
-    os_total = sum(1 for e in entries if e.get('type', 'os') == 'os')
-    by_agent = {}
-    for e in entries:
-        a = e.get('agent', '?')
-        by_agent.setdefault(a, {'os': 0, 'rf': 0})
-        if e.get('type') == 'red_flag':
-            by_agent[a]['rf'] += 1
-        else:
-            by_agent[a]['os'] += 1
-    print(f'OS List summary — last 7 days')
-    print(f'  Red Flags:  {rf_open} unresolved / {rf_total} total')
-    print(f'  OS entries: {os_open} unjustified / {os_total} total')
-    for agent, counts in sorted(by_agent.items()):
-        print(f'  {agent}: {counts["os"]} OS, {counts["rf"]} red flags')
-
+# ── Entry point ────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description='OS List daily review')
-    parser.add_argument('--days', type=int, default=1, help='Days to look back (default 1)')
-    parser.add_argument('--all', action='store_true', help='All time')
-    parser.add_argument('--summary', action='store_true')
-    parser.add_argument('--justify', metavar='TS', help='Justify OS entry by timestamp ID')
-    parser.add_argument('--by', metavar='WHO', default='bill')
-    parser.add_argument('--code-fix', metavar='TS', dest='code_fix')
-    parser.add_argument('--note', metavar='NOTE', default='')
-    parser.add_argument('--resolve', metavar='TS')
-    parser.add_argument('--resolution', metavar='TEXT', default='')
-    args = parser.parse_args()
-
-    now_utc = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-
-    if args.justify:
-        def do_justify(e):
-            e['justified_at'] = now_utc
-            e['justified_by'] = args.by
-        n = update_entry(args.justify, do_justify)
-        print(f'Justified {n} entry(s) — id={args.justify}, by={args.by}')
-        return
-
-    if args.code_fix:
-        def do_code_fix(e):
-            e['justified_at'] = now_utc
-            e['justified_by'] = 'code_fix'
-            e['code_fix_note'] = args.note
-        n = update_entry(args.code_fix, do_code_fix)
-        print(f'Marked {n} entry(s) for code fix — id={args.code_fix}, note={args.note!r}')
-        return
-
-    if args.resolve:
-        def do_resolve(e):
-            e['resolved_at'] = now_utc
-            e['resolution'] = args.resolution
-        n = update_entry(args.resolve, do_resolve)
-        print(f'Resolved {n} Red Flag entry(s) — id={args.resolve}')
-        return
+    p = argparse.ArgumentParser(description='OS List daily review')
+    p.add_argument('--days',       type=int, default=7, help='Days back for Red Flag search')
+    p.add_argument('--summary',    action='store_true')
+    p.add_argument('--review',     metavar='ID',   help='Mark decision reviewed (e.g. OS-001)')
+    p.add_argument('--promote',    metavar='ID',   help='Mark decision promoted to explicit code')
+    p.add_argument('--note',       metavar='TEXT', default='')
+    p.add_argument('--resolve',    metavar='TS',   help='Resolve a Red Flag by timestamp ID')
+    p.add_argument('--resolution', metavar='TEXT', default='')
+    args = p.parse_args()
 
     if args.summary:
-        cmd_summary(args)
-        return
-
+        cmd_summary(args); return
+    if args.review:
+        cmd_mark_reviewed(args); return
+    if args.promote:
+        cmd_promote(args); return
+    if args.resolve:
+        cmd_resolve_flag(args); return
     cmd_review(args)
 
 
