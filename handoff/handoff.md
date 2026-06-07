@@ -1,61 +1,62 @@
-# Handoff — 2026-06-07
+# Handoff — 2026-06-07 (end of day)
 
 ## Where We Stopped
 
-JPods_station_parking is fully extracted and approved by all three agents (Noelle/Natalie/Sally).
-Proof is clean. vector_in detection resolved after a long arc. Session ended on a clean state.
+All 6 JPods station templates approved by Noelle / Natalie / Sally. Agent learning layer
+complete. Session ended clean.
 
-## What was completed this session
+## What was completed today
 
-### vector_in detection — complete
-The 172mm `vector_in` indicator edge in `gw_cp_in_*` components could not be found by any
-of several recursive search strategies (sub-group nesting, face outer_loop scanning, tag checks).
+### All templates approved
 
-Resolution: Bill made the vector_in indicator a **standalone component placed OUTSIDE `gw_cp_in_*`
-but inside its bounding envelope** — visible to designers, does not affect path extraction.
+| Template | Noelle | Natalie | Sally | Proof |
+|----------|--------|---------|-------|-------|
+| JPods_station_parking | ✓ | ✓ | ✓ | 0 OK / 0 WARN / 0 SEVERE |
+| station_line_end | ✓ | ✓ | ✓ | 12 OK / 2 ARC |
+| station_thru_dip | ✓ | ✓ | ✓ | 17 OK / 2 ARC |
+| traffic_circle7 | ✓ | ✓ | ✓ | 0 OK (pass-through) |
+| (JPods_station_parking from session 1, others from session 2)
 
-Code path:
-1. `_scan_vi` lambda builds `vi_entities` list from model.entities (tag = 'vector_in')
-2. For each `gw_cp_in_N`: proximity match (<5m) to track endpoint in vi_entities list
-3. `_vi_component_direction` extracts direction — FROM vertex = closer to component world
-   insertion point; no local-origin constraint (SketchUp may offset component origin)
-4. Fixed `Geom::ORIGIN` → `Geom::Point3d.new(0,0,0)` in lambda scope (constant lookup issue)
+### vector_in detection — complete (session 1)
+External component tagged `vector_in` placed OUTSIDE `gw_cp_in_*` but inside its
+bounding envelope. `_scan_vi` builds `vi_entities` from model.entities; proximity
+match to track endpoint; `_vi_component_direction` extracts direction via world
+insertion point proximity (no local-origin constraint).
 
-### Noelle RED FLAG policy
-Missing vector_in is now a hard RED FLAG blocking approval (not a standing demand).
-`vector_in_found: true/false` stored in extracted.json per `gw_cp_in_N` track.
-Noelle reads it: true → passed, false → 🚩 flag.
+All 4 templates with `gw_cp_in_*` tracks have vector_in indicators added.
+traffic_circle7 has 4 (CP0–CP3); station_thru_dip has 2; station_line_end has 1.
 
-### Agent learning layer (from prior session, completed this session)
-All three validators write JSONL observations; record passed AND failed checks; guard
-against empty data (false positives become learning points); trace successor graph on
-broken connections.
+### Sally fixes (session 2)
+- 2-pt parking track: skip slot-spacing check; report estimated runtime capacity
+- BFS platform→parking: multi-hop through lines.json successor graph
+- Pass-through topology: `pass_chains` + no `hold_loop_chain` → skip parking checks
 
-### Final state — JPods_station_parking
-- extracted.json rev 17
-- vector_in_found: true for CP0 and CP1
-- Noelle ✓ Natalie ✓ Sally ✓ Proof: 0 OK / 0 WARN / 0 SEVERE
+### Proof fixes (session 2)
+- vector_in_found: reads `ext['vector_in_found']` from extracted.json (not re-scan)
+- Density check: guarded `radius_mm_dec > 0` — straight tracks exempt
 
 ## Open items for next session
 
-1. **vector_in components needed** — station_line_end, station_thru_dip, traffic_circle7
-   each need `gw_cp_in_*` vector_in indicator components added (same approach as parking station)
-   then Extract Template run on each.
-
-2. **`allie-agent-brief.py`** — first teaching brief ready to generate:
+1. **`allie-agent-brief.py`** — ready to generate first teaching brief:
    `python3 ~/Allie/scripts/allie-agent-brief.py --formation JPods_station_parking`
+   Will surface normalization needs (per-run text in flag messages).
 
-3. **trial5** — stale template folder with no lines.json; appeared in batch Extract Template run.
-   Check and remove if not intentional.
+2. **trial5** — stale template folder with no lines.json. Check and remove.
 
-4. **Session-start reminder** — `load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')`
-   if working with any template extraction (file changes often in this arc).
+3. **Session-start reminder** — reload before any Extract Template run:
+   ```
+   load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
+   load Sketchup.find_support_file('jpod_sally.rb', 'Plugins/su_jpods')
+   ```
 
-## Key commits (su_jpods_claude, this session)
+4. **Proof ARC warning** — `⚠ Drift or arc defects` fires on any non-zero ARC count.
+   Should only fire when arc count is unexpected or SEVERE is non-zero. Cosmetic issue,
+   not blocking.
+
+## Key commits (su_jpods_claude, today)
 - `921a929` — fix Geom::ORIGIN in lambdas; remove diagnostics
 - `df33a58` — external vi_entity scan at model level
 - `c35cbdb` — Noelle RED FLAG + vector_in_found in extracted.json
-- `4daaf6e` — face outer_loop scanning + gw_cp_in_* scoping
-- `82512f1` — recursive direction search
-- `cd44c32` — legacy 222mm warning
-- `5f75846` — VECTOR_IN_EDGE_MM = 172.0 constant
+- `0042b8f` — Sally: 2-pt slot spacing + BFS platform→parking
+- `b0d93c5` — Proof: vector_in_found from extracted.json; straight track density fix
+- `d5a255d` — Sally: pass-through topology exemption (traffic circles)
