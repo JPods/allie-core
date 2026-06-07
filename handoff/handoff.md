@@ -1,76 +1,61 @@
-# Handoff — 2026-06-06
+# Handoff — 2026-06-07
 
 ## Where We Stopped
 
-Working through the template data pipeline. traffic_circle7 extracted and Proof clean (4 OK, 20 WARN, 0 SEVERE). The other 3 templates need Extract Template + Proof run with the same fixes now in place.
+JPods_station_parking is fully extracted and approved by all three agents (Noelle/Natalie/Sally).
+Proof is clean. vector_in detection resolved after a long arc. Session ended on a clean state.
 
-## What Was Completed This Session
+## What was completed this session
 
-### 1. Permanent Segment ID Registry (noelle.rb)
-- `{model}.segment_registry.json` alongside `.skp`
-- IDs increment only upward; retired segments get `retired_at`, never reassigned
-- Map schema v4 — `id` field on every line entry
-- jpod_vehicle_anim.rb comments updated for v4
+### vector_in detection — complete
+The 172mm `vector_in` indicator edge in `gw_cp_in_*` components could not be found by any
+of several recursive search strategies (sub-group nesting, face outer_loop scanning, tag checks).
 
-### 2. Proof Lines — 3 Major Fixes (jpod_path_json.rb)
+Resolution: Bill made the vector_in indicator a **standalone component placed OUTSIDE `gw_cp_in_*`
+but inside its bounding envelope** — visible to designers, does not affect path extraction.
 
-**Template-model scope:**
-- `populate_from_open_template` sets `@active_template_formation`
-- `proof_lines` reads it; shows ONLY that template (other stations excluded)
-- Label: `traffic_circle7 (to_be_assigned)` — no S-prefix until placed in network
-- Summary line uses formation name, not station_id
+Code path:
+1. `_scan_vi` lambda builds `vi_entities` list from model.entities (tag = 'vector_in')
+2. For each `gw_cp_in_N`: proximity match (<5m) to track endpoint in vi_entities list
+3. `_vi_component_direction` extracts direction — FROM vertex = closer to component world
+   insertion point; no local-origin constraint (SketchUp may offset component origin)
+4. Fixed `Geom::ORIGIN` → `Geom::Point3d.new(0,0,0)` in lambda scope (constant lookup issue)
 
-**bbox sanity check — Priority 1.5 (Extract) and Priority 2 (Scanner):**
-- Extract Priority 1.5: rejects edge_trace when `traced_len < bbox_diag * 0.6`
-  - Eliminates cross-section noise (gw_in_*/gw_c_* at ~1232mm vs ~9539mm diagonal)
-  - Accepts gw_cp_in_* (ratio ~1.0)
-- Scanner Priority 2: same lower bound + upper `> bbox_diag * 2.0` rejects solid perimeter traversal
-  - gw_uturn was 56pts/25173mm (solid perimeter walk); now falls to Priority 3 bbox → 2pts
+### Noelle RED FLAG policy
+Missing vector_in is now a hard RED FLAG blocking approval (not a standing demand).
+`vector_in_found: true/false` stored in extracted.json per `gw_cp_in_N` track.
+Noelle reads it: true → passed, false → 🚩 flag.
 
-**min-delta endpoint comparison:**
-- `delta = min(dist(dec_ep, fnd_ep), dist(dec_ep, fnd_sp))`
-- Scanner has no direction guarantee; position verified regardless of order
-- `↺` flag when scanner direction reversed (informational only — animation uses extracted.json)
+### Agent learning layer (from prior session, completed this session)
+All three validators write JSONL observations; record passed AND failed checks; guard
+against empty data (false positives become learning points); trace successor graph on
+broken connections.
 
-**Synthetic arc handling:**
-- `radius_mm > 0 && pts > 2` → ARC status, not SEVERE
-- gw_uturn_* correctly classified as ARC
+### Final state — JPods_station_parking
+- extracted.json rev 17
+- vector_in_found: true for CP0 and CP1
+- Noelle ✓ Natalie ✓ Sally ✓ Proof: 0 OK / 0 WARN / 0 SEVERE
 
-### 3. Results — traffic_circle7
+## Open items for next session
 
-```
-SUMMARY: 4 OK | 20 WARN | 0 SEVERE | 0 ARC
-```
-- 4 OK: gw_cp_in_0/1/2/3 (3pts, 2672mm, edge_trace, direction corrected via vector_in)
-- 20 WARN: ↺ scanner-direction noise + small endpoint deltas (≤313mm) — not blocking
+1. **vector_in components needed** — station_line_end, station_thru_dip, traffic_circle7
+   each need `gw_cp_in_*` vector_in indicator components added (same approach as parking station)
+   then Extract Template run on each.
 
-## What Needs to Be Done Next
+2. **`allie-agent-brief.py`** — first teaching brief ready to generate:
+   `python3 ~/Allie/scripts/allie-agent-brief.py --formation JPods_station_parking`
 
-### Immediate: Extract remaining 3 templates
-Each: open template model → [3] Extract Template → [5] Proof Lines
+3. **trial5** — stale template folder with no lines.json; appeared in batch Extract Template run.
+   Check and remove if not intentional.
 
-1. **JPods_station_parking** — `templates/track_formations/JPods_station_parking/model.skp`
-   - gw_lift_parking had 898mm SEVERE from network scan; Extract may fix it
-   - gw_cp_in_* will gain 3rd pt once extracted with Priority 1.5
+4. **Session-start reminder** — `load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')`
+   if working with any template extraction (file changes often in this arc).
 
-2. **station_thru_dip** — `templates/track_formations/station_thru_dip/model.skp`
-
-3. **station_line_end** — `templates/track_formations/station_line_end/model.skp`
-
-### After all 4 templates extracted:
-4. [2] Lines Build from Template on each (sync declared lengths)
-5. Open network → Noelle Build → writes map.json with permanent IDs (first registry)
-6. Animate → verify S002→S003 trip
-
-## Open Known Issues
-
-- **gw_uturn ARC**: 13-pt synthetic arc at 4699mm; ARC status suppresses SEVERE. Functionally acceptable for animation.
-- **↺ direction warnings**: scanner-side only. extracted.json is correctly directed. Not blocking.
-- **gw_lift_parking S002**: 898mm SEVERE from network scan — will re-check after Extract Template on JPods_station_parking.
-
-## Reload Commands
-
-```
-load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('noelle.rb', 'Plugins/su_jpods')
-```
+## Key commits (su_jpods_claude, this session)
+- `921a929` — fix Geom::ORIGIN in lambdas; remove diagnostics
+- `df33a58` — external vi_entity scan at model level
+- `c35cbdb` — Noelle RED FLAG + vector_in_found in extracted.json
+- `4daaf6e` — face outer_loop scanning + gw_cp_in_* scoping
+- `82512f1` — recursive direction search
+- `cd44c32` — legacy 222mm warning
+- `5f75846` — VECTOR_IN_EDGE_MM = 172.0 constant
