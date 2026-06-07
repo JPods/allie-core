@@ -923,6 +923,52 @@ of which frame applied. The followus ribbon was lifted "above pts" — but pts w
 beam center, sometimes beam top. The arc correction assumed "extracted pts are in structural
 frame" without verifying. Challenge every coordinate: which frame is this in?
 
+### 19. One Source of Truth — Do the Math — Established 2026-06-07
+
+**Rule:** Every network coordinate has exactly one authoritative source. Compute it once from
+that source. Do not scan 3D geometry to recover what math already knows. Do not snap or patch
+to reconcile two sources that disagree. If they disagree, the model is wrong — fix the model.
+
+**The proof:** `generate_map_json` had a `beam_path_fallback` that scanned built SketchUp groups
+to recover seg_ endpoint Z. It was also doing `z = (beam_top_Z - BEAM_DEPTH) × 25.4` — which
+is just `cp[:center].z × 25.4`. The datum was the CP center all along. The fallback was hiding
+the math inside a geometry scan. A Z-snap was then patching the mismatch between the fallback
+result and the station track geometry.
+
+**The fix:** `StructurePlacer.connection_point(entity, index)` applies the station instance's
+world transformation to the definition-local CP center and returns the exact world position.
+That position IS the seg_ endpoint. No scan, no snap, no fallback.
+
+**What this means for the Build pipeline:**
+
+`cached_connection_point` must apply `entity.transformation` to definition-local CP coords.
+Without it, Build produces correct guideways only on flat terrain (Z≈0). When terrain changes
+and the station instance moves, `entity.transformation` changes. The Bezier adapts automatically.
+**This is what "Build adapts to terrain changes" means** — not a separate recalculation, not
+a cache flush, not a rebuild trigger. The transformation IS the terrain adaptation.
+
+**Corollaries:**
+
+1. **No fallbacks for coordinate data.** If a station entity or CP is not found, log and skip.
+   Do not approximate from nearby geometry or stored beam attributes.
+
+2. **No snapping to reconcile sources.** A snap means two things disagree. Find the one
+   authoritative source and remove the other. Z-snaps, position-snaps, endpoint-snaps — all
+   symptoms of multiple sources of truth.
+
+3. **No reading 3D geometry to recover computed values.** If Build computed a Bezier path,
+   that result is available during Build. Store it in a structured attribute if needed later.
+   Do not re-derive it by walking FollowMe edge geometry.
+
+4. **Reject, not degrade.** If the math cannot run (missing entity, missing CP), reject the
+   seg_ from map.json with a log message. A map with a missing seg_ is better than a map
+   with a seg_ at the wrong coordinates.
+
+**Applies to all domains:** Route-Time (network coordinates from graph data, not pixel scanning),
+Physical (trip paths from Natalie's plan, not re-derived from telemetry), WebClerk (prices from
+Alice's decision, not re-read from cached display values), Allie (synthesis from indexed corpus,
+not re-parsing raw logs).
+
 ---
 
 ## Current Active State (as of 2026-05-18)
