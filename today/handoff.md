@@ -1,72 +1,77 @@
-# Handoff — 2026-06-07 (session 2)
+# Handoff — 2026-06-08
 
 ## What was accomplished
 
-### 1. One Source of Truth — CP-math complete
-TFTS written and committed: `process/inbox/20260607T214448-tfts.md`
-Axiom 19 added to CLAUDE.md: "One Source of Truth — Do the Math"
-- `generate_map_json` now uses `StructurePlacer.connection_point` (CP-math) for all seg_ endpoints
-- `cached_connection_point` now applies `entity.transformation` (world transform fix)
-- Z-snap removed; beam_path_fallback removed
-- Trial6 confirmed: all 6 seg_ using `source: cp_math`
+### 1. geometry.json — all 4 templates complete and correct
 
-### 2. Natalie block fixed — guideway_group?
-Root cause: `guideway_group?(e)` only matched `e.name == 'JPods Guideway'`.
-Inter-station seg_ groups are named by their connection_id and carry `seg_guideway=true`.
-Fix: `guideway_group?` now also checks `e.get_attribute('JPods', 'seg_guideway') == true`.
-Impact: FollowMe export will now find all inter-station guideways → Natalie block cleared.
+| Template | Tracks | Key corrections |
+|----------|--------|----------------|
+| JPods_station_parking | 20 | Flattened to single ring_z=5143.9mm (zero Z differences) |
+| station_line_end | 14 | gw_cp_in_0 + gw_uturn_0 corrected; upper/lower levels preserved |
+| station_thru_dip | 19 | gw_cp_in_0/1 + gw_uturn_0/1 corrected; platform dip preserved |
+| traffic_circle7 | 24 | gw_cp_in_0/1/2/3 corrected from neighbor Z; no uturn tracks |
 
-### 3. path.json inter-station capture fixed
-`jpod_path_json.rb` inter-station scan had same `e.name == 'JPods Guideway'` miss.
-Fixed: also captures groups with `seg_guideway=true`. path.json now has actual track beam paths
-(±1.75m offset from centerline), not just intra-station geometry.
+Committed: "95% with z-bumps and station defects" (earlier in session)
 
-### 4. Show Route — centerline vs. track fixed
-- Issue: map.json seg_ pts = CP hub = construction centerline (midpoint between two tracks)
-- Fix 1: path.json now captures actual offset track positions (beam_path = ±1.75m offset)
-- Fix 2: Show Route lookup adds `anim_lookup[key.downcase]` fallback (path.json lowercase, trip keys uppercase)
-- After Export Path, Show Route draws on the specific navigated track, not centerline between tracks
+### 2. Z-bump root cause identified (both anomalies)
 
-### 5. 222mm removed everywhere
-- `detect_cps_from_top_level_cp`: hub vertex from shared vertex of two 1750mm rail edges; tangent = formation_center→hub; no tang_edge dependency
-- `_find_direction_vector`: only Priority A (vector_in tag) + Priority B (172mm); 222mm legacy removed
-- `DIRECTION_EDGE_MM = 222.0` constant removed; all 222mm comments updated
+**187.5mm internal gw_ bump (gw_cp_in_lead)** — extracted.json path only:
+- Step 6 ran before snap_to_cp_centers, propagating defective gw_cp_in Z into gw_cp_in_lead
+- geometry.json path: gw_cp_in pre-corrected at ring_z; Step 6 doesn't run → bump gone
+- **Requires plugin reload to verify**
 
-## Open issues
+**312mm seg_→gw_ gap** — systematic, all stations:
+- beam_path (seg_) stores beam-TOP Z; geometry.json ring_z is beam-CENTER
+- Gap ≈ BEAM_DEPTH/2 (~250mm) + offsets
+- Deferred: fudge-factor after snap_to_cp_centers (50–1000mm gate)
 
-**S003 station_line_end — SEVERE end_delta=7011mm**
-Template placed on terrain at elevation far from extracted.json origin Z.
-Fix: run Workflow > Generate Template Data on station_line_end template model.
+### 3. Sally backtrack fix — DONE
 
-**S004 station_thru_dip — SEVERE end_delta=27145mm**
-Same cause. Run Extract Template on station_thru_dip.
+`reserve_slot` now refuses slot 1 when higher slots are occupied and capacity > 1.
+Pod is deferred to gw_platform_parking queue. Prevents the reversal Bill observed at s004.
+Committed: "Sally: refuse slot 1 when higher slots occupied — prevent backtrack"
 
-**S003 lines.json synthesis error**
-"no implicit conversion of String into Integer" — not yet investigated.
+### 4. Retrospection 2026-06-08 written
 
-**Z difference ~0.222m between gw_ and seg_ endpoints**
-cp_marker hub vertex Z may not be at Z=0 in definition-local space.
-Diagnostic: re-run Calculate Connection Points; if delta persists, cp_marker geometry needs re-authoring.
+---
 
-**traffic_circle7 chains not approved**
-`approved_by` not set in lines.json chains_header.
+## Open items for next session
 
-## Files changed this session
-
-- `su_jpods/jpod_animator.rb` — guideway_group? fix + Show Route lowercase fallback
-- `su_jpods/jpod_path_json.rb` — seg_ capture + 222mm removal + DIRECTION_EDGE_MM removed
-- `su_jpods/jpod_structure_tool.rb` — 222mm removal from detect_cps_from_top_level_cp
-- `su_jpods/jpod_map_feature_tool.rb` — 222mm comment corrected to 172mm
-- `process/inbox/20260607T214448-tfts.md` — TFTS: one source of truth arc
-- `CLAUDE.md` — Axiom 19 added
-
-## Reload sequence for next session
-
-Run each line separately in Ruby console:
+### Priority 1: Plugin reload + verify geometry.json path
 ```
-load Sketchup.find_support_file('jpod_animator.rb', 'Plugins/su_jpods')
 load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('jpod_structure_tool.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('jpod_map_feature_tool.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('jpod_sally.rb', 'Plugins/su_jpods')
 ```
-Then: Build → FollowMe Export → Export Path → Show Route.
+Run s004→s003 animation. Verify:
+- No 187.5mm internal gw_ bump
+- Sally backtrack fix works (no reversal to slot 1)
+- 312mm seg_→gw_ gap is still there (expected — fudge factor not yet applied)
+
+### Priority 2: Z-bump fudge factor
+In export(), geometry.json path, after snap_to_cp_centers:
+- For each station, find an adjacent seg_ endpoint
+- Compute Z delta (expected ~312mm)
+- Apply uniform Z shift to all gw_ pts for that station
+- Gate: only if 50mm < delta < 1000mm
+- Log delta per station
+
+### Priority 3: Sally slot 1 edge case
+Future hardening: if pod has looped N times and slot 1 is still the only free slot,
+eventually assign it anyway. Currently pods could queue indefinitely if higher slots
+never free. Add loop_count tracking or a timeout threshold.
+
+---
+
+## Key files changed this session
+- `su_jpods/jpod_sally.rb` — backtrack fix in reserve_slot
+- `su_jpods/templates/track_formations/JPods_station_parking/geometry.json` — flattened
+- `su_jpods/templates/track_formations/station_line_end/geometry.json` — new
+- `su_jpods/templates/track_formations/station_thru_dip/geometry.json` — new
+- `su_jpods/templates/track_formations/traffic_circle7/geometry.json` — new
+- `readmes/retrospections/2026-06-08.md` — this session
+
+## Z reference cheat sheet (for next session working on fudge factor)
+- `seg_` pts Z: beam-TOP centerline (from beam_path)
+- `geometry.json` pts_mm Z: beam-CENTER (from extracted.json formation-local)
+- Gap at station junction: ~312mm = BEAM_DEPTH/2 + offsets
+- `snap_to_cp_centers` snaps gw_ endpoints toward seg_ within 600mm 3D distance
