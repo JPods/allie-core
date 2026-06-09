@@ -1034,6 +1034,51 @@ an endpoint is off the ring.
 
 ---
 
+### 22. One File Per Station Template — Established 2026-06-09
+
+**Rule:** Every station template has exactly one authoritative data file for topology
+and behavior combined: `lines.json`. There is no separate behavioral override file.
+
+**The proof:** Separating topology (lines.json) from behavior (feature.json) requires
+designers and users to keep two files coordinated across every track rename, every
+EP change, and every chain update. In the field this coordination fails. Silent
+divergence — topology updated, behavior not — produces routing failures that are
+hard to diagnose because both files look individually valid.
+
+**The physical argument:** In a real JPods network you cannot reprogram a station to
+behave differently without physically changing the track layout. The software must
+reflect this. If the behavior must be different, design a different station with
+different tracks. One topology → one behavior. One file.
+
+**What lines.json contains:**
+
+| Section | Owner | Gate |
+|---------|-------|------|
+| `eps[]`, `lines{}` | Designer (topology) | `eps_header.approved_by` — Noelle enforces |
+| `chains_*`, `landing_chains`, `hold_loop_chain`, `parking_chain`, `pass_chains` | Sally (behavior) | `chains_header.approved_by` — Sally will not operate unsigned |
+
+Two approvals, two agents, one file. The section headers make ownership explicit
+without creating a synchronization risk.
+
+**Template folder committed files (exactly these six):**
+```
+model.skp       — geometry source (designer)
+lines.json      — topology + behavior (designer + Sally, both approved by Bill)
+cp.json         — CP positions (Extract Template generates once)
+geometry.json   — vehicle paths (Extract Template generates, Bezier-protected)
+notes.md        — documents protected geometry.json tracks
+image.png       — thumbnail
+```
+
+`feature.json`, `extracted.json`, and all `lines~*.json` backup files are not
+committed. `model.*.json` files are runtime artifacts — never committed.
+
+**Corollary:** The Console tool "Sally: Draft Chains" drafts the behavioral sections
+of lines.json, not a separate file. Sally drafts into lines.json; Bill approves by
+setting `chains_header.approved_by`.
+
+---
+
 ## Current Active State (as of 2026-05-18)
 
 ### SketchUp Plugin — What Works
