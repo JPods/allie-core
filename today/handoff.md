@@ -1,77 +1,43 @@
-# Handoff — 2026-06-08
+# Handoff — 2026-06-09
 
 ## What was accomplished
 
-### 1. geometry.json — all 4 templates complete and correct
+### 1. Four-layer protection for hand-authored geometry.json tracks
+- **Layer 1 — Console gate** (`jpod_console.rb`): UI.messagebox before Generate Geometry JSON on protected templates
+- **Layer 2 — notes.md** in each template folder: protected tracks, endpoints, Bezier convention, git restore
+- **Layer 3 — CLAUDE.md Axiom 20**: per-template protection map for future Claude Code sessions
+- **Layer 4 — Allie memory**: reference_template_geometry_protection.md
 
-| Template | Tracks | Key corrections |
-|----------|--------|----------------|
-| JPods_station_parking | 20 | Flattened to single ring_z=5143.9mm (zero Z differences) |
-| station_line_end | 14 | gw_cp_in_0 + gw_uturn_0 corrected; upper/lower levels preserved |
-| station_thru_dip | 19 | gw_cp_in_0/1 + gw_uturn_0/1 corrected; platform dip preserved |
-| traffic_circle7 | 24 | gw_cp_in_0/1/2/3 corrected from neighbor Z; no uturn tracks |
+### 2. traffic_circle7 Show Formation Tracks fixed
+- gw_c_0_1, gw_c_1_2, gw_c_2_3, gw_c_3_0: endpoints corrected to ring arc FIRST/LAST (0mm gaps, 1000mm length each)
+- gw_in_0..3, gw_out_0..3: 2-pt diagonals → 13-pt Bezier curves with correct ring-side endpoints
+- Root cause: switch-box offset coordinates (~500mm inside ring radius) used instead of arc endpoints
 
-Committed: "95% with z-bumps and station defects" (earlier in session)
+### 3. Axiom 21 + recovery guide
+- CLAUDE.md Axiom 21: ring junction endpoints come from arc FIRST/LAST
+- `readmes/sketchup/formation-tracks-recovery.md`: full per-template recovery guide with Python recompute script for traffic_circle7
 
-### 2. Z-bump root cause identified (both anomalies)
+## State of Show Formation Tracks (all 4 templates)
 
-**187.5mm internal gw_ bump (gw_cp_in_lead)** — extracted.json path only:
-- Step 6 ran before snap_to_cp_centers, propagating defective gw_cp_in Z into gw_cp_in_lead
-- geometry.json path: gw_cp_in pre-corrected at ring_z; Step 6 doesn't run → bump gone
-- **Requires plugin reload to verify**
+| Template | Status |
+|----------|--------|
+| traffic_circle7 | Fixed 2026-06-09 — reload and verify |
+| JPods_station_parking | Fixed 2026-06-08 — verified working |
+| station_thru_dip | Fixed 2026-06-08 — verified working |
+| station_line_end | Fixed 2026-06-08 — verified working |
 
-**312mm seg_→gw_ gap** — systematic, all stations:
-- beam_path (seg_) stores beam-TOP Z; geometry.json ring_z is beam-CENTER
-- Gap ≈ BEAM_DEPTH/2 (~250mm) + offsets
-- Deferred: fudge-factor after snap_to_cp_centers (50–1000mm gate)
+## Next steps
 
-### 3. Sally backtrack fix — DONE
-
-`reserve_slot` now refuses slot 1 when higher slots are occupied and capacity > 1.
-Pod is deferred to gw_platform_parking queue. Prevents the reversal Bill observed at s004.
-Committed: "Sally: refuse slot 1 when higher slots occupied — prevent backtrack"
-
-### 4. Retrospection 2026-06-08 written
-
----
-
-## Open items for next session
-
-### Priority 1: Plugin reload + verify geometry.json path
-```
-load Sketchup.find_support_file('jpod_path_json.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('jpod_sally.rb', 'Plugins/su_jpods')
-```
-Run s004→s003 animation. Verify:
-- No 187.5mm internal gw_ bump
-- Sally backtrack fix works (no reversal to slot 1)
-- 312mm seg_→gw_ gap is still there (expected — fudge factor not yet applied)
-
-### Priority 2: Z-bump fudge factor
-In export(), geometry.json path, after snap_to_cp_centers:
-- For each station, find an adjacent seg_ endpoint
-- Compute Z delta (expected ~312mm)
-- Apply uniform Z shift to all gw_ pts for that station
-- Gate: only if 50mm < delta < 1000mm
-- Log delta per station
-
-### Priority 3: Sally slot 1 edge case
-Future hardening: if pod has looped N times and slot 1 is still the only free slot,
-eventually assign it anyway. Currently pods could queue indefinitely if higher slots
-never free. Add loop_count tracking or a timeout threshold.
-
----
+1. Reload su_jpods in SketchUp, open traffic_circle7, run Show Formation Tracks — verify smooth curves and no ribbon crossing
+2. Verify station_dip template if it exists
+3. Sally chains verification against updated geometry.json coordinates
 
 ## Key files changed this session
-- `su_jpods/jpod_sally.rb` — backtrack fix in reserve_slot
-- `su_jpods/templates/track_formations/JPods_station_parking/geometry.json` — flattened
-- `su_jpods/templates/track_formations/station_line_end/geometry.json` — new
-- `su_jpods/templates/track_formations/station_thru_dip/geometry.json` — new
-- `su_jpods/templates/track_formations/traffic_circle7/geometry.json` — new
-- `readmes/retrospections/2026-06-08.md` — this session
 
-## Z reference cheat sheet (for next session working on fudge factor)
-- `seg_` pts Z: beam-TOP centerline (from beam_path)
-- `geometry.json` pts_mm Z: beam-CENTER (from extracted.json formation-local)
-- Gap at station junction: ~312mm = BEAM_DEPTH/2 + offsets
-- `snap_to_cp_centers` snaps gw_ endpoints toward seg_ within 600mm 3D distance
+```
+su_jpods/jpod_console.rb                                  — Layer 1 gate
+su_jpods/templates/track_formations/*/notes.md            — Layer 2 docs
+su_jpods/templates/track_formations/traffic_circle7/geometry.json
+Allie/CLAUDE.md                                           — Axioms 20, 21
+Allie/readmes/sketchup/formation-tracks-recovery.md       — recovery guide
+```
