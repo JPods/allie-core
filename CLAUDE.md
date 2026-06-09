@@ -969,6 +969,43 @@ Physical (trip paths from Natalie's plan, not re-derived from telemetry), WebCle
 Alice's decision, not re-read from cached display values), Allie (synthesis from indexed corpus,
 not re-parsing raw logs).
 
+### 20. Template Geometry Protection — Established 2026-06-09
+
+Station template geometry.json files contain hand-authored Bezier curves and Z corrections
+that **cannot be regenerated automatically**. Generate Geometry JSON will destroy them if
+run without awareness. Three protection layers are in place:
+
+**Layer 1 — Console gate** (`jpod_console.rb`): Before running Generate Geometry JSON,
+the tool reads the existing geometry.json and shows `UI.messagebox(MB_YESNO)` listing all
+protected tracks. User must confirm to proceed.
+
+**Layer 2 — Per-template notes.md**: Each template folder has `notes.md` documenting which
+tracks are hand-authored, why, junction coordinates, and the git restore command.
+
+**Layer 3 — This section**: Per-template protection map for Claude Code sessions.
+
+**What triggers protection** in `save_geometry()` (`jpod_path_json.rb`):
+- Track has >2 pts_mm (Bezier or ArcCurve) → preserved, length_mm updated
+- Track has `"authored": true` flag → preserved (hand-corrected 2-pt track, e.g. Z fix)
+
+**Per-template protection map:**
+
+| Template | Protected tracks | Key concern |
+|----------|-----------------|-------------|
+| `JPods_station_parking` | gw_platform_in1, gw_platform_in2, gw_lift_in, gw_lift_parking, gw_platform_out1, gw_platform_out2 (Bezier); gw_lift (straight, confirmed) | Series junction gaps must stay 0.0mm; tangents from adjacent track angles, not chord |
+| `station_thru_dip` | gw_lift_in, gw_platform_in, gw_platform_out (Bezier); gw_uturn_0, gw_uturn_1 (arc) | 3D curves with Z transition; chord direction cannot reproduce these |
+| `station_line_end` | gw_lift_in, gw_platform_in (Bezier); gw_uturn_0, gw_cp_in_0 (authored=true) | Z correction: gw_cp_in_0 and gw_uturn_0 must be Z=10242.7, NOT 8242.7 (model stores them 2m low) |
+| `traffic_circle7` | None currently | Flat ring; Generate Geometry JSON is safe |
+
+**Restore any template from git:**
+```
+git -C "$SU_PLUGINS" checkout HEAD -- templates/track_formations/<template>/geometry.json
+```
+
+**Never run Generate Geometry JSON on station_thru_dip or station_line_end** without
+reading their notes.md first. These templates have 3D Z transitions that auto-extraction
+cannot reconstruct.
+
 ---
 
 ## Current Active State (as of 2026-05-18)
