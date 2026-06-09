@@ -1006,6 +1006,32 @@ git -C "$SU_PLUGINS" checkout HEAD -- templates/track_formations/<template>/geom
 reading their notes.md first. These templates have 3D Z transitions that auto-extraction
 cannot reconstruct.
 
+### 21. Ring Junction Endpoints Come From the Arc — Established 2026-06-09
+
+**Rule:** Every endpoint that touches a ring junction in a traffic-circle template must equal
+the adjacent ring arc's own FIRST or LAST pt. Never use switch-box offset coordinates.
+
+**The proof:** traffic_circle7 short connectors (gw_c_0_1, gw_c_1_2, gw_c_2_3, gw_c_3_0)
+and approach tracks (gw_in_*, gw_out_*) had endpoints ~500mm inside the ring radius — at
+switch-box offset positions extracted from model geometry, not on the ring centerline.
+Effect: ribbons visually crossed the guideway. Fixed by setting every junction endpoint to
+the adjacent arc's FIRST or LAST pt. Correct connector length = 1000mm; any deviation means
+an endpoint is off the ring.
+
+**Diagnosis:**
+- Ribbon crosses guideway at junction → endpoint not on ring (check radius from ring center)
+- gw_in/gw_out draws straight → needs Bezier (13-pt); ring-side endpoint wrong
+- Length of short connector ≠ 1000mm → one or both endpoints off-ring
+
+**For any ring-topology template:**
+1. Four ring arcs define all eight junction EP coordinates (their FIRST and LAST pts)
+2. Short connectors: FIRST = one arc's exit pt, LAST = next arc's entry pt
+3. Approach in/out tracks: ring-side endpoint = same EP coordinate as adjacent connector
+4. Vehicle direction on each arc: determine CCW vs. CW; arcs may be stored LAST→FIRST
+5. Approach Bezier: sv = CCW ring tangent at diverge EP; ev = REVERSE of CP track direction
+
+**Detail in:** `templates/track_formations/traffic_circle7/notes.md`
+
 ---
 
 ## Current Active State (as of 2026-05-18)
