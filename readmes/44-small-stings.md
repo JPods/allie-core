@@ -1,5 +1,5 @@
 # Small Stings — Customer Dissatisfaction Penalties
-**Last Updated:** 2026-05-22
+**Last Updated:** 2026-06-09
 **Owner:** Alice (formula + application), Natalie (detection + reporting)
 **Action:** Reference when designing service quality rules, billing logic, or Natalie delay handling
 **Frequency:** Read when adding any new service failure mode or extending the fare calculation
@@ -183,6 +183,50 @@ A passenger who is physically capable of using the stairs but prefers not to is 
 - Lift fee logic in Alice's price_query
 
 **Open question for Bill:** Is the convenience fee a flat add-on per trip (like a premium seat), a per-use toll, or a subscription tier (unlimited lift access for a monthly fee)? The subscription model may encourage ADA-like users to self-identify without pressure.
+
+---
+
+## Customer-Assessed Stings + Retrospection Payments
+
+The automatic stings above (ST-01 through ST-05) fire when the network detects its own failures. A second class of sting is **customer-assessed**: the customer actively flags a problem they believe should be solved, even when the system did not detect it as a failure.
+
+**Two parts, both owned by Alice:**
+
+### 1. Customer-Assessed Sting
+
+A customer raises a problem — service quality, safety concern, policy disagreement, design flaw, unmet expectation. They submit it as a Small-Sting claim. Alice accepts the claim and records it.
+
+- The claim does not require system-side evidence of failure. The customer's judgment is sufficient to open the claim.
+- Alice logs `sting_type: "customer_assessed"`, `raised_by: carryon_uuid`, `raised_at`, and the problem description.
+- The sting amount is determined by Alice based on problem category (to be designed — equivalent-tier scale to ST-01 through ST-05 or a flat small amount).
+- Claims are visible to Allie and surfaced to Bill at daily brief. Patterns in customer-assessed stings that don't match system-detected stings are the most valuable signal — they reveal gaps in Natalie/Noelle/Sally's detection.
+
+### 2. Retrospection Payment
+
+JPods pays customers to provide structured retrospections. A retrospection is a written account of what happened, what the customer expected, what they experienced, and what they think should change.
+
+**Why paid:** Retrospections take time. A customer who writes a good-faith problem report is performing quality assurance. The payment is the usufruct principle applied to feedback: the customer contributed value; JPods returns value proportional to what was received.
+
+**What a retrospection contains (minimum):**
+- What the customer expected
+- What they experienced instead
+- One specific change they would make
+
+**Payment trigger:** Alice issues payment when a retrospection is submitted and passes a minimum quality check (not blank, not single-word). Alice does not judge whether the retrospection is correct — only whether it was provided in good faith.
+
+**Amount:** Undecided. Should be small enough not to incentivize spam, large enough to feel meaningful. Bill sets the rate.
+
+**Relationship to customer-assessed sting:** A customer who submits a sting claim is invited to provide a retrospection. The sting is the signal; the retrospection is the intelligence. Alice tracks which stings have retrospections. Aggregate sting-without-retrospection rate = measure of customer disengagement.
+
+**Alice's accounting of both flows:**
+
+| Flow | Direction | Alice's role |
+|------|-----------|-------------|
+| Automatic sting (ST-01 to ST-05) | Network → customer (fare discount) | Compute and apply |
+| Customer-assessed sting | Customer → JPods (fine) | Accept, record, surface |
+| Retrospection payment | JPods → customer (payment) | Issue when retrospection submitted |
+
+All three are recorded in Alice's transaction ledger alongside ticket sales.
 
 ---
 
