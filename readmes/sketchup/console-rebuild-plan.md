@@ -39,7 +39,7 @@ responsible for that domain. The prefix `[AgentName]` appears in every output li
 | **Natalie** | Routing | Trip planning, O-D routing, followme.json, route overlay |
 | **Sally** | Station behavior | Originating/landing/hold/parking/pass chains, per-station slot registry, Sally behavior tests |
 | **Nora** | Vehicles | Vehicle placement, animation, trip execution, camera follow |
-| **Alice** | Ticket sales + action lists | Trip pricing, booking, invoices, payments (wcapi); Project → Action → Document records in WC3 |
+| **Alice** | Ticket sales + Small-Stings + action lists | Trip pricing, booking, invoices, payments (wcapi); Small-Stings (customer-assessed fines for unresolved problems; JPods pays customers for retrospections); Project → Action → Document records in WC3 |
 | **Athena** | Cyber security | Not in Console — separate domain; do not rename/reuse |
 
 Format: `[Noelle] CP0 tangent missing — re-run Extract Template.`
