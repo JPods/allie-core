@@ -66,7 +66,7 @@ Full argument: `readmes/sketchup/jpods-trip-schema.md`.
 | **SketchUp Plugin** (`su_jpods`) | 3D design tool for students | Active development — waypoints, build pipeline, height fix |
 | **JPodsSM_RPi** | Physical scale model vehicles | Operational — Nora/Natalie/Noelle on Pi fleet |
 | **Route-Time** | Network planner + travel simulator | Working — two-sweep O-D, isochrone, network clipboard |
-| **WebClerk / Alice** | Commerce layer + ticketing | Alice owns pricing; trip booking API under development |
+| **WebClerk / Alice** | Commerce layer + ticketing | Alice owns ticket sales, Small-Stings (customer-assessed fines for unresolved problems; JPods pays customers for retrospections), and action lists; trip booking API under development |
 
 ### What the SketchUp Plugin Does
 
@@ -91,7 +91,7 @@ Each step has a dedicated tool. The Build step runs `NoelleNetworkBuilder.from_j
 | **Natalie** | Router — trip plans, route sequences | `natalie.rb` (SketchUp), `podPresenter` (Mac) |
 | **Noelle** | Network validator + load balancer | `noelle.rb` (SketchUp), `ezone.py` (Pi) |
 | **Sally** | Station processor — per-station slot registry and parking queue | `jpod_sally.rb` (SketchUp), station chip (Pi) |
-| **Alice** | WebClerk — data quality, billing, patterns | WC3 on Mac; wcapi bridge |
+| **Alice** | WebClerk — ticket sales, Small-Stings, action lists | WC3 on Mac; wcapi bridge. Small-Stings: customers assess fines for unresolved problems; JPods pays customers for retrospections. Alice accounts for both flows. |
 | **Athena** | Security reviewer — signs non-standing actions | `athena_review.py` |
 | **Allie** | Cross-domain persistent intelligence | This repo; local LLM (allie:latest) |
 
