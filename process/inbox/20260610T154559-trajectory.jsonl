@@ -1,0 +1,5 @@
+{"type":"session_start","model":"model","pod_count":1,"ts":"2026-06-10T15:45:59Z"}
+{"type":"tick","ts":"2026-06-10T15:45:59Z","nora_id":"NORA_0003","cid":"T001.hold_loop[11/11]","t_pct":2.3,"pos_mm":[9550.2,-1039.3,5143.9]}
+{"type":"tick","ts":"2026-06-10T15:46:00Z","nora_id":"NORA_0003","cid":"T001.hold_loop[11/11]","t_pct":4.6,"pos_mm":[5250.9,-1039.3,5143.9]}
+{"type":"tick","ts":"2026-06-10T15:46:00Z","nora_id":"NORA_0003","cid":"T001.hold_loop[11/11]","t_pct":6.9,"pos_mm":[952.1,-1039.3,5143.9]}
+{"type":"session_end","ts":"2026-06-10T15:46:01Z"}
