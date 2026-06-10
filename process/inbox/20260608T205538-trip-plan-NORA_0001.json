@@ -1,0 +1,134 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-08T20:55:38Z",
+  "origin_sid": "S003",
+  "dest_sid": "S004",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 23,
+  "lines": {
+    "s001": {
+      "gw_cp_in_3": {
+        "plan": {
+          "seq": 8
+        }
+      },
+      "gw_in_3": {
+        "plan": {
+          "seq": 9
+        }
+      },
+      "gw_c_3_0": {
+        "plan": {
+          "seq": 10
+        }
+      },
+      "gw_c_0_0": {
+        "plan": {
+          "seq": 11
+        }
+      },
+      "gw_c_0_1": {
+        "plan": {
+          "seq": 12
+        }
+      },
+      "gw_c_1_1": {
+        "plan": {
+          "seq": 13
+        }
+      },
+      "gw_c_1_2": {
+        "plan": {
+          "seq": 14
+        }
+      },
+      "gw_out_2": {
+        "plan": {
+          "seq": 15
+        }
+      },
+      "gw_cp_out_2": {
+        "plan": {
+          "seq": 16
+        }
+      }
+    },
+    "s003": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1
+        }
+      },
+      "gw_uturn_1": {
+        "plan": {
+          "seq": 2
+        }
+      },
+      "gw_far_main": {
+        "plan": {
+          "seq": 3
+        }
+      },
+      "gw_far_main_2": {
+        "plan": {
+          "seq": 4
+        }
+      },
+      "gw_cp_out_lead_0": {
+        "plan": {
+          "seq": 5
+        }
+      },
+      "gw_cp_out_0": {
+        "plan": {
+          "seq": 6
+        }
+      }
+    },
+    "s004": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 18
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 19
+        }
+      },
+      "gw_near_main_1": {
+        "plan": {
+          "seq": 20
+        }
+      },
+      "gw_platform_in": {
+        "plan": {
+          "seq": 21
+        }
+      },
+      "gw_platform_parking": {
+        "plan": {
+          "seq": 22
+        }
+      },
+      "gw_platform": {
+        "plan": {
+          "seq": 23
+        }
+      }
+    },
+    "connections": {
+      "seg_s003_cp0_s001_cp3": {
+        "plan": {
+          "seq": 7
+        }
+      },
+      "seg_s001_cp2_s004_cp0": {
+        "plan": {
+          "seq": 17
+        }
+      }
+    }
+  }
+}
