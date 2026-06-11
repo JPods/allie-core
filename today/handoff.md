@@ -1,70 +1,38 @@
-# Handoff — 2026-06-09 (session 2)
+# Handoff — 2026-06-11
 
 ## What was accomplished
 
-### 1. Readme panel (completed in session 1 continuation)
-Two-pane overlay in #div-models, #div-networks, #div-vehicles.
-`cmd_readme_files` Ruby callback reads template notes.md + Allie readmes.
-Custom `_mdToHtml` JS renderer (tables, code blocks, headings, bold/italic).
+station_thru_dip platform_shuffle test is complete and confirmed excellent.
 
-### 2. Template model animation — `start_for_template`
+All six hold_loop bugs in this arc are resolved:
+1. `.values.first` returning "note" string → `.values.find { |v| v.is_a?(Hash) }`
+2. Originating chain completion re-parking pod → Phase 2 erase before Trip-2 dispatch
+3. Stale Sally slot advance interrupting departing pod → `release_slot` at dispatch + `:traveling` guard
+4. Hold loop departure backward (ps4→ps1) → entry-first orientation in `build_fleet` before maneuver build
+5. Loops too many (3 → 1) → changed loops=3 to loops=1 in console test setup
+6. Hold loop return ps4→ps1→ps4 → removed gw_platform from landing chains + `last_man[:pts].last` as seed_pos
 
-Added to `jpod_vehicle_anim.rb`:
-- `start_for_template(model, template_lookup)` — new animation entry point
-  - Accepts pre-built lookup keyed by `"#{station_id}.track_name"`
-  - Calls existing `build_fleet` (Sally hold loop path works without map.json)
-  - Sets `@@template_mode = true` so dwelling loop uses template-specific erase
-  - Same timer/tick loop as normal start
+## Current state
 
-- `@@template_mode = false` module variable (reset in `stop`)
+- station_thru_dip platform_shuffle: PASS ✓
+- All six station template hold_loop tests complete (from prior sessions)
+- lines.json landing_chains for station_thru_dip updated: gw_platform removed from in_cp0 and in_cp1
 
-- Dwelling loop template extension (in tick):
-  - Phase 1: pod landed at platform → dispatch originating chain from lines.json
-  - Phase 2: originating chain complete → erase entity (vehicle "disappears")
-  - Fallback: no originating chain → erase directly
+## Open questions
 
-Modified `jpod_console.rb` → `cmd_sally_standard_test`:
-- Detects template model via `model.path.includes?('track_formations')`
-- Template path: reads geometry.json → builds lookup → places V1 with raw pts
-  (no guideway group needed — `model.entities.add_instance` directly)
-- Sets `template_formation_id` on vehicle so dwelling loop can find lines.json
-- Calls `start_for_template` instead of `start_animation`
-- Poll: watches for V1 erasure (station_test = 'true' remaining count)
-- `raise 'template_path_done'` skips network flow; rescue handles it as success
+- Should `gw_platform` be audited in other templates' landing_chains? The rule is now clear: landing chains end at gw_platform_parking. station_line_end already follows this rule. station_parking (JPods_station_parking) should be checked.
+- `entity.bounds.center` used in other park dispatch contexts? The fix was applied to the main arrival handler. The `hold_loop_return` dwelling handler at line ~2997 also uses `pod.entity.bounds.center` — that branch fires only when to_platform is non-empty AND landing_chains don't intersect. Now that landing_chains are correct for all templates, this branch may never fire. Monitor.
 
-## What still needs testing
-
-The code is written but NOT yet tested in SketchUp. Need to:
-
-1. Reload su_jpods:
-```
-load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
-load Sketchup.find_support_file('jpod_console.rb', 'Plugins/su_jpods')
-```
-
-2. Open `JPods_station_parking/model.skp` (must have been through Build Network)
-3. Console → Models tab → Sally Test button
-4. Expected: V1 placed on gw_platform, 3 hold-loop circuits, lands at platform, exits via gw_cp_out_0, disappears. Test PASS.
-
-## Likely issues to debug
-
-1. **V1 not found by build_fleet**: If `next_nora_num` or `all_nora_vehicles_in_model` doesn't see V1, build_fleet returns empty. Check: does V1 get a `vehicle_id` attribute set? (Yes — `assign_nora_tag` is called.)
-
-2. **Lookup key format mismatch**: Sally reads `"#{station_id}.gw_platform"` (e.g., "S001.gw_platform"). Template lookup is built with this key. Should work but verify station_id is uppercase.
-
-3. **Formation xf**: If geometry.json pts are in formation-local space and the station is not at origin in the template model, pts will be offset. `load_extracted_formation_xf` returns nil for flat templates → identity xf → pts treated as already in world space. Should be fine for JPods_station_parking.
-
-4. **Sally sequencer reset**: `stop()` calls `Sally.reset` which clears sequencers. `build_fleet` auto-reinitializes from the station entity's `formation_id` on the definition. Verify: `station_entity.definition.get_attribute('JPods', 'formation_id', '')` returns `'JPods_station_parking'`.
-
-5. **Hold loop tracks empty**: If `Sally.hold_loop_tracks(hl_sid)` returns `[]` after reinit, build_fleet logs "no hold_loop for this formation". Fix: check that `jpod_sally.rb` finds `hold_loop_chain` in lines.json for the formation.
-
-6. **Originating chain dispatch**: After parking at gw_platform, dwelling loop reads lines.json `originating_chains.out_cp0.tracks`. The tracks include `gw_cp_out_0` as the last track. This track must be in the template_lookup. It is — geometry.json includes all gw_cp_out_* tracks.
-
-## Key files changed
+## Key files
 
 ```
-su_jpods/jpod_vehicle_anim.rb   — start_for_template + @@template_mode + dwelling loop
-su_jpods/jpod_console.rb        — cmd_sally_standard_test template branch
+su_jpods/jpod_vehicle_anim.rb
+su_jpods/jpod_console.rb
+su_jpods/jpod_sally.rb
+su_jpods/templates/track_formations/station_thru_dip/lines.json
 ```
 
-Commit: `su_jpods_claude` branch, hash 10e6c86.
+## Next session
+
+Check JPods_station_parking landing_chains for the same gw_platform overshoot issue.
+Then: full six-template regression test with loops=1 to confirm all templates clean.
