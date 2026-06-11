@@ -1,38 +1,70 @@
-# Handoff — 2026-06-11
+# Handoff — 2026-06-11 (session 2)
 
-## What was accomplished
+## Status
+Platform_shuffle test fixes applied and pushed (6f69a7e). Ready to re-run the test.
 
-station_thru_dip platform_shuffle test is complete and confirmed excellent.
+## What was fixed this session
 
-All six hold_loop bugs in this arc are resolved:
-1. `.values.first` returning "note" string → `.values.find { |v| v.is_a?(Hash) }`
-2. Originating chain completion re-parking pod → Phase 2 erase before Trip-2 dispatch
-3. Stale Sally slot advance interrupting departing pod → `release_slot` at dispatch + `:traveling` guard
-4. Hold loop departure backward (ps4→ps1) → entry-first orientation in `build_fleet` before maneuver build
-5. Loops too many (3 → 1) → changed loops=3 to loops=1 in console test setup
-6. Hold loop return ps4→ps1→ps4 → removed gw_platform from landing chains + `last_man[:pts].last` as seed_pos
+**Root cause:** `station_test_phase=''` is the dispatch gate for originating chain. Pods arriving at the platform with empty phase would fire originating chain on their first dwell expiry — before Sally had a chance to advance them.
 
-## Current state
+**Five fixes applied to jpod_vehicle_anim.rb + jpod_sally.rb:**
 
-- station_thru_dip platform_shuffle: PASS ✓
-- All six station template hold_loop tests complete (from prior sessions)
-- lines.json landing_chains for station_thru_dip updated: gw_platform removed from in_cp0 and in_cp1
+1. `_park_ps` arrival: initial landing sets `shuffle_parked` (prevents originating chain on first dwell)
+2. `_advance_ps` arrival: sets `shuffle_parked` after each advance step
+3. `shuffle_parked` dwelling branch — new semantics:
+   - `slot < cap` → remove from `@@dwelling` only; pod stays in `@@pods` for Sally to advance
+   - `slot >= cap` → phase='', @dwell_until=nil, `next` → next tick fires originating chain
+4. `hold_loop_parked` dwelling branch: transitions to `shuffle_parked` lifecycle (was terminal — V1 never exited, `remaining` never reached 0)
+5. `confirm_slots`: guard `model&.entities` nil to prevent crash
 
-## Open questions
+## Re-run platform_shuffle test
 
-- Should `gw_platform` be audited in other templates' landing_chains? The rule is now clear: landing chains end at gw_platform_parking. station_line_end already follows this rule. station_parking (JPods_station_parking) should be checked.
-- `entity.bounds.center` used in other park dispatch contexts? The fix was applied to the main arrival handler. The `hold_loop_return` dwelling handler at line ~2997 also uses `pod.entity.bounds.center` — that branch fires only when to_platform is non-empty AND landing_chains don't intersect. Now that landing_chains are correct for all templates, this branch may never fire. Monitor.
+Reload both files in SketchUp Ruby console:
+```
+load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
+load Sketchup.find_support_file('jpod_sally.rb', 'Plugins/su_jpods')
+```
+
+Then: Workflow → Station Test → JPods_station_parking → platform_shuffle
+
+**Expected behavior:**
+- V2 (loops=0) and V3 (loops=0) land, get slots, Sally advances them forward each cycle
+- V1 (loops=1) does 1 loop, returns, parks, then also enters shuffle lifecycle
+- Each pod exits via originating chain when it reaches the highest slot
+- Test polls `remaining == 0` → PASS
+
+**Watch for:**
+- `shuffle_parked ps{N}/{cap} — awaiting advance` log lines (pods holding correctly)
+- `shuffle_parked ps{cap}/{cap} — at highest slot, queueing exit` (transition to originating chain)
+- `originating chain → gw_cp_out_0` (departure)
+- `erased at ... — originating chain complete` (entity gone, remaining drops)
+- `confirm_slots error` should be gone (nil guard added)
+
+## If test passes: 6-template regression
+Re-run platform_shuffle for all 6 templates. station_thru_dip confirmed prior session.
+Templates to confirm clean:
+- JPods_station_parking ← current focus
+- station_line_end
+- station_thru_dip ✓
+- traffic_circle7
+- JPods_station_parking (network path, step 2)
+
+## Pre-network audit (still pending from morning handoff)
+Check JPods_station_parking and traffic_circle7 landing_chains:
+- Rule: last track must be gw_platform_parking (or equivalent), NOT gw_platform
+- station_thru_dip fixed last session ✓
+- station_line_end confirmed correct ✓
+- JPods_station_parking — CHECK lines.json in_cp0/in_cp1
+- traffic_circle7 — CHECK lines.json
+
+## Known risk
+`hold_loop_return` dwelling handler (jpod_vehicle_anim.rb ~line 3021) still uses
+`pod.entity.bounds.center` as seed_pos for park maneuver. Should be fine if landing
+chains are correct (end at gw_platform_parking, not gw_platform). If park clips wrong,
+fix: use `JPods::Sally.slot_position(sid, t_slot)` as seed anchor.
 
 ## Key files
-
 ```
-su_jpods/jpod_vehicle_anim.rb
-su_jpods/jpod_console.rb
-su_jpods/jpod_sally.rb
-su_jpods/templates/track_formations/station_thru_dip/lines.json
+su_jpods/jpod_vehicle_anim.rb  — shuffle_parked lifecycle (arrival handlers + dwelling branch)
+su_jpods/jpod_sally.rb         — confirm_slots nil guard
 ```
-
-## Next session
-
-Check JPods_station_parking landing_chains for the same gw_platform overshoot issue.
-Then: full six-template regression test with loops=1 to confirm all templates clean.
