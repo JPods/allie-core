@@ -1072,3 +1072,51 @@ the .skp automatically.
 | `boot.rb` | 3 s startup offer timer; AppObserver `check_model_location_deferred` call |
 | `jpod_connect_tool.rb` | `commit()` canonical JSON path rule; `note_unmanaged_project` call |
 
+
+---
+
+## Logging Engineering Rules
+
+### Adaptive log rate — slow down when events slow
+
+When a periodic process (timer, sweep, animation tick) produces output every cycle,
+the log becomes noise as soon as the interesting activity stops. The correct pattern
+is to log at full rate during active phases and reduce (or stop) during idle phases.
+
+**Sally startup tick** is the reference implementation:
+- Ticks 1–N at 1 s while active: `active(1s)  quiet=k/8`
+- Mode transition logged once: `[Sally mode→idle(4s)]`
+- Subsequent ticks at reduced cadence or suppressed entirely
+
+**Rules:**
+1. Every periodic emitter must track a `quiet` counter or `last_active_at` timestamp.
+2. Log at full rate while `quiet < threshold`. Suppress or reduce after.
+3. Log the mode transition once, loudly (`mode→idle`), so the reader knows why output stopped.
+4. Never suppress errors, state changes, or anomalies — only routine "still running" ticks.
+5. Resume full rate the moment any interesting event occurs.
+
+**Applies to:** Sally timer, Natalie sweep, Nora tick log, any future Pi telemetry bridge.
+
+---
+
+### Console log separators — mark every user-initiated event
+
+The console log (`jpod_console.log`) accumulates background ticks from Sally, Natalie,
+and Nora alongside user-triggered task output. Without visual breaks, finding where a
+button was clicked in a long log requires grep or careful counting.
+
+**Rule:** Every `cmd_execute` call emits two blank lines and a `━━━ ▶ Task  HH:MM:SSZ`
+header **before** any task output. This header prints only when NoelleGuard has passed —
+blocked tasks do not emit a separator (the block message is sufficient).
+
+**Implementation:** `jpod_console.rb` → `cmd_execute` callback, before `capture_run`.
+
+```ruby
+puts ""
+puts ""
+puts "━━━ ▶ #{label}  #{ts} ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+```
+
+**Pattern applies to:** any future agent or dialog that emits user-triggered output into
+a shared log stream — physical Pi agents, Route-Time simulation start, Alice order events.
+The rule is: **user action = blank lines + header**. Background ticks get no separator.
