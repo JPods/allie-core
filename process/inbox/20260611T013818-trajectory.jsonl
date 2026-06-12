@@ -1,0 +1,3 @@
+{"type":"session_start","model":"model","pod_count":3,"ts":"2026-06-11T01:38:18Z"}
+{"type":"tick","ts":"2026-06-11T01:38:18Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":4.9,"pos_mm":[-638.4,-4615.1,5839.4]}
+{"type":"session_end","ts":"2026-06-11T01:38:19Z"}

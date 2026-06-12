@@ -1,0 +1,15 @@
+{"type":"session_start","model":"model","pod_count":3,"ts":"2026-06-11T03:43:59Z"}
+{"type":"tick","ts":"2026-06-11T03:44:00Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":2.2,"pos_mm":[4821.6,-1038.8,5913.3]}
+{"type":"tick","ts":"2026-06-11T03:44:01Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":4.5,"pos_mm":[4370.3,-1038.8,5913.3]}
+{"type":"tick","ts":"2026-06-11T03:44:01Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":6.7,"pos_mm":[36.8,-1038.8,5913.3]}
+{"type":"tick","ts":"2026-06-11T03:44:02Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":9.3,"pos_mm":[-4955.2,-1051.3,5921.0]}
+{"type":"tick","ts":"2026-06-11T03:44:02Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":11.6,"pos_mm":[-9402.4,-1640.1,6284.3]}
+{"type":"maneuver","ts":"2026-06-11T03:44:03Z","nora_id":"NORA_0002","maneuver_id":"station_thru_dip.gw_platform_advance_ps2_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[3015.0,-1038.8,5913.3],[515.0,-1038.8,5913.3]]}
+{"type":"tick","ts":"2026-06-11T03:44:03Z","nora_id":"NORA_0002","cid":"station_thru_dip.gw_platform_advance_ps2_to_ps3","t_pct":90.8,"pos_mm":[744.9,-1038.8,5913.3]}
+{"type":"tick","ts":"2026-06-11T03:44:03Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":13.9,"pos_mm":[-13621.0,-2763.5,6977.7]}
+{"type":"maneuver_end","ts":"2026-06-11T03:44:03Z","nora_id":"NORA_0002","cid":"station_thru_dip.gw_platform_advance_ps2_to_ps3"}
+{"type":"tick","ts":"2026-06-11T03:44:03Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":16.5,"pos_mm":[-18327.7,-4002.4,7742.3]}
+{"type":"maneuver","ts":"2026-06-11T03:44:04Z","nora_id":"NORA_0002","maneuver_id":"station_thru_dip.gw_platform_advance_ps3_to_ps4","tracks":[],"pts_count":2,"pts_mm":[[515.0,-1038.8,5913.3],[-1985.0,-1038.8,5913.3]]}
+{"type":"maneuver_end","ts":"2026-06-11T03:44:04Z","nora_id":"NORA_0002","cid":"station_thru_dip.gw_platform_advance_ps3_to_ps4"}
+{"type":"tick","ts":"2026-06-11T03:44:04Z","nora_id":"NORA_0003","cid":"station_thru_dip.hold_loop[13/13]","t_pct":19.7,"pos_mm":[-24404.0,-4538.8,8073.3]}
+{"type":"session_end","ts":"2026-06-11T03:44:05Z"}

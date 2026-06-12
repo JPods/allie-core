@@ -1,0 +1,69 @@
+{
+  "vehicle_id": "NORA_0002",
+  "generated_at": "2026-06-11T14:40:48Z",
+  "origin_sid": "",
+  "dest_sid": null,
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 6,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps2_to_ps3",
+      "len_mm": 2500,
+      "actual_s": 0.19,
+      "expected_s": 0.301,
+      "actual_ms": 13.17
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps3_to_ps4",
+      "len_mm": 2500,
+      "actual_s": 0.133,
+      "expected_s": 0.301,
+      "actual_ms": 18.77
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps4_to_ps5",
+      "len_mm": 2500,
+      "actual_s": 0.145,
+      "expected_s": 0.301,
+      "actual_ms": 17.27
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps5_to_ps6",
+      "len_mm": 2500,
+      "actual_s": 0.148,
+      "expected_s": 0.301,
+      "actual_ms": 16.95
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps6_to_ps7",
+      "len_mm": 13750,
+      "actual_s": 0.589,
+      "expected_s": 1.657,
+      "actual_ms": 23.34
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps7_to_ps8",
+      "len_mm": 16250,
+      "actual_s": 0.678,
+      "expected_s": 1.958,
+      "actual_ms": 23.97
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}

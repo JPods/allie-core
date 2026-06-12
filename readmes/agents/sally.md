@@ -40,6 +40,90 @@ Sally is the station processor. Her domain is entirely local: she manages who pa
 
 ---
 
+## Platform Queue Advancement (Conveyor-Toward-Exit)
+
+Sally's core base function. Runs at every station with a multi-slot gw_platform, in every mode (template test, full network, physical deployment).
+
+**The principle:** Slot N (highest number) = exit end = departure end. Slot 1 = entry end = where arriving pods land first. When a slot toward the exit opens, the pod immediately behind it advances one slot per Sally cycle. The platform acts as a conveyor — pods flow toward the exit, new arrivals fill the entry end.
+
+**Why this matters for designers:** A station with N slots will never have the exit end empty as long as any pod is parked. Pods advance automatically. Passengers boarding at the exit end always find the next available pod without waiting for it to reposition.
+
+### Cycle cadence
+
+Sally's `on_system_tick` fires every 0.5 s. The advancement check runs at an adaptive interval:
+
+| Mode | Interval | Trigger |
+|------|----------|---------|
+| Active | 1 s (every 2 ticks) | Any slot event resets `@@platform_quiet_ticks` to 0 |
+| Idle | 4 s (every 8 ticks) | After 4 s with no slot events |
+
+**Slot events that activate the 1-second cycle:**
+
+1. `reserve_slot` — pod arrives and is assigned a slot
+2. `release_slot` — pod departs (called by Natalie at trip departure)
+3. `start_hold_loop` — pod leaves gw_platform for hold loop; Sally releases the slot here
+4. `_advance_platform_queues` — each successful advancement resets the clock (stays at 1 s through the full cascade)
+
+**Both queue functions run on this same timer:**
+- `_advance_platform_queues` — advances parked pods (loops=0) toward the exit
+- `check_pending_sequential` — dispatches active pods (loops>0) waiting in `@@pending_dispatch`
+
+`check_pending_sequential` is also called on maneuver-completion events (belt-and-suspenders), but the timer is the primary driver. This means a pod placed on the platform triggers both functions within 1 second, regardless of what other animation events are or are not firing.
+
+### Fundamental rule — any station event activates the 1-second cycle
+
+**Any pod entering any track in Sally's station topology resets `@@platform_quiet_ticks` to 0.**
+
+This includes pods that never touch gw_platform — a pod passing through on gw_far_main, on gw_cp_out_lead_0, on a uturn. If that pod is on any track Sally manages, Sally must know. A pod on gw_far_main could conflict with a hold-loop pod Sally is about to dispatch to gw_uturn. Sally cannot make a safe dispatch decision without knowing the outer ring is occupied.
+
+**Implementation:** `NoraPod#receive_maneuver` calls `Sally.notify_station_activity(station_id)` for every intra-station maneuver dispatch (maneuver IDs with a `.` prefix encode the station). This is the single hook — it covers every dispatch path in the animation engine without requiring changes at each call site.
+
+In physical deployment, the equivalent is every MQTT message Sally receives from a pod in her zone — each message is an event that tells her pods are moving and she should be checking actively.
+
+### The two pod types on gw_platform
+
+| Type | `sally_hold_loop_loops` | Animation state at start | Slot release |
+|------|------------------------|--------------------------|-------------|
+| **Active pod** | > 0 | Dispatched on hold_loop maneuver | `start_hold_loop` deletes pod from `st[:slots]` |
+| **Parked pod** | 0 | Registered in `@@pods` with NO maneuver | Sally calls `advance_pod_slot` when forward slot opens |
+
+### Designer traps — read before designing a station test
+
+**Trap 1 — `start_hold_loop` must release the slot.**
+When an active pod starts its hold loop, `start_hold_loop` deletes the pod from `st[:slots]` and resets `@@platform_quiet_ticks = 0`. If this step is missing, Sally sees the slot as occupied, `_advance_platform_queues` finds nothing to advance, and the entire conveyor stalls until the pod physically returns — one full circuit delay.
+
+**Trap 2 — Parked pods (loops=0) must NOT enter `@@pending_dispatch`.**
+All pods tagged with `sally_hold_loop_sid` enter the hold_loop dispatch path. Pods with `loops=0` must be caught before the sequential dispatch check and added to `@@pods` in `:waiting` state with no maneuver. If they reach `@@pending_dispatch`, they wait for `_dispatch_next_sequential` (fires after the front pod completes its Phase 1 departure) — one full circuit delay before the queue advances.
+
+**Trap 3 — `advance_pod_slot` requires the pod to be in `@@pods`.**
+Parked pods must be registered at animation start (`start_for_template` or `build_fleet`). Sally cannot advance a pod it cannot find. Every pod with `sally_hold_loop_sid`, whether active or parked, must be in `@@pods` at startup.
+
+**Trap 4 — Slot assignment on arrival uses path-clear, not simply "highest empty".**
+A pod arriving from the entry end (slot 1) can only reach slot N if all slots 1..(N-1) are unoccupied. `reserve_slot` finds the highest reachable slot, not the absolute highest. If slots 2 and 3 are occupied, an arriving pod gets slot 1 — correct behavior. The readme's earlier wording "highest available slot" was imprecise; "highest reachable slot" is correct.
+
+### 3-pod Platform Shuffle Test sequence
+
+The canonical correctness test for any end-of-line station:
+
+```
+Initial state:
+  pod1 @ ps3 (exit end)  loops=3   — will depart first
+  pod2 @ ps2             loops=0   — parked, awaiting Sally
+  pod3 @ ps1 (entry end) loops=0   — parked, awaiting Sally
+
+Event                     Sally registry after          Cadence   What happens
+────────────────────────  ────────────────────────────  ────────  ─────────────────────────────
+Animation starts          ps1=pod3  ps2=pod2  ps3=pod1  idle(4s)  pod1 dispatched; pod2,pod3 registered waiting
+pod1 departs ps3          ps1=pod3  ps2=pod2            1s        slot released; quiet_ticks=0
+Sally cycle 1             ps1=pod3  ps3=pod2            1s        advance pod2: ps2→ps3; quiet_ticks=0
+Sally cycle 2             ps2=pod3  ps3=pod2            1s        advance pod3: ps1→ps2; quiet_ticks=0
+pod1 completes 3 loops    ps1=pod1  ps2=pod3  ps3=pod2  →idle     reserve_slot → ps1; test complete
+
+No pod ever passes through an occupied slot.
+```
+
+---
+
 ## Intra-Station Maneuvers
 
 Sally orchestrates three distinct maneuver types. All are declared in `lines.json` — debug once, use many.
