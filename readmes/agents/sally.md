@@ -156,6 +156,61 @@ The ordered sequence of `gw_platform*` tracks that constitute the physical parki
 
 ---
 
+## Station Orientation — CCW Flow Standard
+
+**Looking down from above (standard orientation for all JPods station templates):**
+
+```
+                          12 o'clock
+                         gw_far_main
+                        ┌───────────┐
+                        │           │
+           gw_uturn_1   │           │  gw_uturn_0
+     3 o'clock ■────────┘           └────────■ 9 o'clock
+   (outbound)                                  (inbound)
+   gw_cp_out_1                                 gw_cp_in_0
+        ↑                                          ↓
+ gw_cp_out_lead_1                         gw_cp_in_lead_0
+        ↑                                  ↙          ↘
+ gw_platform_out2              gw_near_main        gw_platform_in1
+        ↑                      (bypass, skips         ↓
+ gw_platform_out1               platform)         gw_platform_in2
+        ↑                                              ↓
+        └──────────────── gw_platform ────────────────┘
+                          6 o'clock (station)
+                          ps1(entry) ──→ ps9(exit)
+```
+
+**CCW flow:** 9 → 6 → 3 → 12 → 9 (counterclockwise looking down from above).
+
+**Pod entering from 9 o'clock (gw_cp_in_0):**
+```
+gw_cp_in_0 → gw_cp_in_lead_0 → gw_platform_in1 → gw_platform_in2
+           → gw_platform (ps1 entry end → ps9 exit end)
+           → gw_platform_out1 → gw_platform_out2 → gw_cp_out_lead_1 → gw_cp_out_1
+```
+
+**Pod in hold_loop (outer ring, no platform stop):**
+```
+from_platform:  gw_platform → gw_platform_out1 → gw_platform_out2
+loop:           → gw_cp_out_lead_1 → gw_uturn_1 (3 o'clock)
+                → gw_cp_in_lead_1 → gw_far_main (12 o'clock)
+                → gw_cp_out_lead_0 → gw_uturn_0 (9 o'clock)
+                → gw_cp_in_lead_0 → gw_near_main → (repeat)
+landing:        at gw_cp_in_lead_0 branch → gw_platform_in1 → gw_platform_in2 → gw_platform
+```
+
+**Bypass (near_main) — pod passes through without stopping:**
+```
+gw_cp_in_lead_0 → gw_near_main → gw_cp_out_lead_1 → gw_cp_out_1
+```
+
+**Slot orientation rule:** ps1 is at the 9 o'clock (entry/inbound) end of gw_platform. ps9 is at the 3 o'clock (exit/outbound) end. Pods fill from ps1 toward ps9 as they park. The conveyor advances pods toward the exit (higher slot number = closer to departure).
+
+**gw_platform edge direction note (established 2026-06-13):** The SketchUp model stores gw_platform's edge with pts[0] at the 3 o'clock (exit) end and pts[-1] at the 9 o'clock (entry) end. `init_from_model` uses `gw_platform_in2` proximity to detect this and flips the pts array so slot positions are measured entry-first. The `gw_platform_in2` anchor takes priority over `gw_near_main` because it directly feeds gw_platform at its entry end and gives an unambiguous proximity signal even when the edge direction is reversed.
+
+---
+
 ## Shuffle Forward
 
 When the departure-end vehicle (highest slot) leaves, Sally advances all remaining vehicles toward the exit:
