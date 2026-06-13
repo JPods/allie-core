@@ -25,16 +25,19 @@ gw_platform behavior at both ends of a trip rather than using Natalie's track in
    load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
    ```
    Then run platform_shuffle. Watch for:
-   - TickLog on hold_loop[11/11]: delta should be ≈ 0 (was -196)
-   - TickLog on hold_loop[9/9]: delta should be ≈ 0 (was -100)
-   - TickLog on gw_platform_park_ps7: delta should be ≈ 0 (was -20)
-   - natalie_verdict in trip report: should be 'authorized' (was 'minor_defects')
+   - `[Sally SID] NORA_0003 departure: gw_platform reversed to entry-first for clip_start`
+     (confirms the fix fired; if it says "already entry-first" the pts were already correct)
+   - n001 (NORA_0003) should move a SHORT distance from ps9 forward to exit, NOT backward through ps1
+   - No jump from gw_cp_out_0 to gw_platform on return
+   - TickLog deltas ≈ 0 (was -196, -100, -20)
+   - natalie_verdict: 'authorized' (was 'minor_defects')
 
-2. **If delta is still non-zero on departure (hold_loop[11/11]):** check whether
-   `pod.pose` is nil when `_dispatch_hold_loop_for_pod` fires (pod may be in :waiting state
-   with @current_maneuver = nil). Fallback to `transformation.origin` in that case is the backup.
+2. **If log says "already entry-first" and pod still goes backward:** the lookup cache
+   may already have entry-first pts from a prior run's cache, but clip_start is still wrong.
+   Check whether `_platform_pts_entry_first` returned the correct orientation by comparing
+   pts[0] position to Sally's ps1 slot position.
 
-3. **After test confirms deltas ≈ 0:** commit both jpod_vehicle_anim.rb changes.
+3. **After test passes:** commit everything on su_jpods_claude branch.
 
 ## Architectural Decision This Session
 
