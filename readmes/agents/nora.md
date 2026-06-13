@@ -80,6 +80,7 @@
 | 2026-04-27 | `@struggle_streak` hash added; `note_repeated_struggle(kind, detail)` escalates at STOP_REVIEW_THRESHOLD | Nora silently retrying a failing action gave no signal to the operator; streak counter makes repeated struggle visible |
 | 2026-04-27 | `stop_and_review` event written to JSONL observation log on escalation | Escalation is a first-class observation, not just a console print; it survives session end and can be audited by Noelle |
 | 2026-04-27 | Streak cleared on trip load success for `:trip_load`, `:trip_schema`, `:replan` | Crossing the threshold is a signal; clearing on success means a healthy session does not carry forward stale escalation state |
+| 2026-06-13 | gw_platform in trip.json is clipped at runtime, not removed | Natalie and Sally write the full route including gw_platform at both ends. Nora does not skip these tracks — she clips them. DEPARTURE: clip_start trims gw_platform forward from the pod's exact slot position to the platform exit (Sally pre-orients entry-first). ARRIVAL: a park maneuver trims gw_platform from the platform entry to the assigned slot. The trip.json shows the complete contract; Nora executes only the mm she actually travels. |
 
 ---
 
