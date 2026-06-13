@@ -1,75 +1,54 @@
-# Handoff — 2026-06-13
+# Handoff — 2026-06-13 (session 2)
 
 ## Where We Left Off
 
-**Files changed:**
-- `su_jpods/jpod_sally.rb` — added `slot_positions_for_station` accessor (after `station_capacity`, line ~220)
-- `su_jpods/jpod_console.rb` — fixed `platform_shuffle` block:
-  - Pre-init Sally (init_sequencer_for_station + init_from_model) before vehicle placement
-  - Orient plat_pts entry-first using Sally ps1 world position
-  - Use `pslots.last(3)` for ps7/ps8/ps9 placement (was incorrectly using ps1/ps2/ps3)
+Confirmed platform_shuffle test works (n001→hold_loop, n002/n003 compact, n001 returns to ps7).
+TickLog reported minor_defects on hold_loop and park maneuvers.
+Bill identified the root cause: Natalie issues trip.json with gw_platform; Nora and Sally must clip
+gw_platform behavior at both ends of a trip rather than using Natalie's track instruction directly.
 
-**Test not yet run.** Code changes are written but not tested in SketchUp.
+**Files changed this session:**
+- `su_jpods/jpod_vehicle_anim.rb` — three clip_start fixes:
+  1. Line ~2764 (park maneuver arrival): replaced `seed_pos: pod_pos` (bounds.center, wrong Z)
+     with `seed_pos: pod.current_maneuver[:pts].last || park_pts.first` (path endpoint, correct Z).
+  2. Line ~4219 (_dispatch_hold_loop_for_pod departure): replaced `transformation.origin`
+     with `pod.pose&.first || pod.entity.transformation.origin` for clip_start seed.
+  3. Line ~4319 (_dispatch_next_sequential departure): same fix for sequential hold_loop dispatch.
+  4. Line ~3318 (originating chain exit): replaced `bounds.center` with `pod.pose&.first || bounds.center`.
+
+**Test not yet run.** Changes written, not tested in SketchUp.
 
 ## What To Do First Next Session
 
 1. **Reload and test:**
    ```ruby
-   load '/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_sally.rb'
-   load '/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/su_jpods/jpod_console.rb'
+   load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
    ```
-   Then: Extensions > JPods > Template Tests > Shuffle Test (or however the test_id
-   'platform_shuffle' is invoked).
+   Then run platform_shuffle. Watch for:
+   - TickLog on hold_loop[11/11]: delta should be ≈ 0 (was -196)
+   - TickLog on hold_loop[9/9]: delta should be ≈ 0 (was -100)
+   - TickLog on gw_platform_park_ps7: delta should be ≈ 0 (was -20)
+   - natalie_verdict in trip report: should be 'authorized' (was 'minor_defects')
 
-2. **Check Ruby console for:**
-   - `[Sally ...] slot positions (lines.json, gw_platform): ps1@...mm  ps2@...mm ... ps9@...mm`
-   - `[platform_shuffle] plat_pts reversed — ps1 d_first=NNN d_last=MMM` (or "kept")
-   - n001 at ps9, n002 at ps8, n003 at ps7 in the animation start log
-   - n001 dispatches hold_loop
-   - n002 and n003 compact to ps9/ps8 after n001 departs
-   - n001 returns and parks at ps7 (TickLog delta ≈ 0)
+2. **If delta is still non-zero on departure (hold_loop[11/11]):** check whether
+   `pod.pose` is nil when `_dispatch_hold_loop_for_pod` fires (pod may be in :waiting state
+   with @current_maneuver = nil). Fallback to `transformation.origin` in that case is the backup.
 
-3. **If plat_pts log shows "ps1 world position unavailable":** Sally pre-init failed.
-   Check whether `init_sequencer_for_station` requires the model to have a lines.json
-   file loaded at the given station_id. Add debug puts inside the rescue block to see
-   the error.
+3. **After test confirms deltas ≈ 0:** commit both jpod_vehicle_anim.rb changes.
 
-4. **After test passes:** Write commit for both files on branch su_jpods_claude.
+## Architectural Decision This Session
 
-## Open Blockers
+Bill: "Natalie should not dominate Nora and Sally behaviors."
+Rule: Natalie issues gw_platform by track name — that is correct. Nora and Sally intercept:
+- DEPARTURE: clip_start clips gw_platform from pod's slot position. Seed = pod.pose.first (path Z).
+- ARRIVAL: park maneuver seed = pod.current_maneuver[:pts].last (path endpoint = gw_platform entry).
+Never use bounds.center or transformation.origin as seed_pos for platform maneuvers.
 
-None blocking the test. All code is written.
+## Open Questions
 
-## What Was Decided and Why
+- Do the hold_loop[11/11] and [9/9] deltas improve after the pose.first fix? Or were they
+  frame-rate timing artifacts (animation loop variance), not seed_pos issues?
 
-**Why pre-init Sally before vehicle placement:**
-Sally's `init_from_model` Pass 3 uses `gw_platform_in*` anchors to orient slot positions
-entry-first. This orientation is already correct for all templates. Using `sp[1]`
-(ps1 world position) to orient `plat_pts` in the console harness lets the same
-authoritative source govern both Sally's internal state and the test placement.
-Alternative (manual gw_platform_parking check) only works for station_thru_dip.
+## TFTS Written This Session
 
-**Why slot_positions_for_station was added to Sally:**
-It was the only clean way to expose `@@slot_positions[sid]` (a private class variable)
-to the console harness without making the console know about Sally internals. The method
-is a read-only accessor — no state mutation.
-
-**plat_pts orientation problem is specific to station_parking:**
-The existing orientation block (gw_platform_parking based) works for station_thru_dip.
-The Sally-based fix is additive — it runs regardless of template type and is a no-op
-when _ps1 is nil (Sally not yet initialized or no ps1 slot). Safe to leave in place.
-
-## TFTS Files Written This Session
-
-- `process/inbox/20260613T155653-tfts-entity-lookup.md` — component def vs. instance
-- `process/inbox/20260613T155654-tfts-exit-slot-assumption.md` — ps3 ≠ exit on 9-slot platform
-- `process/inbox/20260613T155655-tfts-plat-pts-orientation.md` — plat_pts exit-first for station_parking
-
-## Next Phase (Bill's Request)
-
-After shuffle test passes: "send n001 on a station loop, move n2 to ps9 and n3 to ps8
-with n1 parking in ps7 when station loop is complete."
-
-This is exactly what the fixed test demonstrates. If TickLog shows delta ≈ 0 on the
-return park maneuver, both the shuffle logic and the park_man[:len] fix are confirmed
-working together.
+- `process/inbox/20260613T164218-tfts-gw-platform-clip.md` — gw_platform clip principle
