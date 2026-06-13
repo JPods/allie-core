@@ -282,6 +282,50 @@ anim-coords.jsonl first — source=edge_attr on an arc track means the merge fir
 
 ---
 
+## Component Definition ≠ Model Instance — 2026-06-13
+
+**Cost:** ~2 hours. Entity attribute edits appeared to succeed (no error, `true` returned)
+but had zero effect on animation behavior. Repeated attempts with different approaches
+each produced the same silent non-result. The real cause — wrong Ruby object type —
+was only found by comparing entityIDs between two lookup methods.
+
+**What was hard to see:** SketchUp's `ComponentInstance` has both `definition.entities`
+(the shared template) and the instance itself. Both respond to `set_attribute` and
+both accept writes without error. The documentation doesn't warn you that writes to
+`definition.entities` members affect all instances of that component, not just the one
+in the scene. The `find_vehicles` console function recurses into definitions — looks
+reasonable, finds what looks like the right objects, sets attributes that appear to stick.
+The entityID comparison was not obvious until explicitly checking why the write had no effect.
+
+**The rule it produced:** Always use `all_nora_vehicles_in_model` (searches `model.entities`)
+to find placed vehicle instances. Never use a recursive function that descends into
+`e.definition.entities` — those are shared template objects, not scene instances.
+Verify entityIDs match between the lookup and the consumer before concluding a write worked.
+
+**Where the rule lives:** `readmes/retrospections/2026-06-13.md` Lesson 1.
+
+---
+
+## Erase-Recreate Test Harness Invalidates All Post-Creation Patches — 2026-06-13
+
+**Cost:** ~1 hour. Correctly-found instances, correct entityIDs, attributes set and
+confirmed. Restarted animation, attributes gone. No error. The problem was invisible
+until reading the console code's erase loop at test start.
+
+**What was hard to see:** It's natural to think "the entities are there in the model;
+I can patch them." The erase-and-recreate pattern at test start is not unusual for
+test harnesses — but it creates a temporal trap: anything you set between the end of
+one run and the start of the next run is silently overwritten. The harness does not
+warn you that it discards entity state.
+
+**The rule it produced:** Before patching entity attributes in a test harness, read the
+setup code: does it erase and recreate entities on start? If yes, fix the `tag_vehicle`
+or equivalent setup lambda instead — that is the only place initial state survives.
+
+**Where the rule lives:** `readmes/retrospections/2026-06-13.md` Lesson 2.
+
+---
+
 ## [Scars not yet paid — watching]
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |
