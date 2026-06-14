@@ -1,5 +1,5 @@
 # JPods SketchUp Plugin — Feature List
-**Last Updated:** 2026-06-06
+**Last Updated:** 2026-06-14
 **Purpose:** Planned features and enhancements, not yet implemented. Separate from the
 ouch-list (safety/risk) and the gap-log (known defects). These are deliberate additions
 to the student workflow tool.
@@ -88,3 +88,24 @@ at waypoints became visible as tight kinks.
 - Parking guideways remain excluded from `Natalie.route()` BFS — they are dispatched only by explicit Natalie parking commands, never discovered through path search.
 - Dependency: parking guideways must have a correctly-tagged internal connection in the followme so Natalie can look them up by station ID.
 
+
+---
+
+## Console — Unit Tests
+
+**Design principle (Rule 10, su_jpods/CLAUDE.md):** One behavior. One unit. Pass/fail
+unambiguous. Each agent gets its own isolated test before wiring into network animation.
+Populate is setup (not a test). Start Animation is the integration check — run last.
+
+| # | Feature | Why | Domain | Priority | Status |
+|---|---------|-----|--------|----------|--------|
+| F-UT-01 | Route unit test button | Test Natalie in isolation: place two pods at two stations, dispatch one trip, verify it arrives at the correct destination with correct path. Currently the only way to test routing is Start Animation (full network integration) — a single Natalie bug produces a confusing multi-agent failure. Isolated route test gives a binary result for one routing decision. | `jpod_console.rb`, `jpod_vehicle_anim.rb` | High | Idea |
+| F-UT-02 | Hold Loop unit test button | Test Nora + Sally hold loop: place one pod at a station with a hold_loop formation, dispatch it for N loops, verify it returns and parks at psmax. Tests the loop-count-down, hl_from_platform → hl_loop → hl_to_platform sequence, and Sally's slot assignment on return — all isolated from routing and other stations. | `jpod_console.rb`, `jpod_sally.rb`, `jpod_vehicle_anim.rb` | High | Idea |
+| F-UT-03 | CP Handoff unit test button | Test Nora through a single CP transition: place one pod on an approach track, dispatch it through one CP, verify the maneuver completes with no position jump and correct exit track selection. Tests the cp_center synthesis, inbound/outbound arc matching, and Z continuity in one isolated pass. Eliminates guessing whether a Z glitch at a CP is Nora, Natalie, or the build pipeline. | `jpod_console.rb`, `jpod_vehicle_anim.rb` | Medium | Idea |
+
+**Design notes (added 2026-06-14):**
+
+- Each unit test button gets its own `cmd_ut_route`, `cmd_ut_hold_loop`, `cmd_ut_cp_handoff` callback in `jpod_console.rb`.
+- Each test is **self-setting-up**: it places exactly the pods it needs, runs the behavior, reports pass/fail in the console output panel, then cleans up (erases test pods). The model state before and after is identical.
+- Pass/fail criteria are explicit numbers (not visual): trip count, final slot number, final position distance from expected ≤ threshold.
+- Results feed a run log: `process/inbox/YYYYMMDDTHHMMSS-ut-result.json` — one file per test run. Allie harvests these nightly for regression tracking.
