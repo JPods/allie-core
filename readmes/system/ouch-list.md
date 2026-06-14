@@ -174,6 +174,7 @@ safety model — provided the sensing and defensive stop systems are in place.
 | X-08 | First deployment captures the narrative for all deployments | All | A visible failure anywhere sets back every subsequent JPods project; "first mover" risk is high | Existential | Watching |
 | X-09 | Interoperability with future pod generations | Matilda, Sparki | If early stations are built to one pod spec, retrofitting for a larger or different pod is expensive | Medium | Unaddressed |
 | X-10 | Maintenance workforce training and certification: no existing curriculum | All | JPods maintenance is not like any existing transit mode; we have to build the training from scratch | Medium | Unaddressed |
+| X-11 | Pass-through pod / departing pod collision at intermediate stations — Sally does not register passing pods; Natalie must not release a departure while a pass-through is traversing the shared near_main or far_main | Sally, Natalie | pass_chains bypass gw_platform but share near_main/far_main with departing pods; without Sally holding a "passing in transit" flag and Natalie checking it before releasing departures, a collision is possible; applies to both SketchUp animation and physical scale model | High | Unaddressed — Sally passing registry + Natalie clearance check required before any multi-hop animation or physical routing is run |
 
 ---
 

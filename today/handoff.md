@@ -1,57 +1,67 @@
-# Handoff — 2026-06-13 (session 2)
+# Handoff — 2026-06-13 (session 3)
 
 ## Where We Left Off
 
-Confirmed platform_shuffle test works (n001→hold_loop, n002/n003 compact, n001 returns to ps7).
-TickLog reported minor_defects on hold_loop and park maneuvers.
-Bill identified the root cause: Natalie issues trip.json with gw_platform; Nora and Sally must clip
-gw_platform behavior at both ends of a trip rather than using Natalie's track instruction directly.
+station_line_end template test suite: all three tests PASS.
 
-**Files changed this session:**
-- `su_jpods/jpod_vehicle_anim.rb` — three clip_start fixes:
-  1. Line ~2764 (park maneuver arrival): replaced `seed_pos: pod_pos` (bounds.center, wrong Z)
-     with `seed_pos: pod.current_maneuver[:pts].last || park_pts.first` (path endpoint, correct Z).
-  2. Line ~4219 (_dispatch_hold_loop_for_pod departure): replaced `transformation.origin`
-     with `pod.pose&.first || pod.entity.transformation.origin` for clip_start seed.
-  3. Line ~4319 (_dispatch_next_sequential departure): same fix for sequential hold_loop dispatch.
-  4. Line ~3318 (originating chain exit): replaced `bounds.center` with `pod.pose&.first || bounds.center`.
+- platform_shuffle: NORA_0001 (ps3) departs → NORA_0002 advances ps2→ps3,
+  NORA_0003 advances ps1→ps2 → NORA_0001 returns and parks ps1.
+  verdict=authorized, defects=0, TickLog deltas ≈ -25 (timing variance), -2.
+- arrival_test: NORA_0001 placed at gw_cp_in_0 entry, traverses landing chain
+  [4/4], parks at ps3. verdict=authorized, defects=0, TickLog delta=-1.
+- departure_test: NORA_0003 (ps3) departs immediately, NORA_0002 after 4s,
+  NORA_0001 after 8s. All 3 erased on exit. verdict=authorized × 3.
 
-**Test not yet run.** Changes written, not tested in SketchUp.
+**Files changed this session (su_jpods_claude branch):**
+- `jpod_sally.rb`: Pass 2.5 capacity correction (sequencer parking_slots authoritative)
+- `jpod_vehicle_anim.rb`: init order swapped (sequencers before from_model);
+  also comment update to init_sequencers_from_model
+- `templates/track_formations/station_line_end/geometry.json`: added gw_platform_in
+  (reconstructed 2-point ramp from neighboring track endpoints)
+- `jpod_console.rb`: three departure_test fixes:
+  1. cp_num in tag loop — already done prior session
+  2. cp_num in dispatch loop (was still using old idx.odd? ? 0 : 1)
+  3. Staggered departure: exit-slot first, 4s apart
 
 ## What To Do First Next Session
 
-1. **Reload and test:**
-   ```ruby
-   load Sketchup.find_support_file('jpod_vehicle_anim.rb', 'Plugins/su_jpods')
-   ```
-   Then run platform_shuffle. Watch for:
-   - `[Sally SID] NORA_0003 departure: gw_platform reversed to entry-first for clip_start`
-     (confirms the fix fired; if it says "already entry-first" the pts were already correct)
-   - n001 (NORA_0003) should move a SHORT distance from ps9 forward to exit, NOT backward through ps1
-   - No jump from gw_cp_out_0 to gw_platform on return
-   - TickLog deltas ≈ 0 (was -196, -100, -20)
-   - natalie_verdict: 'authorized' (was 'minor_defects')
+1. **Move to station_parking (JPods_station_parking = S003 in station_test.skp).**
+   Run all three tests: platform_shuffle, arrival_test, departure_test.
+   Expect: station_parking has dual CPs (cp0 + cp1), 9-slot platform.
+   The single-CP guards in departure_test/arrival_test will NOT fire — both CP paths active.
 
-2. **If log says "already entry-first" and pod still goes backward:** the lookup cache
-   may already have entry-first pts from a prior run's cache, but clip_start is still wrong.
-   Check whether `_platform_pts_entry_first` returned the correct orientation by comparing
-   pts[0] position to Sally's ps1 slot position.
+2. **Watch for:** station_parking's gw_platform_parking behavior differs from
+   station_line_end — it IS the primary capacity track (not an approach track).
+   Pass 2.5 will not fire if parking_slots.max_slot already matches geometric capacity.
 
-3. **After test passes:** commit everything on su_jpods_claude branch.
+3. **After all station_parking tests pass:** station_thru_dip is the last template
+   (S004). It was already tested in session 1 (the session that preceded this one)
+   and passed platform_shuffle. Confirm arrival_test and departure_test also pass.
+
+4. **Commit final:** once all three templates' all three tests pass, update
+   readmes/agents/nora.md design decisions and write TFTS for the full arc.
 
 ## Architectural Decision This Session
 
-Bill: "Natalie should not dominate Nora and Sally behaviors."
-Rule: Natalie issues gw_platform by track name — that is correct. Nora and Sally intercept:
-- DEPARTURE: clip_start clips gw_platform from pod's slot position. Seed = pod.pose.first (path Z).
-- ARRIVAL: park maneuver seed = pod.current_maneuver[:pts].last (path endpoint = gw_platform entry).
-Never use bounds.center or transformation.origin as seed_pos for platform maneuvers.
+Init order: `init_sequencers_from_model` BEFORE `init_from_model`.
+Why: Pass 2.5 in init_from_model reads @@sequencers[:parking_slots] to override
+geometric capacity. If sequencers aren't loaded first, the correction never fires.
+Rule: anything that reads sequencer data in init_from_model requires this order.
+
+Departure stagger: exit slot first, 4s intervals.
+Why: slot spacing (2.5m) < MIN_SPACING (3m). Simultaneous dispatch causes jam guard
+to stop trailing pods before they even leave the platform.
+Rule: any multi-pod departure test must stagger by enough time for the leader to
+clear MIN_SPACING before the next pod moves.
 
 ## Open Questions
 
-- Do the hold_loop[11/11] and [9/9] deltas improve after the pose.first fix? Or were they
-  frame-rate timing artifacts (animation loop variance), not seed_pos issues?
+- Does station_parking's geometry.json have complete geometry for all tracks in
+  its landing_chains and hold_loop_chain? Check for missing tracks (same class of bug
+  as gw_platform_in missing from station_line_end).
+- Does Pass 2.5 affect station_parking incorrectly? It should be a no-op if the
+  parking_slots.max_slot matches the geometric count.
 
 ## TFTS Written This Session
 
-- `process/inbox/20260613T164218-tfts-gw-platform-clip.md` — gw_platform clip principle
+- `process/inbox/20260613T221900-tfts-station-line-end-capacity.md`

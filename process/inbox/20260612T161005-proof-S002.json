@@ -1,0 +1,470 @@
+{
+  "station_id": "S002",
+  "formation_id": "station_line_end",
+  "generated_at": "2026-06-12T16:10:05Z",
+  "counts": {
+    "ok": 0,
+    "warn": 0,
+    "severe": 11,
+    "missing": 1,
+    "undeclared": 0,
+    "arc": 2,
+    "scan": 0
+  },
+  "tracks": [
+    {
+      "track": "gw_cp_in_0",
+      "cid": "S002.gw_cp_in_0",
+      "declared": {
+        "start_mm": [
+          -255552.2,
+          385326.7,
+          5412.2
+        ],
+        "end_mm": [
+          -254184.1,
+          383031.6,
+          5412.2
+        ],
+        "length_mm": 2672.0,
+        "pts_count": 3,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -262144.0,
+        384928.5,
+        3058.9
+      ],
+      "found_ep_mm": [
+        -260775.8,
+        382633.3,
+        3058.9
+      ],
+      "found_len": 2672.0,
+      "found_pts": 3,
+      "end_delta_mm": 7010.5,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_cp_in_lead_0",
+      "cid": "S002.gw_cp_in_lead_0",
+      "declared": {
+        "start_mm": [
+          -255767.0,
+          385198.7,
+          5599.7
+        ],
+        "end_mm": [
+          -257047.1,
+          387346.1,
+          5599.7
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -262358.7,
+        384800.5,
+        3246.4
+      ],
+      "found_ep_mm": [
+        -263638.9,
+        386947.9,
+        3246.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 6342.8,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_cp_out_0",
+      "cid": "S002.gw_cp_out_0",
+      "declared": {
+        "start_mm": [
+          -258773.3,
+          383406.5,
+          5599.7
+        ],
+        "end_mm": [
+          -257493.2,
+          381259.1,
+          5599.7
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -265365.1,
+        383008.3,
+        3246.4
+      ],
+      "found_ep_mm": [
+        -264085.0,
+        380860.9,
+        3246.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 7010.6,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_cp_out_lead_0",
+      "cid": "S002.gw_cp_out_lead_0",
+      "declared": {
+        "start_mm": [
+          -260053.4,
+          385553.9,
+          5599.7
+        ],
+        "end_mm": [
+          -258773.3,
+          383406.5,
+          5599.7
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -266645.2,
+        385155.7,
+        3246.4
+      ],
+      "found_ep_mm": [
+        -265365.1,
+        383008.3,
+        3246.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 7010.6,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_far_main",
+      "cid": "S002.gw_far_main",
+      "declared": {
+        "start_mm": [
+          -280969.7,
+          420641.3,
+          3549.7
+        ],
+        "end_mm": [
+          -270777.0,
+          403542.9,
+          3549.7
+        ],
+        "length_mm": 19905.9,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -287561.5,
+        420243.1,
+        1196.4
+      ],
+      "found_ep_mm": [
+        -277368.8,
+        403144.6,
+        1196.4
+      ],
+      "found_len": 19906.0,
+      "found_pts": 2,
+      "end_delta_mm": 7010.6,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_far_main_2",
+      "cid": "S002.gw_far_main_2",
+      "declared": {
+        "start_mm": [
+          -270777.0,
+          403542.9,
+          3549.7
+        ],
+        "end_mm": [
+          -260053.4,
+          385553.9,
+          5599.7
+        ],
+        "length_mm": 21042.8,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -277368.8,
+        403144.6,
+        1196.4
+      ],
+      "found_ep_mm": [
+        -266645.2,
+        385155.7,
+        3246.4
+      ],
+      "found_len": 21042.8,
+      "found_pts": 2,
+      "end_delta_mm": 7010.6,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_lift",
+      "cid": "S002.gw_lift",
+      "declared": {
+        "start_mm": [
+          -270825.8,
+          417295.5,
+          3662.2
+        ],
+        "end_mm": [
+          -267617.8,
+          411914.0,
+          3599.7
+        ],
+        "length_mm": 6265.5,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -277417.6,
+        416897.2,
+        1308.9
+      ],
+      "found_ep_mm": [
+        -274209.6,
+        411515.8,
+        1246.4
+      ],
+      "found_len": 6265.4,
+      "found_pts": 2,
+      "end_delta_mm": 7010.5,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_lift_in",
+      "cid": "S002.gw_lift_in",
+      "declared": {
+        "start_mm": [
+          -264409.7,
+          406532.4,
+          3599.7
+        ],
+        "end_mm": [
+          -257047.1,
+          387346.1,
+          5599.7
+        ],
+        "length_mm": 20647.6,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -271001.5,
+        406134.2,
+        1246.4
+      ],
+      "found_ep_mm": [
+        -263638.9,
+        386947.9,
+        3246.4
+      ],
+      "found_len": 20647.6,
+      "found_pts": 2,
+      "end_delta_mm": 7010.5,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_lift_parking",
+      "cid": "S002.gw_lift_parking",
+      "declared": {
+        "start_mm": [
+          -267617.8,
+          411914.0,
+          3599.7
+        ],
+        "end_mm": [
+          -264409.7,
+          406532.4,
+          3599.7
+        ],
+        "length_mm": 6265.2,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -274209.6,
+        411515.8,
+        1246.4
+      ],
+      "found_ep_mm": [
+        -271001.5,
+        406134.2,
+        1246.4
+      ],
+      "found_len": 6265.2,
+      "found_pts": 2,
+      "end_delta_mm": 7010.6,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_platform",
+      "cid": "S002.gw_platform",
+      "declared": {
+        "start_mm": [
+          -277983.9,
+          422467.8,
+          3599.7
+        ],
+        "end_mm": [
+          -274049.9,
+          415868.5,
+          3599.7
+        ],
+        "length_mm": 7682.9,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -284575.6,
+        422069.6,
+        1246.4
+      ],
+      "found_ep_mm": [
+        -280641.6,
+        415470.3,
+        1246.4
+      ],
+      "found_len": 7682.9,
+      "found_pts": 2,
+      "end_delta_mm": 7010.5,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_platform_in",
+      "cid": "S002.gw_platform_in",
+      "declared": {
+        "start_mm": [
+          -267400.2,
+          404713.6,
+          3599.7
+        ],
+        "end_mm": [
+          -257047.1,
+          387346.1,
+          5599.7
+        ],
+        "length_mm": 20317.8,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": null,
+      "found_ep_mm": null,
+      "found_len": null,
+      "found_pts": 0,
+      "end_delta_mm": null,
+      "status": "MISSING"
+    },
+    {
+      "track": "gw_platform_parking",
+      "cid": "S002.gw_platform_parking",
+      "declared": {
+        "start_mm": [
+          -274049.9,
+          415868.5,
+          3599.7
+        ],
+        "end_mm": [
+          -267400.2,
+          404713.6,
+          3599.7
+        ],
+        "length_mm": 12986.6,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -280641.6,
+        415470.3,
+        1246.4
+      ],
+      "found_ep_mm": [
+        -273991.9,
+        404315.3,
+        1246.4
+      ],
+      "found_len": 12986.6,
+      "found_pts": 2,
+      "end_delta_mm": 7010.5,
+      "status": "🚫 SEVERE"
+    },
+    {
+      "track": "gw_uturn_0",
+      "cid": "S002.gw_uturn_0",
+      "declared": {
+        "start_mm": [
+          -258558.6,
+          383534.5,
+          5412.2
+        ],
+        "end_mm": [
+          -255981.7,
+          385070.7,
+          5412.2
+        ],
+        "length_mm": 4699.0,
+        "pts_count": 13,
+        "arc_issue": true
+      },
+      "found_sp_mm": [
+        -265150.4,
+        383136.3,
+        3058.9
+      ],
+      "found_ep_mm": [
+        -262573.5,
+        384672.4,
+        3058.9
+      ],
+      "found_len": 4699.0,
+      "found_pts": 13,
+      "end_delta_mm": 7010.6,
+      "status": "ARC"
+    },
+    {
+      "track": "gw_uturn_1",
+      "cid": "S002.gw_uturn_1",
+      "declared": {
+        "start_mm": [
+          -281023.4,
+          420731.5,
+          3612.2
+        ],
+        "end_mm": [
+          -278035.2,
+          422553.8,
+          3662.2
+        ],
+        "length_mm": 5489.1,
+        "pts_count": 17,
+        "arc_issue": true
+      },
+      "found_sp_mm": [
+        -285556.5,
+        423226.9,
+        2687.6
+      ],
+      "found_ep_mm": [
+        -288133.4,
+        421690.7,
+        2687.6
+      ],
+      "found_len": 4699.0,
+      "found_pts": 13,
+      "end_delta_mm": 7614.0,
+      "status": "ARC"
+    }
+  ]
+}
