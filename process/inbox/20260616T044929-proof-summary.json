@@ -1,0 +1,37 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-16T04:49:29Z",
+  "model": "2_thru_dip",
+  "formation_filter": null,
+  "stations": [
+    {
+      "station_id": "S006",
+      "formation_id": "station_thru_dip",
+      "ok": 0,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 19,
+      "arc": 0,
+      "file": "20260616T044929-proof-S006.json"
+    },
+    {
+      "station_id": "S007",
+      "formation_id": "station_thru_dip",
+      "ok": 0,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 19,
+      "arc": 0,
+      "file": "20260616T044929-proof-S007.json"
+    }
+  ],
+  "total_ok": 0,
+  "total_warn": 0,
+  "total_severe": 0,
+  "total_missing": 0,
+  "total_undeclared": 38,
+  "total_arc": 0,
+  "total_scan": 0
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0002",
+  "generated_at": "2026-06-14T21:35:59Z",
+  "origin_sid": "s004",
+  "dest_sid": "s001",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 4,
+  "lines": {
+    "s004": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 2
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 3
+        }
+      },
+      "gw_platform_in": {
+        "plan": {
+          "seq": 4
+        }
+      }
+    },
+    "connections": {
+      "seg_s001_cp2_s004_cp0": {
+        "plan": {
+          "seq": 1
+        }
+      }
+    }
+  }
+}
