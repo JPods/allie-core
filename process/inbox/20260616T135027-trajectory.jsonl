@@ -1,0 +1,6 @@
+{"type":"session_start","model":"2_thru_dip","pod_count":6,"ts":"2026-06-16T13:50:27Z"}
+{"type":"maneuver_end","ts":"2026-06-16T13:50:31Z","nora_id":"NORA_0001","cid":"s006.gw_platform"}
+{"type":"maneuver_end","ts":"2026-06-16T13:50:31Z","nora_id":"NORA_0004","cid":"s007.gw_platform"}
+{"type":"tick","ts":"2026-06-16T13:50:31Z","nora_id":"NORA_0001","cid":"s006.gw_platform_out","t_pct":2.8,"pos_mm":[186691.5,-636743.1,10678.0]}
+{"type":"tick","ts":"2026-06-16T13:50:31Z","nora_id":"NORA_0004","cid":"s007.gw_platform_out","t_pct":2.8,"pos_mm":[-5038.1,-1053.7,5422.5]}
+{"type":"session_end","ts":"2026-06-16T13:50:31Z"}
