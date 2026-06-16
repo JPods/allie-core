@@ -1,40 +1,57 @@
 # Handoff — 2026-06-16
 
-## Step 4 COMPLETE and VALIDATED
+## Status: station_thru_dip Shuffle + Departure PASS
 
-Animator reads model.json (5-section v1.0 schema) instead of map.json.
-Pods route correctly: 2_thru_dip, NORA_0001 S006→S007 and NORA_0004 S007→S006, 13 segs each.
+Both station_thru_dip station tests now pass. The template is fully validated.
 
-### Commits this session
-- e8535f9 — Animator reads model.json (load_model_json + model_json_to_map_compat)
-- f404789 — Two bugs fixed: complete routing_graph + v5 lines.json chain access
+---
 
-### Root causes found and fixed
+## What Was Fixed This Session
 
-1. routing_graph incomplete (noelle.rb generate_network_json):
-   Pass 1 only gave pass-through successors from map.json track data.
-   Missing: gw_near_main_1→gw_platform_in branch; no cp_out_N→seg_* links.
-   Fix: Pass 2 reads consecutive pairs from all chains in lines.json natalie section.
-        Pass 3 adds cp_out_N→seg_id and seg_id→cp_in_N from canonical connections.
+### Departure Test (pod at psmax disappeared)
 
-2. v5 lines.json not handled (jpod_animator.rb _load_formation_lines):
-   _departure_tracks/_arrival_tracks/_passthrough_tracks read top-level keys
-   but v5 moved chains under lj['natalie'].
-   Fix: hoist lj['natalie'] to top level on load.
+Fixed in commit `57c3aa7` — blank `station_test_phase` fell into else branch →
+`_dispatch_station_exit` fired immediately at whatever slot the pod was at.
+Fix: set `shuffle_parked` during departure test tag loop so Sally's advance queue
+processes pods to ps_max first. Also added `notify_station_activity` after `release_slot`
+in `_dispatch_hold_loop_for_pod` and `_dispatch_station_exit` to trigger immediate advance.
 
-## Open Issues
+### Shuffle Test (pod jumping from gw_cp_in_lead_1 to gw_platform)
 
-### Sally advance SKIPPED (FAULT filed 20260616T054917-fault.md)
-advance_pod_slot reports "path too short" for ps3→ps4 advance on gw_platform_parking.
-Distance is ~2500mm (correct slot spacing) but path clip fails length check.
-Effect: platform queue jams after first arrivals; ps2/ps3 pods never dispatch.
+Commit `d0b4a6d` — restructured `hold_loop_chain` to direct-park pattern (same as station_line_end).
 
-### Pods in trip_complete not redispatching
-NORA_0001/0004 arrive ps1, compact loop targets=[4] but reserved_by_others=[2,3].
-Secondary effect of Sally advance SKIPPED above.
+**Root cause:** `hold_loop_chain.loop` ended at `gw_uturn_1` (outer ring). On promotion,
+Sally dispatched an 8-track intersection-approach maneuver via `_final_approach_tracks` +
+`_enqueue_hold_loop_return_park`. This two-dispatch sequence was failing — pod jumped
+from the approach's first track to gw_platform.
 
-## Next Steps
+**Fix:**
+- `loop`: now 8 tracks ending at `gw_platform_parking` — traverses outer ring then takes
+  platform approach at `gw_cp_in_lead_0 → gw_near_main_1 → gw_platform_in → gw_platform_parking`
+- `to_platform: []` — `on_maneuver_complete` fires direct-park code path. One dispatch, no race.
+- Removed from loop: `gw_near_main_2`, `gw_cp_out_lead_1`, `gw_uturn_1`
 
-1. Fix Sally advance_pod_slot "path too short" for gw_platform_parking ps3→ps4
-2. Test Build + Animate on station_line_end and traffic_circle models
-3. Step 5: remove map.json fallback from jpod_vehicle_anim.rb
+---
+
+## Key Decision
+
+**Direct-park is the one pattern for all templates.** "There needs to be only one sally
+animation function." station_line_end proved it 2026-06-03; station_thru_dip now matches.
+Intersection approach (`_final_approach_tracks`) stays in code but is not used for either
+current template.
+
+---
+
+## Next Steps (ordered)
+
+1. **Apply same framework to station_parking** — run Shuffle Test and Departure Test.
+   Check if station_parking's hold_loop_chain needs the same direct-park treatment.
+
+2. **Network animation on 2_thru_dip model** — station_thru_dip is validated at template
+   level; test it in a full network Build + Animate run.
+
+3. **Sally advance "path too short" fault** (filed 20260616T054917-fault.md) — advance
+   ps3→ps4 on gw_platform_parking clips to zero-length path. Blocks queue compaction
+   in full network runs. Not blocking template tests.
+
+4. **Step 5:** remove map.json fallback from jpod_vehicle_anim.rb once network runs clean.
