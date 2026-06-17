@@ -1,57 +1,81 @@
-# Handoff — 2026-06-16
+# Handoff — 2026-06-17
 
-## Status: station_thru_dip Shuffle + Departure PASS
-
-Both station_thru_dip station tests now pass. The template is fully validated.
+## Status: transit_test implemented for traffic_circle7; station_parking Shuffle/Departure PENDING
 
 ---
 
-## What Was Fixed This Session
+## What Was Built This Session
 
-### Departure Test (pod at psmax disappeared)
+### Transit Test — traffic_circle7 (no station platform)
 
-Fixed in commit `57c3aa7` — blank `station_test_phase` fell into else branch →
-`_dispatch_station_exit` fired immediately at whatever slot the pod was at.
-Fix: set `shuffle_parked` during departure test tag loop so Sally's advance queue
-processes pods to ps_max first. Also added `notify_station_activity` after `release_slot`
-in `_dispatch_hold_loop_for_pod` and `_dispatch_station_exit` to trigger immediate advance.
+Commit `1451c0f`. Three changes:
 
-### Shuffle Test (pod jumping from gw_cp_in_lead_1 to gw_platform)
+**build_fleet (jpod_vehicle_anim.rb):**
+New transit route intercept between Sally hold_loop block and normal Natalie routing.
+Checks `sally_transit_tracks` entity attribute (JSON array of fully-qualified track keys).
+Stitches pts from all tracks into one maneuver and dispatches directly. Handles the case
+where there's no `parked_station_id` or `sally_hold_loop_sid`.
 
-Commit `d0b4a6d` — restructured `hold_loop_chain` to direct-park pattern (same as station_line_end).
+**Console transit_test handler (jpod_console.rb):**
+Added `when 'transit_test'` in the template path. Guarded parking_chain check so
+it only runs for platform tests (transit_test has no platform). 4 vehicles placed at
+gw_cp_in_N, each tagged with `sally_transit_tracks` = from_cpN_to_cp(N+3)%4 route.
+`station_test_phase = 'exiting'` → vehicle erased when maneuver completes.
 
-**Root cause:** `hold_loop_chain.loop` ended at `gw_uturn_1` (outer ring). On promotion,
-Sally dispatched an 8-track intersection-approach maneuver via `_final_approach_tracks` +
-`_enqueue_hold_loop_return_park`. This two-dispatch sequence was failing — pod jumped
-from the approach's first track to gw_platform.
+**HTML (dialogs/console.html):**
+Replaced `ccw_traverse` with `transit_test` card for traffic_circle formations.
+Binary pass/fail: all 4 vehicles exit = PASS.
 
-**Fix:**
-- `loop`: now 8 tracks ending at `gw_platform_parking` — traverses outer ring then takes
-  platform approach at `gw_cp_in_lead_0 → gw_near_main_1 → gw_platform_in → gw_platform_parking`
-- `to_platform: []` — `on_maneuver_complete` fires direct-park code path. One dispatch, no race.
-- Removed from loop: `gw_near_main_2`, `gw_cp_out_lead_1`, `gw_uturn_1`
+**How the erase works:**
+Vehicle with `station_test_phase='exiting'` enters dwelling after maneuver completes.
+Dwelling handler fires `elsif phase == 'exiting'` → erase. Same path used by
+station exit tests. No new code needed in vehicle_anim.rb for the erase.
+
+### Two-file architecture (committed same session)
+Deleted all legacy per-template files: cp.json, geometry.json, feature.json,
+extracted.json, *.retired. lines.computed.json is now the single computed output.
 
 ---
 
-## Key Decision
+## Current Template Status
 
-**Direct-park is the one pattern for all templates.** "There needs to be only one sally
-animation function." station_line_end proved it 2026-06-03; station_thru_dip now matches.
-Intersection approach (`_final_approach_tracks`) stays in code but is not used for either
-current template.
+| Template | Show Tracks | Shuffle Test | Departure Test | Arrival Test |
+|----------|------------|-------------|----------------|--------------|
+| station_line_end | ✓ | ✓ | ✓ | ✓ |
+| station_thru_dip | ✓ | ✓ | ✓ | ✓ |
+| station_parking | ✓ | PENDING | PENDING | - |
+| traffic_circle7 | ✓ | — | — | Transit Test PENDING |
 
 ---
 
 ## Next Steps (ordered)
 
-1. **Apply same framework to station_parking** — run Shuffle Test and Departure Test.
-   Check if station_parking's hold_loop_chain needs the same direct-park treatment.
+1. **Run station_parking Shuffle Test** — Console → Models → station_parking.
+   Configuration ready: hold_loop_chain (direct-park, to_platform=[]), exit_chains.
+   Expect: pods arrive at psmax, queue compacts toward ps1.
 
-2. **Network animation on 2_thru_dip model** — station_thru_dip is validated at template
-   level; test it in a full network Build + Animate run.
+2. **Run station_parking Departure Test** — Console → Models → station_parking.
+   Expect: all pods advance to psmax, exit via out_cp0/out_cp1, all erased.
 
-3. **Sally advance "path too short" fault** (filed 20260616T054917-fault.md) — advance
-   ps3→ps4 on gw_platform_parking clips to zero-length path. Blocks queue compaction
-   in full network runs. Not blocking template tests.
+3. **Run traffic_circle7 Transit Test** — Console → Models → traffic_circle7.
+   4 vehicles, in_N → out_(N+3)%4. Expect all 4 exit cleanly.
+   Reload needed: `load '.../jpod_vehicle_anim.rb'` and `load '.../jpod_console.rb'`
 
-4. **Step 5:** remove map.json fallback from jpod_vehicle_anim.rb once network runs clean.
+4. **Network animation on 2_thru_dip model** — station_thru_dip validated at template
+   level; test in full network Build + Animate run.
+
+5. **Sally advance "path too short" fault** (20260616T054917-fault.md) — ps3→ps4 at
+   built-network stations. Root cause: _platform_pts_entry_first orientation failure
+   in world space. Deferred (not blocking template tests).
+
+---
+
+## Key Design Decisions (this session)
+
+**transit_test pattern:** No station platform = no Sally, no parking_chain.
+Vehicle gets direct maneuver from build_fleet via `sally_transit_tracks`. Erase on
+completion via `station_test_phase='exiting'`. One behavior, no special cases in
+the animator for transit vehicles.
+
+**Two-file rule:** lines.json + lines.computed.json only. No cp.json, geometry.json,
+extracted.json, or model.followme.json as separate files.
