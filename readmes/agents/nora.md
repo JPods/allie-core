@@ -119,6 +119,35 @@
 
 ---
 
+## Trajectory Observation System
+
+Nora observes her own trajectory at every track junction. If the transition is geometrically smooth, she says nothing. If not — heading discontinuity, Z jump, chord cut, position gap — she files a FAULT against the specific track pair and flushes to Noelle.
+
+**Full design plan:** `readmes/agents/nora-trajectory-observation.md`
+
+**Applies to:** SU (animation tick in `jpod_vehicle_anim.rb`) and Physical (line transition in `motor.py` / `ezone.py`). Route-Time v1 does not carry geometry pts per edge — deferred.
+
+**Four metrics at each junction:**
+1. **Heading discontinuity** — cos(exit_vec · entry_vec); thresholds at 15°/35°/60°
+2. **Z jump** — |next_pts[0].z − pts[-1].z|; thresholds at 50/200/500mm
+3. **Chord cut** — 2-pt track on a known arc segment; chord > 500mm is suspect
+4. **Position gap** — distance(pts[-1], next_pts[0]); thresholds at 5/50/200mm
+
+**Flush:** at animation stop (SU) / trip complete (Physical). Writes to `{stem}.physical.json`. Fires `_allie_capture('nora_trajectory_flush', ...)`. Writes FAULT file if any severe.
+
+**Noelle responds:** reads `physical.json` at Build; promotes severe observations into `network.json` noelle.faults[]. Natalie's BFS avoids those tracks automatically.
+
+**Design decisions:**
+
+| Date | Decision | Reasoning |
+|------|----------|-----------|
+| 2026-06-17 | Accumulate observations during run, flush at stop — not at each junction | Avoids flood of output; lets Nora finish the trip; single flush gives Noelle a coherent picture of the full run |
+| 2026-06-17 | Severe faults write FAULT file immediately at flush | Severe defects need to enter the FAULT→TFTS arc immediately; physical.json alone is not visible enough |
+| 2026-06-17 | Route-Time not in v1 scope | RT edges carry distances, not geometry pts; adding pts is a RT architectural change, deferred |
+| 2026-06-17 | `physical.json` capped at 500 entries, time-bound 30 days for fault promotion | Old observations should not block routes after geometry is fixed; Build clears noelle.faults[] anyway |
+
+---
+
 ## Cross-Domain Mappings
 
 | Concept | SketchUp | Route-Time | Physical |
