@@ -123,7 +123,7 @@
 
 Nora observes her own trajectory at every track junction. If the transition is geometrically smooth, she says nothing. If not — heading discontinuity, Z jump, chord cut, position gap — she files a FAULT against the specific track pair and flushes to Noelle.
 
-**Full design plan:** `readmes/agents/nora-trajectory-observation.md`
+**Full design plan:** `readmes/agents/agent-experience-framework.md` (Nora section)
 
 **Applies to:** SU (animation tick in `jpod_vehicle_anim.rb`) and Physical (line transition in `motor.py` / `ezone.py`). Route-Time v1 does not carry geometry pts per edge — deferred.
 
