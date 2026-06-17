@@ -61,7 +61,9 @@ INCREMENT
   - Advance to next run
 ```
 
-Introspection and retrospection records are written to `process/inbox/` as `YYYYMMDDTHHMMSS-intro-{network}.md` and `YYYYMMDDTHHMMSS-retro-{network}.md`. They feed Allie's nightly synthesis exactly like TFTS files.
+Introspection and retrospection records are written to `process/network_learning/{network_id}/` as `YYYYMMDDTHHMMSS-intro.md` and `YYYYMMDDTHHMMSS-retro.md`. They feed Allie's nightly synthesis exactly like TFTS files.
+
+`process/inbox/` is for transient session artifacts (FAULT, DNW, TF, TFTS). `process/network_learning/` is permanent — it accumulates over the entire life of the network.
 
 ---
 
@@ -472,7 +474,7 @@ def _observe_small_sting(problem_type, station_id, sla_deadline, customer_id):
     })
 ```
 
-`allie-capture.py` writes these to `process/inbox/` as events; nightly synthesis aggregates them into `process/physical/networks/{network_id}/alice.jsonl`.
+`allie-capture.py` writes these to `process/inbox/` as events; nightly synthesis aggregates them into `process/network_learning/{network_id}/alice.jsonl`.
 
 ### What Alice's Experience Teaches
 
@@ -508,16 +510,18 @@ Allie's nightly synthesis is responsible for these correlations. She holds all f
 ### Storage
 
 ```
-~/Allie/process/physical/
-  physical.json                    ← rolling 500-entry observation log
-  networks/
-    {network_id}/
-      noelle.jsonl                 ← Noelle observations per Build on this network
-      natalie.jsonl                ← Natalie observations per trip plan / trip complete
-      nora.jsonl                   ← Nora observations per animation run / physical trip
+~/Allie/process/network_learning/
+  {network_id}/                    ← one folder per named network; persists indefinitely
+    YYYYMMDDTHHMMSS-intro.md       ← pre-run agent introspection + forecasts
+    YYYYMMDDTHHMMSS-retro.md       ← post-run retrospection + delta analysis
+    noelle.jsonl                   ← Noelle observations per Build (appended)
+    natalie.jsonl                  ← Natalie observations per trip plan / trip complete
+    nora.jsonl                     ← Nora observations per animation run / physical trip
+    alice.jsonl                    ← Alice observations per transaction / query
+    physical.json                  ← rolling 500-entry cross-agent observation log (legacy compat)
 ```
 
-Long-term: each network gets its own folder. Multiple Build + animate cycles on the same network accumulate evidence. When the network is substantially redesigned, archive the old folder and start fresh.
+`process/inbox/` is for transient session artifacts (FAULT, DNW, TF, TFTS). `process/network_learning/` is permanent — multiple Build + animate cycles accumulate. When a network is substantially redesigned, archive the old folder under `{network_id}/archive/YYYY-MM-DD/` and start fresh observation logs. The intro/retro files are kept — they are the history of what was believed at each stage.
 
 ### Nightly Synthesis
 
