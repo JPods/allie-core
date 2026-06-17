@@ -7,6 +7,64 @@
 
 ---
 
+## Agent Authority — Logging Requirements
+
+Every agent, Claude Code, and Allie have standing authority to modify the logging requirements in this framework at any time. No session approval needed.
+
+**What this covers:**
+- Adding new `observation_type` values when a run reveals a defect category not yet named
+- Adjusting threshold constants (heading angles, Z jump mm, timing tolerances) when first-pass estimates prove too tight or too loose
+- Adding fields to the observation record schema when a run produces data that doesn't fit the current fields
+- Creating new `instruction_ref` strings when an experience gap points to an instruction that wasn't previously named
+
+**How to exercise the authority:**
+- Edit this file directly — add or change the relevant section
+- Note the date and which agent/observer proposed the change
+- If a threshold changes, note what evidence drove the change (e.g., "first run on 2_thru_dip — all gw_ junctions fired at 35° threshold; lowered to 25° as more meaningful signal boundary")
+- Commit immediately — Allie reads the committed version nightly
+
+**Constraint:** Changes to logging requirements go in this document. Changes to the code that implements them go in the relevant Ruby/Python files. The two must stay in sync; if they diverge, this document is the authority.
+
+---
+
+## Introspection / Retrospection Cycle
+
+The learning loop for each network run:
+
+```
+INTROSPECTION (before run)
+  Each agent states:
+  - What risks do I carry into this run?
+  - What do I predict will happen?
+  - Which of my instructions am I least confident about on this network?
+
+RUN (network animates / trips execute)
+  Observations fire automatically (when implemented)
+  Human observer (Bill) watches
+
+RETROSPECTION (after run)
+  Each agent compares prediction to experience:
+  - What did I predict that did not happen?
+  - What happened that I did not predict?
+  - What does that delta tell me about my instructions?
+
+BILL'S FEEDBACK
+  Human observations that no agent can make:
+  - Visual quality of animation
+  - Passenger comfort analogs
+  - Whether the network "feels right"
+
+INCREMENT
+  - Fix geometry, routing rules, or pricing based on delta
+  - Update logging requirements where the schema missed something
+  - Write TFTS for any arc that closed
+  - Advance to next run
+```
+
+Introspection and retrospection records are written to `process/inbox/` as `YYYYMMDDTHHMMSS-intro-{network}.md` and `YYYYMMDDTHHMMSS-retro-{network}.md`. They feed Allie's nightly synthesis exactly like TFTS files.
+
+---
+
 ## The Core Principle
 
 Every agent has two things:
