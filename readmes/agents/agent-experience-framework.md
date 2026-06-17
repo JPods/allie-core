@@ -29,41 +29,98 @@ Every agent, Claude Code, and Allie have standing authority to modify the loggin
 
 ## Introspection / Retrospection Cycle
 
-The learning loop for each network run:
+The learning loop for each network run.
+
+### Depth Policy
+
+**Agents are encouraged to be demanding.** At this stage we want maximum introspective depth — no agent should self-censor a risk, a question, or a prediction on the grounds that it seems too detailed or too obvious. The goal is to surface everything so we can learn what matters. Noise will be weeded out over time as patterns emerge. An insight not written is an insight lost.
+
+**Agents may ask each other questions in their introspection.** If Nora doesn't know what route Natalie will assign, she says so and asks. If Noelle doesn't know whether the template's gw_cp tracks are curved or straight, she asks the template maintainer (Claude Code or Allie). These questions live in the introspection file — they are not blocking; the run proceeds. But they establish what was unknown before the run, which is as important as what was predicted.
+
+**Claude Code and Allie both post forecasts.** Not as observers — as participants. Their forecasts are held to the same standard as the agents': specificity, a named instruction_ref, a stated confidence level, and at least one question they don't know the answer to.
+
+**Volume is not a problem now.** Introspection files can be long. They will be compressed over time as agents learn what to predict. A first run on a new template should be exhaustive.
+
+### Introspection Format
+
+```markdown
+# Introspection — {network_id} — {timestamp}
+
+## {Agent Name} — Risks
+
+**Responsibilities at risk this run:**
+[Each responsibility named explicitly — no "the network might have issues"]
+
+**Predicted findings (with confidence):**
+[Named prediction + confidence: high/medium/low + instruction_ref]
+
+**Instructions I am least confident about:**
+[The specific rules or constants I have not yet measured on a real network]
+
+**Questions for other agents:**
+[What I need to know that I cannot determine from my own inputs]
+
+**Questions for Claude/Allie:**
+[What I need to know about the template, the geometry, or the codebase]
+```
+
+### Retrospection Format
+
+```markdown
+## {Agent Name} — Retrospective
+
+**Predicted correctly:**
+[What matched — include instruction_ref]
+
+**Not predicted:**
+[What happened that was not in the forecast — why wasn't it forecast?]
+
+**Confidence calibration:**
+[High-confidence predictions that were wrong: overconfident. Low-confidence that were right: underconfident. Update confidence model.]
+
+**Logging gaps:**
+[Observations I wanted to make but couldn't — new observation_type needed]
+
+**Instruction updates proposed:**
+[Rules or constants I want to change based on this run — with evidence]
+
+**Questions I now have for other agents:**
+[Cross-agent questions that emerged from this run]
+```
+
+### The Cycle
 
 ```
 INTROSPECTION (before run)
-  Each agent states:
-  - What risks do I carry into this run?
-  - What do I predict will happen?
-  - Which of my instructions am I least confident about on this network?
+  All agents + Claude + Allie post forecasts, risks, and questions
+  Questions for other agents logged — not blocking, but on the record
 
-RUN (network animates / trips execute)
+RUN
   Observations fire automatically (when implemented)
-  Human observer (Bill) watches
+  Human observer (Bill) watches — his observations are the highest-authority layer
 
 RETROSPECTION (after run)
-  Each agent compares prediction to experience:
-  - What did I predict that did not happen?
-  - What happened that I did not predict?
-  - What does that delta tell me about my instructions?
+  All agents compare forecast to experience
+  Confidence calibration updated
+  Logging gaps identified → new observation_types added to this framework
+  Instruction updates proposed → changes made with evidence citation
 
 BILL'S FEEDBACK
-  Human observations that no agent can make:
-  - Visual quality of animation
-  - Passenger comfort analogs
-  - Whether the network "feels right"
+  The human layer no automated agent can replicate:
+  - Visual quality
+  - Passenger comfort analog
+  - Whether the network "feels right" as a whole system
 
 INCREMENT
-  - Fix geometry, routing rules, or pricing based on delta
-  - Update logging requirements where the schema missed something
-  - Write TFTS for any arc that closed
-  - Advance to next run
+  - Fix the identified defect
+  - Update logging requirements (agent authority — no approval needed)
+  - Write TFTS if an arc closed
+  - Next run: agents forecast with updated priors
 ```
 
-Introspection and retrospection records are written to `process/network_learning/{network_id}/` as `YYYYMMDDTHHMMSS-intro.md` and `YYYYMMDDTHHMMSS-retro.md`. They feed Allie's nightly synthesis exactly like TFTS files.
+Records: `process/network_learning/{network_id}/YYYYMMDDTHHMMSS-intro.md` and `-retro.md`.
 
-`process/inbox/` is for transient session artifacts (FAULT, DNW, TF, TFTS). `process/network_learning/` is permanent — it accumulates over the entire life of the network.
+`process/inbox/` is for transient session artifacts (FAULT, DNW, TF, TFTS). `process/network_learning/` is permanent — accumulates over the life of the network.
 
 ---
 
