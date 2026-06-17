@@ -1,39 +1,36 @@
 # Handoff — 2026-06-17
 
-## Status: transit_test implemented for traffic_circle7; station_parking Shuffle/Departure PENDING
+## Status: traffic_circle7 Transit Test PASSING — station_parking Shuffle/Departure PENDING
 
 ---
 
 ## What Was Built This Session
 
-### Transit Test — traffic_circle7 (no station platform)
+### Three transit_test bugs fixed (traffic_circle7)
 
-Commit `1451c0f`. Three changes:
+**Run button inert (console.html):**
+`JSON.stringify(formation)` in the onclick attribute embedded double quotes inside a
+double-quoted HTML attribute — browser parser ended the attribute at the first inner `"`.
+Fix: use single-quoted JS string literals: `` `onclick="runStationTest('${formation}', '${t.id}')"` ``
 
-**build_fleet (jpod_vehicle_anim.rb):**
-New transit route intercept between Sally hold_loop block and normal Natalie routing.
-Checks `sally_transit_tracks` entity attribute (JSON array of fully-qualified track keys).
-Stitches pts from all tracks into one maneuver and dispatches directly. Handles the case
-where there's no `parked_station_id` or `sally_hold_loop_sid`.
+**Vehicles moving CW instead of CCW (jpod_vehicle_anim.rb):**
+pass_chains list track names in CCW traversal order, but some tracks have their `pts_mm`
+stored in the opposite direction (e.g. `gw_c_1_1` pts go right→left but CCW traversal
+goes left→right). The transit intercept was blindly concatenating pts in stored order.
+Fix: before appending each track's pts, compare `last.distance(tk_pts.first)` vs
+`last.distance(tk_pts.last)`; reverse if the last pt is closer. All 4 CCW routes
+now stitch geometrically correct.
 
-**Console transit_test handler (jpod_console.rb):**
-Added `when 'transit_test'` in the template path. Guarded parking_chain check so
-it only runs for platform tests (transit_test has no platform). 4 vehicles placed at
-gw_cp_in_N, each tagged with `sally_transit_tracks` = from_cpN_to_cp(N+3)%4 route.
-`station_test_phase = 'exiting'` → vehicle erased when maneuver completes.
+**Vehicles not following Show Track lines (jpod_console.rb):**
+`show_track_overlay` searches for the formation entity as `ComponentInstance OR Group`
+with a Pass 2 fallback (gw_*-tagged children scan). The console's `template_lookup`
+builder only searched `ComponentInstance` with no Pass 2. If the formation is a Group,
+the console used identity transform while Show Tracks used the real transform → mismatch.
+Fix: brought console search into parity — checks both types, adds identical Pass 2 fallback.
 
-**HTML (dialogs/console.html):**
-Replaced `ccw_traverse` with `transit_test` card for traffic_circle formations.
-Binary pass/fail: all 4 vehicles exit = PASS.
-
-**How the erase works:**
-Vehicle with `station_test_phase='exiting'` enters dwelling after maneuver completes.
-Dwelling handler fires `elsif phase == 'exiting'` → erase. Same path used by
-station exit tests. No new code needed in vehicle_anim.rb for the erase.
-
-### Two-file architecture (committed same session)
-Deleted all legacy per-template files: cp.json, geometry.json, feature.json,
-extracted.json, *.retired. lines.computed.json is now the single computed output.
+**model.network.json created by Build on template (noelle.rb):**
+`generate_network_json` was called on every Build/Validate with no template guard.
+Fix: return early if `model.path.include?('track_formations')`.
 
 ---
 
@@ -44,7 +41,7 @@ extracted.json, *.retired. lines.computed.json is now the single computed output
 | station_line_end | ✓ | ✓ | ✓ | ✓ |
 | station_thru_dip | ✓ | ✓ | ✓ | ✓ |
 | station_parking | ✓ | PENDING | PENDING | - |
-| traffic_circle7 | ✓ | — | — | Transit Test PENDING |
+| traffic_circle7 | ✓ | — | — | Transit Test ✓ |
 
 ---
 
@@ -57,14 +54,10 @@ extracted.json, *.retired. lines.computed.json is now the single computed output
 2. **Run station_parking Departure Test** — Console → Models → station_parking.
    Expect: all pods advance to psmax, exit via out_cp0/out_cp1, all erased.
 
-3. **Run traffic_circle7 Transit Test** — Console → Models → traffic_circle7.
-   4 vehicles, in_N → out_(N+3)%4. Expect all 4 exit cleanly.
-   Reload needed: `load '.../jpod_vehicle_anim.rb'` and `load '.../jpod_console.rb'`
-
-4. **Network animation on 2_thru_dip model** — station_thru_dip validated at template
+3. **Network animation on 2_thru_dip model** — station_thru_dip validated at template
    level; test in full network Build + Animate run.
 
-5. **Sally advance "path too short" fault** (20260616T054917-fault.md) — ps3→ps4 at
+4. **Sally advance "path too short" fault** (20260616T054917-fault.md) — ps3→ps4 at
    built-network stations. Root cause: _platform_pts_entry_first orientation failure
    in world space. Deferred (not blocking template tests).
 
@@ -72,10 +65,15 @@ extracted.json, *.retired. lines.computed.json is now the single computed output
 
 ## Key Design Decisions (this session)
 
-**transit_test pattern:** No station platform = no Sally, no parking_chain.
-Vehicle gets direct maneuver from build_fleet via `sally_transit_tracks`. Erase on
-completion via `station_test_phase='exiting'`. One behavior, no special cases in
-the animator for transit vehicles.
+**Track direction in pass_chains:** pass_chains list track names in the correct
+traversal order, but pts_mm may be stored in either direction. The transit intercept
+now uses a distance-to-endpoint check to determine direction before stitching.
+Rule: when building a pts path from a track list, always check which end connects.
 
-**Two-file rule:** lines.json + lines.computed.json only. No cp.json, geometry.json,
-extracted.json, or model.followme.json as separate files.
+**template_lookup transform search:** Must mirror show_track_overlay exactly —
+ComponentInstance + Group, with Pass 2 gw_* child scan. Divergence causes
+vehicle paths and Show Tracks ribbon to draw in different coordinate spaces.
+
+**No model.*.json for template models:** lines.json + lines.computed.json only.
+guard in generate_network_json prevents model.network.json even if Build is run
+on a template. model.visits.json is a runtime artifact (trips/dwellings) — acceptable.
