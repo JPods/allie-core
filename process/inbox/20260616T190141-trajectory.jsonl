@@ -1,0 +1,3 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-16T19:01:41Z"}
+{"type":"maneuver","ts":"2026-06-16T19:01:42Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_park_ps3","tracks":[],"pts_count":2,"pts_mm":[[6206.0,-1135.1,5839.4],[-44.0,-1135.1,5839.4]]}
+{"type":"session_end","ts":"2026-06-16T19:01:47Z"}

@@ -1,0 +1,17 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-16T15:58:48Z"}
+{"type":"maneuver","ts":"2026-06-16T15:58:51Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","tracks":[],"pts_count":2,"pts_mm":[[12442.6,-1135.1,5839.4],[9942.6,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T15:58:52Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","t_pct":44.1,"pos_mm":[11340.5,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T15:58:52Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4"}
+{"type":"maneuver","ts":"2026-06-16T15:58:52Z","nora_id":"NORA_0003","maneuver_id":"station_line_end.gw_platform_parking_advance_ps1_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[17442.6,-1135.1,5839.4],[12442.6,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T15:58:52Z","nora_id":"NORA_0003","cid":"station_line_end.gw_platform_parking_advance_ps1_to_ps3","t_pct":17.3,"pos_mm":[16577.4,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T15:58:53Z","nora_id":"NORA_0003","cid":"station_line_end.gw_platform_parking_advance_ps1_to_ps3"}
+{"type":"maneuver","ts":"2026-06-16T15:58:54Z","nora_id":"NORA_0003","maneuver_id":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","tracks":[],"pts_count":2,"pts_mm":[[12442.6,-1135.1,5839.4],[9942.6,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T15:58:54Z","nora_id":"NORA_0003","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","t_pct":61.4,"pos_mm":[10907.2,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T15:58:54Z","nora_id":"NORA_0003","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4"}
+{"type":"maneuver","ts":"2026-06-16T15:58:56Z","nora_id":"NORA_0002","maneuver_id":"station_line_end.gw_platform_parking_advance_ps2_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[14942.6,-1135.1,5839.4],[12442.6,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T15:58:56Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_parking_advance_ps2_to_ps3","t_pct":88.6,"pos_mm":[12727.3,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T15:58:56Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_parking_advance_ps2_to_ps3"}
+{"type":"maneuver","ts":"2026-06-16T15:59:02Z","nora_id":"NORA_0002","maneuver_id":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","tracks":[],"pts_count":2,"pts_mm":[[12442.6,-1135.1,5839.4],[9942.6,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T15:59:02Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4","t_pct":100.0,"pos_mm":[9942.6,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T15:59:02Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_parking_advance_ps3_to_ps4"}
+{"type":"session_end","ts":"2026-06-16T15:59:04Z"}
