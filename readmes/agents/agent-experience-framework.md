@@ -609,8 +609,8 @@ Z_JUMP_SEVERE_MM = 500
 GAP_WARN_MM      = 5
 GAP_FAULT_MM     = 50
 CHAIN_BREAK_MM   = 200
-CHORD_SUSPECT_MM = 500
-CHORD_SEVERE_MM  = 2000
+CHORD_SUSPECT_MM = 100   # lowered 2026-06-17: gw_cp_in ~363mm missed at 500mm
+CHORD_SEVERE_MM  = 1000
 ```
 
 ```python
@@ -620,7 +620,7 @@ COS_HEADING_FAULT  = math.cos(math.radians(35))
 COS_HEADING_SEVERE = math.cos(math.radians(60))
 Z_JUMP_WARN_MM     = 50;  Z_JUMP_FAULT_MM = 200;  Z_JUMP_SEVERE_MM = 500
 GAP_WARN_MM        = 5;   GAP_FAULT_MM    = 50;   CHAIN_BREAK_MM   = 200
-CHORD_SUSPECT_MM   = 500; CHORD_SEVERE_MM = 2000
+CHORD_SUSPECT_MM   = 100; CHORD_SEVERE_MM = 1000   # lowered 2026-06-17
 ```
 
 ### SU — `TrajectoryObserver` (Ruby)
