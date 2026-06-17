@@ -88,12 +88,47 @@ The learning loop for each network run.
 [Cross-agent questions that emerged from this run]
 ```
 
+### Pre-Run Blocking Questions
+
+Some agent questions can be answered before the run. Those answers make forecasts specific. Specific forecasts are measurable. Vague forecasts teach nothing.
+
+**Protocol:**
+1. Agent posts a question in their introspection section marked `[BLOCKING]`
+2. The question is directed to a named agent, Claude, Allie, or Bill
+3. The run does not start until the answer is posted in the same file
+4. The answering party posts `[ANSWERED by {name}]` with the answer inline
+5. If a question cannot be answered before the run (Bill isn't available, data doesn't exist), it is marked `[UNRESOLVED — proceeding]` and becomes the first retrospection finding
+
+**What makes a question blocking:**
+- Agent has a specific prediction but is missing one piece of data to name it precisely
+- The missing data exists and can be retrieved before the run
+- Without the answer, the agent's forecast stays vague; with it, the agent names a specific track, timing, or junction
+
+**What is not blocking:**
+- Questions about future states that don't yet exist (e.g., "what will Alice charge for this route?" before any pricing is set)
+- Questions the agent should be able to answer from their own inputs (reading this before asking is required)
+- Questions that would require Bill to make a design decision mid-session
+
+**Example:**
+```
+Nora [BLOCKING] → Natalie: What is my complete track sequence through 2_thru_dip,
+start to finish? I predict a jerk at the seg_→gw_ boundary but I cannot name
+the specific track without knowing my route.
+
+Natalie [ANSWERED]: Your route is s006.gw_platform → s006.gw_cp_out_lead_0 →
+s006.gw_cp_out_0 → seg_s006_cp1_s007_cp1 → s007.gw_cp_in_0 →
+s007.gw_cp_in_lead_0 → s007.gw_near_main_1 → s007.gw_platform.
+```
+
+Now Nora's forecast is: "I predict a severe heading_kink at s006.gw_cp_out_lead_0 → s006.gw_cp_out_0 and at s007.gw_cp_in_0 → s007.gw_cp_in_lead_0." That is measurable.
+
 ### The Cycle
 
 ```
 INTROSPECTION (before run)
   All agents + Claude + Allie post forecasts, risks, and questions
-  Questions for other agents logged — not blocking, but on the record
+  [BLOCKING] questions posed and answered before run starts
+  [UNRESOLVED] questions logged and become first retrospection items
 
 RUN
   Observations fire automatically (when implemented)
