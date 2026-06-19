@@ -1,0 +1,9 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-19T05:30:26Z"}
+{"type":"maneuver","ts":"2026-06-19T05:30:28Z","nora_id":"NORA_0002","maneuver_id":"station_line_end.gw_platform_advance_ps2_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[2456.1,-1135.1,5869.9],[-43.8,-1135.1,5890.2]]}
+{"type":"tick","ts":"2026-06-19T05:30:28Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_advance_ps2_to_ps3","t_pct":13.8,"pos_mm":[2110.3,-1135.1,5872.7]}
+{"type":"maneuver_end","ts":"2026-06-19T05:30:28Z","nora_id":"NORA_0002","cid":"station_line_end.gw_platform_advance_ps2_to_ps3"}
+{"type":"tick","ts":"2026-06-19T05:30:29Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_advance_ps1_to_ps2","t_pct":29.3,"pos_mm":[4223.6,-1135.1,5855.5]}
+{"type":"maneuver","ts":"2026-06-19T05:30:29Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_advance_ps1_to_ps2","tracks":[],"pts_count":2,"pts_mm":[[4956.0,-1135.1,5849.6],[2456.1,-1135.1,5869.9]]}
+{"type":"maneuver_end","ts":"2026-06-19T05:30:29Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_advance_ps1_to_ps2"}
+{"type":"maneuver_end","ts":"2026-06-19T05:30:40Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_advance_ps2_to_ps3"}
+{"type":"maneuver","ts":"2026-06-19T05:30:40Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_advance_ps2_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[2456.1,-1135.1,5869.9],[-43.8,-1135.1,5890.2]]}

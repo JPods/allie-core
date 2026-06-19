@@ -1,0 +1,6 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-19T04:38:31Z"}
+{"type":"tick","ts":"2026-06-19T04:38:31Z","nora_id":"NORA_0001","cid":"station_thru_dip.hold_loop[12/12]","t_pct":5.5,"pos_mm":[-9637.0,-1695.4,6224.8]}
+{"type":"tick","ts":"2026-06-19T04:38:31Z","nora_id":"NORA_0001","cid":"station_thru_dip.hold_loop[12/12]","t_pct":8.5,"pos_mm":[-13759.7,-2803.6,6908.7]}
+{"type":"tick","ts":"2026-06-19T04:38:32Z","nora_id":"NORA_0001","cid":"station_thru_dip.hold_loop[12/12]","t_pct":11.6,"pos_mm":[-17898.7,-3910.3,7591.7]}
+{"type":"tick","ts":"2026-06-19T04:38:32Z","nora_id":"NORA_0001","cid":"station_thru_dip.hold_loop[12/12]","t_pct":15.6,"pos_mm":[-23513.5,-4538.8,7979.6]}
+{"type":"session_end","ts":"2026-06-19T04:38:32Z"}
