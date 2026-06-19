@@ -1,0 +1,219 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0008",
+  "generated_at": "2026-06-18T16:01:42Z",
+  "origin_sid": "s006",
+  "dest_sid": "s007",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 10,
+  "seq_plan": [
+    {
+      "seq": 1,
+      "seg": "s007.gw_platform",
+      "pts": 2,
+      "first_mm": [
+        84877.7,
+        -407586.2,
+        13436.8
+      ],
+      "last_mm": [
+        84877.7,
+        -383721.6,
+        13436.8
+      ]
+    },
+    {
+      "seq": 2,
+      "seg": "s007.gw_platform_out1",
+      "pts": 2,
+      "first_mm": [
+        84877.7,
+        -383721.6,
+        13436.8
+      ],
+      "last_mm": [
+        83127.7,
+        -373796.9,
+        13499.3
+      ]
+    },
+    {
+      "seq": 3,
+      "seg": "s007.gw_platform_out2",
+      "pts": 2,
+      "first_mm": [
+        83127.7,
+        -373796.9,
+        13499.3
+      ],
+      "last_mm": [
+        81377.7,
+        -363872.1,
+        13436.8
+      ]
+    },
+    {
+      "seq": 4,
+      "seg": "s007.gw_cp_out_lead_1",
+      "pts": 2,
+      "first_mm": [
+        81377.7,
+        -363872.1,
+        13436.8
+      ],
+      "last_mm": [
+        81377.7,
+        -361372.1,
+        13436.8
+      ]
+    },
+    {
+      "seq": 5,
+      "seg": "s007.gw_cp_out_1",
+      "pts": 2,
+      "first_mm": [
+        81377.7,
+        -361372.1,
+        13436.8
+      ],
+      "last_mm": [
+        81377.7,
+        -358872.1,
+        13436.8
+      ]
+    },
+    {
+      "seq": 6,
+      "seg": "seg_s007_cp1_s006_cp0",
+      "pts": 2,
+      "first_mm": [
+        83457.0,
+        -398373.9,
+        15980.4
+      ],
+      "last_mm": [
+        33879.5,
+        -325988.4,
+        10346.7
+      ]
+    },
+    {
+      "seq": 7,
+      "seg": "s006.gw_cp_in_0",
+      "pts": 2,
+      "first_mm": [
+        36671.1,
+        -244072.6,
+        7803.1
+      ],
+      "last_mm": [
+        34398.0,
+        -243031.9,
+        7803.1
+      ]
+    },
+    {
+      "seq": 8,
+      "seg": "s006.gw_cp_in_lead_0",
+      "pts": 2,
+      "first_mm": [
+        36671.1,
+        -244072.6,
+        7803.1
+      ],
+      "last_mm": [
+        38944.2,
+        -245113.3,
+        7803.1
+      ]
+    },
+    {
+      "seq": 9,
+      "seg": "s006.gw_platform_in1",
+      "pts": 2,
+      "first_mm": [
+        38944.2,
+        -245113.3,
+        7803.1
+      ],
+      "last_mm": [
+        47239.6,
+        -250835.9,
+        7865.6
+      ]
+    },
+    {
+      "seq": 10,
+      "seg": "s006.gw_platform_in2",
+      "pts": 2,
+      "first_mm": [
+        47239.6,
+        -250835.9,
+        7865.6
+      ],
+      "last_mm": [
+        55535.1,
+        -256558.6,
+        7803.1
+      ]
+    }
+  ],
+  "lines": {
+    "s006": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 7
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 8
+        }
+      },
+      "gw_platform_in1": {
+        "plan": {
+          "seq": 9
+        }
+      },
+      "gw_platform_in2": {
+        "plan": {
+          "seq": 10
+        }
+      }
+    },
+    "s007": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1
+        }
+      },
+      "gw_platform_out1": {
+        "plan": {
+          "seq": 2
+        }
+      },
+      "gw_platform_out2": {
+        "plan": {
+          "seq": 3
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 4
+        }
+      },
+      "gw_cp_out_1": {
+        "plan": {
+          "seq": 5
+        }
+      }
+    },
+    "connections": {
+      "seg_s007_cp1_s006_cp0": {
+        "plan": {
+          "seq": 6
+        }
+      }
+    }
+  }
+}
