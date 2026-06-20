@@ -91,6 +91,22 @@ at waypoints became visible as tight kinks.
 
 ---
 
+## Speed & Collision Avoidance
+
+| # | Feature | Why | Domain | Priority | Status |
+|---|---------|-----|--------|----------|--------|
+| F-SP-01 | Per-track g-limit speed enforcement | Current SU simulator uses a single `speed_ms` (8.3 m/s) for all tracks. The 3.5 m U-turn centerline (r = 1.75 m) has a physical limit of ~2.1 m/s at 0.25g. Implementation: (1) add `lateral_g_limit` to `defaults.json`; (2) Noelle computes `speed_limit_ms` per track from each track's minimum arc radius and stores it in `lines.computed.json`; (3) Natalie issues per-segment `authorized_speed_ms` in trip plans rather than a single trip-wide value; (4) Nora enforces per-segment speed in the animator. Physical Noras already enforce this via accelerometers — SU simulator does not need to replicate hardware dynamics, but per-segment authorization gives Natalie correct data for spacing calculations. Reference: `readmes/sketchup/speed.md`, `jpod_constants.rb::curve_speed_limit_mps`. | `defaults.json`, `noelle.rb`, `natalie.rb`, `jpod_vehicle_anim.rb`, `jpod_constants.rb` | Medium | Idea |
+| F-NAT-01 | Natalie inter-Nora intersection pre-clearance and personal-space enforcement | Two gaps in the SU simulator: (1) **Intersection conflict** — Noras on converging tracks can enter a CP junction simultaneously. Current gap regulation (`MIN_SPACING_IN`) fires on the same track only; it does not check cross-track merges. Natalie needs to hold a Nora at the approach to a CP until the junction is clear. (2) **Personal space cross-track** — a Nora about to merge into a track occupied near the merge point is not detected until it is on the track and the gap fires. Fix: Natalie pre-checks occupancy of the target track within `min_spacing_m` of the merge point before dispatching the junction maneuver. Physical deployment handles this via ezone pre-clearance protocol (already in `readmes/22-jpods-control-system.md`). The SU simulator needs an equivalent software ezone. | `jpod_vehicle_anim.rb`, `natalie.rb`, `jpod_vehicle_anim.rb` | High | Idea |
+
+**Design notes (added 2026-06-20):**
+
+- F-SP-01 does not change the SU animation visually — pods will still appear to run U-turns at full speed in the display. The value is that Natalie gets correct authorized speeds for spacing math and the trip report `actual_ms` vs `authorized_ms` ratio becomes meaningful on per-track basis.
+- F-NAT-01 is the higher-priority item. The personal-space violation at intersections is a routing safety gap. Without it, two Noras can occupy the same physical position at a CP, which the physical system's ezone protocol prevents but the SU simulator does not.
+- Physical Noras use accelerometers for g-limit enforcement — SU does not need to replicate hardware dynamics. The simulator's job is to validate geometry and routing, not vehicle physics.
+- Full speed architecture: `readmes/sketchup/speed.md`.
+
+---
+
 ## Console — Unit Tests
 
 **Design principle (Rule 10, su_jpods/CLAUDE.md):** One behavior. One unit. Pass/fail
