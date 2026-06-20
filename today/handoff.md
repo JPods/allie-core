@@ -1,79 +1,46 @@
-# Handoff — 2026-06-17
+# Handoff — 2026-06-20
 
-## Status: traffic_circle7 Transit Test PASSING — station_parking Shuffle/Departure PENDING
+## What was done this session
 
----
+### Animation stop reliability
+- **Escape key** stops animation via JPodEscapeTool (pushed onto tool stack during animation)
+- **3-second restart latch** blocks Start Animation for 3s after stop
+- **Toolbar Stop button** (red square) — native SketchUp, bypasses JS dialog entirely
+- **Extensions > JPods > Animation** submenu with Start and Stop — native menu, always responsive
+- **JS debounce fixed** — was 2s on both Start and Stop; now only blocks Start
+- **Log volume reduced** — per-pod status dump every ~10s instead of every 2s; build_topology cached per animation run
 
-## What Was Built This Session
+### Agent flags
+- Noelle / Natalie / Sally / Nora approval badges next to Start Animation in Console
+- `setAgentFlag(agent, status, msg)` via `JPods::Console.execute_script` — correct path (not instance_dialog)
+- Flags reset to gray on Stop, pending on Start
 
-### Three transit_test bugs fixed (traffic_circle7)
+### Note / comment mode
+- Toolbar Note button: toggles mode; next button click prompts "Why (Button Name):"
+- Extensions > JPods > Note… menu: freestanding UI.inputbox
+- Note tab in Console: textarea, Save (Cmd+Enter), Cancel
 
-**Run button inert (console.html):**
-`JSON.stringify(formation)` in the onclick attribute embedded double quotes inside a
-double-quoted HTML attribute — browser parser ended the attribute at the first inner `"`.
-Fix: use single-quoted JS string literals: `` `onclick="runStationTest('${formation}', '${t.id}')"` ``
+### seg_ teleporting pods (FIXED)
+- Root cause: `designer.connections[].pts` had 0 or 2 pts (CP chord, not bezier)
+- Fix: `upgrade_segs_from_beam_path!` reads `beam_path` entity attribute from Build geometry
 
-**Vehicles moving CW instead of CCW (jpod_vehicle_anim.rb):**
-pass_chains list track names in CCW traversal order, but some tracks have their `pts_mm`
-stored in the opposite direction (e.g. `gw_c_1_1` pts go right→left but CCW traversal
-goes left→right). The transit intercept was blindly concatenating pts in stored order.
-Fix: before appending each track's pts, compare `last.distance(tk_pts.first)` vs
-`last.distance(tk_pts.last)`; reverse if the last pt is closer. All 4 CCW routes
-now stitch geometrically correct.
+## Open issues
 
-**Vehicles not following Show Track lines (jpod_console.rb):**
-`show_track_overlay` searches for the formation entity as `ComponentInstance OR Group`
-with a Pass 2 fallback (gw_*-tagged children scan). The console's `template_lookup`
-builder only searched `ComponentInstance` with no Pass 2. If the formation is a Group,
-the console used identity transform while Show Tracks used the real transform → mismatch.
-Fix: brought console search into parity — checks both types, adds identical Pass 2 fallback.
+1. **`model.entities nil`** — Sally/Natalie get nil from `model.entities` during animation. The `model` var captured at start() goes stale. Fix: use `Sketchup.active_model` inside timer callbacks.
 
-**model.network.json created by Build on template (noelle.rb):**
-`generate_network_json` was called on every Build/Validate with no template guard.
-Fix: return early if `model.path.include?('track_formations')`.
+2. **Double Natalie sweep** — two `sweep #1` per second. SystemClock registering listener twice. Add dedup guard.
 
----
+3. **`dispatch_idle error: undefined method 'each' for nil:NilClass`** — fires every ~6s. Backtrace added. Next occurrence shows file:line.
 
-## Current Template Status
+4. **All pods accumulate at one station** — after extended animation, all 14 pods drifted to s006, s007 empty. Investigate return-trip dispatch when destination platform is full.
 
-| Template | Show Tracks | Shuffle Test | Departure Test | Arrival Test |
-|----------|------------|-------------|----------------|--------------|
-| station_line_end | ✓ | ✓ | ✓ | ✓ |
-| station_thru_dip | ✓ | ✓ | ✓ | ✓ |
-| station_parking | ✓ | PENDING | PENDING | - |
-| traffic_circle7 | ✓ | — | — | Transit Test ✓ |
+5. **Inbound platform speed anomaly** — gw_platform_in1/in2 at 2-3× authorized speed. Not yet diagnosed.
 
----
+## Commits this session (su_jpods_claude)
+- `b6654c1` Fix agent flags: use Console.execute_script instead of instance_dialog
+- `6983976` Fix Stop Animation unresponsive + Nora error flood
+- `2c64b2e` Stop Animation: toolbar button + radically reduce log volume
+- `20c3dae` Add Animation submenu to Extensions > JPods
 
-## Next Steps (ordered)
-
-1. **Run station_parking Shuffle Test** — Console → Models → station_parking.
-   Configuration ready: hold_loop_chain (direct-park, to_platform=[]), exit_chains.
-   Expect: pods arrive at psmax, queue compacts toward ps1.
-
-2. **Run station_parking Departure Test** — Console → Models → station_parking.
-   Expect: all pods advance to psmax, exit via out_cp0/out_cp1, all erased.
-
-3. **Network animation on 2_thru_dip model** — station_thru_dip validated at template
-   level; test in full network Build + Animate run.
-
-4. **Sally advance "path too short" fault** (20260616T054917-fault.md) — ps3→ps4 at
-   built-network stations. Root cause: _platform_pts_entry_first orientation failure
-   in world space. Deferred (not blocking template tests).
-
----
-
-## Key Design Decisions (this session)
-
-**Track direction in pass_chains:** pass_chains list track names in the correct
-traversal order, but pts_mm may be stored in either direction. The transit intercept
-now uses a distance-to-endpoint check to determine direction before stitching.
-Rule: when building a pts path from a track list, always check which end connects.
-
-**template_lookup transform search:** Must mirror show_track_overlay exactly —
-ComponentInstance + Group, with Pass 2 gw_* child scan. Divergence causes
-vehicle paths and Show Tracks ribbon to draw in different coordinate spaces.
-
-**No model.*.json for template models:** lines.json + lines.computed.json only.
-guard in generate_network_json prevents model.network.json even if Build is run
-on a template. model.visits.json is a runtime artifact (trips/dwellings) — acceptable.
+## Next session
+Start with: read process/inbox/, then investigate `model.entities nil` — prevents Sally/Natalie from scanning entities during animation. Most impactful open issue.
