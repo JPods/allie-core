@@ -1,0 +1,41 @@
+{
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-19T20:53:17Z",
+  "origin_sid": "",
+  "dest_sid": "station_parking",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 2,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "station_parking.hold_loop[12/12]",
+      "len_mm": 127592,
+      "actual_s": 15.516,
+      "expected_s": 15.372,
+      "actual_ms": 8.22
+    },
+    {
+      "seg_id": "station_parking.gw_platform_park_ps7",
+      "len_mm": 16250,
+      "actual_s": 2.069,
+      "expected_s": 1.958,
+      "actual_ms": 7.85
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}
