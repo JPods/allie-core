@@ -11,7 +11,7 @@
 |---|----------|---------|---------|---------|--------|
 | 1 | `traffic_circle7` | ✓ 2026-06-19 | ✓ 2026-06-19 | 0 | PASS |
 | 2 | `station_thru_dip` | ✓ 2026-06-20 | ✓ 2026-06-20 | 0 | PASS |
-| 3 | `station_line_end` | — | — | — | pending |
+| 3 | `station_line_end` | ✓ 2026-06-20 | ✓ 2026-06-20 | 0 | PASS |
 | 4 | `station_parking` | — | — | — | pending |
 
 ---
@@ -69,9 +69,35 @@ All: `natalie_verdict: authorized`, `cp_gap_count: 0`, `speed_deviation_count: 0
 
 ---
 
-## station_line_end — pending
+## station_line_end — PASS (2026-06-20T02:01Z)
 
-Open `station_line_end/model.skp`, run Compute, run animation.
+**Bugs fixed this session (two stacked bugs):**
+- cp_marker post-pass (noelle.rb ~3985): was pinning arm outer tip Z to `hub[2]` (body Z = 10055.2), overriding P0.1's correct ring_z (10242.7). Fixed: `ring_z_for_cp = geo_tracks_xf.dig("gw_uturn_#{n_str}", 'pts_mm')&.first&.at(2)` as rail_z. Committed `8db404b`.
+- ring-Z normalization pass (noelle.rb, inserted before Bezier synthesis): detected ring_z (10242.7) - hub_z (10055.2) = +187.5mm (beam-top extraction artifact from jpods_path attr). Shifted all ring-level pts to hub_z. Multi-pt transition tracks reduced to 2 endpoints for Bezier re-synthesis. Committed `1075298`.
+
+**Design standard established:** pts_mm Z = bottom center of guideway beam = cp_marker hub_z. Animator applies uniform -200mm offset. This is the universal rule for all templates.
+
+**Compute output (lines.computed.json 2026-06-20T01:01:25Z):**
+- Ring (gw_uturn_0, gw_cp_*): Z = 10055.2 (= hub_z, post-normalization) ✓
+- gw_lift_in ramp: 10055.2 → 8242.7 ✓
+- gw_uturn_1 (platform uturn): Z = 8255.2 ✓
+- Platform (gw_far_main, gw_platform, gw_platform_parking): Z = 8192.7 ✓
+
+**Trip reports (020xxx run, 2026-06-20T02:00Z):**
+
+| Vehicle | Trip | Len mm | Actual m/s | Defects | Park |
+|---------|------|--------|-----------|---------|------|
+| NORA_0001 | hold_loop[7/8] | 90,264 | 8.21 | 0 | ps1 |
+| NORA_0003 | hold_loop[6/6] | 52,938 | 8.22 | 0 | — |
+| NORA_0001 | hold_loop[3/4] | 38,269 | 8.22 | 0 | ps3 |
+
+All: `natalie_verdict: authorized`, `cp_gap_count: 0`, `speed_deviation_count: 0`
+
+**Shuffle confirmed:** gw_platform_advance_ps2_to_ps3, gw_platform_advance_ps1_to_ps2 — both executed with maneuver_end. Concurrent shuffle while third pod loops.
+
+**Depart confirmed:** originating_chain dispatched to NORA_0001 at 02:00:57Z — gw_platform → gw_uturn_1 → gw_far_main → gw_far_main_2 → gw_cp_out_lead_0 → gw_cp_out_0 (6 segs, exits at CP0 arm).
+
+**Trajectory Z:** Platform floor 5839.4mm, ring peak 7701.9mm — consistent across all pods and all loop counts. Zero drift.
 
 ---
 
