@@ -1,0 +1,89 @@
+{
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-20T20:53:31Z",
+  "origin_sid": "s009",
+  "dest_sid": "s008",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "severe_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 6,
+    "skipped_segs": 0,
+    "cp_gap_count": 1,
+    "speed_deviation_count": 1,
+    "total_defects": 2
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s009_cp0_s008_cp0",
+      "len_mm": 75282,
+      "actual_s": 11.846,
+      "expected_s": 9.07,
+      "actual_ms": 6.36
+    },
+    {
+      "station": "s008",
+      "track": "gw_cp_in_0",
+      "len_mm": 2500,
+      "actual_s": 0.397,
+      "expected_s": 0.301,
+      "actual_ms": 6.29
+    },
+    {
+      "station": "s008",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.368,
+      "expected_s": 0.301,
+      "actual_ms": 6.79
+    },
+    {
+      "station": "s008",
+      "track": "gw_platform_parking",
+      "len_mm": 12487,
+      "actual_s": 1.557,
+      "expected_s": 1.504,
+      "actual_ms": 8.02
+    },
+    {
+      "station": "s008",
+      "track": "gw_platform",
+      "len_mm": 7683,
+      "actual_s": 0.963,
+      "expected_s": 0.926,
+      "actual_ms": 7.98
+    },
+    {
+      "station": "s008",
+      "track": "gw_platform_park_ps3",
+      "len_mm": 6250,
+      "actual_s": 0.071,
+      "expected_s": 0.753,
+      "actual_ms": 87.46
+    }
+  ],
+  "defects": [
+    {
+      "type": "cp_gap",
+      "station": "s008",
+      "before_track": "gw_platform_parking",
+      "gap_mm": 20782.8,
+      "severity": "severe"
+    },
+    {
+      "type": "speed_deviation",
+      "station": "s008",
+      "track": "gw_platform_park_ps3",
+      "authorized_ms": 8.3,
+      "actual_ms": 87.46,
+      "ratio": 10.54,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}
