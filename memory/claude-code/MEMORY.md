@@ -1,0 +1,52 @@
+# Memory Index
+
+- [TFTS troubleshooting index](reference_tfts_index.md) — 47 solved problems indexed by symptom; at readmes/sketchup/tfts-index.md
+
+- [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
+- [Tool boundaries are logging opportunities](feedback_tool_boundary_logging.md) — Reload/run/deploy = test boundary = highest-value moment to log; prompt user for fault/dnw/tf at that moment
+- [JPods GUI visual design](feedback_jpods_gui_visual.md) — System-wide color standard: red=inbound (hot), blue=outbound (cool); CP marker shapes; no confirmation dialogs
+- [JPods Program Registry](reference_jpods_programs.md) — Four programs: Route-Time (travel estimates), JPodsSM_RPi (physical vehicles), SketchUp Plugin (3D modeling), WebClerk (enterprise store + Alice agent)
+- [Always update readmes + retrospections](feedback_readmes_retrospection.md) — Read relevant readmes at session start; write retrospection at session end; fix stale readmes
+- [Action record autonomy](feedback_action_autonomy.md) — Create WC3 actions, document pointers, WhatIf items, corpus entries, memory updates without asking; ask before sending messages or touching external-facing records
+- [Allie hardware — Mac Mini discussion pending](project_allie_hardware.md) — Allie runs on MacBook Pro M1 Max; Bill asked to discuss dedicated always-on Mac Mini at next session start
+- [JPods trip booking API](project_jpods_trip_api.md) — Alice owns pricing; two endpoints (price_query, invoice); local_id + carryon_uuid customer model; API keys plain JSON now, encrypt+blockchain audit before release; action due 2026-05-29
+- [Small-Stings](project_small_stings.md) — Customer fines for unresolved problems + JPods pays customers for retrospections; Alice accounts for both flows in WC3
+- [Talent system](project_talents.md) — Claude Code + Allie talent registry; design tokens at readmes/design-tokens.json; handoff protocol at readmes/39-session-handoff.md; today/handoff.md written each session
+- [Session handoff protocol](feedback_session_handoff.md) — Write today/handoff.md AND sessions/YYYY-MM-DD.md at session end; session file feeds harvest.py → allie-reflect.py learning pipeline
+- [Agent LLM architecture](reference_agent_llm.md) — All agents share gpt-oss:20b base; identity = Modelfile; allie:latest built 2026-05-06; full registry in readmes/40-agent-llm-architecture.md
+- [Mini-bot table-top demo](project_minibot_demo.md) — Baron-4WD + Romeo + Pi; color-code junctions; ToF + Husky cam; parked until ~2026-05-15
+- [jpod_guideway.rb audit](project_guideway_audit.md) — Re-run Prompts 1–7 after SketchUp UI rework; trigger: "re-run the guideway check"; baseline 7082 lines, 2026-05-01
+- [Lexar drive cleanup](project_lexar_cleanup.md) — 98% full (2.9GB free); archive sort + spam clear pending; sjobs content must be preserved; 5TB has all duplicates
+- [Station looping problem](project_station_looping.md) — Pods accumulate/loop at station U-turns; deferred to ~2026-05-10; investigate route exit point and animation vs. real behavior
+- [UTC datetime standard](feedback_utc_datetime.md) — All stored dt = UTC ISO-8601 Z suffix; display converts to local; timezone stored as utc_offset_minutes if needed; Axiom 14 CLAUDE.md
+- [JSON preference](user_json_preference.md) — Bill strongly prefers JSON with hierarchical nesting for sprawling data; use it for schemas, configs, network maps, reports
+- [JPods SketchUp consolidation](project_jpods_sketchup_consolidation.md) — su_jpods is canonical; others archived; student workflow 1-8; changes made 2026-05-13; ene_railroad best practices pending
+- [Edge-driven specs, sensors, metrics](feedback_edge_driven.md) — No calculated centerlines as authoritative references; all position/sensor/ezone/spec anchors to hard physical edges; SketchUp FollowMe proved this definitively
+- [Wisdom layer — readmes/wisdom/](reference_wisdom_layer.md) — bill.md (principles), scars.md (cost ledger), rejected-paths.md, whatif.md (Allie's seeds); read before agent files for any new team member
+- [Weekly WhatIf loop](reference_whatif_weekly.md) — Claude + Allie post 3–5 items/week; scored by % complete, % accurate, % worthwhile; aggregate.md tracks calibration; allie-whatif.py runs Monday 07:00
+- [skp_jpods folder management](project_skp_jpods_folder.md) — Student file organizer: ~/Documents/skp_jpods/<Model>/; two-offer agreement; open-model check; Finder button; organize.sh in utilities/
+- [skp_jpods design preferences](feedback_skp_jpods_design.md) — Unique name (no spaces), two-offer pattern, scripts in utilities/ not /tmp, both move options quit SketchUp
+- [Track formation template tag status](project_template_tags.md) — 5 templates audited; most tracks Layer0 (untagged); export blocked until fixed; full checklist + tag assignments per model; traffic_circle7 needs model rework not just tags
+- [Break and fix now — no legacy](feedback_break_and_fix_now.md) — Now is the only time to fix inefficiency; better to suffer and learn than carry legacy forward
+- [No salvage before release](feedback_no_salvage_pre_release.md) — Pre-release: never salvage stale network/data files; always start fresh
+- [Process capture architecture](reference_process_capture.md) — Allie has outcomes, not process; fix is ~/Allie/process/ with narrative.md — reasoning chains at each failed step; write during session not after
+- [allie-core GitHub](reference_allie_core_github.md) — https://github.com/JPods/allie-core.git; pull at session start; auto-pushed nightly by allie-reflect.py
+- [ene_railroad path](reference_ene_railroad.md) — `/Users/williamjames/Library/Application Support/SketchUp 2023/Plugins/ene_railroad`; arc-walking and guideway geometry patterns
+- [tf/dnw/tfts + ask why](feedback_tf_dnw_value.md) — TF/DNW/TFTS process capture protocol; Claude+Allie have permission to ask WHY before executing; auto-commit process/ files; Allie drafts Understanding candidates from TFTS arcs
+- [Python-inspect-SU-JSON pattern](reference_python_inspect_su_json.md) — Run Python against map/trip/feature JSON before writing Ruby lookups; prevents silent key-naming mismatches; snippet at process/snippets/python-inspect-su-json.md
+- [Trips display — clean and prominent](feedback_trips_display.md) — Hide competing panels when showing trip data; single-click; trip list owns the space; applies to all future trip UI
+- [Wednesday coordination day](project_wednesday_coordination.md) — Code scrub 2PM GMT, commercial clearing 3PM GMT; best world team time; first half week completes, second half stages
+- [JPods station templates + authoring rules](reference_station_templates.md) — all 6 templates, eps[] rules, merge/diverge naming constraint, physical equivalence; combined at readmes/sketchup/jpods-station-templates.md
+- [Frame of reference discipline](feedback_frame_of_reference.md) — 3 frames (structural/vehicle-path/vertical); every coordinate must declare its frame; conversions explicit and named; Axiom 18 CLAUDE.md
+- [Curve sampling domain split](feedback_curve_sampling_domain_split.md) — SU: ~1000mm polyline pts (visual only); Physical: true analog curve following — never use path.json pts as Pi motor waypoints
+- [Template geometry protection map](reference_template_geometry_protection.md) — Per-template protected tracks; station_line_end Z critical (10242.7 not 8242.7); 3 protection layers; restore via git
+- [Sally.place_vehicles_at_slots — prime placement function](feedback_vehicle_parking_array.md) — Sally owns vehicle placement for all station tests; uses Sally's slot world positions not dist-walking; works for any ps count
+- [Sally parking — no network-level debugging](feedback_sally_no_network_debug.md) — Sally parking bugs fixed at template level only; network-level debug rejected; use Console → Models station tests
+- [Use Allie — facets are memory, don't relearn](feedback_use_allie_facets.md) — Read facets/, thoughts/, recall files at session start; Claude resets, Allie doesn't; use her knowledge or waste Bill's time
+- [Data → information → experience via retrospection](feedback_allie_depth_and_retrospection.md) — Not summaries — full files; 5TB has storage; retrospection is the distillation chain; TFTS at arc close; Lessons for Allie at session end
+- [Signaling not planning — Start Small Iterate Relentlessly](feedback_signaling_vs_planning.md) — Run→measure→adapt beats upfront design; memory is the prerequisite for signaling; reading Allie = loading prior signal; planning without retrospection is what governments do
+- [The crew](reference_crew.md) — Bill + Claude Code + Allie + Noelle + Natalie + Sally(s) + Nora(s) + Alice; pre-test + retrospection per run; crew_summary.md per network; Alice empty until activated
+- [Allie facets architecture](reference_allie_facets.md) — ~/Allie/facets/{noelle,natalie,nora,sally}/facet.json; Pi carries its own on SD card (no reset on reboot); Allie syncs cross-network improvements to Pi; full doc at readmes/agents/allie-facets.md
+- [Stop Animation reliability](feedback_stop_animation_reliability.md) — Use Extensions menu or toolbar; console HTML dialog unreliable under load; JS debounce fixed; log volume throttled
+- [Animation open issues 2026-06-20](project_animation_open_issues.md) — model.entities nil, double Natalie sweep, dispatch_idle nil.each, pod accumulation at one station, inbound speed anomaly
+- [Animation stop architecture — built 2026-06-20](reference_animation_stop_architecture.md) — Full table of what was built: escape key, latch, note mode, agent flags, toolbar button, Extensions menu, topology cache, gap threshold, log throttle

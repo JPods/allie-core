@@ -1,0 +1,15 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-20T05:20:45Z",
+  "model": "2_parking",
+  "formation_filter": "station_parking",
+  "stations": [
+
+  ],
+  "total_ok": 0,
+  "total_warn": 0,
+  "total_severe": 0,
+  "total_missing": 0,
+  "total_undeclared": 0,
+  "total_arc": 0
+}
