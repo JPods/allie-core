@@ -1,0 +1,15 @@
+{
+  "_meta": {
+    "agent": "Noelle",
+    "last_updated": null,
+    "networks_seen": [],
+    "runs_total": 0,
+    "written_by": "Allie nightly (allie-reflect.py)",
+    "version": 1
+  },
+  "confirmed_instructions": [],
+  "cautions": [],
+  "template_reliability": {},
+  "fault_patterns": [],
+  "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations."
+}

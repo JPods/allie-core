@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "agent": "Natalie",
+    "last_updated": null,
+    "networks_seen": [],
+    "runs_total": 0,
+    "written_by": "Allie nightly (allie-reflect.py)",
+    "version": 1
+  },
+  "confirmed_instructions": [],
+  "cautions": [],
+  "timing_constants": {
+    "station_entry_s": 40,
+    "board_alight_s": 20,
+    "walk_segment_min": 5,
+    "source": "initial — not yet calibrated from experience"
+  },
+  "ez_experience": {},
+  "route_patterns": [],
+  "bottleneck_ezones": [],
+  "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations."
+}
