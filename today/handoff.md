@@ -1,47 +1,52 @@
-# Handoff — 2026-06-20 (afternoon session)
+# Handoff — 2026-06-20 (evening)
 
 ## What was done this session
 
-### Toolbar animation workflow
-- **Populate** button (train.png) — `JPodGuideway.populate_fleet(model)` shared method
-- **Clear All Vehicles** button (r_stock_couple.png) — stops animation, removes all vehicles
-- **Toggle Animation** = Start / Complete Trips (graceful stop, not hard stop)
-- Hard stop still available: Extensions > JPods > Animation > Stop Animation, Escape key
+### Toolbar: Populate → Clear → Start/Complete Trips
+Full animation workflow from toolbar. Graceful stop = default toggle behavior.
+Hard stop via Extensions menu or Escape key.
 
 ### Resume v2 with direction recovery
-- save_resume_state v2: saves `man_start` + `remaining[].sp` (first pt of each maneuver as traveled)
-- Resume compares saved start with lookup first/last pt to detect Natalie-reversed tracks
-- Resume intercept moved BEFORE hold_loop in build_fleet (was being trapped as parked ps0)
-- Dynamic Sally advance tracks (gw_platform_park_psN) gracefully fall through as parked
+Saves maneuver direction info. Resume fires before hold_loop. All pods resume correctly.
 
-### Graceful stop ("Complete Trips")
-- `@@graceful_stop` flag blocks random dispatch, idle dispatch, dwelling redispatch
-- Natalie calculates parking demand: parked + inbound vs capacity per station
-- Oversubscribed stations: dispatches lowest-slot parked pods to stations with space
-- Auto-stops when all pods parked
+### 4 networks tested
+- 2_parking (station_parking) — working
+- 2_thru_dip (station_thru_dip) — working
+- 2_line_end (station_line_end) — working
+- 3+circle (traffic_circle7 + station_thru_dip + station_line_end) — CCW enforced, routing working
 
-### Show Track bezier fix
-- Reverse direction connections had no beam_path (one guideway group per connection)
-- Now checks reverse connection ID and uses reversed pts
-- Fixed in both noelle.rb (network.json write) and jpod_animator.rb (Show Track read)
+### Traffic circle CCW
+- lines.json designer.tracks successors were CW — corrected to CCW
+- generate_network_json skips gw_c_* in Pass 2.5 (pass_chains only)
+- build_maneuvers never reverses gw_c_* ring arcs
+- Verbose merge/diverge notes on all 24 CPs — Natalie and Nora behavioral spec
+- gw_out_N pruned when gw_cp_out_N unconnected
 
-### Removed Animate button from Network Editor
+### Ezone protocol identified
+Physical scale model pattern at UTD/jpod_OS/mapV2.json + mqtt.py.
+Each merge/diverge = one ezone. EZONE broadcast via MQTT. Same pattern for SU animation.
+Not yet implemented — ready when vehicle dimensions defined.
+
+### Show Track fixes
+beam_path: reverse direction, any connection_id, cp_→seg_ normalization, Z correction.
+
+### Animation smoothness
+3-level log verbosity. Default level 1 for smooth animation.
 
 ## Open issues
+1. **Ezone implementation** — traffic circle merge/diverge junctions need exclusive zones
+2. **model.entities nil** — Sally/Natalie get nil during animation (prior session)
+3. **3+circle crew_review.md** — not yet written
+4. **S002 (JPods_station_parking)** — no lines.json, CP1 has no departure chain
 
-1. **Graceful stop not yet tested** — need to verify rebalancing log and auto-stop behavior
-2. **Show Track bezier** — need to verify after rebuild that both directions follow curve
-3. **model.entities nil** (from prior session) — Sally/Natalie get nil during animation
-4. **Double Natalie sweep** — SystemClock registering listener twice
-5. **All pods accumulate at one station** — investigate return-trip dispatch when destination full
-
-## Commits this session (su_jpods_claude)
-- `8346a3c` Populate toolbar + resume with direction recovery
-- `9807e4f` Graceful stop: Complete Trips with proactive parking rebalance
-- `7b43e81` Toolbar toggle: graceful stop instead of hard stop
-- `fa6c9a1` Add Clear All Vehicles button to toolbar
-- `e654957` Remove Animate button from Network Editor
-- `aa133fc` Show Track bezier: reverse beam_path for opposite direction
-
-## Next session
-Test graceful stop and Show Track bezier. Then address model.entities nil (most impactful remaining issue from prior session).
+## Key files changed
+- `jpod_vehicle_anim.rb` — resume v2, graceful stop, log verbosity, ring arc guards, ezone pruning
+- `jpod_animator.rb` — Show Track fixes, beam_path Z, dead-end index
+- `noelle.rb` — beam_path extraction, template lookup, pass_chains crash, CCW enforcement
+- `jpod_sally.rb` — log verbosity guards
+- `jpod_vehicle_runtime.rb` — populate_fleet class method
+- `jpod_path_json.rb` — load_extracted_formation_xf replacement
+- `jpod_console.rb` — populate delegates to shared method
+- `main.rb` — toolbar buttons, Complete Trips menu item
+- `traffic_circle7/lines.json` — CCW successors, verbose merge/diverge CPs
+- `network_editor.html` — removed Animate button
