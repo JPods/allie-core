@@ -1,46 +1,47 @@
-# Handoff — 2026-06-20
+# Handoff — 2026-06-20 (afternoon session)
 
 ## What was done this session
 
-### Animation stop reliability
-- **Escape key** stops animation via JPodEscapeTool (pushed onto tool stack during animation)
-- **3-second restart latch** blocks Start Animation for 3s after stop
-- **Toolbar Stop button** (red square) — native SketchUp, bypasses JS dialog entirely
-- **Extensions > JPods > Animation** submenu with Start and Stop — native menu, always responsive
-- **JS debounce fixed** — was 2s on both Start and Stop; now only blocks Start
-- **Log volume reduced** — per-pod status dump every ~10s instead of every 2s; build_topology cached per animation run
+### Toolbar animation workflow
+- **Populate** button (train.png) — `JPodGuideway.populate_fleet(model)` shared method
+- **Clear All Vehicles** button (r_stock_couple.png) — stops animation, removes all vehicles
+- **Toggle Animation** = Start / Complete Trips (graceful stop, not hard stop)
+- Hard stop still available: Extensions > JPods > Animation > Stop Animation, Escape key
 
-### Agent flags
-- Noelle / Natalie / Sally / Nora approval badges next to Start Animation in Console
-- `setAgentFlag(agent, status, msg)` via `JPods::Console.execute_script` — correct path (not instance_dialog)
-- Flags reset to gray on Stop, pending on Start
+### Resume v2 with direction recovery
+- save_resume_state v2: saves `man_start` + `remaining[].sp` (first pt of each maneuver as traveled)
+- Resume compares saved start with lookup first/last pt to detect Natalie-reversed tracks
+- Resume intercept moved BEFORE hold_loop in build_fleet (was being trapped as parked ps0)
+- Dynamic Sally advance tracks (gw_platform_park_psN) gracefully fall through as parked
 
-### Note / comment mode
-- Toolbar Note button: toggles mode; next button click prompts "Why (Button Name):"
-- Extensions > JPods > Note… menu: freestanding UI.inputbox
-- Note tab in Console: textarea, Save (Cmd+Enter), Cancel
+### Graceful stop ("Complete Trips")
+- `@@graceful_stop` flag blocks random dispatch, idle dispatch, dwelling redispatch
+- Natalie calculates parking demand: parked + inbound vs capacity per station
+- Oversubscribed stations: dispatches lowest-slot parked pods to stations with space
+- Auto-stops when all pods parked
 
-### seg_ teleporting pods (FIXED)
-- Root cause: `designer.connections[].pts` had 0 or 2 pts (CP chord, not bezier)
-- Fix: `upgrade_segs_from_beam_path!` reads `beam_path` entity attribute from Build geometry
+### Show Track bezier fix
+- Reverse direction connections had no beam_path (one guideway group per connection)
+- Now checks reverse connection ID and uses reversed pts
+- Fixed in both noelle.rb (network.json write) and jpod_animator.rb (Show Track read)
+
+### Removed Animate button from Network Editor
 
 ## Open issues
 
-1. **`model.entities nil`** — Sally/Natalie get nil from `model.entities` during animation. The `model` var captured at start() goes stale. Fix: use `Sketchup.active_model` inside timer callbacks.
-
-2. **Double Natalie sweep** — two `sweep #1` per second. SystemClock registering listener twice. Add dedup guard.
-
-3. **`dispatch_idle error: undefined method 'each' for nil:NilClass`** — fires every ~6s. Backtrace added. Next occurrence shows file:line.
-
-4. **All pods accumulate at one station** — after extended animation, all 14 pods drifted to s006, s007 empty. Investigate return-trip dispatch when destination platform is full.
-
-5. **Inbound platform speed anomaly** — gw_platform_in1/in2 at 2-3× authorized speed. Not yet diagnosed.
+1. **Graceful stop not yet tested** — need to verify rebalancing log and auto-stop behavior
+2. **Show Track bezier** — need to verify after rebuild that both directions follow curve
+3. **model.entities nil** (from prior session) — Sally/Natalie get nil during animation
+4. **Double Natalie sweep** — SystemClock registering listener twice
+5. **All pods accumulate at one station** — investigate return-trip dispatch when destination full
 
 ## Commits this session (su_jpods_claude)
-- `b6654c1` Fix agent flags: use Console.execute_script instead of instance_dialog
-- `6983976` Fix Stop Animation unresponsive + Nora error flood
-- `2c64b2e` Stop Animation: toolbar button + radically reduce log volume
-- `20c3dae` Add Animation submenu to Extensions > JPods
+- `8346a3c` Populate toolbar + resume with direction recovery
+- `9807e4f` Graceful stop: Complete Trips with proactive parking rebalance
+- `7b43e81` Toolbar toggle: graceful stop instead of hard stop
+- `fa6c9a1` Add Clear All Vehicles button to toolbar
+- `e654957` Remove Animate button from Network Editor
+- `aa133fc` Show Track bezier: reverse beam_path for opposite direction
 
 ## Next session
-Start with: read process/inbox/, then investigate `model.entities nil` — prevents Sally/Natalie from scanning entities during animation. Most impactful open issue.
+Test graceful stop and Show Track bezier. Then address model.entities nil (most impactful remaining issue from prior session).
