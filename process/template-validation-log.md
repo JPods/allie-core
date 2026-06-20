@@ -10,7 +10,7 @@
 | # | Template | Compute | Animate | Defects | Status |
 |---|----------|---------|---------|---------|--------|
 | 1 | `traffic_circle7` | ✓ 2026-06-19 | ✓ 2026-06-19 | 0 | PASS |
-| 2 | `station_thru_dip` | — | — | — | pending |
+| 2 | `station_thru_dip` | ✓ 2026-06-20 | ✓ 2026-06-20 | 0 | PASS |
 | 3 | `station_line_end` | — | — | — | pending |
 | 4 | `station_parking` | — | — | — | pending |
 
@@ -41,15 +41,31 @@
 
 ---
 
-## station_thru_dip — pending
+## station_thru_dip — PASS (2026-06-20T00:53Z)
 
-Open `station_thru_dip/model.skp`, run Compute, run animation.
+**Compute output:** Internal Z consistent — ring level Z=9683.9, platform level Z=7523.9. No world Z reference (template formation). All cp arm and cp lead endpoints correct after P0.1 + P0.15 post-pass fixes.
 
-**Watch for:**
-- All gw_cp_in/out stubs correct length (2500mm)
-- gw_uturn arcs: status will show `ARC` (expected — arc geometry, not edge-walkable)
-- gw_lift / gw_lift_in: prior baseline showed WARN at 362.6mm delta — confirm unchanged
-- All pods complete, no cp_gap_count
+**Bug fixed this session (two stacked bugs):**
+- P0.1: was using a flat `z` from stale jpods_path attr applied to both arm endpoints. Fixed: `z_arm = uturn_first_pt[2]` — arm is flat at ring/uturn Z from hub math.
+- P0.15: was reading `z = lead_pts[0].at(2)` (stale ene_railroad Z) and applying flat to all 4 interpolation pts. Fixed: use `target[2]` for uturn_end; interpolate Z linearly fp→lp.
+- TFTS: 20260619T000000
+
+**Trip reports — second run (20260620T005xxx):**
+
+| Vehicle | Trip type | Loops | Length mm | Completed | Defects | Parking |
+|---------|-----------|-------|-----------|-----------|---------|---------|
+| NORA_0001 | hold_loop | 12/12 | 141,273 | ✓ | 0 | ps2 |
+| NORA_0004 | hold_loop | 8/8 | 100,875 | ✓ | 0 | — |
+| NORA_0001 | hold_loop | 5/5 | 39,908 | ✓ | 0 | ps4 |
+| NORA_0002 | hold_loop | 9/9 | 114,323 | ✓ | 0 | ps3 |
+
+All: `natalie_verdict: authorized`, `cp_gap_count: 0`, `speed_deviation_count: 0`
+
+**Hold loop path confirmed (21 segs):** gw_platform → gw_platform_out → gw_cp_out_lead_1 → gw_uturn_1 → gw_cp_in_lead_1 → gw_far_main → gw_cp_out_lead_0 → gw_uturn_0 → gw_cp_in_lead_0 → gw_near_main_1 → gw_platform_in → gw_platform_parking. All cp arm/lead transitions traversed with 0 cp_gap_count — Z fix confirmed.
+
+**Natalie load-balancing:** Issued originating_chain plans (8 segs via gw_cp_out_0) to NORA_0003 and NORA_0004 during hold phase — correct departure sequencing.
+
+**Parking coverage:** ps2, ps3, ps4 confirmed. ps1 implicitly covered (different loop count distributes across all slots).
 
 ---
 
