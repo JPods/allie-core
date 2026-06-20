@@ -451,3 +451,160 @@
 {"ts":"2026-06-17T23:20:51Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s006","to":"s007","err":"live-model BFS: No route S006→S007. Built stations: none — run Build."}}
 {"ts":"2026-06-17T23:20:51Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s007","to":"s006","bfs_err":"no connected path from s007 to s006 in 110 segments — run Build to regenerate map.json"}}
 {"ts":"2026-06-17T23:20:51Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s007","to":"s006","err":"live-model BFS: No route S007→S006. Built stations: none — run Build."}}
+{"ts":"2026-06-20T04:10:37Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0013","dist_mm":821,"min_mm":2500}}
+{"ts":"2026-06-20T04:10:37Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0007","b":"NORA_0013","dist_mm":2497,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:20Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0005","dist_mm":1812,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:20Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0005","b":"NORA_0012","dist_mm":1250,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:20Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0005","dist_mm":1812,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:20Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0005","b":"NORA_0012","dist_mm":1250,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:22Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0012","dist_mm":1510,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:23Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0012","dist_mm":764,"min_mm":2500}}
+{"ts":"2026-06-20T04:30:28Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0008","b":"NORA_0010","dist_mm":2478,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:15Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0005","b":"NORA_0009","dist_mm":1144,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:20Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0009","b":"NORA_0014","dist_mm":909,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:21Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0011","dist_mm":1575,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:22Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0011","dist_mm":1079,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:24Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0011","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T05:22:25Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0011","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T05:23:06Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0006","dist_mm":1973,"min_mm":2500}}
+{"ts":"2026-06-20T05:24:11Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0007","b":"NORA_0012","dist_mm":1673,"min_mm":2500}}
+{"ts":"2026-06-20T05:24:31Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0008","b":"NORA_0014","dist_mm":2495,"min_mm":2500}}
+{"ts":"2026-06-20T05:24:47Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0014","dist_mm":1751,"min_mm":2500}}
+{"ts":"2026-06-20T05:49:23Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0012","dist_mm":353,"min_mm":2500}}
+{"ts":"2026-06-20T05:49:37Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0012","b":"NORA_0014","dist_mm":1608,"min_mm":2500}}
+{"ts":"2026-06-20T05:49:37Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0012","b":"NORA_0014","dist_mm":1685,"min_mm":2500}}
+{"ts":"2026-06-20T05:49:59Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0013","dist_mm":2026,"min_mm":2500}}
+{"ts":"2026-06-20T05:50:06Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0008","b":"NORA_0009","dist_mm":446,"min_mm":2500}}
+{"ts":"2026-06-20T06:46:49Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0008","dist_mm":1417,"min_mm":2500}}
+{"ts":"2026-06-20T06:46:54Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0011","dist_mm":2183,"min_mm":2500}}
+{"ts":"2026-06-20T06:47:17Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0014","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T06:47:27Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0007","b":"NORA_0008","dist_mm":346,"min_mm":2500}}
+{"ts":"2026-06-20T06:47:29Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0007","b":"NORA_0008","dist_mm":1887,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:15Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0005","b":"NORA_0008","dist_mm":2407,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:18Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0005","b":"NORA_0009","dist_mm":846,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:26Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0008","b":"NORA_0013","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:27Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0008","b":"NORA_0013","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:29Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0005","dist_mm":276,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:29Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0005","dist_mm":1857,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:33Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0012","dist_mm":1250,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:41Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0002","dist_mm":346,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:44Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:44Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0007","dist_mm":1687,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:44Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:45Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0010","b":"NORA_0014","dist_mm":107,"min_mm":2500}}
+{"ts":"2026-06-20T06:48:46Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0007","dist_mm":2500,"min_mm":2500}}
+{"ts":"2026-06-20T06:49:01Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0008","dist_mm":346,"min_mm":2500}}
+{"ts":"2026-06-20T15:36:39Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0009","b":"NORA_0011","dist_mm":1480,"min_mm":2500}}
+{"ts":"2026-06-20T15:36:40Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0009","b":"NORA_0011","dist_mm":1480,"min_mm":2500}}
+{"ts":"2026-06-20T16:55:41Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0012","dist_mm":1249,"min_mm":2500}}
+{"ts":"2026-06-20T16:55:41Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0012","dist_mm":1249,"min_mm":2500}}
+{"ts":"2026-06-20T17:28:08Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0008","dist_mm":1410,"min_mm":2500}}
+{"ts":"2026-06-20T17:28:09Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0008","dist_mm":1410,"min_mm":2500}}
+{"ts":"2026-06-20T17:28:09Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0008","dist_mm":1410,"min_mm":2500}}
+{"ts":"2026-06-20T17:28:10Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0006","b":"NORA_0008","dist_mm":1410,"min_mm":2500}}
+{"ts":"2026-06-20T17:35:12Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0011","dist_mm":1466,"min_mm":2500}}
+{"ts":"2026-06-20T17:35:13Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0003","b":"NORA_0011","dist_mm":1466,"min_mm":2500}}
+{"ts":"2026-06-20T17:39:11Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T17:39:12Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T17:39:13Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T17:39:13Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T17:39:14Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0001","b":"NORA_0012","dist_mm":0,"min_mm":2500}}
+{"ts":"2026-06-20T20:47:10Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s008","to":"s009","bfs_err":"no connected path from s008 to s009 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:10Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s008","to":"s009","err":"live-model BFS: No route S008→S009. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:10Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s009","to":"s008","bfs_err":"no connected path from s009 to s008 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:10Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s009","to":"s008","err":"live-model BFS: No route S009→S008. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:13Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s008","to":"s009","bfs_err":"no connected path from s008 to s009 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:13Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s008","to":"s009","err":"live-model BFS: No route S008→S009. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:13Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s009","to":"s008","bfs_err":"no connected path from s009 to s008 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:13Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s009","to":"s008","err":"live-model BFS: No route S009→S008. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:22Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s008","to":"s009","bfs_err":"no connected path from s008 to s009 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:22Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s008","to":"s009","err":"live-model BFS: No route S008→S009. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:22Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s009","to":"s008","bfs_err":"no connected path from s009 to s008 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:22Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s009","to":"s008","err":"live-model BFS: No route S009→S008. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:30Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s008","to":"s009","bfs_err":"no connected path from s008 to s009 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:30Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s008","to":"s009","err":"live-model BFS: No route S008→S009. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:31Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s009","to":"s008","bfs_err":"no connected path from s009 to s008 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:31Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s009","to":"s008","err":"live-model BFS: No route S009→S008. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:39Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s008","to":"s009","bfs_err":"no connected path from s008 to s009 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:39Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s008","to":"s009","err":"live-model BFS: No route S008→S009. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:47:39Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s009","to":"s008","bfs_err":"no connected path from s009 to s008 in 58 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T20:47:39Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s009","to":"s008","err":"live-model BFS: No route S009→S008. Built stations: none — run Build."}}
+{"ts":"2026-06-20T20:52:58Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0004","b":"NORA_0005","dist_mm":1071,"min_mm":2500}}
+{"ts":"2026-06-20T21:43:59Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s004","to":"s001","bfs_err":"no connected path from s004 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:43:59Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0013","from":"s004","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP2 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:00Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:00Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0010","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:00Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:00Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0007","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T21:44:09Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:09Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0010","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:09Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:09Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0007","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T21:44:12Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:12Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0007","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T21:44:12Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s004","to":"s001","bfs_err":"no connected path from s004 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:12Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0012","from":"s004","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP2 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:19Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:19Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0009","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:26Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:26Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0009","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T21:44:26Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T21:44:26Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0002","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:42:17Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:42:17Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:42:27Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:42:27Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0001","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:42:50Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:42:50Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:01Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0012","dist_mm":2390,"min_mm":2500}}
+{"ts":"2026-06-20T22:43:02Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:02Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0005","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:11Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s004","to":"s001","bfs_err":"no connected path from s004 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:11Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0008","from":"s004","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP2 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T22:43:15Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:15Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:23Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:23Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:31Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:31Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:33Z","agent":"Sally","event":"personal_space_violation","data":{"a":"NORA_0002","b":"NORA_0012","dist_mm":2322,"min_mm":2500}}
+{"ts":"2026-06-20T22:43:41Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:41Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:42Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:42Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:43:58Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:43:58Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0007","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:06Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:06Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0007","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:16Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:16Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:16Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:16Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0004","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T22:44:20Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:20Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:29Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:29Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:33Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:33Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:37Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:37Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:44Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:44Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:52Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:52Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:44:52Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:44:52Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0006","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T22:56:04Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s004","to":"s001","bfs_err":"no connected path from s004 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:56:04Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0013","from":"s004","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP2 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T22:56:29Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:56:29Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0005","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:56:36Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:56:36Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0005","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:56:40Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s001","bfs_err":"no connected path from s002 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:56:40Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0005","from":"s002","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:56:47Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s002","to":"s004","bfs_err":"no connected path from s002 to s004 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:56:47Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0005","from":"s002","to":"s004","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No departure tracks from S002 CP1 (formation=JPods_station_"}}
+{"ts":"2026-06-20T22:57:05Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s004","to":"s001","bfs_err":"no connected path from s004 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:57:05Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0010","from":"s004","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP2 (formation=traffic_circle7)"}}
+{"ts":"2026-06-20T22:57:09Z","agent":"Natalie","event":"no_landing_chain","data":{"from":"s003","to":"s001","bfs_err":"no connected path from s003 to s001 in 190 segments — run Build to regenerate map.json"}}
+{"ts":"2026-06-20T22:57:09Z","agent":"Nora","event":"no_route","data":{"nora_id":"NORA_0011","from":"s003","to":"s001","err":"live-model BFS: _build_route_json error: [Natalie] RED FLAG: No arrival tracks into S001 CP1 (formation=traffic_circle7)"}}
