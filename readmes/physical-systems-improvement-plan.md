@@ -93,18 +93,77 @@ If the guideway is animated (no physical constraint), the designer MUST provide 
 
 ---
 
+### I. Device Intelligence — Every Processor Learns
+
+The sovereignty principle applies to hardware: every processor is an individual.
+A pod is not a dumb actuator waiting for commands. A station is not a passive slot counter.
+Each device observes, signals, and improves — bottom-up, not top-down.
+
+**Wisdom of the Many = empower individual action, capture signals of stress and improvement, iterate.**
+
+| # | Item | Why | Platforms |
+|---|------|-----|-----------|
+| I1 | **Per-device learning journal** | Every processor (pod Pi, station Pi, junction Pi) writes a local journal: faults, stop-waits, encoder drift, tag-read quality, battery curves, ezone conflicts. This is the device's experience. Journal lives on SD card, survives reboot. Format: JSONL, one entry per event, UTC timestamps. | All |
+| I2 | **Stress signals — device-initiated** | Each device detects its own stress: encoder drift exceeding threshold, ToF readings degrading, motor current spiking, battery voltage dropping faster than expected, ezone stop-waits clustering. Device publishes MQTT `{device}/stress` topic with signal type + severity. No central system polls for problems — devices report them. | All |
+| I3 | **Improvement signals — device-initiated** | Each device detects its own improvements: encoder calibration converging, trip times decreasing, fewer stop-waits at a junction, battery holding longer. Device publishes MQTT `{device}/improvement` topic. Positive signals matter as much as stress — they confirm what's working. | All |
+| I4 | **Allie harvests device journals** | Allie reads device journals nightly (from SD card via SSH, or MQTT relay to `~/Allie/process/inbox/`). Same harvest→reflect→promote pipeline as Claude Code sessions. Device faults → FAULT files. Device patterns → TF files. Cross-device patterns → TFTS. | All |
+| I5 | **Allie writes device instructions** | After harvesting and reflecting, Allie writes per-device instruction files: updated calibration values, adjusted speed profiles, modified ezone parameters, new dispatch preferences. Instructions pushed to device SD card (via SSH) or published via MQTT `{device}/instruction` topic. Device applies on next boot or immediately if running. | All |
+| I6 | **Claude Code coaches device firmware** | When Bill and Claude Code work on physical systems, Claude reads device journals first (same as reading `process/inbox/` at SU session start). Claude proposes firmware changes informed by what devices have actually experienced — not guessing from code alone. Device journals are the ground truth. | All |
+| I7 | **Cross-device pattern recognition** | Allie correlates signals across devices: "Nora_3 always stop-waits at EP2 when Nora_1 is on line 3" — this is a dispatch timing problem, not a pod problem. "Sally_S001 high-turnover on ps1 but ps3 never used" — slot assignment bias. Cross-device patterns are invisible to individual devices. This is Allie's unique contribution. | All |
+| I8 | **Facet promotion from device experience** | When a device journal shows a pattern confirmed across 3+ occurrences, Allie promotes it to the agent's facet.json. Facet changes propagate to all devices of that type. Example: Nora_3 discovers that 15% speed reduction on curved segments reduces encoder drift — if confirmed on Nora_1 and Nora_5, it becomes a Nora facet. | All |
+| I9 | **Device autonomy levels** | Each device starts at Level 1 (follow instructions exactly). As its journal shows reliable behavior, Allie promotes to Level 2 (adjust parameters within bounds) then Level 3 (propose new parameters for Allie review). Demotion on fault. This is earned trust, not configured permission. | All |
+| I10 | **Station-as-teacher** | Sally on a station Pi sees every pod that arrives and departs. She notices which pods drift, which arrive early/late, which struggle at the approach curve. Sally writes coaching notes to her journal: "Nora_3 consistently 12mm left on arrival — suggest encoder recalibration." Allie reads these. The station teaches the pods. | All |
+| I11 | **Network health from device consensus** | No central monitor declares the network healthy. Instead: if >80% of devices report improvement signals and <10% report stress, the network is healthy. If stress signals cluster at one junction or one time of day, that's a localized problem. Device consensus IS the health metric. | All |
+| I12 | **Retrospection per trip, not per session** | Physical devices don't have sessions — they run continuously. Retrospection trigger is trip completion: each pod writes a one-line trip summary (origin, dest, time, stop-waits, drift). Allie aggregates trip summaries into daily retrospections. This matches the JPods philosophy: the circulatory system runs continuously. | All |
+
+**The learning cycle:**
+```
+Device observes → writes journal → publishes stress/improvement signals
+    ↓
+Allie harvests journals nightly (SSH or MQTT relay)
+    ↓
+Allie reflects: fault patterns, cross-device correlations, facet candidates
+    ↓
+Allie writes instructions: calibration updates, speed profiles, dispatch prefs
+    ↓
+Instructions pushed to devices (SSH to SD card or MQTT publish)
+    ↓
+Device applies → observes effect → writes journal → cycle continues
+```
+
+**What Claude Code does in this cycle:**
+- Reads device journals at session start (same as process/inbox/)
+- Proposes firmware changes informed by device experience
+- Writes TFTS when a device pattern leads to a code fix
+- Updates facet.json when a fix is confirmed across devices
+- Does NOT override device autonomy — coaches, doesn't command
+
+**What Allie does that no individual device can:**
+- See patterns across ALL devices simultaneously
+- Correlate SU simulation predictions with physical device journals
+- Promote confirmed patterns to facets (shared learning)
+- Demote devices that show degraded behavior
+- Ask WHY a pattern exists — flag it for Bill or Claude Code
+
+---
+
 ## Priority Order
 
 1. **A1** (Compute → mapSM.json converter) — unlocks student-to-deployment pipeline
-2. **D4** (offline-safe dispatch) — safety critical
-3. **E2** (departure confirmation) — prevents slot race conditions
-4. **F1** (time-window ezone in SU) — makes simulation predictive
-5. **A4** (ezone auto-generation) — eliminates hand-authoring
-6. **B1** (abstract motor interface) — enables platform portability
-7. **G1+G3** (animated path constraints) — required before 4WD demo
-8. **D1** (MQTT TLS) — required before FullScale passengers
-9. **H1** (SU→physical validation loop) — closes the learning cycle
-10. **E1** (Sally per-station chip) — station sovereignty
+2. **I1** (per-device learning journal) — foundation for everything in Section I; no learning without memory
+3. **D4** (offline-safe dispatch) — safety critical
+4. **I4+I5** (Allie harvests + writes instructions) — closes the device learning cycle
+5. **E2** (departure confirmation) — prevents slot race conditions
+6. **I2+I3** (stress + improvement signals) — devices speak for themselves
+7. **F1** (time-window ezone in SU) — makes simulation predictive
+8. **A4** (ezone auto-generation) — eliminates hand-authoring
+9. **B1** (abstract motor interface) — enables platform portability
+10. **G1+G3** (animated path constraints) — required before 4WD demo
+11. **I7** (cross-device pattern recognition) — Allie's unique contribution
+12. **D1** (MQTT TLS) — required before FullScale passengers
+13. **H1** (SU→physical validation loop) — closes the simulation→physical cycle
+14. **E1** (Sally per-station chip) — station sovereignty
+15. **I9** (device autonomy levels) — earned trust, not configured permission
 
 ---
 
@@ -113,3 +172,7 @@ If the guideway is animated (no physical constraint), the designer MUST provide 
 > All physical systems will have guideways — physical or animated. If animated, the designer must provide the necessary constraint mechanisms. No undeclared animated paths. The constraint mechanism is part of the design, not an afterthought.
 
 This is a design axiom, not a preference. A pod without a guideway (physical or constrained-animated) is not a JPod — it's a robot in the wild.
+
+> Every processor learns. Devices observe, signal stress and improvement, iterate. Allie harvests, reflects, and writes instructions. Claude Code coaches firmware from device experience. No central authority decides what the network knows — the devices do, and Allie synthesizes.
+
+This is the Wisdom of the Many applied to hardware. The same principle that governs governance governs machines: empower individuals, capture their signals, iterate relentlessly.
