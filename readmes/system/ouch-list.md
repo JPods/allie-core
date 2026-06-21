@@ -280,3 +280,10 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Fix:** BFS should find any cycle from gw_platform back to itself through the successor graph — no name patterns, pure topology
 - **Domain:** SU, Physical
 - **Added by:** Claude Code + Bill
+
+### COMPUTE — Traffic circle unconnected CP pruning not in Compute v2 (2026-06-21)
+- **Risk:** If gw_cp_out_N is not connected to a seg_, Natalie should also block gw_out_N. Currently enforced in jpod_vehicle_anim.rb topology pruning but not in Compute v2 chain builder.
+- **Impact:** Compute v2 builds pass chains that exit through unconnected CPs. Animation topology pruning catches it, but the chain is wrong.
+- **Fix:** Compute v2 ChainBuilder should detect unconnected gw_cp_out_N (no seg_ exists) and exclude gw_out_N from pass chain successors. Same rule, enforced at chain-build time.
+- **Domain:** SU, Physical
+- **Added by:** Claude Code + Bill
