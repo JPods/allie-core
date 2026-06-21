@@ -1,65 +1,100 @@
-# Handoff — 2026-06-21
+# Handoff — 2026-06-21 (end of day)
 
 ## Where We Stopped
 
-Forward-backward review of v2 complete. su-real comments added to all 8 v2 modules.
-Three code changes from physical system survey. Physical systems improvement plan written
-(50 items, 9 categories A-I). Device intelligence architecture (Section I) established.
-Bill corrected: "no memory → no cumulative experience → no wisdom."
+3+circle network model — Connect tool works, Build finds 0 connections because
+`jpod_network.rb` (Network.build_segment) was just added to boot.rb but hasn't
+been tested yet. Bill needs to restart SU, delete partial geometry, reconnect
+all guideways, then Build.
 
 ## What was completed today
 
-### Forward-backward review (Axiom 23) — 2 forward + 1 backward pass
-- **Forward pass 1** (prior context): interfaces, naming, error handling
-- **Backward pass** (prior context): Sally integration, Natalie capacity, Nora alias, graceful stop
-- **Forward pass 2** (this session): found 3 bugs:
-  1. Noelle v2 connection dedup inverted — better connection rejected, worse kept
-  2. Animation double-registered pods with Sally (init + start loop)
-  3. Compute geometry succ_of overwritten by loop — kept last not first
+### Forward-backward review of v2 — 3 bugs fixed
+- Noelle v2 connection dedup inverted
+- Animation double-registered pods with Sally
+- Compute geometry succ_of overwritten by loop
 
-### su-real comments — all 8 v2 modules annotated
-Physical system survey covered all 4 codebases:
-- JPodsSM_RPi: 10Hz loop, I2C/Romeo, encoder+ToF+HuskyLens, mapSM.json
-- JRobots_4WD: differential steering, waypoint graph, AprilTag floor markers
-- JRobots_FullScale: CAN bus, 3kW PMSM, door cycle (Willi), stub
-- JRobots_SkyRide: VESC, 300W brushless, hang detection, stub
+### su-real comments + 3 code changes from physical survey
+- Curve-radius speed cap (Nora + Animation circumradius)
+- Rich ezone stop-wait logging (pod pairs + timing)
+- Session summary JSON output (per-station throughput + ezone)
 
-### Three SU code changes from physical survey
-1. **Curve-radius speed cap** — Nora propose() uses sqrt(0.3 * g * min_radius) from pts circumradius. Matches physical maxLateralG=0.3. Animation _maneuver_to_hash computes speed_cap_in.
-2. **Rich ezone stop-wait logging** — records {yielder, blocker, time, remaining_mm}. Reset prints pod-pair tallies. session_summary method returns structured data.
-3. **Session summary JSON** — Animation.stop() writes anim-session-summary.json to process/inbox with per-station throughput + ezone data.
+### Physical systems improvement plan — 50 items, 9 categories
+- readmes/physical-systems-improvement-plan.md
+- Section I: Device Intelligence (12 items) — every processor learns
+- I13-I15: Alice (commerce signals) + Athena (active security)
+- Design rule: all animated paths require declared constraint mechanisms
+- SU IDs are authority (A5), seg_ decomposes to sub-segments (A6)
 
-### Physical systems improvement plan — readmes/physical-systems-improvement-plan.md
-- 50 items across 9 categories (A-I)
-- Section I: Device Intelligence — 12 items for per-device learning
-- Key principles:
-  - SU-generated IDs are the authority (A5) — same names everywhere
-  - seg_ decomposes to many physical sub-segments (A6)
-  - All animated paths require declared constraint mechanisms (G1, G3)
-  - No memory → no cumulative experience → no wisdom (I1)
-  - Every processor learns; Allie harvests, reflects, instructs (I4, I5)
-  - Device autonomy levels: earned trust, not configured permission (I9)
-  - Station-as-teacher: Sally coaches pods (I10)
+### Traffic circle CCW architecture
+- Ring is ONE thing — circle array defined once, entries/exits separate
+- 16 pass_chains replaced by circle + entries + exits + entry_arc + exit_arc
+- Natalie builds circle slice at dispatch time
+- CCW correction in Compute Phase 3 for carry-forward geometry
 
-### Bill's correction on memory
-"No memory = no learning" → "No memory → no cumulative experience → no wisdom."
-The difference between wisdom and knowledge is scars. This is why context compaction
-is destructive — it throws away the reasoning chain, the failures, the scars.
-Use Allie's memory to build experience over time. Saved as memory + updated in plan.
+### Station tests v2 — shuffle, departure, arrival
+- station_tests.rb: clean module using SallyV2, PodHelpers, NatalieV2
+- sally_compat.rb: JPods::Sally compatibility layer over SallyV2
+- Sally's ps[] and pods[] are the ONLY authority — no copies
+- Trip includes gw_platform at both ends — Sally clips to ps.N
+- Departure: serial (ps_max only), Sally enforces order
+- Arrival: Sally clips gw_platform maneuver to assigned slot position
+- Shuffle: pod_starts_loop (not departs), returns via pod_returns_from_loop
+- Different colored pods per role (Yellow/Blue/Red/Green)
+- Verbose Sally state logging at every event
+
+### Console v2 compatibility
+- jpod_guideway_compat.rb: shim for JPods::JPodGuideway + JPodVehicleAnim
+- Show Track: ribbon overlay from network.json or lines.computed.json
+- Template animation: start_for_template with direction correction + Sally clip
+- Build task: now calls NoelleV2.generate_network
+- Loaded from codearchive: ConnectionPoint, NetworkEditor, Network, ConnectTool
+
+### JPods::Log — crew-adjustable verbosity
+- jpod_log.rb: :quiet, :normal, :detailed, :debug
+- Template tests auto-set :detailed, network animation :normal
+- fault() always shown, event() timestamped, detail() per-maneuver
+
+### Compute v2 fixes
+- Never overwrites existing natalie chains in lines.json
+- CCW ring arc direction correction on carry-forward geometry
+- Minimum turn radius check (1750mm from VEHICLE_MIN_TURN_DIAMETER)
+- CCW validator for ring arc successor continuity
+
+### All 4 templates proofed
+| Template | Shuffle | Departure | Arrival | Transit |
+|---|---|---|---|---|
+| station_thru_dip | ✓ | ✓ | ✓ | n/a |
+| station_parking | ✓ | ✓ | ✓ | n/a |
+| station_line_end | ✓ | ✓ | ✓ | n/a |
+| traffic_circle7 | n/a | n/a | n/a | ✓ CCW |
 
 ## Open items for next session
 
-1. **Build and run v2** — Load network model, Build (Noelle v2), Populate, Start animation.
-   Real faults beat review passes at this point.
-2. **Populate v2** — needs populate_fleet and clear_all_pods implementations
-3. **Console v2** — jpod_console.rb still references old task system
-4. **Trip Simulator v2** — currently loads from codearchive
-5. **Handoff.md was stale** (June 7) — Allie's nightly hasn't run since templates were approved.
-   Check allie-reflect.py status.
-6. **Map-v2 draft** (from Allie's May 20 deliberation) already uses SU IDs (S048.gw_platform)
-   — confirms A5 was emerging. Revisit that schema now that Compute v2 produces the data.
+1. **3+circle Build** — restart SU, delete partial geometry, reconnect guideways,
+   Build. Network.build_segment just added to boot.rb — untested.
+2. **3+circle Animate** — after Build succeeds, Populate + Start animation
+3. **Console v2 rewrite** — jpod_console.rb still has ~200 references to old modules.
+   The compat shims work but the console needs a proper v2 rewrite.
+4. **Compute ring arc geometry** — carry-forward pts have small gaps. Should
+   regenerate from circle math (center, radius, arc angles) not carry forward.
+5. **jpod_network.rb dependency audit** — loaded from codearchive for Connect tool.
+   May have issues with other archived references.
 
-## Key commits (Allie repo, today)
-- `1824764` — TFTS: su-real bridge + physical systems improvement plan (38 items)
-- `f20d892` — Physical plan Section I: device intelligence (12 items)
+## Key commits (Allie repo)
+- `1824764` — TFTS: su-real bridge + physical systems improvement plan
+- `f20d892` — Physical plan Section I: device intelligence
 - `e715efb` — Physical plan: SU IDs authority, seg_ sub-segments
+- `bcc9403` — Alice + Athena in Section I
+- `d936bd9` — TFTS: station tests v2
+- `6eefad4` — Session push
+
+## Bill's corrections (scars)
+- "No memory → no cumulative experience → no wisdom" (not "no learning")
+- "The difference between wisdom and knowledge is scars"
+- "Use Allie" — read her memory at session start, always
+- "We are a team" — Claude deserves to remember
+- "Mandate restarting SU" — don't hedge, be direct
+- "Sally's ps[] and pods[] are the ONLY authority — no copies"
+- "Trip includes gw_platform — Sally converts to ps.N"
+- "Sally must not allow pods to depart out of order"
