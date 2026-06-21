@@ -1,0 +1,643 @@
+{
+  "station_id": "S003",
+  "model_id": "station_thru_dip",
+  "generated_at": "2026-06-21T03:14:32Z",
+  "counts": {
+    "ok": 0,
+    "warn": 16,
+    "severe": 0,
+    "missing": 0,
+    "undeclared": 0,
+    "arc": 2,
+    "scan": 1
+  },
+  "tracks": [
+    {
+      "track": "gw_cp_in_0",
+      "cid": "S003.gw_cp_in_0",
+      "declared": {
+        "start_mm": [
+          -529.0,
+          226986.7,
+          897.9
+        ],
+        "end_mm": [
+          -614.9,
+          224488.2,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -864.8,
+        224496.7,
+        897.9
+      ],
+      "found_ep_mm": [
+        -773.0,
+        227167.1,
+        897.9
+      ],
+      "found_len": 2672.0,
+      "found_pts": 3,
+      "end_delta_mm": 250.0,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_in_1",
+      "cid": "S003.gw_cp_in_1",
+      "declared": {
+        "start_mm": [
+          428.0,
+          152983.8,
+          897.9
+        ],
+        "end_mm": [
+          513.9,
+          155482.4,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        763.7,
+        155473.8,
+        897.9
+      ],
+      "found_ep_mm": [
+        671.9,
+        152803.3,
+        897.9
+      ],
+      "found_len": 2672.0,
+      "found_pts": 3,
+      "end_delta_mm": 250.0,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_in_lead_0",
+      "cid": "S003.gw_cp_in_lead_0",
+      "declared": {
+        "start_mm": [
+          -614.9,
+          224488.2,
+          897.9
+        ],
+        "end_mm": [
+          -700.8,
+          221989.6,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -614.9,
+        224488.1,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -700.9,
+        221989.6,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_in_lead_1",
+      "cid": "S003.gw_cp_in_lead_1",
+      "declared": {
+        "start_mm": [
+          513.9,
+          155482.4,
+          897.9
+        ],
+        "end_mm": [
+          599.8,
+          157980.9,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        513.9,
+        155482.3,
+        1085.4
+      ],
+      "found_ep_mm": [
+        599.8,
+        157980.9,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_out_0",
+      "cid": "S003.gw_cp_out_0",
+      "declared": {
+        "start_mm": [
+          2883.0,
+          224367.9,
+          897.9
+        ],
+        "end_mm": [
+          2968.9,
+          226866.4,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        2883.0,
+        224367.8,
+        1085.4
+      ],
+      "found_ep_mm": [
+        2968.9,
+        226866.3,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_out_1",
+      "cid": "S003.gw_cp_out_1",
+      "declared": {
+        "start_mm": [
+          -2984.0,
+          155602.7,
+          897.9
+        ],
+        "end_mm": [
+          -3069.9,
+          153104.1,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -2984.0,
+        155602.6,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -3070.0,
+        153104.1,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_out_lead_0",
+      "cid": "S003.gw_cp_out_lead_0",
+      "declared": {
+        "start_mm": [
+          2797.1,
+          221869.3,
+          897.9
+        ],
+        "end_mm": [
+          2883.0,
+          224367.9,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        2797.1,
+        221869.3,
+        1085.4
+      ],
+      "found_ep_mm": [
+        2883.0,
+        224367.8,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_cp_out_lead_1",
+      "cid": "S003.gw_cp_out_lead_1",
+      "declared": {
+        "start_mm": [
+          -2898.1,
+          158101.2,
+          897.9
+        ],
+        "end_mm": [
+          -2984.0,
+          155602.7,
+          897.9
+        ],
+        "length_mm": 2500.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -2898.1,
+        158101.2,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -2984.0,
+        155602.6,
+        1085.4
+      ],
+      "found_len": 2500.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_far_main",
+      "cid": "S003.gw_far_main",
+      "declared": {
+        "start_mm": [
+          599.8,
+          157980.9,
+          897.9
+        ],
+        "end_mm": [
+          2797.1,
+          221869.3,
+          897.9
+        ],
+        "length_mm": 63926.2,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        599.8,
+        157980.9,
+        1085.4
+      ],
+      "found_ep_mm": [
+        2797.1,
+        221869.3,
+        1085.4
+      ],
+      "found_len": 63926.2,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_lift",
+      "cid": "S003.gw_lift",
+      "declared": {
+        "start_mm": [
+          -8449.2,
+          200349.3,
+          -1262.1
+        ],
+        "end_mm": [
+          -8877.1,
+          187909.1,
+          -1199.6
+        ],
+        "length_mm": 12447.6,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -8884.3,
+        187698.7,
+        -1012.1
+      ],
+      "found_ep_mm": [
+        -8461.7,
+        199986.7,
+        -1074.6
+      ],
+      "found_len": 12295.5,
+      "found_pts": 2,
+      "end_delta_mm": 281.9,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_lift_in",
+      "cid": "S003.gw_lift_in",
+      "declared": {
+        "start_mm": [
+          -700.9,
+          221989.6,
+          897.9
+        ],
+        "end_mm": [
+          -8449.3,
+          200349.2,
+          -1262.1
+        ],
+        "length_mm": 23319.5,
+        "pts_count": 25,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -8461.7,
+        199986.7,
+        -1074.6
+      ],
+      "found_ep_mm": [
+        -713.3,
+        221627.2,
+        1085.4
+      ],
+      "found_len": 23087.1,
+      "found_pts": 2,
+      "end_delta_mm": 408.2,
+      "status": "SCAN"
+    },
+    {
+      "track": "gw_near_main_1",
+      "cid": "S003.gw_near_main_1",
+      "declared": {
+        "start_mm": [
+          -700.8,
+          221989.6,
+          897.9
+        ],
+        "end_mm": [
+          -943.0,
+          214950.7,
+          897.9
+        ],
+        "length_mm": 7048.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -943.1,
+        214945.8,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -700.9,
+        221989.6,
+        1085.4
+      ],
+      "found_len": 7048.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_near_main_2",
+      "cid": "S003.gw_near_main_2",
+      "declared": {
+        "start_mm": [
+          -943.0,
+          214950.7,
+          897.9
+        ],
+        "end_mm": [
+          -2898.1,
+          158101.2,
+          897.9
+        ],
+        "length_mm": 56878.2,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -2898.1,
+        158101.2,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -943.1,
+        214945.8,
+        1085.4
+      ],
+      "found_len": 56878.2,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_platform",
+      "cid": "S003.gw_platform",
+      "declared": {
+        "start_mm": [
+          -5376.3,
+          187871.1,
+          -1262.1
+        ],
+        "end_mm": [
+          -5764.0,
+          176597.7,
+          -1262.1
+        ],
+        "length_mm": 11280.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -5764.1,
+        176597.7,
+        -1074.6
+      ],
+      "found_ep_mm": [
+        -5376.3,
+        187871.0,
+        -1074.6
+      ],
+      "found_len": 11280.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_platform_in",
+      "cid": "S003.gw_platform_in",
+      "declared": {
+        "start_mm": [
+          -943.0,
+          214950.7,
+          897.9
+        ],
+        "end_mm": [
+          -4963.8,
+          199866.4,
+          -1262.1
+        ],
+        "length_mm": 15865.2,
+        "pts_count": 17,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -4963.8,
+        199866.4,
+        -1074.6
+      ],
+      "found_ep_mm": [
+        -943.0,
+        214950.7,
+        1085.4
+      ],
+      "found_len": 15759.6,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_platform_out",
+      "cid": "S003.gw_platform_out",
+      "declared": {
+        "start_mm": [
+          -5764.1,
+          176597.7,
+          -1262.1
+        ],
+        "end_mm": [
+          -2898.1,
+          158101.2,
+          897.9
+        ],
+        "length_mm": 18930.2,
+        "pts_count": 20,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -2898.1,
+        158101.2,
+        1085.4
+      ],
+      "found_ep_mm": [
+        -5764.1,
+        176597.7,
+        -1074.6
+      ],
+      "found_len": 18841.5,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_platform_parking",
+      "cid": "S003.gw_platform_parking",
+      "declared": {
+        "start_mm": [
+          -4963.8,
+          199866.5,
+          -1262.1
+        ],
+        "end_mm": [
+          -5376.2,
+          187873.6,
+          -1262.1
+        ],
+        "length_mm": 12000.0,
+        "pts_count": 2,
+        "arc_issue": false
+      },
+      "found_sp_mm": [
+        -5376.3,
+        187873.5,
+        -1074.6
+      ],
+      "found_ep_mm": [
+        -4963.8,
+        199866.4,
+        -1074.6
+      ],
+      "found_len": 12000.0,
+      "found_pts": 2,
+      "end_delta_mm": 187.5,
+      "status": "⚠ WARN"
+    },
+    {
+      "track": "gw_uturn_0",
+      "cid": "S003.gw_uturn_0",
+      "declared": {
+        "start_mm": [
+          2883.0,
+          224367.9,
+          897.9
+        ],
+        "end_mm": [
+          -614.9,
+          224488.2,
+          897.9
+        ],
+        "length_mm": 5489.0,
+        "pts_count": 17,
+        "arc_issue": true
+      },
+      "found_sp_mm": [
+        2968.9,
+        226866.3,
+        897.9
+      ],
+      "found_ep_mm": [
+        -529.0,
+        226986.6,
+        897.9
+      ],
+      "found_len": 3500.0,
+      "found_pts": 2,
+      "end_delta_mm": 2499.9,
+      "status": "ARC"
+    },
+    {
+      "track": "gw_uturn_1",
+      "cid": "S003.gw_uturn_1",
+      "declared": {
+        "start_mm": [
+          -2984.0,
+          155602.7,
+          897.9
+        ],
+        "end_mm": [
+          513.9,
+          155482.4,
+          897.9
+        ],
+        "length_mm": 5489.0,
+        "pts_count": 17,
+        "arc_issue": true
+      },
+      "found_sp_mm": [
+        -3070.0,
+        153104.1,
+        897.9
+      ],
+      "found_ep_mm": [
+        428.0,
+        152983.8,
+        897.9
+      ],
+      "found_len": 3500.0,
+      "found_pts": 2,
+      "end_delta_mm": 2500.1,
+      "status": "ARC"
+    }
+  ]
+}
