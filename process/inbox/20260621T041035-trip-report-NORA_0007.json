@@ -1,0 +1,184 @@
+{
+  "vehicle_id": "NORA_0007",
+  "generated_at": "2026-06-21T04:10:35Z",
+  "origin_sid": "s003",
+  "dest_sid": "s002",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "minor_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 19,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 1,
+    "total_defects": 1
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s003_1_s001_1",
+      "len_mm": 191486,
+      "actual_s": 0.721,
+      "expected_s": 23.071,
+      "actual_ms": 265.66
+    },
+    {
+      "station": "s001",
+      "track": "gw_cp_in_1",
+      "len_mm": 1250,
+      "actual_s": 0.215,
+      "expected_s": 0.151,
+      "actual_ms": 5.81
+    },
+    {
+      "station": "s001",
+      "track": "gw_in_1",
+      "len_mm": 9812,
+      "actual_s": 1.232,
+      "expected_s": 1.182,
+      "actual_ms": 7.96
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_1_2",
+      "len_mm": 1001,
+      "actual_s": 0.18,
+      "expected_s": 0.121,
+      "actual_ms": 5.57
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_2_2",
+      "len_mm": 10774,
+      "actual_s": 1.342,
+      "expected_s": 1.298,
+      "actual_ms": 8.03
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_2_3",
+      "len_mm": 1001,
+      "actual_s": 0.169,
+      "expected_s": 0.121,
+      "actual_ms": 5.94
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_3_3",
+      "len_mm": 10774,
+      "actual_s": 1.357,
+      "expected_s": 1.298,
+      "actual_ms": 7.94
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_3_0",
+      "len_mm": 1001,
+      "actual_s": 0.168,
+      "expected_s": 0.121,
+      "actual_ms": 5.96
+    },
+    {
+      "station": "s001",
+      "track": "gw_out_0",
+      "len_mm": 9812,
+      "actual_s": 1.229,
+      "expected_s": 1.182,
+      "actual_ms": 7.98
+    },
+    {
+      "station": "s001",
+      "track": "gw_cp_out_0",
+      "len_mm": 1250,
+      "actual_s": 0.224,
+      "expected_s": 0.151,
+      "actual_ms": 5.59
+    },
+    {
+      "seg_id": "seg_s001_0_s002_1",
+      "len_mm": 140271,
+      "actual_s": 16.972,
+      "expected_s": 16.9,
+      "actual_ms": 8.26
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_1",
+      "len_mm": 2500,
+      "actual_s": 0.355,
+      "expected_s": 0.301,
+      "actual_ms": 7.05
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.429,
+      "expected_s": 0.301,
+      "actual_ms": 5.83
+    },
+    {
+      "station": "s002",
+      "track": "gw_far_main",
+      "len_mm": 63564,
+      "actual_s": 7.715,
+      "expected_s": 7.658,
+      "actual_ms": 8.24
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_out_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.356,
+      "expected_s": 0.301,
+      "actual_ms": 7.02
+    },
+    {
+      "station": "s002",
+      "track": "gw_uturn_0",
+      "len_mm": 5489,
+      "actual_s": 0.695,
+      "expected_s": 0.661,
+      "actual_ms": 7.9
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.368,
+      "expected_s": 0.301,
+      "actual_ms": 6.79
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in1",
+      "len_mm": 10109,
+      "actual_s": 1.305,
+      "expected_s": 1.218,
+      "actual_ms": 7.75
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in2",
+      "len_mm": 10109,
+      "actual_s": 1.274,
+      "expected_s": 1.218,
+      "actual_ms": 7.93
+    }
+  ],
+  "defects": [
+    {
+      "type": "speed_deviation",
+      "seg_id": "seg_s003_1_s001_1",
+      "authorized_ms": 8.3,
+      "actual_ms": 265.66,
+      "ratio": 32.01,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}
