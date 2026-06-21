@@ -281,9 +281,12 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Domain:** SU, Physical
 - **Added by:** Claude Code + Bill
 
-### COMPUTE — Traffic circle unconnected CP pruning not in Compute v2 (2026-06-21)
-- **Risk:** If gw_cp_out_N is not connected to a seg_, Natalie should also block gw_out_N. Currently enforced in jpod_vehicle_anim.rb topology pruning but not in Compute v2 chain builder.
-- **Impact:** Compute v2 builds pass chains that exit through unconnected CPs. Animation topology pruning catches it, but the chain is wrong.
-- **Fix:** Compute v2 ChainBuilder should detect unconnected gw_cp_out_N (no seg_ exists) and exclude gw_out_N from pass chain successors. Same rule, enforced at chain-build time.
-- **Domain:** SU, Physical
+### PHYSICAL CONSTRAINT — Unconnected CP blocks exit (2026-06-21)
+- **Rule:** If gw_cp_out_N has no seg_ connected, gw_out_N is also unusable. You can't exit through a CP that goes nowhere. Physical truth, not an exception.
+- **Enforced at:**
+  1. ✓ Animation — topology pruning in jpod_vehicle_anim.rb (done)
+  2. ✓ Show Track — gw_out_N marked orange/dead-end in jpod_animator.rb (done)
+  3. ✗ Compute v2 — ChainBuilder must exclude gw_out_N from pass chains when gw_cp_out_N is unconnected (TODO)
+- **Impact:** Without #3, Compute builds pass chains through dead CPs. Animation catches it but the chain data is wrong.
+- **Domain:** SU, Physical, Ground
 - **Added by:** Claude Code + Bill
