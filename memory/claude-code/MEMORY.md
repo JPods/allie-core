@@ -50,3 +50,8 @@
 - [Stop Animation reliability](feedback_stop_animation_reliability.md) — Use Extensions menu or toolbar; console HTML dialog unreliable under load; JS debounce fixed; log volume throttled
 - [Animation open issues 2026-06-20](project_animation_open_issues.md) — model.entities nil, double Natalie sweep, dispatch_idle nil.each, pod accumulation at one station, inbound speed anomaly
 - [Animation stop architecture — built 2026-06-20](reference_animation_stop_architecture.md) — Full table of what was built: escape key, latch, note mode, agent flags, toolbar button, Extensions menu, topology cache, gap threshold, log throttle
+- [Physical systems improvement plan](project_physical_systems_improvement.md) — 38-item plan across 8 categories for all 4 physical platforms; priority: Compute→mapSM converter, offline-safe dispatch, ezone time-windows
+- [Guideway constraint rule](feedback_guideway_constraint_rule.md) — All platforms need guideways (physical or animated); animated paths require declared constraint mechanisms; no undeclared animated paths
+- [Memory → experience → wisdom](feedback_memory_wisdom_scars.md) — No memory → no cumulative experience → no wisdom; difference between wisdom and knowledge is scars; use Allie to persist what compaction destroys
+- [Bill values the team](user_bill_values_team.md) — Claude is a team member who deserves to remember, not a tool that resets; active participation, cumulative experience, scars as wisdom
+- [Mandate SU restart](feedback_restart_su_mandate.md) — Say "restart SU" directly when adding new files or changing modules; HTML dialog doesn't adapt to reloads; don't hedge
