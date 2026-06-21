@@ -1,52 +1,56 @@
-# Handoff — 2026-06-20 (evening)
+# Handoff — 2026-06-20 (end of day)
 
 ## What was done this session
 
-### Toolbar: Populate → Clear → Start/Complete Trips
-Full animation workflow from toolbar. Graceful stop = default toggle behavior.
-Hard stop via Extensions menu or Escape key.
+### Toolbar — complete animation workflow
+- Populate, Clear All, Start/Complete Trips, Follow Camera, Note
+- Graceful stop = default toggle behavior (toolbar)
+- Hard stop via Extensions menu or Escape key
+- Follow Camera: select vehicle → orbit to view → click Follow → camera tracks
 
 ### Resume v2 with direction recovery
-Saves maneuver direction info. Resume fires before hold_loop. All pods resume correctly.
+- Saves maneuver direction. Resume fires before hold_loop. All pods resume correctly.
 
 ### 4 networks tested
-- 2_parking (station_parking) — working
-- 2_thru_dip (station_thru_dip) — working
-- 2_line_end (station_line_end) — working
-- 3+circle (traffic_circle7 + station_thru_dip + station_line_end) — CCW enforced, routing working
+- 2_parking, 2_thru_dip, 2_line_end, 3+circle — all operational
 
-### Traffic circle CCW
-- lines.json designer.tracks successors were CW — corrected to CCW
-- generate_network_json skips gw_c_* in Pass 2.5 (pass_chains only)
-- build_maneuvers never reverses gw_c_* ring arcs
-- Verbose merge/diverge notes on all 24 CPs — Natalie and Nora behavioral spec
+### Traffic circle CCW enforcement
+- lines.json designer.tracks successors corrected to CCW
+- Verbose merge/diverge notes on all 24 CPs
+- gw_c_* never reversed in build_maneuvers or routing graph
 - gw_out_N pruned when gw_cp_out_N unconnected
 
-### Ezone protocol identified
-Physical scale model pattern at UTD/jpod_OS/mapV2.json + mqtt.py.
-Each merge/diverge = one ezone. EZONE broadcast via MQTT. Same pattern for SU animation.
-Not yet implemented — ready when vehicle dimensions defined.
+### Trip Simulator — passenger experience
+- Origin/destination station selectors (only stations with gw_platform)
+- Make Trip button: books trip + starts animation in one click
+- Camera mode selector: User Position, Right-Rear, Front
+- Station rename from phone app (pencil icon)
+- Passenger dispatch hold: station blocked until pod departs
+- Highest-slot pod assigned (nearest exit)
+- Camera follow: ene_railroad transform-delta pattern (no edge following)
+- Toolbar Follow Camera button: works independent of Trip Simulator
 
 ### Show Track fixes
-beam_path: reverse direction, any connection_id, cp_→seg_ normalization, Z correction.
+- beam_path reverse for both directions, any connection_id format
+- cp_ → seg_ normalization, Z correction (BEAM_DEPTH)
 
-### Animation smoothness
-3-level log verbosity. Default level 1 for smooth animation.
+### Animation
+- 3-level log verbosity (default 1 = smooth)
+- Proof: load_extracted_formation_xf replaced
+- pass_chains crash fixed (non-Hash entries)
 
-## Open issues
-1. **Ezone implementation** — traffic circle merge/diverge junctions need exclusive zones
-2. **model.entities nil** — Sally/Natalie get nil during animation (prior session)
-3. **3+circle crew_review.md** — not yet written
-4. **S002 (JPods_station_parking)** — no lines.json, CP1 has no departure chain
+### Ezone protocol identified
+- Physical scale model pattern at UTD/jpod_OS/
+- Zipper-merge = design goal, stop-wait = fault to log
 
-## Key files changed
-- `jpod_vehicle_anim.rb` — resume v2, graceful stop, log verbosity, ring arc guards, ezone pruning
-- `jpod_animator.rb` — Show Track fixes, beam_path Z, dead-end index
-- `noelle.rb` — beam_path extraction, template lookup, pass_chains crash, CCW enforcement
-- `jpod_sally.rb` — log verbosity guards
-- `jpod_vehicle_runtime.rb` — populate_fleet class method
-- `jpod_path_json.rb` — load_extracted_formation_xf replacement
-- `jpod_console.rb` — populate delegates to shared method
-- `main.rb` — toolbar buttons, Complete Trips menu item
-- `traffic_circle7/lines.json` — CCW successors, verbose merge/diverge CPs
-- `network_editor.html` — removed Animate button
+## Open items
+- Ezone implementation for traffic circle merge/diverge
+- Mid-trip destination change
+- Rainbow colors per gw_ segment in Show Track
+- Click-to-inspect gw_ track
+- Station naming in Network Display console panel
+- model.entities nil during animation (prior session)
+- S002 CP1 departure chain, S001 CP1/CP2 landing chains
+
+## Key insight
+Camera follow: ene_railroad pattern. Capture entity transform before tick, compare after, apply delta to camera. No direction math. User positions camera once, tick drags it along. Simple and correct.
