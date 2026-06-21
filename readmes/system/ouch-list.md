@@ -273,3 +273,10 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Effect:** False-positive WARNs in Proof Lines only. Animation uses extracted.json (from populate) which has correct cap-centroid endpoints — animation is not affected.
 - **Fix path (long term):** F-10 Guideway Connect Tool — extruded connection with clean tangent join eliminates the cap-face geometry ambiguity. Alternatively: write `path` attribute to these components during Extract Template (scanner Priority 1 reads it, no measurement needed).
 - **Status:** Known, deferred. Not a model error — extracted.json is correct.
+
+### COMPUTE — Hold loop BFS depends on track naming (2026-06-21)
+- **Risk:** hold_loop chain builder pattern-matches `gw_platform_parking` and `gw_platform_in*` instead of walking pure topology
+- **Impact:** breaks on any template that names tracks differently
+- **Fix:** BFS should find any cycle from gw_platform back to itself through the successor graph — no name patterns, pure topology
+- **Domain:** SU, Physical
+- **Added by:** Claude Code + Bill
