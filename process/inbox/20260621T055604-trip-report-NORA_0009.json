@@ -1,0 +1,192 @@
+{
+  "vehicle_id": "NORA_0009",
+  "generated_at": "2026-06-21T05:56:04Z",
+  "origin_sid": "s003",
+  "dest_sid": "s002",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "minor_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 20,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 1,
+    "total_defects": 1
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s003_1_s001_1",
+      "len_mm": 191486,
+      "actual_s": 6.987,
+      "expected_s": 23.071,
+      "actual_ms": 27.41
+    },
+    {
+      "station": "s001",
+      "track": "gw_cp_in_1",
+      "len_mm": 1250,
+      "actual_s": 0.189,
+      "expected_s": 0.151,
+      "actual_ms": 6.63
+    },
+    {
+      "station": "s001",
+      "track": "gw_in_1",
+      "len_mm": 9812,
+      "actual_s": 1.259,
+      "expected_s": 1.182,
+      "actual_ms": 7.79
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_1_2",
+      "len_mm": 1001,
+      "actual_s": 0.181,
+      "expected_s": 0.121,
+      "actual_ms": 5.54
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_2_2",
+      "len_mm": 10774,
+      "actual_s": 1.362,
+      "expected_s": 1.298,
+      "actual_ms": 7.91
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_2_3",
+      "len_mm": 1001,
+      "actual_s": 0.184,
+      "expected_s": 0.121,
+      "actual_ms": 5.43
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_3_3",
+      "len_mm": 10774,
+      "actual_s": 1.489,
+      "expected_s": 1.298,
+      "actual_ms": 7.23
+    },
+    {
+      "station": "s001",
+      "track": "gw_c_3_0",
+      "len_mm": 1001,
+      "actual_s": 0.175,
+      "expected_s": 0.121,
+      "actual_ms": 5.71
+    },
+    {
+      "station": "s001",
+      "track": "gw_out_0",
+      "len_mm": 9812,
+      "actual_s": 1.326,
+      "expected_s": 1.182,
+      "actual_ms": 7.4
+    },
+    {
+      "station": "s001",
+      "track": "gw_cp_out_0",
+      "len_mm": 1250,
+      "actual_s": 0.221,
+      "expected_s": 0.151,
+      "actual_ms": 5.67
+    },
+    {
+      "seg_id": "seg_s001_0_s002_1",
+      "len_mm": 140271,
+      "actual_s": 17.647,
+      "expected_s": 16.9,
+      "actual_ms": 7.95
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_1",
+      "len_mm": 2500,
+      "actual_s": 0.498,
+      "expected_s": 0.301,
+      "actual_ms": 5.02
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.379,
+      "expected_s": 0.301,
+      "actual_ms": 6.6
+    },
+    {
+      "station": "s002",
+      "track": "gw_far_main",
+      "len_mm": 63564,
+      "actual_s": 7.814,
+      "expected_s": 7.658,
+      "actual_ms": 8.13
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_out_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.394,
+      "expected_s": 0.301,
+      "actual_ms": 6.34
+    },
+    {
+      "station": "s002",
+      "track": "gw_uturn_0",
+      "len_mm": 5489,
+      "actual_s": 0.735,
+      "expected_s": 0.661,
+      "actual_ms": 7.47
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.423,
+      "expected_s": 0.301,
+      "actual_ms": 5.91
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in1",
+      "len_mm": 10109,
+      "actual_s": 1.289,
+      "expected_s": 1.218,
+      "actual_ms": 7.84
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in2",
+      "len_mm": 10109,
+      "actual_s": 1.277,
+      "expected_s": 1.218,
+      "actual_ms": 7.92
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_park_ps8",
+      "len_mm": 18750,
+      "actual_s": 2.295,
+      "expected_s": 2.259,
+      "actual_ms": 8.17
+    }
+  ],
+  "defects": [
+    {
+      "type": "speed_deviation",
+      "seg_id": "seg_s003_1_s001_1",
+      "authorized_ms": 8.3,
+      "actual_ms": 27.41,
+      "ratio": 3.3,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}

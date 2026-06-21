@@ -1,0 +1,43 @@
+{
+  "vehicle_id": "NORA_0013",
+  "generated_at": "2026-06-21T05:52:20Z",
+  "origin_sid": "s002",
+  "dest_sid": "s003",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "minor_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 1,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 1,
+    "total_defects": 1
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "station": "s003",
+      "track": "gw_platform_parking",
+      "len_mm": 12000,
+      "actual_s": 0.354,
+      "expected_s": 1.446,
+      "actual_ms": 33.93
+    }
+  ],
+  "defects": [
+    {
+      "type": "speed_deviation",
+      "station": "s003",
+      "track": "gw_platform_parking",
+      "authorized_ms": 8.3,
+      "actual_ms": 33.93,
+      "ratio": 4.09,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}
