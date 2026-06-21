@@ -24,6 +24,8 @@ If the guideway is animated (no physical constraint), the designer MUST provide 
 | A2 | **Unified map schema** | mapSM.json (scale model) and map4WD.json (waypoint) are different formats for the same topology. Define a v3 schema that covers both line/segment and waypoint modes with a `mode` field. | All |
 | A3 | **Per-line speed profile from SU** | SU Compute now has curve radius per track. Converter should produce `speedMin/speedMax` per line from `sqrt(maxLateralG * g * radius)`. Currently hardcoded in mapSM.json. | All |
 | A4 | **EZone auto-generation from topology** | SU Compute Phase 2 identifies merge/diverge EPs. Converter should produce ezone definitions with `inPoint1/inPoint2/outPoint` and `distFrom/distTo` computed from chain geometry. Currently hand-authored in mapSM.json. | All |
+| A5 | **SU-generated IDs are the authority** | SU models produce better, more descriptive guideway IDs than hand-numbered physical maps (seg_s001_1_s003_1 vs line 3). Physical systems adopt SU IDs directly — same names in simulation, MQTT telemetry, device journals, and Allie analysis. No mapping table. SU model IS the design document. | All |
+| A6 | **seg_ sub-segment decomposition** | A single SU seg_ (one polyline between stations) becomes many physical sub-segments: straights, curves, grades — each with its own length, radius, speed limits. Naming: `seg_s001_1_s003_1.0`, `.1`, `.2`, etc. Natalie routes at the parent seg_ level; Nora walks sub-segments internally. Converter decomposes pts_mm into sub-segments by detecting curvature and grade changes. | All |
 
 ### B. Motor Control Layer
 
