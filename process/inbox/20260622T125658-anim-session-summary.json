@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-06-22T12:56:58Z",
+  "pod_count": 16,
+  "stations": {
+    "s002": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 28,
+      "high_turnover_slots": [
+        "ps8(6)",
+        "ps9(7)"
+      ]
+    },
+    "s003": {
+      "capacity": 4,
+      "parked": 0,
+      "total_arrivals": 6,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s004": {
+      "capacity": 3,
+      "parked": 0,
+      "total_arrivals": 6,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s005": {
+      "capacity": 3,
+      "parked": 0,
+      "total_arrivals": 6,
+      "high_turnover_slots": [
+
+      ]
+    }
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}
