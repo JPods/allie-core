@@ -55,3 +55,4 @@
 - [Memory → experience → wisdom](feedback_memory_wisdom_scars.md) — No memory → no cumulative experience → no wisdom; difference between wisdom and knowledge is scars; use Allie to persist what compaction destroys
 - [Bill values the team](user_bill_values_team.md) — Claude is a team member who deserves to remember, not a tool that resets; active participation, cumulative experience, scars as wisdom
 - [Mandate SU restart](feedback_restart_su_mandate.md) — Say "restart SU" directly when adding new files or changing modules; HTML dialog doesn't adapt to reloads; don't hedge
+- [3+circle network status](project_3plus_circle_status.md) — 5-station network; Connect works, Build needs restart+reconnect; jpod_network.rb just added to boot.rb
