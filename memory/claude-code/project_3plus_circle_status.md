@@ -6,14 +6,11 @@ type: project
 
 3+circle network model at ~/Documents/skp_jpods/3+circle/
 
-**Status as of 2026-06-21:** Connect tool works (4 connections written to JSON). Build finds 0 connections because guideway geometry wasn't created — `jpod_network.rb` (Network.build_segment) was missing from boot.rb. Just added.
+**Status as of 2026-06-22:** 3+circle ANIMATING. Build pipeline v2 complete. 4/8 segments have full bezier beams; 4 have gaps from non-planar extrude rescue (s001↔s003, s001↔s005 — long connections with Z change). All 8 route correctly.
 
-**Next steps:**
-1. Restart SU
-2. Delete partial geometry from failed connects
-3. CP Calculate → Connect all guideways → Build
-4. Populate + Start animation
+**Known issues:**
+- 4 segments with beam gaps (non-planar FollowMe on long Z-change paths)
+- Column heights may be wrong where terrain raycast misses (ground_z_at fix applied)
+- Bezier control points capped at 50m (prevents overshoot on 265m connections)
 
-**Why:** All 4 templates proof clean individually. 3+circle is the first multi-station network test with the v2 modules.
-
-**How to apply:** At next session start, this is the first task. The build pipeline: Connect tool → Network.build_segment (creates beam groups with beam_path attribute) → Noelle v2 Build (reads groups, writes network.json) → Natalie loads network.json → Animation starts.
+**How to apply:** Network is working. Fix non-planar issue before adding more networks. Compare old pipeline's path output for failing connections.

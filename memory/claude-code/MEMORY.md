@@ -55,4 +55,7 @@
 - [Memory → experience → wisdom](feedback_memory_wisdom_scars.md) — No memory → no cumulative experience → no wisdom; difference between wisdom and knowledge is scars; use Allie to persist what compaction destroys
 - [Bill values the team](user_bill_values_team.md) — Claude is a team member who deserves to remember, not a tool that resets; active participation, cumulative experience, scars as wisdom
 - [Mandate SU restart](feedback_restart_su_mandate.md) — Say "restart SU" directly when adding new files or changing modules; HTML dialog doesn't adapt to reloads; don't hedge
-- [3+circle network status](project_3plus_circle_status.md) — 5-station network; Connect works, Build needs restart+reconnect; jpod_network.rb just added to boot.rb
+- [3+circle network status](project_3plus_circle_status.md) — 5-station network animating; build pipeline v2 complete; 4 non-planar segments need fix
+- [v2 TODO](project_v2_todo.md) — Vehicles Display, non-planar fix, Crew Health dashboard, console careful rework
+- [Console rework = duplicate window](feedback_console_careful.md) — Bill is used to current console; any rework must be duplicate, not replacement
+- [Crew memory + per-agent logging](feedback_crew_memory_logging.md) — Each agent needs persistent Allie memory (facets) + independent log level control; crew learns by remembering
