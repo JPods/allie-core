@@ -290,3 +290,12 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Impact:** Without #3, Compute builds pass chains through dead CPs. Animation catches it but the chain data is wrong.
 - **Domain:** SU, Physical, Ground
 - **Added by:** Claude Code + Bill
+
+### BUILD PROFILE — Sharp Z changes vs long-distance smoothing (2026-06-23)
+- **Problem:** Current Z radius (single Gaussian) trades off sharp terrain response against long-distance smoothness. There are cases where sharp Z changes are needed locally (terrain step, bridge approach) but the profile over distance needs greater smoothing to minimize g-forces.
+- **Current state:** Single Z radius control (MIN_Z_CHANGE_DIAMETER, default 60m). Works for most terrain. Does not handle the case where you need both a local step AND smooth long-distance profile.
+- **Possible fix:** Two-stage Z profile — a local radius for terrain response and a long-distance span for g-force minimization. Or: adaptive radius that tightens at waypoints and widens between them.
+- **Domain:** SU, Physical
+- **Severity:** Medium
+- **Status:** Watching — single radius sufficient for current networks
+- **Added by:** Bill + Claude Code

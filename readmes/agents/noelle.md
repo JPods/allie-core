@@ -579,3 +579,15 @@ When a standalone Noelle processor runs, it writes to:
 ```
 
 Allie harvests with `scripts/allie-harvest-processors.py` and promotes confirmed lessons to the Understandings section above.
+
+### Design Decisions — 2026-06-23
+
+| Date | Decision | Why |
+|------|----------|-----|
+| 2026-06-23 | Smooth guideways primary — hard_floor_z removed from profile | Every Z change = g-forces on passengers. Columns absorb terrain. SU mesh noise is not physical reality. |
+| 2026-06-23 | XY radius 5m, Z radius 60m, Z span 80m defaults | 5m dampens XY jitter; 60m produces gentle vertical curves; 80m terrain averaging prevents adjacent hills from corrupting road grade |
+| 2026-06-23 | Piecewise grade envelopes between waypoint anchors | Old: grade cones from CPs overrode waypoint Z. New: each WP-to-WP span gets own envelope. |
+| 2026-06-23 | Waypoint beam_z is authoritative — no hard pin, no double clearance | beam_z attribute = terrain + clearance at placement. Flows through profile via piecewise desired_z. |
+| 2026-06-23 | BOM: 30% straight / 70% curved spans per network | Typical JPods network on terrain. Curved spans cost $95k vs $75k straight. |
+| 2026-06-23 | ADA: 3 lifts per station, 40s dispatch | All stations ADA accessible. Lifts count in both BOM and capacity estimator. |
+| 2026-06-23 | Console 1 only — stop maintaining c2 | Easier to teach, has all features. c2 kept but not updated. |
