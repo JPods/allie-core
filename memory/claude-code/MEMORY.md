@@ -59,3 +59,5 @@
 - [v2 TODO](project_v2_todo.md) — Vehicles Display, non-planar fix, Crew Health dashboard, console careful rework
 - [Console rework = duplicate window](feedback_console_careful.md) — Bill is used to current console; any rework must be duplicate, not replacement
 - [Crew memory + per-agent logging](feedback_crew_memory_logging.md) — Each agent needs persistent Allie memory (facets) + independent log level control; crew learns by remembering
+- [Terrain smoothing pulls adjacent features](feedback_terrain_smooth_radius.md) — 80m Z-smooth radius averages steep hillside into road grade; expose XY/Z radii as per-network controls
+- [Smooth guideways are primary requirement](feedback_smooth_guideways_primary.md) — Columns absorb terrain with variable height; guideway must be smooth; never sacrifice beam smoothness for short columns
