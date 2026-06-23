@@ -15,3 +15,4 @@ Smooth guideways are a primary requirement. All changes in XYZ apply acceleratio
 - XY smooth = horizontal path jitter dampening. 5m. Was 3m.
 - Columns will be whatever height is needed. Never sacrifice beam smoothness for short columns.
 - Waypoint beam_z flows through the profile via piecewise interpolation, not hard pins
+- Terrain raycast: bounding-box skip + z=0 interpolation works; Entities.raytest does NOT exist in SketchUp API
