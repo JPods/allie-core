@@ -1,55 +1,47 @@
-# Handoff — 2026-06-24 (end of marathon)
+# Handoff — 2026-06-24
 
-## Status: Travel app working, Sally conveyor solid, Natalie dispatch registry in place
+## Where We Left Off
+- 500mm edge hallucination guard in Natalie + Noelle RED FLAG validation in Build
+- Crew flag system: any agent flags defects, show/hide in Crew Health, merge within 2m
+- Noelle visual defect posts in 3D model, Nora kink detection (>15°)
+- Build preserves station_names in network.json
+- Travel app wired with fresh pod placement, auto camera follow
+- Sally 3-step conveyor, Natalie 5s dispatch, 20s dwell, 3s exit hold
+- All architecture rules documented in memory + retrospection
 
-### What Works (accumulated across 2026-06-23 + 06-24)
-- Build Profile: smooth guideways, waypoint beam_z, XY=5m Z=60m
-- BOM: scans built geometry, 30/70 straight/curved, writes {model}.bom.json
-- Capacity per Hour: fleet-limited + station-limited, 2.1 pax/pod, ADA lifts
-- Camera Follow: 25/20/5 offset (editable), click pod row
-- Travel App: phone UI, stations from network.json, places fresh pod, camera follows
-- Station Names: network.json source of truth
-- Sally conveyor: 3-step direct transforms, exit hold 3s
-- Sally-Natalie: 50% rebalance, inbound tracking, Natalie 5s dispatch interval
-- 20s minimum dwell: simulates unload/load at every station
-- Route Validation: all pairs tested before animation
-- Diverging pod spacing fix (uturn)
-- Build-required flag: blocks animation after structure changes
-- Console 1 only, Result bar with SU Console + log level
-- Speed 12 m/s, personal space 5m travel / 0.5m station
-- Crew Health: HTML renders properly
-- Toolbar icons: renamed to purpose, custom JPods designs
-- Toolbar Travel button opens phone app directly
+## Do This First Next Session
+1. **Restart SU and Build** — test 500mm guard, defect flags, station name preservation
+2. **Travel app** — test trip booking with correct station IDs
+3. **Crew Health → Flags button** — verify gap + kink defect markers in 3D model
+4. **gw_platform_in2 junction** — verify 500mm guard prevents the jam
+5. **Template validation chain** — implement timestamp checks (Save > Compute > Test)
 
-### Next Session Priorities
-1. Natalie dispatch registry → extend to zipper merge timing
-2. Pod arrival at entry slot (ps1) not exit slot — conveyor shuffles to exit
-3. Travel app: test full trip flow with corrected station ID mapping
-4. Station locking: implement lock mechanism from network-change-protocol.md
-5. Terrain raycast: proper terrain-group filter (on ouch list)
-6. Two-stage Z profile (ouch list)
-7. gw_lift_in junction issue — pods stop at fork
+## Open Problems
+- gw_lift_in junction fork — pods may still stop if chain doesn't match geometry
+- Terrain raycast z=0 fallback — interpolation patch covers it, proper fix deferred
+- Two-stage Z profile — sharp local + smooth long-distance (ouch list)
+- Natalie dispatch registry → extend to zipper merge timing
+- Pod arrival at entry slot (ps1) not exit slot — conveyor should shuffle to exit
+- Station locking after Build — implement lock mechanism (readme written, code not yet)
 
-### Architecture Rules Established This Session
-- Smooth guideways primary — columns absorb terrain
-- network.json is source of truth for ALL network-specific data
-- Template folders read-only during network operations
-- Entity attributes are cache, not source of truth
-- Console 1 only
-- Sally owns slots, Natalie owns timing, Nora executes
-- File authority: lines.json=designer, lines.computed.json=Noelle, network.json=network
-- Network ops never modify station instances
-- Build-required flag prevents animation on stale network
-
-### Key Commits
-- 1cdd3e0 — Custom toolbar icons
-- 0eaec53 — Travel station ID fix
+## Key Commits (su_jpods)
+- e69397a — Crew flags system
+- 627c81e — Noelle visual defect flags + Nora kink detection
+- f8d9853 — Noelle RED FLAG gap validation
+- ba6777c — Build preserves station_names
+- 2065193 — 500mm edge hallucination guard
 - 0685f2a — Travel standalone + 20s dwell
 - c4d17be — Natalie 5s dispatch interval
-- 5955560 — Sally all-pods-advance
-- 646c124 — Sally exit hold 3s
 - c716c0a — Sally direct entity transforms
-- 195e712 — Route validation, diverging pod fix
-- 5085947 — Animation fixes, rebalance, 12 m/s
 - 1df1a60 — Smooth guideways, BOM, capacity, camera
 - bc8dcdf — Waypoint Z fix
+
+## Architecture Rules
+- Smooth guideways primary — columns absorb terrain
+- network.json is source of truth for ALL network-specific data
+- USE MATH NOT EDGES — Axiom 10 (500mm hallucination is the proof)
+- No silent defect tolerance — documented, visible, counted, approved
+- Sally owns slots, Natalie owns timing, Nora executes
+- Template validation chain: Save → Compute → Test (timestamps must align, all UTC)
+- Designer accountability — Noelle rejects, designer fixes
+- Build must not destroy user data
