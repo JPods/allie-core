@@ -25,42 +25,6 @@
   "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations.",
   "observations": [
     {
-      "ts": "2026-06-24T01:33:24Z",
-      "observation": "s001 ps9 high turnover: 60 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 9,
-        "count": 60
-      }
-    },
-    {
-      "ts": "2026-06-24T01:35:21Z",
-      "observation": "s002 ps9 high turnover: 70 arrivals",
-      "data": {
-        "station": "s002",
-        "slot": 9,
-        "count": 70
-      }
-    },
-    {
-      "ts": "2026-06-24T01:35:48Z",
-      "observation": "s001 ps9 high turnover: 70 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 9,
-        "count": 70
-      }
-    },
-    {
-      "ts": "2026-06-24T01:37:18Z",
-      "observation": "s001 ps9 high turnover: 80 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 9,
-        "count": 80
-      }
-    },
-    {
       "ts": "2026-06-24T01:37:41Z",
       "observation": "s002 ps9 high turnover: 80 arrivals",
       "data": {
@@ -943,6 +907,42 @@
         "station": "s008",
         "slot": 9,
         "count": 20
+      }
+    },
+    {
+      "ts": "2026-06-24T14:30:40Z",
+      "observation": "s006 ps8 high turnover: 10 arrivals",
+      "data": {
+        "station": "s006",
+        "slot": 8,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-06-24T14:30:40Z",
+      "observation": "s008 ps8 high turnover: 10 arrivals",
+      "data": {
+        "station": "s008",
+        "slot": 8,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-06-24T14:30:41Z",
+      "observation": "s010 ps8 high turnover: 10 arrivals",
+      "data": {
+        "station": "s010",
+        "slot": 8,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-06-24T14:31:17Z",
+      "observation": "s007 ps9 high turnover: 10 arrivals",
+      "data": {
+        "station": "s007",
+        "slot": 9,
+        "count": 10
       }
     }
   ]
