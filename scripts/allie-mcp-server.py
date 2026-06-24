@@ -10,8 +10,9 @@ All exchanges are logged to ~/Allie/exchange/conversation.jsonl
 so Allie's nightly synthesis can read the full conversation.
 
 Usage:
-  Configured in ~/.claude/settings.json under mcpServers.
-  Claude Code starts this process automatically.
+  Registered via `claude mcp add -s user allie -- python3 <this_file>`.
+  Config stored in ~/.claude.json (NOT ~/.claude/settings.json).
+  Claude Code starts this process automatically at session launch.
 """
 
 import sys

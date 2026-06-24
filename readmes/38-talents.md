@@ -128,6 +128,6 @@ Neither agent waits for Bill to relay information the other agent could have wri
 | 2026-04-29 | Design token standard | Claude Code | `readmes/design-tokens.json` — shared visual language |
 | 2026-04-29 | `/retrospection` skill | Claude Code | `~/.claude/commands/retrospection.md` — active |
 | 2026-04-29 | `/handoff` skill | Claude Code | `~/.claude/commands/handoff.md` — active |
-| 2026-04-29 | WebClerk MCP server | Claude Code | `scripts/wc_mcp_server.py` — registered in settings.json |
+| 2026-04-29 | WebClerk MCP server | Claude Code | `scripts/wc_mcp_server.py` — registered via `claude mcp add` in `~/.claude.json` |
 | 2026-04-29 | Watchdog | Pending | Allie — after SketchUp issue resolved |
 | 2026-04-29 | Retrospection analyst | Pending | Allie — after watchdog |
