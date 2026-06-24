@@ -66,6 +66,7 @@
 - [Build profile Z pipeline](reference_build_profile_architecture.md) — Complete Z pipeline: bezier→terrain→desired→grade→smooth→blend; which stage causes which defect
 - [SketchUp API gotchas](reference_sketchup_api_gotchas.md) — Entities has no raytest, Point3d.z must be Float, bounds.center is visual not routing, endless method syntax
 - [Cross-domain scaling](project_cross_domain_scaling.md) — Every lesson applies to all platforms (SU, scale model, 4WD, SkyRide, full) and programs (RT, WC3, MyCarryOn); TFTS is the propagation mechanism
+- [Sally-Natalie authority chain](project_sally_natalie_authority.md) — Sally owns slots/conveyor, Natalie owns dispatch timing/routing, Nora executes; 5s dispatch interval, 3s exit hold, 20s min dwell
 - [File authority](reference_file_authority.md) — lines.json=designer, lines.computed.json=Noelle, network.json=network, crew.json=crew, bom.json=Build; no followme.json
 - [network.json is source of truth](feedback_network_json_source_of_truth.md) — ALL network-specific data in .network.json; template folders are static/read-only; entity attrs are cache only
 - [Network ops never modify stations](feedback_network_never_modifies_stations.md) — Build/Animate/Populate must never change station instance names, tags, or definitions; templates read-only during network ops
