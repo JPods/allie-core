@@ -299,3 +299,17 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Severity:** Medium
 - **Status:** Watching — single radius sufficient for current networks
 - **Added by:** Bill + Claude Code
+
+### CRITICAL — Entity name/tag corruption during animation (2026-06-23)
+- **Problem:** Station instance names, seg_ guideway names, and SketchUp tags are being overwritten during animation. Multiple entities renamed to `gw_lift_in` (an internal station template track name). Affects both station ComponentInstances and seg_ Groups.
+- **Symptoms:** Entities lose their assigned names. Instance names change to internal template track names. Tags reassigned. Happens at multiple stations simultaneously.
+- **Not caused by our Ruby code:** Audit of all `.name =` and `.layer =` assignments confirmed no code path renames entities to `gw_lift_in`. Only Build creates seg_ names, only template load creates station names.
+- **Suspected causes:**
+  1. SketchUp transparent operations (`true, false, true`) running at animation tick rate may corrupt entity references
+  2. Component definition collision when station types are swapped (thru_dip → station_parking) — internal group names from one definition leak to entities in another
+  3. Entity reference staleness — pod entity references may point to wrong entities after SketchUp garbage collection during rapid operation cycles
+- **Impact:** Model becomes unusable. Must revert to backup.
+- **Domain:** SU
+- **Severity:** High
+- **Status:** Must Fix — blocks sustained animation testing
+- **Added by:** Bill + Claude Code

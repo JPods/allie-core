@@ -1,34 +1,49 @@
-# Handoff — 2026-06-23
+# Handoff — 2026-06-23 (marathon session)
 
-## Status: Build profile smoothing, BOM, capacity estimator, camera follow
+## Status: Major feature session — Build profile, BOM, Capacity, Travel, Sally-Natalie coordination
 
 ### What Works
-- Waypoint beam_z flows through build profile (reads attribute, no Z flattening)
-- Piecewise grade envelopes between waypoint anchors (not CP endpoints)
-- Smooth guideways primary: hard_floor_z removed from profile, columns absorb terrain
-- XY radius 5m, Z radius 60m defaults, Z span 80m (background)
-- Build Profile controls in Network Display (Apply persists to model)
-- BOM button in Network Display — scans built geometry, writes {model}.bom.json
-- Capacity button in Pods tab — Current/5×/NetMax with pax/pod, load time, ADA lifts
-- Camera follow: click pod row → snaps 25m behind, 20m right, 5m above (editable)
-- Console cleanup: Result bar + Log level dropdown + SU Console button (one line)
-- Runtime Console removed from NE iframe, Validate button removed
-- Console 1 is the console — c2 not actively maintained
+- **Build Profile**: smooth guideways primary, waypoint beam_z, piecewise grade envelopes, XY=5m Z=60m defaults
+- **BOM**: button in Network Display, scans built geometry, writes {model}.bom.json, 30/70 straight/curved split
+- **Capacity per Hour**: fleet-limited (3 speeds) + station-limited (PS + ADA lifts), 2.1 pax/pod
+- **Camera Follow**: 25m back, 20m right, 5m up (editable), click pod row to follow
+- **Travel App**: wired — stations from network.json, booking dispatches pods, camera follow, station rename
+- **Station Names**: in network.json (source of truth), not just entity attributes
+- **Sally conveyor**: direct entity transforms (3 substeps), no animation maneuvers
+- **Sally-Natalie rebalance**: 50% threshold, inbound tracking with ETA, picks station with most room
+- **Dispatch cooldown**: 3s per station between departures
+- **Route Validation**: tests all station pairs before animation starts
+- **Diverging pod spacing**: pods traveling opposite directions skip personal space
+- **Build-required flag**: blocks animation after structure changes until Build runs
+- **Console cleanup**: Result bar, SU Console button, log level dropdown, no c2 maintenance
+- **Speed**: 12 m/s (27 mph) default
+- **Crew Health**: HTML renders properly (innerHTML not textContent)
+- **Terrain raycast**: bounding-box skip + z=0 interpolation
 
-### What Needs Work
-- Travel app: callbacks archived in codearchive/jpod_trip_dialog.rb, not wired to dialog
-- Terrain raycast: skip-based approach works but z=0 fallback still possible at waypoints; interpolation patch covers it; proper fix (terrain group filtering) attempted, hit SketchUp API limitations (Entities has no raytest)
-- BOM: vehicle counts not populated (needs animation data), systems/power counts static
-- Two-stage Z profile (sharp local + smooth long-distance) — on ouch list
-- 4 non-planar build segments still need fix
+### Next Session Priorities
+1. **Natalie dispatch registry** — per-station outbound queue, manages clearance timing (replaces timer cooldown)
+2. **Pod arrival at entry slot** — pods should arrive at lowest empty slot (ps1), conveyor shuffles to exit
+3. **Minimum dwell time** — pods need to stay parked before redispatch (prevents ping-pong)
+4. **Don't swap origin/dest on redispatch** — causes s001↔s002 ping-pong
+5. **Travel app testing** — Make Trip button, trip booking, status polling
+6. **Entity name display during animation** — confirmed cosmetic (SketchUp transparent ops), not corruption
+7. **Station locking** — implement the lock mechanism from network-change-protocol.md
+8. **Two-stage Z profile** — on ouch list for terrain with bridges/overpasses
 
-### Key Commits
+### Key Commits (su_jpods)
+- `6b4ad06` — Station dispatch cooldown
+- `c716c0a` — Sally direct entity transforms
+- `bfb052d` — Sally lock during advance
+- `195e712` — Route validation, diverging pod fix, Sally tick
+- `5085947` — Animation fixes, rebalance, personal space, 12 m/s
 - `1df1a60` — Smooth guideways, BOM, capacity, camera, console cleanup
-- `bc8dcdf` — Waypoint Z: beam tracks through beam_z, piecewise grade envelopes
+- `bc8dcdf` — Waypoint Z fix
 
-### Terrain Raycast TFTS
-- Problem: raycast hits marker geometry, exhausts steps, returns z=0
-- Tried: Entities.raytest → Entities has no raytest method
-- Tried: Symbol sentinel :no_terrain → Point3d.z requires Float
-- Working: bounding-box skip + z=0 interpolation from neighbors
-- Principle: the working simple approach beats the elegant broken one
+### Architecture Rules Established
+- Smooth guideways are primary — columns absorb terrain, SU mesh is noise
+- network.json is source of truth for all network-specific data
+- Template folders are static/read-only during network operations
+- Entity attributes are cache only, not source of truth
+- Console 1 only — stop maintaining c2
+- File authority: lines.json=designer, lines.computed.json=Noelle, network.json=network
+- Network operations must never modify station instances or tags
