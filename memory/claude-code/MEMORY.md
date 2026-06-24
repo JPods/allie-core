@@ -67,6 +67,9 @@
 - [SketchUp API gotchas](reference_sketchup_api_gotchas.md) — Entities has no raytest, Point3d.z must be Float, bounds.center is visual not routing, endless method syntax
 - [Cross-domain scaling](project_cross_domain_scaling.md) — Every lesson applies to all platforms (SU, scale model, 4WD, SkyRide, full) and programs (RT, WC3, MyCarryOn); TFTS is the propagation mechanism
 - [Sally-Natalie authority chain](project_sally_natalie_authority.md) — Sally owns slots/conveyor, Natalie owns dispatch timing/routing, Nora executes; 5s dispatch interval, 3s exit hold, 20s min dwell
+- [500mm gaps are hallucinations](feedback_500mm_gap_hallucination.md) — Edge-to-edge not centerline; 250mm each side; causes wrong track reversals; use math not edges; Axiom 10
+- [Noelle rejects sloppy models](feedback_noelle_rejects_sloppy_models.md) — Gaps > 50mm get warnings, > 350mm fail validation; designers fix models, no silent workarounds
+- [Template validation chain](feedback_template_validation_chain.md) — Save→Compute→Test timestamps must align; model save > computed = reject; all dt UTC Axiom 14
 - [File authority](reference_file_authority.md) — lines.json=designer, lines.computed.json=Noelle, network.json=network, crew.json=crew, bom.json=Build; no followme.json
 - [network.json is source of truth](feedback_network_json_source_of_truth.md) — ALL network-specific data in .network.json; template folders are static/read-only; entity attrs are cache only
 - [Network ops never modify stations](feedback_network_never_modifies_stations.md) — Build/Animate/Populate must never change station instance names, tags, or definitions; templates read-only during network ops
