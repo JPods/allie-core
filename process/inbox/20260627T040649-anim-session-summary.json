@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-06-27T04:06:49Z",
+  "pod_count": 63,
+  "stations": {
+    "s006": {
+      "capacity": 9,
+      "parked": 15,
+      "total_arrivals": 14,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s007": {
+      "capacity": 9,
+      "parked": 8,
+      "total_arrivals": 11,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s008": {
+      "capacity": 9,
+      "parked": 11,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s009": {
+      "capacity": 9,
+      "parked": 15,
+      "total_arrivals": 3,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s010": {
+      "capacity": 9,
+      "parked": 12,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s012": {
+      "capacity": 9,
+      "parked": 7,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    }
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}
