@@ -73,3 +73,7 @@
 - [File authority](reference_file_authority.md) — lines.json=designer, lines.computed.json=Noelle, network.json=network, crew.json=crew, bom.json=Build; no followme.json
 - [network.json is source of truth](feedback_network_json_source_of_truth.md) — ALL network-specific data in .network.json; template folders are static/read-only; entity attrs are cache only
 - [Network ops never modify stations](feedback_network_never_modifies_stations.md) — Build/Animate/Populate must never change station instance names, tags, or definitions; templates read-only during network ops
+- [DB consolidation — single local PostgreSQL](project_db_consolidation.md) — Only commerce_expert; bill/agent_bill dropped; runserver.sh defaults local; no SQLite
+- [Claude Code WebClerk identity](reference_claude_identity.md) — claude@jpods.com id=69 superuser; MCP authenticates as claude not allie; own audit trail
+- [RBAC silently denies without superuser](feedback_rbac_superuser.md) — inject_role_filters denies all if no UserProfile; agents must be is_superuser=True
+- [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
