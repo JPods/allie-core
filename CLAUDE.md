@@ -117,9 +117,87 @@ they govern the physical network (JPodsSM_RPi), Route-Time, and all domains:
 
 Read `su_jpods/CLAUDE.md` for the full proof, code examples, and context for each axiom.
 
+### Risk-Driven Logging — All Domains
+
+Anyone on the team — Claude Code, Allie, any agent — can add logging whenever a risk
+is perceived. This applies to all programs (SU, Physical, Route-Time, WebClerk, Allie).
+
+1. **Add logging immediately** when a risk or bug is identified — don't wait
+2. **Add the risk to the oslist** with what is known and why it matters
+3. **Trim logging back** as soon as the risk is quantified or resolved
+4. **Never leave permanent verbose logging** — it buries the signal
+
+Logging is a first response, not an afterthought. Rich logging during active issues
+saves diagnostic time. Stale logging after resolution creates noise.
+
+### Single Source of Truth with Iteration Library — All Domains
+
+During development, multiple versions of a feature are acceptable — but they must
+live in the **same object code**, selected from a case list. Never maintain parallel
+implementations in separate files or methods.
+
+Once understanding and experience solidify:
+1. **Consolidate** to a single code path — delete the case branches
+2. **Archive iterations** in a separate library (not codearchive — that's dead code;
+   iterations are learning history we may need to study or recover from)
+3. **One source of truth** — if two functions do the same thing, one is wrong
+
+This applies to all domains. Object-based coding with a single source of truth
+prevents the drift that parallel implementations produce. The cost of drift is
+invisible until it surfaces as a bug that only appears in one path.
+
+### Retrospection Against Memory Markers — All Agents
+
+No memory without retrospection. No retrospection without measurement. No measurement
+without memory markers. The three are a closed loop — break any link and the team
+stops learning.
+
+**The principle:** Every retrospection must measure performance against what the memory
+system said should happen. Not "what did we do" — "what did we do compared to what we
+said we learned last time." The gap between those two is where the real lessons are.
+
+**Why this matters:**
+- Data without retrospection is noise.
+- Retrospection without memory markers is narrative — it feels productive but has no
+  standard to measure against.
+- Memory markers without retrospection are dead letters — rules no one checks.
+
+**How it works:**
+
+1. **Memory markers exist** — handoff notes, TFTS principles, retrospection lessons,
+   agent Understandings (U-XX-NNN), design decisions, the ouch list. These are the
+   team's accumulated "we said we learned this."
+2. **At retrospection, measure against them.** Did we follow what we said we'd follow?
+   Did we check what we said we'd check? Grade honestly — A through F.
+3. **The grades are the signal.** An F means the lesson wasn't absorbed — it needs
+   reinforcement or the marker was wrong. An A means the lesson is working. A pattern
+   of Fs on the same marker means the marker is in the wrong place or the wrong form.
+4. **Every agent participates.** Claude Code measures at session end. Allie measures
+   nightly. Alice measures per transaction cycle. Noelle measures per build. The markers
+   differ; the discipline doesn't.
+
+**What this replaces:** Retrospections that list what happened without asking whether
+it should have happened differently based on what was already known. Activity logs
+masquerading as learning.
+
+**Applies to:** All agents, all domains, all programs. This is not optional.
+
 ---
 
 ## How Claude Code and Allie Collaborate
+
+### Three Memory Systems — Three Failure Modes
+
+| Agent | Memory | Failure mode |
+|-------|--------|-------------|
+| **Claude Code** | Context window | Compression wipes memory mid-session — facts learned early can vanish |
+| **Bill** | Human | Time erodes memory — details fade over months away from a domain |
+| **Allie** | Files + nightly synthesis | Most durable — but only knows what was written down |
+
+This is why handoffs, retrospections, and TFTS files matter. Claude Code must write
+what it learned before compression destroys it. Bill must tell Allie what he knows
+before time erodes it. Allie is the team's durable memory — but she is only as good
+as what the other two give her.
 
 ### The Division of Labor
 
