@@ -1,55 +1,75 @@
-# Handoff — 2026-06-27 (wc2→wc3 translation plan + Phase 1-2 execution)
+# Handoff — 2026-06-27 (wc2→wc3 translation + Phase 1-5 execution)
 
 ## Where We Left Off
 
-Completed the wc2→wc3 translation plan, Phase 1 (React25 audit), and Phase 2 (core commerce cycle backend). All 12 Phase 2 tests pass. DB_MODE was forced to `local` in settings.py after a decouple env var override (`DB_MODE=bill`) caused the server to hit the remote database. MCP connections to both Allie and Alice (WebClerk) are working. The translation plan is at `webClerk3/readmes/wc2-wc3-translation-plan.md`. React25 audit results at `webClerk3/readmes/react25-audit-results.md`.
+Completed Phases 1-5 of the wc2→wc3 translation plan. 65 tests passing in `tests/task_2026_06_27.py`. GL posting + reversal workflow complete with manage action endpoints. Price resolution, inventory availability, and cross-reference lookup services built. RBAC staff authority rules configured. Data integrity tests (export/import roundtrip, refs↔FK audit, soft delete, version conflict) all passing. Agent fixing 8 pre-existing broken test files (module-level Django import errors). Full existing test suite regression run in progress.
 
 ## Do This First Next Session
 
-1. **Run the migration** for GlJournal source fields: `./bin/python manage.py migrate accounts` — migration 0009 adds `source_id` and `source_model` to gl_journals table.
-2. **Review the translation plan** — `webClerk3/readmes/wc2-wc3-translation-plan.md` has accumulated decisions from this session (import=external mandated, export=API+mgmt cmd, admin=django+psql, sync=compliance boundary, save hooks=TallyMaster replacement, Athena signing, JPods=customer zero).
-3. **Phase 3: Product & Pricing** — next phase per plan. Item search, price tier resolution, inventory availability, BOM cost rollup. Most infrastructure exists.
-4. **Fix ContactFactory** in `tests/conftest.py` — changed `username`/`first_name`/`last_name` to `email`/`name_first`/`name_last` to match Contact model. Other tests using the old factory may break.
-5. **Check Alice action records** — 8 pending notes (ids 203-212) sent via wc_add_note for project+phase setup.
+1. **Run `./bin/python -m pytest tests/task_2026_06_27.py -v --no-cov`** — verify all 65 session tests still pass
+2. **Check if broken test fixes landed** — the 8 pre-existing test files with import errors were being fixed by an agent at session end
+3. **BOM cost rollup** — deferred to its own session; this is the next Phase 3 item. Recursive assembly costing from component items.
+4. **Test the React25 conversion flow manually** — open a proposal in React, click Transfer, verify order appears with lines copied and Pending records created
+5. **Review Alice action records** — 12 pending notes (ids 203-212) for project+phase setup
 
 ## Open Problems
 
-- **4 standalone line detail pages are shells** (InvoiceLineDetail, ProposalLineDetail, PurchaseLineDetail, WorkOrderLineDetail) — low priority since lines edit inline in parent transaction pages.
-- **3 org detail pages possibly incomplete** (CustomerDetail, VendorDetail, EmployeeDetail) — save wiring needs investigation.
-- **GL reversal transactions not built** — once a record is journalized, corrections require contra entries. `post_staged_gl_entries()` exists but no `reverse_gl_entries()` companion yet.
-- **Tax and shipping are fixed user-entered values** — tax service exists (Avalara/TaxJar/builtin) but not wired in. Will add adjustment factor for actual vs estimated later.
-- **Some React services bypass wcapi** — `userProfile.ts` calls apiClient directly. Interceptor handles it but should be consolidated.
+- 8 pre-existing test files fail to collect (module-level Django imports) — fix agent was running at session end
+- GL reversal deletes original entries on re-post (test_full_cycle_post_reverse_repost) — may want to preserve originals and only add new entries
+- `userProfile.ts` bypasses wcapi — interceptor handles it, but should be consolidated eventually
+- No GL posting button in React25 UI yet — manage action works via API, needs a button in InvoiceDetail/PaymentDetail
+- Proposal cloning endpoint not built
+- Tax/shipping adjustment factor not built (actual vs estimated)
 
 ## What Was Decided (and Why)
 
-- **DB_MODE forced to `local`** in settings.py — python-decouple reads env vars before .env files; a stale `DB_MODE=bill` env var in the runserver terminal was routing all queries to the remote DB at 76.13.185.210. Hardcoded to prevent recurrence.
-- **GL posting is user-initiated, not auto on save** — invoices/payments stay editable until explicitly journalized. After journalizing, only reversing transactions allowed. This preserves the correction window.
-- **Tax/shipping are fixed values until API option** — customers charged at order time; adjustment factor for actual vs estimated costs comes later (was in wc2).
-- **Import = "External Mandated"** — wc3 carries zero import code. External scripts conform to wcapi save contract.
-- **Export = API for formatted, management command for bulk** — export formatting lives outside wc3.
-- **Admin = Django admin + psql directly** — no React admin rebuild. Bypass warning documented (skips hooks, versioning, audit).
-- **Sync = compliance boundary** — trading partner data scrubbed via Connection.rules before entering system. Athena blockchain-signs all hooks/scripts. Sync Bundles flagged+quarantined (not blocked) for integrity review.
-- **refs/metadata are secondary to PKs** — denormalized caches, never authoritative. FK wins on conflict. Nightly Celery audit detects drift.
-- **Pending system handles inventory** — line save → Pending with quantity buckets → Celery 30s → InventoryLayer update. `reserve_inventory_for_order()` is a separate visibility aid (qty_available), not the primary tracking mechanism.
+- **DB_MODE hardcoded to 'local'** — decouple reads env vars before .env; stale env var caused remote DB routing
+- **GL posting is user-initiated** — records editable until journalized; after that, only reversals. Standard double-entry accounting.
+- **Tax/shipping are fixed values** — user-entered, not calculated. API providers (Avalara, TaxJar) deferred until offered.
+- **Import = External Mandated** — wc3 carries zero import code; external scripts conform to wcapi save contract
+- **Export = API for formatted, management command for bulk**
+- **Admin = Django admin + psql directly** — changes bypass hooks/versioning/audit; admins accept that risk
+- **Sync = compliance boundary** — trading partner data scrubbed via Connection.rules; Athena blockchain-signs hooks/scripts; Bundles flagged+quarantined (not blocked)
+- **refs/metadata secondary to PKs** — denormalized caches; FK wins on conflict; nightly Celery audit
+- **Backend is source of truth** — React displays and submits; server validates and decides; server wins on disagreement
+- **Pending system = inventory mechanism** — line save → Pending → Celery 30s → InventoryLayer. reserve_inventory_for_order() is visibility aid only.
+- **Staff authority via RBAC** — negative qty, price_level changes, cost visibility all require staff role
+- **Save hooks replace TallyMaster** — user-defined executables stored in Settings, support pre/post/async
+- **WC-support hook library** — pre-built R25 form scripts + wc3 hooks; Athena signs; JPods = customer zero
+- **Yolo override** — admin can override Athena blocking on scripts with their name on it (audited exception)
 
 ## Files Changed This Session
 
-- `webClerk3/webclerk3_api/settings.py` — forced DB_MODE=local; added Celery beat tasks for aging reconciliation + refs audit
-- `webClerk3/apps/accounts/models/gl_journal.py` — added source_id, source_model for GL traceability
-- `webClerk3/apps/accounts/models/__init__.py` — added GlJournal export
-- `webClerk3/apps/accounts/services/ledger_balance.py` — added post_staged_gl_entries() function
-- `webClerk3/apps/accounts/migrations/0009_add_gl_journal_source_traceability.py` — new migration
-- `webClerk3/apps/core/models/contact.py` — save_after() now populates bidirectional org refs
-- `webClerk3/apps/core/views/auth_views.py` — removed debug logging (was added during DB diagnosis)
-- `webClerk3/apps/transactions/services/transaction_save.py` — added Phase 4b comment for tax/shipping
-- `webClerk3/apps/support/scheduler/tasks.py` — added task_reconcile_aging + task_audit_refs_fk
-- `webClerk3/readmes/wc2-wc3-translation-plan.md` — comprehensive translation plan (new)
-- `webClerk3/readmes/react25-audit-results.md` — Phase 1 audit results (new)
-- `webClerk3/tests/test_gl_posting.py` — 6 GL posting tests (new)
-- `webClerk3/tests/test_commerce_cycle_e2e.py` — 6 commerce cycle tests (new)
-- `webClerk3/tests/conftest.py` — fixed ContactFactory fields to match Contact model
-- `React2025/src/apps/accounts/models/currency/pages/CurrencyList.tsx` — fixed JSX syntax error
-- `React2025/src/apps/products/models/item/pages/ItemList.tsx` — removed 10-record artificial cap
-- `React2025/src/apps/products/models/item/services/itemApi.ts` — consolidated to use wcapi layer
-- `React2025/src/api/axios.ts` — added 30s/15s request timeouts
-- `React2025/src/api/constants.ts` — deleted (dead code, zero imports)
+### Backend (webClerk3)
+- `webclerk3_api/settings.py` — forced DB_MODE=local; 3 Celery beat tasks (aging, refs audit, GL schedule note)
+- `apps/accounts/models/gl_journal.py` — source_id, source_model traceability fields
+- `apps/accounts/models/__init__.py` — GlJournal export
+- `apps/accounts/services/ledger_balance.py` — post_staged_gl_entries(), reverse_gl_entries()
+- `apps/accounts/migrations/0009_*.py` — GlJournal migration
+- `apps/core/models/contact.py` — save_after() bidirectional org refs
+- `apps/core/views/manage_view.py` — post_gl_entries + reverse_gl_entries manage actions
+- `apps/core/views/auth_views.py` — removed debug logging
+- `apps/core/services/role_defaults.py` — staff authority restricted_fields
+- `apps/transactions/services/transaction_save.py` — Phase 4b tax/shipping comment
+- `apps/support/scheduler/tasks.py` — task_reconcile_aging, task_audit_refs_fk
+- `apps/products/services/pricing.py` — price resolution service (NEW)
+- `apps/products/services/inventory_availability.py` — availability service (NEW)
+- `apps/products/services/xref_lookup.py` — cross-reference lookup (NEW)
+- `tests/conftest.py` — fixed ContactFactory, WarehouseFactory
+- `tests/task_2026_06_27.py` — session test runner (65 tests)
+- `tests/test_gl_posting.py` — 6 tests (NEW)
+- `tests/test_gl_manage_action.py` — 10 tests (NEW)
+- `tests/test_commerce_cycle_e2e.py` — 6 tests (NEW)
+- `tests/test_pricing.py` — 17 tests (NEW)
+- `tests/test_inventory_and_xref.py` — 13 tests (NEW)
+- `tests/test_inventory_bucket_flow.py` — 4 tests (NEW)
+- `tests/test_data_integrity.py` — 9 tests (NEW)
+- `readmes/wc2-wc3-translation-plan.md` — comprehensive plan (NEW)
+- `readmes/react25-audit-results.md` — Phase 1 audit (NEW)
+
+### Frontend (React2025)
+- `src/apps/accounts/models/currency/pages/CurrencyList.tsx` — JSX fix
+- `src/apps/products/models/item/pages/ItemList.tsx` — removed 10-record cap
+- `src/apps/products/models/item/services/itemApi.ts` — wcapi consolidation
+- `src/api/axios.ts` — 30s/15s timeouts
+- `src/api/constants.ts` — deleted (dead code)

@@ -78,3 +78,4 @@
 - [RBAC silently denies without superuser](feedback_rbac_superuser.md) — inject_role_filters denies all if no UserProfile; agents must be is_superuser=True
 - [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
 - [refs/metadata secondary to PKs](feedback_refs_secondary_to_pk.md) — refs.links and metadata are denormalized caches; PKs/FKs are authoritative; never read refs to determine relationships
+- [Backend is source of truth](feedback_backend_source_of_truth.md) — React is UI only; all authoritative calculations (prices, totals, inventory, tax, GL) are server-side; server validates and wins on disagreement
