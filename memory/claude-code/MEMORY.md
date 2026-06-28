@@ -77,3 +77,4 @@
 - [Claude Code WebClerk identity](reference_claude_identity.md) — claude@jpods.com id=69 superuser; MCP authenticates as claude not allie; own audit trail
 - [RBAC silently denies without superuser](feedback_rbac_superuser.md) — inject_role_filters denies all if no UserProfile; agents must be is_superuser=True
 - [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
+- [refs/metadata secondary to PKs](feedback_refs_secondary_to_pk.md) — refs.links and metadata are denormalized caches; PKs/FKs are authoritative; never read refs to determine relationships
