@@ -81,3 +81,5 @@
 - [Backend is source of truth](feedback_backend_source_of_truth.md) — React is UI only; all authoritative calculations (prices, totals, inventory, tax, GL) are server-side; server validates and wins on disagreement
 - [Test against PostgreSQL not SQLite](feedback_no_sqlite_testing.md) — SQLite lacks JSON __contains, raw SQL differs, FK behavior differs; use PYTEST_FORCE_DB=1 or default to Postgres
 - [Alice needs full LLM agent](project_alice_full_agent.md) — Alice must have her own LLM, persistent memory, learning from transaction patterns; not just a note inbox; she owns training + housekeeping
+- [Model vs Network boundary](feedback_model_vs_network_boundary.md) — Model=template (lines.json, Compute). Network=placed instances (network.json, Build). Never cross. Compute is model-only. Build is network-only.
+- [One-way travel, CCW circulation](feedback_one_way_ccw.md) — All guideways one-way; station CCW; in/out swaps between CPs by design; pass chains in lines.json are authoritative; never infer from geometry
