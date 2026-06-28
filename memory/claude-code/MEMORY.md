@@ -79,3 +79,5 @@
 - [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
 - [refs/metadata secondary to PKs](feedback_refs_secondary_to_pk.md) — refs.links and metadata are denormalized caches; PKs/FKs are authoritative; never read refs to determine relationships
 - [Backend is source of truth](feedback_backend_source_of_truth.md) — React is UI only; all authoritative calculations (prices, totals, inventory, tax, GL) are server-side; server validates and wins on disagreement
+- [Test against PostgreSQL not SQLite](feedback_no_sqlite_testing.md) — SQLite lacks JSON __contains, raw SQL differs, FK behavior differs; use PYTEST_FORCE_DB=1 or default to Postgres
+- [Alice needs full LLM agent](project_alice_full_agent.md) — Alice must have her own LLM, persistent memory, learning from transaction patterns; not just a note inbox; she owns training + housekeeping
