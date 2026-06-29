@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-06-29T02:13:53Z",
+  "pod_count": 87,
+  "stations": {
+    "s001": {
+      "capacity": 5,
+      "parked": 4,
+      "total_arrivals": 2,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s003": {
+      "capacity": 4,
+      "parked": 3,
+      "total_arrivals": 2,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s004": {
+      "capacity": 4,
+      "parked": 1,
+      "total_arrivals": 6,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s011": {
+      "capacity": 9,
+      "parked": 6,
+      "total_arrivals": 10,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s012": {
+      "capacity": 9,
+      "parked": 4,
+      "total_arrivals": 20,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s013": {
+      "capacity": 9,
+      "parked": 6,
+      "total_arrivals": 5,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s014": {
+      "capacity": 9,
+      "parked": 6,
+      "total_arrivals": 9,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s015": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 25,
+      "high_turnover_slots": [
+        "ps8(6)"
+      ]
+    },
+    "s016": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 42,
+      "high_turnover_slots": [
+        "ps4(6)",
+        "ps5(7)",
+        "ps6(6)",
+        "ps7(6)"
+      ]
+    },
+    "s025": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 26,
+      "high_turnover_slots": [
+        "ps7(6)"
+      ]
+    },
+    "s026": {
+      "capacity": 9,
+      "parked": 7,
+      "total_arrivals": 7,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s027": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 26,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s028": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 24,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s029": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 30,
+      "high_turnover_slots": [
+
+      ]
+    }
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}
