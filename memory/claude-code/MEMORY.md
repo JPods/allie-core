@@ -84,3 +84,7 @@
 - [Model vs Network boundary](feedback_model_vs_network_boundary.md) — Model=template (lines.json, Compute). Network=placed instances (network.json, Build). Never cross. Compute is model-only. Build is network-only.
 - [One-way travel, CCW circulation](feedback_one_way_ccw.md) — All guideways one-way; station CCW; in/out swaps between CPs by design; pass chains in lines.json are authoritative; never infer from geometry
 - [Layout marketplace concept](project_layout_marketplace.md) — Users submit DataBrowser layouts for credit/cash; Alice manages adoption tracking; submitted via sync
+- [Expense/disbursement UI](project_expense_ui.md) — Payment model handles AR+AP via type field; needs spreadsheet-style fast entry UI
+- [DataBrowser status](project_databrowser_status.md) — Two-pane dark/light DataBrowser at /admin-wb; replaces 40+ admin pages; 61 models seeded with initial layouts
+- [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in DataBrowser); Bill loves it; use instead of extra buttons
+- [WC3 value proposition](project_wc3_value_proposition.md) — Local+cloud sovereignty, WC_HQ data services, cross-company sync, Alice as bookkeeper; polish sync+transactions+DataBrowser first
