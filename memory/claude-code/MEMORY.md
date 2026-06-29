@@ -88,3 +88,6 @@
 - [DataBrowser status](project_databrowser_status.md) — Two-pane dark/light DataBrowser at /admin-wb; replaces 40+ admin pages; 61 models seeded with initial layouts
 - [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in DataBrowser); Bill loves it; use instead of extra buttons
 - [WC3 value proposition](project_wc3_value_proposition.md) — Local+cloud sovereignty, WC_HQ data services, cross-company sync, Alice as bookkeeper; polish sync+transactions+DataBrowser first
+- [WebClerk is commerce not accounting](feedback_wc3_not_accounting.md) — WC3 produces GL journal entries; accounting programs consume them; never build P&L/Balance Sheet; AR collection is sales, AP is accounting
+- [WC3 reporting — campaigns + margin velocity](feedback_wc3_reporting_focus.md) — Track campaign ROI (source → order → cost to acquire); inventory by margin velocity (margin × turns ÷ carry cost) not just counts
+- [WC3 UI architecture](project_wc3_ui_architecture.md) — Multiple React templates for business types; theme library via sync; contact↔org many-to-many; communications FK is truth, aspects are cache

@@ -1,49 +1,104 @@
-# Handoff — 2026-06-28
+# Handoff — 2026-06-29
 
 ## Where We Left Off
 
-All 4 station models approved (station_parking, station_line_end, station_thru_dip, traffic_circle7). Compute cp_marker geometry rewritten to pure math — no edges, definition-local coords, cross product for outbound/inbound, tracks extend inward from tip. NC_Asheville_4 network editing in progress — s014 needs reconnection. Populate % selector added (40/20/10%). Bill is preparing a video demo.
+Massive two-day session. Built the DataBrowser, extended Payment model for expenses, created print components, seeded 61 layouts + 31 fake records + 59 report definitions, built report selector component, established the commerce-vs-accounting boundary, and defined the WC3 value proposition.
+
+## What Was Built (2026-06-28 → 2026-06-29)
+
+### DataBrowser (AdminWorkbench rewrite)
+- **File:** `React2025/src/pages/admin/AdminWorkbench.tsx` (~900 lines)
+- Two-pane layout (list + detail), dark/light mode (JPods Console palette)
+- Model picker with text filter + select list (Cmd/Ctrl+Shift+M)
+- Server-side search, pagination (50/page), column sort
+- Column drag-reorder, column resize (drag right edge)
+- Saved named layouts (shift-click to delete)
+- Subset show/omit, CSV export, font size S/M/L toggle
+- Collapsible field config panel (List Cols / Detail Fields)
+
+### Route Cleanup
+- **Router.tsx** — 40+ admin routes replaced with `<Navigate to="/admin-wb?model=X">` redirects
+- **protectedRoutesConfig.tsx** — same cleanup for window manager
+- **wrapperPage.ts** — removed ~35 admin imports/exports
+- **AppSidebar.tsx** — all admin model links → `/admin-wb?model=X` directly; shift-click ANY model opens DataBrowser
+
+### Payment Model Extended for Expenses
+- **File:** `webClerk3/apps/transactions/models/payment.py`
+- Added `type` field: `received` (AR) / `disbursed` (AP)
+- Added `purchase` FK (nullable) for AP disbursements
+- **Migration:** `0007_payment_add_type_and_purchase.py` — applied
+
+### Print Components (from vue2020)
+- `React2025/src/apps/transactions/print/printStyles.ts` — shared styles + currency formatting
+- `React2025/src/apps/transactions/print/InvoicePrint.tsx` — `/transactions/invoice/print/:id`
+- `React2025/src/apps/transactions/print/OrderPrint.tsx` — `/transactions/order/print/:id`
+- `React2025/src/apps/transactions/print/ProposalPrint.tsx` — `/transactions/proposal/print/:id`
+- `React2025/src/apps/transactions/print/QAPrint.tsx` — `/transactions/qa/print/:model/:id`
+
+### Report System
+- `webClerk3/apps/core/management/commands/seed_reports.py` — 59 reports seeded across 15 models
+- `React2025/src/components/common/ReportMenu.tsx` — dropdown report selector for any detail page
+- Reports stored as Report records with `data.route` for template routing
+
+### Shared Field Config for List Pages
+- `React2025/src/hooks/useListFieldConfig.ts` — hook for column selection/ordering
+- `React2025/src/components/common/FieldConfigBar.tsx` — collapsible bar component
+- Wired into CustomerList as example — 4 lines to add to any list page
+
+### Layout Seeder
+- `webClerk3/apps/core/management/commands/seed_databrowser.py` — curated initial layouts + fake records
+- 61 models with "initial" named view, 31 fake "zz" records
+- `webClerk3/readmes/databrowser-initial-layouts.md` — documents layout design principles
+
+### Sidebar
+- "Submit for Bonus" link added at `/submit-bonus` (stub page)
+- "Admin Workbench" renamed to "DataBrowser"
+- Shift-click power user feature on all sidebar items
+
+## Architecture Decisions (Critical — future Claude will reverse without these)
+
+### WebClerk is Commerce, NOT Accounting
+- WC3 manages sales, collections, purchasing, inventory
+- WC3 produces GL journal entries by account code
+- Accounting programs (QuickBooks, Xero, Sage) consume GL entries
+- AR collection is SALES finishing the job — it's our domain
+- AP management is ACCOUNTING — not our domain
+- NEVER build P&L, Balance Sheet, Trial Balance, Cash Flow in WC3
+- The GL Journal Export is the primary handoff product
+
+### Reporting Focus
+- **Campaign ROI:** Every order tracks source (campaign_id in source JSON). Reports connect campaign spend to orders generated to measure acquisition cost.
+- **Margin velocity:** `(margin_per_unit × annual_turns) / carry_cost_per_unit` — the metric that tells you which products earn their shelf space. Not just counts or costs.
+- **Operations reports, not financial statements.** Sales by product/customer/rep, collections, inventory velocity, campaign ROI, pricing analysis.
+
+### WC3 Value Proposition
+- **Free platform** — open source, runs on laptop. Paid data services only.
+- **Local + cloud dual storage** — laptop is system of record, cloud is backup/collaboration
+- **WCHQ proximity search** — merchants publish inventory via sync, buyers search by distance. Amazon loses findability advantage.
+- **Cross-company sync** — order→PO→SO linking via sync bundles. EDI for small business at zero setup cost.
+- **Vendor blessed list** — curated projection of fields/products, not open access. Sovereignty principle.
+- **JPods cargo** — Middle Mile delivery integrated into commerce loop
+- **Layout marketplace** — users submit layouts via sync for credit/cash bonuses
+
+### Key Identifiers
+- `ida` = human readable (what you say on the phone)
+- `id` = local FK (internal database key)
+- `uuid` = cross-database unique identifier (sync join key)
 
 ## Do This First Next Session
 
-1. **Fix Compute span resolver diverges** — `succ_of` takes only the first successor at diverge points, leaving platform tracks unresolved. All platform stations affected. DO NOT click Compute on approved models until fixed. File: `compute/compute_geometry.rb` `_resolve_spans`.
-2. **Add Compute confirmation gate** — Compute button overwrites approved lines.computed.json with no warning. Add a confirmation dialog when `approved_at` is set. File: `jpod_console.rb` `cmd_compute_template`.
-3. **Test animation start/stop** — Extensions > JPods > Animation menu, toolbar toggle. Bill reports toolbar toggle is sluggish. File: `main.rb`, `jpod_animator.rb`.
-4. **JPods Travel improvements** — User Position camera needs "Ready" button before animation starts. Trip selection needs back-navigation. Trip details page should be collapsible div. File: `ui/trip/index.html`.
-5. **Test Shift-click CP delete** — format mismatch fixed (`s014.0` vs `S014_cp0`) but untested in the field. File: `tools/connect_tool.rb`.
+1. **Update seeded reports** — remove accounting reports (Trial Balance, P&L, Balance Sheet, AP Aging), add operations reports (Campaign ROI, Margin Velocity, Pricing Analysis, Sales Trend)
+2. **Build expense entry UI** — spreadsheet-style fast entry for Payment type=disbursed
+3. **Wire ReportMenu into detail pages** — add `<ReportMenu>` to InvoiceDetail, OrderDetail, ProposalDetail toolbars
+4. **Wire FieldConfigBar into remaining list pages** — InvoiceList, OrderList, ItemList, etc. (same 4-line pattern as CustomerList)
+5. **Test DataBrowser visually** — dark/light, model picker, layouts, shift-click sidebar
+6. **Test print pages** — `/transactions/invoice/print/57` etc.
 
 ## Open Problems
 
-- Span resolver can't handle diverges — 8 platform tracks unresolved in station_parking, 6 in station_thru_dip, 3 lift tracks in station_line_end
-- Compute overwrites approved files with no guard — known-good lines.computed.json must be restored from git after accidental Compute
-- Save Network button reads from disk + Noelle validates — but iframe sync at Build time can still overwrite (morning merge fix in place but fragile)
-- NC_Asheville_4 has old s014 connections that need cleanup after station was moved
-- Allie MCP returns empty responses intermittently — ollama running but ask_allie gives no output
-
-## What Was Decided (and Why)
-
-- **Compute is MODEL ONLY, Build is NETWORK ONLY** — documented as top-level rule in both CLAUDE.md files. Confusing these scopes caused every cp_marker bug this session (180° rotations, 4.3m offsets).
-- **cp_marker: pure math from 4 points, no edges** — hub + 222mm direction + two 1750mm tips. Cross product of 222mm × tip_offset gives outbound/inbound. Tangent from hub-to-hub axis, not 222mm. 10-attempt TFTS arc documented.
-- **All tracks extend INWARD from cp_marker tip** — tip is outermost dangling end. gw_cp_in/out = 2500mm inward, junction (uturn) = 2500mm in, lead = 2500mm more. Previous code extended outward past the tip.
-- **One-way CCW (Rule 12)** — all guideways one-way, station circulation CCW. in/out swaps between CPs by design. Pass chains in lines.json are authoritative.
-- **Predecessors on every track** — all 4 template lines.json now have both successors and predecessors for every gw_ track. Predecessors enable merge-point validation.
-- **Sally parks only on gw_platform** — gw_platform_parking is approach track, not parking surface. sally.rb regex changed from `gw_platform(?:_parking)?` to `gw_platform\z`.
-- **Populate default 40%** — was 70%, too dense for demos. Dropdown selector: 40/20/10%, minimum 1 per station.
-
-## Files Changed This Session
-
-- `su_jpods/compute/compute_geometry.rb` — cp_marker pure math rewrite (definition-local, cross product, inward layout)
-- `su_jpods/compute/compute_writer.rb` — approved_at, test_results, source_files fields
-- `su_jpods/jpod_console.rb` — Save Network, Approve button, refresh callback, populate %, station list, merge-not-replace sync
-- `su_jpods/dialogs/console.html` — Save Network button, Approve button with visual feedback, populate % dropdown, Team Review checkbox
-- `su_jpods/tools/connect_tool.rb` — Shift-click format fix (s014.0 vs S014_cp0), draft_connections accessor
-- `su_jpods/sally/sally.rb` — park only on gw_platform
-- `su_jpods/station_tests.rb` — stamp_test_pass, check_approval, has_platform test selection
-- `su_jpods/noelle_v2/noelle_v2.rb` — eff_xf investigation (reverted)
-- `su_jpods/jpod_guideway_compat.rb` — populate_pct configurable
-- `su_jpods/animation/animation.rb` — random dispatch (sample not min_by), shuffle overflow neighbors
-- `su_jpods/CLAUDE.md` — Rule 12 (CCW), Model vs Network boundary, cp_marker geometry, track layout
-- `su_jpods/readmes/principles.md` — cp_marker section with diagram
-- All 4 template `lines.json` — predecessors added to every track
-- `Allie/CLAUDE.md` — Model vs Network, cp_marker, Rule 12, one-way CCW
-- `Allie/process/inbox/20260628T173500-tfts.md` — NoEdgesPureMath TFTS (10-attempt arc)
+- 11 models failed fake record creation (non-null constraints in seed_databrowser)
+- Model naming convention inconsistency (ouch-list WC3 item)
+- Allie MCP returns empty responses intermittently
+- 30 pre-existing wc3 test failures (from prior sessions)
+- Seeded reports include some accounting reports that should be removed per commerce-not-accounting rule
+- Print templates need real company header data (logo, address from Setting or org)
