@@ -84,6 +84,8 @@
 - [Model vs Network boundary](feedback_model_vs_network_boundary.md) — Model=template (lines.json, Compute). Network=placed instances (network.json, Build). Never cross. Compute is model-only. Build is network-only.
 - [One-way travel, CCW circulation](feedback_one_way_ccw.md) — All guideways one-way; station CCW; in/out swaps between CPs by design; pass chains in lines.json are authoritative; never infer from geometry
 - [Layout marketplace concept](project_layout_marketplace.md) — Users submit DataBrowser layouts for credit/cash; Alice manages adoption tracking; submitted via sync
+- [Shift-click CP delete broken](project_shift_click_delete_broken.md) — Handler doesn't fire; debug logging added; check CONSTRAIN_MODIFIER_MASK and active tool
+- [Network editing workflow](project_network_editing_workflow.md) — Connect by clicking CPs, delete by Shift-click, Refresh reads disk, Build rebuilds; Network Display sync fixes in progress
 - [Expense/disbursement UI](project_expense_ui.md) — Payment model handles AR+AP via type field; needs spreadsheet-style fast entry UI
 - [DataBrowser status](project_databrowser_status.md) — Two-pane dark/light DataBrowser at /admin-wb; replaces 40+ admin pages; 61 models seeded with initial layouts
 - [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in DataBrowser); Bill loves it; use instead of extra buttons
@@ -93,3 +95,6 @@
 - [WC3 UI architecture](project_wc3_ui_architecture.md) — Multiple React templates for business types; theme library via sync; contact↔org many-to-many; communications FK is truth, aspects are cache
 - [field_access Setting pattern](reference_field_access_settings.md) — One Setting per model for RBAC; query_scope restricts external users to their data; syncable policy; seeded for 61 models
 - [All CRUD through wcapi](feedback_all_crud_thru_wcapi.md) — No direct model access; every operation flows through wcapi which enforces RBAC, query scoping, field filtering, audit
+- [Daily start/close practice](feedback_daily_practice.md) — Start: check for existing functions before writing new. Close: audit overlap, consolidate, create test actions in weekly project
+- [WC2→WC3 gap analysis](project_wc2_gap_analysis.md) — 15 missing flows from wc2 flow charts; GAP-01 through GAP-15 in Alice queue; time capture via external API
+- [Desktop Hosting book](reference_desktop_hosting_book.md) — Bill's Wiley book; foundation for wc3; local-first, relationship-aware, published-based; "put communications at point of action"
