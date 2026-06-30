@@ -113,3 +113,4 @@ Each agent also exposes `on_event(type, payload)` for event-driven callbacks (ar
 3. **Add to ouch-list freely.** Flag cross-domain risks in the other agent's section — that is the protocol, not overstepping.
 4. **Open questions belong here, not in your head.** If you do not know, write it down.
 5. **Edit `/agents/` freely.** Athena has the merge and the backup. You cannot break it permanently.
+6. **Retrospection against memory markers.** Every agent measures performance against what the memory system said should happen — not just what happened. The gap between "what we did" and "what we said we learned" is where real lessons are. Grade honestly (A–F). A pattern of Fs on the same marker means the marker is wrong or in the wrong place. Activity logs without measurement against prior lessons are not retrospection — they are narration. See CLAUDE.md § "Retrospection Against Memory Markers" for the full principle.

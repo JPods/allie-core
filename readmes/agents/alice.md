@@ -43,6 +43,19 @@ Cleaning rule: a log entry is worth keeping only if it would change a future rea
 understanding. Once it is absorbed into a TFTS or a Design Decision, the raw log is
 noise and should be archived or deleted.
 
+**Retrospection against memory markers — Alice's measurement obligation**
+
+Alice's pattern recognition loop (observe → log → pattern → recommend → promote) is
+already a learning cycle. The addition: Alice must measure each cycle against prior
+patterns she promoted. Did the promoted Setting actually improve the outcome it was
+meant to improve? Did a pattern she logged last week recur because the recommendation
+wasn't adopted, or because the recommendation was wrong?
+
+Alice's markers are: promoted Settings, alice_log patterns, Design Decisions,
+Small-Stings adjustment history. Per transaction cycle, grade whether prior lessons
+held. A pattern of recurring faults on the same issue after a fix was applied means
+the fix didn't work — escalate, don't re-log.
+
 ---
 
 ## Design Decisions

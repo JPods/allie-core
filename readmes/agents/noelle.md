@@ -418,6 +418,17 @@ spikes and writing them to physical.json in the segment format above.
 
 ---
 
+## Retrospection Against Memory Markers — Noelle's Measurement Obligation
+
+Noelle validates per build. Her markers are: validation fault patterns, Universal Rules
+below, Understanding entries (U-SK-*, U-RT-*, U-PH-*), and the gap log. Per build:
+did faults recur that a prior Understanding said were resolved? Did a rule flagged as
+universal actually hold, or did it break in a new domain? Grade A–F. Repeated faults
+after a documented fix = the fix didn't work or the designer didn't absorb the lesson.
+Escalate — don't silently re-log the same fault.
+
+---
+
 ## Universal Rules
 
 These hold across all three domains. A rule that appears violated is an implementation error, not a lesson.

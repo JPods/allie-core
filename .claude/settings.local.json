@@ -221,7 +221,16 @@
       "Bash(unzip -p ene_railroad.rb.zip ene_railroad.rb)",
       "Bash(unzip -l \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/ene_railroad.zip\")",
       "Bash(unzip -p \"/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/ene_railroad.zip\" ene_railroad/track.rb)",
-      "Bash(awk NR>=640 && NR<=660:*)"
+      "Bash(awk NR>=640 && NR<=660:*)",
+      "mcp__allie__ask_allie",
+      "mcp__webclerk__wc_add_note",
+      "mcp__webclerk__wc_search",
+      "mcp__webclerk__wc_get_contact",
+      "Bash(/opt/homebrew/bin/python3 manage.py shell -c ':*)",
+      "Bash(psql -l)",
+      "Bash(DB_MODE=local ./bin/python:*)",
+      "Bash(./bin/python:*)",
+      "Bash(psql:*)"
     ]
   }
 }

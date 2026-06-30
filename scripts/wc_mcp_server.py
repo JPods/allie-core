@@ -49,10 +49,10 @@ WC_BASE = "http://localhost:8000"
 # ── Auth ───────────────────────────────────────────────────────────────────────
 
 def _token() -> str:
-    """Get a valid Bearer token for the 'allie' agent."""
+    """Get a valid Bearer token for the 'claude' agent."""
     try:
         from allie_wc_token import get_token
-        return get_token("allie")
+        return get_token("claude")
     except Exception as e:
         raise RuntimeError(f"Cannot get WebClerk token: {e}. "
                            "Run allie_wc_token.py --setup to configure credentials.")
@@ -238,7 +238,7 @@ def wc_add_note(
         for_agent: Target agent — 'allie', 'alice', or 'athena' (optional).
     """
     try:
-        payload: dict = {"category": category, "role": role, "body": body, "details": {}}
+        payload: dict = {"category": category, "role": role, "name": body, "details": {}}
         if for_agent:
             payload["details"]["for"] = for_agent
         result = _post("/wcapi/ai/note/", payload)

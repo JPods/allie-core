@@ -286,9 +286,9 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Enforced at:**
   1. ✓ Animation — topology pruning in jpod_vehicle_anim.rb (done)
   2. ✓ Show Track — gw_out_N marked orange/dead-end in jpod_animator.rb (done)
-  3. ✗ Compute v2 — ChainBuilder must exclude gw_out_N from pass chains when gw_cp_out_N is unconnected (TODO)
-- **Impact:** Without #3, Compute builds pass chains through dead CPs. Animation catches it but the chain data is wrong.
+  3. ✓ CPB barriers — ChainBuilder excludes gw_out_N from pass chains when gw_cp_out_N is unconnected (done 2026-06-25)
 - **Domain:** SU, Physical, Ground
+- **Status:** Resolved 2026-06-25
 - **Added by:** Claude Code + Bill
 
 ### BUILD PROFILE — Sharp Z changes vs long-distance smoothing (2026-06-23)
@@ -312,4 +312,14 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Domain:** SU
 - **Severity:** High
 - **Status:** Must Fix — blocks sustained animation testing
+- **Added by:** Bill + Claude Code
+
+### WC3 — Model naming convention: singular model_name vs plural display (2026-06-28)
+- **Problem:** WebClerk3 uses `model_name` (singular, snake_case) as the standard key for API calls, Settings, and DataBrowser. But sidebar navigation, URLs, and user-facing labels sometimes use plurals or different casing. This creates confusion when model names don't match what users expect in the DataBrowser select list.
+- **Example:** API returns `accounts.TaxJurisdiction` but sidebar says "Tax Jurisdiction" and URL is `/accounts/tax-jurisdiction/list`. DataBrowser shows the raw model_name.
+- **Risk:** Users can't find models they're looking for. Field config Settings saved under one name won't load under another.
+- **Mitigation:** Stick with `model_name` as the canonical key everywhere. Add display labels from model registry for user-facing UI. Never use plurals or URL slugs as keys.
+- **Domain:** WC3
+- **Severity:** Low
+- **Status:** Watching
 - **Added by:** Bill + Claude Code

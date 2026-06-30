@@ -326,6 +326,34 @@ or equivalent setup lambda instead — that is the only place initial state surv
 
 ---
 
+## Memory Without Measurement — 2026-06-27
+
+**Cost:** Claude Code did not read Allie's facets or recall files at session start,
+despite the rule existing in CLAUDE.md, in memory entries, and in the agent README.
+The session succeeded anyway — the problem (database scramble) was diagnosable from
+first principles. But if the problem had required cross-domain context that only Allie
+held, the session would have failed. The memory system had the right rules. Nobody
+checked whether they were being followed.
+
+**What was hard to see:** The rules existed. The memory entries existed. The handoff
+said what to do. But having rules is not the same as measuring compliance. The team
+had memory without retrospection-against-markers — which is storage, not learning.
+Activity logs (what we did) masqueraded as retrospection (what we did vs. what we
+said we'd do). The gap was invisible because the retrospections read like they were
+thorough. They listed actions. They just never graded those actions against the
+markers that said what should have been done.
+
+**The rule it produced:** Every retrospection must measure performance against memory
+markers. Grade A–F per marker. A pattern of Fs on the same marker means the marker
+is wrong or the team is ignoring it. Both are actionable. Activity logs without
+grades are not retrospection.
+
+**Where the rule lives:** `CLAUDE.md` § "Retrospection Against Memory Markers";
+`readmes/wisdom/retrospection-against-markers.md`; `readmes/agents/README.md`
+Cross-Cutting Rule 6; agent files for Allie, Alice, Noelle.
+
+---
+
 ## [Scars not yet paid — watching]
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |
