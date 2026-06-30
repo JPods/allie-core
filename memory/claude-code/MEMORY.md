@@ -91,3 +91,5 @@
 - [WebClerk is commerce not accounting](feedback_wc3_not_accounting.md) — WC3 produces GL journal entries; accounting programs consume them; never build P&L/Balance Sheet; AR collection is sales, AP is accounting
 - [WC3 reporting — campaigns + margin velocity](feedback_wc3_reporting_focus.md) — Track campaign ROI (source → order → cost to acquire); inventory by margin velocity (margin × turns ÷ carry cost) not just counts
 - [WC3 UI architecture](project_wc3_ui_architecture.md) — Multiple React templates for business types; theme library via sync; contact↔org many-to-many; communications FK is truth, aspects are cache
+- [field_access Setting pattern](reference_field_access_settings.md) — One Setting per model for RBAC; query_scope restricts external users to their data; syncable policy; seeded for 61 models
+- [All CRUD through wcapi](feedback_all_crud_thru_wcapi.md) — No direct model access; every operation flows through wcapi which enforces RBAC, query scoping, field filtering, audit
