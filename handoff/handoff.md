@@ -1,75 +1,65 @@
-# Handoff — 2026-06-29 (FINAL — massive 2-day WC3 session)
+# Handoff — 2026-07-01
 
-## Where We Left Off
+## Session Summary
 
-Built 5 operational service modules (order production, inventory FIFO, serial lifecycle, backorder management, campaign ROI), wired them into wcapi/manage (24 new actions), created ManageActionPanel React component, and wired it into OrderDetail, InvoiceDetail, PurchaseDetail, ProposalDetail. Also built DataBrowser, org pages, print pages, field_access RBAC, field_behaviors, coaching system, training documents, flow charts.
+Massive wc3 build session (June 28 → July 1). Commerce services, AI infrastructure, codebase documentation, and design decisions.
 
-## Do This First Next Session
+## Core Principle Established
 
-1. **Start Django + React dev servers** — test ManageActionPanel on any order detail page
-2. **Test the 5 operational flows** with real data:
-   - Order: Create Work Order, Partial Ship, Complete
-   - PO: Receive Goods (creates inventory layer), Create Serial
-   - Invoice: Consume Inventory (FIFO), Assign Serial, Post GL
-   - Campaign: Create, link to transaction, calculate ROI
-3. **Run pytest** — verify no regressions from Payment migration + new services
-4. **Test DataBrowser** — dark/light, model picker, field behaviors, form layout editor
+"We cannot anticipate all user needs. Coaching allows creation with disciplined review." — Bill
 
-## Files Created/Modified This Session
+Applied everywhere: Alice doesn't block, she coaches. Users create what they need. Alice watches patterns, enforces standards through observation, promotes what works, flags what drifts. The builder story: don't design sidewalks — watch where people walk, pave those paths.
 
-### Backend Services (webClerk3/)
-- `apps/transactions/services/order_production.py` — spawn WO, partial ship, complete order
-- `apps/transactions/services/backorder.py` — create/fulfill/get/summarize backorders
-- `apps/products/services/inventory_stacks.py` — receive, consume FIFO/LIFO, get summary
-- `apps/products/services/serial_lifecycle.py` — create on receive, assign on ship, return, history
-- `apps/transactions/services/campaign_roi.py` — create, spend, calculate ROI, link transactions
-- `apps/core/views/manage_view.py` — 24 new actions in _ACTION_DISPATCH
-- `apps/transactions/models/payment.py` — type (received/disbursed) + purchase FK
-- `apps/transactions/migrations/0007_payment_add_type_and_purchase.py`
-- `apps/core/management/commands/seed_field_access.py` — 61 models × 8 roles + field_behaviors
-- `apps/core/management/commands/seed_databrowser.py` — 61 layouts + 31 fake records
-- `apps/core/management/commands/seed_reports.py` — 59 reports across 15 models
-- `apps/core/management/commands/seed_coaching.py` — 9 coaching + 3 docs + 8 onboarding actions
-- `apps/core/choices.py` — added field_access, seed, alice_coaching, campaign purposes
+## What Was Built
 
-### React Frontend (React2025/src/)
-- `hooks/useDataBrowser.ts` — all DataBrowser state/data management (440 lines)
-- `hooks/useListFieldConfig.ts` — column visibility/ordering for list pages
-- `components/common/BehaviorField.tsx` — field renderer based on field_behaviors (177 lines)
-- `components/common/ManageActionPanel.tsx` — operations panel for detail pages (305 lines)
-- `components/common/FieldConfigBar.tsx` — collapsible column toggle bar
-- `components/common/DetailLayoutDialog.tsx` — form layout editor dialog
-- `components/common/ReportMenu.tsx` — report selector dropdown
-- `pages/admin/AdminWorkbench.tsx` — DataBrowser (332 lines, refactored)
-- `apps/orgs/orgConfig.ts` — per-org-type config
-- `apps/orgs/components/OrgPage.tsx` — shared org list+detail
-- `apps/orgs/components/CommunicationsPanel.tsx` — inline email/phone/address/domain
-- `apps/orgs/pages/*.tsx` — 5 one-line org page wrappers
-- `apps/transactions/print/*.tsx` — Invoice, Order, Proposal, QA print pages
-- `apps/transactions/models/order/pages/OrderDetail.tsx` — added ManageActionPanel
-- `apps/transactions/models/invoice/pages/InvoiceDetail.tsx` — added ManageActionPanel
-- `apps/transactions/models/purchase/pages/PurchaseDetail.tsx` — added ManageActionPanel
-- `apps/transactions/models/proposal/pages/ProposalDetail.tsx` — added ManageActionPanel
-- `routes/Router.tsx` — print routes, org routes, admin redirects
-- `routes/protectedRoutesConfig.tsx` — same cleanup
-- `pages/wrapperPage.ts` — cleaned imports
-- `layout/AppSidebar.tsx` — direct DataBrowser links, shift-click power user
+### Commerce (12 services, 50+ manage actions)
+- GL journalization (line-level, wc2 pattern), commission system (level_factors, splits, GL accrual chain), pending inventory (CoreModel), pending payment (one-path), credit check (warnings + audit trail), vendor scorecard, suggest_purchase, campaign CAC, manufacturer rebate, MAP enforcement, PDF reports (8 templates), commission auto-accrual on journalize
 
-### Readmes (webClerk3/readmes/)
-- `claude-session-recovery.md` — post-compaction recovery document
-- `wcapi-query-scoping.md` — RBAC query scoping documentation
-- `databrowser-initial-layouts.md` — layout design principles
-- `daily-development-practice.md` — start/close checklist, reusable components
-- `alice-coaching.md` — coaching system architecture
+### AI Infrastructure
+- 3 ChromaDB vector stores (Alice 10,808 / Allie 2,291 / Claude 1,153 chunks)
+- PostgreSQL `allie` database (12 tables — sessions, memory, agent logs, messages)
+- Agent message bus + WC3 bridge
+- Session start script + allie-db MCP server (available next session)
+- Model router (qwen2.5:72b downloading to 5TB)
+- Alice pattern detection (7 detectors, 4-hour cron, code standards)
+- User behavior tracking (navigation, search, preset promotion, pruning)
+- AliceContext + AliceHintBar + GetHelpDialog (React)
+- Django signals → agent bus (5 transaction types)
+- Alice models: AliceObservation, AlicePreset, AliceCoachingLog
+- Code standards enforcement (7 anti-patterns, scheduled + on-demand + git hook)
 
-### Database Records Created
-- 61 field_access Settings (RBAC + field_behaviors + formatting)
-- 61 workbench_fields Settings (DataBrowser layouts)
-- 59 Report records (print/email/export per model)
-- 9 alice_coaching Settings
-- 17 Document records (6 training + 8 flow charts + 3 system guides)
-- 8 onboarding Action records
-- 31 fake "zz" records
-- 15 GAP action records (#367-381)
-- 12 W27 test action records (#343-354)
-- 5 BUILD action records (#385-389)
+### Documentation (531 records)
+- 64 field docs (wc2 cross-referenced), 68 React docs, 160 v20 form assessments
+- 156 v19 table forms, 56 method/feature assessments, 8 training docs, 19 reports, 8 action records
+
+### DataBrowser
+- Fixed model switching race condition, removed duplicate buttons, consolidated toolbars
+- User prefs → contact.metadata, data-wc attributes everywhere, alice_guess + alphabetical layouts (62 models)
+- Fixed workbench settings loading bug (parent_model not model_name)
+
+### Data Model
+- commission JSONField on all 12 transaction tables
+- vendor_id + manufacturer_id FKs on Item
+- AliceObservation, AlicePreset, AliceCoachingLog tables
+
+## 16 Design Decisions Answered
+1-2: conditions=legal docs w/ content_hash; terms varchar+FK both stay
+3-4: priority=integer 1-5; finance schema=Setting
+5-6: commission at earliest chain point; per-line (price levels differ)
+7-8: org.data=freeform; org.relations=freeform (parent/vendor/rep common)
+9-10: contact.other_id=delete; specification_id=active
+11-12: warranty JSON defined; tax=MCP server pointer
+13-14: status+kanban both stay; DocumentIndex=qqq_
+15-16: specialty pages=Dashboards; migrate all lists to DataGrid
+
+## In Progress
+- DataGrid migration of 82 list pages + LinesCard (agents running)
+- qwen2.5:72b model download
+- wc2 scrub agents completing
+
+## Next Session Priority
+1. **Document conversion chain** — Proposal→Order→Invoice→Payment (THE #1 gap)
+2. **Pricing engine** — price matrix, level resolution, qty breaks
+3. **Inventory Dashboard** — receive/adjust/warehouse/reconcile consolidated
+4. Test the services built tonight against real transactions
+5. Walk through the wc2 flow charts with Allie and Alice
