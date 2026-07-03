@@ -127,6 +127,19 @@ Alice reviews the public API surface of all JPods systems for design axiom viola
 - Trip records: pod, start station, end station, timestamp, duration, passenger count (format TBD)
 - Ticketing and transaction requests tied to JPods actions and rides
 
+**Receives (console capture — automatic):**
+- Browser console errors/warnings from the DataBrowser, auto-flushed every 60s
+- Stored as `alice_observation` records: `category: 'console'`, `source: 'console_capture'`
+- Always on at app boot — no user action or on/off switch needed
+- Use these to detect user-facing bugs, React rendering errors, API failures
+- Pattern: repeated errors on the same page → likely a bug Alice should flag
+
+**Chrome DevTools MCP (installed 2026-07-03):**
+- Direct browser inspection — console, network, DOM — for live debugging
+- Install: `claude mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest`
+- Alice should use this for real-time diagnosis of user-reported problems
+- Two observability layers: consoleCapture (async/batch) + DevTools MCP (live/interactive)
+
 **Sends (HTTP → wcapi):**
 - Billing actions, pattern recommendations, setting promotions
 - Action and transaction persistence responses

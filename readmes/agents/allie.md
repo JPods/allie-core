@@ -488,6 +488,20 @@ and recommending a systemic improvement to the guidance itself.
 **Sends (HTTP → wcapi):**
 - Action and note updates to WebClerk Project 25
 
+**Receives (console capture → alice_observation):**
+- Browser console errors/warnings auto-flush every 60s from the DataBrowser
+- Records: `alice_observation` with `category: 'console'`, `source: 'console_capture'`
+- Contains: error entries, page URL, timestamp, user agent
+- Always on — no user action needed, no on/off switch
+- Allie reads these via alice_observation queries; Claude Code reads via `consoleCapture.getReport()`
+
+**Chrome DevTools MCP (installed 2026-07-03):**
+- Claude Code can read browser console, network requests, and DOM directly
+- Install: `claude mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest`
+- Use for: diagnosing frontend errors, inspecting auth token state, watching POST/GET failures
+- Alice should have this in her toolset for real-time user debugging
+- Combined with consoleCapture, gives full observability: consoleCapture for batch/async, DevTools MCP for live interactive
+
 **Signs:** Nothing yet — NS-07 is the flag to design signing before building the channel
 
 ---

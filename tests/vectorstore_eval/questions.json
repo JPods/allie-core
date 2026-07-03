@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "description": "Blind evaluation questions for vector store quality scoring. Written by Bill, NOT indexed by any store. Each question has an expected_source (the file/chunk that SHOULD be top result) and expected_keywords (terms that MUST appear in a correct answer).",
+  "instructions_for_bill": "Add your own questions below. Think: what would a new WC3 user ask? What would a customer ask Alice? The store has never seen these questions — that's the point.",
+  "questions": [
+    {
+      "id": "Q01",
+      "store": "alice",
+      "question": "How do I apply a payment to an invoice?",
+      "expected_source": "test_payment_services.py",
+      "expected_keywords": ["apply", "payment", "invoice", "totals.received", "balance"],
+      "category": "billing"
+    },
+    {
+      "id": "Q02",
+      "store": "alice",
+      "question": "What happens to inventory when I ship an order?",
+      "expected_source": "inventory_flow_testing.md",
+      "expected_keywords": ["on_hand", "on_so", "invoice", "decreases"],
+      "category": "inventory"
+    },
+    {
+      "id": "Q03",
+      "store": "alice",
+      "question": "How do I set up payment terms like Net 30?",
+      "expected_source": "test_ledger.py",
+      "expected_keywords": ["term", "N30", "ledger", "due"],
+      "category": "billing"
+    },
+    {
+      "id": "Q04",
+      "store": "alice",
+      "question": "What is the formula for available inventory?",
+      "expected_source": "inventory_flow_testing.md",
+      "expected_keywords": ["on_hand", "on_so", "on_po", "on_wo", "available"],
+      "category": "inventory"
+    },
+    {
+      "id": "Q05",
+      "store": "alice",
+      "question": "How do I convert an order to an invoice?",
+      "expected_source": "order_to_invoice",
+      "expected_keywords": ["transfer", "order", "invoice", "lines"],
+      "category": "commerce_flow"
+    },
+    {
+      "id": "Q06",
+      "store": "alice",
+      "question": "What is Desktop Hosting?",
+      "expected_source": "Desktop_Hosting_All.pdf",
+      "expected_keywords": ["unattended", "communications", "published", "relationship"],
+      "category": "foundation"
+    },
+    {
+      "id": "Q07",
+      "store": "alice",
+      "question": "How does the GL posting work for an invoice?",
+      "expected_source": "test_gl_posting.py",
+      "expected_keywords": ["debit", "credit", "1200", "4000", "AR", "revenue"],
+      "category": "billing"
+    },
+    {
+      "id": "Q08",
+      "store": "alice",
+      "question": "What is margin erosion?",
+      "expected_source": "test_erosion.py",
+      "expected_keywords": ["erosion", "margin", "proposal", "order", "invoice"],
+      "category": "billing"
+    },
+    {
+      "id": "Q09",
+      "store": "alice",
+      "question": "How do reservations work with inventory stacks?",
+      "expected_source": "test_inventory_reservations.py",
+      "expected_keywords": ["reserve", "available", "commit", "expire"],
+      "category": "inventory"
+    },
+    {
+      "id": "Q10",
+      "store": "alice",
+      "question": "What is the Contact model and how does it relate to Customer?",
+      "expected_source": "contact",
+      "expected_keywords": ["contact", "customer", "vendor", "role"],
+      "category": "models"
+    },
+    {
+      "id": "Q11",
+      "store": "allie",
+      "question": "What is the 500mm gap hallucination in SketchUp?",
+      "expected_source": "500mm",
+      "expected_keywords": ["edge", "centerline", "250mm", "track", "reversal"],
+      "category": "sketchup"
+    },
+    {
+      "id": "Q12",
+      "store": "allie",
+      "question": "How does Sally handle vehicle parking at stations?",
+      "expected_source": "sally",
+      "expected_keywords": ["slot", "conveyor", "parking", "placement"],
+      "category": "sketchup"
+    },
+    {
+      "id": "Q13",
+      "store": "allie",
+      "question": "What is the JPods color standard?",
+      "expected_source": "color",
+      "expected_keywords": ["red", "inbound", "blue", "outbound"],
+      "category": "jpods"
+    },
+    {
+      "id": "Q14",
+      "store": "allie",
+      "question": "What is the difference between Model and Network in SketchUp?",
+      "expected_source": "model",
+      "expected_keywords": ["template", "network", "lines.json", "network.json"],
+      "category": "sketchup"
+    },
+    {
+      "id": "Q15",
+      "store": "alice",
+      "question": "What tools does Ingrid use for data conversion?",
+      "expected_source": "alice-toolkit.md",
+      "expected_keywords": ["pandas", "chardet", "phonenumbers", "ingrid"],
+      "category": "tools"
+    }
+  ]
+}

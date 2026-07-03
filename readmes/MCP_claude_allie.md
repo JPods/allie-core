@@ -208,6 +208,35 @@ the nightly run handles archival.
 
 ---
 
+## All MCP Servers (as of 2026-07-03)
+
+| Server | Command | Purpose | Scope |
+|--------|---------|---------|-------|
+| `allie` | `python3 ~/Allie/scripts/allie-mcp-server.py` | Allie coordination — ask, teach, recall, flag | user |
+| `webclerk` | `python ~/Allie/scripts/wc_mcp_server.py` | WC3 API bridge — search, price, stations, notes | user |
+| `allie-db` | `python ~/Allie/scripts/allie_db_mcp.py` | Allie PostgreSQL database (sessions, memory, logs) | user |
+| `commerce-db` | `python ~/Allie/scripts/commerce_db_mcp.py` | WC3 commerce_expert database | user |
+| `chrome-devtools` | `npx -y chrome-devtools-mcp@latest` | Browser console, network, DOM inspection | user |
+| `claude.ai Gmail` | Google hosted | Gmail read/write/label | claude.ai |
+| `claude.ai Google Calendar` | Google hosted | Calendar events | claude.ai |
+| `claude.ai Google Drive` | Google hosted | Drive files (needs auth) | claude.ai |
+
+### Install chrome-devtools (user scope — available in all projects)
+
+```bash
+claude mcp add -s user chrome-devtools -- npx -y chrome-devtools-mcp@latest
+```
+
+### Verify all servers
+
+```bash
+claude mcp list
+```
+
+All user-scope servers should show `✓ Connected` at Claude Code startup.
+
+---
+
 ## Key Files
 
 | File | Purpose |
