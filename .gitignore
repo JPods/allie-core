@@ -69,3 +69,10 @@ __pycache__/
 
 # Backup snapshots (large; Athena keeps these locally)
 **/agents_backup/
+
+# Large files — too big for GitHub
+process/inbox/*.log
+.chroma_db/*.sqlite3
+.chroma_db_claude/*.sqlite3
+.chroma_db_alice/*.sqlite3
+
