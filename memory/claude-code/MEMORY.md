@@ -98,3 +98,9 @@
 - [Daily start/close practice](feedback_daily_practice.md) — Start: check for existing functions before writing new. Close: audit overlap, consolidate, create test actions in weekly project
 - [WC2→WC3 gap analysis](project_wc2_gap_analysis.md) — 15 missing flows from wc2 flow charts; GAP-01 through GAP-15 in Alice queue; time capture via external API
 - [Desktop Hosting book](reference_desktop_hosting_book.md) — Bill's Wiley book; foundation for wc3; local-first, relationship-aware, published-based; "put communications at point of action"
+- [data→config rename](project_data_to_config_rename.md) — 16 models renamed data→config; DB+Python+React done; eliminates wcapi data wrapper collision
+- [json_field_ops](reference_json_field_ops.md) — apply_json_op() for surgical JSON updates (upsert/merge/append/remove); works in shell, save_view wiring pending
+- [Alice infrastructure](reference_alice_infrastructure.md) — Vector store (4521 chunks), MCP server (5 tools), quiz engine (28 questions), observation pipeline
+- [Chrome DevTools MCP](reference_chrome_debug.md) — Chrome 150 requires --user-data-dir; Chrome Debug app; firewall allow; readme at readmes/46
+- [WC3 flow charts](reference_wc3_flowcharts.md) — 12 Graphviz DOT+PDF charts at readmes/flowcharts/; master, inventory, payment, serials, project, QA, action, contact, signin
+- [Open source tools](reference_open_source_tools.md) — 20 tools for Alice+Ingrid; Graphviz, D2, matplotlib, pandas, phonenumbers, etc; Document records TOOL-*
