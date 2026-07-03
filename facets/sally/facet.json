@@ -25,33 +25,6 @@
   "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations.",
   "observations": [
     {
-      "ts": "2026-06-26T22:54:29Z",
-      "observation": "s003 ps1 high turnover: 30 arrivals",
-      "data": {
-        "station": "s003",
-        "slot": 1,
-        "count": 30
-      }
-    },
-    {
-      "ts": "2026-06-26T22:55:17Z",
-      "observation": "s001 ps1 high turnover: 30 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 1,
-        "count": 30
-      }
-    },
-    {
-      "ts": "2026-06-26T22:57:16Z",
-      "observation": "s004 ps3 high turnover: 50 arrivals",
-      "data": {
-        "station": "s004",
-        "slot": 3,
-        "count": 50
-      }
-    },
-    {
       "ts": "2026-06-26T22:57:42Z",
       "observation": "s002 ps1 high turnover: 40 arrivals",
       "data": {
@@ -920,6 +893,33 @@
       "observation": "s012 ps1 high turnover: 10 arrivals",
       "data": {
         "station": "s012",
+        "slot": 1,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-02T17:39:02Z",
+      "observation": "s004 ps1 high turnover: 10 arrivals",
+      "data": {
+        "station": "s004",
+        "slot": 1,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-02T17:42:13Z",
+      "observation": "s001 ps1 high turnover: 10 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 1,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-02T17:43:31Z",
+      "observation": "s011 ps1 high turnover: 10 arrivals",
+      "data": {
+        "station": "s011",
         "slot": 1,
         "count": 10
       }
