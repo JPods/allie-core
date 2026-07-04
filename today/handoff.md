@@ -1,59 +1,53 @@
-# Handoff — 2026-07-03
+# Handoff — 2026-07-04
 
-## Where We Left Off
-Renamed `model.data` → `model.config` on 16 models (DB, Python, React all done). Built `json_field_ops.py` for surgical JSON updates — works in Django shell but save_view.py field loop doesn't route dot-path keys to it via the API yet. Layout save changed from Pending to direct Setting save with retry-on-lock. Alice fully operational: vector store (4,656 chunks), MCP server (5 tools), quiz engine (28 questions), observation pipeline. The save reaches the backend and returns 200, but the **merge logic is wrong**: it replaces the entire `Setting.data` instead of merging the new named view into `data.views[]`. The "BillTest" view saved via curl proved the backend CAN persist views — the problem is the React `persistSetting` sends the full `data` object which overwrites existing views. Fix needed: either merge on the backend (preferred — Setting save should merge `data.views` not replace) or have the frontend fetch current views before saving.
+## What Was Done This Session (2026-07-03/04)
 
-## Do This First Next Session
-1. **Wire dot-path json_field_ops through save_view** — `apply_json_op` works perfectly in Django shell (proven: upsert, merge, append, remove all work). But save_view.py's field loop skips dot-path keys like `config.views` when they arrive via the API. The field IS in the `data.items()` loop and the `'.' in field` check at line 653 should route it to `apply_json_op`, but something earlier in the loop (lines 570-593) may be skipping or consuming it. Debug: add a log at line 653 to confirm it reaches the branch. The `data→config` rename is DONE (DB columns, model fields, Python refs, React refs all updated).
-2. **Clean up stale Pending records** — 3 unprocessed Pending records (ids 245-247) with `purpose=layout_change` and `dt_processed=0`. Mark them processed or delete — they're from the old Pending-based flow that never worked (Celery tasks in `tasks.py` had no `@shared_task` decorators).
-3. **Reseed alice_guess + alphabetical views** — The BillTest curl test overwrote them. Run `seed_alice_layouts.py` to restore default views for contact model.
-4. **Test alice_observation auto-flush** — Console capture should now save to `alice_observations` table (model registered, alias map added). Verify in browser — should see no more 400 errors in network tab.
-5. **Register Alice MCP server** — Built but needs Claude Code restart to activate. After restart, `ask_alice`, `alice_search`, `alice_observe`, `alice_recall`, `alice_quiz` tools available.
+### Mining (3 sweeps)
+- Sweep 1: WC2 features (38 method clusters, 20 Vue2020 routes, 19 TableForm workflows, 10 WC2 class patterns, 40+ 4D example projects)
+- Sweep 2: Gap analysis (WC3 current vs mined patterns — 6 high, 6 medium priority gaps)
+- Sweep 3: Staged implementation plan (5 stages, 35 items)
+- Documents: `webClerk3/readmes/topics/wc2/wc2-harvest-matrix.md` + `wc2-harvest-plan.md`
 
-## Open Problems
-- **Layout save replaces instead of merging** — views get wiped when saving a new named view. Core UX blocker for DataBrowser.
-- **Chrome Debug app** — works from terminal but `open` via Finder may not pass args reliably. Shell alias `chrome-debug` works. Requires `--user-data-dir` (Chrome 150 requirement) which means separate profile from normal Chrome.
-- **Celery tasks have no decorators** — All functions in `apps/ai_assistant/tasks.py` are plain Python, not `@shared_task`. Celery Beat schedules them but they never execute. Not blocking since we moved to direct save, but the tasks file needs cleanup.
-- **`save_hooks.py` had indentation error** — Fixed line 75, but this file should be audited for other issues.
+### DataBrowser Improvements (7 items + CSS migration)
+1. doSafeSelect after delete — select adjacent record
+2. Reset Layout button — loads initial/alice_guess view
+3. Operator vocabulary — `filterOperators.ts` + `filter_operators.py` (single source of truth)
+4. Widget type schema — `widgetTypes.ts` (16 types with defaults)
+5. typeHint override on FieldSpec
+6. Client-side validation — `validateRecord.ts` accumulates all errors
+7. Full CSS migration — zero inline styles in AdminWorkbench.tsx, all via CSS custom properties
 
-## What Was Decided (and Why)
-- **Direct Setting save, not Pending** — Pending pattern requires Celery, and the tasks had no decorators. Direct save is simpler and immediate. Audit trail via AliceObservation instead of Pending records.
-- **Alice vector store separate from Allie/Claude** — Three stores, three domains. Alice indexes WC3 code + docs + legacy PDFs (3,977 → 4,521 chunks). No overlap confusion.
-- **Alice MCP server** — Separate from Allie's MCP. Alice does commerce (search, observe, recall, quiz). Allie does cross-domain (ask, teach, recall, flag). Different knowledge, different tools.
-- **Chrome Debug requires `--user-data-dir`** — Chrome 150 won't open debug port without it. Means separate profile. Acceptable for dev.
-- **wcapi_registry `_ALIAS_MAP`** — Multi-word Django model names (e.g., `aliceobservation`) need underscore aliases (`alice_observation`) so wcapi resolves them. Added 30+ entries covering all compound model names.
-- **`models_alice.py` imported in `models.py`** — Django only discovers models in `models.py` or `models/__init__.py`. Without the import, AliceObservation/AlicePreset/AliceCoachingLog were invisible to Django's app registry.
+### Field Widget Suite (16 components)
+- `React2025/src/components/fields/` — standalone, reusable, point at any field
+- `getWidget(typeName)` registry + `renderField()` dynamic entry point
+- The field_access Setting IS the instruction set — Alice controls rendering
 
-## Files Changed This Session
+### BOM System (operational)
+- 5 new services: expand_tree, propagate_cost_up, consume_bom, find_top_level_assemblies, calc_net_build_qty
+- 4 new API endpoints
+- DataGrid tree mode (treeColumn + levelField + childFlag)
+- Live example: BB200 Baseball Kit multi-level BOM working
+- Readme: `webClerk3/apps/products/readmes/bom_operations.md`
 
-### Allie
-- `scripts/alice-vectorstore.py` — NEW: Alice's vector store (index, search, stats, PDF support)
-- `scripts/alice-mcp-server.py` — NEW: Alice MCP server (ask, search, observe, recall, quiz)
-- `scripts/update_field_access.py` — Field access update script (from July 2)
-- `readmes/46-chrome-devtools-mcp.md` — NEW: Chrome DevTools MCP setup guide
-- `readmes/flowcharts/wc3-*.dot` — NEW: 12 WC3 flow charts (DOT source)
-- `readmes/flowcharts/wc3-*.pdf` — NEW: 12 WC3 flow charts (rendered PDF)
-- `.chroma_db_alice/` — NEW: Alice's ChromaDB store (4,521 chunks)
-- `exchange/alice-conversation.jsonl` — NEW: Alice MCP exchange log
+### Serial Number Services (built)
+- 12 operations in `serial_services.py`
+- Status lifecycle: available→issued→returned | available→referenced
+- Warranty at issue time, search by customer/vendor, full audit log
 
-### WC3 (webClerk3)
-- `apps/ai_assistant/models.py` — Added import of models_alice (line 7)
-- `apps/core/services/wcapi_registry.py` — Added `_ALIAS_MAP` with 30+ compound model name aliases
-- `apps/core/constants/save_hooks.py` — Fixed indentation error line 75
-- `apps/core/views/save_view.py` — Added pre-save debug logging for Setting
-- `readmes/topics/ai/alice-toolkit.md` — NEW: Complete tool registry readme
-- `readmes/topics/ai/alice-observation-setup.md` — NEW: Alice observation pipeline guide
-- `readmes/flowcharts/` — NEW: 12 flow chart DOT + PDF files
+### Architecture Decisions
+- Spawn pattern: desktop=window.open, mobile=tabs, driven by spawn_links in field_access Setting
+- JSON-schema-defines-forms confirmed as r25 foundation
+- CSS > inline styles (Bill directive)
+- Time tracking = outside apps/APIs
+- 95 models exist; only 10 new ones needed; gap is workflows not models
 
-### React (React2025)
-- `src/hooks/useDataBrowser.ts` — Changed `persistSetting` from Pending to direct Setting save with retry-on-lock
+## Alice Training Ready
+5 topics, 8 quiz questions loaded. Alice trains Bill tomorrow.
 
-### Infrastructure
-- `/Applications/Chrome Debug.app/` — NEW: Chrome launcher with debug port
-- `~/.zshrc` — Added `chrome-debug` alias
-- `~/.claude.json` — Registered alice MCP server
-
-### WC3 Documents Created (via wcapi)
-- 20 tool reference Documents (TOOL-GRAPHVIZ through TOOL-CHROMADB)
-- 5 quiz Documents (QUIZ-INVENTORY-FLOW through QUIZ-TOOLS, 28 questions total)
-- 1 AliceObservation test record
+## Next Steps
+1. Alice trains Bill on DataBrowser + BOM + Serials + Widgets + Spawn pattern
+2. Wire BOM tree view into DataBrowser
+3. Wire serial services to API endpoints + DataBrowser with spawn_links
+4. CSS migration of DataGrid and BehaviorField
+5. Per-user layouts (separate PR — Setting model migration)
+6. Stage 1 integrity fixes: invoice type enum, AuditLog wiring, version conflict, webhook dedup
