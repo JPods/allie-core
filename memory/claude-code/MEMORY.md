@@ -85,7 +85,10 @@
 - [One-way travel, CCW circulation](feedback_one_way_ccw.md) — All guideways one-way; station CCW; in/out swaps between CPs by design; pass chains in lines.json are authoritative; never infer from geometry
 - [Layout marketplace concept](project_layout_marketplace.md) — Users submit DataBrowser layouts for credit/cash; Alice manages adoption tracking; submitted via sync
 - [Shift-click CP delete broken](project_shift_click_delete_broken.md) — Handler doesn't fire; debug logging added; check CONSTRAIN_MODIFIER_MASK and active tool
-- [Network editing workflow](project_network_editing_workflow.md) — Connect by clicking CPs, delete by Shift-click, Refresh reads disk, Build rebuilds; Network Display sync fixes in progress
+- [Network editing workflow](project_network_editing_workflow.md) — Connect by clicking CPs, delete via × button in Network Display, Refresh reads disk, Build rebuilds
+- [Camera follow not lock](feedback_camera_follow_not_lock.md) — Camera translates with pod; user controls angle freely; old rigid transform replaced
+- [Animation pause not stop](feedback_animation_pause_not_stop.md) — Toolbar toggles pause/resume; no hard stop; clear pods to reset; 95% freeze for camera
+- [Structure ID prefixes](reference_structure_id_prefixes.md) — s001=stations, tc001=traffic circles, b001=barriers; all lowercase; barriers serialized for safety inspection
 - [Expense/disbursement UI](project_expense_ui.md) — Payment model handles AR+AP via type field; needs spreadsheet-style fast entry UI
 - [DataBrowser status](project_databrowser_status.md) — Two-pane dark/light DataBrowser at /admin-wb; replaces 40+ admin pages; 61 models seeded with initial layouts
 - [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in DataBrowser); Bill loves it; use instead of extra buttons
