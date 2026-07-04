@@ -19,6 +19,12 @@ Built the complete commerce service layer: BOM (expand/consume/propagate), seria
 - AuditLog model exists but nothing auto-writes to it
 - `inventory_reservations.py` references old field names in the model (`stack` → needs audit that model FK names match)
 
+## Late Session — Architecture Decisions (stored in vector stores)
+- Campaign records live in the WC3 user's system, not WCHQ. WCHQ routes, never owns.
+- Manufacturer sales reporting: retailers opt in (none/aggregate_only/full) to report product movement back to manufacturers via WCHQ. Same sovereignty model as Alice coaching. Metadata only — never customer data.
+- Campaign attribution: source field on Contact/Order/Proposal. Provide the tool, if they use it great, if not the cost is small. No nagging. When populated, Alice traces Campaign→Contact→Orders→Invoices→lifetime value = ROI.
+- Alice WCHQ coaching: metadata only (patterns, layouts). Four levels: receive tips / share patterns / both / neither. Framed like Claude's "can we use your conversation to improve."
+
 ## What Was Decided (and Why)
 - **Layer not stack** — layers accumulate, erode, split. Stack implies push/pop which is wrong for inventory that gets partially consumed and transferred.
 - **Margin velocity as real fields** — too important for JSON. Four indexed columns on Item (margin_velocity, margin_pct, annual_turns, velocity_category) so DataBrowser can sort/filter.
