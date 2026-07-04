@@ -107,3 +107,4 @@
 - [Chrome DevTools MCP](reference_chrome_debug.md) — Chrome 150 requires --user-data-dir; Chrome Debug app; firewall allow; readme at readmes/46
 - [WC3 flow charts](reference_wc3_flowcharts.md) — 12 Graphviz DOT+PDF charts at readmes/flowcharts/; master, inventory, payment, serials, project, QA, action, contact, signin
 - [Open source tools](reference_open_source_tools.md) — 20 tools for Alice+Ingrid; Graphviz, D2, matplotlib, pandas, phonenumbers, etc; Document records TOOL-*
+- [Three-agent UI experiment](project_ui_experiment.md) — Claude/5173, Allie/5175, Alice/5176 + baseline/5174; five rounds; all copies kept for human eval; continuous memory capture
