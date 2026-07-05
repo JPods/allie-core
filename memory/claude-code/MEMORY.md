@@ -108,3 +108,5 @@
 - [WC3 flow charts](reference_wc3_flowcharts.md) — 12 Graphviz DOT+PDF charts at readmes/flowcharts/; master, inventory, payment, serials, project, QA, action, contact, signin
 - [Open source tools](reference_open_source_tools.md) — 20 tools for Alice+Ingrid; Graphviz, D2, matplotlib, pandas, phonenumbers, etc; Document records TOOL-*
 - [Three-agent UI experiment](project_ui_experiment.md) — Claude/5173, Allie/5175, Alice/5176 + baseline/5174; five rounds; all copies kept for human eval; continuous memory capture
+- [qqq/zzz = dead code, delete](feedback_qqq_zzz_cleanup.md) — Files prefixed qqq_ or zzz_ are temp/dead archive; delete unless hold-until-date > today
+- [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
