@@ -76,10 +76,23 @@ Every structure exposes **stub-pairs** — the universal interface shared with t
 | Hover | Gold target circle (disappears on mouseout) |
 
 **Interaction (edit mode only — CPs non-interactive when locked):**
-- Click CP → select (gold ring)
-- Click second CP → connect (two guideways drawn)
+- Click CP → select parent structure (gold ring)
+- Click CP on second structure → connect **closest open CPs** between the two structures (two guideways drawn)
 - Shift-click connected CP → disconnect
 - Esc → cancel selection
+
+**Keyboard shortcuts for placement:**
+
+| Key | Tool |
+|-----|------|
+| 1 | Station N–S |
+| 2 | Station E–W |
+| 3 | Station NW–SE |
+| 4 | Station NE–SW |
+| 5 | Circle |
+| 6 | Circle 45° |
+
+Press key, click map to place. Esc to cancel. Disabled when typing in input fields.
 
 ---
 

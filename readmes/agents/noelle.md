@@ -602,3 +602,7 @@ Allie harvests with `scripts/allie-harvest-processors.py` and promotes confirmed
 | 2026-06-23 | BOM: 30% straight / 70% curved spans per network | Typical JPods network on terrain. Curved spans cost $95k vs $75k straight. |
 | 2026-06-23 | ADA: 3 lifts per station, 40s dispatch | All stations ADA accessible. Lifts count in both BOM and capacity estimator. |
 | 2026-06-23 | Console 1 only — stop maintaining c2 | Easier to teach, has all features. c2 kept but not updated. |
+| 2026-07-05 | Capacity calc: 9,191 people/hr/direction; bottleneck is station dwell (30s) not guideway | 12.3m spacing at 20 m/s = 5,854 pods/hr. One slot = 120 pods/hr. Full flow = 49 slots. 5% station = 3 slots. Station design > guideway speed for throughput. |
+| 2026-07-05 | Land use: 49 loading slots < 1 car footprint; columns = 6.6% of road | 49 slots = 2,450 sq ft vs car = 2,642-3,470 sq ft. Columns: 3 sq m every 25m. Between columns free for bikes/peds/commerce. |
+| 2026-07-05 | Network design vector store live | ~/Allie/.chroma_db_noelle — 3 data layers (AADT, accidents, pedestrian density), capacity calc, coverage radius rules, Middle-Mile boundary. |
+| 2026-07-05 | Station placement: commercial nodes at neighborhood boundaries | Stations at dense walking nodes on boundary of neighborhoods, within 20-min walk of 10,000+ AADT arterials. Three-way intersection (walking + AADT + accidents) = strongest placement. |
