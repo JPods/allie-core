@@ -249,6 +249,72 @@ Noelle proposes, Alice validates, Natalie routes, Sally loads, Allie remembers.
 
 ---
 
+## Noelle's Established Pattern — 2026-07-05 (Tulsa)
+
+**The pattern that works. Noelle proposes stations only. The designer adds circles.**
+
+### The Insight: Crash Rate Per Unit of Traffic
+
+The single most important number Noelle computes is **crashes per 10K AADT** by road type. In Tulsa:
+
+| Road Type | Crashes/10K AADT |
+|-----------|-----------------|
+| Local/Arterial | **87.7** |
+| Highway | 15.5 |
+| Interstate | 9.3 |
+| State Route | 3.8 |
+
+Local arterials are **9× more dangerous per unit of traffic** than interstates. And they carry the majority of pedestrian fatalities — people are walking on these roads and dying. This is the walkability demand signal: people want to walk here, but car traffic is killing them.
+
+**JPods on the grid displaces the deadliest trips, not just the most numerous.**
+
+### Three Rules for Noelle Draft
+
+1. **Stations only** — Noelle places stations where data shows signal. She does NOT place circles. Circles require local knowledge of where corridors branch, merge, or loop. That is the designer's job. Stations say "something should be here." Circles say "something connects here to there." The second is a design decision, not a data decision.
+
+2. **Highways are boundaries, not corridors** — I-44, US-169, I-244 are walls that divide neighborhoods. Nobody walks to an interstate. Stations go on the arterial grid *between* highways where the commercial nodes are. Highways tell you where demand *crosses*, not where stations *go*.
+
+3. **Crash rate is the primary signal** — A grid intersection with fatal crashes within 600m gets a station regardless of AADT. A grid intersection with 5K+ AADT on local roads gets a station even without nearby crashes. Both signals together = highest priority.
+
+### The Road Ratio: 1 Mile JPods Per 12-18 Miles of Road
+
+FHWA Table HM-72 (2021) provides road density by urbanized area:
+
+| City | Road miles/sq mi |
+|------|-----------------|
+| Tulsa, OK | 14.0 |
+| Fresno, CA | 14.6 |
+| Knoxville, TN | 11.0 |
+| Sarasota, FL | 10.9 |
+
+At the target ratio of **1 mile JPods per 12-18 miles of road**:
+- Tulsa at 14:1 → ~1 mile JPods per square mile
+- This drives the **1×2 mile grid** as the optimal mesh size:
+  - 1×1 = 2.0 mi/sq mi → 1:7 ratio, over-capitalized
+  - **1×2 = 1.0 mi/sq mi → 1:14 ratio, matches target**
+  - 2×2 = 0.5 mi/sq mi → 1:28 ratio, too sparse
+
+### The Draft Button
+
+Route-Time GUI has two Noelle buttons:
+- **Draft** — analyses loaded AADT + accident overlays, places stations on the arterial grid, shows summary panel with crash rates, station count, and top intersections
+- **Report** — opens printable HTML analysis in a new tab with full crash rate tables, highway boundaries, grid analysis, and per-station scores
+
+API endpoints:
+- `POST /api/noelle/draft?place=true` — analyse and place stations
+- `GET /api/noelle/report` — printable HTML report
+
+### What the Designer Does After Noelle Drafts
+
+1. Turn on AADT and Accidents overlays — see how stations align with data
+2. Move stations to where commercial nodes actually are (malls, transit hubs, grocery clusters)
+3. Remove stations that don't make sense on the ground
+4. **Add circles** where corridors need to connect (the designer's job, not Noelle's)
+5. Connect (Auto-Connect or manual CP clicks)
+6. Snapshot with explanation of why changes were made
+
+---
+
 ## Energy — Not for Payback
 
 JPods gathers solar energy over guideways for **ruggedness**, not payback. The focus is on **Economic Work** — force applied to mass to drive commerce. Energy independence makes the system resilient; the economics are driven by displaced car trips and increased proximity.
