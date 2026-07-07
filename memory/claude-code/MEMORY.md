@@ -111,10 +111,11 @@
 - [qqq/zzz = dead code, delete](feedback_qqq_zzz_cleanup.md) — Files prefixed qqq_ or zzz_ are temp/dead archive; delete unless hold-until-date > today
 - [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
-- [Route-Time data overlays](project_rt_overlays.md) — AADT (84 stations), accidents (1019 crashes), pedestrian (pending); three-layer network placement
+- [Route-Time data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
+- [Route-Time CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
 - [Route-Time keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
-- [Noelle network design rules](reference_noelle_design_rules.md) — Circles=connective tissue; dual-network (AADT primary, accident secondary); 0.5mi spacing; mesh over capacity
+- [Noelle network design rules](reference_noelle_design_rules.md) — Draft pattern: stations only, highways as boundaries, crash rate signal, 1:14 road ratio, 1x2 grid, both-side access, Local Knowledge QA; 7 cities
 - [JPods evidence base](reference_evidence_base.md) — Harvard $64B, Morgantown PRT, Praetor $45B, Glydways $420M, walkability 20x tax revenue; all in vector stores
 - [Tulsa network — next session](project_tulsa_next.md) — Build with Noelle workflow; existing OK_Tulsa (249 structures) as reference; need OK DOT AADT + FARS data
