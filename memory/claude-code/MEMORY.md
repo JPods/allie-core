@@ -113,6 +113,7 @@
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
 - [Route-Time data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
 - [Route-Time CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
+- [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
 - [Route-Time keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
