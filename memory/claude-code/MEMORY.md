@@ -115,6 +115,7 @@
 - [Route-Time CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
+- [Conservative payback estimates](feedback_payback_conservative.md) — 7yr minimum for capital; car ownership unwinds slowly; aggressive numbers lose credibility
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
 - [Route-Time keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
 - [Noelle network design rules](reference_noelle_design_rules.md) — Draft pattern: stations only, highways as boundaries, crash rate signal, 1:14 road ratio, 1x2 grid, both-side access, Local Knowledge QA; 7 cities

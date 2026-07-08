@@ -1,53 +1,48 @@
-# Handoff — 2026-07-06 (Night)
+# Handoff — 2026-07-07 (Evening)
 
 ## Do This First
-1. **Restart Route-Time server** — new API endpoints for economic overlays won't load until restart
-2. Test the three heatmap buttons: isoPopDensity (purple), isoPropertyValue (green), isoJobs (blue)
-3. Test city switching — dropdown should swap all 6 overlay types including the new 3
+1. **Restart Route-Time** if not running — `cd /Users/williamjames/Documents/08_JPods/03_Technology/00_working_code && bash route_time/runserver.sh`
+2. Verify `rtb.webclerk.com` and `wcb.webclerk.com` are serving (tunnel auto-starts on boot)
+3. Test `rtb.webclerk.com/citytool` — Census API key is live
 
-## What Was Done This Session
+## Where We Left Off
 
-### React2025 (morning — committed & pushed)
-- Major cleanup: 92 qqq_ files, 14 npm deps, 265 lines dead CSS removed
-- Sidebar redesign: dark slate, lucide icons, WC3 branding, 3 sections (Work/Forms/Dashboards)
-- Dashboard rewritten to Sales & Service (mirrors wc2 Cal_SearchMySales)
-- Alice Dashboard: Quiz tab, CycleDetails tab, Page/PDF Designer tabs
-- Ported: useColumnContextMenu, useRecords, SlidePanel, QuickCreate, DataBrowserLink
-- CORS fix, Accounting/Inventory dashboard routes, manage_view dispatch wiring
-- All pushed to git (React2025 + webClerk3)
+### Cloudflare — DONE
+- Tunnel `wc_hq_tunnel` running as system service, healthy
+- `rtb.webclerk.com` → Route-Time:5050
+- `wcb.webclerk.com` → WebClerk3:8000
+- `rtb.webclerk.com/citytool` → CityTool (serves from original file location)
+- jpods.us on Cloudflare nameservers (propagated)
+- webclerk.com on Cloudflare nameservers (active)
 
-### Route-Time Economic Overlays (evening — NOT YET COMMITTED)
-- `scripts/census_overlays.py` — Census ACS API pulls for 3 cities
-- 9 GeoJSON files: {population_density, property_values, jobs} × {sc, ok, mn}
-- 3 new API endpoints in api.py
-- 3 heatmap renderers in overlays.js (purple=pop, green=property, blue=jobs)
-- 3 toggle buttons in index.html
-- City switcher updated for new layers
-- Generic defaults copied from SC
+### Route-Time — Committed & pushed (bill_dev)
+- Tools + Overlays panels in right sidebar (consolidated from left palette)
+- Keys 1-9: placement, zoom, walk radius
+- Fixed scale bars: 0.75mi walk + 5mi
+- On-demand overlay fetch for any US city (AADT, FARS, census)
+- All 50 states harvested: 123MB on 5TB at `/Volumes/Allie/data/overlays/`
+- Data files gitignored, 5TB is durable store
+- Asheville NC tested — all overlays loading, Noelle Draft working
 
-### Architecture (documented, not coded)
-- Signal Loop documented at readmes/50-signal-loop-and-station-economics.md
-- Station reports, Noelle draft vs designer comparison, iso-scoring
-- MarkMyStation public.html design (read-only civic input)
-- Capital meeting format (1hr: pre-model city, CityTool, mall ride, station report)
-- JPods cost corrected to $20M/mile (not $7.4M)
-
-### Cloudflare (started, paused)
-- webclerk.com DNS moved to Cloudflare (active, propagated)
-- cloudflared installed but tunnel login cert not completing — try again next session
-- jpods.com not yet moved
+### Tulsa Network Sizing — Analysis complete
+- Vector analysis: 263 guideway mi, 183 stations, 329 total structures
+- CityTool validation: 189 mi (city), $3.78B build, $1.61B/yr savings, 7yr payback
+- PDF saved: `route-time_maps/Tulsa_CityTool.pdf`
+- Conservative payback (7yr) — car ownership unwinds slowly
 
 ## Open Issues
-- Post-login redirect not firing in React2025 (manual /dashboard works)
-- Cloudflare tunnel auth callback failing — may need firewall check
-- Route-Time server needs restart for new overlay endpoints
-- Route-Time changes not yet committed to git
+- CityTool on jpods.com/library needs Census API key uploaded to Hostinger
+- Cloudflare Access (email verification for public RT/WC3) not yet configured
+- Crash density overlay is FARS fatals only — true all-severity needs state DOT data
+- AADT on-demand fetch limited (2000-record HPMS cap) — state files on 5TB more complete
+- jpods.us tunnel routes not yet added (webclerk.com only)
 
 ## Tomorrow
-- Frame capital approaches (1-2 page document)
-- Test economic overlays in Route-Time
-- 5YearPLBS walkthrough (separate focused session)
-- Continue Cloudflare tunnel setup
+- Upload CityTool with API key to Hostinger (library.jpods.com)
+- Capital pitch document: CityTool → Route-Time → Station Report flow
+- Cloudflare Access for email verification on public endpoints
+- Consider `citytool.jpods.us` and `rt.jpods.us` as clean public URLs
+- Asheville network design session with Noelle
 
-## Vector Store Updates
-IDs 38-43: signal loop, economic overlays design, cost correction, capital meeting format, RT overlay implementation, MarkMyStation design
+## Key Insight
+Oil depletes with use; ingenuity increases with use. JPods is a 10x paradigm shift. Every network built teaches the next one. The capital pitch leads with this framing before any numbers.
