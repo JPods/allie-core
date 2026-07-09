@@ -15,7 +15,7 @@ A workflow where Noelle proposes JPods network layouts based on real government 
 
 Every station placement decision is informed by three overlapping data layers:
 
-| Layer | Question it answers | Data source | Route-Time overlay |
+| Layer | Question it answers | Data source | MeshMobility overlay |
 |-------|-------------------|-------------|-------------------|
 | **Traffic density (AADT)** | Where are the cars? | SC DOT traffic counts — 12,000+ stations statewide, AADT per road segment | `overlays/aadt.geojson` → AADT button |
 | **Accident heat map** | Where are people dying? | NHTSA FARS — fatal crash lat/lon, severity, conditions. 1,019 SC crashes in 2022 alone | `overlays/accidents.geojson` → Accidents button |
@@ -140,7 +140,7 @@ python3 route_time/noelle_propose.py history     # all iterations
 ```
 
 Each snapshot records:
-- Full .jpd file (loadable in Route-Time)
+- Full .jpd file (loadable in MeshMobility)
 - Topology (stations, circles, connections, components, orphans, degree distribution)
 - Spatial metrics (coverage, spacing)
 - Designer's explanation of WHY changes were made
@@ -157,8 +157,8 @@ Script: `~/Allie/scripts/noelle-vectorstore.py`
 | Command | What it does |
 |---------|-------------|
 | `seed` | Foundational design rules (payback threshold, three layers, spacing, capacity) |
-| `index` | Knowledge files from readmes, agents, wisdom, TFTS, Route-Time docs |
-| `ingest-network` | Pulls current network descriptor from Route-Time `/api/network/describe` |
+| `index` | Knowledge files from readmes, agents, wisdom, TFTS, MeshMobility docs |
+| `ingest-network` | Pulls current network descriptor from MeshMobility `/api/network/describe` |
 | `search "query"` | Semantic search across all knowledge |
 | `stats` | Chunk counts by domain and category |
 
@@ -171,7 +171,7 @@ The vector store holds:
 
 ---
 
-## Route-Time Overlays
+## MeshMobility Overlays
 
 Overlay data files live in `route_time/overlays/`:
 
@@ -296,7 +296,7 @@ At the target ratio of **1 mile JPods per 12-18 miles of road**:
 
 ### The Draft Button
 
-Route-Time GUI has two Noelle buttons:
+MeshMobility GUI has two Noelle buttons:
 - **Draft** — analyses loaded AADT + accident overlays, places stations on the arterial grid, shows summary panel with crash rates, station count, and top intersections
 - **Report** — opens printable HTML analysis in a new tab with full crash rate tables, highway boundaries, grid analysis, and per-station scores
 

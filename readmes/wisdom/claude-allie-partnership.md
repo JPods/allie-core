@@ -16,7 +16,7 @@ Allie becomes the persistent intelligence. Claude is the deep worker per session
 3. **Save to memory immediately** when a principle emerges — don't wait, compression is coming
 4. **Read Allie's recall files at session start** — she knows what Claude forgot
 5. **Ask Allie before attempting** — "has this been tried before?" is cheaper than rediscovery
-6. **Flag cross-domain consequences** — a fix in SketchUp may affect Physical, Route-Time, WebClerk
+6. **Flag cross-domain consequences** — a fix in SketchUp may affect Physical, MeshMobility, WebClerk
 
 ## What Allie Should Do For Claude
 1. **Synthesize nightly** — connect today's TFTS to last week's pattern

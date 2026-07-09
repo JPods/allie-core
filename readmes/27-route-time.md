@@ -1,5 +1,5 @@
-# Route-Time — JPods Network Planner and Simulator
-**Action:** Read at the start of any Route-Time planning or development session
+# MeshMobility — JPods Network Planner and Simulator
+**Action:** Read at the start of any MeshMobility planning or development session
 **Function:** Browser-based simulation and network design tool for JPods
 **Location:** `/Users/williamjames/Documents/08_JPods/03_Technology/route_time/`
 
@@ -7,12 +7,12 @@
 
 ## What It Is
 
-Route-Time is the middle layer in the three-program JPods ecosystem:
+MeshMobility is the middle layer in the three-program JPods ecosystem:
 
 | Program | Role |
 |---------|------|
 | **SketchUp plugin** | 3D design — places structures, assigns CPs |
-| **Route-Time** | 2D planning — simulates transit times, designs networks |
+| **MeshMobility** | 2D planning — simulates transit times, designs networks |
 | **JPodsSM_RPi** | Runtime — Nora/Natalie/Noelle control on the Pi |
 
 Reads `.jpd` and `map.json` files. Runs a discrete-tick physics simulation and outputs
@@ -191,7 +191,7 @@ CP_far_near                                               CP_near_far
           platform_parking_a → [platform_parking] → platform_parking_b
 ```
 
-`platform_parking` is a single node. `platform_parking_a` and `platform_parking_b` are the line segments connecting into and out of it. The physical system supports multiple parking spots per platform; Route-Time does not model individual spots.
+`platform_parking` is a single node. `platform_parking_a` and `platform_parking_b` are the line segments connecting into and out of it. The physical system supports multiple parking spots per platform; MeshMobility does not model individual spots.
 
 **Line vocabulary (13 lines per station):**
 
@@ -458,25 +458,25 @@ For large networks, use the **Isochrone** tool instead — click any station to 
 
 ---
 
-## Routing Intelligence Stack — Route-Time's Role
+## Routing Intelligence Stack — MeshMobility's Role
 
-Route-Time is where the three-layer routing intelligence is most fully visible, because the simulation runs at network scale over time.
+MeshMobility is where the three-layer routing intelligence is most fully visible, because the simulation runs at network scale over time.
 
-**The three layers in Route-Time:**
+**The three layers in MeshMobility:**
 
-| Layer | Route-Time implementation | Current state |
+| Layer | MeshMobility implementation | Current state |
 |-------|--------------------------|---------------|
 | **Topology** | Dijkstra over the network graph | Active — `engine/routing.py` |
 | **Noelle's load map** | Congestion ratio weights segments by predicted future occupancy | Partial — static ratio today; time-projected not yet implemented |
 | **Alice's rate signals** | Price factor (1–5) weights segments by economics | Stub — `price_factor` field exists in settings; not yet wired to Alice's `price_query` API |
 
-**Why Dijkstra (not BFS) in Route-Time:** Route-Time asks "what is the optimal path?" under congestion across a large network. BFS answers "does a path exist?" — correct for SketchUp's small design-validation graphs. Dijkstra weights edges by segment cost (time + congestion + price). On a network with 50+ stations and real pricing, the optimal path is rarely the shortest one.
+**Why Dijkstra (not BFS) in MeshMobility:** MeshMobility asks "what is the optimal path?" under congestion across a large network. BFS answers "does a path exist?" — correct for SketchUp's small design-validation graphs. Dijkstra weights edges by segment cost (time + congestion + price). On a network with 50+ stations and real pricing, the optimal path is rarely the shortest one.
 
-**The price-routing connection:** When Alice raises rates on a congested segment, Route-Time's Dijkstra will route around it — not because of physical congestion, but because the economic cost exceeds the time savings. This is the correct behavior: passengers who can take a slightly longer route pay less and reduce load on the premium segment. Price is a congestion signal expressed in dollars.
+**The price-routing connection:** When Alice raises rates on a congested segment, MeshMobility's Dijkstra will route around it — not because of physical congestion, but because the economic cost exceeds the time savings. This is the correct behavior: passengers who can take a slightly longer route pay less and reduce load on the premium segment. Price is a congestion signal expressed in dollars.
 
-**Segment throughput weighting (open):** Segments with tight approach curves carry a structural throughput penalty independent of congestion. A `curve_penalty` term in `engine/network.py` Dijkstra weights is not yet implemented. Natalie's open question on approach-curve-limited speed (in `natalie.md`) and Route-Time's Dijkstra weights are the same problem in two domains.
+**Segment throughput weighting (open):** Segments with tight approach curves carry a structural throughput penalty independent of congestion. A `curve_penalty` term in `engine/network.py` Dijkstra weights is not yet implemented. Natalie's open question on approach-curve-limited speed (in `natalie.md`) and MeshMobility's Dijkstra weights are the same problem in two domains.
 
-**What Route-Time validates that SketchUp cannot:** At network scale, the interaction between Noelle's load balancing and Alice's pricing becomes visible — a price signal that works at 4 stations may create perverse routing incentives at 40 stations. Route-Time is where those emergent behaviors surface before any physical network is built.
+**What MeshMobility validates that SketchUp cannot:** At network scale, the interaction between Noelle's load balancing and Alice's pricing becomes visible — a price signal that works at 4 stations may create perverse routing incentives at 40 stations. MeshMobility is where those emergent behaviors surface before any physical network is built.
 
 ---
 
@@ -484,7 +484,7 @@ Route-Time is where the three-layer routing intelligence is most fully visible, 
 
 **The design intent:**
 
-1. **Simulate** — Route-Time predicts transit times for a network
+1. **Simulate** — MeshMobility predicts transit times for a network
 2. **Run** — Physical JPods robots (Nora/Natalie/Noelle) execute trips on the same network
 3. **Observe** — Allie records actual transit times from the robots via MQTT/wcapi
 4. **Compare** — Actual vs predicted; discrepancies surface design improvements
@@ -493,10 +493,10 @@ Route-Time is where the three-layer routing intelligence is most fully visible, 
 **Allie's specific tasks when robots run:**
 - Monitor MQTT telemetry from Nora (vehicle state) and Natalie (routing decisions)
 - Record trip start/end times, actual vs predicted for each O-D pair
-- Flag lines where actual transit time deviates >20% from Route-Time prediction
+- Flag lines where actual transit time deviates >20% from MeshMobility prediction
 - Log to wcapi notes for session retrospection
 
-Route-Time predicts. Robots run. Allie records. Discrepancies teach.
+MeshMobility predicts. Robots run. Allie records. Discrepancies teach.
 
 ---
 

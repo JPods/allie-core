@@ -25,7 +25,7 @@ It brings the physical-environment document up to the same standard as the newer
 
 The physical JPods environment is the scale-model and real-world testbed where pods move on actual track, sensors fail or succeed, ezones behave under true timing, and every prior assumption is forced to answer to reality.
 
-This environment is not the same as SketchUp and not the same as Route-Time:
+This environment is not the same as SketchUp and not the same as MeshMobility:
 - it is not a design-time geometry tool
 - it is not an abstract graph simulator
 - it is the place where guideway direction, timing, blockage, merge behavior, and hardware reliability meet the real world
@@ -69,7 +69,7 @@ That means:
 - when Nora repeats a fault or logs repeated struggle, Allie identifies the pattern and the likely root cause
 - when Natalie’s dispatch behavior looks wrong, Allie helps decide whether the problem is route assignment, pod state, or track reality
 - when Noelle’s distributed ezone behavior produces queueing or blockage, Allie helps determine whether the issue is timing, policy, or hardware state
-- when a physical result contradicts Route-Time or SketchUp, Allie records the correction pressure immediately
+- when a physical result contradicts MeshMobility or SketchUp, Allie records the correction pressure immediately
 - when a session yields fleet follow-up, hardware work, or a WhatIf experiment, Allie records it in WebClerk instead of leaving it as conversational residue
 
 ### Authority boundary
@@ -144,7 +144,7 @@ Retry is not diagnosis in hardware any more than it is in software.
 
 This document applies to the physical JPods environment only.
 Do not silently transfer facts from:
-- Route-Time Python/Flask/Leaflet implementation details
+- MeshMobility Python/Flask/Leaflet implementation details
 - SketchUp Ruby APIs or export wiring
 - WebClerk internals beyond its role as operating database
 
@@ -163,7 +163,7 @@ At session start:
 During session:
 1. Track fleet status and repeated anomalies as they occur
 2. Distinguish runtime behavior from interpretation — what happened first, what it means second
-3. Flag any contradiction with SketchUp or Route-Time immediately
+3. Flag any contradiction with SketchUp or MeshMobility immediately
 4. Convert hardware follow-up, startup fixes, and candidate experiments into WebClerk actions or WhatIf items
 5. Treat repeat anomalies as patterns to diagnose, not just noise to tolerate
 
@@ -172,7 +172,7 @@ At session end:
 2. Append retrospection notes with root cause, lesson, and files changed
 3. Create or update the corresponding WebClerk action, note, or WhatIf record if follow-up remains
 4. Mark whether the lesson is physical-only, overlapping, or universal
-5. If physical reality falsified an upstream assumption, point to the SketchUp or Route-Time artifact that must change
+5. If physical reality falsified an upstream assumption, point to the SketchUp or MeshMobility artifact that must change
 
 ### WebClerk records Allie should use from physical work
 
@@ -218,12 +218,12 @@ This document should not claim a cleaner or more centralized physical architectu
 1. Repeated pod-specific and fleet-wide failure patterns
 2. Repeated startup and broker issues
 3. Known differences between simulated and physical timing or throughput
-4. Cross-domain corrections imposed by physical reality on SketchUp or Route-Time
+4. Cross-domain corrections imposed by physical reality on SketchUp or MeshMobility
 5. Decisions about startup, telemetry interpretation, route assignment, and observation logging
 
 ### Cross-domain mappings that matter here
 
-| Physical concept | Route-Time equivalent | SketchUp equivalent | Invariant |
+| Physical concept | MeshMobility equivalent | SketchUp equivalent | Invariant |
 |-----------------|----------------------|--------------------|-----------|
 | Physical pod travel direction | Directed graph edge | FollowMe line direction | One-way legality must hold everywhere |
 | Physical platform berth | PLATFORM node | Detectable `platform_guideways` in export | Boarding/alighting must resolve to a real place |
@@ -252,7 +252,7 @@ This document should not claim a cleaner or more centralized physical architectu
 ## Open questions
 
 - What is the cleanest formal Stop and Review trigger for physical repeated anomalies?
-- Which physical observations should immediately force a Route-Time parameter change rather than only a note?
+- Which physical observations should immediately force a MeshMobility parameter change rather than only a note?
 - How should the future Allie↔Nora live channel be signed and bounded so Allie advises without becoming a hidden control plane?
 - What is the cleanest handoff artifact for a future standalone processor in physical Noelle, Natalie, or Nora?
 

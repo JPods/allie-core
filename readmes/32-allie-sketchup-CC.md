@@ -29,7 +29,7 @@ Key changes from the original `32-allie-sketchup.md`:
 ### What the SketchUp Plugin Is
 
 The SketchUp plugin is the **design-time** environment for JPods networks.
-It is not the simulator (Route-Time) and not the physical runtime (podPresenter / jpod_OS).
+It is not the simulator (MeshMobility) and not the physical runtime (podPresenter / jpod_OS).
 
 The plugin is where:
 - stations and traffic circles are placed as 3D component formations
@@ -39,7 +39,7 @@ The plugin is where:
 Those exported artifacts are what every downstream system actually consumes:
 - Natalie (podPresenter) assigns routes from the FollowMe graph
 - Nora (rpod_OS) follows the graph physically on the track
-- Route-Time uses a parallel Python graph — the two should agree on topology
+- MeshMobility uses a parallel Python graph — the two should agree on topology
 
 A model that looks geometrically correct but exports a broken FollowMe graph is a failed model.
 Geometry is input. The export is the product.
@@ -55,7 +55,7 @@ In SketchUp, these four are Ruby authority structures. They enforce rules. They 
 | Nora | Vehicle stand-in — consumes assigned trips, tracks struggle streaks, writes JSONL observation log | `nora.rb` |
 | Athena | Guard — task validation in console, Stop and Review escalation | `jpod_console.rb` |
 
-None of these agents learn across sessions. None carry lessons from Route-Time or the physical pods.
+None of these agents learn across sessions. None carry lessons from MeshMobility or the physical pods.
 Allie does all of that.
 
 ### Allie's Role in SketchUp
@@ -67,7 +67,7 @@ Until Noelle, Natalie, and Nora each have a standalone processor, Allie is their
 - When Noelle's definition gate fires, Allie reasons about root cause, not just the error string
 - When Natalie cannot find a route, Allie diagnoses: topology? naming? export? station-definition?
 - When Nora logs repeated struggle, Allie identifies what changed in the model or trip data
-- When a design choice affects Route-Time or the physical model, Allie flags it immediately — not at session end
+- When a design choice affects MeshMobility or the physical model, Allie flags it immediately — not at session end
 
 ### The Authority Boundary
 
@@ -111,13 +111,13 @@ When Stop and Review fires, Allie should answer:
 - what repeated pattern just occurred
 - what changed compared with the last known good state
 - which file, formation, station, or export convention is the likely root cause
-- whether this lesson belongs only to SketchUp, or also applies to Route-Time or the physical pods
+- whether this lesson belongs only to SketchUp, or also applies to MeshMobility or the physical pods
 
 ### Key Design Invariants
 
 These are non-negotiable and come from JPods physics and hard-won experience:
 
-1. **CCW guideway direction** — guideways are one-way, counter-clockwise when viewed from above. This applies to the SketchUp model, Route-Time, and the physical track equally. Drawing a guideway backwards is not detectable by looking at it — only the direction tag distinguishes inbound from outbound.
+1. **CCW guideway direction** — guideways are one-way, counter-clockwise when viewed from above. This applies to the SketchUp model, MeshMobility, and the physical track equally. Drawing a guideway backwards is not detectable by looking at it — only the direction tag distinguishes inbound from outbound.
 2. **Color standard (mandatory)** — red = inbound (vehicle arriving at this CP), blue = outbound (vehicle departing). No exceptions. No monochrome for directional elements.
 3. **CPs connect to CPs, never to individual lines** — breaking a connection removes both guideways of the pair.
 4. **Station identity must be explicit and unique** — every station component definition must have an `Sxxx` ID and at least one `platform_guideways` entry. Without both, Natalie cannot route to it.
@@ -223,7 +223,7 @@ The plugin produces two artifact types per model:
 3. Copy `followme.json` to `podPresenter/json/` and to each pod via Noelle deploy sequence
 4. Physical pods load the graph on startup; Natalie (podPresenter) reads it for route assignment
 
-**Note on Route-Time relationship:** Route-Time uses a parallel Python graph (`engine/network.py`), not the `followme.json` directly. The two graphs should agree on topology. When they disagree, the physical behavior is the arbiter.
+**Note on MeshMobility relationship:** MeshMobility uses a parallel Python graph (`engine/network.py`), not the `followme.json` directly. The two graphs should agree on topology. When they disagree, the physical behavior is the arbiter.
 
 ### `network.json` Format
 
@@ -290,7 +290,7 @@ When a new gap pattern is found:
 1. Log it in `readmes/sketchup/jpods-gap-log.md` under Session Log
 2. Identify which pattern (P1–P5) or add a new pattern entry
 3. Record root cause and fix applied
-4. Allie promotes it to universal if the same pattern appears in Route-Time or physical
+4. Allie promotes it to universal if the same pattern appears in MeshMobility or physical
 
 ### Allie's Session Workflow
 
@@ -303,7 +303,7 @@ When a new gap pattern is found:
 
 **During session:**
 1. Track design decisions as they happen — do not reconstruct at the end
-2. Flag cross-domain implications when they arise (SketchUp decision → Route-Time consequence; SketchUp convention → physical deployment consequence)
+2. Flag cross-domain implications when they arise (SketchUp decision → MeshMobility consequence; SketchUp convention → physical deployment consequence)
 3. Diagnose root cause when a rule-based agent fires — the agent reports a fault; Allie identifies why
 4. Log new gap patterns immediately, not after the session
 
@@ -312,24 +312,24 @@ When a new gap pattern is found:
 2. Update the relevant agent readme if agent behavior or responsibility changed
 3. Append retrospection in `readmes/retrospections/YYYY-MM-DD.md`
 4. Classify each new lesson: SketchUp-only, overlapping, or universal candidate
-5. If universal candidate: verify it holds in Route-Time and physical before promoting
+5. If universal candidate: verify it holds in MeshMobility and physical before promoting
 
 ### Cross-Domain Mappings
 
-| SketchUp concept | Route-Time equivalent | Physical equivalent | Invariant |
+| SketchUp concept | MeshMobility equivalent | Physical equivalent | Invariant |
 |-----------------|----------------------|--------------------|-----------|
 | CP pair / directed endpoint | CP object (Python) with `inbound_node`, `outbound_node` | Physical directional switch at junction | Directed boundary — inbound and outbound are never interchangeable |
 | Color standard: red=inbound, blue=outbound | Same color standard in GUI | Physical track direction (CCW = standard) | Flow direction must be visible at every representation level |
-| `platform_guideways` in FollowMe | PLATFORM node in Route-Time network graph | Physical platform berth on track | Route must begin and end at a real boarding/alighting location |
+| `platform_guideways` in FollowMe | PLATFORM node in MeshMobility network graph | Physical platform berth on track | Route must begin and end at a real boarding/alighting location |
 | `followme.json` BFS graph | Dijkstra graph in `engine/network.py` | Nora's onboard path following (`mapSM.json`) | Same topology, different format — they must agree |
 | Noelle definition gate | `diag_grid.py` topology check | Pre-run I2C and MQTT connectivity check | Loud validation failure at boundaries beats silent degradation |
 | Stop and Review (3 consecutive) | No formal equivalent yet | Nora `stop_and_review` JSONL event | Repeated identical failure is a signal, not bad luck |
-| Station `Sxxx` ID | `structure_id` in Route-Time network | Station identity tag on physical hardware | Stations must be individually addressable in every environment |
+| Station `Sxxx` ID | `structure_id` in MeshMobility network | Station identity tag on physical hardware | Stations must be individually addressable in every environment |
 | `network.json` connection declaration | CP connection in `api.py` state | Physical guideway installation between switches | Declared topology drives all downstream agents |
 
 ### Environment-Specific Knowledge (Do NOT Transfer)
 
-These facts are SketchUp-only. Do not use them as premises in Route-Time or physical reasoning:
+These facts are SketchUp-only. Do not use them as premises in MeshMobility or physical reasoning:
 
 - SketchUp Ruby API calls (`Sketchup.active_model`, `entities`, `component_definitions`, `HtmlDialog`)
 - `network.json` format and stub index logic
@@ -347,7 +347,7 @@ Each session, Allie updates:
 
 1. **Gap log** (`readmes/sketchup/jpods-gap-log.md`) — any new gap pattern
 2. **SketchUp-specific memory** — Ruby API behaviors, new gate scenarios, new model-state patterns
-3. **Cross-domain mappings** — when a SketchUp concept clarifies or contradicts something in Route-Time or physical, write the explicit mapping
+3. **Cross-domain mappings** — when a SketchUp concept clarifies or contradicts something in MeshMobility or physical, write the explicit mapping
 4. **Design decisions table** in this file and in the relevant agent file — any decision made this session
 5. **Universal promotions** — lessons that appear independently in two or more environments are candidates for `memory/universal/`
 

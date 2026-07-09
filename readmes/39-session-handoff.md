@@ -42,14 +42,14 @@ Each item: what to do, which file, why it matters.
 ## Open Problems
 Bullets. Things that are known broken or incomplete.
 - dispatch_server.rb: NORA_DISPATCH_1 must exist in the model — spawn manually first.
-- Route-Time travel time: requires sim to have been run for the O-D pair.
+- MeshMobility travel time: requires sim to have been run for the O-D pair.
 
 ## What Was Decided (and Why)
 Bullets. Non-obvious architectural decisions made this session.
 Do not list obvious things. Only record what future-Claude might reverse without knowing.
 - dispatch_server uses a Queue + UI.start_timer pattern (not direct model calls from WEBrick
   thread) because SketchUp's model API is not thread-safe.
-- Port 5051 for SketchUp WEBrick; 5050 is Route-Time — do not swap.
+- Port 5051 for SketchUp WEBrick; 5050 is MeshMobility — do not swap.
 
 ## Files Changed This Session
 Brief list — path and one-line description.
@@ -134,14 +134,14 @@ SketchUp was having line-connection issues during the session — not yet fully 
   platform recovery protocol documented in retrospection 2026-04-29.
 - WEBrick may not be available in all SketchUp Ruby runtimes — `dispatch_server.rb`
   now degrades gracefully if `require 'webrick'` fails.
-- Route-Time travel time in confirmation box requires a prior simulation run for the O-D pair.
+- MeshMobility travel time in confirmation box requires a prior simulation run for the O-D pair.
 - Physical dispatch (Natalie inbound API on RPi) is a placeholder — no implementation.
 
 ## What Was Decided (and Why)
 
 - **dispatch_server uses Queue + UI.start_timer** — SketchUp's model API is not thread-safe;
   WEBrick runs on a background thread; all model calls must be deferred to main thread.
-- **Port 5051 for WEBrick** — 5050 is Route-Time Flask; never swap.
+- **Port 5051 for WEBrick** — 5050 is MeshMobility Flask; never swap.
 - **Item-based pricing** (not custom model) — trips flow through standard WC3 Item/Invoice
   stack; no new model needed; every trip is a full transaction record.
 - **fire-and-log dispatch** — dispatch failure never cancels the invoice;

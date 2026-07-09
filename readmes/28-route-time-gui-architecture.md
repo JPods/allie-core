@@ -1,12 +1,12 @@
-# Route-Time GUI — Architecture and Lessons Learned
-**Action:** Read when working on the Route-Time browser GUI, or when similar state-persistence problems arise in other programs
+# MeshMobility GUI — Architecture and Lessons Learned
+**Action:** Read when working on the MeshMobility browser GUI, or when similar state-persistence problems arise in other programs
 **Date documented:** 2026-04-26
 
 ---
 
 ## What This Document Is
 
-A deep-dive into how the Route-Time GUI works internally, the hard bugs we solved, and the patterns that apply to other programs. Written so future sessions can pick up without re-deriving everything from scratch.
+A deep-dive into how the MeshMobility GUI works internally, the hard bugs we solved, and the patterns that apply to other programs. Written so future sessions can pick up without re-deriving everything from scratch.
 
 ---
 

@@ -1,5 +1,5 @@
 # Allie — Universal Role and Knowledge Architecture (Parallel Draft)
-**Applies to:** All environments — Route-Time, SketchUp Plugin, Physical JPods, WebClerk
+**Applies to:** All environments — MeshMobility, SketchUp Plugin, Physical JPods, WebClerk
 **Compare against:** `readmes/30-allie-universal.md`
 **Status:** Parallel draft for comparison and merge
 **Date:** 2026-04-27
@@ -35,7 +35,7 @@ She tracks open questions, recurring mistakes, unresolved design tensions, and t
 
 Noelle, Natalie, Nora, and Athena are authority structures.
 In each environment where they exist, they enforce rules at runtime:
-- Python in Route-Time
+- Python in MeshMobility
 - Ruby in SketchUp
 - pod/runtime code in the physical system
 - security/admission or guard code where Athena is present
@@ -114,7 +114,7 @@ Every environment follows the same architecture:
 
 | Layer | Purpose | Examples |
 |------|---------|----------|
-| Runtime authority | Enforce truth and legality inside the environment | Route-Time routing engine, SketchUp Ruby gate, physical pod runtime |
+| Runtime authority | Enforce truth and legality inside the environment | MeshMobility routing engine, SketchUp Ruby gate, physical pod runtime |
 | Intelligence layer | Diagnose, compare, interpret, accumulate experience | Allie |
 | Operating database | Persist structured follow-up and coordination | WebClerk |
 | Long-form memory | Preserve narrative explanation, retrospection, and design reasoning | readmes, retrospections, agent files |
@@ -201,7 +201,7 @@ The rule is simple:
 |-----------|----------------|-----------------|-----|
 | CCW traffic-circle rule | Environment-specific | Universal | It is a JPods operating invariant across simulation, modeling, and physical runtime |
 | `component_definition_faults()` in Ruby | Universal | SketchUp-specific | The lesson is universal; the method is not |
-| `connect_cps(net, a, b)` | Universal | Route-Time-specific | The concept transfers; the Python call does not |
+| `connect_cps(net, a, b)` | Universal | MeshMobility-specific | The concept transfers; the Python call does not |
 | station must expose a platform concept | Universal | Overlapping / cross-domain | True everywhere, but expressed differently in each environment |
 | MQTT field positions for TELEMETRY | Universal | Physical-specific | Pure implementation detail |
 | fail fast at definition/readiness boundaries | Environment-specific | Universal | The principle transfers even when the checks differ |

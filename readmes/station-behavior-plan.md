@@ -271,7 +271,7 @@ Tests are PROOFS, not procedures. Each test should be a formal proof that Sally'
 
 ### Phase 4 — Large Networks (3+ existing .jpd conversions)
 
-**Use:** Converted Route-Time networks from `/Applications/RouteTime_JPods/converted/`
+**Use:** Converted MeshMobility networks from `/Applications/RouteTime_JPods/converted/`
 
 **Proves:**
 - Sally scales: 10+ stations, 50+ pods

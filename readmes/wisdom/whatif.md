@@ -80,18 +80,18 @@ axiom needs a domain qualifier.
 
 ---
 
-## [WI-004] Route-Time — 2026-05-13
+## [WI-004] MeshMobility — 2026-05-13
 
-**Observed:** Route-Time's simulation uses MIN_HEADWAY_MM for vehicle spacing.
+**Observed:** MeshMobility's simulation uses MIN_HEADWAY_MM for vehicle spacing.
 The physical scale model uses GUIDEWAY_SPACING_M (5.0m) as the telemetry-based
 minimum gap. These are separate constants in separate codebases. If they diverge,
 simulation results will not match physical behavior.
 
-**Why it might matter:** A student designing a network in Route-Time who then tests
+**Why it might matter:** A student designing a network in MeshMobility who then tests
 it physically will see different throughput. The simulation will predict a certain
 capacity; the physical system will deliver less if the headway constants differ.
 
-**Check by:** Find the headway constant in Route-Time's Python codebase and compare
+**Check by:** Find the headway constant in MeshMobility's Python codebase and compare
 to `GUIDEWAY_SPACING_M` in `jpod_constants.rb`. If they differ by more than 10%,
 flag as a calibration issue.
 
@@ -125,7 +125,7 @@ NEW-05 becomes a deployment blocker.
 **Observed:** Bill is explicit about mortality and succession. The wisdom layer
 was built in response. But the wisdom layer is in the Allie repo, which requires
 knowing the repo exists to read it. A successor who inherits only the JPods codebase
-(`su_jpods`, `JPodsSM_RPi`, `Route-Time`) will not find `readmes/wisdom/` unless
+(`su_jpods`, `JPodsSM_RPi`, `MeshMobility`) will not find `readmes/wisdom/` unless
 they are explicitly directed there.
 
 **Why it might matter:** The knowledge layer (code, comments, README) will travel

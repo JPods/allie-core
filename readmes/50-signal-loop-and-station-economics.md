@@ -1,7 +1,7 @@
 # Signal Loop & Station Economics
 
 **Established:** 2026-07-06
-**Applies to:** Route-Time, Noelle, all JPods programs
+**Applies to:** MeshMobility, Noelle, all JPods programs
 **Principle:** Signaling versus planning. The wisdom of the many.
 
 ---
@@ -37,7 +37,7 @@ through signaling, not directed by anyone.
 
 ## Economic Data Overlays
 
-Route-Time renders each data source as an individual heatmap layer (not circles).
+MeshMobility renders each data source as an individual heatmap layer (not circles).
 Each is a toggle overlay. Combinations are weighted composites.
 
 ### Data Sources (all free, all API)
@@ -93,7 +93,7 @@ The multiplier between bike-reachable and JPods-reachable is 8-10x.
 ## Station Report
 
 Every Noelle point (station or circle) gets a report card automatically from
-census/BLS data + Route-Time's isochrone engine.
+census/BLS data + MeshMobility's isochrone engine.
 
 ### Example: Station S-012 (Main & Augusta)
 

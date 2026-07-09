@@ -53,7 +53,7 @@ may update geometry while preserving the signed eps.
 - trip.json (Natalie's route sequences)
 - Nora's ezone boundaries and encoder distance tracking
 - Alice's fare calculation (sums length_mm across the trip path)
-- Route-Time station throughput and capacity
+- MeshMobility station throughput and capacity
 
 A topology error in lines.json is not a software bug — it is a description of a physical
 layout that cannot work. The vehicle that fails to route in SketchUp stalls or derails on

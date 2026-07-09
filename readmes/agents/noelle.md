@@ -222,7 +222,7 @@ Natalie weights X accordingly.
 
 **What Noelle does NOT do:** price incentives (Alice owns that), route selection (Natalie owns that), or demand forecasting beyond the current trip pool. Noelle sees pods, not passengers.
 
-**Current state:** Not yet implemented. `@@anim_state` in the SketchUp animator tracks live positions but does not project forward. Route-Time's congestion weights are a static ratio, not a time-projected load. The segment-load API Natalie needs is the first implementation step.
+**Current state:** Not yet implemented. `@@anim_state` in the SketchUp animator tracks live positions but does not project forward. MeshMobility's congestion weights are a static ratio, not a time-projected load. The segment-load API Natalie needs is the first implementation step.
 
 **Connection to slime mold:** Noelle's real-time load map is the short-term version of her long-term topology recommendations. Both are the same mechanism at different time scales: reinforce what flows, flag what stalls.
 
@@ -409,12 +409,12 @@ spikes and writing them to physical.json in the segment format above.
 | Domain | What Noelle IS here | Key file / tool |
 |--------|-------------------|----------------|
 | **SketchUp** | Definition validator — checks station/CP definitions before Natalie routes | `noelle.rb` in jpods-plugin |
-| **Route-Time** | Network graph manager — holds line weights, enforces jam threshold, signals Natalie on congestion | `engine/network.py` |
+| **MeshMobility** | Network graph manager — holds line weights, enforces jam threshold, signals Natalie on congestion | `engine/network.py` |
 | **Scale Model / 4WD** | Distributed ezone coordinator — emerges from each Nora's `ezone.py`; no central process | `ezone.py` on each Pi |
 | **SkyRide** | Same distributed ezone role; elevated guideway changes approach physics | TBD — not yet documented |
 | **JPods Full System** | Ezone + storage dispatch + prepositioning + switch control (patent claim 3) | TBD — not yet implemented |
 
-**Critical distinction:** In SketchUp, Noelle validates *design*. In Route-Time, she enforces *simulation physics*. In physical, she coordinates *real-time exclusion zones*. Same role (capacity), three completely different mechanisms.
+**Critical distinction:** In SketchUp, Noelle validates *design*. In MeshMobility, she enforces *simulation physics*. In physical, she coordinates *real-time exclusion zones*. Same role (capacity), three completely different mechanisms.
 
 ---
 
@@ -442,13 +442,13 @@ These hold across all three domains. A rule that appears violated is an implemen
 | **Edge-driven specs, sensors, and metrics — no calculated centerlines** | All position references, ezone boundaries, clearance specs, and sensor targets are defined on hard physical edges (beam bottom face, platform edge, stub end edge). Never on a computed midpoint or centerline. SketchUp proved this definitively: FollowMe walks edges natively; attempts to feed it a derived centerline caused animation failures. Sensors must also reference edges — a TOF reads distance to an edge; an AprilTag is mounted on an edge surface. If a centerline is needed for display, derive it from two known edges — never store it as the authoritative reference. |
 | **Noelle reads structure identity from placed instances — never writes it** | `structure_type` is declared by the model author inside every template `model.skp`. Noelle reads it; she does not create or backfill it. She reads from four sources in priority order: (1) JPods attribute on the placed instance (written by StructurePlacer), (2) entity tag (layer name) on the placed instance, (3) instance name, (4) definition name prefix. A missing type after all four checks = placement fault. The model author is responsible for setting the tag and naming correctly. |
 | **On/off behaviors live in one function with a parameter — never paired do_x/undo_x** | A behavior that can be turned on or off is encoded as `f(model, enabled:)` or `f(model, install:)`. The caller declares intent; the function owns how to achieve it. Two separate functions split ownership, force callers to know implementation details, and drift apart when one is updated and the other isn't. Violations: any paired `restore_x`/`remove_x`, `enable_x`/`disable_x`, `add_x`/`delete_x` that share the same domain. **Policed by Athena (code review), Allie (pattern detection), Alice (API surface review).** Established 2026-05-23. |
-| **Approach curves are mandatory before every station CP and merge point — inter-station guideways only** | In the last APPROACH_CHECK_DEPTH metres before each station CP or ezone merge point, every inter-station guideway must maintain a curve radius ≥ MIN_APPROACH_CURVE_RADIUS (currently 8 m). This is a momentum rule, not an aesthetic one. Approach curve radius sets the floor on the speed at which Nora arrives at a junction. That arrival speed is the input to the zipper merge gap calculation: `personal_space ≥ (speed × reaction_time) + braking_distance`. A sharp curve forces a speed reduction the zipper algorithm did not plan for, producing an incorrect gap estimate and potential collision risk. **Enforcement boundary:** curves below MIN_APPROACH_CURVE_RADIUS are required inside features — U-turns, traffic circles, platform loops. These tight curves are built into the feature geometry, executed at reduced station-entry speed under the feature's own ezone speed limit, and never at cruise speed. `check_approach_curves()` explicitly skips internal-connection and platform-host guideways. **Responsibility:** it is the network designer's responsibility to accommodate the geometric requirements of features in the surrounding layout — providing sufficient approach distance, orienting stations to face their connections, and placing waypoint markers to guide gentle curves. Noelle flags violations; she does not move stations. Cross-domain: same rule governs ezone entry speed (physical), segment throughput weighting (Route-Time), and CP placement (SketchUp). |
+| **Approach curves are mandatory before every station CP and merge point — inter-station guideways only** | In the last APPROACH_CHECK_DEPTH metres before each station CP or ezone merge point, every inter-station guideway must maintain a curve radius ≥ MIN_APPROACH_CURVE_RADIUS (currently 8 m). This is a momentum rule, not an aesthetic one. Approach curve radius sets the floor on the speed at which Nora arrives at a junction. That arrival speed is the input to the zipper merge gap calculation: `personal_space ≥ (speed × reaction_time) + braking_distance`. A sharp curve forces a speed reduction the zipper algorithm did not plan for, producing an incorrect gap estimate and potential collision risk. **Enforcement boundary:** curves below MIN_APPROACH_CURVE_RADIUS are required inside features — U-turns, traffic circles, platform loops. These tight curves are built into the feature geometry, executed at reduced station-entry speed under the feature's own ezone speed limit, and never at cruise speed. `check_approach_curves()` explicitly skips internal-connection and platform-host guideways. **Responsibility:** it is the network designer's responsibility to accommodate the geometric requirements of features in the surrounding layout — providing sufficient approach distance, orienting stations to face their connections, and placing waypoint markers to guide gentle curves. Noelle flags violations; she does not move stations. Cross-domain: same rule governs ezone entry speed (physical), segment throughput weighting (MeshMobility), and CP placement (SketchUp). |
 
 ---
 
 ## Cross-Domain Mappings
 
-| Concept | SketchUp | Route-Time | Physical |
+| Concept | SketchUp | MeshMobility | Physical |
 |---------|----------|-----------|---------|
 | Capacity signal | Missing `platform_guideways` tag | `line_stats.congestion > 0.7` | `ezoneId` congestion at merge zones |
 | Jam / failure | `component_definition_faults()` fault list | `congestion = 1.0` → infinite weight | `blockedByEZ = True` |
@@ -456,7 +456,7 @@ These hold across all three domains. A rule that appears violated is an implemen
 | Stop-and-review trigger | 3 consecutive validation fault runs | Repeated congestion inversion without demand change | `blockedByEZ` true without two-pod collision |
 | Noelle's body | `noelle.rb` validation functions | `engine/network.py` Network object | Distributed across all `ezone.py` instances |
 
-**Does NOT transfer:** Jam threshold (7.17m) is Route-Time only. `ezoneId`/`ezState` TELEMETRY fields are physical only. `component_definition_faults()` is SketchUp only.
+**Does NOT transfer:** Jam threshold (7.17m) is MeshMobility only. `ezoneId`/`ezState` TELEMETRY fields are physical only. `component_definition_faults()` is SketchUp only.
 
 ---
 
@@ -481,7 +481,7 @@ processors come online, Allie hands off and steps back. The protocol is:
    - She watches the processor's outputs
    - She flags divergence between processor findings and her expectation
    - She does NOT duplicate the processor's reasoning or override its decisions
-   - She continues to hold cross-domain context (SketchUp ↔ Physical ↔ Route-Time)
+   - She continues to hold cross-domain context (SketchUp ↔ Physical ↔ MeshMobility)
 
 4. **Handoff is declared complete** when the new processor has run independently
    through at least one full export → validate → review cycle without Allie
@@ -493,7 +493,7 @@ processors come online, Allie hands off and steps back. The protocol is:
 |----------|--------|-------------|------------------|
 | 1 | Physical Natalie | podPresenter (Mac Processing sketch) | Dedicated Pi — Natalie Pi |
 | 2 | Physical Noelle | Distributed ezone.py (already on Nora Pis) | Already distributed — no handoff needed |
-| 3 | Route-Time Noelle | `engine/network.py` on Mac | Could move to Pi if Route-Time becomes real-time |
+| 3 | MeshMobility Noelle | `engine/network.py` on Mac | Could move to Pi if MeshMobility becomes real-time |
 | 4 | SketchUp Noelle | `noelle.rb` Ruby module — stays on Mac | **Do not move.** SketchUp must remain self-contained. |
 
 ### SketchUp stays local — always
@@ -516,20 +516,20 @@ A lost week came from stations missing `platform_guideways` — routing ran but 
 `component_definition_faults()` fires before every BFS. If Noelle does not gate, Natalie walks a broken graph and the failure looks like a routing problem when it is a definition problem.
 *Provenance: SketchUp design decision 2026-04-27.*
 
-**U-RT-001 [Route-Time] 0.7 congestion is the early warning, not the action threshold**
+**U-RT-001 [MeshMobility] 0.7 congestion is the early warning, not the action threshold**
 When `line_stats.congestion > 0.7` the line is stressed. At 1.0 Natalie is already rerouting. Add capacity at 0.7 — before degradation begins.
 *Provenance: Teaching session 2026-04-28; Noelle self-report via llama3.2 (deepseek returned empty).*
 
-**U-RT-002 [Route-Time] Jam ripple — one stop creates a backward wave**
+**U-RT-002 [MeshMobility] Jam ripple — one stop creates a backward wave**
 One pod hitting the threshold stops. The pod behind reaches threshold distance and also stops. Wave propagates backward. Correct behavior — not a bug.
-*Provenance: Nora self-report 2026-04-28; Route-Time readme 27.*
+*Provenance: Nora self-report 2026-04-28; MeshMobility readme 27.*
 
-**U-RT-003 [Route-Time] Congestion inversion at adjacent stations under load = congestion signal, not topology bug**
+**U-RT-003 [MeshMobility] Congestion inversion at adjacent stations under load = congestion signal, not topology bug**
 If station B (farther) shows shorter travel time than C (closer) under significant demand, the direct segment is jammed — pods are routing around it. Check `line_stats.congestion` first before inspecting topology.
-*Provenance: Route-Time readme 28; diag_grid.py verification 2026-04-27.*
+*Provenance: MeshMobility readme 28; diag_grid.py verification 2026-04-27.*
 
 **U-SK-005 [Cross-domain] Approach curve radius is a momentum constraint, not a geometry preference**
-The minimum curve radius before a station CP or ezone merge point is derived from physics, not aesthetics. A pod arriving at speed V needs `reaction_distance = V × reaction_time` before a merge decision, plus braking distance after. If the approach curve has forced V below nominal before that window begins, the zipper gap calculation runs on the wrong speed — producing an incorrect gap and potential collision risk. The fix is always layout: move the station further away, rotate it to face the connection, or add waypoint markers to force a longer approach. `check_approach_curves(model)` enforces MIN_APPROACH_CURVE_RADIUS = 8 m over the last 12 m of each guideway end. The 2 m straight lead-in in the bezier handles seam tangent continuity — a different, narrower constraint. Same law governs: ezone entry speed (physical), segment throughput weighting (Route-Time), CP placement (SketchUp).
+The minimum curve radius before a station CP or ezone merge point is derived from physics, not aesthetics. A pod arriving at speed V needs `reaction_distance = V × reaction_time` before a merge decision, plus braking distance after. If the approach curve has forced V below nominal before that window begins, the zipper gap calculation runs on the wrong speed — producing an incorrect gap and potential collision risk. The fix is always layout: move the station further away, rotate it to face the connection, or add waypoint markers to force a longer approach. `check_approach_curves(model)` enforces MIN_APPROACH_CURVE_RADIUS = 8 m over the last 12 m of each guideway end. The 2 m straight lead-in in the bezier handles seam tangent continuity — a different, narrower constraint. Same law governs: ezone entry speed (physical), segment throughput weighting (MeshMobility), CP placement (SketchUp).
 *Provenance: Build session 2026-05-16; Bill's explicit requirement.*
 
 **U-PH-001 [Physical — Scale/4WD] `blockedByEZ = True` means two pods collided at ezone entry**
@@ -564,8 +564,8 @@ When computing CP tangent direction, use `cap_pt` (the `dead_cap_end` entity, pl
 Noelle's `[BLOCK]` level recommendations are not advisory. They represent physical constraints (approach curve radius = momentum constraint, not aesthetics; disconnected topology = no routing). Allie must not let them pass silently into the console. When Noelle BLOCKs, Allie names the specific stations and the specific remediation: rotate, move, or add waypoints. Approach curve violations require the DESIGNER to fix layout — the code is correctly detecting a physical safety constraint.
 *Provenance: Bill's instruction 2026-05-18: "Noelle needs to demand attention to the parameters. Allie needs to listen to Noelle."*
 
-**U-ALL-001 [Cross-domain] Noelle feature.json applies to all environments — SketchUp, Physical, Route-Time**
-Station behaviors (allowed segment sequences per template) are physical facts. They are declared once in `noelle_features.json` (plugin folder, keyed by component definition name). Noelle generates `{model}.feature.json` on every Build and Validate. TripPlanner, Natalie, Nora, and Route-Time all read from it — none recalculate. This is how large networks stay manageable: behaviors are enumerated once, looked up everywhere. Adding a new station template means one entry in `noelle_features.json`, not code changes across multiple files.
+**U-ALL-001 [Cross-domain] Noelle feature.json applies to all environments — SketchUp, Physical, MeshMobility**
+Station behaviors (allowed segment sequences per template) are physical facts. They are declared once in `noelle_features.json` (plugin folder, keyed by component definition name). Noelle generates `{model}.feature.json` on every Build and Validate. TripPlanner, Natalie, Nora, and MeshMobility all read from it — none recalculate. This is how large networks stay manageable: behaviors are enumerated once, looked up everywhere. Adding a new station template means one entry in `noelle_features.json`, not code changes across multiple files.
 *Provenance: Bill's direct instruction 2026-05-17.*
 
 ---
@@ -610,4 +610,4 @@ Allie harvests with `scripts/allie-harvest-processors.py` and promotes confirmed
 | 2026-07-05 | Highways are boundaries, not corridors | I-44, US-169, I-244 etc. are walls that divide neighborhoods. Nobody walks to an interstate. Stations go on the arterial grid between highways where commercial nodes are. Highways tell you where demand crosses, not where stations go. |
 | 2026-07-05 | Crash rate per 10K AADT is the primary placement signal | Tulsa local arterials: 87.7 crashes/10K AADT — 9× more dangerous than interstates (9.3/10K). Pedestrian fatalities concentrate on these grid streets. JPods on the grid displaces the deadliest trips, not just the most numerous. |
 | 2026-07-05 | 1 mile JPods per 12-18 miles of road = optimal payback ratio | FHWA HM-72: Tulsa has 14 road miles/sq mi. At 1:14, that's ~1 mi JPods/sq mi. 1×2 mile grid matches this exactly. 1×1 is over-capitalized (1:7); 2×2 too sparse (1:28). |
-| 2026-07-05 | Noelle Draft button + printable report in Route-Time GUI | /api/noelle/draft places stations; /api/noelle/report generates printable HTML. Crash rate table, highway boundaries, grid analysis, station list with crash/AADT scores. |
+| 2026-07-05 | Noelle Draft button + printable report in MeshMobility GUI | /api/noelle/draft places stations; /api/noelle/report generates printable HTML. Crash rate table, highway boundaries, grid analysis, station list with crash/AADT scores. |

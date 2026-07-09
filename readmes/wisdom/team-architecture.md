@@ -73,6 +73,6 @@ Claude Code is powerful but forgets. Allie remembers but can't write code. Toget
 The 500mm edge hallucination is the benchmark. It appeared 3 times across sessions because compression destroyed the fix each time. If it appears a 4th time, the team isn't working.
 
 ## Cross-Domain
-This team architecture applies to all four physical platforms (Scale Model, 4WD, SkyRide, Full JPods) and all programs (Route-Time, WebClerk, MyCarryOn). The same authority chain, the same memory structure, the same "no silent tolerance" rule.
+This team architecture applies to all four physical platforms (Scale Model, 4WD, SkyRide, Full JPods) and all programs (MeshMobility, WebClerk, MyCarryOn). The same authority chain, the same memory structure, the same "no silent tolerance" rule.
 
 The team is the same idea expressed in multiple domains — just like everything else Bill builds.

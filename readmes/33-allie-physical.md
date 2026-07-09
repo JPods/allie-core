@@ -12,12 +12,12 @@
 
 The physical JPods environment is the scale-model and real-world testbed where pods move on actual track, sensors fail or succeed, ezones behave under true timing, and every prior assumption is forced to answer to reality.
 
-This environment is not SketchUp and not Route-Time:
+This environment is not SketchUp and not MeshMobility:
 - Not a design-time geometry tool
 - Not an abstract graph simulator
 - The place where guideway direction, timing, blockage, merge behavior, and hardware reliability meet the real world
 
-**When there is a contradiction, the physical system is the final arbiter.** Upstream environments (Route-Time, SketchUp) must correct to it.
+**When there is a contradiction, the physical system is the final arbiter.** Upstream environments (MeshMobility, SketchUp) must correct to it.
 
 ### What WebClerk Is in This Environment
 
@@ -45,7 +45,7 @@ Until physical Noelle, Natalie, and Nora each have standalone processors, **Alli
 - When Nora repeats a fault or logs repeated struggle, Allie identifies the pattern and the likely root cause
 - When Natalie's dispatch behavior looks wrong, Allie helps decide whether the problem is route assignment, pod state, or track reality
 - When Noelle's distributed ezone behavior produces queueing or blockage, Allie determines whether the issue is timing, policy, or hardware state
-- When a physical result contradicts Route-Time or SketchUp, Allie records the correction pressure immediately and identifies which upstream artifact must change
+- When a physical result contradicts MeshMobility or SketchUp, Allie records the correction pressure immediately and identifies which upstream artifact must change
 - When a session yields fleet follow-up, hardware work, or a WhatIf experiment, Allie records it in WebClerk
 
 **Stop and Review equivalent:** When the same physical anomaly appears repeatedly, stop treating it as noise. Stop repeating the same motion or reset loop blindly. Inspect telemetry, pod state, hardware state, and recent changes. Compare with the last known good physical session. Write the unresolved issue into WebClerk if follow-up remains. Retry is not diagnosis in hardware any more than in software.
@@ -89,7 +89,7 @@ Until physical Noelle, Natalie, and Nora each have standalone processors, **Alli
 | Known pod IPs | In `JPodsSM_RPi/readmes/Bill-Allie-Notes.md` (authoritative) and `podPresenter/json/podIP.json` (runtime) |
 | MQTT broker address | 192.168.1.189 (home network) — changes per venue |
 
-**Project boundary:** This document applies to the physical JPods environment only. Do not silently transfer Route-Time Python/Flask details, SketchUp Ruby APIs, or WebClerk internals. Cross-domain lessons may transfer via explicit mappings. Implementation details do not transfer.
+**Project boundary:** This document applies to the physical JPods environment only. Do not silently transfer MeshMobility Python/Flask details, SketchUp Ruby APIs, or WebClerk internals. Cross-domain lessons may transfer via explicit mappings. Implementation details do not transfer.
 
 ### Critical Files
 
@@ -198,7 +198,7 @@ mosquitto_sub -h 192.168.1.189 -t SERVER -v | grep TELEMETRY
 **During session:**
 1. Track fleet status and repeated anomalies as they occur
 2. Distinguish runtime behavior from interpretation — what happened first, what it means second
-3. Flag any contradiction with SketchUp or Route-Time immediately, with a specific statement of which upstream artifact must change
+3. Flag any contradiction with SketchUp or MeshMobility immediately, with a specific statement of which upstream artifact must change
 4. Convert hardware follow-up and candidate experiments into WebClerk actions or WhatIf items
 5. Treat repeat anomalies as patterns to diagnose, not noise to tolerate
 
@@ -208,7 +208,7 @@ mosquitto_sub -h 192.168.1.189 -t SERVER -v | grep TELEMETRY
 3. Append retrospection: root cause, lesson, files changed
 4. Create or update WebClerk action/note/WhatIf record if follow-up remains
 5. Mark whether the lesson is physical-only, overlapping, or universal
-6. If physical reality falsified an upstream assumption, identify the specific SketchUp or Route-Time artifact that must change
+6. If physical reality falsified an upstream assumption, identify the specific SketchUp or MeshMobility artifact that must change
 
 ### WebClerk Records Allie Uses from Physical Work
 
@@ -234,7 +234,7 @@ Allie reads this log at session start and session end. Pattern analysis: same ev
 
 ### Cross-Domain Mappings
 
-| Physical concept | Route-Time equivalent | SketchUp equivalent | Invariant |
+| Physical concept | MeshMobility equivalent | SketchUp equivalent | Invariant |
 |-----------------|----------------------|--------------------|-----------|
 | Physical pod travel direction | Directed graph edge | FollowMe line direction | One-way legality must hold everywhere |
 | Physical platform berth | PLATFORM node | `platform_guideways` tag | Boarding/alighting must resolve to a real place |
@@ -250,7 +250,7 @@ Allie reads this log at session start and session end. Pattern analysis: same ev
 |----------|-----------|--------|
 | Simulation says route is X min; physical takes Y min | Physical | Update simulation speed/overhead assumptions |
 | SketchUp model shows geometry A; physical track is geometry B | Physical | Fix SketchUp model |
-| Route-Time topology is clean; physical pod goes wrong way | Physical | Check SketchUp direction tags, then physical track installation |
+| MeshMobility topology is clean; physical pod goes wrong way | Physical | Check SketchUp direction tags, then physical track installation |
 | Simulation shows no congestion; physical pods queue up | Physical | Diagnose ezone timing — may need headway adjustment in simulation |
 
 ### Environment-Specific Knowledge (Do NOT Transfer)
@@ -269,10 +269,10 @@ Allie reads this log at session start and session end. Pattern analysis: same ev
 
 - **Live Allie↔Nora channel** (NS-07): Allie currently reads TELEMETRY manually. When the live channel is built, what is the signing scheme? Design the signing before building the channel.
 - **Allie WebSocket connection**: Mosquitto WebSocket bridge (port 9001) is not yet configured. Without it, Allie cannot receive live telemetry in a browser context.
-- **Demand model calibration**: How does physical throughput data feed back into Route-Time simulation speed and congestion assumptions? No formal protocol exists yet.
+- **Demand model calibration**: How does physical throughput data feed back into MeshMobility simulation speed and congestion assumptions? No formal protocol exists yet.
 - **Multi-venue operation**: Pod IPs change at every venue. The broker address (currently hardcoded 192.168.1.189) also changes. Venue-configurable broker address is not yet implemented.
 - **Ezone timing in simulation**: The simulation has no model of physical ezone timing. When should it get one?
-- **Physical contradiction cascade**: When physical contradicts both SketchUp and Route-Time simultaneously, what is the protocol for updating both upstream environments in the same session?
+- **Physical contradiction cascade**: When physical contradicts both SketchUp and MeshMobility simultaneously, what is the protocol for updating both upstream environments in the same session?
 
 ---
 

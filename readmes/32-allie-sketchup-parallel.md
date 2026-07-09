@@ -16,7 +16,7 @@ It incorporates the newer Allie policy already agreed elsewhere:
 - Allie is always present in SketchUp sessions
 - Allie is the AI substrate for Noelle, Natalie, and Nora until each has a standalone processor
 - The Ruby agents remain the runtime authority structures
-- SketchUp-specific lessons must be kept separate from Route-Time and physical JPods lessons
+- SketchUp-specific lessons must be kept separate from MeshMobility and physical JPods lessons
 - WebClerk is the structured operating database Allie uses for actions, notes, and cross-session coordination
 
 ---
@@ -30,7 +30,7 @@ It is where formations are placed, Connection Points are discovered, dual guidew
 
 The SketchUp plugin is not the simulator and not the physical runtime:
 
-- It is not Route-Time's Python graph and congestion model
+- It is not MeshMobility's Python graph and congestion model
 - It is not the physical pod fleet and MQTT system
 - It is the 3D authoring system that produces the declared network geometry and FollowMe export those other environments depend on
 
@@ -61,7 +61,7 @@ In SketchUp, these agents are Ruby authority structures:
 
 These agents enforce rules.
 They do not learn across sessions.
-They do not compare this SketchUp session with prior Route-Time or physical findings.
+They do not compare this SketchUp session with prior MeshMobility or physical findings.
 They do not build an experience base.
 
 ### Allie's role in SketchUp
@@ -76,7 +76,7 @@ That means:
 - When Noelle's definition gate fires, Allie reasons about root cause, not just the error string
 - When Natalie cannot find a route, Allie diagnoses whether the failure is topology, naming, export, or station-definition related
 - When Nora logs repeated struggle, Allie reads the pattern and helps identify what changed in the model or trip data
-- When a design choice may affect Route-Time or the physical scale model, Allie flags the cross-domain consequence immediately
+- When a design choice may affect MeshMobility or the physical scale model, Allie flags the cross-domain consequence immediately
 - When the session produces a real next action, candidate WhatIf, or coordination note, Allie records it in WebClerk rather than leaving it as an untracked conversational residue
 
 ### Authority boundary
@@ -280,19 +280,19 @@ When Stop and Review fires, Allie should answer:
 - what repeated pattern just occurred
 - what changed compared with the last known good state
 - which file, formation, station, or export convention is the likely root cause
-- whether this lesson belongs only to SketchUp or also to Route-Time / physical JPods
+- whether this lesson belongs only to SketchUp or also to MeshMobility / physical JPods
 
 ### What Allie should accumulate from SketchUp
 
 1. Repeated formation tag mistakes
 2. Repeated station identity mistakes
 3. Known-bad modeling patterns that look correct in 3D but export broken FollowMe state
-4. Cross-domain mismatches between SketchUp intent and Route-Time / physical behavior
+4. Cross-domain mismatches between SketchUp intent and MeshMobility / physical behavior
 5. Decisions about datum, platform detection, trip export policy, and runtime contract
 
 ### Cross-domain mappings that matter here
 
-| SketchUp concept | Route-Time equivalent | Physical equivalent | Invariant |
+| SketchUp concept | MeshMobility equivalent | Physical equivalent | Invariant |
 | ---------------- | --------------------- | ------------------- | --------- |
 | CP pair / directed endpoint | CP object with inbound/outbound nodes | Physical directional junction / switch behavior | Directed boundary — inbound and outbound are not interchangeable |
 | `platform_guideways` in export | PLATFORM node | Physical platform berth | Route must begin or end at a real boarding/alighting location |
@@ -304,7 +304,7 @@ When Stop and Review fires, Allie should answer:
 
 When SketchUp work crosses into another domain, Allie should use WebClerk as the handoff surface:
 
-- create an `action` when Route-Time or physical follow-up is required
+- create an `action` when MeshMobility or physical follow-up is required
 - create a WhatIf item in project 24 when the insight is promising but unvalidated
 - create an Alice note only when the issue belongs to WebClerk data quality, settings, or search behavior
 
@@ -335,7 +335,7 @@ Use it to make responsibility, sequence, and review explicit.
 
 - What additional geometry-readiness checks should exist before FollowMe export beyond the current definition gate?
 - Should the SketchUp environment get a formal "export readiness" report separate from Noelle's graph validation?
-- How should Allie's gap log entries be promoted into universal design invariants when Route-Time and physical confirm the same lesson?
+- How should Allie's gap log entries be promoted into universal design invariants when MeshMobility and physical confirm the same lesson?
 - What is the cleanest handoff artifact when standalone processors replace Allie's advisory role for Noelle, Natalie, or Nora?
 
 ---

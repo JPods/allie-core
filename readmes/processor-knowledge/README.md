@@ -4,7 +4,7 @@
 
 The per-agent knowledge files (Noelle, Natalie, Nora) live in `readmes/agents/`.
 Each file contains the agent's full knowledge across all three domains:
-SketchUp, Route-Time, and real-world physical implementations.
+SketchUp, MeshMobility, and real-world physical implementations.
 
 ---
 
@@ -23,9 +23,9 @@ SketchUp, Route-Time, and real-world physical implementations.
 Each agent file has:
 1. **Three Domains at a Glance** — quick reference: what the agent IS in each domain
 2. **Universal Rules** — invariants that hold across all domains
-3. **Domain Knowledge** — SketchUp / Route-Time / Physical, each in its own section
+3. **Domain Knowledge** — SketchUp / MeshMobility / Physical, each in its own section
 4. **Cross-Domain Mappings** — explicit table showing where concepts transfer vs where they are domain-specific
-5. **Allie's Accumulated Understandings** — tagged `[SketchUp]`, `[Route-Time]`, `[Physical]`, or `[Universal]`
+5. **Allie's Accumulated Understandings** — tagged `[SketchUp]`, `[MeshMobility]`, `[Physical]`, or `[Universal]`
 6. **Processor Contract** — inputs, outputs, and queries per domain
 7. **Experience Log Protocol** — how future standalone processors write experience back to Allie
 
@@ -54,6 +54,6 @@ the relevant agent file under "Allie's Accumulated Understandings."
 
 For how Allie herself operates in each domain, see:
 - `readmes/30-allie-universal-FINAL.md` — Allie's universal role
-- `readmes/31-allie-route-time-FINAL.md` — Allie's role in Route-Time
+- `readmes/31-allie-route-time-FINAL.md` — Allie's role in MeshMobility
 - `readmes/32-allie-sketchup-FINAL.md` — Allie's role in SketchUp
 - `readmes/33-allie-physical-FINAL.md` — Allie's role in physical

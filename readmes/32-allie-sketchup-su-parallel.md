@@ -8,7 +8,7 @@
 
 ## Why this parallel draft exists
 
-This draft is a comparison candidate, not a replacement yet. It tightens SU authority boundaries, clarifies what must be shared with Route-Time and Physical, and removes ambiguity about who does what during a SketchUp session.
+This draft is a comparison candidate, not a replacement yet. It tightens SU authority boundaries, clarifies what must be shared with MeshMobility and Physical, and removes ambiguity about who does what during a SketchUp session.
 
 ---
 
@@ -26,7 +26,7 @@ This draft is a comparison candidate, not a replacement yet. It tightens SU auth
 ### Needed updates in 31-allie-route-time.md
 
 1. Add a required export format for SU handoff.
-   - Route-Time needs a stable, machine-readable handoff payload so SU and Physical can compare topology and directionality.
+   - MeshMobility needs a stable, machine-readable handoff payload so SU and Physical can compare topology and directionality.
 2. Add a stronger distinction between congestion and topology issues in reporting.
    - Require both indicators in reports: congestion metric and route-ratio metric.
 3. Add the same session evidence packet fields used in SU and Physical.
@@ -36,7 +36,7 @@ This draft is a comparison candidate, not a replacement yet. It tightens SU auth
 1. Add a direct intake contract for SU model intent.
    - Physical should receive a concise route-intent table from SU so failures can be attributed to geometry, control, or sensing.
 2. Add a rule for physical contradiction handling.
-   - If physical contradicts SU/Route-Time, record exact contradiction and required upstream correction in both documents, same day.
+   - If physical contradicts SU/MeshMobility, record exact contradiction and required upstream correction in both documents, same day.
 3. Add explicit feedback format for simulation calibration.
    - Physical should emit calibration deltas (timing, queue behavior, blockage frequency) in fixed fields.
 
@@ -66,7 +66,7 @@ SU is the design-authoring environment. It is where topology intent is declared:
 - CP boundary orientation,
 - export graph integrity.
 
-SU is not the runtime truth. Physical runtime behavior is truth. Route-Time is analytic truth for the modeled assumptions. SU must provide clear intent so those two systems can validate or reject it.
+SU is not the runtime truth. Physical runtime behavior is truth. MeshMobility is analytic truth for the modeled assumptions. SU must provide clear intent so those two systems can validate or reject it.
 
 ### Agent roles in SU
 
@@ -121,7 +121,7 @@ At session end, SU publishes this packet:
 - Stop-and-Review events: count, trigger type, resolution status.
 - Directional exceptions: list, reason, owner, sunset.
 - Cross-domain implications:
-  - what Route-Time should verify,
+  - what MeshMobility should verify,
   - what Physical should verify.
 
 This packet is the comparison substrate across your three version streams.
@@ -131,7 +131,7 @@ This packet is the comparison substrate across your three version streams.
 For each concept that leaves SU, include:
 
 1. SU representation
-2. Route-Time representation
+2. MeshMobility representation
 3. Physical representation
 4. invariant that must survive translation
 5. implementation details that must not be transferred
@@ -140,7 +140,7 @@ Example:
 
 - Concept: CP boundary direction
 - SU: colored directional endpoint in component definition
-- Route-Time: CP object with inbound/outbound nodes
+- MeshMobility: CP object with inbound/outbound nodes
 - Physical: switch behavior with directional traversal constraints
 - Invariant: inbound/outbound are not interchangeable
 - Do-not-transfer: method names, internal API signatures
@@ -149,7 +149,7 @@ Example:
 
 ## Comparison Protocol (SU version)
 
-When comparing SU vs Route-Time vs Physical outputs, use this sequence:
+When comparing SU vs MeshMobility vs Physical outputs, use this sequence:
 
 1. Topology intent check
    - Do all three agree on station/CP connectivity?
@@ -160,7 +160,7 @@ When comparing SU vs Route-Time vs Physical outputs, use this sequence:
 4. Throughput/congestion check
    - Are bottlenecks aligned in location and order-of-magnitude?
 5. Contradiction record
-   - If mismatch exists, log root candidate and required correction target (SU, Route-Time, or Physical runtime/calibration).
+   - If mismatch exists, log root candidate and required correction target (SU, MeshMobility, or Physical runtime/calibration).
 
 ---
 
@@ -180,4 +180,4 @@ When comparing SU vs Route-Time vs Physical outputs, use this sequence:
 - Should SU evidence packet be markdown, JSON, or both?
 - What is the minimum OD route set for mandatory reachability tests before export?
 - Should Stop-and-Review thresholds differ by fault class (identity fault vs routing fault)?
-- Do we need a single shared schema for comparison artifacts across SU, Route-Time, and Physical?
+- Do we need a single shared schema for comparison artifacts across SU, MeshMobility, and Physical?

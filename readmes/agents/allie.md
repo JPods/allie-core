@@ -19,7 +19,7 @@ Quick-read snapshot. Read the named readme for full detail.
 | Project | Status | Last Active | Key readme |
 |---------|--------|-------------|------------|
 | **JPods — SketchUp plugin** | 5V vehicle placement working (stop-and-dump fixed 4 bugs on 2026-05-01). Dispatch server on port 5051. CP/platform tag-first policy settled. | 2026-05-01 | `readmes/sketchup/jpods-plugin.md` |
-| **JPods — Route-Time** | Full trip simulation with two-sweep O-D coverage. Isochrone (walk-ride-walk). Network clipboard (copy/paste lat-lon network). | 2026-05-01 | `readmes/27-route-time.md`, `28-route-time-gui-architecture.md` |
+| **JPods — MeshMobility** | Full trip simulation with two-sweep O-D coverage. Isochrone (walk-ride-walk). Network clipboard (copy/paste lat-lon network). | 2026-05-01 | `readmes/27-route-time.md`, `28-route-time-gui-architecture.md` |
 | **JPods — Control system** | Nora/Natalie/Noelle Ruby modules in SketchUp. Allie is processing substrate. Physical dispatch via WEBrick 5051. Physical pod startup guide in `25-`. | 2026-05-01 | `readmes/22-jpods-control-system.md` |
 | **JPods — Trip booking API** | Alice owns pricing (WC3 Item model). Two endpoints: price_query, invoice. fire-and-log dispatch. Mobile trip app at `/jpods/trip/`. | 2026-04-29 | `readmes/35-jpods-alice-trip-api.md` |
 | **WebClerk / Alice** | Alice provides API/database for JPods ticketing, actions, transactions. WebClerk MCP server registered in `~/.claude/settings.json`. | 2026-04-30 | `readmes/agents/alice.md`, `readmes/05-webclerk-integration.md` |
@@ -226,7 +226,7 @@ Natalie queries Noelle and Alice at dispatch time. Neither Noelle nor Alice rout
 **The fare = the route:** A pod's fare is the sum of segment rates along the route Natalie actually chose. If Alice raised rates on segment X at peak load, that premium is in the passenger's fare. Passengers who can wait see a lower-rate alternative route. Passengers who cannot pay the premium. Price and routing are the same signal — one in pods/minute, one in dollars.
 
 **What Allie watches across domains:**
-- Price signals that work at 4 stations may create perverse routing incentives at 40 stations (Route-Time is where this surfaces)
+- Price signals that work at 4 stations may create perverse routing incentives at 40 stations (MeshMobility is where this surfaces)
 - Noelle's load map and Alice's rate signals are both time-projected; they must be on the same clock (UTC — Axiom 14)
 - A segment Alice has priced high because of past congestion, but Noelle projects as clear next cycle, is a signal to lower the rate — Alice needs Noelle's projection to price correctly
 - Neither Noelle nor Alice will naturally see this feedback loop; Allie flags it
@@ -265,7 +265,7 @@ the story.
     cp-anchor-z/
     layer-manager-missing/
     vector3d-multiply/
-  rt/                          # Route-Time domain
+  rt/                          # MeshMobility domain
   ph/                          # Physical domain
 ```
 
@@ -433,7 +433,7 @@ before Bill or a student encounters it again. Current guidance domains:
 | **followme.json hygiene** | One canonical followme.json beside each .skp; no scattered duplicates | First Connect Guideways commit |
 | **Approach curves before stations** | Guideways must curve gently for ≥ 12 m before each station CP; Noelle flags radius < 8 m as a block. Redesign = move station, rotate station, or add waypoints. | Build output; Noelle review |
 | **Physical Pi setup** | SD card in skp_jpods/utilities/; hardware.json beside the .skp | Robot startup sequence |
-| **Route-Time export** | Export to named project folder; do not overwrite last run | Export button |
+| **MeshMobility export** | Export to named project folder; do not overwrite last run | Export button |
 
 This list grows as new failure patterns are identified. Allie adds to it; she does not
 remove items unless the underlying system has been redesigned so the mistake is no longer

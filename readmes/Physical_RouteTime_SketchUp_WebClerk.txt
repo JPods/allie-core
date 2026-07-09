@@ -11,13 +11,13 @@ The What of JPods:
 Use JPods solar-powered, grade-separated networks of self-driving vehicles to replace 60% of car-miles in cities by JPods trips in the Middle-mile (.5 to 50 miles) and walking/biking/proximity in the last-mile (www.library.JPods.com, and www.JPods.com)
 WebClerk is our enterprise software and database program to build and manage JPods networks.
 JPodsSM is our physical world implementation on full JPods, scale models, 4wd models, SkyRide.
-Route-Time is our travel time estimate that helps design networks on maps.
+MeshMobility is our travel time estimate that helps design networks on maps.
 SketchUp Plugin is a 3D rendering and modeling program for segments of networks.
 5x5FreeMarket.com defines the regulatory framework for cities. Privately funded networks 5 times more efficient than roads, pay 5% of gross transport revenues to use the airspace over approved public Rights of Way and are regulated by the 3,000 times better safety record of theme park rides.
 
 The How of JPods: 
 Start small, iterate relentlessly.
-Mass is a Principle of War. Create mass by polishing, then giving away WebClerk, JPodsSM, Route-Time, and SketchUp applications so vast numbers of people (Wisdom of the Many) can get their city to adopt 5x5FreeMarket. Viable networks designed by people, JPods will form a company, fund construction, share equity, build and operate the network. Parallel example is AOL massively sending out "You've got mail" disks to trigger a tipping point in email adoption.
+Mass is a Principle of War. Create mass by polishing, then giving away WebClerk, JPodsSM, MeshMobility, and SketchUp applications so vast numbers of people (Wisdom of the Many) can get their city to adopt 5x5FreeMarket. Viable networks designed by people, JPods will form a company, fund construction, share equity, build and operate the network. Parallel example is AOL massively sending out "You've got mail" disks to trigger a tipping point in email adoption.
 
 Following are notes made by agents in each of the applications. Please review and consolidate a plan. Here is a link to all the Allie readmes. We are focused at this moment on 
 
@@ -34,7 +34,7 @@ Validation: the revised parallel draft now passes workspace diagnostics with no 
 
 Natural next steps:
 
-Apply the same WebClerk/database layer to the universal, Route-Time, and physical drafts as separate parallel copies.
+Apply the same WebClerk/database layer to the universal, MeshMobility, and physical drafts as separate parallel copies.
 Diff this parallel SketchUp version against the main SketchUp draft and merge only the parts Bill wants kept.
 
 
@@ -51,18 +51,18 @@ Top findings from the review:
 
 Participation boundary ambiguity: SU text says Allie is start/end only, but also implies continuous in-session guidance.
 No common comparison artifact: the four docs do not enforce one shared end-of-session evidence format, which makes side-by-side comparison harder.
-Cross-domain contradiction handling is under-specified: when Physical disagrees with SU or Route-Time, correction ownership is not consistently declared.
+Cross-domain contradiction handling is under-specified: when Physical disagrees with SU or MeshMobility, correction ownership is not consistently declared.
 Promotion criteria to universal knowledge need tighter rules to avoid premature generalization.
 SU export quality needs a stronger blocking checklist artifact, not just descriptive guidance.
 What the new SU parallel draft includes:
 
-Explicit changes needed in Universal, Route-Time, SketchUp, and Physical docs from the SU perspective.
+Explicit changes needed in Universal, MeshMobility, SketchUp, and Physical docs from the SU perspective.
 A full SU candidate copy with clearer authority boundaries.
 A required SU readiness gate before export.
 A required SU session evidence packet for clean three-way comparison.
-A comparison protocol for SU vs Route-Time vs Physical.
+A comparison protocol for SU vs MeshMobility vs Physical.
 Open questions to drive final polish.
-If you want, I can now generate matching parallel drafts for Route-Time and Physical in the same style so you have a full three-document comparison set.
+If you want, I can now generate matching parallel drafts for MeshMobility and Physical in the same style so you have a full three-document comparison set.
 
 
 I have the gap. The universal seed draft still has the older taxonomy core, but it does not yet reflect the stronger boundary now present in all three environment parallels: Allie always present, explicit AI-substrate role, explicit WebClerk role, and a cleaner separation between runtime truth, long-form memory, and structured operating records.
@@ -128,6 +128,6 @@ Validation: the revised parallel draft now passes workspace diagnostics with no 
 
 Natural next steps:
 
-Apply the same WebClerk/database layer to the universal, Route-Time, and physical drafts as separate parallel copies.
+Apply the same WebClerk/database layer to the universal, MeshMobility, and physical drafts as separate parallel copies.
 Diff this parallel SketchUp version against the main SketchUp draft and merge only the parts Bill wants kept.
 

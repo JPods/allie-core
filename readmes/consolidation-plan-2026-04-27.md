@@ -10,7 +10,7 @@
 | Doc | Original | Parallel (with WebClerk) | SU draft | CC draft |
 |-----|----------|--------------------------|----------|----------|
 | Universal (30) | 30-allie-universal.md | 30-allie-universal-parallel.md | — | — |
-| Route-Time (31) | 31-allie-route-time.md | 31-allie-route-time-parallel.md | — | — |
+| MeshMobility (31) | 31-allie-route-time.md | 31-allie-route-time-parallel.md | — | — |
 | SketchUp (32) | 32-allie-sketchup.md | 32-allie-sketchup-parallel.md | 32-allie-sketchup-su-parallel.md | 32-allie-sketchup-CC.md |
 | Physical (33) | 33-allie-physical.md | 33-allie-physical-parallel.md | — | — |
 
@@ -37,14 +37,14 @@ What the original has that the parallel lacks:
 
 ---
 
-### 31 — Route-Time
+### 31 — MeshMobility
 
 **Winner to carry forward:** `31-allie-route-time-parallel.md`
 
 What it adds over the original that must be kept:
 - Allie always present framing
 - WebClerk project 25 / project 24 usage spelled out concretely
-- Stop and Review rule for Route-Time (not present in original)
+- Stop and Review rule for MeshMobility (not present in original)
 - Authority boundary stated for three layers: Python runtime / Allie / WebClerk
 - Minimum required state before results are worth believing — 4 conditions
 
@@ -126,7 +126,7 @@ What the original has that the parallel lacks:
 
 3. **FollowMe deploy path** — CC asks: how does `followme.json` get from the SketchUp machine to physical pods and podPresenter? Deploy script or manual? Not documented anywhere in the 10 files.
 
-4. **Route-Time routing sanity endpoint** — all versions flag `GET /api/network/routing_check` as a proposed-but-not-built endpoint. If built it belongs in the FINAL doc as current, not speculative.
+4. **MeshMobility routing sanity endpoint** — all versions flag `GET /api/network/routing_check` as a proposed-but-not-built endpoint. If built it belongs in the FINAL doc as current, not speculative.
 
 5. **Allie WebSocket / Mosquitto port 9001** — physical draft notes this as a gap for live Allie↔Nora channel. Should be an explicit open task in WebClerk project 25.
 
@@ -142,7 +142,7 @@ The brief states the mission context that must be embedded in the universal doc 
 
 **What:** JPods solar-powered, grade-separated, self-driving networks for Middle-mile (.5–50 miles) + walking/biking for Last-mile. Replace 60% of car-miles in cities.
 
-**How:** Start small. Iterate relentlessly. Give away WebClerk, JPodsSM, Route-Time, SketchUp applications so a mass of people (Wisdom of the Many) can design their city's network. Viable networks → JPods forms company, funds construction, shares equity, builds and operates. (Model: AOL mass-distribution creating email tipping point.)
+**How:** Start small. Iterate relentlessly. Give away WebClerk, JPodsSM, MeshMobility, SketchUp applications so a mass of people (Wisdom of the Many) can design their city's network. Viable networks → JPods forms company, funds construction, shares equity, builds and operates. (Model: AOL mass-distribution creating email tipping point.)
 
 **Regulatory frame:** 5x5 FreeMarket — private networks 5× more efficient than roads, pay 5% of gross transport revenues for airspace over approved public Rights of Way, regulated by the 3,000× better safety record of theme park rides.
 

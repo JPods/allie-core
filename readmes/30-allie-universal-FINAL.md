@@ -1,5 +1,5 @@
 # Allie — Universal Role and Knowledge Architecture
-**Applies to:** All environments — Route-Time, SketchUp Plugin, Physical JPods, WebClerk
+**Applies to:** All environments — MeshMobility, SketchUp Plugin, Physical JPods, WebClerk
 **Status:** FINAL — merged from original, parallel, and MERGED candidate
 **Source drafts:** `30-allie-universal.md`, `30-allie-universal-parallel.md`, `30-allie-universal-MERGED.md`
 **Date:** 2026-04-27
@@ -19,11 +19,11 @@ Solar-powered, grade-separated networks of self-driving vehicles replacing 60% o
 |------|------|
 | WebClerk | Enterprise software and operating database for building and managing JPods networks |
 | JPodsSM | Physical world implementation — full JPods, scale models, 4WD models, SkyRide |
-| Route-Time | Travel-time estimation and network design on maps |
+| MeshMobility | Travel-time estimation and network design on maps |
 | SketchUp Plugin | 3D rendering and modeling for network segments |
 | 5×5FreeMarket.com | Regulatory framework — privately funded networks, 5× more efficient than roads, 5% of gross transport revenues to use public ROW airspace |
 
-**How:** Start small. Iterate relentlessly. Build mass by polishing and giving away WebClerk, JPodsSM, Route-Time, and SketchUp so the Wisdom of the Many can get their city to adopt the 5×5 Free Market. Viable networks designed by people → JPods forms a company, funds construction, shares equity, builds and operates. The playbook: AOL massively distributing disks to trigger email adoption — same tipping-point strategy, applied to JPods regulatory adoption.
+**How:** Start small. Iterate relentlessly. Build mass by polishing and giving away WebClerk, JPodsSM, MeshMobility, and SketchUp so the Wisdom of the Many can get their city to adopt the 5×5 Free Market. Viable networks designed by people → JPods forms a company, funds construction, shares equity, builds and operates. The playbook: AOL massively distributing disks to trigger email adoption — same tipping-point strategy, applied to JPods regulatory adoption.
 
 ---
 
@@ -46,7 +46,7 @@ She tracks open questions, recurring mistakes, unresolved design tensions, and l
 Noelle, Natalie, Nora, and Athena are authority structures.
 In each environment where they exist, they enforce rules at runtime:
 
-- Python in Route-Time
+- Python in MeshMobility
 - Ruby in SketchUp
 - Pod/runtime code in the physical system
 - Security and admission code where Athena is present
@@ -130,7 +130,7 @@ Every environment follows the same four-layer structure:
 
 | Layer | Purpose | Examples |
 |-------|---------|---------|
-| Runtime authority | Enforce truth and legality inside the environment | Route-Time routing engine, SketchUp Ruby gate, physical pod runtime |
+| Runtime authority | Enforce truth and legality inside the environment | MeshMobility routing engine, SketchUp Ruby gate, physical pod runtime |
 | Intelligence layer | Diagnose, compare, interpret, accumulate experience | Allie |
 | Operating database | Persist structured follow-up and coordination | WebClerk |
 | Long-form memory | Preserve narrative explanation, retrospection, and design reasoning | readmes, retrospections, agent files |
@@ -170,7 +170,7 @@ Each mapping must identify:
 
 | Environment | Representation | Invariant | Must NOT transfer |
 |-------------|---------------|-----------|------------------|
-| Route-Time (Python) | `CP` object with `inbound_node`, `outbound_node` | Directed boundary — inbound and outbound are never interchangeable | Python API, `connect_cps()` method |
+| MeshMobility (Python) | `CP` object with `inbound_node`, `outbound_node` | Directed boundary — inbound and outbound are never interchangeable | Python API, `connect_cps()` method |
 | SketchUp (Ruby) | CP pair at guideway endpoint; labeled in viewport | Same directed boundary | Ruby `add_text`, stub index logic |
 | Physical (hardware) | Physical directional switch at track junction | Same directed boundary | I2C pin assignments, Nora firmware |
 
@@ -233,7 +233,7 @@ The rule across all environments is simple:
 |-----------|---------------|-----------------|-----|
 | CCW traffic-circle rule | Environment-specific | Universal | JPods operating invariant across simulation, modeling, and physical runtime |
 | `component_definition_faults()` in Ruby | Universal | SketchUp-specific | The lesson is universal; the Ruby method is not |
-| `connect_cps(net, a, b)` | Universal | Route-Time-specific | The concept transfers; the Python call does not |
+| `connect_cps(net, a, b)` | Universal | MeshMobility-specific | The concept transfers; the Python call does not |
 | Station must expose a platform | Universal | Overlapping / cross-domain | True everywhere but expressed differently in each environment |
 | MQTT field positions for TELEMETRY | Universal | Physical-specific | Pure implementation detail |
 | Fail fast at definition / readiness boundaries | Environment-specific | Universal | The principle transfers even when the checks differ |
@@ -269,7 +269,7 @@ Shared principle does not mean identical implementation.
     jpods-physics.md           — CCW rule, one-way constraint, ezone protocol
     design-invariants.md       — fail-fast, no silent degradation, usufruct
     bills-principles.md        — sovereignty, bottom-up, harder right
-  route-time/                  — Route-Time-specific lessons
+  route-time/                  — MeshMobility-specific lessons
   sketchup/                    — SketchUp-specific lessons
   physical/                    — Physical robot-specific lessons
   cross-domain/

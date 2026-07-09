@@ -94,12 +94,12 @@ with a price JSONField. The load is in InvoiceLine (one row per completed trip),
 
 ---
 
-## Route-Time Integration (Future)
+## MeshMobility Integration (Future)
 
-Route-Time has travel time estimates per (origin, destination) pair. When integrated:
+MeshMobility has travel time estimates per (origin, destination) pair. When integrated:
 - Trip app shows estimated travel time before the rider confirms
 - Alice can factor travel time into pricing (longer routes cost more)
-- Natalie uses Route-Time estimates to schedule vehicle dispatch timing
+- Natalie uses MeshMobility estimates to schedule vehicle dispatch timing
 
 ---
 
@@ -110,6 +110,6 @@ Route-Time has travel time estimates per (origin, destination) pair. When integr
    - `adjust_route_price(origin, destination, delta_percent)` — raises one pair, lowers neighbors
    - Triggered by Natalie signal or manual Alice action
 3. **Off-peak discount automation** — cron or Natalie signal to toggle Customer discounts
-4. **Route-Time travel time** — fetch estimate and show in trip app before Travel button
+4. **MeshMobility travel time** — fetch estimate and show in trip app before Travel button
 5. **Noelle integration** — construction and maintenance transactions also affect capacity;
    Noelle signals Alice when a station is offline or constrained

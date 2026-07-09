@@ -2,7 +2,7 @@
 
 ## Color Standard — Red Inbound, Blue Outbound
 
-**All JPods tools (SketchUp plugin, Route-Time GUI, any future visualizations) follow this rule:**
+**All JPods tools (SketchUp plugin, MeshMobility GUI, any future visualizations) follow this rule:**
 
 | Color | Meaning |
 |-------|---------|

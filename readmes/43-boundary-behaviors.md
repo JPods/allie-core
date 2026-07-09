@@ -61,10 +61,10 @@ Allie reads `~/Allie/process/inbox/` nightly:
 | **Physical** | `trip_dispatched` | `mqtt.py` | START OK received — pod, path, length |
 | **Physical** | `ezone_entry` | `ezone.py` | Pod entered ezone — line, ezone_stack state |
 | **Physical** | `trip_complete` | `motor.py` | Trip done — pod, dist_mm, path |
-| **Route-Time** | `simulation_start` | `api.py` | Network, passenger count |
-| **Route-Time** | `simulation_complete` | `api.py` | Served/generated, elapsed |
-| **Route-Time** | `simulation_fault` | `api.py` | 0-served detection, exception message |
-| **Route-Time** | `network_reload` | `api.py` | Network file reloaded — the RT "Reload Plugin" |
+| **MeshMobility** | `simulation_start` | `api.py` | Network, passenger count |
+| **MeshMobility** | `simulation_complete` | `api.py` | Served/generated, elapsed |
+| **MeshMobility** | `simulation_fault` | `api.py` | 0-served detection, exception message |
+| **MeshMobility** | `network_reload` | `api.py` | Network file reloaded — the RT "Reload Plugin" |
 | **WebClerk** | `price_query` | `views_ui.py` | Origin/dest/price/level/contact — Alice's primary signal |
 | **WebClerk** | `order_fulfilled` | `signals.py` | Invoice STATUS_RELEASED transition |
 | **WebClerk** | `payment_created/updated` | `signals.py` | Payment status change |
@@ -76,7 +76,7 @@ Allie reads `~/Allie/process/inbox/` nightly:
 
 ## Implementation Patterns
 
-### Python (Physical, Route-Time, WebClerk, Allie)
+### Python (Physical, MeshMobility, WebClerk, Allie)
 
 ```python
 def _allie_capture(event, message, data=None):
@@ -95,7 +95,7 @@ def _allie_capture(event, message, data=None):
         pass
 ```
 
-Source codes: `PH` (Physical), `RT` (Route-Time), `WC3` (WebClerk), `ALLIE` (Allie), `SU` (SketchUp).
+Source codes: `PH` (Physical), `RT` (MeshMobility), `WC3` (WebClerk), `ALLIE` (Allie), `SU` (SketchUp).
 
 ### Ruby (SketchUp)
 

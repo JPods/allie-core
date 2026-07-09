@@ -75,7 +75,7 @@ The individual is the unit of sovereignty. The JPods passenger who boards a vehi
 **Stop and Review escalation (added April 27, 2026):**
 `@review_block_streak_by_task` per task ID; `stop_and_review_message()` fires after 3 consecutive blocks on the same task. Cleared on success (Athena passes, `ok: true`). Same `STOP_REVIEW_THRESHOLD = 3` as all other agents.
 
-**Scope note:** Domain 2 is the SketchUp plugin only — not the scale model, Route-Time, WebClerk, or any other JPods project.
+**Scope note:** Domain 2 is the SketchUp plugin only — not the scale model, MeshMobility, WebClerk, or any other JPods project.
 - Own `JPods::Athena` in `jpod_console.rb` — the pre-execution validation module
 - Pre-execution gate runs twice: on task selection (UI feedback) and server-side before any proc fires
 - Maintain risk classification of all tasks in `JPods::TASKS`: `:safe | :caution | :destructive`

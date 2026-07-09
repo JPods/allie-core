@@ -159,7 +159,7 @@ python3 /Users/williamjames/Allie/scripts/allie-reflect.py
 
 **Noelle, Natalie, Nora** follow the same trajectory as the control system matures:
 1. Today: rule-based Ruby modules in SketchUp; Allie is their reasoning substrate
-2. Near-term: standalone Python processors running on the Mac alongside Route-Time
+2. Near-term: standalone Python processors running on the Mac alongside MeshMobility
 3. Deployment: Modelfiles running on edge hardware (Pi or dedicated compute) per network node
 4. Scale: one Noelle/Natalie per deployed JPods network; one Nora per physical pod
 

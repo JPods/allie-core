@@ -11,7 +11,7 @@
 
   "_innovation_global": [
     "PROMOTED — trip_id (UUID): dispatch-assigned unique ID. Separate from route_id. Dispatcher writes; Alice and Nora reference for billing and telemetry correlation.",
-    "PROMOTED — route_id: the canonical station-pair route label (e.g. S048_to_S050). Separate from trip_id. Route-Time uses for O-D matrix aggregation.",
+    "PROMOTED — route_id: the canonical station-pair route label (e.g. S048_to_S050). Separate from trip_id. MeshMobility uses for O-D matrix aggregation.",
     "PROMOTED — expires_at: stale trip guard. TripPlanner sets now+TTL. Nora refuses to execute if clock > expires_at.",
     "PROMOTED — trip_hash: SHA of ordered segment_id list. Tamper detection. Nora verifies before departure.",
     "PROMOTED — billing fields: passenger_count, cargo_kg, carryon_uuid, station_pair. Alice reads from trip; no separate billing record needed.",
@@ -19,9 +19,9 @@
     "PROMOTED — segment_action (was 'action'): renamed to avoid collision with generic 'action' in dispatch protocol.",
     "PROMOTED — ezone_entries (was 'ezones'): renamed to reflect per-trip nature vs. network-wide ezone registry.",
     "PROMOTED — cp_index (was 'stub'): renamed to match noelle_features.json stub_pair numbering.",
-    "OPEN — ALLIE: multi-hop trips (more than one inter-station connection). Current hops:1 only. Route-Time O-D matrix needs multi-hop. Add hops[] array with one entry per inter-station connection?",
+    "OPEN — ALLIE: multi-hop trips (more than one inter-station connection). Current hops:1 only. MeshMobility O-D matrix needs multi-hop. Add hops[] array with one entry per inter-station connection?",
     "OPEN — NOELLE: should TripPlanner validate that every segment_id exists in the current map.json before writing trip.json? Catch topology drift before Nora sees it.",
-    "OPEN — ALLIE: Route-Time O-D matrix population. TripPlanner writes one trip.json per O-D pair; Route-Time reads the set. No separate route computation needed — confirm this is the intended architecture."
+    "OPEN — ALLIE: MeshMobility O-D matrix population. TripPlanner writes one trip.json per O-D pair; MeshMobility reads the set. No separate route computation needed — confirm this is the intended architecture."
   ],
 
   "trips": [
@@ -29,7 +29,7 @@
       "trip_id":    null,
       "_note_trip_id": "UUID assigned by Dispatcher at dispatch time. Null in pre-computed route files. Alice and Nora use this as the billing and telemetry correlation key.",
       "route_id":   "S048_to_S050",
-      "_note_route_id": "Canonical route label: {origin}_{to}_{destination}. TripPlanner writes. Route-Time aggregates by route_id for O-D matrix. Stable across multiple dispatches of the same route.",
+      "_note_route_id": "Canonical route label: {origin}_{to}_{destination}. TripPlanner writes. MeshMobility aggregates by route_id for O-D matrix. Stable across multiple dispatches of the same route.",
       "from":       "S048",
       "to":         "S050",
       "hops":       1,

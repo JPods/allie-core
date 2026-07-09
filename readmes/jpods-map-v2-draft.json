@@ -1,5 +1,5 @@
 {
-  "_schema_note": "jpods-map-v2 — 2026-05-20 rev 2. Full physical network document. Written by Noelle on every Build/Validate. One source of truth for all consumers: SketchUp visualizer, TripPlanner, Nora (Pi), Alice (billing), Route-Time, Dispatcher. All distances in mm. All coordinates in mm (x=east, y=north, z=up from model origin). Converges SketchUp and podPresenter formats. Deliberation: 2026-05-20. Field renames applied: stub→cp_index. Added: followme_hash, last_physical_survey, nominal_time_s per line, stations block, ezone_status.",
+  "_schema_note": "jpods-map-v2 — 2026-05-20 rev 2. Full physical network document. Written by Noelle on every Build/Validate. One source of truth for all consumers: SketchUp visualizer, TripPlanner, Nora (Pi), Alice (billing), MeshMobility, Dispatcher. All distances in mm. All coordinates in mm (x=east, y=north, z=up from model origin). Converges SketchUp and podPresenter formats. Deliberation: 2026-05-20. Field renames applied: stub→cp_index. Added: followme_hash, last_physical_survey, nominal_time_s per line, stations block, ezone_status.",
 
   "schema":            "jpods-map-v2",
   "mapId":             "CA_Gilroy_Clean",
@@ -13,7 +13,7 @@
   "_innovation_global": [
     "PROMOTED — followme_hash: required field at top level. Safety: stale map detection. Noelle writes SHA at Build.",
     "PROMOTED — last_physical_survey: required field. Dispatcher uses to age-gate physical.json. Nora writes after full survey run.",
-    "PROMOTED — nominal_time_s per line: required field on every line. Route-Time reads; never recalculates fixed geometry.",
+    "PROMOTED — nominal_time_s per line: required field on every line. MeshMobility reads; never recalculates fixed geometry.",
     "PROMOTED — stations block: top-level index of all stations with capacity and template. Dispatcher and Alice read; Noelle writes at Build.",
     "PROMOTED — ezone_status on each ezone: runtime field set by Dispatcher. Nora reads before entry.",
     "OPEN — ALLIE: what cross-domain data belongs at the map level vs. line level? (solar capacity, CO2 offset, cargo throughput ceiling)",
@@ -58,7 +58,7 @@
       "speedMin":       50,
       "speedMax":       200,
       "nominal_time_s": 57,
-      "_note_nominal_time_s": "Nominal travel time = length_mm / speedMax (mm/s). Route-Time reads; never recalculates. Noelle computes at Build from speedMax.",
+      "_note_nominal_time_s": "Nominal travel time = length_mm / speedMax (mm/s). MeshMobility reads; never recalculates. Noelle computes at Build from speedMax.",
       "startPoint": { "x": 18046, "y": 189037, "z": 5442 },
       "endPoint":   { "x": 13079, "y": 199266, "z": 5442 },
       "segments": [
@@ -111,7 +111,7 @@
     },
 
     "seg_S048_cp1_S050_cp0": {
-      "_note": "Inter-station line. Bezier path with waypoints — multiple segments. grade_pct per segment captures vertical profile for Nora motor control and Route-Time energy model.",
+      "_note": "Inter-station line. Bezier path with waypoints — multiple segments. grade_pct per segment captures vertical profile for Nora motor control and MeshMobility energy model.",
       "id":             "seg_S048_cp1_S050_cp0",
       "type":           "inter_station",
       "from":           { "station": "S048", "cp_index": 1 },
@@ -151,7 +151,7 @@
       "successors":   ["S050.gw_stub_pair_0_in"],
       "predecessors": ["S048.gw_stub_pair_1_out"],
       "energy_model": {
-        "_note": "Per-line energy estimate. Route-Time and Alice use this. Noelle calculates from grade profile + length. Physical Nora logs actual vs. estimated for calibration.",
+        "_note": "Per-line energy estimate. MeshMobility and Alice use this. Noelle calculates from grade profile + length. Physical Nora logs actual vs. estimated for calibration.",
         "estimated_wh": 12.4,
         "grade_penalty_factor": 1.05,
         "method": "grade_adjusted_flat_rate"
@@ -186,7 +186,7 @@
   ],
 
   "network_summary": {
-    "_note": "Top-level network stats. Alice uses for capacity planning. Route-Time uses for network-wide metrics. Noelle calculates at Build.",
+    "_note": "Top-level network stats. Alice uses for capacity planning. MeshMobility uses for network-wide metrics. Noelle calculates at Build.",
     "total_lines":                 17,
     "total_length_mm":             980000,
     "station_count":               4,

@@ -25,7 +25,7 @@ from allie_ask_claude import ask_claude
 
 answer = ask_claude(
     prompt="Why is station S02 showing 35 min at near-zero demand?",
-    context="Route-Time session. Grid generator verified correct 2026-04-27."
+    context="MeshMobility session. Grid generator verified correct 2026-04-27."
 )
 ```
 
@@ -148,7 +148,7 @@ python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 {
   "model": "deepseek-r1:8b",
   "prompt": "Why is the north station showing longer travel time than the south station?",
-  "context": "Route-Time session. Near-zero demand. Grid layout 3×3.",
+  "context": "MeshMobility session. Near-zero demand. Grid layout 3×3.",
   "timeout": 120
 }
 ```

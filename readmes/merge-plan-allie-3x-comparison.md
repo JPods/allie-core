@@ -14,10 +14,10 @@
 **WHAT:** JPods solar-powered, grade-separated transport networks — self-driving vehicles replacing 60% of car-miles in cities via the Middle Mile (0.5–50 miles) plus walking/biking for the Last Mile.
 **HOW:** Start small, iterate relentlessly.
 
-The four tools (Route-Time, SketchUp, Physical/JPodsSM, WebClerk) are not just Bill's working environment. They are **give-away mass products** that create a tipping point — the AOL-disk model. Anyone can design a network for their city; JPods forms a company, funds construction, shares equity, builds, and operates. Allie's role in each environment therefore has a dual purpose:
+The four tools (MeshMobility, SketchUp, Physical/JPodsSM, WebClerk) are not just Bill's working environment. They are **give-away mass products** that create a tipping point — the AOL-disk model. Anyone can design a network for their city; JPods forms a company, funds construction, shares equity, builds, and operates. Allie's role in each environment therefore has a dual purpose:
 
 1. **Bill's personal production tool** — the current session-by-session collaboration model
-2. **Template for the intelligence layer that ships with the product** — every copy of Route-Time running in a city planner's browser will eventually need an Allie equivalent
+2. **Template for the intelligence layer that ships with the product** — every copy of MeshMobility running in a city planner's browser will eventually need an Allie equivalent
 
 This second purpose does not appear in any of the current drafts. It should be in the universal document introduction, not only in the brief.
 
@@ -59,12 +59,12 @@ Across all four parallel sets, these points were independently confirmed by at l
 
 ---
 
-### 31 — Route-Time
+### 31 — MeshMobility
 
 | Source | What it contributes (keep) | What to skip |
 |--------|---------------------------|--------------|
 | Original | CP model (Python), `connect_cps()` behavior, grid generator verification, congestion vs. topology diagnosis table, station topology (turnabout), `diag_grid.py`, critical files table, cross-domain mappings table, Walk-Ride-Walk coverage display | Implied start/end-only framing |
-| Parallel | WebClerk records table (project 25/24, action, setting, document), continuous-presence framing, "what the code actually supports" discipline, Route-Time Stop and Review equivalent, explicit project boundary | The "known weaknesses" section is a comparison note — drop from final |
+| Parallel | WebClerk records table (project 25/24, action, setting, document), continuous-presence framing, "what the code actually supports" discipline, MeshMobility Stop and Review equivalent, explicit project boundary | The "known weaknesses" section is a comparison note — drop from final |
 
 **Merge decisions for 31:**
 - Keep original's entire technical section — it is the most detailed of all documents and represents real verified findings
@@ -115,7 +115,7 @@ This document has four parallel sources. Each adds something that the others lac
 - Keep original's failure modes, hardware behaviors, fleet state checks — verified operational content
 - Add WebClerk records table from parallel directly after the session workflow section
 - Add "what the system actually supports" discipline from parallel
-- Add physical contradiction handling rule from parallel: when physical contradicts SketchUp or Route-Time, identify the upstream artifact that must change, same day
+- Add physical contradiction handling rule from parallel: when physical contradicts SketchUp or MeshMobility, identify the upstream artifact that must change, same day
 - Add venue-configurable broker address as an open question (was buried in original)
 - Replace startup-assistance framing with continuous presence from parallel
 
@@ -210,7 +210,7 @@ These items are not in any of the ten documents and should be added during final
 1. ~~**Resolve WebClerk connection specifics**~~ — **DONE** (Allie + Alice have credentials, WC3 auto-starts, wcapi pattern confirmed in `05-webclerk-integration.md`)
 2. **Merge universal (30)** — set the framework all others inherit from; add canonical Why/What/How
 3. **Merge SketchUp (32)** — most complex; combine all four sources; produces the template for the other environments
-4. **Merge Route-Time (31)** — technically the deepest; mostly additive WebClerk layer on top of solid original
+4. **Merge MeshMobility (31)** — technically the deepest; mostly additive WebClerk layer on top of solid original
 5. **Merge Physical (33)** — operationally the most time-sensitive; additive WebClerk layer on solid original
 
 Each merge should:

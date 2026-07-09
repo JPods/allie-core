@@ -98,12 +98,12 @@
 | Domain | What Nora IS here | Key file / tool |
 |--------|------------------|----------------|
 | **SketchUp** | Operation executor + struggle escalator — attempts operations on the model, escalates repeated failures | `nora.rb` in jpods-plugin |
-| **Route-Time** | Discrete-event simulator — moves pods tick-by-tick, records TripRecord per passenger, generates SimResult | `engine/simulation.py` |
+| **MeshMobility** | Discrete-event simulator — moves pods tick-by-tick, records TripRecord per passenger, generates SimResult | `engine/simulation.py` |
 | **Scale Model / 4WD** | Autonomous Pi pod — encoder dead-reckoning + HuskyLens + TOF; Pi is sovereign, Romeo BLE is muscle | `main.py` + `ezone.py` on Raspberry Pi |
 | **SkyRide** | Same Pi pod role; elevated guideway, outdoor operation, different weight/wind physics | TBD — not yet documented |
 | **JPods Full System** | Passenger-carrying pod with full safety systems; storage and prepositioning added | TBD — not yet implemented |
 
-**Critical distinction:** In SketchUp, Nora executes plugin operations and escalates failures. In Route-Time, Nora is a simulated vehicle moving through a graph. In physical, Nora IS the autonomous pod — she thinks, navigates, and reports.
+**Critical distinction:** In SketchUp, Nora executes plugin operations and escalates failures. In MeshMobility, Nora is a simulated vehicle moving through a graph. In physical, Nora IS the autonomous pod — she thinks, navigates, and reports.
 
 ---
 
@@ -115,7 +115,7 @@
 | Announce anomalous trip times — do not absorb them | Physical reality is the final arbiter; discrepancies teach |
 | Respect jam/spacing threshold — stop when minimum spacing is violated | Physical collision prevention; simulation physics; correct in all domains |
 | Record every trip completely | Allie's observation data; incomplete records break the feedback loop |
-| 3 consecutive failures on same operation → escalate, do not retry silently | Applies in SketchUp plugin operations, Route-Time anomaly detection, and physical FAULT messages |
+| 3 consecutive failures on same operation → escalate, do not retry silently | Applies in SketchUp plugin operations, MeshMobility anomaly detection, and physical FAULT messages |
 
 ---
 
@@ -125,7 +125,7 @@ Nora observes her own trajectory at every track junction. If the transition is g
 
 **Full design plan:** `readmes/agents/agent-experience-framework.md` (Nora section)
 
-**Applies to:** SU (animation tick in `jpod_vehicle_anim.rb`) and Physical (line transition in `motor.py` / `ezone.py`). Route-Time v1 does not carry geometry pts per edge — deferred.
+**Applies to:** SU (animation tick in `jpod_vehicle_anim.rb`) and Physical (line transition in `motor.py` / `ezone.py`). MeshMobility v1 does not carry geometry pts per edge — deferred.
 
 **Four metrics at each junction:**
 1. **Heading discontinuity** — cos(exit_vec · entry_vec); thresholds at 15°/35°/60°
@@ -143,14 +143,14 @@ Nora observes her own trajectory at every track junction. If the transition is g
 |------|----------|-----------|
 | 2026-06-17 | Accumulate observations during run, flush at stop — not at each junction | Avoids flood of output; lets Nora finish the trip; single flush gives Noelle a coherent picture of the full run |
 | 2026-06-17 | Severe faults write FAULT file immediately at flush | Severe defects need to enter the FAULT→TFTS arc immediately; physical.json alone is not visible enough |
-| 2026-06-17 | Route-Time not in v1 scope | RT edges carry distances, not geometry pts; adding pts is a RT architectural change, deferred |
+| 2026-06-17 | MeshMobility not in v1 scope | RT edges carry distances, not geometry pts; adding pts is a RT architectural change, deferred |
 | 2026-06-17 | `physical.json` capped at 500 entries, time-bound 30 days for fault promotion | Old observations should not block routes after geometry is fixed; Build clears noelle.faults[] anyway |
 
 ---
 
 ## Cross-Domain Mappings
 
-| Concept | SketchUp | Route-Time | Physical |
+| Concept | SketchUp | MeshMobility | Physical |
 |---------|----------|-----------|---------|
 | Trip record | `stop_and_review` JSONL event on escalation | `TripRecord` {origin, dest, depart_tick, arrive_tick, route_line_ids} | TELEMETRY stream + CALIBRATION ping per line |
 | Position tracking | Current operation target in model | Node + meters into current segment | mmDist + line ID in TELEMETRY field [2][3] |
@@ -158,7 +158,7 @@ Nora observes her own trajectory at every track junction. If the transition is g
 | Spacing / collision | N/A | Jam threshold 7.17m → pod stops and waits | TOF sensor + `podFront`/`podBack` clearance |
 | Southbound penalty | FollowMe graph has the extra turnabout segments | ~160m added to southbound trip cost | Pod physically navigates the north turnabout |
 
-**Does NOT transfer:** mmStep calibration is physical only — no equivalent in SketchUp or Route-Time. `TripRecord` timing constants (40s station entry, 20s board/alight) are Route-Time only. `@struggle_streak` escalation logic is SketchUp plugin only. Physical Nora and simulation Nora share the same role name but completely different implementations.
+**Does NOT transfer:** mmStep calibration is physical only — no equivalent in SketchUp or MeshMobility. `TripRecord` timing constants (40s station entry, 20s board/alight) are MeshMobility only. `@struggle_streak` escalation logic is SketchUp plugin only. Physical Nora and simulation Nora share the same role name but completely different implementations.
 
 ---
 
@@ -168,21 +168,21 @@ Nora observes her own trajectory at every track junction. If the transition is g
 Nora silently retrying a failing operation gave no signal to the operator. `@struggle_streak` makes 3+ consecutive failures a first-class event written to the JSONL observation log — survives session end, auditable by Noelle.
 *Provenance: SketchUp design decision 2026-04-27.*
 
-**U-RT-001 [Route-Time] Timing constants are fixed costs, not variable**
-Each trip has ~10 min of fixed costs regardless of distance (station entry/exit 40s each, board/alight 20s each, walk 5 min each way). Walk-Ride-Walk is always more than the ride time. When comparing Route-Time predictions to physical, account for fixed costs first — discrepancy in the variable (travel) component is more diagnostic.
-*Provenance: Nora self-report 2026-04-28; Route-Time readme 27 settings section.*
+**U-RT-001 [MeshMobility] Timing constants are fixed costs, not variable**
+Each trip has ~10 min of fixed costs regardless of distance (station entry/exit 40s each, board/alight 20s each, walk 5 min each way). Walk-Ride-Walk is always more than the ride time. When comparing MeshMobility predictions to physical, account for fixed costs first — discrepancy in the variable (travel) component is more diagnostic.
+*Provenance: Nora self-report 2026-04-28; MeshMobility readme 27 settings section.*
 
-**U-RT-002 [Route-Time] Jam ripple — Nora stops and waits, does not reroute**
+**U-RT-002 [MeshMobility] Jam ripple — Nora stops and waits, does not reroute**
 When Nora approaches a stopped pod within min_spacing_m, she stops and waits until spacing clears. She does not reroute. The queue propagates backward. This is correct — it is Noelle's jam signal propagating through vehicles. Interpret it as a capacity issue, not an algorithm malfunction.
 *Provenance: Nora self-report 2026-04-28.*
 
-**U-RT-003 [Route-Time] trip_ms at near-zero demand with no congestion = pure path cost**
+**U-RT-003 [MeshMobility] trip_ms at near-zero demand with no congestion = pure path cost**
 At near-zero demand, no pod is ever stopped by jam threshold. trip_ms = route distance / cruise speed + fixed station costs only. If this is anomalously high for a short pair, Natalie gave Nora a bad route. Near-zero demand is Allie's cleanest diagnostic window for topology bugs.
-*Provenance: Allie Stop-and-Review principle; Route-Time readme 28.*
+*Provenance: Allie Stop-and-Review principle; MeshMobility readme 28.*
 
-**U-RT-004 [Route-Time] route_line_ids serves two purposes**
+**U-RT-004 [MeshMobility] route_line_ids serves two purposes**
 (1) Animation replay — browser draws pod movement from this list. (2) Diagnostic trace — Allie counts IDs to check if Natalie's path is plausible (13–19 for adjacent pair). A trip with hundreds of IDs at near-zero demand is a routing bug, not a congested route.
-*Provenance: Route-Time readme 28; Natalie self-report 2026-04-28.*
+*Provenance: MeshMobility readme 28; Natalie self-report 2026-04-28.*
 
 **U-PH-001 [Physical — Scale/4WD] Pi is sovereign; Romeo BLE is muscle only**
 Pi decides, communicates, and navigates. Romeo BLE/VESC/EZkontrol executes motor commands only. Pi can be upgraded without changing the motor controller. This is the correct separation of logic and muscle — maintain it in all physical variants.

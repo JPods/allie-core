@@ -9,7 +9,7 @@ The SketchUp plugin starts a WEBrick HTTP server on port 5051 when it loads.
 Django's `TravelView` POSTs a trip command to it after posting the invoice to Alice.
 SketchUp receives the trip and animates the pod moving from origin to destination.
 
-**Port:** 5051 (port 5050 is Route-Time)
+**Port:** 5051 (port 5050 is MeshMobility)
 
 ---
 

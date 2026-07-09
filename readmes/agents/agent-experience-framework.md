@@ -1,7 +1,7 @@
 # Agent Experience Framework
 
 **Status:** Design — Nora/SU partially implemented; Noelle, Natalie, Alice pending  
-**Applies to:** Noelle, Natalie, Nora, Alice — all domains (SketchUp, Physical/RPi, Route-Time, WebClerk)  
+**Applies to:** Noelle, Natalie, Nora, Alice — all domains (SketchUp, Physical/RPi, MeshMobility, WebClerk)  
 **Authored:** 2026-06-17  
 **Custodian:** Allie (stores, synthesizes, promotes to Understanding entries)
 
@@ -678,7 +678,7 @@ Over time, `process/physical/networks/` becomes the empirical record of JPods pe
 15. Add cross-network pattern detection to nightly synthesis
 16. Define promotion threshold (3+ networks, moderate+ severity)
 
-### Phase 6 — Route-Time
+### Phase 6 — MeshMobility
 17. Add observation hooks to `engine/simulation.py` at trip complete and SimResult
 18. Surface timing accuracy and conflict rate in RT observation output
 
@@ -1037,7 +1037,7 @@ trajectory_observer.flush(trip_id=current_trip_id)
 
 - **Threshold calibration** — All constants are first-pass estimates. Adjust after first real observation batch on `2_thru_dip`.
 - **Noelle time-bounding** — Observations older than 30 days should not promote to `noelle.faults[]`. Need a `valid_until` field or a Build-time age filter.
-- **Route-Time edges** — Should RT carry geometry pts per edge? Enables Nora's checks in simulation before physical build. Currently deferred — architectural change to Route-Time.
+- **MeshMobility edges** — Should RT carry geometry pts per edge? Enables Nora's checks in simulation before physical build. Currently deferred — architectural change to MeshMobility.
 - **Natalie timing baseline** — The 40s/20s constants are estimates. Once physical trips run, replace with measured values per station type.
 - **Cross-network pattern threshold** — 3 networks, moderate+ severity proposed. May need adjustment once first real dataset exists.
 - **Student networks** — Should student-built networks feed the same synthesis pool, or go into a separate partition? Student errors are different in character from system geometry errors.

@@ -65,7 +65,7 @@ Full argument: `readmes/sketchup/jpods-trip-schema.md`.
 |---------|--------|---------------|
 | **SketchUp Plugin** (`su_jpods`) | 3D design tool for students | Active development — waypoints, build pipeline, height fix |
 | **JPodsSM_RPi** | Physical scale model vehicles | Operational — Nora/Natalie/Noelle on Pi fleet |
-| **Route-Time** | Network planner + travel simulator | Working — two-sweep O-D, isochrone, network clipboard |
+| **MeshMobility** | Network planner + travel simulator | Working — two-sweep O-D, isochrone, network clipboard |
 | **WebClerk / Alice** | Commerce layer + ticketing | Alice owns ticket sales, Small-Stings (customer-assessed fines for unresolved problems; JPods pays customers for retrospections), and action lists; trip booking API under development |
 
 ### What the SketchUp Plugin Does
@@ -146,14 +146,14 @@ outbound ←── 1750mm ──── CP POINT ──── 1750mm ──→ in
 
 The full set of non-negotiable design axioms lives in `su_jpods/CLAUDE.md` (loaded
 automatically when working in the plugin). **Several axioms apply beyond SketchUp** —
-they govern the physical network (JPodsSM_RPi), Route-Time, and all domains:
+they govern the physical network (JPodsSM_RPi), MeshMobility, and all domains:
 
 | Axiom | Applies to |
 |-------|-----------|
 | 3. Color Standard (red=inbound, blue=outbound) | All tools — SU, RT, any visualization |
 | 6. Fail Fast, Never Silent Degradation | All domains |
 | 7. Trip Authority Chain | SU + Physical (Nora/Natalie/Noelle) |
-| 8. Noelle Feature JSON | SU + Physical + Route-Time |
+| 8. Noelle Feature JSON | SU + Physical + MeshMobility |
 | 9. Physical Observations Separate from Routing | SU + Physical (Nora writes physical.json) |
 | 10. Explicit Model Datum Beats Derived Reference | All domains — sensors, routing, ezones |
 | 14. All Stored Datetimes Are UTC | All domains — every file, DB, log record |
@@ -166,7 +166,7 @@ Read `su_jpods/CLAUDE.md` for the full proof, code examples, and context for eac
 ### Risk-Driven Logging — All Domains
 
 Anyone on the team — Claude Code, Allie, any agent — can add logging whenever a risk
-is perceived. This applies to all programs (SU, Physical, Route-Time, WebClerk, Allie).
+is perceived. This applies to all programs (SU, Physical, MeshMobility, WebClerk, Allie).
 
 1. **Add logging immediately** when a risk or bug is identified — don't wait
 2. **Add the risk to the oslist** with what is known and why it matters
@@ -440,7 +440,7 @@ testing and why. Each boundary feeds the FAULT→DNW→TF→TFTS arc.
 **What a tool boundary is:**
 - Reload Plugin → Build → animate → watch (SketchUp)
 - Pod start → trip dispatch → ezone entry → trip complete (Physical)
-- Run simulation (Route-Time)
+- Run simulation (MeshMobility)
 - Price query → travel invoice → order fulfilled (WebClerk/Alice)
 - Reflection start → reflection complete (Allie)
 
@@ -640,7 +640,7 @@ and Worthwhile columns. Run `--score` after any assessment update.
 ## Lessons for Allie
 
 1. **Short title** — Concrete lesson. Why it matters. What to check next time.
-   Domain tag: [SketchUp] [Physical] [Route-Time] [Cross-domain]
+   Domain tag: [SketchUp] [Physical] [MeshMobility] [Cross-domain]
 ```
 
 Allie reads these and promotes them to Understanding entries. Write them to be

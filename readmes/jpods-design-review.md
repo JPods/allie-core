@@ -10,7 +10,7 @@ Regular deliberative review of developments in SketchUp (SU) and physical (PH) d
 
 | Agent | Role in review | Domain expertise |
 |---|---|---|
-| Allie | Cross-domain synthesizer; flags consequences that span domains | All domains — billing, physical, SU, Route-Time |
+| Allie | Cross-domain synthesizer; flags consequences that span domains | All domains — billing, physical, SU, MeshMobility |
 | Athena | Adversary — challenges assumptions, finds gaps, identifies security and safety risks | All domains — security, correctness |
 | Noelle | Network validator — reviews topology, map.json / feature.json consistency, Build pipeline | SketchUp, map.json, feature.json |
 | Natalie | Router — reviews trip planning, dispatch logic, ezone protocol, headway | trip.json, dispatch, routing |
@@ -76,7 +76,7 @@ For targeted reviews (specific schema or domain), pass the relevant JSON drafts 
 - Any JSON schema consumed by both SketchUp and Pi agents
 - UTC datetime compliance in new fields — checked against the UTC Standard (see `jpods-utc-standard.md`)
 - Billing fields — Alice depends on trip.json; any rename breaks her
-- Route-Time O-D matrix inputs — throughput and capacity fields flow from feature.json
+- MeshMobility O-D matrix inputs — throughput and capacity fields flow from feature.json
 - Physical.json severity thresholds — moderate/severe trigger Natalie route blocks
 
 ---
@@ -114,7 +114,7 @@ At each review: scan `_innovation` fields, promote what is ready, close what has
 ## Standing Rules for All Reviews
 
 1. **Schema changes are proposed in draft JSON first.** Implementation follows the draft, not the reverse.
-2. **A field rename needs a migration path before implementation.** Flag which consumers break. Alice, Route-Time, and the Pi agents are all consumers of trip.json — a rename that only updates the SketchUp exporter and leaves the others reading the old key is a silent failure.
+2. **A field rename needs a migration path before implementation.** Flag which consumers break. Alice, MeshMobility, and the Pi agents are all consumers of trip.json — a rename that only updates the SketchUp exporter and leaves the others reading the old key is a silent failure.
 3. **UTC datetime compliance is checked on every new field that carries a timestamp.** See `jpods-utc-standard.md`. Any `_at` or `_on` field must use UTC with Z suffix.
 4. **Physical observations (physical.json) are never merged into routing declarations (feature.json, map.json).** Separate files, separate writers. A Build run regenerates feature.json — physical observations accumulated over weeks must not be erased.
 5. **Noelle writes; others read.** No other agent writes map.json, feature.json, or trip.json in production. Nora writes physical.json only. Alice reads trip.json for billing; she does not write it.
@@ -127,8 +127,8 @@ At each review: scan `_innovation` fields, promote what is ready, close what has
 
 | File | Writer | Readers |
 |---|---|---|
-| `map.json` | Noelle | Natalie, Nora, TripPlanner, Route-Time |
-| `feature.json` | Noelle | TripPlanner, Natalie, Nora, Route-Time |
+| `map.json` | Noelle | Natalie, Nora, TripPlanner, MeshMobility |
+| `feature.json` | Noelle | TripPlanner, Natalie, Nora, MeshMobility |
 | `trip.json` | TripPlanner (reads feature.json) | Nora, Natalie, Alice (billing) |
 | `physical.json` | Nora | Noelle (reads before route confirmation) |
 | `billing fields` in trip.json | TripPlanner (Alice sets rates) | Alice |
@@ -150,7 +150,7 @@ Key promotions from that review:
 |---|---|
 | `followme_hash` | Promoted — required field in map.json; enables stale-trip detection without file stat |
 | `last_physical_survey` | Promoted — required in map.json; Noelle reads before route confirmation |
-| `nominal_time_s` | Promoted — required in trip.json segments; Route-Time and billing depend on it |
+| `nominal_time_s` | Promoted — required in trip.json segments; MeshMobility and billing depend on it |
 | `stations{}` block | Promoted — platform and ezone data moved to structured block rather than flat list |
 | `ezone_status` | Promoted — explicit field; replaces derived check from ezone_entries length |
 | Billing fields | Promoted — `base_fare`, `distance_m`, `duration_s` added to trip.json for Alice |

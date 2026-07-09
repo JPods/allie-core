@@ -48,9 +48,9 @@ launchctl load   ~/Library/LaunchAgents/com.allie.watcher.plist
    If no reflect file exists for today, the previous day's is fine. If none exist at all,
    run manually: `python3 /Users/williamjames/Allie/scripts/allie-reflect.py`
 
-9. `readmes/agents/` — **When working with Route-Time, SketchUp, or physical robots:**
+9. `readmes/agents/` — **When working with MeshMobility, SketchUp, or physical robots:**
    Read the agent file for each role in scope:
-   - `readmes/agents/noelle.md` — load balancer: SketchUp / Route-Time / physical + accumulated understandings
+   - `readmes/agents/noelle.md` — load balancer: SketchUp / MeshMobility / physical + accumulated understandings
    - `readmes/agents/natalie.md` — router: same three-domain structure
    - `readmes/agents/nora.md` — vehicle agent: same three-domain structure
 
@@ -62,7 +62,7 @@ launchctl load   ~/Library/LaunchAgents/com.allie.watcher.plist
 
 10. `readmes/30–33-allie-*-FINAL.md` — **Allie's own role guides per environment** (distinct from the agent files above, which cover Noelle/Natalie/Nora):
     - `readmes/30-allie-universal-FINAL.md` — universal architecture, three-layer knowledge taxonomy, session obligations
-    - `readmes/31-allie-route-time-FINAL.md` — Allie's role in Route-Time; congestion vs. topology; Stop and Review rule
+    - `readmes/31-allie-route-time-FINAL.md` — Allie's role in MeshMobility; congestion vs. topology; Stop and Review rule
     - `readmes/32-allie-sketchup-FINAL.md` — Allie's role in SketchUp; seven critical rules; SU readiness gate
     - `readmes/33-allie-physical-FINAL.md` — Allie's role in the physical system; MQTT protocol; fleet startup sequence
     - `readmes/34-allie-app-observation.md` — app observation architecture; status table; setup instructions

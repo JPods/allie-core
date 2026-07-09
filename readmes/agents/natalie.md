@@ -204,7 +204,7 @@ If `delay_s > 30`, Natalie posts a `delay_discount` record to Alice via wcapi:
 - Billing: how does Natalie securely post trip records to wcapi? NS-05 is the risk; the design is not yet written.
 - As fleet grows beyond ~8 pods on a single LAN, does Natalie on the Mac need dedicated hardware? Or does a LAN stay small by design (and the answer is more LANs, not a bigger Natalie)?
 - **Approach-curve-limited speed in zipper merge (open):** `planZipperApproach()` in `ezone.py` currently uses the segment's nominal speed. It should use the curve-limited arrival speed for merge segments whose approach radius < MIN_APPROACH_CURVE_RADIUS. The followme.json does not yet carry per-segment curve radius — Noelle must emit it at export time, and Natalie/Nora must read it. Design not yet started.
-- **Segment throughput weighting by approach curve (open):** Route-Time's Dijkstra weights segments by congestion ratio. Segments with tight approach curves carry a structural throughput penalty independent of current congestion — but this is not yet reflected in the weight formula. Needs a `curve_penalty` term in `engine/network.py`.
+- **Segment throughput weighting by approach curve (open):** MeshMobility's Dijkstra weights segments by congestion ratio. Segments with tight approach curves carry a structural throughput penalty independent of current congestion — but this is not yet reflected in the weight formula. Needs a `curve_penalty` term in `engine/network.py`.
 
 ---
 
@@ -245,12 +245,12 @@ If `delay_s > 30`, Natalie posts a `delay_discount` record to Alice via wcapi:
 | Domain | What Natalie IS here | Key file / tool |
 |--------|---------------------|----------------|
 | **SketchUp** | Route validator — BFS on FollowMe graph; confirms routes exist before export | `natalie.rb` in jpods-plugin |
-| **Route-Time** | Dijkstra router — optimal path from .PLATFORM to .PLATFORM; reads Noelle's line weights | `engine/routing.py` |
+| **MeshMobility** | Dijkstra router — optimal path from .PLATFORM to .PLATFORM; reads Noelle's line weights | `engine/routing.py` |
 | **Scale Model / 4WD** | Fleet dispatcher — receives START pings, assigns `myPath`, issues ACTION commands | `podPresenter` (Processing sketch on Mac) |
 | **SkyRide** | Same fleet dispatcher; longer paths, inter-LAN handoff needed | TBD — not yet documented |
 | **JPods Full System** | LAN federation — each LAN has its own Natalie; peer-to-peer boundary negotiation | TBD — not yet implemented |
 
-**Critical distinction:** In SketchUp, Natalie validates that a route *exists*. In Route-Time, she finds the *optimal* route under congestion. In physical, she *assigns* a specific route to a specific pod and tracks it live.
+**Critical distinction:** In SketchUp, Natalie validates that a route *exists*. In MeshMobility, she finds the *optimal* route under congestion. In physical, she *assigns* a specific route to a specific pod and tracks it live.
 
 ---
 
@@ -281,7 +281,7 @@ Alice's rate signals    ← economics layer   (which paths are priced to spread 
 
 **Fare = sum of segment rates along the actual route Natalie chose.** If Alice priced segment X at a premium because it was at peak load, that premium is in the passenger's fare. Price and routing are the same signal expressed in different units — one in pods/minute, one in dollars.
 
-**Current state:** Rate signals from Alice are not yet wired into Natalie's routing. Noelle's time-projected load map is not yet implemented. The topology layer (BFS in SketchUp, Dijkstra in Route-Time) is the only active layer. Alice's `price_query` API is defined; the segment-rate feed to Natalie is the next integration step.
+**Current state:** Rate signals from Alice are not yet wired into Natalie's routing. Noelle's time-projected load map is not yet implemented. The topology layer (BFS in SketchUp, Dijkstra in MeshMobility) is the only active layer. Alice's `price_query` API is defined; the segment-rate feed to Natalie is the next integration step.
 
 ---
 
@@ -290,17 +290,17 @@ Alice's rate signals    ← economics layer   (which paths are priced to spread 
 | Rule | Why universal |
 |------|--------------|
 | One-way constraint — never route against guideway direction | Physical track is one-way; all three tools must respect this |
-| CCW on traffic circles — N→W→S→E→N | JPods physics; SketchUp models it, Route-Time enforces it in graph, physical pods navigate it |
-| No direct south exit from station — northbound turnabout adds ~160m | Physical geometry present in SketchUp model, Route-Time graph, and physical navigation map |
+| CCW on traffic circles — N→W→S→E→N | JPods physics; SketchUp models it, MeshMobility enforces it in graph, physical pods navigate it |
+| No direct south exit from station — northbound turnabout adds ~160m | Physical geometry present in SketchUp model, MeshMobility graph, and physical navigation map |
 | Origin and destination are always platform nodes | Trips begin and end at real boarding locations across all implementations |
-| 3 consecutive failures on same pair → escalate, do not retry | "Retry is not diagnosis" — applies in SketchUp, Route-Time, and physical equally |
-| Approach curve radius constrains segment throughput — weight accordingly | A segment whose approach zone has curve radius below MIN_APPROACH_CURVE_RADIUS forces pods to slow before the merge point. The zipper merge algorithm computes gap based on arrival speed; if that speed is unpredictably low (curve-forced), the gap estimate is wrong. In Route-Time, such segments carry a throughput penalty in Dijkstra weights. In physical, Natalie must know each merge point's expected arrival speed when computing headway. A segment that looks short on paper but has a tight approach curve is slower in practice than its length implies. |
+| 3 consecutive failures on same pair → escalate, do not retry | "Retry is not diagnosis" — applies in SketchUp, MeshMobility, and physical equally |
+| Approach curve radius constrains segment throughput — weight accordingly | A segment whose approach zone has curve radius below MIN_APPROACH_CURVE_RADIUS forces pods to slow before the merge point. The zipper merge algorithm computes gap based on arrival speed; if that speed is unpredictably low (curve-forced), the gap estimate is wrong. In MeshMobility, such segments carry a throughput penalty in Dijkstra weights. In physical, Natalie must know each merge point's expected arrival speed when computing headway. A segment that looks short on paper but has a tight approach curve is slower in practice than its length implies. |
 
 ---
 
 ## Cross-Domain Mappings
 
-| Concept | SketchUp | Route-Time | Physical |
+| Concept | SketchUp | MeshMobility | Physical |
 |---------|----------|-----------|---------|
 | Route representation | Ordered FollowMe segment IDs | `route_line_ids` (Dijkstra output) | `myPath` — ordered line ID list |
 | Route algorithm | BFS (does path exist?) | Dijkstra (what is optimal path?) | Fixed assignment on START ping |
@@ -308,42 +308,42 @@ Alice's rate signals    ← economics layer   (which paths are priced to spread 
 | Reachability check | Destination must exist in FollowMe graph | `is_reachable = False` if all paths jammed | Pod never receives `START,OK` |
 | Sanity count | N/A | 13–19 line IDs for adjacent pair | Smaller (simpler network) |
 
-**Does NOT transfer:** Dijkstra weights/rerouting are Route-Time only. MQTT `START/ACTION` protocol is physical only. BFS vs Dijkstra is a domain choice, not a universal algorithm. `parseStartPing` version-field bug is physical only.
+**Does NOT transfer:** Dijkstra weights/rerouting are MeshMobility only. MQTT `START/ACTION` protocol is physical only. BFS vs Dijkstra is a domain choice, not a universal algorithm. `parseStartPing` version-field bug is physical only.
 
 ---
 
 ## Allie's Accumulated Understandings
 
 **U-SK-001 [SketchUp] BFS not Dijkstra for design validation**
-Route-Time uses Dijkstra because optimality matters under congestion. SketchUp uses BFS because the question is binary: does a valid path exist? BFS is faster and the graph is smaller. Do not apply Route-Time routing lessons to SketchUp routing.
+MeshMobility uses Dijkstra because optimality matters under congestion. SketchUp uses BFS because the question is binary: does a valid path exist? BFS is faster and the graph is smaller. Do not apply MeshMobility routing lessons to SketchUp routing.
 *Provenance: SketchUp design decisions 2026-04-27.*
 
 **U-SK-002 [SketchUp] Route failure streak is a design defect signal**
 Three consecutive failures on the same `origin→destination` pair means a topological problem in the model — missing CP connection, wrong heading, or definition fault Noelle missed. Operator review required.
 *Provenance: SketchUp design decision 2026-04-27.*
 
-**U-RT-001 [Route-Time] CCW is a graph constraint, not an algorithm constraint**
+**U-RT-001 [MeshMobility] CCW is a graph constraint, not an algorithm constraint**
 CCW is enforced by building only CCW-direction edges in `engine/network.py` (Noelle). Dijkstra finds CCW-compliant paths naturally — no special logic in `find_path()`. A path that appears to violate CCW is a graph construction error — look in `build()`, not `find_path()`.
 *Provenance: Natalie self-report 2026-04-28.*
 
-**U-RT-002 [Route-Time] route_line_ids count 13–19 = adjacent pair sanity**
+**U-RT-002 [MeshMobility] route_line_ids count 13–19 = adjacent pair sanity**
 Adjacent trip: station exit → circle arms → circle exit → station entry = 13–19 segment transitions. Hundreds means the algorithm is looping — a graph bug, not a long path.
-*Provenance: Natalie self-report 2026-04-28; Route-Time readme 28.*
+*Provenance: Natalie self-report 2026-04-28; MeshMobility readme 28.*
 
-**U-RT-003 [Route-Time] diag_grid.py is the pre-simulation gate**
+**U-RT-003 [MeshMobility] diag_grid.py is the pre-simulation gate**
 Run before any simulation when travel times are anomalous at near-zero demand. All 12 adjacent-station pairs in 3×3 grid should route at 1.0–1.1× expected distance. >3× is a blocking error.
-*Provenance: Route-Time readme 28; grid verified correct 2026-04-27.*
+*Provenance: MeshMobility readme 28; grid verified correct 2026-04-27.*
 
-**U-RT-004 [Route-Time] Natalie does not reroute mid-trip**
+**U-RT-004 [MeshMobility] Natalie does not reroute mid-trip**
 Once Natalie gives Nora a route, Nora follows exactly. Natalie recalculates only on the next dispatch. A mid-trip jam affects the next pod dispatched, not the current one.
-*Provenance: Route-Time architecture; Nora self-report 2026-04-28.*
+*Provenance: MeshMobility architecture; Nora self-report 2026-04-28.*
 
 **U-PH-001 [Physical — Scale/4WD] parseStartPing must accept `msg.length >= 7`, not `== 7`**
 Nora's START ping added a `version` field at index 7. Strict equality caused Natalie to silently ignore every START ping — pods entered an endless RESEND loop. Version field is optional. This is the single largest silent failure mode discovered in physical testing.
 *Provenance: Design decision 2026-04-07.*
 
 **U-PH-003 [Cross-domain] Approach curve radius, zipper merge gap, and personal space are one constraint in three forms**
-The zipper merge calculates the gap Nora must maintain: `personal_space ≥ (V × reaction_time) + braking_distance(V, mass)`. V is the arrival speed at the merge point. Arrival speed is set by the approach curve radius — a curve below MIN_APPROACH_CURVE_RADIUS forces V below nominal before the merge window begins. The merge calculation then runs on the wrong V, producing a gap that is either too tight (collision risk) or too wide (throughput loss). The three forms of the same constraint: (1) MIN_APPROACH_CURVE_RADIUS in the SketchUp design enforces the speed floor; (2) the zipper merge algorithm in ezone.py must use the actual curve-limited speed, not the nominal segment speed; (3) Natalie's segment weights in Route-Time must reflect the throughput penalty of approach-curve-limited segments. A network that passes all three consistently cannot have a merge collision caused by approach geometry.
+The zipper merge calculates the gap Nora must maintain: `personal_space ≥ (V × reaction_time) + braking_distance(V, mass)`. V is the arrival speed at the merge point. Arrival speed is set by the approach curve radius — a curve below MIN_APPROACH_CURVE_RADIUS forces V below nominal before the merge window begins. The merge calculation then runs on the wrong V, producing a gap that is either too tight (collision risk) or too wide (throughput loss). The three forms of the same constraint: (1) MIN_APPROACH_CURVE_RADIUS in the SketchUp design enforces the speed floor; (2) the zipper merge algorithm in ezone.py must use the actual curve-limited speed, not the nominal segment speed; (3) Natalie's segment weights in MeshMobility must reflect the throughput penalty of approach-curve-limited segments. A network that passes all three consistently cannot have a merge collision caused by approach geometry.
 *Provenance: Bill's explicit connection, 2026-05-16.*
 
 **U-SK-003 [SketchUp] Build embeds world coords; Natalie confirms from template — not both as alternatives, but as a single design**

@@ -40,7 +40,7 @@ The division of labor follows Bill's operating principle: each agent does what i
 | **`/route-check` skill** | Validates followme.json: checks platforms[], structure coverage, line count | Medium | Platform loss bug has appeared 3 times; a check command prevents silent failure |
 | **Design token enforcer** | When building any JPods/WebClerk UI, pulls from `design-tokens.json` first | High | Currently every UI is designed independently — color, spacing, typography drift |
 | **WebClerk MCP** | Exposes Alice's wcapi as Claude Code tools: create_invoice, get_contact, post_note | High | Removes the copy-paste layer between Claude Code and Alice; Claude Code can verify live data |
-| **Route-Time MCP** | Query travel time, get network status, run dispatch | Medium | Currently Claude Code writes to a file; with MCP it can verify the endpoint is responding |
+| **MeshMobility MCP** | Query travel time, get network status, run dispatch | Medium | Currently Claude Code writes to a file; with MCP it can verify the endpoint is responding |
 | **Session handoff writer** | At session end, writes `today/handoff.md` — one-page briefing for next session | High | Context reconstruction is expensive; a structured handoff cuts start time |
 
 ### Backlog (lower urgency, higher value over time)
@@ -72,7 +72,7 @@ The division of labor follows Bill's operating principle: each agent does what i
 
 | Talent | What it does | Priority | Why |
 |--------|-------------|----------|-----|
-| **Watchdog** | Monitors that Django, Route-Time, and Natalie processes are running; alerts Bill when they drop | High | Demo environment; a dead process before a demo is a silent failure that becomes a visible one |
+| **Watchdog** | Monitors that Django, MeshMobility, and Natalie processes are running; alerts Bill when they drop | High | Demo environment; a dead process before a demo is a silent failure that becomes a visible one |
 | **Retrospection analyst** | Reads `retrospections/` folder; surfaces recurring patterns across sessions | High | Claude Code sees one session; Allie sees all of them — she is the right agent for cross-session pattern recognition |
 | **Simplify reviewer** | When Bill or Claude Code proposes a design, Allie flags unnecessary complexity before implementation | Medium | Bill's operating principle is bottom-up minimal; a named discipline makes it consistent |
 | **Front end generator** | Produces quick HTML mockups from a plain-English description | Medium | Allows Bill to review UI concepts without opening a Claude Code session |

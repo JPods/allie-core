@@ -615,7 +615,7 @@ When a standalone Natalie or Noelle processor comes online:
 
 ## Session decisions (April 27, 2026) — SketchUp plugin only
 
-**Scope note:** This file covers the **SketchUp 2026 plugin** (`JPods/` folder). It is not the scale model (`jpod_OS/`), Route-Time GUI, WebClerk, or any other JPods project. Keep decisions scoped accordingly.
+**Scope note:** This file covers the **SketchUp 2026 plugin** (`JPods/` folder). It is not the scale model (`jpod_OS/`), MeshMobility GUI, WebClerk, or any other JPods project. Keep decisions scoped accordingly.
 
 ### Mandatory formation tag requirements (enforced)
 Three SketchUp tags are now required on every formation SKP. The plugin fails fast if any are missing:
@@ -927,7 +927,7 @@ Add a checkbox labeled **"AI watching"** (or "Copilot watching") to the header a
 |---------|-------------|
 | SketchUp plugin | `dialogs/network_editor.html` + `jpod_console.rb` |
 | Physical robot | robot console (Pi-side) |
-| Route-Time GUI | browser front-end |
+| MeshMobility GUI | browser front-end |
 | WebClerk3 | WC3 admin console |
 
 **When checked:**
@@ -1118,5 +1118,5 @@ puts "━━━ ▶ #{label}  #{ts} ━━━━━━━━━━━━━━�
 ```
 
 **Pattern applies to:** any future agent or dialog that emits user-triggered output into
-a shared log stream — physical Pi agents, Route-Time simulation start, Alice order events.
+a shared log stream — physical Pi agents, MeshMobility simulation start, Alice order events.
 The rule is: **user action = blank lines + header**. Background ticks get no separator.

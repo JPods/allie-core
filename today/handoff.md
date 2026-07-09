@@ -1,7 +1,7 @@
 # Handoff — 2026-07-07 (Evening)
 
 ## Do This First
-1. **Restart Route-Time** if not running — `cd /Users/williamjames/Documents/08_JPods/03_Technology/00_working_code && bash route_time/runserver.sh`
+1. **Restart MeshMobility** if not running — `cd /Users/williamjames/Documents/08_JPods/03_Technology/00_working_code && bash route_time/runserver.sh`
 2. Verify `rtb.webclerk.com` and `wcb.webclerk.com` are serving (tunnel auto-starts on boot)
 3. Test `rtb.webclerk.com/citytool` — Census API key is live
 
@@ -9,13 +9,13 @@
 
 ### Cloudflare — DONE
 - Tunnel `wc_hq_tunnel` running as system service, healthy
-- `rtb.webclerk.com` → Route-Time:5050
+- `rtb.webclerk.com` → MeshMobility:5050
 - `wcb.webclerk.com` → WebClerk3:8000
 - `rtb.webclerk.com/citytool` → CityTool (serves from original file location)
 - jpods.us on Cloudflare nameservers (propagated)
 - webclerk.com on Cloudflare nameservers (active)
 
-### Route-Time — Committed & pushed (bill_dev)
+### MeshMobility — Committed & pushed (bill_dev)
 - Tools + Overlays panels in right sidebar (consolidated from left palette)
 - Keys 1-9: placement, zoom, walk radius
 - Fixed scale bars: 0.75mi walk + 5mi
@@ -39,7 +39,7 @@
 
 ## Tomorrow
 - Upload CityTool with API key to Hostinger (library.jpods.com)
-- Capital pitch document: CityTool → Route-Time → Station Report flow
+- Capital pitch document: CityTool → MeshMobility → Station Report flow
 - Cloudflare Access for email verification on public endpoints
 - Consider `citytool.jpods.us` and `rt.jpods.us` as clean public URLs
 - Asheville network design session with Noelle

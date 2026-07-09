@@ -1,8 +1,8 @@
-# Route-Time: Legacy .jpd Conversion
+# MeshMobility: Legacy .jpd Conversion
 
 ## Status (as of 2026-04-26)
 
-Claude Code converted 397 legacy Java Route-Time `.jpd` files to the new GUI format.
+Claude Code converted 397 legacy Java MeshMobility `.jpd` files to the new GUI format.
 The converted files are at: `/Applications/RouteTime_JPods/converted/`
 Source files: `/Applications/RouteTime_JPods/*.jpd`
 
@@ -31,7 +31,7 @@ quality — two perspectives, better retrospection.
 
 ### How to check a file
 
-1. Start the Route-Time server:
+1. Start the MeshMobility server:
    ```bash
    cd /Users/williamjames/Documents/08_JPods/03_Technology
    python3 -m route_time.gui
@@ -146,7 +146,7 @@ python3 -m route_time.convert_jpd /Applications/RouteTime_JPods/FILENAME.jpd \
 ## Architecture reference
 
 Full architecture: `readmes/28-route-time-gui-architecture.md`
-Route-Time overview: `readmes/27-route-time.md`
+MeshMobility overview: `readmes/27-route-time.md`
 
 Key files in the code:
 - `route_time/io/jpd_reader.py` — reads .jpd, extracts StructureMeta

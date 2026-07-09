@@ -29,7 +29,7 @@ The plugin is the design-authoring environment. It declares topology intent:
 
 The plugin is not runtime truth.
 Physical behavior is truth.
-Route-Time is analytic truth for the modeled assumptions.
+MeshMobility is analytic truth for the modeled assumptions.
 SU must provide unambiguous intent so downstream agents can validate or reject it.
 
 **Plugin directory:** `/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods/`
@@ -218,7 +218,7 @@ The Build button reads a `network.json` that declares segment connections:
 3. Copy `followme.json` to `podPresenter/json/` and to each pod via the Noelle deploy sequence
 4. Physical pods load the graph on startup; Natalie (podPresenter) reads it for route assignment
 
-**Topology note:** Route-Time uses a parallel Python graph (`engine/network.py`), not `followme.json` directly.
+**Topology note:** MeshMobility uses a parallel Python graph (`engine/network.py`), not `followme.json` directly.
 The two graphs should agree on topology. When they disagree, the physical behavior is the arbiter.
 
 ### Gap Log Quick Reference
@@ -237,7 +237,7 @@ When a new gap pattern is found:
 1. Log it in `readmes/sketchup/jpods-gap-log.md` under Session Log
 2. Identify which pattern (P1–P5) or add a new pattern entry
 3. Record root cause and fix applied
-4. Allie promotes it to universal if the same pattern appears in Route-Time or physical
+4. Allie promotes it to universal if the same pattern appears in MeshMobility or physical
 
 ### Allie's Session Workflow
 
@@ -251,7 +251,7 @@ When a new gap pattern is found:
 
 **During session** *(see Bill's participation decision at top of this file)*:
 1. Track design decisions as they happen — do not reconstruct at end
-2. Flag cross-domain implications when they arise (SketchUp decision → Route-Time consequence; convention → physical deployment consequence)
+2. Flag cross-domain implications when they arise (SketchUp decision → MeshMobility consequence; convention → physical deployment consequence)
 3. Diagnose root cause when a rule-based agent fires — the agent reports a fault; Allie identifies why
 4. Log new gap patterns immediately, not after the session
 5. Convert real follow-up into WebClerk `action` or WhatIf items as they arise
@@ -262,7 +262,7 @@ When a new gap pattern is found:
 3. Update the relevant agent readme if agent behavior or responsibility changed
 4. Append retrospection in `readmes/retrospections/YYYY-MM-DD.md`
 5. Classify each new lesson: SketchUp-only, overlapping, or universal candidate
-6. If universal candidate: verify it holds in Route-Time and physical before promoting
+6. If universal candidate: verify it holds in MeshMobility and physical before promoting
 7. Record remaining follow-up in WebClerk
 
 ### Required Session Evidence Packet
@@ -274,40 +274,40 @@ At session end, publish this packet in the retrospection:
 - **Stop-and-Review events** — count, trigger type, resolution status
 - **Directional exceptions** — list, reason, owner, sunset date
 - **Cross-domain implications:**
-  - what Route-Time should verify
+  - what MeshMobility should verify
   - what Physical should verify
 
-This packet is the comparison substrate when reconciling SU topology with Route-Time and physical results.
+This packet is the comparison substrate when reconciling SU topology with MeshMobility and physical results.
 
 ### Comparison Protocol (Three-Stream)
 
-When comparing SketchUp topology against Route-Time simulation and Physical behavior:
+When comparing SketchUp topology against MeshMobility simulation and Physical behavior:
 
 1. **Topology intent** — do all three agree on station/CP connectivity?
 2. **Directionality** — do all three preserve inbound/outbound direction?
 3. **Reachability** — can required OD pairs complete in all three?
 4. **Throughput/congestion** — are bottlenecks aligned in location and order-of-magnitude?
-5. **Contradiction record** — if mismatch exists, log root candidate and required correction target (SU, Route-Time, or Physical)
+5. **Contradiction record** — if mismatch exists, log root candidate and required correction target (SU, MeshMobility, or Physical)
 
-When Physical contradicts SU or Route-Time, Physical wins.
+When Physical contradicts SU or MeshMobility, Physical wins.
 Name the specific upstream artifact that must change — not a note, a named required correction.
 
 ### Cross-Domain Mappings
 
-| SketchUp concept | Route-Time equivalent | Physical equivalent | Invariant |
+| SketchUp concept | MeshMobility equivalent | Physical equivalent | Invariant |
 |-----------------|----------------------|--------------------|-----------|
 | CP pair / directed endpoint | CP object (Python) with `inbound_node`, `outbound_node` | Physical directional switch at junction | Directed boundary — inbound and outbound are never interchangeable |
 | Color: red=inbound, blue=outbound | Same color standard in GUI | Physical track direction (CCW = standard) | Flow direction must be visible at every representation level |
-| `platform_guideways` in FollowMe | PLATFORM node in Route-Time network graph | Physical platform berth on track | Route must begin and end at a real boarding/alighting location |
+| `platform_guideways` in FollowMe | PLATFORM node in MeshMobility network graph | Physical platform berth on track | Route must begin and end at a real boarding/alighting location |
 | `followme.json` BFS graph | Dijkstra graph in `engine/network.py` | Nora's onboard path following (`mapSM.json`) | Same topology, different format — they must agree |
 | Noelle definition gate | `diag_grid.py` topology check | Pre-run I2C and MQTT connectivity check | Loud validation failure at boundaries beats silent degradation |
 | Stop and Review (3 consecutive) | Stop and Review (same threshold) | Nora `stop_and_review` JSONL event | Repeated identical failure is a signal, not bad luck |
-| Station `Sxxx` ID | `structure_id` in Route-Time network | Station identity tag on physical hardware | Stations must be individually addressable in every environment |
+| Station `Sxxx` ID | `structure_id` in MeshMobility network | Station identity tag on physical hardware | Stations must be individually addressable in every environment |
 | `network.json` connection declaration | CP connection in `api.py` state | Physical guideway installation between switches | Declared topology drives all downstream agents |
 
 ### Environment-Specific Knowledge — Do NOT Transfer
 
-These facts are SketchUp-only. Do not use them as premises in Route-Time or physical reasoning:
+These facts are SketchUp-only. Do not use them as premises in MeshMobility or physical reasoning:
 
 - SketchUp Ruby API calls (`Sketchup.active_model`, `entities`, `component_definitions`, `HtmlDialog`)
 - `network.json` format and stub index logic
@@ -334,7 +334,7 @@ These facts are SketchUp-only. Do not use them as premises in Route-Time or phys
 
 1. **Gap log** (`readmes/sketchup/jpods-gap-log.md`) — any new gap pattern
 2. **SketchUp-specific memory** — Ruby API behaviors, new gate scenarios, new model-state patterns
-3. **Cross-domain mappings** — when a SketchUp concept clarifies or contradicts something in Route-Time or physical, write the explicit mapping
+3. **Cross-domain mappings** — when a SketchUp concept clarifies or contradicts something in MeshMobility or physical, write the explicit mapping
 4. **Design decisions table** — any decision made this session, in this file and in the relevant agent file
 5. **Universal promotions** — lessons that appear independently in two or more environments are candidates for `memory/universal/`
 
