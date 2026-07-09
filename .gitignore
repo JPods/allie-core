@@ -76,3 +76,4 @@ process/inbox/*.log
 .chroma_db_claude/*.sqlite3
 .chroma_db_alice/*.sqlite3
 
+.chroma_db_noelle/
