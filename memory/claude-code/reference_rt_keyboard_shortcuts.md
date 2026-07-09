@@ -1,5 +1,5 @@
 ---
-name: Route-Time keyboard shortcuts
+name: MeshMobility keyboard shortcuts
 description: Keys 1-6 for placement; collapsible palette; closest-CP connect; save handle; dead end/orphan highlighting
 type: reference
 ---

@@ -6,7 +6,7 @@ type: feedback
 
 Only static frameworks and data specific to the generalized model lives in the su_jpods template folder. ALL use data to build and operate the network lives in the .network.json file.
 
-**Why:** Station names, connections, waypoints, operational parameters — anything specific to THIS network — must be in network.json. Entity attributes inside the .skp are invisible to external tools (Travel app, Route-Time, Alice, WebClerk). Template folders are shared across all networks — network-specific data doesn't belong there.
+**Why:** Station names, connections, waypoints, operational parameters — anything specific to THIS network — must be in network.json. Entity attributes inside the .skp are invisible to external tools (Travel app, MeshMobility, Alice, WebClerk). Template folders are shared across all networks — network-specific data doesn't belong there.
 
 **How to apply:**
 - Station friendly names → network.json `station_names{}`

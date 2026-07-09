@@ -14,4 +14,4 @@ All ~500mm gaps are hallucinations. They come from measuring the distance betwee
 - Centerline-to-centerline gap should be < 50mm for a valid connection
 - If gap is 400-600mm, LOG A WARNING and DO NOT reverse — it's the wrong measurement
 - The correct reference is always the track centerline, never the beam edge
-- This principle applies to all programs: SU, Physical, Route-Time
+- This principle applies to all programs: SU, Physical, MeshMobility

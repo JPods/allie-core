@@ -4,7 +4,7 @@ description: Baron-4WD + Romeo BLE/ESP32-S3 + Pi table-top demo system — parke
 type: project
 ---
 
-Color-code junction routing on printed Route-Time network. Revisit in ~2 weeks.
+Color-code junction routing on printed MeshMobility network. Revisit in ~2 weeks.
 
 **Why:** Physical demonstration of full JPods routing stack at table scale.
 
@@ -16,7 +16,7 @@ Color-code junction routing on printed Route-Time network. Revisit in ~2 weeks.
 - Husky cameras (visual positioning / lane detection)
 
 **Design settled:**
-- Black track lines on printed paper (A0 from Route-Time export)
+- Black track lines on printed paper (A0 from MeshMobility export)
 - 4-block color sequences (R/G/B/Y) at junction approaches = junction ID
 - TCS34725 RGB sensor reads junction codes
 - Encoder-timed slowdown before expected junction (dead reckoning between junctions)
@@ -27,8 +27,8 @@ Color-code junction routing on printed Route-Time network. Revisit in ~2 weeks.
 **To build when returning:**
 1. `GET /natalie/turn` endpoint
 2. `junction_reader.py` on Pi (color read + Natalie query)
-3. Junction code assignment script (Route-Time node IDs → color sequences)
-4. Network print workflow from Route-Time export
+3. Junction code assignment script (MeshMobility node IDs → color sequences)
+4. Network print workflow from MeshMobility export
 5. README: `readmes/40-minibot-table-demo.md`
 
 **How to apply:** When Bill says "mini-bot" or "table demo" or "2-week project," this is it.

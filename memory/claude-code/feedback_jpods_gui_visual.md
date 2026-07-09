@@ -1,6 +1,6 @@
 ---
-name: JPods Route-Time GUI — visual design feedback
-description: User feedback on CP marker design in the Route-Time browser GUI
+name: JPods MeshMobility GUI — visual design feedback
+description: User feedback on CP marker design in the MeshMobility browser GUI
 type: feedback
 ---
 

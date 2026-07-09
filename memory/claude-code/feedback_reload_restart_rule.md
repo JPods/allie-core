@@ -15,7 +15,7 @@ These functions belong *in the tool*, not in the terminal or documentation.
 
 **How to apply:**
 - **su_jpods**: "reload su_jpods" = click Reload Plugin in the JPods Console. "restart SketchUp" = when the restart dialog fires, or when I say a change requires it.
-- **Route-Time**: Flask dev server has `--reload`; consider adding a `/reload` endpoint or browser button
+- **MeshMobility**: Flask dev server has `--reload`; consider adding a `/reload` endpoint or browser button
 - **JPodsSM_RPi**: Add a reload/restart command to MQTT debug channel or Pi local interface
 - **Allie scripts**: watcher/agent system should expose reload and restart via wcapi or CLI
 - **Any new tool**: build reload + restart into the debug/logging UI before shipping

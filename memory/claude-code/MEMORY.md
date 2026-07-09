@@ -5,7 +5,7 @@
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
 - [Tool boundaries are logging opportunities](feedback_tool_boundary_logging.md) — Reload/run/deploy = test boundary = highest-value moment to log; prompt user for fault/dnw/tf at that moment
 - [JPods GUI visual design](feedback_jpods_gui_visual.md) — System-wide color standard: red=inbound (hot), blue=outbound (cool); CP marker shapes; no confirmation dialogs
-- [JPods Program Registry](reference_jpods_programs.md) — Four programs: Route-Time (travel estimates), JPodsSM_RPi (physical vehicles), SketchUp Plugin (3D modeling), WebClerk (enterprise store + Alice agent)
+- [JPods Program Registry](reference_jpods_programs.md) — Four programs: MeshMobility (travel estimates), JPodsSM_RPi (physical vehicles), SketchUp Plugin (3D modeling), WebClerk (enterprise store + Alice agent)
 - [Always update readmes + retrospections](feedback_readmes_retrospection.md) — Read relevant readmes at session start; write retrospection at session end; fix stale readmes
 - [Action record autonomy](feedback_action_autonomy.md) — Create WC3 actions, document pointers, WhatIf items, corpus entries, memory updates without asking; ask before sending messages or touching external-facing records
 - [Allie hardware — Mac Mini discussion pending](project_allie_hardware.md) — Allie runs on MacBook Pro M1 Max; Bill asked to discuss dedicated always-on Mac Mini at next session start
@@ -111,14 +111,14 @@
 - [qqq/zzz = dead code, delete](feedback_qqq_zzz_cleanup.md) — Files prefixed qqq_ or zzz_ are temp/dead archive; delete unless hold-until-date > today
 - [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
-- [Route-Time data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
-- [Route-Time CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
+- [MeshMobility data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
+- [MeshMobility CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
 - [Books on sovereignty and usufruct free markets](project_books_sovereignty.md) — Mercantile monopoly, Liberty mechanism, constitutional evidence chain, oil vs ingenuity; keep notes
 - [Conservative payback estimates](feedback_payback_conservative.md) — 7yr minimum for capital; car ownership unwinds slowly; aggressive numbers lose credibility
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
-- [Route-Time keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
+- [MeshMobility keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
 - [Noelle network design rules](reference_noelle_design_rules.md) — Draft pattern: stations only, highways as boundaries, crash rate signal, 1:14 road ratio, 1x2 grid, both-side access, Local Knowledge QA; 7 cities
 - [JPods evidence base](reference_evidence_base.md) — Harvard $64B, Morgantown PRT, Praetor $45B, Glydways $420M, walkability 20x tax revenue; all in vector stores
 - [Tulsa network — next session](project_tulsa_next.md) — Build with Noelle workflow; existing OK_Tulsa (249 structures) as reference; need OK DOT AADT + FARS data

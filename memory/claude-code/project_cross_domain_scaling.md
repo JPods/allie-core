@@ -14,7 +14,7 @@ Every lesson learned in one domain applies to all others. The platforms share ph
 - Full JPods network — the deployed system
 
 **Programs (same data architecture, different domains):**
-- Route-Time — city mapping, travel estimates, network planning, O-D simulation
+- MeshMobility — city mapping, travel estimates, network planning, O-D simulation
 - WebClerk — enterprise software, Alice's domain, ticket sales, Small-Stings, pricing
 - MyCarryOn — identity, context portability
 
@@ -27,6 +27,6 @@ Every lesson learned in one domain applies to all others. The platforms share ph
 - TFTS process capture (the reasoning chain is scale-independent)
 - Camera follow offsets (visualization at every scale)
 
-**Why:** Bill (CLAUDE.md): "These are not separate projects. They are the same idea expressed in multiple domains." A scar earned in SketchUp's terrain raycast prevents the same mistake in Route-Time's elevation model. A grade limit principle from the build pipeline applies to the physical ezone speed protocol.
+**Why:** Bill (CLAUDE.md): "These are not separate projects. They are the same idea expressed in multiple domains." A scar earned in SketchUp's terrain raycast prevents the same mistake in MeshMobility's elevation model. A grade limit principle from the build pipeline applies to the physical ezone speed protocol.
 
 **How to apply:** When writing a TFTS, tag the domain but note cross-domain applicability. When Allie promotes an Understanding, check if it applies beyond the originating domain. Noelle's universal rules section carries cross-domain axioms.
