@@ -125,3 +125,4 @@
 - [Student kit program](project_student_kit_program.md) — Design→Survey→Build→Ride loop; kit tiers ($20-$300); scored across 4 platforms; Alice handles commerce; GPS survey = ground truth for Noelle
 - [PiratesAndPatriots.com](project_pirates_and_patriots.md) — Bill's domain; public face of student program; "create it, don't wait for permission"; leaderboard + kit store + city networks
 - [Prime Law of Networks](reference_prime_law_of_networks.md) — V ∝ n²/p; Metcalfe extended to physical systems; packet size toward 1 = full network value; JPods is packet-switching for transit
+- [Patent portfolio + capital strategy](reference_patent_portfolio.md) — 9 filed patents + expired 6,810,817; freight/datacenter/energy = valuation floor; DirtPods = unregulated entry; "we invented solar-powered transport networks"

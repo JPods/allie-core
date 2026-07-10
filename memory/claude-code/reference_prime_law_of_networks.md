@@ -4,7 +4,7 @@ description: Bill's extension of Metcalfe's Law: V ∝ n²/p — network value i
 type: reference
 ---
 
-Bill owns the PrimeLawOfNetworks domains. His formulation:
+Bill owns the PrimeLawOfNetworks and BetterPhysics.com domains. His formulation:
 
 > "Network value increases exponentially as the number of interconnected nodes increases and the packet-size is driven towards one."
 
