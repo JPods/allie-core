@@ -123,6 +123,6 @@
 - [JPods evidence base](reference_evidence_base.md) — Harvard $64B, Morgantown PRT, Praetor $45B, Glydways $420M, walkability 20x tax revenue; all in vector stores
 - [Tulsa network — next session](project_tulsa_next.md) — Build with Noelle workflow; existing OK_Tulsa (249 structures) as reference; need OK DOT AADT + FARS data
 - [Student kit program](project_student_kit_program.md) — Design→Survey→Build→Ride loop; kit tiers ($20-$300); scored across 4 platforms; Alice handles commerce; GPS survey = ground truth for Noelle
-- [PiratesAndPatriots.com](project_pirates_and_patriots.md) — Bill's domain; public face of student program; "create it, don't wait for permission"; leaderboard + kit store + city networks
+- [10xMakers + PiratesAndPatriots](project_pirates_and_patriots.md) — 10xMakers.com = student platform (leaderboard, kits, viral); PiratesAndPatriots.com = punchline (identity, not storefront)
 - [Prime Law of Networks](reference_prime_law_of_networks.md) — V ∝ n²/p; Metcalfe extended to physical systems; packet size toward 1 = full network value; JPods is packet-switching for transit
 - [Patent portfolio + capital strategy](reference_patent_portfolio.md) — 9 filed patents + expired 6,810,817; freight/datacenter/energy = valuation floor; DirtPods = unregulated entry; "we invented solar-powered transport networks"

@@ -1,18 +1,17 @@
 ---
-name: PiratesAndPatriots.com — public face of student program
-description: Bill owns PiratesAndPatriots.com; framing for the student kit program — people who purposefully break rules to create a sustainable future
+name: 10xMakers.com + PiratesAndPatriots.com — student program branding
+description: 10xMakers.com is the student/viral platform (leaderboard, kits, city networks); PiratesAndPatriots.com is the punchline — the identity, not the storefront
 type: project
 ---
 
-Bill owns the domain PiratesAndPatriots.com. This is the public-facing brand for the student kit program and the broader JPods movement.
+**10xMakers.com** — the public-facing platform for students and viral distribution. Leaderboard, kit store, city networks, retrospections. "Build something 10x better." This is where the action happens.
 
-**The framing:** "Want a sustainable future, create it. Government produces more of what is failing." Pirates and patriots are the same people — the label depends on who's writing the history. Every breakthrough in transit, commerce, and communication started with someone breaking the rules.
+**PiratesAndPatriots.com** — the punchline, not the homepage. Used as identity and framing in pitches, talks, closing lines. "People who purposefully break the rules." Pirates and patriots are the same people — the label depends on who's writing the history.
 
-**Why:** The student program is bottom-up by design. Students design transit without asking the DOT, build vehicles without federal certification, prove the concept in parking lots. That's piracy to institutions and patriotism to the republic. The name captures this precisely.
+**Why this split:** 10xMakers is aspirational and inclusive — students, teams, anyone who wants to build. PiratesAndPatriots is confrontational and political — it's the punch, not the invitation. You invite with 10xMakers, you close with PiratesAndPatriots.
 
 **How to apply:**
-- PiratesAndPatriots.com is where the challenge lives publicly — leaderboard, kit store, city networks, retrospections
-- Not a corporate product page — a call to action
-- Connects to Bill's liberty mechanism: Individual → Disruptive Minorities → Wisdom of the Many → Government Coercion (last resort, not first)
-- The students ARE the disruptive minority
-- Scoring is meritocratic — judged by people served and crashes prevented, not by committee approval
+- 10xMakers.com is the storefront — challenge, leaderboard, kit store, scored networks, team profiles
+- PiratesAndPatriots.com redirects to 10xMakers or serves as landing page for the framing/manifesto
+- Capital pitch ends with PiratesAndPatriots — emotional close, not operational detail
+- Students discover 10xMakers; they earn the PiratesAndPatriots identity by building
