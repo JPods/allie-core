@@ -126,3 +126,4 @@
 - [10xMakers + PiratesAndPatriots](project_pirates_and_patriots.md) — 10xMakers.com = student platform (leaderboard, kits, viral); PiratesAndPatriots.com = punchline (identity, not storefront)
 - [Prime Law of Networks](reference_prime_law_of_networks.md) — V ∝ n²/p; Metcalfe extended to physical systems; packet size toward 1 = full network value; JPods is packet-switching for transit
 - [Patent portfolio + capital strategy](reference_patent_portfolio.md) — 9 filed patents + expired 6,810,817; freight/datacenter/energy = valuation floor; DirtPods = unregulated entry; "we invented solar-powered transport networks"
+- [Government in its proper role](feedback_government_proper_role.md) — Not anti-government; coercion enforces safety, liberty allows innovation; each in proper role; ASTM F24 serves both; never frame as "government bad"
