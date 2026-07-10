@@ -16,4 +16,4 @@ UI features built 2026-07-05:
 - Alt+drag suppression: 300ms window after drag-end prevents accidental CP selection
 - Collapsible palette sections: click label to toggle
 - Dead ends (yellow dashed) + orphans (green dashed) shown on Run
-- Full docs: route_time/readmes/keyboard-shortcuts.md
+- Full docs: mesh_mobility/readmes/keyboard-shortcuts.md

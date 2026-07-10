@@ -5,7 +5,7 @@ type: project
 ---
 
 Next session: Build Tulsa JPods network using the Noelle data-driven design workflow.
-- Existing hand-built reference: route-time_maps/OK_Tulsa_2026-05-04.jpd (249 structures, 0.49mi spacing)
+- Existing hand-built reference: mesh_mobility_maps/OK_Tulsa_2026-05-04.jpd (249 structures, 0.49mi spacing)
 - Need Oklahoma DOT AADT data (odot.org or similar)
 - Need NHTSA FARS Oklahoma crash data (same process as SC — download national CSV, filter state 40)
 - Tulsa data already in CityTool: pop 413K, 168K HH, 1.8 cars/HH, 2000 road miles, WalkScore 37

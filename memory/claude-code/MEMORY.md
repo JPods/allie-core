@@ -122,3 +122,5 @@
 - [Noelle network design rules](reference_noelle_design_rules.md) — Draft pattern: stations only, highways as boundaries, crash rate signal, 1:14 road ratio, 1x2 grid, both-side access, Local Knowledge QA; 7 cities
 - [JPods evidence base](reference_evidence_base.md) — Harvard $64B, Morgantown PRT, Praetor $45B, Glydways $420M, walkability 20x tax revenue; all in vector stores
 - [Tulsa network — next session](project_tulsa_next.md) — Build with Noelle workflow; existing OK_Tulsa (249 structures) as reference; need OK DOT AADT + FARS data
+- [Student kit program](project_student_kit_program.md) — Design→Survey→Build→Ride loop; kit tiers ($20-$300); scored across 4 platforms; Alice handles commerce; GPS survey = ground truth for Noelle
+- [PiratesAndPatriots.com](project_pirates_and_patriots.md) — Bill's domain; public face of student program; "create it, don't wait for permission"; leaderboard + kit store + city networks

@@ -6,7 +6,7 @@ type: project
 
 **Overlay system established 2026-07-05/06:**
 
-Per-city overlay files in route_time/overlays/:
+Per-city overlay files in mesh_mobility/overlays/:
 - `aadt_{city}.geojson` — state DOT traffic counts
 - `accidents_{city}.geojson` — NHTSA FARS fatal crashes
 - `crash_density_{city}.geojson` — all-severity aggregated to 200m grid

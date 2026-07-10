@@ -8,7 +8,7 @@ Four separate programs in the JPods ecosystem. Keep their concerns distinct.
 
 | Program | Stack | Purpose |
 |---------|-------|---------|
-| **MeshMobility** | Python, Flask, Leaflet | `/Users/williamjames/Documents/08_JPods/03_Technology/route_time` — Estimates travel times. Browser-based network planner and simulator. Design tool — does not run vehicles. |
+| **MeshMobility** | Python, Flask, Leaflet | `/Users/williamjames/Documents/08_JPods/03_Technology/00_working_code/mesh_mobility` — Estimates travel times. Browser-based network planner and simulator. Design tool — does not run vehicles. |
 | **JPodsSM_RPi** | Python, MQTT, Raspberry Pi | `/Users/williamjames/Documents/08_JPods/03_Technology/JPodsSM_RPi` — Runs physical vehicles. Nora (vehicle), Natalie (router), Noelle (network) on hardware. |
 | **SketchUp Plugin** | Ruby | `/Users/williamjames/Library/Application Support/SketchUp 2026/SketchUp/Plugins/JPods` — 3D modeling of networks. Places structures, assigns CPs, generates geometry. |
 | **WebClerk** | Django, Python, PostgreSQL, React | `/Users/williamjames/Documents/CommerceExpert/webClerk3` — Enterprise software with Alice agent built in. Stores anything helpful — network data, trip logs, operational records, shared context across programs. Alice is WebClerk's agent. |
