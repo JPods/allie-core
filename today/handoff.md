@@ -1,48 +1,49 @@
-# Handoff — 2026-07-07 (Evening)
-
-## Do This First
-1. **Restart MeshMobility** if not running — `cd /Users/williamjames/Documents/08_JPods/03_Technology/00_working_code && bash route_time/runserver.sh`
-2. Verify `rtb.webclerk.com` and `wcb.webclerk.com` are serving (tunnel auto-starts on boot)
-3. Test `rtb.webclerk.com/citytool` — Census API key is live
+# Handoff — 2026-07-09
 
 ## Where We Left Off
+Renamed Route-Time → MeshMobility across the full stack: Python package (`mesh_mobility/`), 12 Allie scripts, 5 Claude Code memory files, Noelle vector store (re-seeded + re-indexed, 50K chunks). Added grid rotation to the Mesh Network Estimate dialog — users set angle in degrees or click two map points to measure street grid angle. Austin tested at 25°, grid aligns perfectly to Congress/Lamar. Crash data registry built at `/Volumes/Allie/data/overlays/crash_data_registry.json` — 51 states FARS complete, 2 all-severity (OK, MA), 7 harvestable via ArcGIS, 39 need source hunting. Designed the Student Kit Program (Design → Survey → Build → Ride) and PiratesAndPatriots.com branding. All committed and pushed to both repos.
 
-### Cloudflare — DONE
-- Tunnel `wc_hq_tunnel` running as system service, healthy
-- `rtb.webclerk.com` → MeshMobility:5050
-- `wcb.webclerk.com` → WebClerk3:8000
-- `rtb.webclerk.com/citytool` → CityTool (serves from original file location)
-- jpods.us on Cloudflare nameservers (propagated)
-- webclerk.com on Cloudflare nameservers (active)
+## Do This First Next Session
+1. **Build the score endpoint** — `/api/network/score` computing 5 dimensions (coverage, safety, connectivity, efficiency, revenue) from existing overlay data. This is the foundation for gamification.
+2. **Harvest the 7 ready states** — VA, FL, IA, TN, IL, OR, AK have confirmed ArcGIS endpoints for all-severity crash data. Run `allie-crash-convert.py --arcgis` for each. Add field mappings to FIELD_MAPS.
+3. **Session-keyed state** — refactor `_state` in `api.py` from single dict to session-keyed dict. Enables multiple teams/individuals simultaneously.
+4. **GPS survey capture** — HTML5 geolocation page: drop pin, photo, obstruction tag, POST to session. Minimal viable version.
+5. **Kit bill of materials** — document the 4 tiers (Survey $20, Cargo $50, Scale $150, Rider $300) with specific parts and weekend build guides.
 
-### MeshMobility — Committed & pushed (bill_dev)
-- Tools + Overlays panels in right sidebar (consolidated from left palette)
-- Keys 1-9: placement, zoom, walk radius
-- Fixed scale bars: 0.75mi walk + 5mi
-- On-demand overlay fetch for any US city (AADT, FARS, census)
-- All 50 states harvested: 123MB on 5TB at `/Volumes/Allie/data/overlays/`
-- Data files gitignored, 5TB is durable store
-- Asheville NC tested — all overlays loading, Noelle Draft working
+## Open Problems
+- All 51 `crash_density_*.geojson` files are FARS fatals repackaged, not true all-severity. Only `crashes_all_ok.geojson` and `crashes_all_ma.geojson` have real state DOT data.
+- 39 states have no known public all-severity crash data source — need Bill's help to find state DOT portals. Flagged in `crash_data_registry.json` with `hunt_with_bill: true`.
+- Texas CRIS (richest crash data) locked behind interactive web app — no API.
+- `route-time_maps/` sibling folder renamed to `mesh_mobility_maps/` but the git repo for mesh_mobility still tracks as `times.git` on GitHub — repo name unchanged.
+- MeshMobility server restart still destroys in-memory network (never restart without confirming save).
 
-### Tulsa Network Sizing — Analysis complete
-- Vector analysis: 263 guideway mi, 183 stations, 329 total structures
-- CityTool validation: 189 mi (city), $3.78B build, $1.61B/yr savings, 7yr payback
-- PDF saved: `route-time_maps/Tulsa_CityTool.pdf`
-- Conservative payback (7yr) — car ownership unwinds slowly
+## What Was Decided (and Why)
+- **Up-Down / Left-Right instead of N-S / E-W** — city grids are rarely aligned to compass. Austin is 25°. Labels should describe the grid's own axes, not the compass.
+- **Grid rotation in metres, not degrees** — 1° lat ≠ 1° lon. First implementation mixed lat/lon degrees during rotation and produced unrotated grids. Fix: rotate in uniform metre space, convert to lat/lon after.
+- **No git for students** — git is a developer tool. Students need save/fork/share/timeline, which we build simpler. Design event logs go to our git for Noelle training.
+- **Keep domain code "RT"** — short codes (RT, SU, PH) are internal. Renaming to MM everywhere adds confusion for no user benefit. User-facing text says MeshMobility; internal tags stay RT.
+- **PiratesAndPatriots.com** — Bill owns the domain. Public face of the student program. Framing: "Want a sustainable future, create it. Government produces more of what is failing."
 
-## Open Issues
-- CityTool on jpods.com/library needs Census API key uploaded to Hostinger
-- Cloudflare Access (email verification for public RT/WC3) not yet configured
-- Crash density overlay is FARS fatals only — true all-severity needs state DOT data
-- AADT on-demand fetch limited (2000-record HPMS cap) — state files on 5TB more complete
-- jpods.us tunnel routes not yet added (webclerk.com only)
+## Files Changed This Session
 
-## Tomorrow
-- Upload CityTool with API key to Hostinger (library.jpods.com)
-- Capital pitch document: CityTool → MeshMobility → Station Report flow
-- Cloudflare Access for email verification on public endpoints
-- Consider `citytool.jpods.us` and `rt.jpods.us` as clean public URLs
-- Asheville network design session with Noelle
+**mesh_mobility/ (32 files) — committed 365a9d3, pushed to JPods/times bill_dev:**
+- All `.py` files — `from route_time.` → `from mesh_mobility.` imports
+- `route_time.py` → `mesh_mobility.py` — standalone entry point renamed
+- `gui/static/index.html` — N-S→Up-Down, E-W→Left-Right, grid angle input + measure button
+- `gui/static/app.js` — Grid module: angle param, two-click measure tool, rotation in generate()
+- `gui/static/style.css` — `.btn-small` class for measure button
+- `gui/api.py` — `angle_deg` parameter, `_rotated()` function using metre-space rotation
+- `runserver.sh`, `README.md`, `readmes/setup.md` — command references updated
 
-## Key Insight
-Oil depletes with use; ingenuity increases with use. JPods is a 10x paradigm shift. Every network built teaches the next one. The capital pitch leads with this framing before any numbers.
+**~/Allie/ (12 scripts) — committed 6f62eba, pushed to JPods/allie-core main:**
+- `scripts/noelle-mcp-server.py` — paths, docstrings, tool descriptions
+- `scripts/noelle-vectorstore.py` — paths, domain guesser, seed content
+- `scripts/allie-crash-convert.py` — overlay path
+- `scripts/allie-{mcp-server,reflect,capture,whatif,api}.py` — domain names
+- `scripts/allie_{ask_claude,corpus_log,wc_client}.py` — domain lists
+- `scripts/wc_mcp_server.py` — dispatch target name
+
+**New files:**
+- `/Volumes/Allie/data/overlays/crash_data_registry.json` — 51-state crash data status
+- `~/Allie/readmes/50-student-kit-program.md` — full student program writeup
+- Memory: `project_student_kit_program.md`, `project_pirates_and_patriots.md`
