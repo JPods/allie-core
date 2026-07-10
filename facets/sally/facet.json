@@ -25,123 +25,6 @@
   "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations.",
   "observations": [
     {
-      "ts": "2026-07-03T20:27:42Z",
-      "observation": "s001 ps8 high turnover: 20 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 8,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-03T20:29:46Z",
-      "observation": "s003 ps1 high turnover: 20 arrivals",
-      "data": {
-        "station": "s003",
-        "slot": 1,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-03T20:30:42Z",
-      "observation": "s004 ps1 high turnover: 20 arrivals",
-      "data": {
-        "station": "s004",
-        "slot": 1,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-03T20:30:51Z",
-      "observation": "s002 ps1 high turnover: 20 arrivals",
-      "data": {
-        "station": "s002",
-        "slot": 1,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-03T20:31:47Z",
-      "observation": "s001 ps7 high turnover: 20 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 7,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-03T20:34:15Z",
-      "observation": "s001 ps1 high turnover: 20 arrivals",
-      "data": {
-        "station": "s001",
-        "slot": 1,
-        "count": 20
-      }
-    },
-    {
-      "ts": "2026-07-05T10:18:13Z",
-      "observation": "s015 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s015",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-05T10:22:25Z",
-      "observation": "s012 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s012",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-05T10:25:27Z",
-      "observation": "s028 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s028",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-05T10:26:08Z",
-      "observation": "s025 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s025",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-05T10:27:22Z",
-      "observation": "s014 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s014",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-05T12:47:41Z",
-      "observation": "s029 ps1 high turnover: 10 arrivals",
-      "data": {
-        "station": "s029",
-        "slot": 1,
-        "count": 10
-      }
-    },
-    {
-      "ts": "2026-07-06T12:19:26Z",
-      "observation": "s008 ps6 high turnover: 10 arrivals",
-      "data": {
-        "station": "s008",
-        "slot": 6,
-        "count": 10
-      }
-    },
-    {
       "ts": "2026-07-06T12:24:04Z",
       "observation": "s005 ps6 high turnover: 10 arrivals",
       "data": {
@@ -921,6 +804,123 @@
       "data": {
         "station": "s004",
         "slot": 3,
+        "count": 40
+      }
+    },
+    {
+      "ts": "2026-07-09T16:04:39Z",
+      "observation": "s001 ps7 high turnover: 10 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 7,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-09T16:04:41Z",
+      "observation": "s002 ps1 high turnover: 10 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 1,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-09T16:06:23Z",
+      "observation": "s001 ps1 high turnover: 10 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 1,
+        "count": 10
+      }
+    },
+    {
+      "ts": "2026-07-09T16:11:03Z",
+      "observation": "s002 ps7 high turnover: 20 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 7,
+        "count": 20
+      }
+    },
+    {
+      "ts": "2026-07-09T16:14:42Z",
+      "observation": "s001 ps8 high turnover: 30 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 8,
+        "count": 30
+      }
+    },
+    {
+      "ts": "2026-07-09T16:14:54Z",
+      "observation": "s002 ps1 high turnover: 20 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 1,
+        "count": 20
+      }
+    },
+    {
+      "ts": "2026-07-09T16:18:30Z",
+      "observation": "s001 ps1 high turnover: 20 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 1,
+        "count": 20
+      }
+    },
+    {
+      "ts": "2026-07-09T16:22:56Z",
+      "observation": "s002 ps1 high turnover: 30 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 1,
+        "count": 30
+      }
+    },
+    {
+      "ts": "2026-07-09T16:29:11Z",
+      "observation": "s001 ps1 high turnover: 30 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 1,
+        "count": 30
+      }
+    },
+    {
+      "ts": "2026-07-09T16:31:20Z",
+      "observation": "s002 ps1 high turnover: 40 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 1,
+        "count": 40
+      }
+    },
+    {
+      "ts": "2026-07-09T16:33:15Z",
+      "observation": "s001 ps8 high turnover: 60 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 8,
+        "count": 60
+      }
+    },
+    {
+      "ts": "2026-07-09T16:35:20Z",
+      "observation": "s002 ps8 high turnover: 60 arrivals",
+      "data": {
+        "station": "s002",
+        "slot": 8,
+        "count": 60
+      }
+    },
+    {
+      "ts": "2026-07-09T16:37:03Z",
+      "observation": "s001 ps1 high turnover: 40 arrivals",
+      "data": {
+        "station": "s001",
+        "slot": 1,
         "count": 40
       }
     }
