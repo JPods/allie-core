@@ -16,16 +16,16 @@ Usage:
   log = CorpusLog()
   log.add(
       agent="allie",
-      domain="route-time",
+      domain="mesh-mobility",
       prompt="Why is station S02 showing 35 min travel time at near-zero demand?",
       response="Topology bug — direct south guideway missing. Turnabout adds ~160m.",
       verified=True,
       ground_truth="diag_grid.py confirmed route ratio 1.1× after fix.",
-      tags=["topology", "route-time", "diagnosis"],
+      tags=["topology", "mesh-mobility", "diagnosis"],
   )
 
 CLI:
-  python3 allie_corpus_log.py add --agent allie --domain route-time \\
+  python3 allie_corpus_log.py add --agent allie --domain mesh-mobility \\
       --prompt "..." --response "..." --verified --ground-truth "..."
   python3 allie_corpus_log.py stats
   python3 allie_corpus_log.py export --format jsonl --out /tmp/corpus_export.jsonl
@@ -41,7 +41,7 @@ ALLIE = pathlib.Path("/Users/williamjames/Allie")
 CORPUS_PATH = ALLIE / "training" / "corpus.jsonl"
 
 AGENTS  = ["allie", "alice", "athena", "natalie", "noelle", "nora"]
-DOMAINS = ["route-time", "sketchup", "physical", "webclerk", "writing", "universal"]
+DOMAINS = ["mesh-mobility", "sketchup", "physical", "webclerk", "writing", "universal"]
 
 
 class CorpusLog:

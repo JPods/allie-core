@@ -316,7 +316,7 @@ def wc_jpods_travel(
         currency: Currency code (e.g. 'USD').
         item_id: Item pk from wc_jpods_price response.
         price_level: 'retail' | 'wholesale' | 'sample'.
-        network: Dispatch target — 'sketchup' | 'route-time' | 'physical'.
+        network: Dispatch target — 'sketchup' | 'mesh-mobility' | 'physical'.
     """
     try:
         result = _post(

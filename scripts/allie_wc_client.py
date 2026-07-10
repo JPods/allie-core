@@ -9,7 +9,7 @@ and Setting (document pointers, corpus links, notes).
 Usage (from other scripts):
   from allie_wc_client import WCClient
   wc = WCClient(agent="allie")
-  wc.create_action("Review Route-Time topology", project_id=25, kanban_column="InProcess")
+  wc.create_action("Review MeshMobility topology", project_id=25, kanban_column="InProcess")
 
   wc = WCClient(agent="alice")
   wc.create_document_pointer(title="Reflect 2026-04-27", path="...", summary="...")

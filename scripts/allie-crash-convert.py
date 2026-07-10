@@ -23,7 +23,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 OVERLAY_5TB = Path("/Volumes/Allie/data/overlays")
-OVERLAY_LOCAL = Path(__file__).parent.parent / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "route_time" / "overlays"
+OVERLAY_LOCAL = Path(__file__).parent.parent / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "mesh_mobility" / "overlays"
 
 GRID_CELL_M = 200
 CELL_DEG = GRID_CELL_M / 111000  # ~0.0018°

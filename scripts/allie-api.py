@@ -8,7 +8,7 @@ Exposes Allie's local LLMs (DeepSeek, Llama, Athena models) to:
   - Other local network devices
   - External callers via ngrok tunnel (when enabled)
 
-Port: 5001 (does not conflict with WebClerk on 8000 or Route-Time on 5050)
+Port: 5001 (does not conflict with WebClerk on 8000 or MeshMobility on 5050)
 
 Authentication: Bearer token from config/allie_api_keys.json
 

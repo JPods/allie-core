@@ -41,7 +41,7 @@ DOMAINS = {
     "WC3": "WebClerk3 — data quality, Alice, pattern recognition, billing",
     "SU":  "JPods SketchUp plugin — student tool, build pipeline, animation",
     "PH":  "Physical — scale model, Nora/Natalie/Noelle on Pi",
-    "RT":  "Route-Time — network planner, simulator",
+    "RT":  "MeshMobility — network planner, simulator",
     "SYS": "System-wide — Allie, CLAUDE.md, wisdom layer, succession",
     "EXT": "External — regulations, deployment, first customer",
 }

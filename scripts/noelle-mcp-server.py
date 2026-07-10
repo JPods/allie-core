@@ -9,7 +9,7 @@ propose data-driven station placement, and iterates with human designers.
 Tools:
   ask_noelle      — Ask Noelle about network design, placement, capacity, topology
   noelle_search   — Semantic search across Noelle's vector store
-  noelle_describe — Analyze current Route-Time network topology
+  noelle_describe — Analyze current MeshMobility network topology
   noelle_propose  — Place structures based on AADT data (not connected)
   noelle_snapshot — Record current network state with designer's note
   noelle_diff     — Show changes since last snapshot
@@ -40,7 +40,7 @@ COLLECTION_NAME = "noelle_network_design"
 
 RT_URL = os.environ.get("RT_URL", "http://localhost:5050")
 
-RT_DIR = pathlib.Path.home() / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "route_time"
+RT_DIR = pathlib.Path.home() / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "mesh_mobility"
 HISTORY_DIR = RT_DIR / "noelle_history"
 
 DB_NAME = "allie"
@@ -94,7 +94,7 @@ def _now_ms():
 
 
 def _rt_api(method, path, body=None):
-    """Call Route-Time API."""
+    """Call MeshMobility API."""
     url = f"{RT_URL}{path}"
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(url, data=data, method=method,
@@ -209,7 +209,7 @@ def write_noelle_log(event, message, source="claude", data=None):
 # ── Network Describe ──────────────────────────────────────────────────
 
 def describe_network():
-    """Get structured description of current Route-Time network."""
+    """Get structured description of current MeshMobility network."""
     result = _rt_api("GET", "/api/network/describe")
     if "error" in result:
         return result
@@ -397,7 +397,7 @@ TOOLS = [
     },
     {
         "name": "noelle_describe",
-        "description": "Analyze the current Route-Time network topology. Returns station/circle counts, connectivity, spacing, orphans, components, degree distribution, and a quality assessment.",
+        "description": "Analyze the current MeshMobility network topology. Returns station/circle counts, connectivity, spacing, orphans, components, degree distribution, and a quality assessment.",
         "inputSchema": {
             "type": "object",
             "properties": {},

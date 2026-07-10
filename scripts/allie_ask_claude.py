@@ -13,7 +13,7 @@ Usage (import):
 
 Usage (CLI):
   python3 allie_ask_claude.py --prompt "..." [--mode api|cli|file]
-  python3 allie_ask_claude.py --prompt "..." --mode file --domain route-time --priority high
+  python3 allie_ask_claude.py --prompt "..." --mode file --domain mesh-mobility --priority high
   python3 allie_ask_claude.py --prompt "..." --escalate  # only calls if local model uncertain
 """
 
@@ -31,7 +31,7 @@ LOG_PATH    = ALLIE / "config" / "agent_log.jsonl"
 
 DEFAULT_MODEL       = "claude-sonnet-4-6"
 HIGH_STAKES_MODEL   = "claude-opus-4-6"
-DOMAINS  = ["route-time", "sketchup", "physical", "webclerk", "writing", "universal"]
+DOMAINS  = ["mesh-mobility", "sketchup", "physical", "webclerk", "writing", "universal"]
 PRIORITIES = ["high", "normal", "low"]
 
 

@@ -5,7 +5,7 @@ allie-capture.py — Universal event capture for Allie's events.jsonl
 Called by:
   - Claude Code hooks (JSON on stdin)
   - Git post-commit hooks (CLI args)
-  - Application hooks in Route-Time, JPodsSM_RPi, WebClerk3
+  - Application hooks in MeshMobility, JPodsSM_RPi, WebClerk3
   - SketchUp log watcher
 
 Writes one JSONL line per event to ~/Allie/logs/events.jsonl.
@@ -13,7 +13,7 @@ allie-reflect.py reads this file as part of nightly synthesis.
 
 Usage (CLI):
   python3 allie-capture.py --source git:su_jpods --event commit --message "Fix bezier height"
-  python3 allie-capture.py --source route-time --event simulation_complete --data '{"lines": 5}'
+  python3 allie-capture.py --source mesh-mobility --event simulation_complete --data '{"lines": 5}'
   python3 allie-capture.py --source jpods-rpi --event trip_complete --message "NORA_0001 310mm"
 
 Usage (stdin — Claude Code hooks pass JSON on stdin):
@@ -119,7 +119,7 @@ def capture_from_stdin(source: str, event: str):
 
 def main():
     parser = argparse.ArgumentParser(description="Allie event capture")
-    parser.add_argument("--source",  required=True, help="e.g. claude-code, git:su_jpods, route-time")
+    parser.add_argument("--source",  required=True, help="e.g. claude-code, git:su_jpods, mesh-mobility")
     parser.add_argument("--event",   required=True, help="e.g. commit, simulation_complete, trip_complete")
     parser.add_argument("--message", default="",    help="Human-readable description")
     parser.add_argument("--data",    default="",    help="JSON string with structured data")

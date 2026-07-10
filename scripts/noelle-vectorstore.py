@@ -3,7 +3,7 @@
 Noelle Vector Store — network design intelligence across all JPods programs.
 
 Noelle validates and reasons about network design across three programs:
-  - Route-Time (RT): network topology, simulation results, travel times
+  - MeshMobility (RT): network topology, simulation results, travel times
   - SketchUp (SU): 3D geometry, station templates, build pipeline
   - Physical (PH): scale model behavior, ezone faults, trip telemetry
 
@@ -15,7 +15,7 @@ Three data layers feed network placement decisions:
 Usage:
     python3 noelle-vectorstore.py index             # Index all knowledge
     python3 noelle-vectorstore.py seed              # Seed foundational design rules
-    python3 noelle-vectorstore.py ingest-network URL # Ingest a Route-Time network descriptor
+    python3 noelle-vectorstore.py ingest-network URL # Ingest a MeshMobility network descriptor
     python3 noelle-vectorstore.py search "query"    # Search
     python3 noelle-vectorstore.py stats             # Show statistics
 """
@@ -42,10 +42,10 @@ INDEX_DIRS = [
     ("facets_noelle", ALLIE_HOME / "facets" / "noelle"),
 ]
 
-# Also index Route-Time readmes
-RT_DIR = Path.home() / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "route_time" / "readmes"
+# Also index MeshMobility readmes
+RT_DIR = Path.home() / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "mesh_mobility" / "readmes"
 if RT_DIR.exists():
-    INDEX_DIRS.append(("route_time", RT_DIR))
+    INDEX_DIRS.append(("mesh_mobility", RT_DIR))
 
 EXTENSIONS = {".md", ".txt", ".json"}
 CHUNK_SIZE = 1500
@@ -211,7 +211,7 @@ def seed():
                 "JPods Color Standard — All Programs\n\n"
                 "Red = inbound (hot end — vehicle arriving)\n"
                 "Blue = outbound (cool end — vehicle departing)\n\n"
-                "Applied to: Route-Time guideway polylines, CP stub-pair dots, "
+                "Applied to: MeshMobility guideway polylines, CP stub-pair dots, "
                 "SketchUp 3D geometry, animation, physical model LEDs.\n"
                 "Never reverse. Never monochrome for directional elements."
             ),
@@ -282,8 +282,8 @@ def seed():
                 "Shapefile downloads: https://info2.scdot.org/sites/GIS/SitePages/GISFiles.aspx\n"
                 "Available: Statewide Traffic Lines and Points (2009-2017 as shapefiles).\n"
                 "Newer data via ArcGIS: scdot.maps.arcgis.com\n\n"
-                "For Route-Time overlay: convert shapefile to GeoJSON, filter to map bounds, "
-                "save as route_time/overlays/aadt.geojson"
+                "For MeshMobility overlay: convert shapefile to GeoJSON, filter to map bounds, "
+                "save as mesh_mobility/overlays/aadt.geojson"
             ),
         },
         {
@@ -296,8 +296,8 @@ def seed():
                 "contributing factors. Queryable by state and year.\n\n"
                 "SC DPS also maintains state-level crash database at "
                 "scdps.sc.gov/ohsjp/stat_services\n\n"
-                "For Route-Time overlay: query FARS API for South Carolina, "
-                "extract lat/lon and severity, save as route_time/overlays/accidents.geojson\n\n"
+                "For MeshMobility overlay: query FARS API for South Carolina, "
+                "extract lat/lon and severity, save as mesh_mobility/overlays/accidents.geojson\n\n"
                 "High-accident corridors are the strongest safety and political "
                 "argument for JPods. Every accident on a JPods corridor is one that "
                 "JPods prevents by removing cars from the road."
@@ -317,8 +317,8 @@ def seed():
                 "- StreetLight Data: cellphone-derived pedestrian volumes, API available\n"
                 "- Replica: activity-based travel model with walking trip data\n"
                 "- Both are commercial; WalkScore API is the most accessible.\n\n"
-                "For Route-Time overlay: query WalkScore API on a grid across map "
-                "bounds, interpolate to heat map, save as route_time/overlays/mobility.geojson"
+                "For MeshMobility overlay: query WalkScore API on a grid across map "
+                "bounds, interpolate to heat map, save as mesh_mobility/overlays/mobility.geojson"
             ),
         },
     ]
@@ -387,7 +387,7 @@ def index_files():
 def _guess_domain(path):
     """Guess domain from file path."""
     s = str(path).lower()
-    if "route_time" in s or "route-time" in s:
+    if "mesh_mobility" in s or "route_time" in s or "route-time" in s:
         return "RT"
     if "sketchup" in s or "su_jpods" in s or "jpod_" in s:
         return "SU"
@@ -403,7 +403,7 @@ def _guess_domain(path):
 
 
 def ingest_network(url="http://localhost:5050/api/network/describe"):
-    """Ingest a network descriptor from Route-Time into the vector store."""
+    """Ingest a network descriptor from MeshMobility into the vector store."""
     import urllib.request
 
     try:
@@ -532,7 +532,7 @@ def main():
                         help="Filter search by domain (RT, SU, PH, CROSS, economics, etc.)")
     parser.add_argument("--url", type=str,
                         default="http://localhost:5050/api/network/describe",
-                        help="Route-Time describe endpoint URL")
+                        help="MeshMobility describe endpoint URL")
     args = parser.parse_args()
 
     if args.command == "seed":
