@@ -144,6 +144,143 @@ FIELD_MAPS = {
         "road": ["ROAD", "road_name"],
         "year": ["YEAR", "year"],
     },
+    "dc": {
+        "lat": ["LATITUDE"],
+        "lon": ["LONGITUDE"],
+        "fatal": [],
+        "fatal_sum": ["FATAL_DRIVER", "FATAL_PEDESTRIAN", "FATAL_BICYCLIST", "FATALPASSENGER", "FATALOTHER"],
+        "injury": [],
+        "injury_sum": ["MAJORINJURIES_DRIVER", "MINORINJURIES_DRIVER", "MAJORINJURIES_PEDESTRIAN", "MINORINJURIES_PEDESTRIAN", "MAJORINJURIES_BICYCLIST", "MINORINJURIES_BICYCLIST"],
+        "pedestrian": ["TOTAL_PEDESTRIANS"],
+        "bicycle": ["TOTAL_BICYCLES"],
+        "severity": [],
+        "collision_type": [],
+        "road": ["ADDRESS", "NEARESTINTSTREETNAME"],
+        "year": ["REPORTDATE"],
+    },
+    "ut": {
+        "lat": ["lat_utm_y"],
+        "lon": ["long_utm_x"],
+        "fatal": ["number_fatalities"],
+        "injury": [],
+        "injury_sum": ["number_four_injuries", "number_three_injuries", "number_two_injuries", "number_one_injuries"],
+        "pedestrian": ["pedestrian_involved"],
+        "bicycle": ["bicyclist_involved"],
+        "severity": ["crash_severity_desc"],
+        "collision_type": ["manner_collision_desc"],
+        "road": ["main_road_name"],
+        "year": ["crash_datetime"],
+    },
+    "pa": {
+        "lat": ["DEC_LAT"],
+        "lon": ["DEC_LONG"],
+        "fatal": ["FATAL_COUN", "FATAL"],
+        "injury": ["TOT_INJ_CO", "INJURY"],
+        "pedestrian": ["PEDESTRIAN", "PED_COUNT"],
+        "bicycle": ["BICYCLE"],
+        "severity": ["MAX_SEVERI"],
+        "collision_type": ["COLLISION_"],
+        "road": ["STREET_NAM"],
+        "year": ["CRASH_YEAR"],
+    },
+    "ma": {
+        "lat": ["Latitude"],
+        "lon": ["Longitude"],
+        "fatal": ["Fatalities"],
+        "injury": ["Serious_Injuries", "Minor_Injuries", "Possible_Injuries"],
+        "pedestrian": ["EA_Pedestrians"],
+        "bicycle": ["EA_Bicyclists"],
+        "severity": ["Crash_Severity"],
+        "collision_type": ["Manner_of_Collision", "First_Harmful_Event"],
+        "road": ["Roadway"],
+        "year": ["Year"],
+    },
+    "id": {
+        "lat": ["latitude"],
+        "lon": ["longitude"],
+        "fatal": ["fatalities"],
+        "injury": ["numberofinjuries", "injuries"],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["severity"],
+        "collision_type": [],
+        "road": ["street1", "statehighway"],
+        "year": ["year"],
+    },
+    "de": {
+        "lat": ["LATITUDE"],
+        "lon": ["LONGITUDE"],
+        "fatal": ["CRASH_CLASS"],
+        "injury": ["CRASH_CLASS"],
+        "pedestrian": ["PED_INVOLVED"],
+        "bicycle": ["BIKE_INVOLVED"],
+        "severity": ["CRASH_CLASS"],
+        "collision_type": ["IMPACT_DESC"],
+        "road": [],
+        "year": ["YEAR"],
+    },
+    "co": {
+        "lat": ["LATITUDE"],
+        "lon": ["LONGITUDE"],
+        "fatal": ["KILLED"],
+        "injury": ["INJURED"],
+        "pedestrian": ["PED_ACT1"],
+        "bicycle": [],
+        "severity": ["INJLEVEL_0"],
+        "collision_type": ["ACCTYPE"],
+        "road": ["LOC_01"],
+        "year": ["YEAR"],
+    },
+    "wa": {
+        "lat": ["Y"],
+        "lon": ["X"],
+        "fatal": ["tFatal"],
+        "injury": ["tSinjury", "tEinjury", "tPinjury"],
+        "pedestrian": ["tPeds", "Ped"],
+        "bicycle": ["tBicycles", "PedBike"],
+        "severity": ["fCrash"],
+        "collision_type": [],
+        "road": ["IndxPrimaryTrafficway", "PrimaryTrafficway"],
+        "year": ["Year"],
+    },
+    "ny": {
+        "lat": ["USER_LATITUDE", "Y"],
+        "lon": ["USER_LONGITUDE", "X"],
+        "fatal": ["USER_NUMBER_OF_PERSONS_KILLED"],
+        "injury": ["USER_NUMBER_OF_PERSONS_INJURED"],
+        "pedestrian": ["USER_NUMBER_OF_PEDESTRIANS_INJU", "USER_NUMBER_OF_PEDESTRIANS_KILL"],
+        "bicycle": ["USER_NUMBER_OF_CYCLIST_INJURED", "USER_NUMBER_OF_CYCLIST_KILLED"],
+        "severity": [],
+        "collision_type": ["USER_CONTRIBUTING_FACTOR_VEHICL"],
+        "road": ["USER_ON_STREET_NAME", "USER_CROSS_STREET_NAME"],
+        "year": ["USER_CRASH_DATE"],
+    },
+    "in": {
+        "lat": ["Latitude"],
+        "lon": ["Longitude"],
+        "fatal": [],
+        "injury": [],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["Incapacitated_Fatal"],
+        "collision_type": ["Manner_of_Colision"],
+        "road": ["Cross_Street"],
+        "year": ["Year"],
+        "fatal_flag": ["Incapacitated_Fatal"],
+    },
+    "md": {
+        "lat": ["MSP_Y_COORDINATE"],
+        "lon": ["MSP_X_COORDINATE"],
+        "fatal": [],
+        "injury": [],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": [],
+        "collision_type": ["CRASH_TYPE"],
+        "road": ["ROUTE_PREFIX", "ROUTE_NUMBER"],
+        "year": ["DATE_OF_CRASH"],
+        "fatal_flag": [],
+    },
 }
 
 
@@ -153,6 +290,15 @@ def _get_field(props, field_names):
         if name in props:
             return props[name]
     return None
+
+
+def _sum_fields(props, field_names):
+    """Sum all matching fields (for states like DC that split fatals by participant type)."""
+    total = 0
+    for name in field_names:
+        if name in props:
+            total += _to_int(props[name])
+    return total
 
 
 def _to_int(val):
@@ -172,7 +318,7 @@ def _to_bool_int(val):
     if isinstance(val, (int, float)):
         return 1 if val > 0 else 0
     s = str(val).strip().upper()
-    return 1 if s in ("Y", "YES", "TRUE", "1") else 0
+    return 1 if s in ("Y", "YES", "TRUE", "1", "FATAL", "INJURY", "INCAPACITATING") else 0
 
 
 def load_raw(path):
@@ -183,10 +329,17 @@ def load_raw(path):
 
 def fetch_arcgis(url):
     """Fetch all features from an ArcGIS Feature Service."""
+    # Detect if URL already ends with a layer number (e.g., .../MapServer/24)
+    import re
+    if re.search(r'/\d+$', url.rstrip('/')):
+        layer_url = url.rstrip('/')
+    else:
+        layer_url = f"{url}/0"
+
     # Discover server's max record count
     page_size = 2000
     try:
-        info_url = f"{url}/0?f=json"
+        info_url = f"{layer_url}?f=json"
         req = urllib.request.Request(info_url, headers={"User-Agent": "Allie/CrashHarvester"})
         with urllib.request.urlopen(req, timeout=30) as resp:
             info = json.loads(resp.read().decode())
@@ -201,7 +354,7 @@ def fetch_arcgis(url):
     retries = 0
     max_retries = 3
     while True:
-        query_url = f"{url}/0/query?where=1%3D1&outFields=*&f=geojson&resultRecordCount={page_size}&resultOffset={offset}"
+        query_url = f"{layer_url}/query?where=1%3D1&outFields=*&f=geojson&outSR=4326&resultRecordCount={page_size}&resultOffset={offset}"
         req = urllib.request.Request(query_url, headers={"User-Agent": "Allie/CrashHarvester"})
         try:
             with urllib.request.urlopen(req, timeout=60) as resp:
@@ -277,11 +430,19 @@ def convert(raw_geojson, state, source_info):
 
         grid[key]["crashes"] += 1
 
-        # Extract fields
-        fat = _to_int(_get_field(props, fmap.get("fatal", [])))
-        inj = _to_int(_get_field(props, fmap.get("injury", [])))
-        ped = _to_int(_get_field(props, fmap.get("pedestrian", [])))
-        bike = _to_int(_get_field(props, fmap.get("bicycle", [])))
+        # Extract fields — use _sum_fields if fatal_sum/injury_sum keys exist
+        if fmap.get("fatal_sum"):
+            fat = _sum_fields(props, fmap["fatal_sum"])
+        else:
+            fat = _to_int(_get_field(props, fmap.get("fatal", [])))
+        if fmap.get("injury_sum"):
+            inj = _sum_fields(props, fmap["injury_sum"])
+        else:
+            inj = _to_int(_get_field(props, fmap.get("injury", [])))
+        ped_raw = _get_field(props, fmap.get("pedestrian", []))
+        ped = _to_bool_int(ped_raw) if isinstance(ped_raw, str) and ped_raw.strip().upper() in ("Y", "YES", "N", "NO", "TRUE", "FALSE") else _to_int(ped_raw)
+        bike_raw = _get_field(props, fmap.get("bicycle", []))
+        bike = _to_bool_int(bike_raw) if isinstance(bike_raw, str) and bike_raw.strip().upper() in ("Y", "YES", "N", "NO", "TRUE", "FALSE") else _to_int(bike_raw)
         sev = _to_int(_get_field(props, fmap.get("severity", [])))
         ctype = _get_field(props, fmap.get("collision_type", [])) or ""
         road = _get_field(props, fmap.get("road", [])) or ""
@@ -309,12 +470,20 @@ def convert(raw_geojson, state, source_info):
 
         if year:
             try:
-                y = int(float(year))
-                # Handle epoch milliseconds (ArcGIS date fields)
-                if y > 1e12:
-                    y = datetime.fromtimestamp(y / 1000, tz=timezone.utc).year
-                elif y > 1e9:
-                    y = datetime.fromtimestamp(y, tz=timezone.utc).year
+                year_str = str(year).strip()
+                # Handle ISO datetime strings (e.g., "2026-01-02T09:19:00+00:00")
+                if 'T' in year_str or (len(year_str) >= 10 and year_str[4:5] == '-'):
+                    y = int(year_str[:4])
+                # Handle YYYYMMDD numeric dates (e.g., 20170712)
+                elif len(year_str) == 8 and year_str.isdigit() and int(year_str[:4]) > 1990:
+                    y = int(year_str[:4])
+                else:
+                    y = int(float(year))
+                    # Handle epoch milliseconds (ArcGIS date fields)
+                    if y > 1e12:
+                        y = datetime.fromtimestamp(y / 1000, tz=timezone.utc).year
+                    elif y > 1e9:
+                        y = datetime.fromtimestamp(y, tz=timezone.utc).year
                 if 0 <= y <= 99:
                     y += 2000 if y < 50 else 1900
                 if 1990 <= y <= 2030:
