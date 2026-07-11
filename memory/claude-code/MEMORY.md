@@ -131,3 +131,4 @@
 - [Government in its proper role](feedback_government_proper_role.md) — Not anti-government; coercion enforces safety, liberty allows innovation; each in proper role; ASTM F24 serves both; never frame as "government bad"
 - [MeshMobility platform](project_meshmobility_platform.md) — Library (browse/clone/fork), user tokens for points, protected JPods_primary networks, for-fee support line; viral loop
 - [Cargo and utility overlays](project_cargo_utility_overlays.md) — Future data layers: USPS/UPS/FedEx/grocery locations + water/sewage/recycling as cassettes; DO NOT BUILD YET
+- [60% reduction already done](reference_60pct_already_done.md) — "Can't be done" has been done; US/Europe diverged post-1973 from same baseline; 60% less oil, 400-600% fewer deaths; Paris 4.3% car vs US 85%
