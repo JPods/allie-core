@@ -110,6 +110,7 @@
 - [Three-agent UI experiment](project_ui_experiment.md) — Claude/5173, Allie/5175, Alice/5176 + baseline/5174; five rounds; all copies kept for human eval; continuous memory capture
 - [qqq/zzz = dead code, delete](feedback_qqq_zzz_cleanup.md) — Files prefixed qqq_ or zzz_ are temp/dead archive; delete unless hold-until-date > today
 - [zz/qq data never tallies](feedback_zz_qq_data_exclusion.md) — Records with ida starting zz or qq are training/disposable; exclude from all reports, GL, dashboards, decisions
+- [No List.tsx — DataBrowser only](feedback_no_list_tsx.md) — Hard rule: no custom list pages; all lists via DataBrowser at /db/:model; fix DataBrowser, don't build custom lists
 - [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
 - [MeshMobility data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
