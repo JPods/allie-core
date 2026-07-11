@@ -128,3 +128,5 @@
 - [Prime Law of Networks](reference_prime_law_of_networks.md) — V ∝ n²/p; Metcalfe extended to physical systems; packet size toward 1 = full network value; JPods is packet-switching for transit
 - [Patent portfolio + capital strategy](reference_patent_portfolio.md) — 9 filed patents + expired 6,810,817; freight/datacenter/energy = valuation floor; DirtPods = unregulated entry; "we invented solar-powered transport networks"
 - [Government in its proper role](feedback_government_proper_role.md) — Not anti-government; coercion enforces safety, liberty allows innovation; each in proper role; ASTM F24 serves both; never frame as "government bad"
+- [MeshMobility platform](project_meshmobility_platform.md) — Library (browse/clone/fork), user tokens for points, protected JPods_primary networks, for-fee support line; viral loop
+- [Cargo and utility overlays](project_cargo_utility_overlays.md) — Future data layers: USPS/UPS/FedEx/grocery locations + water/sewage/recycling as cassettes; DO NOT BUILD YET
