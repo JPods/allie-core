@@ -14,6 +14,12 @@
 
 ---
 
+## You Can Ride It Today
+
+SkyRide Technology has an operational guideway in Waconia, Minnesota. JPods provides the robots. The pedal-powered version is on 3 Carnival Cruise Ships — rated Best Cruise Ship Feature of 2016 and 2017. Millions of people have already ridden the guideway form factor. This isn't a concept. It's a ride. ([skyridetechnology.com](https://skyridetechnology.com/) · [library.jpods.com/skyride](https://library.jpods.com/skyride/))
+
+Mall of America is 35 miles from Waconia. 42 million visitors per year. The first solar-powered JPods network at MOA lets every visitor experience the future of transit — then go home and design one for their city on MeshMobility.
+
 ## What We're Building
 
 **Free software** that lets anyone design a transit network for their city. Real crash data, traffic counts, and census data for all 50 states. A student in Austin built a complete network in one hour and proved a 2-year payback.
@@ -34,4 +40,12 @@ JPods will become an iconic company. But even in the worst case — once mind-sh
 
 Government produces more of what is failing. We empower people to create what works.
 
-**PiratesAndPatriots.com**
+---
+
+**See it working — it takes 60 seconds:**
+
+- **CityTool** — type any US city, see the numbers: [meshmobility.com/citytool](https://meshmobility.com/citytool)
+- **MeshMobility** — design a network yourself: [meshmobility.com](https://meshmobility.com)
+- **Training videos** — 60-second CityTool hook, 5-minute first network, full design workflow
+
+*10xMakers.com — Pirates and Patriots.*

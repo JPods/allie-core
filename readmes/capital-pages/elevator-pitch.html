@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JPods — Luck Is When Preparation Meets Opportunity</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; color: #1a1a1a; background: #fafafa; line-height: 1.8; }
+  a { color: #1a6bb5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero {
+    background: linear-gradient(160deg, #0a2540 0%, #143d66 60%, #1a6bb5 100%);
+    color: white; padding: 80px 24px 60px; text-align: center;
+  }
+  .hero .epigraph { font-style: italic; font-size: 1.5em; opacity: 0.9; margin-bottom: 8px; }
+  .hero .attr { font-size: 1em; opacity: 0.6; margin-bottom: 32px; }
+  .hero h1 { font-size: 2.6em; font-weight: 400; letter-spacing: -0.5px; }
+
+  .container { max-width: 740px; margin: 0 auto; padding: 0 24px; }
+
+  .section { padding: 48px 0; border-bottom: 1px solid #e0e0e0; }
+  .section:last-child { border-bottom: none; }
+  .section h2 {
+    font-size: 1.5em; margin-bottom: 24px; color: #0a2540;
+    font-weight: 400; letter-spacing: -0.3px;
+  }
+
+  .force {
+    display: flex; gap: 20px; align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  .force-num {
+    font-size: 2.4em; font-weight: 700; color: #1a6bb5;
+    line-height: 1; min-width: 40px;
+  }
+  .force-text { flex: 1; }
+  .force-text strong { color: #0a2540; }
+
+  .quote {
+    font-style: italic; font-size: 1.1em; color: #444;
+    border-left: 3px solid #1a6bb5; padding: 14px 24px; margin: 16px 0;
+  }
+  .quote .who { font-style: normal; font-size: 0.85em; color: #888; margin-top: 6px; }
+
+  p { margin-bottom: 16px; }
+  p.lead { font-size: 1.15em; color: #333; }
+
+  .highlight {
+    background: #f0f7ff; border-radius: 10px; padding: 28px 32px;
+    margin: 28px 0;
+  }
+  .highlight h3 { color: #0a2540; margin-bottom: 12px; font-size: 1.15em; }
+
+  /* ── Collapsible "...more" ── */
+  .more-toggle {
+    display: inline-block; cursor: pointer; color: #1a6bb5;
+    font-size: 0.95em; padding: 6px 0; user-select: none;
+    border: none; background: none; font-family: inherit;
+  }
+  .more-toggle:hover { text-decoration: underline; }
+  .more-toggle::before { content: '▸ '; font-size: 0.85em; }
+  .more-toggle.open::before { content: '▾ '; }
+  .more-content {
+    display: none; padding: 16px 0 8px;
+    border-left: 3px solid #e8e8e8; margin-left: 4px; padding-left: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .more-content.open { display: block; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .prep-list { margin: 20px 0; }
+  .prep-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid #eee;
+  }
+  .prep-item:last-child { border-bottom: none; }
+  .prep-item .name { font-weight: 700; color: #0a2540; min-width: 160px; }
+  .prep-item .desc { color: #444; flex: 1; }
+
+  .try-it {
+    background: #0a2540; color: white; border-radius: 12px;
+    padding: 40px; margin: 40px 0; text-align: center;
+  }
+  .try-it h2 { color: white; margin-bottom: 12px; font-size: 1.3em; }
+  .try-it p { opacity: 0.85; margin-bottom: 24px; }
+  .try-it .buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .try-it .btn {
+    display: inline-block; padding: 14px 32px; border-radius: 8px;
+    font-size: 1.05em; font-weight: 600; transition: transform 0.15s;
+  }
+  .try-it .btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn-green { background: #2e8b57; color: white; }
+  .btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.4); }
+
+  .footer {
+    text-align: center; padding: 40px 24px; color: #888; font-size: 0.9em;
+  }
+  .footer .tagline { font-size: 1.15em; color: #0a2540; margin-bottom: 6px; font-style: italic; }
+  .footer .links { margin-top: 8px; }
+  .footer .links a { margin: 0 10px; }
+
+  @media (max-width: 600px) {
+    .force { flex-direction: column; gap: 4px; }
+    .prep-item { flex-direction: column; gap: 4px; }
+    .prep-item .name { min-width: auto; }
+    .try-it .buttons { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="epigraph">"Luck is when preparation meets opportunity."</div>
+  <div class="attr">&mdash; Seneca</div>
+  <h1>JPods</h1>
+</div>
+
+<div class="container">
+
+  <!-- ============ HORIZONTAL ELEVATORS ============ -->
+  <div class="section">
+    <div class="highlight" style="margin-top: 0;">
+      <h3>Feel this change.</h3>
+      <p>Next time you get in an elevator and push a button, you are riding in a vertical JPod. Now imagine traveling without congestion or traffic in a network of <strong>Horizontal Elevators&trade;</strong>.</p>
+    </div>
+    <p>Traffic on analog roads costs Americans $2.76 trillion a year. Bill James spent 28 years preparing to replace analog roads with 10&times; lower-cost, solar-powered guideways. <strong>Physical Internet&reg;</strong> is his registered trademark. <strong>Patent 6,810,817</strong> documents the invention of solar-powered transport networks.</p>
+  </div>
+
+  <!-- ============ OPPORTUNITY ============ -->
+  <div class="section">
+    <h2>Opportunity</h2>
+    <p class="lead">Three forces are converging to trigger a radical retooling of transport and energy infrastructure:</p>
+
+    <div class="force">
+      <div class="force-num">1</div>
+      <div class="force-text">
+        <strong>Big money is flowing into podcar networks.</strong>
+        JPods' competitor Glydways locked $170 million and is chasing $250 million more &mdash; establishing podcar companies at $500M+ valuations. Deployments in Atlanta, Miami, Abu Dhabi, Dubai, Tokyo, and Hyderabad.
+        <button class="more-toggle" onclick="toggle(this)">Quotes from industry leaders...more</button>
+        <div class="more-content">
+          <div class="quote">
+            "When it happens, AVs will change transportation as dramatically as the PC changed office work."
+            <div class="who">&mdash; Bill Gates, founder, Microsoft</div>
+          </div>
+          <div class="quote">
+            "It will be the principal mode of transit in all cities. It's cheaper than a private car. It'll be faster than a private chauffeur-driven car."
+            <div class="who">&mdash; Vinod Khosla, co-founder, Sun Microsystems</div>
+          </div>
+          <div class="quote">
+            "We have to think about how we connect people and places to where they want to be&hellip;. The higher capacity of Personal Rapid Transit, that people can have mobility options that they don't have today."
+            <div class="who">&mdash; Russell McMurry, Commissioner, Georgia DOT (2026)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="force">
+      <div class="force-num">2</div>
+      <div class="force-text">
+        <strong>Supply chains in robotics, solar, and batteries are ready.</strong>
+        The components JPods needs are mass-produced commodities. The supply chain built for EVs and solar rooftops is available today to meet JPods' demand at scale.
+      </div>
+    </div>
+
+    <div class="force">
+      <div class="force-num">3</div>
+      <div class="force-text">
+        <strong>Massive demand for alternatives.</strong>
+        Oil supply shocks recur on a 15-year cycle. American roads earn a D+ maintenance grade. Scooters and Uber prove the market is ready to shift &mdash; people want mobility, not vehicle ownership.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PREPARATION ============ -->
+  <div class="section">
+    <h2>Preparation</h2>
+
+    <p>This is not as radical as it seems. In 1975, Congressional study PB-244854, <em>Automated Guideway Transit</em>, was published to identify solutions to the 1973 Oil Embargo. It identified podcar networks like JPods as the solution. It also noted that government &ldquo;institutional failures&rdquo; had blocked such innovations for &ldquo;four to six decades.&rdquo;</p>
+
+    <p>JPods has been breaking down those century-old barriers &mdash; with laws passed in Massachusetts and New Jersey, a vote to deploy by the DFW Regional Transportation Council, and an MOU to start building at the Mall of America.</p>
+
+    <p>In 1972, President Nixon sent his daughter to open the Morgantown Personal Rapid Transit network in West Virginia. Tricia Nixon's comment: <em>"More fun than Disneyland."</em> You can ride the Morgantown PRT today &mdash; over 100 million injury-free passenger-miles since 1975.</p>
+
+    <button class="more-toggle" onclick="toggle(this)">SkyRide, Steve Jobs, and 28 years of building...more</button>
+    <div class="more-content">
+      <p>JPods builds robots for <a href="https://skyridetechnology.com/">SkyRide</a>, which you can ride today in Waconia, MN. SkyRide is a bicycle version of JPods created by Scott Olson &mdash; who also created Roller Blades. SkyRide is on 3 Carnival Cruise Ships and was awarded <strong>Best Cruise Ship Feature of 2016 and 2017</strong>. <a href="https://library.jpods.com/skyride/">See photos &rarr;</a></p>
+
+      <p>In 1999, Steve Jobs wanted to show that Macs could run businesses, not just art studios. Bill's WebClerk enterprise software had won <em>"Best New High Tech Product of the Year"</em> from the business press in Minnesota. Bill was invited on two national tours by Apple. He tried to get Jobs to help build JPods. Jobs loved the idea of the Physical Internet&reg; but thought Segway could break the Rights of Way barrier easier. Eighteen months later, Jobs announced iPods. Jobs was right about the barrier. Massachusetts broke it in 2021.</p>
+    </div>
+
+    <button class="more-toggle" onclick="toggle(this)" style="margin-top: 16px;">Software, hardware, patents, regulatory wins...more</button>
+    <div class="more-content">
+      <div class="prep-list">
+        <div class="prep-item">
+          <div class="name"><a href="https://meshmobility.com">MeshMobility</a></div>
+          <div class="desc">Free software anyone can use to design JPods networks for their city. Real crash data, traffic counts, and census data for all 50 states.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name"><a href="https://meshmobility.com/citytool">CityTool</a></div>
+          <div class="desc">Type any US city. See the build cost, annual savings, and payback in 10 seconds.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name">JPods 3D</div>
+          <div class="desc">Free SketchUp plugin. Build CAD network simulations. Ride through your city on a simulated JPods network.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name"><a href="https://10xmakers.com">10xMakers</a></div>
+          <div class="desc">Physical robots &mdash; scale models, riding versions for parking lots, and full-size networks. Kits from $50 to $300.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Climate Change Root Cause</div>
+          <div class="desc">The book documenting how Federal mercantile monopolies created climate change, oil-wars, and $31 trillion in debt.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name"><a href="https://webclerk.com">WebClerk</a></div>
+          <div class="desc">Enterprise software to control scaling &mdash; sell rides, manage cargo logistics, track fleet operations.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Patent Portfolio</div>
+          <div class="desc">Foundational US 6,810,817 + 9 filed patents covering energy, freight, border security, datacenter, autonomous guideway.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Regulatory Wins</div>
+          <div class="desc">Massachusetts funded $1.3M unanimously. GSP Airport signed a 30-year franchise. Secaucus NJ passed the 5X5 Standard 6-0.</div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Mike Teske</div>
+          <div class="desc">Certified 110 major rides for Disney and Universal Studios. ASTM F24 &mdash; 3,000&times; safer than roads.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TRY IT ============ -->
+  <div class="try-it">
+    <h2>See It Working &mdash; 60 Seconds</h2>
+    <p>Type any city. See the numbers. Then design a network yourself.<br>
+    <em>Austin, TX: $3.2B to build, $1.6B/year in savings, 2-year payback.</em></p>
+    <div class="buttons">
+      <a href="https://meshmobility.com/citytool" class="btn btn-green">Open CityTool</a>
+      <a href="https://meshmobility.com/app" class="btn btn-outline">Design a Network</a>
+    </div>
+  </div>
+
+  <!-- ============ TRAINING VIDEOS ============ -->
+  <div class="section">
+    <h2>Training Videos</h2>
+    <button class="more-toggle" onclick="toggle(this)">Watch how simple the tools are...more</button>
+    <div class="more-content">
+      <div class="prep-list">
+        <div class="prep-item">
+          <div class="name">60-Second CityTool</div>
+          <div class="desc">See your city's numbers in under a minute. <span style="color:#888">1 min</span></div>
+        </div>
+        <div class="prep-item">
+          <div class="name">First Network in 5 Min</div>
+          <div class="desc">Search a city, load overlays, generate a mesh, see the score. <span style="color:#888">5 min</span></div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Designing with Noelle</div>
+          <div class="desc">Draft, Apply, Wild Guess, Refine &mdash; AI-assisted network design. <span style="color:#888">4 min</span></div>
+        </div>
+        <div class="prep-item">
+          <div class="name">Running a Simulation</div>
+          <div class="desc">Run, replay, isochrone, read results. <span style="color:#888">3 min</span></div>
+        </div>
+        <div class="prep-item">
+          <div class="name">The Capital Report</div>
+          <div class="desc">Generate and walk through the network report for investors. <span style="color:#888">2 min</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NEXT STEPS ============ -->
+  <div class="section">
+    <h2>Next Steps</h2>
+    <p>JPods is raising capital in two stages:</p>
+    <div class="highlight">
+      <p><strong>Friends &amp; Family &mdash; $240,000</strong><br>
+      Launch at Mall of America. Launch 10xMakers.com. Assemble vendor team.<br>
+      <a href="friends-and-family.html">See F&amp;F terms &rarr;</a></p>
+    </div>
+    <div class="highlight" style="background: #f0fff5;">
+      <p><strong>Growth Round &mdash; $20 Million at $220M valuation</strong><br>
+      Multi-city deployment. Manufacturing at scale. DOE Loan Program pathway.<br>
+      <a href="growth-round.html">See growth round details &rarr;</a></p>
+    </div>
+    <p style="margin-top: 20px;">Contact: <strong>Bill James</strong> &mdash; bill.james@jpods.com<br>
+    <span style="color:#666;">West Point 1972 &middot; Infantry veteran &middot; Founder of JPods &middot; Inventor of solar-powered transport networks</span></p>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="tagline">Want a sustainable future? Create it.</div>
+  <div class="links">
+    <a href="https://jpods.com">jpods.com</a>
+    <a href="https://10xmakers.com">10xMakers.com</a>
+    <a href="https://betterphysics.com">BetterPhysics.com</a>
+    <a href="https://meshmobility.com">MeshMobility.com</a>
+  </div>
+  <p style="margin-top: 12px; font-style: italic;">Pirates and Patriots.</p>
+</div>
+
+<script>
+function toggle(btn) {
+  const content = btn.nextElementSibling;
+  btn.classList.toggle('open');
+  content.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

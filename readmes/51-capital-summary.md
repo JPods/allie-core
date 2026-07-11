@@ -39,4 +39,10 @@ This is not a request to fund an idea. The software works. Seven cities are mode
 
 **Want a sustainable future? Create it.**
 
-PiratesAndPatriots.com
+---
+
+**See it working:**
+- **CityTool** — type any city, see the numbers: [meshmobility.com/citytool](https://meshmobility.com/citytool)
+- **MeshMobility** — design a network: [meshmobility.com](https://meshmobility.com)
+
+*10xMakers.com — Pirates and Patriots.*

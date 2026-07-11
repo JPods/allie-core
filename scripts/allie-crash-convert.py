@@ -23,7 +23,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 OVERLAY_5TB = Path("/Volumes/Allie/data/overlays")
-OVERLAY_LOCAL = Path(__file__).parent.parent / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "mesh_mobility" / "overlays"
+OVERLAY_LOCAL = Path.home() / "Documents" / "08_JPods" / "03_Technology" / "00_working_code" / "mesh_mobility" / "overlays"
 
 GRID_CELL_M = 200
 CELL_DEG = GRID_CELL_M / 111000  # ~0.0018°
@@ -44,7 +44,94 @@ FIELD_MAPS = {
         "fatal_flag": ["FAT_C"],
         "injury_flag": ["INJURED"],
     },
-    # Add more states as we harvest them
+    "va": {
+        "lat": ["LAT"],
+        "lon": ["LON"],
+        "fatal": ["K_PEOPLE"],
+        "injury": ["PERSONS_INJURED"],
+        "pedestrian": ["PED_NONPED"],
+        "bicycle": ["BIKE_NONBIKE"],
+        "severity": ["CRASH_SEVERITY"],
+        "collision_type": ["COLLISION_TYPE"],
+        "road": ["ROUTE_OR_STREET_NM", "RTE_NM"],
+        "year": ["CRASH_YEAR"],
+        "fatal_flag": ["K_PEOPLE"],
+        "injury_flag": ["PERSONS_INJURED"],
+        "ped_killed": ["PEDESTRIANS_KILLED"],
+        "ped_injured": ["PEDESTRIANS_INJURED"],
+    },
+    "fl": {
+        "lat": ["LATITUDE", "SAFETYLAT"],
+        "lon": ["LONGITUDE", "SAFETYLON"],
+        "fatal": ["NUMBER_OF_KILLED"],
+        "injury": ["NUMBER_OF_INJURED"],
+        "pedestrian": ["NUMBER_OF_PEDESTRIANS"],
+        "bicycle": ["NUMBER_OF_BICYCLISTS"],
+        "severity": ["INJSEVER"],
+        "collision_type": ["CRRATECD"],
+        "road": ["ON_ROADWAY_NAME"],
+        "year": ["CALENDAR_YEAR"],
+    },
+    "ia": {
+        "lat": ["YCOORD"],
+        "lon": ["XCOORD"],
+        "fatal": ["FATALITIES"],
+        "injury": ["INJURIES"],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["CSEV"],
+        "collision_type": ["CRCOMNNR"],
+        "road": ["LITERAL"],
+        "year": ["CRASH_DATE"],
+    },
+    "tn": {
+        "lat": [],
+        "lon": [],
+        "fatal": ["TOTALKILLE"],
+        "injury": ["TOTALINJUR"],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["TYPEOFCRAS"],
+        "collision_type": ["MANNEROFCO"],
+        "road": ["NBR_RT2"],
+        "year": ["YEAROFCRAS"],
+    },
+    "il": {
+        "lat": ["TSCrashLatitude"],
+        "lon": ["TSCrashLongitude"],
+        "fatal": ["TotalFatals"],
+        "injury": ["TotalInjured"],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["CrashSeverityCd", "CrashSeverity"],
+        "collision_type": ["CollisionTypeCode", "TypeOfFirstCrash"],
+        "road": ["RouteNumber"],
+        "year": ["CrashYr", "AgencyReportYear"],
+    },
+    "or": {
+        "lat": ["LAT_DD"],
+        "lon": ["LONGTD_DD"],
+        "fatal": ["TOT_FATAL_CNT"],
+        "injury": ["TOT_INJ_LVL_A_CNT"],
+        "pedestrian": ["TOT_PED_CNT"],
+        "bicycle": ["TOT_PEDCYCL_CNT"],
+        "severity": ["HIGHEST_INJ_SVRTY_CD", "KABCO"],
+        "collision_type": ["COLLIS_TYP_LONG_DESC", "CRASH_TYP_LONG_DESC"],
+        "road": ["ST_FULL_NM", "RTE_NM"],
+        "year": ["CRASH_YR_NO"],
+    },
+    "ak": {
+        "lat": ["Latitude"],
+        "lon": ["Longitude"],
+        "fatal": ["Number_of_Fatalities"],
+        "injury": ["Number_of_Serious_Injuries", "Number_of_Minor_Injuries"],
+        "pedestrian": [],
+        "bicycle": [],
+        "severity": ["Crash_Severity", "COL_SEVERITY"],
+        "collision_type": ["Manner_of_Collision", "COL_TYPE"],
+        "road": ["Street"],
+        "year": ["Year", "COL_YEAR_"],
+    },
     "nc": {
         "lat": ["LATITUDE", "lat"],
         "lon": ["LONGITUDE", "lon"],
@@ -96,23 +183,51 @@ def load_raw(path):
 
 def fetch_arcgis(url):
     """Fetch all features from an ArcGIS Feature Service."""
+    # Discover server's max record count
+    page_size = 2000
+    try:
+        info_url = f"{url}/0?f=json"
+        req = urllib.request.Request(info_url, headers={"User-Agent": "Allie/CrashHarvester"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            info = json.loads(resp.read().decode())
+        server_max = info.get("maxRecordCount", 2000)
+        page_size = min(server_max, 2000)
+        print(f"  Server max records per page: {server_max}, using {page_size}")
+    except Exception as e:
+        print(f"  Could not read server info ({e}), using page_size={page_size}")
+
     all_features = []
     offset = 0
+    retries = 0
+    max_retries = 3
     while True:
-        query_url = f"{url}/0/query?where=1%3D1&outFields=*&f=geojson&resultRecordCount=2000&resultOffset={offset}"
+        query_url = f"{url}/0/query?where=1%3D1&outFields=*&f=geojson&resultRecordCount={page_size}&resultOffset={offset}"
         req = urllib.request.Request(query_url, headers={"User-Agent": "Allie/CrashHarvester"})
-        with urllib.request.urlopen(req, timeout=90) as resp:
-            raw = resp.read()
-            if raw[:2] == b'\x1f\x8b':
-                raw = gzip.decompress(raw)
-            data = json.loads(raw.decode())
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                raw = resp.read()
+                if raw[:2] == b'\x1f\x8b':
+                    raw = gzip.decompress(raw)
+                data = json.loads(raw.decode())
+        except Exception as e:
+            retries += 1
+            if retries <= max_retries:
+                import time
+                print(f"  offset {offset}: retry {retries}/{max_retries} after error: {e}")
+                time.sleep(5 * retries)
+                continue
+            print(f"  offset {offset}: giving up after {max_retries} retries ({e})")
+            print(f"  Returning {len(all_features)} features collected so far")
+            break
+        retries = 0  # reset on success
         feats = data.get("features", [])
         if not feats:
             break
         all_features.extend(feats)
         print(f"  offset {offset}: +{len(feats)} (total {len(all_features)})")
-        offset += 2000
-        if len(feats) < 2000:
+        sys.stdout.flush()
+        offset += page_size
+        if len(feats) < page_size:
             break
     return {"type": "FeatureCollection", "features": all_features}
 
@@ -194,7 +309,16 @@ def convert(raw_geojson, state, source_info):
 
         if year:
             try:
-                years_seen.add(int(year))
+                y = int(float(year))
+                # Handle epoch milliseconds (ArcGIS date fields)
+                if y > 1e12:
+                    y = datetime.fromtimestamp(y / 1000, tz=timezone.utc).year
+                elif y > 1e9:
+                    y = datetime.fromtimestamp(y, tz=timezone.utc).year
+                if 0 <= y <= 99:
+                    y += 2000 if y < 50 else 1900
+                if 1990 <= y <= 2030:
+                    years_seen.add(y)
             except (ValueError, TypeError):
                 pass
 

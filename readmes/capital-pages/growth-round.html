@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JPods — $20M Growth Round</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; color: #1a1a1a; background: #fafafa; line-height: 1.7; }
+  a { color: #1a6bb5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero {
+    background: linear-gradient(135deg, #0a2540 0%, #1a4a7a 50%, #2e8b57 100%);
+    color: white; padding: 80px 24px 60px; text-align: center;
+  }
+  .hero h1 { font-size: 2.4em; margin-bottom: 12px; font-weight: 400; letter-spacing: -0.5px; }
+  .hero .subtitle { font-size: 1.2em; opacity: 0.85; max-width: 640px; margin: 0 auto 30px; }
+  .hero .amount { font-size: 3.2em; font-weight: 700; margin: 20px 0 8px; }
+  .hero .valuation { font-size: 1.1em; opacity: 0.8; }
+
+  .container { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+  .section { padding: 50px 0; border-bottom: 1px solid #e0e0e0; }
+  .section:last-child { border-bottom: none; }
+  .section h2 { font-size: 1.6em; margin-bottom: 20px; color: #0a2540; font-weight: 400; }
+
+  .stat-row {
+    display: flex; gap: 20px; margin: 30px 0; flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1; min-width: 200px; background: white; border-radius: 12px;
+    padding: 28px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .stat-card .number { font-size: 2em; font-weight: 700; color: #0a2540; }
+  .stat-card .label { font-size: 0.9em; color: #666; margin-top: 4px; }
+
+  .timeline {
+    margin: 24px 0; position: relative;
+    padding-left: 28px; border-left: 3px solid #1a6bb5;
+  }
+  .timeline .event { margin-bottom: 20px; position: relative; }
+  .timeline .event::before {
+    content: ''; position: absolute; left: -34px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%; background: #1a6bb5;
+  }
+  .timeline .event.green::before { background: #2e8b57; }
+  .timeline .year { font-weight: 700; color: #0a2540; }
+  .timeline .desc { color: #444; }
+
+  .terms-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  .terms-table td { padding: 14px 16px; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+  .terms-table td:first-child { font-weight: 600; width: 40%; color: #0a2540; }
+
+  .comp-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em; }
+  .comp-table th { background: #0a2540; color: white; padding: 12px 16px; text-align: left; font-weight: 500; }
+  .comp-table td { padding: 12px 16px; border-bottom: 1px solid #e8e8e8; }
+  .comp-table tr:nth-child(even) { background: #f5f8fb; }
+
+  .try-it {
+    background: #0a2540; color: white; border-radius: 12px;
+    padding: 40px; margin: 40px 0; text-align: center;
+  }
+  .try-it h2 { color: white; margin-bottom: 16px; }
+  .try-it p { opacity: 0.85; margin-bottom: 24px; }
+  .try-it .buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .try-it .btn {
+    display: inline-block; padding: 14px 32px; border-radius: 8px;
+    font-size: 1.05em; font-weight: 600; transition: transform 0.15s;
+  }
+  .try-it .btn:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn-primary { background: #2e8b57; color: white; }
+  .btn-secondary-light { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+  .quote {
+    font-style: italic; font-size: 1.15em; color: #444;
+    border-left: 3px solid #2e8b57; padding: 16px 24px; margin: 24px 0;
+  }
+  .quote .attr { font-style: normal; font-size: 0.85em; color: #888; margin-top: 8px; }
+
+  .two-col { display: flex; gap: 32px; margin: 20px 0; flex-wrap: wrap; }
+  .two-col > div { flex: 1; min-width: 280px; }
+
+  .videos { margin: 20px 0; }
+  .videos a { display: block; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 1.05em; }
+  .videos a:last-child { border-bottom: none; }
+  .videos .duration { color: #888; font-size: 0.85em; margin-left: 8px; }
+
+  .footer {
+    text-align: center; padding: 40px 24px; color: #888; font-size: 0.9em;
+  }
+  .footer .tagline { font-size: 1.1em; color: #0a2540; margin-bottom: 8px; font-style: italic; }
+
+  @media (max-width: 600px) {
+    .stat-row { flex-direction: column; }
+    .try-it .buttons { flex-direction: column; }
+    .two-col { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>JPods &mdash; Growth Round</h1>
+  <p class="subtitle">The inventor of solar-powered transport networks. 10&times; lower cost than highways. The market has arrived.</p>
+  <div class="amount">$20 Million</div>
+  <p class="valuation">$220M pre-money &middot; ~8.3% dilution</p>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="number">$2.01</div>
+        <div class="label">per passenger-mile<br>(vs $3.40 car ownership)</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">10&times;</div>
+        <div class="label">lower cost than<br>highway infrastructure</div>
+      </div>
+      <div class="stat-card">
+        <div class="number">3,000&times;</div>
+        <div class="label">safer than roads<br>(ASTM F24 record)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Opportunity</h2>
+    <p>40,000 Americans die on roads every year. The government's solution: wider highways that induce more traffic. JPods invented solar-powered transport networks in 2002 (US Patent 6,810,817) and has spent 28 years building the proof &mdash; patents, legislation, franchise agreements, software, and a team that includes the engineer who certified 110 major rides for Disney and Universal Studios.</p>
+
+    <div class="quote">
+      "It will be the principal mode of transit in all cities. It's cheaper than a private car. It'll be faster than a private chauffeur-driven car."
+      <div class="attr">&mdash; Vinod Khosla, co-founder, Sun Microsystems</div>
+    </div>
+
+    <p>In 2025-2026, the market validated. Glydways raised $170M+, establishing podcar companies at $500M+ valuations. JPods at $220M is a <strong>discount</strong> to the market comp &mdash; with stronger IP, solar self-reliance, private funding model, and legislative wins Glydways doesn't have.</p>
+  </div>
+
+  <div class="section">
+    <h2>JPods vs. Glydways</h2>
+    <table class="comp-table">
+      <tr><th></th><th>Glydways</th><th>JPods</th></tr>
+      <tr><td>Grade separation</td><td>At-grade / low</td><td>Fully above traffic</td></tr>
+      <tr><td>Energy</td><td>Grid-dependent</td><td>Solar self-reliant</td></tr>
+      <tr><td>Funding model</td><td>Government subsidies</td><td>Privately funded (5X5 Standard)</td></tr>
+      <tr><td>Patent priority</td><td>None on core concept</td><td>US 6,810,817 (2002)</td></tr>
+      <tr><td>State legislation</td><td>None</td><td>MA funded $1.3M, unanimously</td></tr>
+      <tr><td>Safety framework</td><td>Federal ATN (sovereign immunity)</td><td>ASTM F24 (insurance, enforcement, tort law) + ATN</td></tr>
+      <tr><td>Distribution</td><td>Top-down government contracts</td><td>Free software + student kits (bottom-up)</td></tr>
+      <tr><td>Valuation</td><td>$500M+</td><td><strong>$220M (discount)</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Valuation Basis</h2>
+    <table class="terms-table">
+      <tr><td>Market comp</td><td>Glydways at $500M+ with weaker IP, no solar, no private-funding model, no legislative wins. JPods at $220M is a discount.</td></tr>
+      <tr><td>Patent portfolio</td><td>9 filed patents + foundational US 6,810,817 covering energy, freight, border security, datacenter, autonomous guideway</td></tr>
+      <tr><td>Regulatory moat</td><td>Only company with state-funded legislation (MA $1.3M) and signed franchise (GSP 30-year)</td></tr>
+      <tr><td>Software + AI</td><td>MeshMobility, Noelle AI, CityTool &mdash; all 50 states crash data, traffic, census</td></tr>
+      <tr><td>Brand</td><td>549 domains, 28-year track record, inventor provenance, 10xMakers distribution</td></tr>
+      <tr><td>Safety</td><td>Mike Teske &mdash; certified 110 major rides for Disney and Universal Studios. Both ASTM F24 and federal ATN compliance.</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>What $20M Buys</h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:#0a2540; margin-bottom:12px;">Build</h3>
+        <p>Complete MOA network &mdash; full operation, revenue-generating. First city deployments using franchise agreements already signed.</p>
+        <p style="margin-top:12px;">Manufacturing capacity for kits and network components. Technical Readiness Level 7 &mdash; the prerequisite for DOE Loan Program Office ($600M pathway).</p>
+      </div>
+      <div>
+        <h3 style="color:#0a2540; margin-bottom:12px;">Distribute</h3>
+        <p>10xMakers.com at scale &mdash; thousands of students designing networks, hundreds of cities modeled, Noelle AI trained on real deployment data.</p>
+        <p style="margin-top:12px;">Kit sales: $20 survey, $50 cargo robot, $150 scale model, $300 rideable vehicle. Every kit sold is a sensor. Every student is a surveyor.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Determined Campaign</h2>
+    <p>The Internet didn't appear overnight. JPods has followed the same incremental path:</p>
+    <div class="timeline">
+      <div class="event"><span class="year">2002</span> <span class="desc">&mdash; Patent filed. Solar-powered autonomous guideway transit.</span></div>
+      <div class="event"><span class="year">2011</span> <span class="desc">&mdash; TEDxAtlanta. Vision demonstrated publicly.</span></div>
+      <div class="event"><span class="year">2014</span> <span class="desc">&mdash; Secaucus NJ passes 5X5 Standard unanimously. First municipality.</span></div>
+      <div class="event"><span class="year">2019</span> <span class="desc">&mdash; Goldman Sachs LOI + GDOT Commissioner + GA Senate Transportation Chairman aligned.</span></div>
+      <div class="event green"><span class="year">2021</span> <span class="desc">&mdash; Massachusetts funds $1.3M unanimously. Governor signs. Regulatory barrier broken.</span></div>
+      <div class="event green"><span class="year">2025</span> <span class="desc">&mdash; GSP Airport signs 30-year franchise. Glydways validates market at $500M+.</span></div>
+      <div class="event green"><span class="year">2026</span> <span class="desc">&mdash; MeshMobility free software live. 7 cities modeled. Student kit program ready. <strong>This is the AOL moment.</strong></span></div>
+    </div>
+  </div>
+
+  <div class="try-it">
+    <h2>See It Working &mdash; 60 Seconds</h2>
+    <p>Type any US city into CityTool. See the build cost, annual savings, and payback.<br>Then open MeshMobility and design a scored network in under a minute.</p>
+    <div class="buttons">
+      <a href="https://meshmobility.com/citytool" class="btn btn-primary">Open CityTool</a>
+      <a href="https://meshmobility.com/app" class="btn btn-secondary-light">Design a Network</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Training Videos</h2>
+    <div class="videos">
+      <a href="https://library.jpods.com/videos/citytool-60s">60-Second CityTool &mdash; see your city's numbers <span class="duration">1 min</span></a>
+      <a href="https://library.jpods.com/videos/first-network">Your First Network in 5 Minutes <span class="duration">5 min</span></a>
+      <a href="https://library.jpods.com/videos/noelle-design">Designing with Noelle AI <span class="duration">4 min</span></a>
+      <a href="https://library.jpods.com/videos/simulation">Running a Simulation <span class="duration">3 min</span></a>
+      <a href="https://library.jpods.com/videos/capital-report">The Report &mdash; Capital Pitch <span class="duration">2 min</span></a>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Objective and Floor</h2>
+    <div class="two-col">
+      <div>
+        <h3 style="color:#2e8b57; margin-bottom:12px;">Objective: Iconic Company</h3>
+        <p>The inventor of solar-powered transport networks with 10&times; lower costs than highways. JPods becomes to urban mobility what the Internet became to communications: the infrastructure layer that makes everything else possible.</p>
+      </div>
+      <div>
+        <h3 style="color:#0a2540; margin-bottom:12px;">Floor: Acquisition</h3>
+        <p>If JPods doesn't reach iconic scale, the brand and patent portfolio are acquired by UPS, FedEx, DHL, Amazon, or tech companies who need Middle-Mile freight, distributed energy, or autonomous logistics. 9 patents, each independently valuable to a different acquirer. No zero-value scenario.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The Scale Precedent</h2>
+    <p>The Pacific Railroad Act of 1864 broke the deployment barrier. Four years later, 1,911 miles crossed the nation. 260,000 miles were built in 30 years. By 1916, every US city over 10,000 had a privately funded streetcar network.</p>
+    <p style="margin-top: 12px;">Once the barrier breaks, deployment is explosive. Railroads proved it. The Internet proved it. Massachusetts broke the barrier for JPods in 2021. Capital accelerates what is already moving.</p>
+    <div class="quote">
+      We need both government coercion to enforce safety and liberty to allow Disruptive Minorities to innovate the general welfare. Each in their proper role.
+      <div class="attr">&mdash; JPods operating principle</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="tagline">Want a sustainable future? Create it.</div>
+  <p>JPods LLC &middot; <a href="https://jpods.com">jpods.com</a> &middot; <a href="https://10xmakers.com">10xMakers.com</a> &middot; <a href="https://betterphysics.com">BetterPhysics.com</a></p>
+  <p style="margin-top: 8px; font-style: italic;">Pirates and Patriots.</p>
+</div>
+
+</body>
+</html>
