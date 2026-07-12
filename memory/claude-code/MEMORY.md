@@ -113,6 +113,10 @@
 - [No List.tsx — DataBrowser only](feedback_no_list_tsx.md) — Hard rule: no custom list pages; all lists via DataBrowser at /db/:model; fix DataBrowser, don't build custom lists
 - [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
+- [CrashHarvester standalone app](project_crashharvester.md) — Standalone data supply chain; MM reads library only; Alice manages sources; DynamicCatalogs pattern; no legacy overlay code in api.py
+- [Station density is coverage not capacity](feedback_station_density_coverage.md) — More doors > bigger doors; 50 slots handles 10K/hr; 15-min walk OK; crash corridors = guideways, walk circles = stations
+- [Noelle owns slot count](project_noelle_slot_authority.md) — Noelle sets slots from data unless user explicitly overrides; single (1-2), standard (8-16), hub (50-100)
+- [Noelle algorithm library](project_noelle_algorithm_library.md) — Library of algorithms not just one; keep grid mesh; build crash-corridor algorithm; 15-min walk + more doors as constraints
 - [MeshMobility data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
 - [MeshMobility CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
