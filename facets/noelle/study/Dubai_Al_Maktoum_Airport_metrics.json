@@ -1,0 +1,45 @@
+{
+  "filename": "Dubai_Al_Maktoum_Airport.jpd",
+  "name": "Dubai_Al_Maktoum_Airport",
+  "state": "",
+  "city": "Dubai Al Maktoum Airport",
+  "analyzed_at": "2026-07-12T01:28:41Z",
+  "topology": {
+    "total_structures": 261,
+    "stations": 169,
+    "traffic_circles": 92,
+    "station_to_circle_ratio": 1.8,
+    "lines": 4484,
+    "cps_total": 706,
+    "cps_connected": 646,
+    "cps_open": 60,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      261
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 20.3,
+    "extent_ew_mi": 11.7,
+    "area_sq_mi": 238.5,
+    "nn_avg_mi": 0.72,
+    "nn_min_mi": 0.26,
+    "nn_max_mi": 1.57,
+    "density_per_sq_mi": 1.1
+  },
+  "center": {
+    "lat": 25.0164,
+    "lon": 55.1762
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 9,
+    "completeness": 100
+  }
+}

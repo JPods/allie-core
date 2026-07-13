@@ -1,0 +1,47 @@
+{
+  "filename": "TX_Plano_2026-07-08-rough.jpd",
+  "name": "TX_Plano_2026-07-08-rough",
+  "state": "TX",
+  "city": "Plano 2026-07-08-rough",
+  "analyzed_at": "2026-07-12T01:28:48Z",
+  "topology": {
+    "total_structures": 1,
+    "stations": 1,
+    "traffic_circles": 0,
+    "station_to_circle_ratio": 1.0,
+    "lines": 14,
+    "cps_total": 2,
+    "cps_connected": 0,
+    "cps_open": 2,
+    "orphans": 1,
+    "orphan_ids": [
+      "s1"
+    ],
+    "connected_components": 1,
+    "component_sizes": [
+      1
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 0.0,
+    "extent_ew_mi": 0.0,
+    "area_sq_mi": 0.0,
+    "nn_avg_mi": 0,
+    "nn_min_mi": 0,
+    "nn_max_mi": 0,
+    "density_per_sq_mi": 100.0
+  },
+  "center": {
+    "lat": 33.0848,
+    "lon": -96.753
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 90,
+    "spacing_uniformity": 0,
+    "completeness": 2
+  }
+}

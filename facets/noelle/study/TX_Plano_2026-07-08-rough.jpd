@@ -1,0 +1,374 @@
+{
+  "format": "jpd",
+  "version": 2,
+  "network_id": "untitled",
+  "saved_at": 1783539073752,
+  "settings": {
+    "accInG": 1.0,
+    "deccInG": 1.0,
+    "maxVelocityInKMPH": 60,
+    "podLen": 3,
+    "minHeadwaySec": 0.25,
+    "disembarkingTimeInSec": 20,
+    "embarkingTimeInSec": 20,
+    "ticketingTimeInSec": 30,
+    "stationEntryTimeInSec": 40,
+    "stationExitTimeInSec": 40,
+    "walkingSpeedKmh": 4.8,
+    "walkToStationSec": 300,
+    "walkFromStationSec": 300,
+    "timeResolutionPerSec": 9,
+    "podsPerStation": 8,
+    "graceDistance": 1,
+    "simSpeedMultiplier": 360,
+    "stationLabelSize": 3
+  },
+  "switches": [
+    {
+      "id": "s1.guideway_near_out_end",
+      "lat": 33.08507865518209,
+      "lon": -96.75312104414432
+    },
+    {
+      "id": "s1.guideway_near_in_end",
+      "lat": 33.0844498373596,
+      "lon": -96.75312104441264
+    },
+    {
+      "id": "s1.guideway_far_in_end",
+      "lat": 33.08507865518209,
+      "lon": -96.75319609452758
+    },
+    {
+      "id": "s1.guideway_far_out_end",
+      "lat": 33.0844498373596,
+      "lon": -96.75319609425927
+    },
+    {
+      "id": "s1.platform_out_end",
+      "lat": 33.08489000983534,
+      "lon": -96.75304599400253
+    },
+    {
+      "id": "s1.platform_in_end",
+      "lat": 33.084638482706346,
+      "lon": -96.75304599432451
+    },
+    {
+      "id": "s1.uturn_near_far_mid",
+      "lat": 33.08507865518209,
+      "lon": -96.75315856933595
+    },
+    {
+      "id": "s1.uturn_far_near_mid",
+      "lat": 33.0844498373596,
+      "lon": -96.75315856933595
+    },
+    {
+      "id": "s1.guideway_near_out_tip",
+      "lat": 33.08516848629959,
+      "lon": -96.75312104410598
+    },
+    {
+      "id": "s1.guideway_far_in_tip",
+      "lat": 33.08516848629959,
+      "lon": -96.75319609456592
+    },
+    {
+      "id": "s1.guideway_near_in_tip",
+      "lat": 33.0843600062421,
+      "lon": -96.75312104445096
+    },
+    {
+      "id": "s1.guideway_far_out_tip",
+      "lat": 33.0843600062421,
+      "lon": -96.75319609422094
+    }
+  ],
+  "stations": [
+    {
+      "id": "s1.platform_parking",
+      "lat": 33.084764246270844,
+      "lon": -96.75304599416353
+    }
+  ],
+  "lines": [
+    {
+      "id": "s1.guideway_near_in",
+      "start": "s1.guideway_near_in_tip",
+      "end": "s1.guideway_near_in_end",
+      "coordinates": [
+        [
+          33.0843600062421,
+          -96.75312104445096
+        ],
+        [
+          33.0844498373596,
+          -96.75312104441264
+        ]
+      ]
+    },
+    {
+      "id": "s1.guideway_near_main",
+      "start": "s1.guideway_near_in_end",
+      "end": "s1.guideway_near_out_end",
+      "coordinates": [
+        [
+          33.0844498373596,
+          -96.75312104441264
+        ],
+        [
+          33.08507865518209,
+          -96.75312104414432
+        ]
+      ]
+    },
+    {
+      "id": "s1.guideway_near_out",
+      "start": "s1.guideway_near_out_end",
+      "end": "s1.guideway_near_out_tip",
+      "coordinates": [
+        [
+          33.08507865518209,
+          -96.75312104414432
+        ],
+        [
+          33.08516848629959,
+          -96.75312104410598
+        ]
+      ]
+    },
+    {
+      "id": "s1.guideway_far_in",
+      "start": "s1.guideway_far_in_tip",
+      "end": "s1.guideway_far_in_end",
+      "coordinates": [
+        [
+          33.08516848629959,
+          -96.75319609456592
+        ],
+        [
+          33.08507865518209,
+          -96.75319609452758
+        ]
+      ]
+    },
+    {
+      "id": "s1.guideway_far_main",
+      "start": "s1.guideway_far_in_end",
+      "end": "s1.guideway_far_out_end",
+      "coordinates": [
+        [
+          33.08507865518209,
+          -96.75319609452758
+        ],
+        [
+          33.0844498373596,
+          -96.75319609425927
+        ]
+      ]
+    },
+    {
+      "id": "s1.guideway_far_out",
+      "start": "s1.guideway_far_out_end",
+      "end": "s1.guideway_far_out_tip",
+      "coordinates": [
+        [
+          33.0844498373596,
+          -96.75319609425927
+        ],
+        [
+          33.0843600062421,
+          -96.75319609422094
+        ]
+      ]
+    },
+    {
+      "id": "s1.platform_in",
+      "start": "s1.guideway_near_in_end",
+      "end": "s1.platform_in_end",
+      "coordinates": [
+        [
+          33.0844498373596,
+          -96.75312104441264
+        ],
+        [
+          33.084638482706346,
+          -96.75304599432451
+        ]
+      ]
+    },
+    {
+      "id": "s1.platform_parking_a",
+      "start": "s1.platform_in_end",
+      "end": "s1.platform_parking",
+      "coordinates": [
+        [
+          33.084638482706346,
+          -96.75304599432451
+        ],
+        [
+          33.084764246270844,
+          -96.75304599416353
+        ]
+      ]
+    },
+    {
+      "id": "s1.platform_parking_b",
+      "start": "s1.platform_parking",
+      "end": "s1.platform_out_end",
+      "coordinates": [
+        [
+          33.084764246270844,
+          -96.75304599416353
+        ],
+        [
+          33.08489000983534,
+          -96.75304599400253
+        ]
+      ]
+    },
+    {
+      "id": "s1.platform_out",
+      "start": "s1.platform_out_end",
+      "end": "s1.guideway_near_out_end",
+      "coordinates": [
+        [
+          33.08489000983534,
+          -96.75304599400253
+        ],
+        [
+          33.08507865518209,
+          -96.75312104414432
+        ]
+      ]
+    },
+    {
+      "id": "s1.uturn_near_far_a",
+      "start": "s1.guideway_near_out_end",
+      "end": "s1.uturn_near_far_mid",
+      "coordinates": [
+        [
+          33.08507865518209,
+          -96.75312104414432
+        ],
+        [
+          33.08507865518209,
+          -96.75315856933595
+        ]
+      ]
+    },
+    {
+      "id": "s1.uturn_near_far_b",
+      "start": "s1.uturn_near_far_mid",
+      "end": "s1.guideway_far_in_end",
+      "coordinates": [
+        [
+          33.08507865518209,
+          -96.75315856933595
+        ],
+        [
+          33.08507865518209,
+          -96.75319609452758
+        ]
+      ]
+    },
+    {
+      "id": "s1.uturn_far_near_a",
+      "start": "s1.guideway_far_out_end",
+      "end": "s1.uturn_far_near_mid",
+      "coordinates": [
+        [
+          33.0844498373596,
+          -96.75319609425927
+        ],
+        [
+          33.0844498373596,
+          -96.75315856933595
+        ]
+      ]
+    },
+    {
+      "id": "s1.uturn_far_near_b",
+      "start": "s1.uturn_far_near_mid",
+      "end": "s1.guideway_near_in_end",
+      "coordinates": [
+        [
+          33.0844498373596,
+          -96.75315856933595
+        ],
+        [
+          33.0844498373596,
+          -96.75312104441264
+        ]
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "structure_id": "s1",
+      "structure_type": "station",
+      "cp_ids": [
+        "s1.CP_near_far",
+        "s1.CP_far_near"
+      ],
+      "node_ids": [
+        "s1.guideway_near_out_end",
+        "s1.guideway_near_in_end",
+        "s1.guideway_far_in_end",
+        "s1.guideway_far_out_end",
+        "s1.platform_out_end",
+        "s1.platform_in_end",
+        "s1.platform_parking",
+        "s1.uturn_near_far_mid",
+        "s1.uturn_far_near_mid",
+        "s1.guideway_near_out_tip",
+        "s1.guideway_far_in_tip",
+        "s1.guideway_near_in_tip",
+        "s1.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s1.guideway_near_in",
+        "s1.guideway_near_main",
+        "s1.guideway_near_out",
+        "s1.guideway_far_in",
+        "s1.guideway_far_main",
+        "s1.guideway_far_out",
+        "s1.platform_in",
+        "s1.platform_parking_a",
+        "s1.platform_parking_b",
+        "s1.platform_out",
+        "s1.uturn_near_far_a",
+        "s1.uturn_near_far_b",
+        "s1.uturn_far_near_a",
+        "s1.uturn_far_near_b"
+      ],
+      "center_lat": 33.084764246270844,
+      "center_lon": -96.75315856933595,
+      "heading_deg": 0.0,
+      "arm_headings": []
+    }
+  ],
+  "cps": [
+    {
+      "cp_id": "s1.CP_near_far",
+      "structure_id": "s1",
+      "heading_deg": 0.0,
+      "inbound_node": "s1.guideway_far_in_tip",
+      "outbound_node": "s1.guideway_near_out_tip",
+      "center_lat": 33.08516848629959,
+      "center_lon": -96.75315856933595,
+      "connected_to": null
+    },
+    {
+      "cp_id": "s1.CP_far_near",
+      "structure_id": "s1",
+      "heading_deg": 180.0,
+      "inbound_node": "s1.guideway_near_in_tip",
+      "outbound_node": "s1.guideway_far_out_tip",
+      "center_lat": 33.0843600062421,
+      "center_lon": -96.75315856933595,
+      "connected_to": null
+    }
+  ]
+}

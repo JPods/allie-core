@@ -1,0 +1,64 @@
+{
+  "filename": "TX_DallasCounty_2026-07-07_Noelle.jpd",
+  "name": "TX_DallasCounty_2026-07-07_Noelle",
+  "state": "TX",
+  "city": "DallasCounty 2026-07-07 Noelle",
+  "analyzed_at": "2026-07-12T01:28:47Z",
+  "topology": {
+    "total_structures": 941,
+    "stations": 941,
+    "traffic_circles": 0,
+    "station_to_circle_ratio": 941.0,
+    "lines": 13174,
+    "cps_total": 1882,
+    "cps_connected": 0,
+    "cps_open": 1882,
+    "orphans": 941,
+    "orphan_ids": [
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7",
+      "s8",
+      "s9",
+      "s10"
+    ],
+    "connected_components": 941,
+    "component_sizes": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 51.3,
+    "extent_ew_mi": 45.2,
+    "area_sq_mi": 2320.7,
+    "nn_avg_mi": 0.8,
+    "nn_min_mi": 0.25,
+    "nn_max_mi": 4.94,
+    "density_per_sq_mi": 0.4
+  },
+  "center": {
+    "lat": 32.8643,
+    "lon": -96.8154
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 0,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

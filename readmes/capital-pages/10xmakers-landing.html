@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10xMakers — Build Something 10x Better</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #1a1a1a; background: #fafafa; }
+  a { color: #1a6bb5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .hero {
+    background: linear-gradient(160deg, #1a3a1a 0%, #2e6b2e 50%, #4a9a4a 100%);
+    color: white; padding: 60px 24px 50px; text-align: center;
+  }
+  .hero h1 { font-size: 3em; font-weight: 300; letter-spacing: -1px; margin-bottom: 8px; }
+  .hero h1 span { font-weight: 700; color: #8f8; }
+  .hero .tagline { font-size: 1.3em; opacity: 0.85; max-width: 600px; margin: 0 auto 12px; line-height: 1.5; }
+  .hero .motto { font-size: 1em; opacity: 0.6; font-style: italic; margin-bottom: 30px; }
+
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 30px; border-radius: 10px; font-size: 1.05em; font-weight: 600;
+    transition: transform 0.15s, box-shadow 0.2s; cursor: pointer;
+  }
+  .cta:hover { transform: translateY(-2px); text-decoration: none; }
+  .cta-primary { background: white; color: #1a3a1a; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+  .cta-primary:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.3); }
+  .cta-secondary { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.25); }
+  .cta-secondary:hover { background: rgba(255,255,255,0.2); color: white; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .section { padding: 48px 0; border-bottom: 1px solid #e8e8e8; }
+  .section:last-child { border-bottom: none; }
+  .section h2 { font-size: 1.6em; margin-bottom: 20px; color: #1a3a1a; font-weight: 400; }
+
+  .video-feature {
+    background: #111; border-radius: 12px; overflow: hidden;
+    margin: 30px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .video-feature iframe {
+    width: 100%; aspect-ratio: 16/9; border: none; display: block;
+  }
+  .video-feature .caption {
+    padding: 16px 20px; color: #aaa; font-size: 0.95em; line-height: 1.5;
+  }
+  .video-feature .caption strong { color: #8f8; }
+
+  .loop {
+    display: flex; gap: 0; justify-content: center; align-items: center;
+    flex-wrap: wrap; margin: 30px 0;
+  }
+  .loop-step {
+    text-align: center; padding: 20px 16px; min-width: 140px; flex: 1;
+  }
+  .loop-step .icon { font-size: 2em; margin-bottom: 6px; }
+  .loop-step .name { font-weight: 700; color: #1a3a1a; font-size: 1.05em; }
+  .loop-step .desc { font-size: 0.85em; color: #666; margin-top: 4px; }
+  .loop-arrow { font-size: 1.5em; color: #4a9a4a; padding: 0 4px; }
+
+  .kit-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .kit-card {
+    background: white; border: 2px solid #e0e8e0; border-radius: 10px;
+    padding: 20px; text-align: center;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .kit-card:hover { border-color: #4a9a4a; transform: translateY(-3px); }
+  .kit-card .price { font-size: 1.8em; font-weight: 700; color: #2e6b2e; }
+  .kit-card .name { font-weight: 600; color: #1a3a1a; margin: 6px 0; font-size: 1.1em; }
+  .kit-card .desc { font-size: 0.85em; color: #666; line-height: 1.4; }
+
+  .quote-block {
+    background: #f0f7f0; border-left: 4px solid #4a9a4a;
+    padding: 20px 24px; margin: 24px 0; border-radius: 0 8px 8px 0;
+  }
+  .quote-block p { font-size: 1.15em; color: #333; font-style: italic; line-height: 1.6; }
+  .quote-block .attr { font-style: normal; font-size: 0.85em; color: #888; margin-top: 8px; }
+
+  .stem-link {
+    display: block; background: #1a3a1a; color: white; border-radius: 10px;
+    padding: 24px; text-align: center; margin: 24px 0;
+    transition: background 0.2s;
+  }
+  .stem-link:hover { background: #2e6b2e; text-decoration: none; color: white; }
+  .stem-link h3 { font-size: 1.3em; margin-bottom: 6px; }
+  .stem-link p { opacity: 0.7; font-size: 0.95em; }
+
+  .tools-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+  .tool-card {
+    flex: 1; min-width: 200px; background: white; border: 1px solid #e0e8e0;
+    border-radius: 8px; padding: 16px; text-align: center;
+  }
+  .tool-card strong { display: block; color: #1a3a1a; margin-bottom: 4px; font-size: 1.05em; }
+  .tool-card p { font-size: 0.85em; color: #666; }
+
+  .footer {
+    background: #1a3a1a; color: #8a8; padding: 32px 24px; text-align: center;
+    font-size: 0.9em;
+  }
+  .footer a { color: #8f8; }
+  .footer .tagline { font-size: 1.1em; color: white; margin-bottom: 8px; }
+  .footer .links { margin: 8px 0; }
+  .footer .links a { margin: 0 10px; }
+  .footer .pirate { font-style: italic; color: #6a6; margin-top: 10px; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2.2em; }
+    .cta-row { flex-direction: column; align-items: center; }
+    .loop { flex-direction: column; }
+    .loop-arrow { transform: rotate(90deg); }
+    .kit-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1><span>10x</span>Makers</h1>
+  <p class="tagline">Build something 10x better.<br>Design transit for your city. Then build it and ride it.</p>
+  <p class="motto">Empowering Everyone. Energy self-reliance starts with myself.<br>Start small, iterate relentlessly.</p>
+
+  <div class="cta-row">
+    <a href="https://meshmobility.com/app" class="cta cta-primary">Design a Network</a>
+    <a href="https://meshmobility.com/citytool" class="cta cta-secondary">See Your City's Numbers</a>
+    <a href="https://library.jpods.com/stem/" class="cta cta-secondary">STEM Resources</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Garden Girls -->
+  <div class="section">
+    <h2>6th Graders Did This. So Can You.</h2>
+    <div class="video-feature">
+      <iframe src="https://www.youtube.com/embed/4AQSQ1wUGeA?start=59"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen></iframe>
+      <div class="caption">
+        <strong>Garden Girls</strong> — 6th grade students present their JPods network design
+        to the Fremont City Council. They researched the problem, designed the solution,
+        and presented it to elected officials. That's 10xMakers.
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p>"Want a sustainable future? Create it. Government produces more of what is failing."</p>
+    </div>
+  </div>
+
+  <!-- The Loop -->
+  <div class="section">
+    <h2>Design. Survey. Build. Ride.</h2>
+    <div class="loop">
+      <div class="loop-step">
+        <div class="icon">&#127758;</div>
+        <div class="name">Design</div>
+        <div class="desc">MeshMobility — free software. Design a JPods network for your city.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128205;</div>
+        <div class="name">Survey</div>
+        <div class="desc">Walk the route. GPS-mark where columns go. Ground-truth beats theory.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128295;</div>
+        <div class="name">Build</div>
+        <div class="desc">Kits from $50. Cargo robots, scale models, rideable vehicles.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128752;</div>
+        <div class="name">Ride</div>
+        <div class="desc">Test in parking lots. Prove it works. Then take it to your city council.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kits -->
+  <div class="section">
+    <h2>Kits</h2>
+    <p>Every kit sold is a sensor deployed. Every student is a surveyor. Every design trains the AI.</p>
+    <div class="kit-grid">
+      <div class="kit-card">
+        <div class="price">$20</div>
+        <div class="name">Survey Kit</div>
+        <div class="desc">Phone mount, measuring wheel, marker flags, printed map. Walk the route. Mark reality.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$50</div>
+        <div class="name">Cargo Carrier</div>
+        <div class="desc">TTL motors, Arduino, chassis, ToF sensor, battery. Carries packages. Learns obstacles.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$150</div>
+        <div class="name">Scale Model</div>
+        <div class="desc">Pi, track sections, pod, HuskyLens. Multi-vehicle control. The full Nora/Natalie system.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$300</div>
+        <div class="name">Rider</div>
+        <div class="desc">90W skateboard motors, Pi, frame, brakes. Build it. Ride it. In a parking lot.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tools -->
+  <div class="section">
+    <h2>Free Software</h2>
+    <div class="tools-row">
+      <div class="tool-card">
+        <strong><a href="https://meshmobility.com/app">MeshMobility</a></strong>
+        <p>Design a JPods network for any US city. Crash data, traffic, census for all 50 states.</p>
+      </div>
+      <div class="tool-card">
+        <strong><a href="https://meshmobility.com/citytool">CityTool</a></strong>
+        <p>Type a city. See build cost, savings, payback in 10 seconds.</p>
+      </div>
+      <div class="tool-card">
+        <strong><a href="https://meshmobility.com/library">Library</a></strong>
+        <p>Browse 44 networks across 8 countries. Clone and improve.</p>
+      </div>
+    </div>
+
+    <a href="https://library.jpods.com/stem/" class="stem-link" target="_blank">
+      <h3>&#127891; STEM Resources at library.jpods.com/stem</h3>
+      <p>Lesson plans, curriculum guides, project templates, and research resources for educators and students.</p>
+    </a>
+  </div>
+
+  <!-- Start Small -->
+  <div class="section" style="text-align:center">
+    <h2>Start Small, Iterate Relentlessly</h2>
+    <img src="http://jpods.com/wp-content/uploads/2023/08/HowOfJPods_2021-08-24.005-1024x300.png"
+         alt="Start small, iterate relentlessly — Data → Information → Knowledge → Scars/Experience → Wisdom"
+         style="max-width:100%;border-radius:8px;margin:16px 0">
+    <p style="color:#666;font-size:0.9em;margin-top:8px">Excellence is the process of relentlessly improving. Data becomes information becomes knowledge. Customers — the Wisdom of the Many — sort viable ideas from brilliant ideas.</p>
+  </div>
+
+  <!-- 10X -->
+  <div class="section" style="text-align:center">
+    <h2>Profit by Cutting Costs 10x</h2>
+    <img src="https://meshmobility.com/static/img/ShareOf_Change_TripsByMile_cost_snelling.png"
+         alt="JPods cost per passenger-mile: 50x less than buses, 25x less than trains, 10x less than cars. 80% of trips can shift from cars."
+         style="max-width:100%;border-radius:8px;margin:16px 0">
+    <p style="color:#666;font-size:0.9em">80% of trips are under 10 miles. JPods at $0.03/passenger-mile vs $0.38 for cars. MassDOT cost data, US DOE energy data.</p>
+  </div>
+
+  <!-- Why -->
+  <div class="section">
+    <h2>Why This Matters</h2>
+    <img src="https://jpods.com/wp-content/uploads/2025/05/Facets_CCRC-1024x501.png"
+         alt="Federal Highway Harms — Climate Change Root Cause: unconstitutional Federal highways making unwalkable cities"
+         style="max-width:100%;border-radius:8px;margin:0 0 20px">
+    <p style="font-size:1.1em;color:#333;margin-bottom:16px">Highway central planning of the economy created a fiscal, social, military, and ecological disaster. <em>"If all you have is a hammer, every problem looks like a nail."</em></p>
+    <p>40,000 Americans die on roads every year. Traffic costs $2.76 trillion. American roads earn a D+ maintenance grade. 1.2% of US land is walkable — yet produces 20% of GDP.</p>
+    <p style="margin-top:12px">The solution exists. It was identified by Congress in 1975. It's been running injury-free in Morgantown, WV since 1975 — over 100 million passenger-miles. JPods is solar-powered, grade-separated, 10x lower cost than highways, 3,000x safer than roads.</p>
+    <img src="https://jpods.com/wp-content/uploads/2025/01/ClimateChangeVehicleMilesTraveled-1024x620.png"
+         alt="Climate Change tracks Vehicle Miles Traveled — the correlation is direct"
+         style="max-width:100%;border-radius:8px;margin:16px 0">
+    <p style="margin-top:12px"><strong>The barrier isn't technical. It's institutional.</strong> Massachusetts broke it in 2021 — funded $1.3M unanimously, Governor signed. The 5X5 Standard is law. Now we need makers to build it, city by city.</p>
+
+    <div class="quote-block">
+      <p>"In 1975, Congress identified podcar networks as the solution. They also noted that government 'institutional failures' had blocked such innovations for 'four to six decades.' That was 50 years ago. The barrier is over a century old. We're breaking it."</p>
+    </div>
+  </div>
+
+  <!-- References -->
+  <div class="section">
+    <h2>References</h2>
+    <div style="font-size:0.95em;color:#444">
+
+    <h3 style="color:#1a3a1a;margin:16px 0 8px">Books — The Intellectual Foundation</h3>
+    <ul style="line-height:2">
+      <li><strong>Jane Jacobs</strong> — <em>The Death and Life of Great American Cities</em> (1961); <em>Cities and the Wealth of Nations</em> (1984); <em>The Economy of Cities</em> (1969). The original case for walkable, mixed-use, bottom-up urbanism.</li>
+      <li><strong>Donald Shoup</strong> — <em>The High Cost of Free Parking</em> (2005). Cities spend more on free parking than schools. Parking minimums destroy the tax base.</li>
+      <li><strong>Robert Bullard</strong> — <em>Highway Robbery: Transportation Racism &amp; New Routes to Equity</em> (2004). Federal highway construction replaced Jim Crow with concrete — same communities destroyed, different tool.</li>
+      <li><strong>Jeff Speck</strong> — <em>Walkable City</em> (2012); <em>Walkable City Rules</em> (2018). The practical guide to making cities walkable. 10 steps, all measurable.</li>
+      <li><strong>Megan Kimble</strong> — <em>City Limits: Infrastructure, Inequality, and the Future of America's Highways</em> (2024). The current fight — freeway fighters, induced demand, who benefits and who pays.</li>
+      <li><strong>Chuck Marohn</strong> — <em>Strong Towns: A Bottom-Up Revolution to Rebuild American Prosperity</em> (2019); <em>Confessions of a Recovering Engineer</em> (2021). Cities are insolvent. The smallest next step wins.</li>
+      <li><strong>Bill James</strong> — <em>Climate Change Root Cause</em>. How Federal mercantile monopolies in transport and energy created the crisis. <a href="https://www.ClimateChangeRootCause.com">ClimateChangeRootCause.com</a></li>
+    </ul>
+
+    <h3 style="color:#1a3a1a;margin:16px 0 8px">Organizations</h3>
+    <ul style="line-height:2">
+      <li><a href="https://www.strongtowns.org">Strong Towns</a> — bottom-up fiscal responsibility for infrastructure</li>
+      <li><a href="https://www.cnu.org">Congress for the New Urbanism (CNU)</a> — walkable, mixed-use, transit-oriented design</li>
+      <li><a href="https://urban3.com">Urban3</a> — fiscal productivity mapping by Joe Minicozzi (the data that proves walkability pays)</li>
+      <li><a href="https://freeway-fighters.org">Freeway Fighters</a> — communities fighting highway expansion</li>
+    </ul>
+
+    <h3 style="color:#1a3a1a;margin:16px 0 8px">Strong Towns Articles</h3>
+    <ul style="line-height:2">
+      <li><a href="https://www.strongtowns.org/journal/2024-7-22-what-strong-towns-really-says-about-infrastructure-spending">What We Really Say About Infrastructure Spending</a></li>
+      <li><a href="https://www.strongtowns.org/journal/2020-8-10-i-did-the-math-on-my-towns-cul-de-sacs">I Did the Math on My Town's Cul-de-Sacs</a> — a citizen runs the numbers (MeshMobility lets every citizen do this)</li>
+      <li><a href="https://archive.strongtowns.org/journal/2017/3/22/right-metric-for-infrastructure">The Right Metric for Infrastructure</a></li>
+      <li><a href="https://archive.strongtowns.org/journal/2025/4/14/cities-are-already-defaulting-on-their-debts">Cities Are Already Defaulting on Their Debts</a></li>
+    </ul>
+
+    <h3 style="color:#1a3a1a;margin:16px 0 8px">JPods Tools &amp; Resources</h3>
+    <ul style="line-height:2">
+      <li><a href="https://www.5x5FreeMarket.com">5X5 FreeMarket</a> — performance-based regulations: zero cost to cities, 5% new revenue, private capital takes the risk</li>
+      <li><a href="https://meshmobility.com">MeshMobility</a> — free software to design transit for your city</li>
+      <li><a href="https://meshmobility.com/citytool">CityTool</a> — type any US city, see build cost, savings, and payback</li>
+      <li><a href="https://www.ClimateChangeRootCause.com">Climate Change Root Cause</a></li>
+      <li><a href="https://jpods.substack.com">JPods Substack</a> — follow the journey</li>
+      <li><a href="https://library.jpods.com/stem/">STEM Resources</a> — lesson plans, curriculum, project templates</li>
+      <li><a href="https://library.jpods.com/walkable/">Walkable Cities Library</a> — research, data, and resources on walkability and prosperity</li>
+      <li><a href="https://library.jpods.com/eisenhower/">Eisenhower's Regret</a> — the man who signed the Interstate Highway Act realized it was a mistake by 1960. "Those who had steered the program in such a direction had not followed his wishes."</li>
+      <li><a href="https://www.postroads.com/vetoes/">Presidential Vetoes of Federal Roads</a> — 4 of the first 5 presidents vetoed Federal roads as unconstitutional</li>
+      <li><a href="https://www.postroads.com/post-roads/">Post Roads — The Constitutional Limit</a> — Federal mercantile monopolies are unconstitutional. The Constitution limits Federal infrastructure to "post Roads." Internal improvements are reserved to the states.</li>
+      <li><a href="https://www.youtube.com/watch?v=4AQSQ1wUGeA&t=59s">Garden Girls: 6th graders present JPods to Fremont City Council</a></li>
+    </ul>
+
+    </div>
+  </div>
+
+  <!-- Substack -->
+  <div class="section" style="text-align:center;padding:40px 0">
+    <h2>Follow the Journey</h2>
+    <p style="margin-bottom:20px">Subscribe to JPods on Substack for weekly updates, city spotlights, and the story of how we're changing the economic lifeblood from oil to ingenuity.</p>
+    <a href="https://jpods.substack.com" class="cta cta-primary" target="_blank" style="background:#1a3a1a;color:white">&#128220; JPods Substack</a>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="tagline">Empowering Everyone. Energy self-reliance starts with myself.</div>
+  <div class="links">
+    <a href="https://jpods.substack.com">Substack</a>
+    <a href="https://meshmobility.com">MeshMobility</a>
+    <a href="https://jpods.com">JPods</a>
+    <a href="https://betterphysics.com">BetterPhysics</a>
+    <a href="https://www.5x5FreeMarket.com">5X5 FreeMarket</a>
+    <a href="https://www.ClimateChangeRootCause.com">Climate Change Root Cause</a>
+    <a href="https://library.jpods.com/stem/">STEM</a>
+  </div>
+  <div class="pirate">Pirates and Patriots.</div>
+</div>
+
+</body>
+</html>

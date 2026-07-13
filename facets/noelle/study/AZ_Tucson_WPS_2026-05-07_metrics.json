@@ -1,0 +1,45 @@
+{
+  "filename": "AZ_Tucson_WPS_2026-05-07.jpd",
+  "name": "AZ_Tucson_WPS_2026-05-07",
+  "state": "AZ",
+  "city": "Tucson WPS 2026-05-07",
+  "analyzed_at": "2026-07-12T01:28:40Z",
+  "topology": {
+    "total_structures": 154,
+    "stations": 102,
+    "traffic_circles": 52,
+    "station_to_circle_ratio": 2.0,
+    "lines": 2628,
+    "cps_total": 412,
+    "cps_connected": 368,
+    "cps_open": 44,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      154
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 11.1,
+    "extent_ew_mi": 17.7,
+    "area_sq_mi": 196.9,
+    "nn_avg_mi": 0.85,
+    "nn_min_mi": 0.3,
+    "nn_max_mi": 1.74,
+    "density_per_sq_mi": 0.8
+  },
+  "center": {
+    "lat": 32.2005,
+    "lon": -110.9204
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 16,
+    "completeness": 100
+  }
+}

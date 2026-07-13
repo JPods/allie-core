@@ -1,0 +1,48 @@
+{
+  "filename": "MA_Belmont_rough.jpd",
+  "name": "MA_Belmont_rough",
+  "state": "MA",
+  "city": "Belmont rough",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 73,
+    "stations": 48,
+    "traffic_circles": 25,
+    "station_to_circle_ratio": 1.9,
+    "lines": 1246,
+    "cps_total": 196,
+    "cps_connected": 174,
+    "cps_open": 22,
+    "orphans": 1,
+    "orphan_ids": [
+      "s48"
+    ],
+    "connected_components": 2,
+    "component_sizes": [
+      72,
+      1
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 5.8,
+    "extent_ew_mi": 8.4,
+    "area_sq_mi": 48.2,
+    "nn_avg_mi": 0.64,
+    "nn_min_mi": 0.29,
+    "nn_max_mi": 1.23,
+    "density_per_sq_mi": 1.5
+  },
+  "center": {
+    "lat": 42.3919,
+    "lon": -71.1676
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 70,
+    "spacing_uniformity": 27,
+    "completeness": 100
+  }
+}

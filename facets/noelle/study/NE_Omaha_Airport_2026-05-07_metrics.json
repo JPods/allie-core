@@ -1,0 +1,45 @@
+{
+  "filename": "NE_Omaha_Airport_2026-05-07.jpd",
+  "name": "NE_Omaha_Airport_2026-05-07",
+  "state": "NE",
+  "city": "Omaha Airport 2026-05-07",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 12,
+    "stations": 11,
+    "traffic_circles": 1,
+    "station_to_circle_ratio": 11.0,
+    "lines": 192,
+    "cps_total": 26,
+    "cps_connected": 22,
+    "cps_open": 4,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      12
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 3.7,
+    "extent_ew_mi": 2.2,
+    "area_sq_mi": 8.1,
+    "nn_avg_mi": 0.41,
+    "nn_min_mi": 0.18,
+    "nn_max_mi": 0.77,
+    "density_per_sq_mi": 1.5
+  },
+  "center": {
+    "lat": 41.2856,
+    "lon": -95.9167
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 28,
+    "completeness": 24
+  }
+}

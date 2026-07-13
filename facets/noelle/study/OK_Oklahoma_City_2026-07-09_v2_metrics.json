@@ -1,0 +1,49 @@
+{
+  "filename": "OK_Oklahoma_City_2026-07-09_v2.jpd",
+  "name": "OK_Oklahoma_City_2026-07-09_v2",
+  "state": "OK",
+  "city": "Oklahoma City 2026-07-09 v2",
+  "analyzed_at": "2026-07-12T01:28:46Z",
+  "topology": {
+    "total_structures": 280,
+    "stations": 213,
+    "traffic_circles": 67,
+    "station_to_circle_ratio": 3.2,
+    "lines": 4690,
+    "cps_total": 694,
+    "cps_connected": 636,
+    "cps_open": 58,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      280
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 17.0,
+    "extent_ew_mi": 11.5,
+    "area_sq_mi": 195.0,
+    "nn_avg_mi": 0.55,
+    "nn_min_mi": 0.38,
+    "nn_max_mi": 0.73,
+    "density_per_sq_mi": 1.4
+  },
+  "center": {
+    "lat": 35.4683,
+    "lon": -97.5258
+  },
+  "overlays": {
+    "city_label": "Oklahoma City, Oklahoma County, Oklahoma",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 68,
+    "completeness": 100
+  }
+}

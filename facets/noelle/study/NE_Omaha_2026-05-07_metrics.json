@@ -1,0 +1,45 @@
+{
+  "filename": "NE_Omaha_2026-05-07.jpd",
+  "name": "NE_Omaha_2026-05-07",
+  "state": "NE",
+  "city": "Omaha 2026-05-07",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 204,
+    "stations": 137,
+    "traffic_circles": 67,
+    "station_to_circle_ratio": 2.0,
+    "lines": 3494,
+    "cps_total": 542,
+    "cps_connected": 504,
+    "cps_open": 38,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      204
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 9.1,
+    "extent_ew_mi": 16.0,
+    "area_sq_mi": 145.3,
+    "nn_avg_mi": 0.92,
+    "nn_min_mi": 0.26,
+    "nn_max_mi": 1.29,
+    "density_per_sq_mi": 1.4
+  },
+  "center": {
+    "lat": 41.2383,
+    "lon": -96.0513
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 44,
+    "completeness": 100
+  }
+}

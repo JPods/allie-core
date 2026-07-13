@@ -1,0 +1,49 @@
+{
+  "filename": "TX_Richardson_2026-07-08_Rough.jpd",
+  "name": "TX_Richardson_2026-07-08_Rough",
+  "state": "TX",
+  "city": "Richardson 2026-07-08 Rough",
+  "analyzed_at": "2026-07-12T01:28:48Z",
+  "topology": {
+    "total_structures": 129,
+    "stations": 81,
+    "traffic_circles": 48,
+    "station_to_circle_ratio": 1.7,
+    "lines": 2216,
+    "cps_total": 354,
+    "cps_connected": 314,
+    "cps_open": 40,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      129
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 4.6,
+    "extent_ew_mi": 10.0,
+    "area_sq_mi": 46.0,
+    "nn_avg_mi": 0.61,
+    "nn_min_mi": 0.38,
+    "nn_max_mi": 0.87,
+    "density_per_sq_mi": 2.8
+  },
+  "center": {
+    "lat": 32.9672,
+    "lon": -96.6997
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 60,
+    "completeness": 100
+  }
+}

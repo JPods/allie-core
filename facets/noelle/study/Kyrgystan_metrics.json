@@ -1,0 +1,45 @@
+{
+  "filename": "Kyrgystan.jpd",
+  "name": "Kyrgystan",
+  "state": "",
+  "city": "Kyrgystan",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 188,
+    "stations": 150,
+    "traffic_circles": 38,
+    "station_to_circle_ratio": 3.9,
+    "lines": 3128,
+    "cps_total": 452,
+    "cps_connected": 420,
+    "cps_open": 32,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      188
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 9.5,
+    "extent_ew_mi": 10.0,
+    "area_sq_mi": 94.5,
+    "nn_avg_mi": 0.55,
+    "nn_min_mi": 0.5,
+    "nn_max_mi": 0.71,
+    "density_per_sq_mi": 2.0
+  },
+  "center": {
+    "lat": 42.8687,
+    "lon": 74.5755
+  },
+  "overlays": {
+    "city_label": "\u0428\u043a\u043e\u043b\u0430 \u043e\u043b\u0438\u043c\u043f\u0438\u0439\u0441\u043a\u043e\u0433\u043e \u0440\u0435\u0437\u0435\u0440\u0432\u0430, \u041a\u0430\u0434\u0436\u0438-\u0421\u0430\u0439\u0441\u043a\u0438\u0439 \u043f\u0435\u0440\u0435\u0443\u043b\u043e\u043a, Alamedin-1 Suburb",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 81,
+    "completeness": 100
+  }
+}

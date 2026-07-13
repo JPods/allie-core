@@ -1,0 +1,49 @@
+{
+  "filename": "MN_Bloomington_Noelle_2026-07-06.jpd",
+  "name": "MN_Bloomington_Noelle_2026-07-06",
+  "state": "MN",
+  "city": "Bloomington Noelle 2026-07-06",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 140,
+    "stations": 89,
+    "traffic_circles": 51,
+    "station_to_circle_ratio": 1.7,
+    "lines": 2394,
+    "cps_total": 382,
+    "cps_connected": 331,
+    "cps_open": 51,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      140
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 5.3,
+    "extent_ew_mi": 9.1,
+    "area_sq_mi": 48.4,
+    "nn_avg_mi": 0.43,
+    "nn_min_mi": 0.21,
+    "nn_max_mi": 1.34,
+    "density_per_sq_mi": 2.9
+  },
+  "center": {
+    "lat": 44.8508,
+    "lon": -93.294
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "aadt",
+      "accidents",
+      "crash_density"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

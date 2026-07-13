@@ -1,0 +1,45 @@
+{
+  "filename": "FL_Miami_2026-05-08.jpd",
+  "name": "FL_Miami_2026-05-08",
+  "state": "FL",
+  "city": "Miami 2026-05-08",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 181,
+    "stations": 123,
+    "traffic_circles": 58,
+    "station_to_circle_ratio": 2.1,
+    "lines": 3088,
+    "cps_total": 478,
+    "cps_connected": 438,
+    "cps_open": 40,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      181
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 10.1,
+    "extent_ew_mi": 16.1,
+    "area_sq_mi": 162.0,
+    "nn_avg_mi": 0.84,
+    "nn_min_mi": 0.13,
+    "nn_max_mi": 1.86,
+    "density_per_sq_mi": 1.1
+  },
+  "center": {
+    "lat": 25.8245,
+    "lon": -80.2449
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

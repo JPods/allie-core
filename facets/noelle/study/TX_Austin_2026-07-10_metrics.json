@@ -1,0 +1,49 @@
+{
+  "filename": "TX_Austin_2026-07-10.jpd",
+  "name": "TX_Austin_2026-07-10",
+  "state": "TX",
+  "city": "Austin 2026-07-10",
+  "analyzed_at": "2026-07-12T01:28:47Z",
+  "topology": {
+    "total_structures": 299,
+    "stations": 234,
+    "traffic_circles": 65,
+    "station_to_circle_ratio": 3.6,
+    "lines": 5004,
+    "cps_total": 728,
+    "cps_connected": 687,
+    "cps_open": 41,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      299
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 18.6,
+    "extent_ew_mi": 12.0,
+    "area_sq_mi": 223.4,
+    "nn_avg_mi": 0.54,
+    "nn_min_mi": 0.11,
+    "nn_max_mi": 0.71,
+    "density_per_sq_mi": 1.3
+  },
+  "center": {
+    "lat": 30.2705,
+    "lon": -97.7392
+  },
+  "overlays": {
+    "city_label": "Austin, Travis County, Texas",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 44,
+    "completeness": 100
+  }
+}

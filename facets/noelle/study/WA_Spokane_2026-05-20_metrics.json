@@ -1,0 +1,49 @@
+{
+  "filename": "WA_Spokane_2026-05-20.jpd",
+  "name": "WA_Spokane_2026-05-20",
+  "state": "WA",
+  "city": "Spokane 2026-05-20",
+  "analyzed_at": "2026-07-12T01:28:48Z",
+  "topology": {
+    "total_structures": 265,
+    "stations": 178,
+    "traffic_circles": 87,
+    "station_to_circle_ratio": 2.0,
+    "lines": 4524,
+    "cps_total": 704,
+    "cps_connected": 640,
+    "cps_open": 64,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      265
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 10.0,
+    "extent_ew_mi": 17.4,
+    "area_sq_mi": 173.5,
+    "nn_avg_mi": 0.69,
+    "nn_min_mi": 0.19,
+    "nn_max_mi": 0.91,
+    "density_per_sq_mi": 1.5
+  },
+  "center": {
+    "lat": 47.6733,
+    "lon": -117.3404
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "aadt",
+      "accidents",
+      "crash_density"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 48,
+    "completeness": 100
+  }
+}

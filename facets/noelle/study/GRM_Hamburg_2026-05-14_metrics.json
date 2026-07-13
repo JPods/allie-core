@@ -1,0 +1,45 @@
+{
+  "filename": "GRM_Hamburg_2026-05-14.jpd",
+  "name": "GRM_Hamburg_2026-05-14",
+  "state": "",
+  "city": "GRM Hamburg 2026-05-14",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 139,
+    "stations": 92,
+    "traffic_circles": 47,
+    "station_to_circle_ratio": 2.0,
+    "lines": 2376,
+    "cps_total": 372,
+    "cps_connected": 336,
+    "cps_open": 36,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      139
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 9.8,
+    "extent_ew_mi": 7.0,
+    "area_sq_mi": 68.2,
+    "nn_avg_mi": 0.57,
+    "nn_min_mi": 0.21,
+    "nn_max_mi": 0.95,
+    "density_per_sq_mi": 2.0
+  },
+  "center": {
+    "lat": 53.5653,
+    "lon": 9.9819
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 36,
+    "completeness": 100
+  }
+}

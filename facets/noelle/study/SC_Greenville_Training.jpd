@@ -1,0 +1,6433 @@
+{
+  "format": "jpd",
+  "version": 2,
+  "network_id": "untitled",
+  "saved_at": 1783549683962,
+  "settings": {
+    "accInG": 1.0,
+    "deccInG": 1.0,
+    "maxVelocityInKMPH": 60,
+    "podLen": 3,
+    "minHeadwaySec": 0.25,
+    "disembarkingTimeInSec": 20,
+    "embarkingTimeInSec": 20,
+    "ticketingTimeInSec": 30,
+    "stationEntryTimeInSec": 40,
+    "stationExitTimeInSec": 40,
+    "walkingSpeedKmh": 4.8,
+    "walkToStationSec": 300,
+    "walkFromStationSec": 300,
+    "timeResolutionPerSec": 9,
+    "podsPerStation": 8,
+    "graceDistance": 1,
+    "simSpeedMultiplier": 360,
+    "stationLabelSize": 3
+  },
+  "switches": [],
+  "stations": [],
+  "lines": [],
+  "structures": [],
+  "cps": [],
+  "overlays": {
+    "city": "sc_045",
+    "files": [
+      "aadt",
+      "accidents",
+      "crash_density",
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "overlay_data": {
+    "population_density": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "population_density",
+        "count": 123
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 2485,
+            "name": "Census Tract 1; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 4182,
+            "intensity": 4182
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3891794,
+              34.8566157
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 1616,
+            "name": "Census Tract 2; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3116,
+            "intensity": 3116
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.396799,
+              34.8484255
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 1456,
+            "name": "Census Tract 4; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2931,
+            "intensity": 2931
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4002397,
+              34.8379823
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 1411,
+            "name": "Census Tract 5; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3451,
+            "intensity": 3451
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4115291,
+              34.8376716
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000700",
+            "value": 3285,
+            "name": "Census Tract 7; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3314,
+            "intensity": 3314
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4129979,
+              34.8498334
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 1202,
+            "name": "Census Tract 8; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3447,
+            "intensity": 3447
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4271137,
+              34.8493143
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 1164,
+            "name": "Census Tract 9; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3186,
+            "intensity": 3186
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4098291,
+              34.8607609
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 2310,
+            "name": "Census Tract 10; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 4015,
+            "intensity": 4015
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.400254,
+              34.8606437
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001101",
+            "value": 3942,
+            "name": "Census Tract 11.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2230,
+            "intensity": 2230
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3788701,
+              34.8786243
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001102",
+            "value": 2103,
+            "name": "Census Tract 11.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 4018,
+            "intensity": 4018
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3924299,
+              34.8692748
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001203",
+            "value": 2714,
+            "name": "Census Tract 12.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 5528,
+            "intensity": 5528
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3647584,
+              34.8709259
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001204",
+            "value": 2634,
+            "name": "Census Tract 12.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2917,
+            "intensity": 2917
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3679015,
+              34.8586719
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001205",
+            "value": 1237,
+            "name": "Census Tract 12.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2453,
+            "intensity": 2453
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3772889,
+              34.8631793
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001302",
+            "value": 1426,
+            "name": "Census Tract 13.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2153,
+            "intensity": 2153
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3606077,
+              34.8343593
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001400",
+            "value": 3576,
+            "name": "Census Tract 14; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2226,
+            "intensity": 2226
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3780259,
+              34.8196958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001501",
+            "value": 4874,
+            "name": "Census Tract 15.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3987,
+            "intensity": 3987
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3970675,
+              34.8192211
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001502",
+            "value": 2552,
+            "name": "Census Tract 15.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2532,
+            "intensity": 2532
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3837909,
+              34.802851
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001600",
+            "value": 5224,
+            "name": "Census Tract 16; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1733,
+            "intensity": 1733
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3615018,
+              34.9073005
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 4418,
+            "name": "Census Tract 17; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1944,
+            "intensity": 1944
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3510473,
+              34.8960916
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001803",
+            "value": 3993,
+            "name": "Census Tract 18.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2909,
+            "intensity": 2909
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3250569,
+              34.9005975
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001804",
+            "value": 4965,
+            "name": "Census Tract 18.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3075,
+            "intensity": 3075
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3161889,
+              34.8865959
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001805",
+            "value": 5394,
+            "name": "Census Tract 18.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2412,
+            "intensity": 2412
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3434452,
+              34.8811431
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001807",
+            "value": 5083,
+            "name": "Census Tract 18.07; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2699,
+            "intensity": 2699
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3147759,
+              34.8729175
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001808",
+            "value": 4291,
+            "name": "Census Tract 18.08; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2007,
+            "intensity": 2007
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3286839,
+              34.8449487
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001809",
+            "value": 2968,
+            "name": "Census Tract 18.09; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 4250,
+            "intensity": 4250
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.339235,
+              34.8671766
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001810",
+            "value": 3641,
+            "name": "Census Tract 18.10; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 5880,
+            "intensity": 5880
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3481127,
+              34.8617386
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 7464,
+            "name": "Census Tract 19; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1393,
+            "intensity": 1393
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3429087,
+              34.821065
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002001",
+            "value": 2560,
+            "name": "Census Tract 20.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1692,
+            "intensity": 1692
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3953293,
+              34.7877058
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002003",
+            "value": 5505,
+            "name": "Census Tract 20.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1425,
+            "intensity": 1425
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4062843,
+              34.7698079
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002005",
+            "value": 4952,
+            "name": "Census Tract 20.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2072,
+            "intensity": 2072
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3727964,
+              34.7829618
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002103",
+            "value": 3340,
+            "name": "Census Tract 21.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1152,
+            "intensity": 1152
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4088364,
+              34.8055903
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002104",
+            "value": 1619,
+            "name": "Census Tract 21.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3054,
+            "intensity": 3054
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4400779,
+              34.8412612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002105",
+            "value": 2373,
+            "name": "Census Tract 21.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2858,
+            "intensity": 2858
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4262354,
+              34.8387641
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002106",
+            "value": 2974,
+            "name": "Census Tract 21.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2791,
+            "intensity": 2791
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4379688,
+              34.8273889
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002107",
+            "value": 2530,
+            "name": "Census Tract 21.07; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1772,
+            "intensity": 1772
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4282331,
+              34.8154582
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002108",
+            "value": 1412,
+            "name": "Census Tract 21.08; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2579,
+            "intensity": 2579
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4161124,
+              34.8290192
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002202",
+            "value": 2770,
+            "name": "Census Tract 22.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2421,
+            "intensity": 2421
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4412278,
+              34.8546429
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 4455,
+            "name": "Census Tract 22.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 5009,
+            "intensity": 5009
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4276286,
+              34.8640249
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 2796,
+            "name": "Census Tract 22.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2710,
+            "intensity": 2710
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4383938,
+              34.8714404
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002301",
+            "value": 3868,
+            "name": "Census Tract 23.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1953,
+            "intensity": 1953
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4258656,
+              34.8942425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002302",
+            "value": 3684,
+            "name": "Census Tract 23.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3656,
+            "intensity": 3656
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4173126,
+              34.8811322
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 1756,
+            "name": "Census Tract 23.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1867,
+            "intensity": 1867
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4111842,
+              34.8728042
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 3179,
+            "name": "Census Tract 23.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1732,
+            "intensity": 1732
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3932158,
+              34.888003
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002403",
+            "value": 5033,
+            "name": "Census Tract 24.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 182,
+            "intensity": 182
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2826749,
+              35.0650479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002404",
+            "value": 4120,
+            "name": "Census Tract 24.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 67,
+            "intensity": 67
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2970996,
+              35.1388269
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002405",
+            "value": 7660,
+            "name": "Census Tract 24.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 510,
+            "intensity": 510
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2669414,
+              35.0155447
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002406",
+            "value": 2165,
+            "name": "Census Tract 24.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 698,
+            "intensity": 698
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2417273,
+              34.9861257
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 11969,
+            "name": "Census Tract 25.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1509,
+            "intensity": 1509
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2431906,
+              34.9074666
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 1736,
+            "name": "Census Tract 25.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2151,
+            "intensity": 2151
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2339594,
+              34.9440872
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 3879,
+            "name": "Census Tract 25.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2879,
+            "intensity": 2879
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2349121,
+              34.9340004
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 4197,
+            "name": "Census Tract 25.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 949,
+            "intensity": 949
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2667223,
+              34.9571612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002507",
+            "value": 4590,
+            "name": "Census Tract 25.07; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1367,
+            "intensity": 1367
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2392964,
+              34.9649557
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002602",
+            "value": 4482,
+            "name": "Census Tract 26.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2866,
+            "intensity": 2866
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.307532,
+              34.9065624
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 5464,
+            "name": "Census Tract 26.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1376,
+            "intensity": 1376
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2867609,
+              34.9171574
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 6866,
+            "name": "Census Tract 26.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 677,
+            "intensity": 677
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3124715,
+              34.9887995
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 7153,
+            "name": "Census Tract 26.09; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3357,
+            "intensity": 3357
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2730873,
+              34.880874
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002610",
+            "value": 3113,
+            "name": "Census Tract 26.10; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1935,
+            "intensity": 1935
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3181636,
+              34.9317233
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002611",
+            "value": 5599,
+            "name": "Census Tract 26.11; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 822,
+            "intensity": 822
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3140399,
+              34.9543799
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002612",
+            "value": 8647,
+            "name": "Census Tract 26.12; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2620,
+            "intensity": 2620
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2600996,
+              34.8939156
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002613",
+            "value": 1668,
+            "name": "Census Tract 26.13; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2653,
+            "intensity": 2653
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2820228,
+              34.8974468
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 4242,
+            "name": "Census Tract 27.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 365,
+            "intensity": 365
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3915987,
+              34.9404095
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002703",
+            "value": 5419,
+            "name": "Census Tract 27.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1036,
+            "intensity": 1036
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3491069,
+              34.9461246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 2724,
+            "name": "Census Tract 27.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2668,
+            "intensity": 2668
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3278469,
+              34.9214254
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 2204,
+            "name": "Census Tract 28.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1984,
+            "intensity": 1984
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3089003,
+              34.8617825
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002805",
+            "value": 4753,
+            "name": "Census Tract 28.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1312,
+            "intensity": 1312
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.29474,
+              34.8483036
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002811",
+            "value": 10295,
+            "name": "Census Tract 28.11; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2244,
+            "intensity": 2244
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.30384,
+              34.8089384
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002812",
+            "value": 6944,
+            "name": "Census Tract 28.12; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1785,
+            "intensity": 1785
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2707903,
+              34.8033643
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002813",
+            "value": 4784,
+            "name": "Census Tract 28.13; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1505,
+            "intensity": 1505
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2394089,
+              34.8290723
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002814",
+            "value": 6274,
+            "name": "Census Tract 28.14; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1421,
+            "intensity": 1421
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2148263,
+              34.8281698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002815",
+            "value": 7486,
+            "name": "Census Tract 28.15; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2935,
+            "intensity": 2935
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2426257,
+              34.801832
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002817",
+            "value": 4456,
+            "name": "Census Tract 28.17; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2461,
+            "intensity": 2461
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.289775,
+              34.8718376
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002818",
+            "value": 3198,
+            "name": "Census Tract 28.18; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2851,
+            "intensity": 2851
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2676745,
+              34.8657732
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002819",
+            "value": 5261,
+            "name": "Census Tract 28.19; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1421,
+            "intensity": 1421
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2710483,
+              34.8331308
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002820",
+            "value": 2572,
+            "name": "Census Tract 28.20; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 788,
+            "intensity": 788
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.250626,
+              34.8534606
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002821",
+            "value": 5771,
+            "name": "Census Tract 28.21; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2578,
+            "intensity": 2578
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.19376,
+              34.7934968
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002822",
+            "value": 7829,
+            "name": "Census Tract 28.22; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1908,
+            "intensity": 1908
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1894319,
+              34.8063365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002901",
+            "value": 6581,
+            "name": "Census Tract 29.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1150,
+            "intensity": 1150
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3463323,
+              34.7817687
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002903",
+            "value": 7800,
+            "name": "Census Tract 29.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2054,
+            "intensity": 2054
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2930949,
+              34.7786862
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002904",
+            "value": 6182,
+            "name": "Census Tract 29.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1575,
+            "intensity": 1575
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3265895,
+              34.776337
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002905",
+            "value": 5003,
+            "name": "Census Tract 29.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1618,
+            "intensity": 1618
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3138361,
+              34.754983
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003005",
+            "value": 3142,
+            "name": "Census Tract 30.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1074,
+            "intensity": 1074
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.26321,
+              34.737477
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003008",
+            "value": 7822,
+            "name": "Census Tract 30.08; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1940,
+            "intensity": 1940
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2428294,
+              34.7805829
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003009",
+            "value": 9293,
+            "name": "Census Tract 30.09; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 631,
+            "intensity": 631
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1907465,
+              34.7591297
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003010",
+            "value": 8056,
+            "name": "Census Tract 30.10; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1622,
+            "intensity": 1622
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2483519,
+              34.7565425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003011",
+            "value": 6698,
+            "name": "Census Tract 30.11; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1756,
+            "intensity": 1756
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2343584,
+              34.7276009
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003012",
+            "value": 5368,
+            "name": "Census Tract 30.12; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3600,
+            "intensity": 3600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2726323,
+              34.7255467
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003013",
+            "value": 8494,
+            "name": "Census Tract 30.13; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2119,
+            "intensity": 2119
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2611454,
+              34.7024177
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003014",
+            "value": 5587,
+            "name": "Census Tract 30.14; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1123,
+            "intensity": 1123
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3001522,
+              34.7353021
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003016",
+            "value": 5170,
+            "name": "Census Tract 30.16; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 809,
+            "intensity": 809
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2864481,
+              34.680595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003017",
+            "value": 5111,
+            "name": "Census Tract 30.17; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2563,
+            "intensity": 2563
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2906471,
+              34.7134608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003101",
+            "value": 8413,
+            "name": "Census Tract 31.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1232,
+            "intensity": 1232
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2058003,
+              34.7061612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 2581,
+            "name": "Census Tract 31.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 204,
+            "intensity": 204
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2377578,
+              34.6651538
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003104",
+            "value": 2951,
+            "name": "Census Tract 31.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 169,
+            "intensity": 169
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2591391,
+              34.6140955
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 3639,
+            "name": "Census Tract 32.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 66,
+            "intensity": 66
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.330282,
+              34.5539256
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 3464,
+            "name": "Census Tract 32.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 178,
+            "intensity": 178
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3735258,
+              34.6408427
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 2281,
+            "name": "Census Tract 32.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 162,
+            "intensity": 162
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3254022,
+              34.6180638
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003301",
+            "value": 7028,
+            "name": "Census Tract 33.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 398,
+            "intensity": 398
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4424299,
+              34.6827071
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003303",
+            "value": 5368,
+            "name": "Census Tract 33.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 268,
+            "intensity": 268
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3947947,
+              34.6974078
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003304",
+            "value": 8740,
+            "name": "Census Tract 33.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 697,
+            "intensity": 697
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3358467,
+              34.7046357
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003401",
+            "value": 952,
+            "name": "Census Tract 34.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 173,
+            "intensity": 173
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3736859,
+              34.750223
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003500",
+            "value": 2565,
+            "name": "Census Tract 35; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 379,
+            "intensity": 379
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4334269,
+              34.7625524
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003601",
+            "value": 5541,
+            "name": "Census Tract 36.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1004,
+            "intensity": 1004
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4634583,
+              34.8251981
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003602",
+            "value": 2631,
+            "name": "Census Tract 36.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 833,
+            "intensity": 833
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4447154,
+              34.7975847
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003701",
+            "value": 6076,
+            "name": "Census Tract 37.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 544,
+            "intensity": 544
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4821686,
+              34.9104678
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003704",
+            "value": 4346,
+            "name": "Census Tract 37.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3823,
+            "intensity": 3823
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4524775,
+              34.8683522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003705",
+            "value": 2375,
+            "name": "Census Tract 37.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 967,
+            "intensity": 967
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4707319,
+              34.8532115
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003706",
+            "value": 3418,
+            "name": "Census Tract 37.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2030,
+            "intensity": 2030
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4550839,
+              34.882033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003707",
+            "value": 3672,
+            "name": "Census Tract 37.07; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2358,
+            "intensity": 2358
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4551226,
+              34.8974836
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003802",
+            "value": 4957,
+            "name": "Census Tract 38.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 889,
+            "intensity": 889
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4133304,
+              34.9190242
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003803",
+            "value": 4823,
+            "name": "Census Tract 38.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1459,
+            "intensity": 1459
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4480249,
+              34.9341533
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003804",
+            "value": 2588,
+            "name": "Census Tract 38.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1642,
+            "intensity": 1642
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4414551,
+              34.9094511
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003902",
+            "value": 4025,
+            "name": "Census Tract 39.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 277,
+            "intensity": 277
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3881885,
+              34.9903048
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003903",
+            "value": 5212,
+            "name": "Census Tract 39.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 259,
+            "intensity": 259
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4838283,
+              34.9885777
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003905",
+            "value": 4556,
+            "name": "Census Tract 39.05; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 500,
+            "intensity": 500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4423337,
+              34.9915958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003906",
+            "value": 2865,
+            "name": "Census Tract 39.06; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 1360,
+            "intensity": 1360
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4505607,
+              34.9569698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004001",
+            "value": 3756,
+            "name": "Census Tract 40.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 251,
+            "intensity": 251
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.372437,
+              35.0360455
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004003",
+            "value": 4110,
+            "name": "Census Tract 40.03; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 214,
+            "intensity": 214
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4224582,
+              35.0724555
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004004",
+            "value": 1810,
+            "name": "Census Tract 40.04; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 35,
+            "intensity": 35
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4442568,
+              35.1359117
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004101",
+            "value": 3637,
+            "name": "Census Tract 41.01; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 192,
+            "intensity": 192
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5090919,
+              35.0334389
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004102",
+            "value": 1259,
+            "name": "Census Tract 41.02; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 19,
+            "intensity": 19
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6069444,
+              35.0920167
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004200",
+            "value": 2397,
+            "name": "Census Tract 42; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 2471,
+            "intensity": 2471
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.389697,
+              34.8350776
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004300",
+            "value": 4204,
+            "name": "Census Tract 43; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 3396,
+            "intensity": 3396
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.375449,
+              34.8413428
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004400",
+            "value": 1950,
+            "name": "Census Tract 44; Greenville County; South Carolina",
+            "layer": "population_density",
+            "density": 905,
+            "intensity": 905
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3537028,
+              34.8482854
+            ]
+          }
+        }
+      ]
+    },
+    "property_values": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "property_values",
+        "count": 121
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 542900,
+            "name": "Census Tract 1; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 542900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3891794,
+              34.8566157
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 560200,
+            "name": "Census Tract 2; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 560200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.396799,
+              34.8484255
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 422200,
+            "name": "Census Tract 4; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 422200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4002397,
+              34.8379823
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 345700,
+            "name": "Census Tract 5; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 345700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4115291,
+              34.8376716
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 154500,
+            "name": "Census Tract 8; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 154500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4271137,
+              34.8493143
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 287700,
+            "name": "Census Tract 9; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 287700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4098291,
+              34.8607609
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 476500,
+            "name": "Census Tract 10; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 476500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.400254,
+              34.8606437
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001101",
+            "value": 333600,
+            "name": "Census Tract 11.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 333600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3788701,
+              34.8786243
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001102",
+            "value": 420000,
+            "name": "Census Tract 11.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 420000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3924299,
+              34.8692748
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001203",
+            "value": 292500,
+            "name": "Census Tract 12.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 292500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3647584,
+              34.8709259
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001204",
+            "value": 257900,
+            "name": "Census Tract 12.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 257900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3679015,
+              34.8586719
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001205",
+            "value": 277700,
+            "name": "Census Tract 12.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 277700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3772889,
+              34.8631793
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001302",
+            "value": 278000,
+            "name": "Census Tract 13.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 278000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3606077,
+              34.8343593
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001400",
+            "value": 587500,
+            "name": "Census Tract 14; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 587500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3780259,
+              34.8196958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001501",
+            "value": 582000,
+            "name": "Census Tract 15.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 582000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3970675,
+              34.8192211
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001502",
+            "value": 96300,
+            "name": "Census Tract 15.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 96300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3837909,
+              34.802851
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001600",
+            "value": 286000,
+            "name": "Census Tract 16; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 286000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3615018,
+              34.9073005
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 182300,
+            "name": "Census Tract 17; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 182300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3510473,
+              34.8960916
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001803",
+            "value": 164100,
+            "name": "Census Tract 18.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 164100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3250569,
+              34.9005975
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001804",
+            "value": 261500,
+            "name": "Census Tract 18.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 261500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3161889,
+              34.8865959
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001805",
+            "value": 290300,
+            "name": "Census Tract 18.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 290300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3434452,
+              34.8811431
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001807",
+            "value": 297000,
+            "name": "Census Tract 18.07; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 297000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3147759,
+              34.8729175
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001809",
+            "value": 306400,
+            "name": "Census Tract 18.09; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 306400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.339235,
+              34.8671766
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001810",
+            "value": 203700,
+            "name": "Census Tract 18.10; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 203700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3481127,
+              34.8617386
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 661200,
+            "name": "Census Tract 19; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 661200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3429087,
+              34.821065
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002001",
+            "value": 122600,
+            "name": "Census Tract 20.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 122600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3953293,
+              34.7877058
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002003",
+            "value": 100600,
+            "name": "Census Tract 20.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 100600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4062843,
+              34.7698079
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002005",
+            "value": 135500,
+            "name": "Census Tract 20.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 135500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3727964,
+              34.7829618
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002103",
+            "value": 199200,
+            "name": "Census Tract 21.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 199200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4088364,
+              34.8055903
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002104",
+            "value": 109300,
+            "name": "Census Tract 21.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 109300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4400779,
+              34.8412612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002105",
+            "value": 80600,
+            "name": "Census Tract 21.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 80600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4262354,
+              34.8387641
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002106",
+            "value": 111900,
+            "name": "Census Tract 21.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 111900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4379688,
+              34.8273889
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002107",
+            "value": 125300,
+            "name": "Census Tract 21.07; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 125300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4282331,
+              34.8154582
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002108",
+            "value": 243000,
+            "name": "Census Tract 21.08; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 243000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4161124,
+              34.8290192
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002202",
+            "value": 107500,
+            "name": "Census Tract 22.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 107500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4412278,
+              34.8546429
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 111500,
+            "name": "Census Tract 22.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 111500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4276286,
+              34.8640249
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 110000,
+            "name": "Census Tract 22.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 110000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4383938,
+              34.8714404
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002301",
+            "value": 190600,
+            "name": "Census Tract 23.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 190600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4258656,
+              34.8942425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002302",
+            "value": 165200,
+            "name": "Census Tract 23.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 165200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4173126,
+              34.8811322
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 85000,
+            "name": "Census Tract 23.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 85000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4111842,
+              34.8728042
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 520600,
+            "name": "Census Tract 23.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 520600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3932158,
+              34.888003
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002403",
+            "value": 240100,
+            "name": "Census Tract 24.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 240100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2826749,
+              35.0650479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002404",
+            "value": 368800,
+            "name": "Census Tract 24.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 368800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2970996,
+              35.1388269
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002405",
+            "value": 279800,
+            "name": "Census Tract 24.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 279800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2669414,
+              35.0155447
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002406",
+            "value": 218500,
+            "name": "Census Tract 24.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 218500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2417273,
+              34.9861257
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 257500,
+            "name": "Census Tract 25.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 257500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2431906,
+              34.9074666
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 178400,
+            "name": "Census Tract 25.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 178400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2339594,
+              34.9440872
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 131600,
+            "name": "Census Tract 25.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 131600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2349121,
+              34.9340004
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 231500,
+            "name": "Census Tract 25.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 231500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2667223,
+              34.9571612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002507",
+            "value": 203500,
+            "name": "Census Tract 25.07; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 203500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2392964,
+              34.9649557
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002602",
+            "value": 214200,
+            "name": "Census Tract 26.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 214200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.307532,
+              34.9065624
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 213300,
+            "name": "Census Tract 26.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 213300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2867609,
+              34.9171574
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 259600,
+            "name": "Census Tract 26.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 259600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3124715,
+              34.9887995
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 420900,
+            "name": "Census Tract 26.09; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 420900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2730873,
+              34.880874
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002610",
+            "value": 195300,
+            "name": "Census Tract 26.10; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 195300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3181636,
+              34.9317233
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002611",
+            "value": 225400,
+            "name": "Census Tract 26.11; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 225400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3140399,
+              34.9543799
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002612",
+            "value": 289400,
+            "name": "Census Tract 26.12; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 289400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2600996,
+              34.8939156
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002613",
+            "value": 347800,
+            "name": "Census Tract 26.13; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 347800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2820228,
+              34.8974468
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 342100,
+            "name": "Census Tract 27.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 342100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3915987,
+              34.9404095
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002703",
+            "value": 276100,
+            "name": "Census Tract 27.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 276100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3491069,
+              34.9461246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 198500,
+            "name": "Census Tract 27.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 198500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3278469,
+              34.9214254
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 373600,
+            "name": "Census Tract 28.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 373600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3089003,
+              34.8617825
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002805",
+            "value": 294300,
+            "name": "Census Tract 28.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 294300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.29474,
+              34.8483036
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002811",
+            "value": 241100,
+            "name": "Census Tract 28.11; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 241100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.30384,
+              34.8089384
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002812",
+            "value": 255100,
+            "name": "Census Tract 28.12; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 255100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2707903,
+              34.8033643
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002813",
+            "value": 602200,
+            "name": "Census Tract 28.13; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 602200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2394089,
+              34.8290723
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002814",
+            "value": 382900,
+            "name": "Census Tract 28.14; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 382900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2148263,
+              34.8281698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002815",
+            "value": 397800,
+            "name": "Census Tract 28.15; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 397800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2426257,
+              34.801832
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002817",
+            "value": 336900,
+            "name": "Census Tract 28.17; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 336900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.289775,
+              34.8718376
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002818",
+            "value": 478300,
+            "name": "Census Tract 28.18; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 478300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2676745,
+              34.8657732
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002819",
+            "value": 355700,
+            "name": "Census Tract 28.19; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 355700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2710483,
+              34.8331308
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002820",
+            "value": 321300,
+            "name": "Census Tract 28.20; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 321300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.250626,
+              34.8534606
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002821",
+            "value": 269300,
+            "name": "Census Tract 28.21; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 269300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.19376,
+              34.7934968
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002822",
+            "value": 408300,
+            "name": "Census Tract 28.22; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 408300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1894319,
+              34.8063365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002901",
+            "value": 199500,
+            "name": "Census Tract 29.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 199500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3463323,
+              34.7817687
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002903",
+            "value": 179600,
+            "name": "Census Tract 29.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 179600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2930949,
+              34.7786862
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002904",
+            "value": 218100,
+            "name": "Census Tract 29.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 218100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3265895,
+              34.776337
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002905",
+            "value": 239600,
+            "name": "Census Tract 29.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 239600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3138361,
+              34.754983
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003005",
+            "value": 166900,
+            "name": "Census Tract 30.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 166900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.26321,
+              34.737477
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003008",
+            "value": 310000,
+            "name": "Census Tract 30.08; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 310000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2428294,
+              34.7805829
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003009",
+            "value": 352500,
+            "name": "Census Tract 30.09; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 352500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1907465,
+              34.7591297
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003010",
+            "value": 284300,
+            "name": "Census Tract 30.10; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 284300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2483519,
+              34.7565425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003011",
+            "value": 265800,
+            "name": "Census Tract 30.11; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 265800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2343584,
+              34.7276009
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003012",
+            "value": 167500,
+            "name": "Census Tract 30.12; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 167500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2726323,
+              34.7255467
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003013",
+            "value": 245400,
+            "name": "Census Tract 30.13; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 245400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2611454,
+              34.7024177
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003014",
+            "value": 270600,
+            "name": "Census Tract 30.14; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 270600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3001522,
+              34.7353021
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003016",
+            "value": 340700,
+            "name": "Census Tract 30.16; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 340700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2864481,
+              34.680595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003017",
+            "value": 330500,
+            "name": "Census Tract 30.17; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 330500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2906471,
+              34.7134608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003101",
+            "value": 188100,
+            "name": "Census Tract 31.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 188100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2058003,
+              34.7061612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 276300,
+            "name": "Census Tract 31.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 276300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2377578,
+              34.6651538
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003104",
+            "value": 250500,
+            "name": "Census Tract 31.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 250500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2591391,
+              34.6140955
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 161700,
+            "name": "Census Tract 32.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 161700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.330282,
+              34.5539256
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 235500,
+            "name": "Census Tract 32.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 235500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3735258,
+              34.6408427
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 164900,
+            "name": "Census Tract 32.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 164900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3254022,
+              34.6180638
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003301",
+            "value": 128100,
+            "name": "Census Tract 33.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 128100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4424299,
+              34.6827071
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003303",
+            "value": 239100,
+            "name": "Census Tract 33.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 239100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3947947,
+              34.6974078
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003304",
+            "value": 217500,
+            "name": "Census Tract 33.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 217500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3358467,
+              34.7046357
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003401",
+            "value": 148600,
+            "name": "Census Tract 34.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 148600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3736859,
+              34.750223
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003500",
+            "value": 128100,
+            "name": "Census Tract 35; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 128100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4334269,
+              34.7625524
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003601",
+            "value": 154600,
+            "name": "Census Tract 36.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 154600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4634583,
+              34.8251981
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003602",
+            "value": 165700,
+            "name": "Census Tract 36.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 165700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4447154,
+              34.7975847
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003701",
+            "value": 191400,
+            "name": "Census Tract 37.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 191400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4821686,
+              34.9104678
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003704",
+            "value": 133100,
+            "name": "Census Tract 37.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 133100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4524775,
+              34.8683522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003705",
+            "value": 165900,
+            "name": "Census Tract 37.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 165900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4707319,
+              34.8532115
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003706",
+            "value": 144700,
+            "name": "Census Tract 37.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 144700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4550839,
+              34.882033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003707",
+            "value": 166500,
+            "name": "Census Tract 37.07; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 166500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4551226,
+              34.8974836
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003802",
+            "value": 211000,
+            "name": "Census Tract 38.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 211000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4133304,
+              34.9190242
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003803",
+            "value": 397700,
+            "name": "Census Tract 38.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 397700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4480249,
+              34.9341533
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003804",
+            "value": 194900,
+            "name": "Census Tract 38.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 194900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4414551,
+              34.9094511
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003902",
+            "value": 263900,
+            "name": "Census Tract 39.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 263900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3881885,
+              34.9903048
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003903",
+            "value": 183200,
+            "name": "Census Tract 39.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 183200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4838283,
+              34.9885777
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003905",
+            "value": 255100,
+            "name": "Census Tract 39.05; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 255100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4423337,
+              34.9915958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003906",
+            "value": 319600,
+            "name": "Census Tract 39.06; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 319600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4505607,
+              34.9569698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004001",
+            "value": 194200,
+            "name": "Census Tract 40.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 194200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.372437,
+              35.0360455
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004003",
+            "value": 223800,
+            "name": "Census Tract 40.03; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 223800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4224582,
+              35.0724555
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004004",
+            "value": 765100,
+            "name": "Census Tract 40.04; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 765100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4442568,
+              35.1359117
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004101",
+            "value": 120400,
+            "name": "Census Tract 41.01; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 120400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5090919,
+              35.0334389
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004102",
+            "value": 117800,
+            "name": "Census Tract 41.02; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 117800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6069444,
+              35.0920167
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004200",
+            "value": 835700,
+            "name": "Census Tract 42; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 835700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.389697,
+              34.8350776
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004300",
+            "value": 294500,
+            "name": "Census Tract 43; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 294500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.375449,
+              34.8413428
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004400",
+            "value": 214000,
+            "name": "Census Tract 44; Greenville County; South Carolina",
+            "layer": "property_values",
+            "intensity": 214000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3537028,
+              34.8482854
+            ]
+          }
+        }
+      ]
+    },
+    "jobs": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "jobs",
+        "count": 123
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 849,
+            "name": "Census Tract 1; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 849
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3891794,
+              34.8566157
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 946,
+            "name": "Census Tract 2; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 946
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.396799,
+              34.8484255
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 908,
+            "name": "Census Tract 4; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 908
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4002397,
+              34.8379823
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 570,
+            "name": "Census Tract 5; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 570
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4115291,
+              34.8376716
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000700",
+            "value": 2005,
+            "name": "Census Tract 7; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2005
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4129979,
+              34.8498334
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 516,
+            "name": "Census Tract 8; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 516
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4271137,
+              34.8493143
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 588,
+            "name": "Census Tract 9; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 588
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4098291,
+              34.8607609
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 1229,
+            "name": "Census Tract 10; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1229
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.400254,
+              34.8606437
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001101",
+            "value": 2171,
+            "name": "Census Tract 11.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2171
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3788701,
+              34.8786243
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001102",
+            "value": 1218,
+            "name": "Census Tract 11.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1218
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3924299,
+              34.8692748
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001203",
+            "value": 1603,
+            "name": "Census Tract 12.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1603
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3647584,
+              34.8709259
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001204",
+            "value": 1731,
+            "name": "Census Tract 12.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1731
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3679015,
+              34.8586719
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001205",
+            "value": 808,
+            "name": "Census Tract 12.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 808
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3772889,
+              34.8631793
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001302",
+            "value": 854,
+            "name": "Census Tract 13.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 854
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3606077,
+              34.8343593
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001400",
+            "value": 1932,
+            "name": "Census Tract 14; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1932
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3780259,
+              34.8196958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001501",
+            "value": 2380,
+            "name": "Census Tract 15.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2380
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3970675,
+              34.8192211
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001502",
+            "value": 794,
+            "name": "Census Tract 15.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 794
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3837909,
+              34.802851
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001600",
+            "value": 2547,
+            "name": "Census Tract 16; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2547
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3615018,
+              34.9073005
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 1825,
+            "name": "Census Tract 17; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1825
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3510473,
+              34.8960916
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001803",
+            "value": 2131,
+            "name": "Census Tract 18.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2131
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3250569,
+              34.9005975
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001804",
+            "value": 2664,
+            "name": "Census Tract 18.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2664
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3161889,
+              34.8865959
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001805",
+            "value": 2989,
+            "name": "Census Tract 18.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2989
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3434452,
+              34.8811431
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001807",
+            "value": 2604,
+            "name": "Census Tract 18.07; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2604
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3147759,
+              34.8729175
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001808",
+            "value": 3090,
+            "name": "Census Tract 18.08; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3090
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3286839,
+              34.8449487
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001809",
+            "value": 1720,
+            "name": "Census Tract 18.09; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1720
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.339235,
+              34.8671766
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001810",
+            "value": 2235,
+            "name": "Census Tract 18.10; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2235
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3481127,
+              34.8617386
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 3614,
+            "name": "Census Tract 19; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3614
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3429087,
+              34.821065
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002001",
+            "value": 1026,
+            "name": "Census Tract 20.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1026
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3953293,
+              34.7877058
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002003",
+            "value": 1828,
+            "name": "Census Tract 20.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1828
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4062843,
+              34.7698079
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002005",
+            "value": 2258,
+            "name": "Census Tract 20.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2258
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3727964,
+              34.7829618
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002103",
+            "value": 1838,
+            "name": "Census Tract 21.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1838
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4088364,
+              34.8055903
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002104",
+            "value": 771,
+            "name": "Census Tract 21.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 771
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4400779,
+              34.8412612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002105",
+            "value": 1064,
+            "name": "Census Tract 21.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1064
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4262354,
+              34.8387641
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002106",
+            "value": 1228,
+            "name": "Census Tract 21.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1228
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4379688,
+              34.8273889
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002107",
+            "value": 1242,
+            "name": "Census Tract 21.07; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1242
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4282331,
+              34.8154582
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002108",
+            "value": 869,
+            "name": "Census Tract 21.08; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 869
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4161124,
+              34.8290192
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002202",
+            "value": 1271,
+            "name": "Census Tract 22.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1271
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4412278,
+              34.8546429
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 1924,
+            "name": "Census Tract 22.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1924
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4276286,
+              34.8640249
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 995,
+            "name": "Census Tract 22.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 995
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4383938,
+              34.8714404
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002301",
+            "value": 2104,
+            "name": "Census Tract 23.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2104
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4258656,
+              34.8942425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002302",
+            "value": 1901,
+            "name": "Census Tract 23.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1901
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4173126,
+              34.8811322
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 873,
+            "name": "Census Tract 23.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 873
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4111842,
+              34.8728042
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 1511,
+            "name": "Census Tract 23.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1511
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3932158,
+              34.888003
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002403",
+            "value": 2447,
+            "name": "Census Tract 24.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2447
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2826749,
+              35.0650479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002404",
+            "value": 1844,
+            "name": "Census Tract 24.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1844
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2970996,
+              35.1388269
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002405",
+            "value": 4238,
+            "name": "Census Tract 24.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4238
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2669414,
+              35.0155447
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002406",
+            "value": 1390,
+            "name": "Census Tract 24.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1390
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2417273,
+              34.9861257
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 6132,
+            "name": "Census Tract 25.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 6132
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2431906,
+              34.9074666
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 879,
+            "name": "Census Tract 25.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 879
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2339594,
+              34.9440872
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 1690,
+            "name": "Census Tract 25.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1690
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2349121,
+              34.9340004
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 2241,
+            "name": "Census Tract 25.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2241
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2667223,
+              34.9571612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002507",
+            "value": 2318,
+            "name": "Census Tract 25.07; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2318
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2392964,
+              34.9649557
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002602",
+            "value": 2281,
+            "name": "Census Tract 26.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2281
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.307532,
+              34.9065624
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 2713,
+            "name": "Census Tract 26.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2713
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2867609,
+              34.9171574
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 3123,
+            "name": "Census Tract 26.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3123
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3124715,
+              34.9887995
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 3519,
+            "name": "Census Tract 26.09; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3519
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2730873,
+              34.880874
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002610",
+            "value": 1815,
+            "name": "Census Tract 26.10; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1815
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3181636,
+              34.9317233
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002611",
+            "value": 2990,
+            "name": "Census Tract 26.11; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2990
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3140399,
+              34.9543799
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002612",
+            "value": 4469,
+            "name": "Census Tract 26.12; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4469
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2600996,
+              34.8939156
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002613",
+            "value": 848,
+            "name": "Census Tract 26.13; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 848
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2820228,
+              34.8974468
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 2004,
+            "name": "Census Tract 27.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2004
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3915987,
+              34.9404095
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002703",
+            "value": 2703,
+            "name": "Census Tract 27.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2703
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3491069,
+              34.9461246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 1407,
+            "name": "Census Tract 27.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1407
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3278469,
+              34.9214254
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 964,
+            "name": "Census Tract 28.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 964
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3089003,
+              34.8617825
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002805",
+            "value": 2493,
+            "name": "Census Tract 28.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2493
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.29474,
+              34.8483036
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002811",
+            "value": 6374,
+            "name": "Census Tract 28.11; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 6374
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.30384,
+              34.8089384
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002812",
+            "value": 3347,
+            "name": "Census Tract 28.12; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3347
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2707903,
+              34.8033643
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002813",
+            "value": 2308,
+            "name": "Census Tract 28.13; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2308
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2394089,
+              34.8290723
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002814",
+            "value": 3104,
+            "name": "Census Tract 28.14; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3104
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2148263,
+              34.8281698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002815",
+            "value": 3573,
+            "name": "Census Tract 28.15; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3573
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2426257,
+              34.801832
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002817",
+            "value": 2140,
+            "name": "Census Tract 28.17; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2140
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.289775,
+              34.8718376
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002818",
+            "value": 1763,
+            "name": "Census Tract 28.18; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1763
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2676745,
+              34.8657732
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002819",
+            "value": 2602,
+            "name": "Census Tract 28.19; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2602
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2710483,
+              34.8331308
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002820",
+            "value": 1272,
+            "name": "Census Tract 28.20; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1272
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.250626,
+              34.8534606
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002821",
+            "value": 2813,
+            "name": "Census Tract 28.21; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2813
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.19376,
+              34.7934968
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002822",
+            "value": 3264,
+            "name": "Census Tract 28.22; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3264
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1894319,
+              34.8063365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002901",
+            "value": 3500,
+            "name": "Census Tract 29.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3463323,
+              34.7817687
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002903",
+            "value": 4015,
+            "name": "Census Tract 29.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4015
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2930949,
+              34.7786862
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002904",
+            "value": 3388,
+            "name": "Census Tract 29.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3388
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3265895,
+              34.776337
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002905",
+            "value": 2767,
+            "name": "Census Tract 29.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2767
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3138361,
+              34.754983
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003005",
+            "value": 1675,
+            "name": "Census Tract 30.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1675
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.26321,
+              34.737477
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003008",
+            "value": 3732,
+            "name": "Census Tract 30.08; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3732
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2428294,
+              34.7805829
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003009",
+            "value": 4222,
+            "name": "Census Tract 30.09; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4222
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.1907465,
+              34.7591297
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003010",
+            "value": 4358,
+            "name": "Census Tract 30.10; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4358
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2483519,
+              34.7565425
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003011",
+            "value": 3155,
+            "name": "Census Tract 30.11; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3155
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2343584,
+              34.7276009
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003012",
+            "value": 3433,
+            "name": "Census Tract 30.12; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3433
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2726323,
+              34.7255467
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003013",
+            "value": 4537,
+            "name": "Census Tract 30.13; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4537
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2611454,
+              34.7024177
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003014",
+            "value": 2901,
+            "name": "Census Tract 30.14; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2901
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3001522,
+              34.7353021
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003016",
+            "value": 2799,
+            "name": "Census Tract 30.16; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2799
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2864481,
+              34.680595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003017",
+            "value": 2564,
+            "name": "Census Tract 30.17; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2564
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2906471,
+              34.7134608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003101",
+            "value": 3857,
+            "name": "Census Tract 31.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3857
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2058003,
+              34.7061612
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 1328,
+            "name": "Census Tract 31.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1328
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2377578,
+              34.6651538
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003104",
+            "value": 1556,
+            "name": "Census Tract 31.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1556
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2591391,
+              34.6140955
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 1428,
+            "name": "Census Tract 32.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1428
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.330282,
+              34.5539256
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 1135,
+            "name": "Census Tract 32.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1135
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3735258,
+              34.6408427
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 983,
+            "name": "Census Tract 32.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 983
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3254022,
+              34.6180638
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003301",
+            "value": 3194,
+            "name": "Census Tract 33.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3194
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4424299,
+              34.6827071
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003303",
+            "value": 2661,
+            "name": "Census Tract 33.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2661
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3947947,
+              34.6974078
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003304",
+            "value": 4290,
+            "name": "Census Tract 33.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 4290
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3358467,
+              34.7046357
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003401",
+            "value": 453,
+            "name": "Census Tract 34.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 453
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3736859,
+              34.750223
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003500",
+            "value": 1119,
+            "name": "Census Tract 35; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1119
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4334269,
+              34.7625524
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003601",
+            "value": 3150,
+            "name": "Census Tract 36.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3150
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4634583,
+              34.8251981
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003602",
+            "value": 1030,
+            "name": "Census Tract 36.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1030
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4447154,
+              34.7975847
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003701",
+            "value": 3080,
+            "name": "Census Tract 37.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 3080
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4821686,
+              34.9104678
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003704",
+            "value": 1994,
+            "name": "Census Tract 37.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1994
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4524775,
+              34.8683522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003705",
+            "value": 1078,
+            "name": "Census Tract 37.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1078
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4707319,
+              34.8532115
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003706",
+            "value": 1336,
+            "name": "Census Tract 37.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1336
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4550839,
+              34.882033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003707",
+            "value": 1749,
+            "name": "Census Tract 37.07; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1749
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4551226,
+              34.8974836
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003802",
+            "value": 2452,
+            "name": "Census Tract 38.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2452
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4133304,
+              34.9190242
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003803",
+            "value": 2126,
+            "name": "Census Tract 38.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2126
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4480249,
+              34.9341533
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003804",
+            "value": 1344,
+            "name": "Census Tract 38.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1344
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4414551,
+              34.9094511
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003902",
+            "value": 1937,
+            "name": "Census Tract 39.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1937
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3881885,
+              34.9903048
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003903",
+            "value": 2251,
+            "name": "Census Tract 39.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 2251
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4838283,
+              34.9885777
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003905",
+            "value": 1937,
+            "name": "Census Tract 39.05; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1937
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4423337,
+              34.9915958
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003906",
+            "value": 1051,
+            "name": "Census Tract 39.06; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1051
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4505607,
+              34.9569698
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004001",
+            "value": 1526,
+            "name": "Census Tract 40.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1526
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.372437,
+              35.0360455
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004003",
+            "value": 1719,
+            "name": "Census Tract 40.03; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1719
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4224582,
+              35.0724555
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004004",
+            "value": 602,
+            "name": "Census Tract 40.04; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 602
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4442568,
+              35.1359117
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004101",
+            "value": 1549,
+            "name": "Census Tract 41.01; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1549
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5090919,
+              35.0334389
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004102",
+            "value": 517,
+            "name": "Census Tract 41.02; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 517
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6069444,
+              35.0920167
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004200",
+            "value": 1213,
+            "name": "Census Tract 42; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1213
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.389697,
+              34.8350776
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004300",
+            "value": 1962,
+            "name": "Census Tract 43; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1962
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.375449,
+              34.8413428
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "004400",
+            "value": 1266,
+            "name": "Census Tract 44; Greenville County; South Carolina",
+            "layer": "jobs",
+            "intensity": 1266
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3537028,
+              34.8482854
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

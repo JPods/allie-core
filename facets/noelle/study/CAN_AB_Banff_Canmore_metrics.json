@@ -1,0 +1,45 @@
+{
+  "filename": "CAN_AB_Banff_Canmore.jpd",
+  "name": "CAN_AB_Banff_Canmore",
+  "state": "",
+  "city": "CAN AB Banff Canmore",
+  "analyzed_at": "2026-07-12T01:28:41Z",
+  "topology": {
+    "total_structures": 25,
+    "stations": 25,
+    "traffic_circles": 0,
+    "station_to_circle_ratio": 25.0,
+    "lines": 398,
+    "cps_total": 50,
+    "cps_connected": 48,
+    "cps_open": 2,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      25
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 10.6,
+    "extent_ew_mi": 67.6,
+    "area_sq_mi": 716.4,
+    "nn_avg_mi": 2.58,
+    "nn_min_mi": 0.97,
+    "nn_max_mi": 10.31,
+    "density_per_sq_mi": 0.0
+  },
+  "center": {
+    "lat": 51.1248,
+    "lon": -114.7899
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 0,
+    "completeness": 50
+  }
+}

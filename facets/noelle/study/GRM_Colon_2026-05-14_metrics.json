@@ -1,0 +1,45 @@
+{
+  "filename": "GRM_Colon_2026-05-14.jpd",
+  "name": "GRM_Colon_2026-05-14",
+  "state": "",
+  "city": "GRM Colon 2026-05-14",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 127,
+    "stations": 81,
+    "traffic_circles": 46,
+    "station_to_circle_ratio": 1.8,
+    "lines": 2180,
+    "cps_total": 346,
+    "cps_connected": 310,
+    "cps_open": 36,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      127
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 6.2,
+    "extent_ew_mi": 7.0,
+    "area_sq_mi": 43.2,
+    "nn_avg_mi": 0.6,
+    "nn_min_mi": 0.35,
+    "nn_max_mi": 0.95,
+    "density_per_sq_mi": 2.9
+  },
+  "center": {
+    "lat": 53.557,
+    "lon": 9.9784
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 50,
+    "completeness": 100
+  }
+}

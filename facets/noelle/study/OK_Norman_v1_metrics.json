@@ -1,0 +1,49 @@
+{
+  "filename": "OK_Norman_v1.jpd",
+  "name": "OK_Norman_v1",
+  "state": "OK",
+  "city": "Norman v1",
+  "analyzed_at": "2026-07-12T01:28:45Z",
+  "topology": {
+    "total_structures": 81,
+    "stations": 59,
+    "traffic_circles": 22,
+    "station_to_circle_ratio": 2.7,
+    "lines": 1352,
+    "cps_total": 206,
+    "cps_connected": 177,
+    "cps_open": 29,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      81
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 8.3,
+    "extent_ew_mi": 6.1,
+    "area_sq_mi": 51.0,
+    "nn_avg_mi": 0.49,
+    "nn_min_mi": 0.17,
+    "nn_max_mi": 0.67,
+    "density_per_sq_mi": 1.6
+  },
+  "center": {
+    "lat": 35.2169,
+    "lon": -97.4442
+  },
+  "overlays": {
+    "city_label": "Norman, Cleveland County, Oklahoma",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 49,
+    "completeness": 100
+  }
+}

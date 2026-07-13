@@ -1,0 +1,64 @@
+{
+  "filename": "Noelle_Tulsa_2026-06-05.jpd",
+  "name": "Noelle_Tulsa_2026-06-05",
+  "state": "",
+  "city": "Noelle Tulsa 2026-06-05",
+  "analyzed_at": "2026-07-12T01:28:44Z",
+  "topology": {
+    "total_structures": 267,
+    "stations": 267,
+    "traffic_circles": 0,
+    "station_to_circle_ratio": 267.0,
+    "lines": 3738,
+    "cps_total": 534,
+    "cps_connected": 0,
+    "cps_open": 534,
+    "orphans": 267,
+    "orphan_ids": [
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7",
+      "s8",
+      "s9",
+      "s10"
+    ],
+    "connected_components": 267,
+    "component_sizes": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 24.0,
+    "extent_ew_mi": 20.7,
+    "area_sq_mi": 497.9,
+    "nn_avg_mi": 0.78,
+    "nn_min_mi": 0.35,
+    "nn_max_mi": 2.68,
+    "density_per_sq_mi": 0.5
+  },
+  "center": {
+    "lat": 36.1132,
+    "lon": -95.9062
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "aadt",
+      "accidents",
+      "crash_density"
+    ]
+  },
+  "quality": {
+    "connectivity": 0,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

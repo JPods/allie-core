@@ -1,0 +1,45 @@
+{
+  "filename": "OK_OKC_2026-05-15.jpd",
+  "name": "OK_OKC_2026-05-15",
+  "state": "OK",
+  "city": "OKC 2026-05-15",
+  "analyzed_at": "2026-07-12T01:28:45Z",
+  "topology": {
+    "total_structures": 318,
+    "stations": 207,
+    "traffic_circles": 111,
+    "station_to_circle_ratio": 1.9,
+    "lines": 5490,
+    "cps_total": 858,
+    "cps_connected": 816,
+    "cps_open": 42,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      318
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 12.0,
+    "extent_ew_mi": 8.0,
+    "area_sq_mi": 95.5,
+    "nn_avg_mi": 0.69,
+    "nn_min_mi": 0.52,
+    "nn_max_mi": 0.79,
+    "density_per_sq_mi": 3.3
+  },
+  "center": {
+    "lat": 35.4775,
+    "lon": -97.5284
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 81,
+    "completeness": 100
+  }
+}

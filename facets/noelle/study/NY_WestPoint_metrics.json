@@ -1,0 +1,45 @@
+{
+  "filename": "NY_WestPoint.jpd",
+  "name": "NY_WestPoint",
+  "state": "NY",
+  "city": "WestPoint",
+  "analyzed_at": "2026-07-12T01:28:44Z",
+  "topology": {
+    "total_structures": 16,
+    "stations": 10,
+    "traffic_circles": 6,
+    "station_to_circle_ratio": 1.7,
+    "lines": 266,
+    "cps_total": 44,
+    "cps_connected": 30,
+    "cps_open": 14,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      16
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 2.4,
+    "extent_ew_mi": 1.4,
+    "area_sq_mi": 3.4,
+    "nn_avg_mi": 0.44,
+    "nn_min_mi": 0.32,
+    "nn_max_mi": 0.51,
+    "density_per_sq_mi": 4.7
+  },
+  "center": {
+    "lat": 41.3879,
+    "lon": -73.9659
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 78,
+    "completeness": 32
+  }
+}

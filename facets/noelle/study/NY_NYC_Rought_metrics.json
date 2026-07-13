@@ -1,0 +1,45 @@
+{
+  "filename": "NY_NYC_Rought.jpd",
+  "name": "NY_NYC_Rought",
+  "state": "NY",
+  "city": "NYC Rought",
+  "analyzed_at": "2026-07-12T01:28:44Z",
+  "topology": {
+    "total_structures": 325,
+    "stations": 211,
+    "traffic_circles": 114,
+    "station_to_circle_ratio": 1.9,
+    "lines": 5612,
+    "cps_total": 878,
+    "cps_connected": 834,
+    "cps_open": 44,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      325
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 10.6,
+    "extent_ew_mi": 10.0,
+    "area_sq_mi": 105.5,
+    "nn_avg_mi": 0.69,
+    "nn_min_mi": 0.3,
+    "nn_max_mi": 0.95,
+    "density_per_sq_mi": 3.1
+  },
+  "center": {
+    "lat": 40.7192,
+    "lon": -73.9137
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 54,
+    "completeness": 100
+  }
+}

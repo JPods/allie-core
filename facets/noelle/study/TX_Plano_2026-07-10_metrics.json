@@ -1,0 +1,45 @@
+{
+  "filename": "TX_Plano_2026-07-10.jpd",
+  "name": "TX_Plano_2026-07-10",
+  "state": "TX",
+  "city": "Plano 2026-07-10",
+  "analyzed_at": "2026-07-12T01:28:48Z",
+  "topology": {
+    "total_structures": 214,
+    "stations": 167,
+    "traffic_circles": 47,
+    "station_to_circle_ratio": 3.6,
+    "lines": 3546,
+    "cps_total": 522,
+    "cps_connected": 456,
+    "cps_open": 66,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      214
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 17.7,
+    "extent_ew_mi": 18.7,
+    "area_sq_mi": 331.2,
+    "nn_avg_mi": 0.5,
+    "nn_min_mi": 0.18,
+    "nn_max_mi": 0.99,
+    "density_per_sq_mi": 0.6
+  },
+  "center": {
+    "lat": 37.4977,
+    "lon": -122.246
+  },
+  "overlays": {
+    "city_label": "Redwood City, San Mateo County, California",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 20,
+    "completeness": 100
+  }
+}

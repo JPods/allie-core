@@ -1,0 +1,49 @@
+{
+  "filename": "TX_Denton_County_2026-07-12.jpd",
+  "name": "TX_Denton_County_2026-07-12",
+  "state": "TX",
+  "city": "Denton County 2026-07-12",
+  "analyzed_at": "2026-07-12T01:28:48Z",
+  "topology": {
+    "total_structures": 94,
+    "stations": 77,
+    "traffic_circles": 17,
+    "station_to_circle_ratio": 4.5,
+    "lines": 1550,
+    "cps_total": 222,
+    "cps_connected": 200,
+    "cps_open": 22,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      94
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 8.7,
+    "extent_ew_mi": 8.9,
+    "area_sq_mi": 77.1,
+    "nn_avg_mi": 0.6,
+    "nn_min_mi": 0.5,
+    "nn_max_mi": 1.5,
+    "density_per_sq_mi": 1.2
+  },
+  "center": {
+    "lat": 33.2002,
+    "lon": -97.1135
+  },
+  "overlays": {
+    "city_label": "Denton County, Texas, United States",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 16,
+    "completeness": 100
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "filename": "OK_Tulsa_2026-07-08.jpd",
+  "name": "OK_Tulsa_2026-07-08",
+  "state": "OK",
+  "city": "Tulsa 2026-07-08",
+  "analyzed_at": "2026-07-12T01:28:46Z",
+  "topology": {
+    "total_structures": 375,
+    "stations": 288,
+    "traffic_circles": 87,
+    "station_to_circle_ratio": 3.3,
+    "lines": 6296,
+    "cps_total": 924,
+    "cps_connected": 874,
+    "cps_open": 50,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      375
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 14.0,
+    "extent_ew_mi": 10.0,
+    "area_sq_mi": 139.3,
+    "nn_avg_mi": 0.55,
+    "nn_min_mi": 0.07,
+    "nn_max_mi": 0.71,
+    "density_per_sq_mi": 2.7
+  },
+  "center": {
+    "lat": 36.1038,
+    "lon": -95.9179
+  },
+  "overlays": {
+    "city_label": "Tulsa, Oklahoma, United States",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 43,
+    "completeness": 100
+  }
+}

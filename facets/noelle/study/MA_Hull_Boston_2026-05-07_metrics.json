@@ -1,0 +1,45 @@
+{
+  "filename": "MA_Hull_Boston_2026-05-07.jpd",
+  "name": "MA_Hull_Boston_2026-05-07",
+  "state": "MA",
+  "city": "Hull Boston 2026-05-07",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 23,
+    "stations": 21,
+    "traffic_circles": 2,
+    "station_to_circle_ratio": 10.5,
+    "lines": 370,
+    "cps_total": 50,
+    "cps_connected": 44,
+    "cps_open": 6,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      23
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 8.4,
+    "extent_ew_mi": 10.5,
+    "area_sq_mi": 88.3,
+    "nn_avg_mi": 0.89,
+    "nn_min_mi": 0.38,
+    "nn_max_mi": 1.38,
+    "density_per_sq_mi": 0.3
+  },
+  "center": {
+    "lat": 42.2929,
+    "lon": -70.9672
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 44,
+    "completeness": 46
+  }
+}

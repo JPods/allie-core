@@ -1,0 +1,52 @@
+{
+  "filename": "SC_Greenville_Noelle_v4_designer.jpd",
+  "name": "SC_Greenville_Noelle_v4_designer",
+  "state": "SC",
+  "city": "Greenville Noelle v4 designer",
+  "analyzed_at": "2026-07-12T01:28:46Z",
+  "topology": {
+    "total_structures": 149,
+    "stations": 106,
+    "traffic_circles": 43,
+    "station_to_circle_ratio": 2.5,
+    "lines": 2504,
+    "cps_total": 384,
+    "cps_connected": 334,
+    "cps_open": 50,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      149
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 10.5,
+    "extent_ew_mi": 15.1,
+    "area_sq_mi": 158.7,
+    "nn_avg_mi": 0.65,
+    "nn_min_mi": 0.13,
+    "nn_max_mi": 2.69,
+    "density_per_sq_mi": 0.9
+  },
+  "center": {
+    "lat": 34.8543,
+    "lon": -82.3602
+  },
+  "overlays": {
+    "city_label": "Greenville, Greenville County, South Carolina",
+    "files_loaded": [
+      "aadt",
+      "accidents",
+      "crash_density",
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

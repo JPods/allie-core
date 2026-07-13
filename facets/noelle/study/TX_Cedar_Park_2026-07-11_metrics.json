@@ -1,0 +1,49 @@
+{
+  "filename": "TX_Cedar_Park_2026-07-11.jpd",
+  "name": "TX_Cedar_Park_2026-07-11",
+  "state": "TX",
+  "city": "Cedar Park 2026-07-11",
+  "analyzed_at": "2026-07-12T01:28:47Z",
+  "topology": {
+    "total_structures": 94,
+    "stations": 71,
+    "traffic_circles": 23,
+    "station_to_circle_ratio": 3.1,
+    "lines": 1572,
+    "cps_total": 234,
+    "cps_connected": 210,
+    "cps_open": 24,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      94
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 6.9,
+    "extent_ew_mi": 6.0,
+    "area_sq_mi": 41.3,
+    "nn_avg_mi": 0.53,
+    "nn_min_mi": 0.4,
+    "nn_max_mi": 0.71,
+    "density_per_sq_mi": 2.3
+  },
+  "center": {
+    "lat": 30.5126,
+    "lon": -97.8141
+  },
+  "overlays": {
+    "city_label": "Cedar Park, Williamson County, Texas",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 71,
+    "completeness": 100
+  }
+}

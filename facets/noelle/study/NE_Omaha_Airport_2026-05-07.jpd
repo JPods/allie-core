@@ -1,0 +1,4499 @@
+{
+  "format": "jpd",
+  "version": 2,
+  "network_id": "grid",
+  "saved_at": 1778198664736,
+  "settings": {
+    "accInG": 1.0,
+    "deccInG": 1.0,
+    "maxVelocityInKMPH": 100,
+    "podLen": 3,
+    "minHeadwaySec": 0.25,
+    "disembarkingTimeInSec": 20,
+    "embarkingTimeInSec": 20,
+    "ticketingTimeInSec": 30,
+    "stationEntryTimeInSec": 40,
+    "stationExitTimeInSec": 40,
+    "walkingSpeedKmh": 4.8,
+    "walkToStationSec": 300,
+    "walkFromStationSec": 300,
+    "timeResolutionPerSec": 9,
+    "podsPerStation": 8,
+    "graceDistance": 1,
+    "simSpeedMultiplier": 360,
+    "stationLabelSize": 3
+  },
+  "switches": [
+    {
+      "id": "s113.guideway_near_out_end",
+      "lat": 41.29396941336913,
+      "lon": -95.90090381667298
+    },
+    {
+      "id": "s113.guideway_near_in_end",
+      "lat": 41.293340595546645,
+      "lon": -95.90090381707635
+    },
+    {
+      "id": "s113.guideway_far_in_end",
+      "lat": 41.29396941336913,
+      "lon": -95.90098751023135
+    },
+    {
+      "id": "s113.guideway_far_out_end",
+      "lat": 41.293340595546645,
+      "lon": -95.90098750982797
+    },
+    {
+      "id": "s113.platform_out_end",
+      "lat": 41.29378076802239,
+      "lon": -95.90082012347764
+    },
+    {
+      "id": "s113.platform_in_end",
+      "lat": 41.29352924089339,
+      "lon": -95.90082012396171
+    },
+    {
+      "id": "s113.uturn_near_far_mid",
+      "lat": 41.29396941336913,
+      "lon": -95.90094566345216
+    },
+    {
+      "id": "s113.uturn_far_near_mid",
+      "lat": 41.293340595546645,
+      "lon": -95.90094566345216
+    },
+    {
+      "id": "s113.guideway_near_out_tip",
+      "lat": 41.29405924448663,
+      "lon": -95.90090381661535
+    },
+    {
+      "id": "s113.guideway_far_in_tip",
+      "lat": 41.29405924448663,
+      "lon": -95.90098751028897
+    },
+    {
+      "id": "s113.guideway_near_in_tip",
+      "lat": 41.293250764429146,
+      "lon": -95.90090381713398
+    },
+    {
+      "id": "s113.guideway_far_out_tip",
+      "lat": 41.293250764429146,
+      "lon": -95.90098750977035
+    },
+    {
+      "id": "s114.guideway_near_out_end",
+      "lat": 41.29977461768675,
+      "lon": -95.9007321515714
+    },
+    {
+      "id": "s114.guideway_near_in_end",
+      "lat": 41.29914579986426,
+      "lon": -95.90073215197489
+    },
+    {
+      "id": "s114.guideway_far_in_end",
+      "lat": 41.29977461768675,
+      "lon": -95.90081585257899
+    },
+    {
+      "id": "s114.guideway_far_out_end",
+      "lat": 41.29914579986426,
+      "lon": -95.9008158521755
+    },
+    {
+      "id": "s114.platform_out_end",
+      "lat": 41.299585972340005,
+      "lon": -95.90064845092697
+    },
+    {
+      "id": "s114.platform_in_end",
+      "lat": 41.29933444521101,
+      "lon": -95.90064845141116
+    },
+    {
+      "id": "s114.uturn_near_far_mid",
+      "lat": 41.29977461768675,
+      "lon": -95.9007740020752
+    },
+    {
+      "id": "s114.uturn_far_near_mid",
+      "lat": 41.29914579986426,
+      "lon": -95.9007740020752
+    },
+    {
+      "id": "s114.guideway_near_out_tip",
+      "lat": 41.29986444880425,
+      "lon": -95.90073215151375
+    },
+    {
+      "id": "s114.guideway_far_in_tip",
+      "lat": 41.29986444880425,
+      "lon": -95.90081585263664
+    },
+    {
+      "id": "s114.guideway_near_in_tip",
+      "lat": 41.299055968746764,
+      "lon": -95.90073215203255
+    },
+    {
+      "id": "s114.guideway_far_out_tip",
+      "lat": 41.299055968746764,
+      "lon": -95.90081585211784
+    },
+    {
+      "id": "s115.guideway_near_out_end",
+      "lat": 41.30540739545781,
+      "lon": -95.906601621876
+    },
+    {
+      "id": "s115.guideway_near_in_end",
+      "lat": 41.30585203680423,
+      "lon": -95.90719353092256
+    },
+    {
+      "id": "s115.guideway_far_in_end",
+      "lat": 41.30545185959246,
+      "lon": -95.90654243119334
+    },
+    {
+      "id": "s115.guideway_far_out_end",
+      "lat": 41.30589650093888,
+      "lon": -95.90713433983628
+    },
+    {
+      "id": "s115.platform_out_end",
+      "lat": 41.3054963237271,
+      "lon": -95.90683838539373
+    },
+    {
+      "id": "s115.platform_in_end",
+      "lat": 41.30567418026567,
+      "lon": -95.90707514917379
+    },
+    {
+      "id": "s115.uturn_near_far_mid",
+      "lat": 41.305429627525136,
+      "lon": -95.90657202653468
+    },
+    {
+      "id": "s115.uturn_far_near_mid",
+      "lat": 41.305874268871555,
+      "lon": -95.90716393537942
+    },
+    {
+      "id": "s115.guideway_near_out_tip",
+      "lat": 41.30534387526547,
+      "lon": -95.90651706344077
+    },
+    {
+      "id": "s115.guideway_far_in_tip",
+      "lat": 41.30538833940012,
+      "lon": -95.90645787281578
+    },
+    {
+      "id": "s115.guideway_near_in_tip",
+      "lat": 41.305915556996574,
+      "lon": -95.90727808935779
+    },
+    {
+      "id": "s115.guideway_far_out_tip",
+      "lat": 41.30596002113122,
+      "lon": -95.90721889821384
+    },
+    {
+      "id": "s117.guideway_near_out_end",
+      "lat": 41.26776925671835,
+      "lon": -95.94254148543206
+    },
+    {
+      "id": "s117.guideway_near_in_end",
+      "lat": 41.26776925671835,
+      "lon": -95.94337808549079
+    },
+    {
+      "id": "s117.guideway_far_in_end",
+      "lat": 41.26783213850061,
+      "lon": -95.94254148543206
+    },
+    {
+      "id": "s117.guideway_far_out_end",
+      "lat": 41.26783213850061,
+      "lon": -95.94337808549079
+    },
+    {
+      "id": "s117.platform_out_end",
+      "lat": 41.267706374936104,
+      "lon": -95.94279246544968
+    },
+    {
+      "id": "s117.platform_in_end",
+      "lat": 41.267706374936104,
+      "lon": -95.94312710547317
+    },
+    {
+      "id": "s117.uturn_near_far_mid",
+      "lat": 41.26780069760948,
+      "lon": -95.94254148543206
+    },
+    {
+      "id": "s117.uturn_far_near_mid",
+      "lat": 41.26780069760948,
+      "lon": -95.94337808549079
+    },
+    {
+      "id": "s117.guideway_near_out_tip",
+      "lat": 41.26776925671835,
+      "lon": -95.94242197113796
+    },
+    {
+      "id": "s117.guideway_far_in_tip",
+      "lat": 41.26783213850061,
+      "lon": -95.94242197113796
+    },
+    {
+      "id": "s117.guideway_near_in_tip",
+      "lat": 41.26776925671835,
+      "lon": -95.94349759978489
+    },
+    {
+      "id": "s117.guideway_far_out_tip",
+      "lat": 41.26783213850061,
+      "lon": -95.94349759978489
+    },
+    {
+      "id": "c67.A0_div",
+      "lat": 41.268747865143304,
+      "lon": -95.92941772908776
+    },
+    {
+      "id": "c67.A0_merge",
+      "lat": 41.268747865143304,
+      "lon": -95.92943565649193
+    },
+    {
+      "id": "c67.A0_out",
+      "lat": 41.26888261181955,
+      "lon": -95.92941772906926
+    },
+    {
+      "id": "c67.A0_in",
+      "lat": 41.26888261181955,
+      "lon": -95.92943565651044
+    },
+    {
+      "id": "c67.A3_div",
+      "lat": 41.26868722913899,
+      "lon": -95.92951632971827
+    },
+    {
+      "id": "c67.A3_merge",
+      "lat": 41.268673754471365,
+      "lon": -95.92951632971827
+    },
+    {
+      "id": "c67.A3_out",
+      "lat": 41.26868722913899,
+      "lon": -95.9296956035751
+    },
+    {
+      "id": "c67.A3_in",
+      "lat": 41.268673754471365,
+      "lon": -95.9296956035751
+    },
+    {
+      "id": "c67.A2_div",
+      "lat": 41.26861311846705,
+      "lon": -95.92943565647344
+    },
+    {
+      "id": "c67.A2_merge",
+      "lat": 41.26861311846705,
+      "lon": -95.92941772910625
+    },
+    {
+      "id": "c67.A2_out",
+      "lat": 41.268478371790806,
+      "lon": -95.92943565645494
+    },
+    {
+      "id": "c67.A2_in",
+      "lat": 41.268478371790806,
+      "lon": -95.92941772912475
+    },
+    {
+      "id": "c67.A1_div",
+      "lat": 41.268673754471365,
+      "lon": -95.92933705586142
+    },
+    {
+      "id": "c67.A1_merge",
+      "lat": 41.26868722913899,
+      "lon": -95.92933705586142
+    },
+    {
+      "id": "c67.A1_out",
+      "lat": 41.268673754471365,
+      "lon": -95.9291577820046
+    },
+    {
+      "id": "c67.A1_in",
+      "lat": 41.26868722913899,
+      "lon": -95.9291577820046
+    },
+    {
+      "id": "s135.guideway_near_out_end",
+      "lat": 41.26782431906562,
+      "lon": -95.93231892016946
+    },
+    {
+      "id": "s135.guideway_near_in_end",
+      "lat": 41.26782431906562,
+      "lon": -95.93315552093371
+    },
+    {
+      "id": "s135.guideway_far_in_end",
+      "lat": 41.26788720084787,
+      "lon": -95.93231892016946
+    },
+    {
+      "id": "s135.guideway_far_out_end",
+      "lat": 41.26788720084787,
+      "lon": -95.93315552093371
+    },
+    {
+      "id": "s135.platform_out_end",
+      "lat": 41.26776143728337,
+      "lon": -95.93256990039873
+    },
+    {
+      "id": "s135.platform_in_end",
+      "lat": 41.26776143728337,
+      "lon": -95.93290454070444
+    },
+    {
+      "id": "s135.uturn_near_far_mid",
+      "lat": 41.267855759956745,
+      "lon": -95.93231892016946
+    },
+    {
+      "id": "s135.uturn_far_near_mid",
+      "lat": 41.267855759956745,
+      "lon": -95.93315552093371
+    },
+    {
+      "id": "s135.guideway_near_out_tip",
+      "lat": 41.26782431906562,
+      "lon": -95.93219940577457
+    },
+    {
+      "id": "s135.guideway_far_in_tip",
+      "lat": 41.26788720084787,
+      "lon": -95.93219940577457
+    },
+    {
+      "id": "s135.guideway_near_in_tip",
+      "lat": 41.26782431906562,
+      "lon": -95.9332750353286
+    },
+    {
+      "id": "s135.guideway_far_out_tip",
+      "lat": 41.26788720084787,
+      "lon": -95.9332750353286
+    },
+    {
+      "id": "s136.guideway_near_out_end",
+      "lat": 41.25732894188796,
+      "lon": -95.92909215758772
+    },
+    {
+      "id": "s136.guideway_near_in_end",
+      "lat": 41.256700124065475,
+      "lon": -95.92909215799037
+    },
+    {
+      "id": "s136.guideway_far_in_end",
+      "lat": 41.25732894188796,
+      "lon": -95.92917580417955
+    },
+    {
+      "id": "s136.guideway_far_out_end",
+      "lat": 41.256700124065475,
+      "lon": -95.9291758037769
+    },
+    {
+      "id": "s136.platform_out_end",
+      "lat": 41.257140296541216,
+      "lon": -95.92900851135828
+    },
+    {
+      "id": "s136.platform_in_end",
+      "lat": 41.25688876941222,
+      "lon": -95.92900851184145
+    },
+    {
+      "id": "s136.uturn_near_far_mid",
+      "lat": 41.25732894188796,
+      "lon": -95.92913398088363
+    },
+    {
+      "id": "s136.uturn_far_near_mid",
+      "lat": 41.256700124065475,
+      "lon": -95.92913398088363
+    },
+    {
+      "id": "s136.guideway_near_out_tip",
+      "lat": 41.25741877300546,
+      "lon": -95.9290921575302
+    },
+    {
+      "id": "s136.guideway_far_in_tip",
+      "lat": 41.25741877300546,
+      "lon": -95.92917580423706
+    },
+    {
+      "id": "s136.guideway_near_in_tip",
+      "lat": 41.256610292947975,
+      "lon": -95.92909215804788
+    },
+    {
+      "id": "s136.guideway_far_out_tip",
+      "lat": 41.256610292947975,
+      "lon": -95.92917580371939
+    },
+    {
+      "id": "s142.guideway_near_out_end",
+      "lat": 41.278363132316926,
+      "lon": -95.91429281948453
+    },
+    {
+      "id": "s142.guideway_near_in_end",
+      "lat": 41.27791849097051,
+      "lon": -95.91488447917081
+    },
+    {
+      "id": "s142.guideway_far_in_end",
+      "lat": 41.27840759645157,
+      "lon": -95.91435198563454
+    },
+    {
+      "id": "s142.guideway_far_out_end",
+      "lat": 41.27796295510515,
+      "lon": -95.91494364491774
+    },
+    {
+      "id": "s142.platform_out_end",
+      "lat": 41.27818527577836,
+      "lon": -95.91441115136134
+    },
+    {
+      "id": "s142.platform_in_end",
+      "lat": 41.27800741923979,
+      "lon": -95.91464781539706
+    },
+    {
+      "id": "s142.uturn_near_far_mid",
+      "lat": 41.27838536438425,
+      "lon": -95.91432240255953
+    },
+    {
+      "id": "s142.uturn_far_near_mid",
+      "lat": 41.27794072303783,
+      "lon": -95.91491406204428
+    },
+    {
+      "id": "s142.guideway_near_out_tip",
+      "lat": 41.27842665250927,
+      "lon": -95.91420829667221
+    },
+    {
+      "id": "s142.guideway_far_in_tip",
+      "lat": 41.278471116643914,
+      "lon": -95.9142674628798
+    },
+    {
+      "id": "s142.guideway_near_in_tip",
+      "lat": 41.277854970778165,
+      "lon": -95.91496900198312
+    },
+    {
+      "id": "s142.guideway_far_out_tip",
+      "lat": 41.27789943491281,
+      "lon": -95.91502816767247
+    },
+    {
+      "id": "s143.guideway_near_out_end",
+      "lat": 41.28258258192239,
+      "lon": -95.91111883969482
+    },
+    {
+      "id": "s143.guideway_near_in_end",
+      "lat": 41.28213794057597,
+      "lon": -95.91171053763452
+    },
+    {
+      "id": "s143.guideway_far_in_end",
+      "lat": 41.28262704605704,
+      "lon": -95.91117800967022
+    },
+    {
+      "id": "s143.guideway_far_out_end",
+      "lat": 41.28218240471062,
+      "lon": -95.91176970720676
+    },
+    {
+      "id": "s143.platform_out_end",
+      "lat": 41.28240472538383,
+      "lon": -95.9112371792223
+    },
+    {
+      "id": "s143.platform_in_end",
+      "lat": 41.28222686884526,
+      "lon": -95.91147385855943
+    },
+    {
+      "id": "s143.uturn_near_far_mid",
+      "lat": 41.282604813989714,
+      "lon": -95.91114842468252
+    },
+    {
+      "id": "s143.uturn_far_near_mid",
+      "lat": 41.282160172643295,
+      "lon": -95.91174012242064
+    },
+    {
+      "id": "s143.guideway_near_out_tip",
+      "lat": 41.28264610211473,
+      "lon": -95.91103431141774
+    },
+    {
+      "id": "s143.guideway_far_in_tip",
+      "lat": 41.28269056624938,
+      "lon": -95.91109348145072
+    },
+    {
+      "id": "s143.guideway_near_in_tip",
+      "lat": 41.28207442038363,
+      "lon": -95.9117950659116
+    },
+    {
+      "id": "s143.guideway_far_out_tip",
+      "lat": 41.282118884518276,
+      "lon": -95.91185423542626
+    },
+    {
+      "id": "s145.guideway_near_out_end",
+      "lat": 41.270796583524,
+      "lon": -95.92261732197042
+    },
+    {
+      "id": "s145.guideway_near_in_end",
+      "lat": 41.270351942177584,
+      "lon": -95.92320891307895
+    },
+    {
+      "id": "s145.guideway_far_in_end",
+      "lat": 41.27084104765865,
+      "lon": -95.92267648126258
+    },
+    {
+      "id": "s145.guideway_far_out_end",
+      "lat": 41.27039640631223,
+      "lon": -95.92326807196821
+    },
+    {
+      "id": "s145.platform_out_end",
+      "lat": 41.27061872698544,
+      "lon": -95.92273564013168
+    },
+    {
+      "id": "s145.platform_in_end",
+      "lat": 41.27044087044687,
+      "lon": -95.92297227673627
+    },
+    {
+      "id": "s145.uturn_near_far_mid",
+      "lat": 41.270818815591326,
+      "lon": -95.9226469016165
+    },
+    {
+      "id": "s145.uturn_far_near_mid",
+      "lat": 41.27037417424491,
+      "lon": -95.92323849252358
+    },
+    {
+      "id": "s145.guideway_near_out_tip",
+      "lat": 41.270860103716345,
+      "lon": -95.92253280895491
+    },
+    {
+      "id": "s145.guideway_far_in_tip",
+      "lat": 41.27090456785099,
+      "lon": -95.92259196830463
+    },
+    {
+      "id": "s145.guideway_near_in_tip",
+      "lat": 41.27028842198524,
+      "lon": -95.92329342609446
+    },
+    {
+      "id": "s145.guideway_far_out_tip",
+      "lat": 41.27033288611989,
+      "lon": -95.92335258492616
+    },
+    {
+      "id": "s146.guideway_near_out_end",
+      "lat": 41.308419520097694,
+      "lon": -95.9096700566838
+    },
+    {
+      "id": "s146.guideway_near_in_end",
+      "lat": 41.30886416144411,
+      "lon": -95.91026199307534
+    },
+    {
+      "id": "s146.guideway_far_in_end",
+      "lat": 41.30846398423234,
+      "lon": -95.90961086326668
+    },
+    {
+      "id": "s146.guideway_far_out_end",
+      "lat": 41.30890862557876,
+      "lon": -95.91020279925452
+    },
+    {
+      "id": "s146.platform_out_end",
+      "lat": 41.30850844836698,
+      "lon": -95.9099068311395
+    },
+    {
+      "id": "s146.platform_in_end",
+      "lat": 41.30868630490555,
+      "lon": -95.91014360585757
+    },
+    {
+      "id": "s146.uturn_near_far_mid",
+      "lat": 41.30844175216502,
+      "lon": -95.90964045997524
+    },
+    {
+      "id": "s146.uturn_far_near_mid",
+      "lat": 41.308886393511436,
+      "lon": -95.91023239616493
+    },
+    {
+      "id": "s146.guideway_near_out_tip",
+      "lat": 41.30835599990535,
+      "lon": -95.90958549434215
+    },
+    {
+      "id": "s146.guideway_far_in_tip",
+      "lat": 41.30840046404,
+      "lon": -95.9095263009827
+    },
+    {
+      "id": "s146.guideway_near_in_tip",
+      "lat": 41.308927681636455,
+      "lon": -95.91034655541698
+    },
+    {
+      "id": "s146.guideway_far_out_tip",
+      "lat": 41.3089721457711,
+      "lon": -95.9102873615385
+    },
+    {
+      "id": "s147.guideway_near_out_end",
+      "lat": 41.31067603432854,
+      "lon": -95.91142957657794
+    },
+    {
+      "id": "s147.guideway_near_in_end",
+      "lat": 41.31112067567496,
+      "lon": -95.91202153345752
+    },
+    {
+      "id": "s147.guideway_far_in_end",
+      "lat": 41.31072049846318,
+      "lon": -95.91137038111205
+    },
+    {
+      "id": "s147.guideway_far_out_end",
+      "lat": 41.3111651398096,
+      "lon": -95.9119623375879
+    },
+    {
+      "id": "s147.platform_out_end",
+      "lat": 41.31076496259782,
+      "lon": -95.91166635922886
+    },
+    {
+      "id": "s147.platform_in_end",
+      "lat": 41.31094281913639,
+      "lon": -95.91190314214217
+    },
+    {
+      "id": "s147.uturn_near_far_mid",
+      "lat": 41.31069826639586,
+      "lon": -95.911399978845
+    },
+    {
+      "id": "s147.uturn_far_near_mid",
+      "lat": 41.31114290774228,
+      "lon": -95.9119919355227
+    },
+    {
+      "id": "s147.guideway_near_out_tip",
+      "lat": 41.310612514136196,
+      "lon": -95.91134501130945
+    },
+    {
+      "id": "s147.guideway_far_in_tip",
+      "lat": 41.31065697827084,
+      "lon": -95.91128581590122
+    },
+    {
+      "id": "s147.guideway_near_in_tip",
+      "lat": 41.3111841958673,
+      "lon": -95.91210609872603
+    },
+    {
+      "id": "s147.guideway_far_out_tip",
+      "lat": 41.311228660001944,
+      "lon": -95.9120469027987
+    }
+  ],
+  "stations": [
+    {
+      "id": "s113.platform_parking",
+      "lat": 41.29365500445789,
+      "lon": -95.90082012371968
+    },
+    {
+      "id": "s114.platform_parking",
+      "lat": 41.29946020877551,
+      "lon": -95.90064845116906
+    },
+    {
+      "id": "s115.platform_parking",
+      "lat": 41.30558525199638,
+      "lon": -95.90695676728376
+    },
+    {
+      "id": "s117.platform_parking",
+      "lat": 41.267706374936104,
+      "lon": -95.94295978546143
+    },
+    {
+      "id": "s135.platform_parking",
+      "lat": 41.26776143728337,
+      "lon": -95.93273722055159
+    },
+    {
+      "id": "s136.platform_parking",
+      "lat": 41.25701453297672,
+      "lon": -95.92900851159986
+    },
+    {
+      "id": "s142.platform_parking",
+      "lat": 41.27809634750908,
+      "lon": -95.9145294833792
+    },
+    {
+      "id": "s143.platform_parking",
+      "lat": 41.28231579711454,
+      "lon": -95.91135551889086
+    },
+    {
+      "id": "s145.platform_parking",
+      "lat": 41.270529798716154,
+      "lon": -95.92285395843398
+    },
+    {
+      "id": "s146.platform_parking",
+      "lat": 41.308597376636264,
+      "lon": -95.91002521849853
+    },
+    {
+      "id": "s147.platform_parking",
+      "lat": 41.31085389086711,
+      "lon": -95.91178475068551
+    }
+  ],
+  "lines": [
+    {
+      "id": "s113.guideway_near_in",
+      "start": "s113.guideway_near_in_tip",
+      "end": "s113.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.293250764429146,
+          -95.90090381713398
+        ],
+        [
+          41.293340595546645,
+          -95.90090381707635
+        ]
+      ]
+    },
+    {
+      "id": "s113.guideway_near_main",
+      "start": "s113.guideway_near_in_end",
+      "end": "s113.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.293340595546645,
+          -95.90090381707635
+        ],
+        [
+          41.29396941336913,
+          -95.90090381667298
+        ]
+      ]
+    },
+    {
+      "id": "s113.guideway_near_out",
+      "start": "s113.guideway_near_out_end",
+      "end": "s113.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.29396941336913,
+          -95.90090381667298
+        ],
+        [
+          41.29405924448663,
+          -95.90090381661535
+        ]
+      ]
+    },
+    {
+      "id": "s113.guideway_far_in",
+      "start": "s113.guideway_far_in_tip",
+      "end": "s113.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.29405924448663,
+          -95.90098751028897
+        ],
+        [
+          41.29396941336913,
+          -95.90098751023135
+        ]
+      ]
+    },
+    {
+      "id": "s113.guideway_far_main",
+      "start": "s113.guideway_far_in_end",
+      "end": "s113.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.29396941336913,
+          -95.90098751023135
+        ],
+        [
+          41.293340595546645,
+          -95.90098750982797
+        ]
+      ]
+    },
+    {
+      "id": "s113.guideway_far_out",
+      "start": "s113.guideway_far_out_end",
+      "end": "s113.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.293340595546645,
+          -95.90098750982797
+        ],
+        [
+          41.293250764429146,
+          -95.90098750977035
+        ]
+      ]
+    },
+    {
+      "id": "s113.platform_in",
+      "start": "s113.guideway_near_in_end",
+      "end": "s113.platform_in_end",
+      "coordinates": [
+        [
+          41.293340595546645,
+          -95.90090381707635
+        ],
+        [
+          41.29352924089339,
+          -95.90082012396171
+        ]
+      ]
+    },
+    {
+      "id": "s113.platform_parking_a",
+      "start": "s113.platform_in_end",
+      "end": "s113.platform_parking",
+      "coordinates": [
+        [
+          41.29352924089339,
+          -95.90082012396171
+        ],
+        [
+          41.29365500445789,
+          -95.90082012371968
+        ]
+      ]
+    },
+    {
+      "id": "s113.platform_parking_b",
+      "start": "s113.platform_parking",
+      "end": "s113.platform_out_end",
+      "coordinates": [
+        [
+          41.29365500445789,
+          -95.90082012371968
+        ],
+        [
+          41.29378076802239,
+          -95.90082012347764
+        ]
+      ]
+    },
+    {
+      "id": "s113.platform_out",
+      "start": "s113.platform_out_end",
+      "end": "s113.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.29378076802239,
+          -95.90082012347764
+        ],
+        [
+          41.29396941336913,
+          -95.90090381667298
+        ]
+      ]
+    },
+    {
+      "id": "s113.uturn_near_far_a",
+      "start": "s113.guideway_near_out_end",
+      "end": "s113.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.29396941336913,
+          -95.90090381667298
+        ],
+        [
+          41.29396941336913,
+          -95.90094566345216
+        ]
+      ]
+    },
+    {
+      "id": "s113.uturn_near_far_b",
+      "start": "s113.uturn_near_far_mid",
+      "end": "s113.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.29396941336913,
+          -95.90094566345216
+        ],
+        [
+          41.29396941336913,
+          -95.90098751023135
+        ]
+      ]
+    },
+    {
+      "id": "s113.uturn_far_near_a",
+      "start": "s113.guideway_far_out_end",
+      "end": "s113.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.293340595546645,
+          -95.90098750982797
+        ],
+        [
+          41.293340595546645,
+          -95.90094566345216
+        ]
+      ]
+    },
+    {
+      "id": "s113.uturn_far_near_b",
+      "start": "s113.uturn_far_near_mid",
+      "end": "s113.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.293340595546645,
+          -95.90094566345216
+        ],
+        [
+          41.293340595546645,
+          -95.90090381707635
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_near_in",
+      "start": "s114.guideway_near_in_tip",
+      "end": "s114.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.299055968746764,
+          -95.90073215203255
+        ],
+        [
+          41.29914579986426,
+          -95.90073215197489
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_near_main",
+      "start": "s114.guideway_near_in_end",
+      "end": "s114.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.29914579986426,
+          -95.90073215197489
+        ],
+        [
+          41.29977461768675,
+          -95.9007321515714
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_near_out",
+      "start": "s114.guideway_near_out_end",
+      "end": "s114.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.29977461768675,
+          -95.9007321515714
+        ],
+        [
+          41.29986444880425,
+          -95.90073215151375
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_far_in",
+      "start": "s114.guideway_far_in_tip",
+      "end": "s114.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.29986444880425,
+          -95.90081585263664
+        ],
+        [
+          41.29977461768675,
+          -95.90081585257899
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_far_main",
+      "start": "s114.guideway_far_in_end",
+      "end": "s114.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.29977461768675,
+          -95.90081585257899
+        ],
+        [
+          41.29914579986426,
+          -95.9008158521755
+        ]
+      ]
+    },
+    {
+      "id": "s114.guideway_far_out",
+      "start": "s114.guideway_far_out_end",
+      "end": "s114.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.29914579986426,
+          -95.9008158521755
+        ],
+        [
+          41.299055968746764,
+          -95.90081585211784
+        ]
+      ]
+    },
+    {
+      "id": "s114.platform_in",
+      "start": "s114.guideway_near_in_end",
+      "end": "s114.platform_in_end",
+      "coordinates": [
+        [
+          41.29914579986426,
+          -95.90073215197489
+        ],
+        [
+          41.29933444521101,
+          -95.90064845141116
+        ]
+      ]
+    },
+    {
+      "id": "s114.platform_parking_a",
+      "start": "s114.platform_in_end",
+      "end": "s114.platform_parking",
+      "coordinates": [
+        [
+          41.29933444521101,
+          -95.90064845141116
+        ],
+        [
+          41.29946020877551,
+          -95.90064845116906
+        ]
+      ]
+    },
+    {
+      "id": "s114.platform_parking_b",
+      "start": "s114.platform_parking",
+      "end": "s114.platform_out_end",
+      "coordinates": [
+        [
+          41.29946020877551,
+          -95.90064845116906
+        ],
+        [
+          41.299585972340005,
+          -95.90064845092697
+        ]
+      ]
+    },
+    {
+      "id": "s114.platform_out",
+      "start": "s114.platform_out_end",
+      "end": "s114.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.299585972340005,
+          -95.90064845092697
+        ],
+        [
+          41.29977461768675,
+          -95.9007321515714
+        ]
+      ]
+    },
+    {
+      "id": "s114.uturn_near_far_a",
+      "start": "s114.guideway_near_out_end",
+      "end": "s114.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.29977461768675,
+          -95.9007321515714
+        ],
+        [
+          41.29977461768675,
+          -95.9007740020752
+        ]
+      ]
+    },
+    {
+      "id": "s114.uturn_near_far_b",
+      "start": "s114.uturn_near_far_mid",
+      "end": "s114.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.29977461768675,
+          -95.9007740020752
+        ],
+        [
+          41.29977461768675,
+          -95.90081585257899
+        ]
+      ]
+    },
+    {
+      "id": "s114.uturn_far_near_a",
+      "start": "s114.guideway_far_out_end",
+      "end": "s114.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.29914579986426,
+          -95.9008158521755
+        ],
+        [
+          41.29914579986426,
+          -95.9007740020752
+        ]
+      ]
+    },
+    {
+      "id": "s114.uturn_far_near_b",
+      "start": "s114.uturn_far_near_mid",
+      "end": "s114.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.29914579986426,
+          -95.9007740020752
+        ],
+        [
+          41.29914579986426,
+          -95.90073215197489
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_near_in",
+      "start": "s115.guideway_near_in_tip",
+      "end": "s115.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.305915556996574,
+          -95.90727808935779
+        ],
+        [
+          41.30585203680423,
+          -95.90719353092256
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_near_main",
+      "start": "s115.guideway_near_in_end",
+      "end": "s115.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.30585203680423,
+          -95.90719353092256
+        ],
+        [
+          41.30540739545781,
+          -95.906601621876
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_near_out",
+      "start": "s115.guideway_near_out_end",
+      "end": "s115.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.30540739545781,
+          -95.906601621876
+        ],
+        [
+          41.30534387526547,
+          -95.90651706344077
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_far_in",
+      "start": "s115.guideway_far_in_tip",
+      "end": "s115.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.30538833940012,
+          -95.90645787281578
+        ],
+        [
+          41.30545185959246,
+          -95.90654243119334
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_far_main",
+      "start": "s115.guideway_far_in_end",
+      "end": "s115.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.30545185959246,
+          -95.90654243119334
+        ],
+        [
+          41.30589650093888,
+          -95.90713433983628
+        ]
+      ]
+    },
+    {
+      "id": "s115.guideway_far_out",
+      "start": "s115.guideway_far_out_end",
+      "end": "s115.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.30589650093888,
+          -95.90713433983628
+        ],
+        [
+          41.30596002113122,
+          -95.90721889821384
+        ]
+      ]
+    },
+    {
+      "id": "s115.platform_in",
+      "start": "s115.guideway_near_in_end",
+      "end": "s115.platform_in_end",
+      "coordinates": [
+        [
+          41.30585203680423,
+          -95.90719353092256
+        ],
+        [
+          41.30567418026567,
+          -95.90707514917379
+        ]
+      ]
+    },
+    {
+      "id": "s115.platform_parking_a",
+      "start": "s115.platform_in_end",
+      "end": "s115.platform_parking",
+      "coordinates": [
+        [
+          41.30567418026567,
+          -95.90707514917379
+        ],
+        [
+          41.30558525199638,
+          -95.90695676728376
+        ]
+      ]
+    },
+    {
+      "id": "s115.platform_parking_b",
+      "start": "s115.platform_parking",
+      "end": "s115.platform_out_end",
+      "coordinates": [
+        [
+          41.30558525199638,
+          -95.90695676728376
+        ],
+        [
+          41.3054963237271,
+          -95.90683838539373
+        ]
+      ]
+    },
+    {
+      "id": "s115.platform_out",
+      "start": "s115.platform_out_end",
+      "end": "s115.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.3054963237271,
+          -95.90683838539373
+        ],
+        [
+          41.30540739545781,
+          -95.906601621876
+        ]
+      ]
+    },
+    {
+      "id": "s115.uturn_near_far_a",
+      "start": "s115.guideway_near_out_end",
+      "end": "s115.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.30540739545781,
+          -95.906601621876
+        ],
+        [
+          41.305429627525136,
+          -95.90657202653468
+        ]
+      ]
+    },
+    {
+      "id": "s115.uturn_near_far_b",
+      "start": "s115.uturn_near_far_mid",
+      "end": "s115.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.305429627525136,
+          -95.90657202653468
+        ],
+        [
+          41.30545185959246,
+          -95.90654243119334
+        ]
+      ]
+    },
+    {
+      "id": "s115.uturn_far_near_a",
+      "start": "s115.guideway_far_out_end",
+      "end": "s115.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.30589650093888,
+          -95.90713433983628
+        ],
+        [
+          41.305874268871555,
+          -95.90716393537942
+        ]
+      ]
+    },
+    {
+      "id": "s115.uturn_far_near_b",
+      "start": "s115.uturn_far_near_mid",
+      "end": "s115.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.305874268871555,
+          -95.90716393537942
+        ],
+        [
+          41.30585203680423,
+          -95.90719353092256
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_near_in",
+      "start": "s117.guideway_near_in_tip",
+      "end": "s117.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94349759978489
+        ],
+        [
+          41.26776925671835,
+          -95.94337808549079
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_near_main",
+      "start": "s117.guideway_near_in_end",
+      "end": "s117.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94337808549079
+        ],
+        [
+          41.26776925671835,
+          -95.94254148543206
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_near_out",
+      "start": "s117.guideway_near_out_end",
+      "end": "s117.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94254148543206
+        ],
+        [
+          41.26776925671835,
+          -95.94242197113796
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_far_in",
+      "start": "s117.guideway_far_in_tip",
+      "end": "s117.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.26783213850061,
+          -95.94242197113796
+        ],
+        [
+          41.26783213850061,
+          -95.94254148543206
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_far_main",
+      "start": "s117.guideway_far_in_end",
+      "end": "s117.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.26783213850061,
+          -95.94254148543206
+        ],
+        [
+          41.26783213850061,
+          -95.94337808549079
+        ]
+      ]
+    },
+    {
+      "id": "s117.guideway_far_out",
+      "start": "s117.guideway_far_out_end",
+      "end": "s117.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.26783213850061,
+          -95.94337808549079
+        ],
+        [
+          41.26783213850061,
+          -95.94349759978489
+        ]
+      ]
+    },
+    {
+      "id": "s117.platform_in",
+      "start": "s117.guideway_near_in_end",
+      "end": "s117.platform_in_end",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94337808549079
+        ],
+        [
+          41.267706374936104,
+          -95.94312710547317
+        ]
+      ]
+    },
+    {
+      "id": "s117.platform_parking_a",
+      "start": "s117.platform_in_end",
+      "end": "s117.platform_parking",
+      "coordinates": [
+        [
+          41.267706374936104,
+          -95.94312710547317
+        ],
+        [
+          41.267706374936104,
+          -95.94295978546143
+        ]
+      ]
+    },
+    {
+      "id": "s117.platform_parking_b",
+      "start": "s117.platform_parking",
+      "end": "s117.platform_out_end",
+      "coordinates": [
+        [
+          41.267706374936104,
+          -95.94295978546143
+        ],
+        [
+          41.267706374936104,
+          -95.94279246544968
+        ]
+      ]
+    },
+    {
+      "id": "s117.platform_out",
+      "start": "s117.platform_out_end",
+      "end": "s117.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.267706374936104,
+          -95.94279246544968
+        ],
+        [
+          41.26776925671835,
+          -95.94254148543206
+        ]
+      ]
+    },
+    {
+      "id": "s117.uturn_near_far_a",
+      "start": "s117.guideway_near_out_end",
+      "end": "s117.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94254148543206
+        ],
+        [
+          41.26780069760948,
+          -95.94254148543206
+        ]
+      ]
+    },
+    {
+      "id": "s117.uturn_near_far_b",
+      "start": "s117.uturn_near_far_mid",
+      "end": "s117.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.26780069760948,
+          -95.94254148543206
+        ],
+        [
+          41.26783213850061,
+          -95.94254148543206
+        ]
+      ]
+    },
+    {
+      "id": "s117.uturn_far_near_a",
+      "start": "s117.guideway_far_out_end",
+      "end": "s117.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.26783213850061,
+          -95.94337808549079
+        ],
+        [
+          41.26780069760948,
+          -95.94337808549079
+        ]
+      ]
+    },
+    {
+      "id": "s117.uturn_far_near_b",
+      "start": "s117.uturn_far_near_mid",
+      "end": "s117.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.26780069760948,
+          -95.94337808549079
+        ],
+        [
+          41.26776925671835,
+          -95.94337808549079
+        ]
+      ]
+    },
+    {
+      "id": "CX_116100",
+      "start": "s113.guideway_near_out_tip",
+      "end": "s114.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.29405924448663,
+          -95.90090381661535
+        ],
+        [
+          41.299055968746764,
+          -95.90073215203255
+        ]
+      ]
+    },
+    {
+      "id": "CX_0CEBC2",
+      "start": "s114.guideway_far_out_tip",
+      "end": "s113.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.299055968746764,
+          -95.90081585211784
+        ],
+        [
+          41.29405924448663,
+          -95.90098751028897
+        ]
+      ]
+    },
+    {
+      "id": "CX_FB6A85",
+      "start": "s114.guideway_near_out_tip",
+      "end": "s115.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.29986444880425,
+          -95.90073215151375
+        ],
+        [
+          41.30538833940012,
+          -95.90645787281578
+        ]
+      ]
+    },
+    {
+      "id": "CX_8E9BF0",
+      "start": "s115.guideway_near_out_tip",
+      "end": "s114.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.30534387526547,
+          -95.90651706344077
+        ],
+        [
+          41.29986444880425,
+          -95.90081585263664
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL0a",
+      "start": "c67.A0_div",
+      "end": "c67.A0_merge",
+      "coordinates": [
+        [
+          41.268747865143304,
+          -95.92941772908776
+        ],
+        [
+          41.268747865143304,
+          -95.92943565649193
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL0b",
+      "start": "c67.A0_merge",
+      "end": "c67.A3_div",
+      "coordinates": [
+        [
+          41.268747865143304,
+          -95.92943565649193
+        ],
+        [
+          41.26868722913899,
+          -95.92951632971827
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL3a",
+      "start": "c67.A3_div",
+      "end": "c67.A3_merge",
+      "coordinates": [
+        [
+          41.26868722913899,
+          -95.92951632971827
+        ],
+        [
+          41.268673754471365,
+          -95.92951632971827
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL3b",
+      "start": "c67.A3_merge",
+      "end": "c67.A2_div",
+      "coordinates": [
+        [
+          41.268673754471365,
+          -95.92951632971827
+        ],
+        [
+          41.26861311846705,
+          -95.92943565647344
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL2a",
+      "start": "c67.A2_div",
+      "end": "c67.A2_merge",
+      "coordinates": [
+        [
+          41.26861311846705,
+          -95.92943565647344
+        ],
+        [
+          41.26861311846705,
+          -95.92941772910625
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL2b",
+      "start": "c67.A2_merge",
+      "end": "c67.A1_div",
+      "coordinates": [
+        [
+          41.26861311846705,
+          -95.92941772910625
+        ],
+        [
+          41.268673754471365,
+          -95.92933705586142
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL1a",
+      "start": "c67.A1_div",
+      "end": "c67.A1_merge",
+      "coordinates": [
+        [
+          41.268673754471365,
+          -95.92933705586142
+        ],
+        [
+          41.26868722913899,
+          -95.92933705586142
+        ]
+      ]
+    },
+    {
+      "id": "c67.RL1b",
+      "start": "c67.A1_merge",
+      "end": "c67.A0_div",
+      "coordinates": [
+        [
+          41.26868722913899,
+          -95.92933705586142
+        ],
+        [
+          41.268747865143304,
+          -95.92941772908776
+        ]
+      ]
+    },
+    {
+      "id": "c67.A0_out_stub",
+      "start": "c67.A0_div",
+      "end": "c67.A0_out",
+      "coordinates": [
+        [
+          41.268747865143304,
+          -95.92941772908776
+        ],
+        [
+          41.26888261181955,
+          -95.92941772906926
+        ]
+      ]
+    },
+    {
+      "id": "c67.A0_in_stub",
+      "start": "c67.A0_in",
+      "end": "c67.A0_merge",
+      "coordinates": [
+        [
+          41.26888261181955,
+          -95.92943565651044
+        ],
+        [
+          41.268747865143304,
+          -95.92943565649193
+        ]
+      ]
+    },
+    {
+      "id": "c67.A3_out_stub",
+      "start": "c67.A3_div",
+      "end": "c67.A3_out",
+      "coordinates": [
+        [
+          41.26868722913899,
+          -95.92951632971827
+        ],
+        [
+          41.26868722913899,
+          -95.9296956035751
+        ]
+      ]
+    },
+    {
+      "id": "c67.A3_in_stub",
+      "start": "c67.A3_in",
+      "end": "c67.A3_merge",
+      "coordinates": [
+        [
+          41.268673754471365,
+          -95.9296956035751
+        ],
+        [
+          41.268673754471365,
+          -95.92951632971827
+        ]
+      ]
+    },
+    {
+      "id": "c67.A2_out_stub",
+      "start": "c67.A2_div",
+      "end": "c67.A2_out",
+      "coordinates": [
+        [
+          41.26861311846705,
+          -95.92943565647344
+        ],
+        [
+          41.268478371790806,
+          -95.92943565645494
+        ]
+      ]
+    },
+    {
+      "id": "c67.A2_in_stub",
+      "start": "c67.A2_in",
+      "end": "c67.A2_merge",
+      "coordinates": [
+        [
+          41.268478371790806,
+          -95.92941772912475
+        ],
+        [
+          41.26861311846705,
+          -95.92941772910625
+        ]
+      ]
+    },
+    {
+      "id": "c67.A1_out_stub",
+      "start": "c67.A1_div",
+      "end": "c67.A1_out",
+      "coordinates": [
+        [
+          41.268673754471365,
+          -95.92933705586142
+        ],
+        [
+          41.268673754471365,
+          -95.9291577820046
+        ]
+      ]
+    },
+    {
+      "id": "c67.A1_in_stub",
+      "start": "c67.A1_in",
+      "end": "c67.A1_merge",
+      "coordinates": [
+        [
+          41.26868722913899,
+          -95.9291577820046
+        ],
+        [
+          41.26868722913899,
+          -95.92933705586142
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_near_in",
+      "start": "s135.guideway_near_in_tip",
+      "end": "s135.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.9332750353286
+        ],
+        [
+          41.26782431906562,
+          -95.93315552093371
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_near_main",
+      "start": "s135.guideway_near_in_end",
+      "end": "s135.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.93315552093371
+        ],
+        [
+          41.26782431906562,
+          -95.93231892016946
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_near_out",
+      "start": "s135.guideway_near_out_end",
+      "end": "s135.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.93231892016946
+        ],
+        [
+          41.26782431906562,
+          -95.93219940577457
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_far_in",
+      "start": "s135.guideway_far_in_tip",
+      "end": "s135.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.26788720084787,
+          -95.93219940577457
+        ],
+        [
+          41.26788720084787,
+          -95.93231892016946
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_far_main",
+      "start": "s135.guideway_far_in_end",
+      "end": "s135.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.26788720084787,
+          -95.93231892016946
+        ],
+        [
+          41.26788720084787,
+          -95.93315552093371
+        ]
+      ]
+    },
+    {
+      "id": "s135.guideway_far_out",
+      "start": "s135.guideway_far_out_end",
+      "end": "s135.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.26788720084787,
+          -95.93315552093371
+        ],
+        [
+          41.26788720084787,
+          -95.9332750353286
+        ]
+      ]
+    },
+    {
+      "id": "s135.platform_in",
+      "start": "s135.guideway_near_in_end",
+      "end": "s135.platform_in_end",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.93315552093371
+        ],
+        [
+          41.26776143728337,
+          -95.93290454070444
+        ]
+      ]
+    },
+    {
+      "id": "s135.platform_parking_a",
+      "start": "s135.platform_in_end",
+      "end": "s135.platform_parking",
+      "coordinates": [
+        [
+          41.26776143728337,
+          -95.93290454070444
+        ],
+        [
+          41.26776143728337,
+          -95.93273722055159
+        ]
+      ]
+    },
+    {
+      "id": "s135.platform_parking_b",
+      "start": "s135.platform_parking",
+      "end": "s135.platform_out_end",
+      "coordinates": [
+        [
+          41.26776143728337,
+          -95.93273722055159
+        ],
+        [
+          41.26776143728337,
+          -95.93256990039873
+        ]
+      ]
+    },
+    {
+      "id": "s135.platform_out",
+      "start": "s135.platform_out_end",
+      "end": "s135.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.26776143728337,
+          -95.93256990039873
+        ],
+        [
+          41.26782431906562,
+          -95.93231892016946
+        ]
+      ]
+    },
+    {
+      "id": "s135.uturn_near_far_a",
+      "start": "s135.guideway_near_out_end",
+      "end": "s135.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.93231892016946
+        ],
+        [
+          41.267855759956745,
+          -95.93231892016946
+        ]
+      ]
+    },
+    {
+      "id": "s135.uturn_near_far_b",
+      "start": "s135.uturn_near_far_mid",
+      "end": "s135.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.267855759956745,
+          -95.93231892016946
+        ],
+        [
+          41.26788720084787,
+          -95.93231892016946
+        ]
+      ]
+    },
+    {
+      "id": "s135.uturn_far_near_a",
+      "start": "s135.guideway_far_out_end",
+      "end": "s135.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.26788720084787,
+          -95.93315552093371
+        ],
+        [
+          41.267855759956745,
+          -95.93315552093371
+        ]
+      ]
+    },
+    {
+      "id": "s135.uturn_far_near_b",
+      "start": "s135.uturn_far_near_mid",
+      "end": "s135.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.267855759956745,
+          -95.93315552093371
+        ],
+        [
+          41.26782431906562,
+          -95.93315552093371
+        ]
+      ]
+    },
+    {
+      "id": "CX_7899F9",
+      "start": "c67.A3_out",
+      "end": "s135.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.26868722913899,
+          -95.9296956035751
+        ],
+        [
+          41.26788720084787,
+          -95.93219940577457
+        ]
+      ]
+    },
+    {
+      "id": "CX_32997B",
+      "start": "s135.guideway_near_out_tip",
+      "end": "c67.A3_in",
+      "coordinates": [
+        [
+          41.26782431906562,
+          -95.93219940577457
+        ],
+        [
+          41.268673754471365,
+          -95.9296956035751
+        ]
+      ]
+    },
+    {
+      "id": "CX_A05172",
+      "start": "s135.guideway_far_out_tip",
+      "end": "s117.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.26788720084787,
+          -95.9332750353286
+        ],
+        [
+          41.26783213850061,
+          -95.94242197113796
+        ]
+      ]
+    },
+    {
+      "id": "CX_D7220E",
+      "start": "s117.guideway_near_out_tip",
+      "end": "s135.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.26776925671835,
+          -95.94242197113796
+        ],
+        [
+          41.26782431906562,
+          -95.9332750353286
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_near_in",
+      "start": "s136.guideway_near_in_tip",
+      "end": "s136.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.256610292947975,
+          -95.92909215804788
+        ],
+        [
+          41.256700124065475,
+          -95.92909215799037
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_near_main",
+      "start": "s136.guideway_near_in_end",
+      "end": "s136.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.256700124065475,
+          -95.92909215799037
+        ],
+        [
+          41.25732894188796,
+          -95.92909215758772
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_near_out",
+      "start": "s136.guideway_near_out_end",
+      "end": "s136.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.25732894188796,
+          -95.92909215758772
+        ],
+        [
+          41.25741877300546,
+          -95.9290921575302
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_far_in",
+      "start": "s136.guideway_far_in_tip",
+      "end": "s136.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.25741877300546,
+          -95.92917580423706
+        ],
+        [
+          41.25732894188796,
+          -95.92917580417955
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_far_main",
+      "start": "s136.guideway_far_in_end",
+      "end": "s136.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.25732894188796,
+          -95.92917580417955
+        ],
+        [
+          41.256700124065475,
+          -95.9291758037769
+        ]
+      ]
+    },
+    {
+      "id": "s136.guideway_far_out",
+      "start": "s136.guideway_far_out_end",
+      "end": "s136.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.256700124065475,
+          -95.9291758037769
+        ],
+        [
+          41.256610292947975,
+          -95.92917580371939
+        ]
+      ]
+    },
+    {
+      "id": "s136.platform_in",
+      "start": "s136.guideway_near_in_end",
+      "end": "s136.platform_in_end",
+      "coordinates": [
+        [
+          41.256700124065475,
+          -95.92909215799037
+        ],
+        [
+          41.25688876941222,
+          -95.92900851184145
+        ]
+      ]
+    },
+    {
+      "id": "s136.platform_parking_a",
+      "start": "s136.platform_in_end",
+      "end": "s136.platform_parking",
+      "coordinates": [
+        [
+          41.25688876941222,
+          -95.92900851184145
+        ],
+        [
+          41.25701453297672,
+          -95.92900851159986
+        ]
+      ]
+    },
+    {
+      "id": "s136.platform_parking_b",
+      "start": "s136.platform_parking",
+      "end": "s136.platform_out_end",
+      "coordinates": [
+        [
+          41.25701453297672,
+          -95.92900851159986
+        ],
+        [
+          41.257140296541216,
+          -95.92900851135828
+        ]
+      ]
+    },
+    {
+      "id": "s136.platform_out",
+      "start": "s136.platform_out_end",
+      "end": "s136.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.257140296541216,
+          -95.92900851135828
+        ],
+        [
+          41.25732894188796,
+          -95.92909215758772
+        ]
+      ]
+    },
+    {
+      "id": "s136.uturn_near_far_a",
+      "start": "s136.guideway_near_out_end",
+      "end": "s136.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.25732894188796,
+          -95.92909215758772
+        ],
+        [
+          41.25732894188796,
+          -95.92913398088363
+        ]
+      ]
+    },
+    {
+      "id": "s136.uturn_near_far_b",
+      "start": "s136.uturn_near_far_mid",
+      "end": "s136.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.25732894188796,
+          -95.92913398088363
+        ],
+        [
+          41.25732894188796,
+          -95.92917580417955
+        ]
+      ]
+    },
+    {
+      "id": "s136.uturn_far_near_a",
+      "start": "s136.guideway_far_out_end",
+      "end": "s136.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.256700124065475,
+          -95.9291758037769
+        ],
+        [
+          41.256700124065475,
+          -95.92913398088363
+        ]
+      ]
+    },
+    {
+      "id": "s136.uturn_far_near_b",
+      "start": "s136.uturn_far_near_mid",
+      "end": "s136.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.256700124065475,
+          -95.92913398088363
+        ],
+        [
+          41.256700124065475,
+          -95.92909215799037
+        ]
+      ]
+    },
+    {
+      "id": "CX_6FB18A",
+      "start": "s136.guideway_near_out_tip",
+      "end": "c67.A2_in",
+      "coordinates": [
+        [
+          41.25741877300546,
+          -95.9290921575302
+        ],
+        [
+          41.268478371790806,
+          -95.92941772912475
+        ]
+      ]
+    },
+    {
+      "id": "CX_CB122C",
+      "start": "c67.A2_out",
+      "end": "s136.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.268478371790806,
+          -95.92943565645494
+        ],
+        [
+          41.25741877300546,
+          -95.92917580423706
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_near_in",
+      "start": "s142.guideway_near_in_tip",
+      "end": "s142.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.277854970778165,
+          -95.91496900198312
+        ],
+        [
+          41.27791849097051,
+          -95.91488447917081
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_near_main",
+      "start": "s142.guideway_near_in_end",
+      "end": "s142.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.27791849097051,
+          -95.91488447917081
+        ],
+        [
+          41.278363132316926,
+          -95.91429281948453
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_near_out",
+      "start": "s142.guideway_near_out_end",
+      "end": "s142.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.278363132316926,
+          -95.91429281948453
+        ],
+        [
+          41.27842665250927,
+          -95.91420829667221
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_far_in",
+      "start": "s142.guideway_far_in_tip",
+      "end": "s142.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.278471116643914,
+          -95.9142674628798
+        ],
+        [
+          41.27840759645157,
+          -95.91435198563454
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_far_main",
+      "start": "s142.guideway_far_in_end",
+      "end": "s142.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.27840759645157,
+          -95.91435198563454
+        ],
+        [
+          41.27796295510515,
+          -95.91494364491774
+        ]
+      ]
+    },
+    {
+      "id": "s142.guideway_far_out",
+      "start": "s142.guideway_far_out_end",
+      "end": "s142.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.27796295510515,
+          -95.91494364491774
+        ],
+        [
+          41.27789943491281,
+          -95.91502816767247
+        ]
+      ]
+    },
+    {
+      "id": "s142.platform_in",
+      "start": "s142.guideway_near_in_end",
+      "end": "s142.platform_in_end",
+      "coordinates": [
+        [
+          41.27791849097051,
+          -95.91488447917081
+        ],
+        [
+          41.27800741923979,
+          -95.91464781539706
+        ]
+      ]
+    },
+    {
+      "id": "s142.platform_parking_a",
+      "start": "s142.platform_in_end",
+      "end": "s142.platform_parking",
+      "coordinates": [
+        [
+          41.27800741923979,
+          -95.91464781539706
+        ],
+        [
+          41.27809634750908,
+          -95.9145294833792
+        ]
+      ]
+    },
+    {
+      "id": "s142.platform_parking_b",
+      "start": "s142.platform_parking",
+      "end": "s142.platform_out_end",
+      "coordinates": [
+        [
+          41.27809634750908,
+          -95.9145294833792
+        ],
+        [
+          41.27818527577836,
+          -95.91441115136134
+        ]
+      ]
+    },
+    {
+      "id": "s142.platform_out",
+      "start": "s142.platform_out_end",
+      "end": "s142.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.27818527577836,
+          -95.91441115136134
+        ],
+        [
+          41.278363132316926,
+          -95.91429281948453
+        ]
+      ]
+    },
+    {
+      "id": "s142.uturn_near_far_a",
+      "start": "s142.guideway_near_out_end",
+      "end": "s142.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.278363132316926,
+          -95.91429281948453
+        ],
+        [
+          41.27838536438425,
+          -95.91432240255953
+        ]
+      ]
+    },
+    {
+      "id": "s142.uturn_near_far_b",
+      "start": "s142.uturn_near_far_mid",
+      "end": "s142.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.27838536438425,
+          -95.91432240255953
+        ],
+        [
+          41.27840759645157,
+          -95.91435198563454
+        ]
+      ]
+    },
+    {
+      "id": "s142.uturn_far_near_a",
+      "start": "s142.guideway_far_out_end",
+      "end": "s142.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.27796295510515,
+          -95.91494364491774
+        ],
+        [
+          41.27794072303783,
+          -95.91491406204428
+        ]
+      ]
+    },
+    {
+      "id": "s142.uturn_far_near_b",
+      "start": "s142.uturn_far_near_mid",
+      "end": "s142.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.27794072303783,
+          -95.91491406204428
+        ],
+        [
+          41.27791849097051,
+          -95.91488447917081
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_near_in",
+      "start": "s143.guideway_near_in_tip",
+      "end": "s143.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.28207442038363,
+          -95.9117950659116
+        ],
+        [
+          41.28213794057597,
+          -95.91171053763452
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_near_main",
+      "start": "s143.guideway_near_in_end",
+      "end": "s143.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.28213794057597,
+          -95.91171053763452
+        ],
+        [
+          41.28258258192239,
+          -95.91111883969482
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_near_out",
+      "start": "s143.guideway_near_out_end",
+      "end": "s143.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.28258258192239,
+          -95.91111883969482
+        ],
+        [
+          41.28264610211473,
+          -95.91103431141774
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_far_in",
+      "start": "s143.guideway_far_in_tip",
+      "end": "s143.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.28269056624938,
+          -95.91109348145072
+        ],
+        [
+          41.28262704605704,
+          -95.91117800967022
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_far_main",
+      "start": "s143.guideway_far_in_end",
+      "end": "s143.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.28262704605704,
+          -95.91117800967022
+        ],
+        [
+          41.28218240471062,
+          -95.91176970720676
+        ]
+      ]
+    },
+    {
+      "id": "s143.guideway_far_out",
+      "start": "s143.guideway_far_out_end",
+      "end": "s143.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.28218240471062,
+          -95.91176970720676
+        ],
+        [
+          41.282118884518276,
+          -95.91185423542626
+        ]
+      ]
+    },
+    {
+      "id": "s143.platform_in",
+      "start": "s143.guideway_near_in_end",
+      "end": "s143.platform_in_end",
+      "coordinates": [
+        [
+          41.28213794057597,
+          -95.91171053763452
+        ],
+        [
+          41.28222686884526,
+          -95.91147385855943
+        ]
+      ]
+    },
+    {
+      "id": "s143.platform_parking_a",
+      "start": "s143.platform_in_end",
+      "end": "s143.platform_parking",
+      "coordinates": [
+        [
+          41.28222686884526,
+          -95.91147385855943
+        ],
+        [
+          41.28231579711454,
+          -95.91135551889086
+        ]
+      ]
+    },
+    {
+      "id": "s143.platform_parking_b",
+      "start": "s143.platform_parking",
+      "end": "s143.platform_out_end",
+      "coordinates": [
+        [
+          41.28231579711454,
+          -95.91135551889086
+        ],
+        [
+          41.28240472538383,
+          -95.9112371792223
+        ]
+      ]
+    },
+    {
+      "id": "s143.platform_out",
+      "start": "s143.platform_out_end",
+      "end": "s143.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.28240472538383,
+          -95.9112371792223
+        ],
+        [
+          41.28258258192239,
+          -95.91111883969482
+        ]
+      ]
+    },
+    {
+      "id": "s143.uturn_near_far_a",
+      "start": "s143.guideway_near_out_end",
+      "end": "s143.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.28258258192239,
+          -95.91111883969482
+        ],
+        [
+          41.282604813989714,
+          -95.91114842468252
+        ]
+      ]
+    },
+    {
+      "id": "s143.uturn_near_far_b",
+      "start": "s143.uturn_near_far_mid",
+      "end": "s143.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.282604813989714,
+          -95.91114842468252
+        ],
+        [
+          41.28262704605704,
+          -95.91117800967022
+        ]
+      ]
+    },
+    {
+      "id": "s143.uturn_far_near_a",
+      "start": "s143.guideway_far_out_end",
+      "end": "s143.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.28218240471062,
+          -95.91176970720676
+        ],
+        [
+          41.282160172643295,
+          -95.91174012242064
+        ]
+      ]
+    },
+    {
+      "id": "s143.uturn_far_near_b",
+      "start": "s143.uturn_far_near_mid",
+      "end": "s143.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.282160172643295,
+          -95.91174012242064
+        ],
+        [
+          41.28213794057597,
+          -95.91171053763452
+        ]
+      ]
+    },
+    {
+      "id": "CX_FB6846",
+      "start": "s142.guideway_near_out_tip",
+      "end": "s143.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.27842665250927,
+          -95.91420829667221
+        ],
+        [
+          41.28207442038363,
+          -95.9117950659116
+        ]
+      ]
+    },
+    {
+      "id": "CX_635D92",
+      "start": "s143.guideway_far_out_tip",
+      "end": "s142.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.282118884518276,
+          -95.91185423542626
+        ],
+        [
+          41.278471116643914,
+          -95.9142674628798
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_near_in",
+      "start": "s145.guideway_near_in_tip",
+      "end": "s145.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.27028842198524,
+          -95.92329342609446
+        ],
+        [
+          41.270351942177584,
+          -95.92320891307895
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_near_main",
+      "start": "s145.guideway_near_in_end",
+      "end": "s145.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.270351942177584,
+          -95.92320891307895
+        ],
+        [
+          41.270796583524,
+          -95.92261732197042
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_near_out",
+      "start": "s145.guideway_near_out_end",
+      "end": "s145.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.270796583524,
+          -95.92261732197042
+        ],
+        [
+          41.270860103716345,
+          -95.92253280895491
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_far_in",
+      "start": "s145.guideway_far_in_tip",
+      "end": "s145.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.27090456785099,
+          -95.92259196830463
+        ],
+        [
+          41.27084104765865,
+          -95.92267648126258
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_far_main",
+      "start": "s145.guideway_far_in_end",
+      "end": "s145.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.27084104765865,
+          -95.92267648126258
+        ],
+        [
+          41.27039640631223,
+          -95.92326807196821
+        ]
+      ]
+    },
+    {
+      "id": "s145.guideway_far_out",
+      "start": "s145.guideway_far_out_end",
+      "end": "s145.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.27039640631223,
+          -95.92326807196821
+        ],
+        [
+          41.27033288611989,
+          -95.92335258492616
+        ]
+      ]
+    },
+    {
+      "id": "s145.platform_in",
+      "start": "s145.guideway_near_in_end",
+      "end": "s145.platform_in_end",
+      "coordinates": [
+        [
+          41.270351942177584,
+          -95.92320891307895
+        ],
+        [
+          41.27044087044687,
+          -95.92297227673627
+        ]
+      ]
+    },
+    {
+      "id": "s145.platform_parking_a",
+      "start": "s145.platform_in_end",
+      "end": "s145.platform_parking",
+      "coordinates": [
+        [
+          41.27044087044687,
+          -95.92297227673627
+        ],
+        [
+          41.270529798716154,
+          -95.92285395843398
+        ]
+      ]
+    },
+    {
+      "id": "s145.platform_parking_b",
+      "start": "s145.platform_parking",
+      "end": "s145.platform_out_end",
+      "coordinates": [
+        [
+          41.270529798716154,
+          -95.92285395843398
+        ],
+        [
+          41.27061872698544,
+          -95.92273564013168
+        ]
+      ]
+    },
+    {
+      "id": "s145.platform_out",
+      "start": "s145.platform_out_end",
+      "end": "s145.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.27061872698544,
+          -95.92273564013168
+        ],
+        [
+          41.270796583524,
+          -95.92261732197042
+        ]
+      ]
+    },
+    {
+      "id": "s145.uturn_near_far_a",
+      "start": "s145.guideway_near_out_end",
+      "end": "s145.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.270796583524,
+          -95.92261732197042
+        ],
+        [
+          41.270818815591326,
+          -95.9226469016165
+        ]
+      ]
+    },
+    {
+      "id": "s145.uturn_near_far_b",
+      "start": "s145.uturn_near_far_mid",
+      "end": "s145.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.270818815591326,
+          -95.9226469016165
+        ],
+        [
+          41.27084104765865,
+          -95.92267648126258
+        ]
+      ]
+    },
+    {
+      "id": "s145.uturn_far_near_a",
+      "start": "s145.guideway_far_out_end",
+      "end": "s145.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.27039640631223,
+          -95.92326807196821
+        ],
+        [
+          41.27037417424491,
+          -95.92323849252358
+        ]
+      ]
+    },
+    {
+      "id": "s145.uturn_far_near_b",
+      "start": "s145.uturn_far_near_mid",
+      "end": "s145.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.27037417424491,
+          -95.92323849252358
+        ],
+        [
+          41.270351942177584,
+          -95.92320891307895
+        ]
+      ]
+    },
+    {
+      "id": "CX_795A92",
+      "start": "c67.A1_out",
+      "end": "s145.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.268673754471365,
+          -95.9291577820046
+        ],
+        [
+          41.27028842198524,
+          -95.92329342609446
+        ]
+      ]
+    },
+    {
+      "id": "CX_8E4BCB",
+      "start": "s145.guideway_far_out_tip",
+      "end": "c67.A1_in",
+      "coordinates": [
+        [
+          41.27033288611989,
+          -95.92335258492616
+        ],
+        [
+          41.26868722913899,
+          -95.9291577820046
+        ]
+      ]
+    },
+    {
+      "id": "CX_585A39",
+      "start": "s145.guideway_near_out_tip",
+      "end": "s142.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.270860103716345,
+          -95.92253280895491
+        ],
+        [
+          41.277854970778165,
+          -95.91496900198312
+        ]
+      ]
+    },
+    {
+      "id": "CX_0814FB",
+      "start": "s142.guideway_far_out_tip",
+      "end": "s145.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.27789943491281,
+          -95.91502816767247
+        ],
+        [
+          41.27090456785099,
+          -95.92259196830463
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_near_in",
+      "start": "s146.guideway_near_in_tip",
+      "end": "s146.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.308927681636455,
+          -95.91034655541698
+        ],
+        [
+          41.30886416144411,
+          -95.91026199307534
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_near_main",
+      "start": "s146.guideway_near_in_end",
+      "end": "s146.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.30886416144411,
+          -95.91026199307534
+        ],
+        [
+          41.308419520097694,
+          -95.9096700566838
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_near_out",
+      "start": "s146.guideway_near_out_end",
+      "end": "s146.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.308419520097694,
+          -95.9096700566838
+        ],
+        [
+          41.30835599990535,
+          -95.90958549434215
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_far_in",
+      "start": "s146.guideway_far_in_tip",
+      "end": "s146.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.30840046404,
+          -95.9095263009827
+        ],
+        [
+          41.30846398423234,
+          -95.90961086326668
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_far_main",
+      "start": "s146.guideway_far_in_end",
+      "end": "s146.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.30846398423234,
+          -95.90961086326668
+        ],
+        [
+          41.30890862557876,
+          -95.91020279925452
+        ]
+      ]
+    },
+    {
+      "id": "s146.guideway_far_out",
+      "start": "s146.guideway_far_out_end",
+      "end": "s146.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.30890862557876,
+          -95.91020279925452
+        ],
+        [
+          41.3089721457711,
+          -95.9102873615385
+        ]
+      ]
+    },
+    {
+      "id": "s146.platform_in",
+      "start": "s146.guideway_near_in_end",
+      "end": "s146.platform_in_end",
+      "coordinates": [
+        [
+          41.30886416144411,
+          -95.91026199307534
+        ],
+        [
+          41.30868630490555,
+          -95.91014360585757
+        ]
+      ]
+    },
+    {
+      "id": "s146.platform_parking_a",
+      "start": "s146.platform_in_end",
+      "end": "s146.platform_parking",
+      "coordinates": [
+        [
+          41.30868630490555,
+          -95.91014360585757
+        ],
+        [
+          41.308597376636264,
+          -95.91002521849853
+        ]
+      ]
+    },
+    {
+      "id": "s146.platform_parking_b",
+      "start": "s146.platform_parking",
+      "end": "s146.platform_out_end",
+      "coordinates": [
+        [
+          41.308597376636264,
+          -95.91002521849853
+        ],
+        [
+          41.30850844836698,
+          -95.9099068311395
+        ]
+      ]
+    },
+    {
+      "id": "s146.platform_out",
+      "start": "s146.platform_out_end",
+      "end": "s146.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.30850844836698,
+          -95.9099068311395
+        ],
+        [
+          41.308419520097694,
+          -95.9096700566838
+        ]
+      ]
+    },
+    {
+      "id": "s146.uturn_near_far_a",
+      "start": "s146.guideway_near_out_end",
+      "end": "s146.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.308419520097694,
+          -95.9096700566838
+        ],
+        [
+          41.30844175216502,
+          -95.90964045997524
+        ]
+      ]
+    },
+    {
+      "id": "s146.uturn_near_far_b",
+      "start": "s146.uturn_near_far_mid",
+      "end": "s146.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.30844175216502,
+          -95.90964045997524
+        ],
+        [
+          41.30846398423234,
+          -95.90961086326668
+        ]
+      ]
+    },
+    {
+      "id": "s146.uturn_far_near_a",
+      "start": "s146.guideway_far_out_end",
+      "end": "s146.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.30890862557876,
+          -95.91020279925452
+        ],
+        [
+          41.308886393511436,
+          -95.91023239616493
+        ]
+      ]
+    },
+    {
+      "id": "s146.uturn_far_near_b",
+      "start": "s146.uturn_far_near_mid",
+      "end": "s146.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.308886393511436,
+          -95.91023239616493
+        ],
+        [
+          41.30886416144411,
+          -95.91026199307534
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_near_in",
+      "start": "s147.guideway_near_in_tip",
+      "end": "s147.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.3111841958673,
+          -95.91210609872603
+        ],
+        [
+          41.31112067567496,
+          -95.91202153345752
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_near_main",
+      "start": "s147.guideway_near_in_end",
+      "end": "s147.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.31112067567496,
+          -95.91202153345752
+        ],
+        [
+          41.31067603432854,
+          -95.91142957657794
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_near_out",
+      "start": "s147.guideway_near_out_end",
+      "end": "s147.guideway_near_out_tip",
+      "coordinates": [
+        [
+          41.31067603432854,
+          -95.91142957657794
+        ],
+        [
+          41.310612514136196,
+          -95.91134501130945
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_far_in",
+      "start": "s147.guideway_far_in_tip",
+      "end": "s147.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.31065697827084,
+          -95.91128581590122
+        ],
+        [
+          41.31072049846318,
+          -95.91137038111205
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_far_main",
+      "start": "s147.guideway_far_in_end",
+      "end": "s147.guideway_far_out_end",
+      "coordinates": [
+        [
+          41.31072049846318,
+          -95.91137038111205
+        ],
+        [
+          41.3111651398096,
+          -95.9119623375879
+        ]
+      ]
+    },
+    {
+      "id": "s147.guideway_far_out",
+      "start": "s147.guideway_far_out_end",
+      "end": "s147.guideway_far_out_tip",
+      "coordinates": [
+        [
+          41.3111651398096,
+          -95.9119623375879
+        ],
+        [
+          41.311228660001944,
+          -95.9120469027987
+        ]
+      ]
+    },
+    {
+      "id": "s147.platform_in",
+      "start": "s147.guideway_near_in_end",
+      "end": "s147.platform_in_end",
+      "coordinates": [
+        [
+          41.31112067567496,
+          -95.91202153345752
+        ],
+        [
+          41.31094281913639,
+          -95.91190314214217
+        ]
+      ]
+    },
+    {
+      "id": "s147.platform_parking_a",
+      "start": "s147.platform_in_end",
+      "end": "s147.platform_parking",
+      "coordinates": [
+        [
+          41.31094281913639,
+          -95.91190314214217
+        ],
+        [
+          41.31085389086711,
+          -95.91178475068551
+        ]
+      ]
+    },
+    {
+      "id": "s147.platform_parking_b",
+      "start": "s147.platform_parking",
+      "end": "s147.platform_out_end",
+      "coordinates": [
+        [
+          41.31085389086711,
+          -95.91178475068551
+        ],
+        [
+          41.31076496259782,
+          -95.91166635922886
+        ]
+      ]
+    },
+    {
+      "id": "s147.platform_out",
+      "start": "s147.platform_out_end",
+      "end": "s147.guideway_near_out_end",
+      "coordinates": [
+        [
+          41.31076496259782,
+          -95.91166635922886
+        ],
+        [
+          41.31067603432854,
+          -95.91142957657794
+        ]
+      ]
+    },
+    {
+      "id": "s147.uturn_near_far_a",
+      "start": "s147.guideway_near_out_end",
+      "end": "s147.uturn_near_far_mid",
+      "coordinates": [
+        [
+          41.31067603432854,
+          -95.91142957657794
+        ],
+        [
+          41.31069826639586,
+          -95.911399978845
+        ]
+      ]
+    },
+    {
+      "id": "s147.uturn_near_far_b",
+      "start": "s147.uturn_near_far_mid",
+      "end": "s147.guideway_far_in_end",
+      "coordinates": [
+        [
+          41.31069826639586,
+          -95.911399978845
+        ],
+        [
+          41.31072049846318,
+          -95.91137038111205
+        ]
+      ]
+    },
+    {
+      "id": "s147.uturn_far_near_a",
+      "start": "s147.guideway_far_out_end",
+      "end": "s147.uturn_far_near_mid",
+      "coordinates": [
+        [
+          41.3111651398096,
+          -95.9119623375879
+        ],
+        [
+          41.31114290774228,
+          -95.9119919355227
+        ]
+      ]
+    },
+    {
+      "id": "s147.uturn_far_near_b",
+      "start": "s147.uturn_far_near_mid",
+      "end": "s147.guideway_near_in_end",
+      "coordinates": [
+        [
+          41.31114290774228,
+          -95.9119919355227
+        ],
+        [
+          41.31112067567496,
+          -95.91202153345752
+        ]
+      ]
+    },
+    {
+      "id": "CX_A10943",
+      "start": "s147.guideway_near_out_tip",
+      "end": "s146.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.310612514136196,
+          -95.91134501130945
+        ],
+        [
+          41.308927681636455,
+          -95.91034655541698
+        ]
+      ]
+    },
+    {
+      "id": "CX_87AFEE",
+      "start": "s146.guideway_far_out_tip",
+      "end": "s147.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.3089721457711,
+          -95.9102873615385
+        ],
+        [
+          41.31065697827084,
+          -95.91128581590122
+        ]
+      ]
+    },
+    {
+      "id": "CX_00FFBE",
+      "start": "s146.guideway_near_out_tip",
+      "end": "s115.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.30835599990535,
+          -95.90958549434215
+        ],
+        [
+          41.305915556996574,
+          -95.90727808935779
+        ]
+      ]
+    },
+    {
+      "id": "CX_6B55BC",
+      "start": "s115.guideway_far_out_tip",
+      "end": "s146.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.30596002113122,
+          -95.90721889821384
+        ],
+        [
+          41.30840046404,
+          -95.9095263009827
+        ]
+      ]
+    },
+    {
+      "id": "CX_C1D5CC",
+      "start": "s143.guideway_near_out_tip",
+      "end": "s113.guideway_near_in_tip",
+      "coordinates": [
+        [
+          41.28264610211473,
+          -95.91103431141774
+        ],
+        [
+          41.293250764429146,
+          -95.90090381713398
+        ]
+      ]
+    },
+    {
+      "id": "CX_51EF29",
+      "start": "s113.guideway_far_out_tip",
+      "end": "s143.guideway_far_in_tip",
+      "coordinates": [
+        [
+          41.293250764429146,
+          -95.90098750977035
+        ],
+        [
+          41.28269056624938,
+          -95.91109348145072
+        ]
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "structure_id": "s113",
+      "structure_type": "station",
+      "cp_ids": [
+        "s113.CP_near_far",
+        "s113.CP_far_near"
+      ],
+      "node_ids": [
+        "s113.guideway_near_out_end",
+        "s113.guideway_near_in_end",
+        "s113.guideway_far_in_end",
+        "s113.guideway_far_out_end",
+        "s113.platform_out_end",
+        "s113.platform_in_end",
+        "s113.platform_parking",
+        "s113.uturn_near_far_mid",
+        "s113.uturn_far_near_mid",
+        "s113.guideway_near_out_tip",
+        "s113.guideway_far_in_tip",
+        "s113.guideway_near_in_tip",
+        "s113.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s113.guideway_near_in",
+        "s113.guideway_near_main",
+        "s113.guideway_near_out",
+        "s113.guideway_far_in",
+        "s113.guideway_far_main",
+        "s113.guideway_far_out",
+        "s113.platform_in",
+        "s113.platform_parking_a",
+        "s113.platform_parking_b",
+        "s113.platform_out",
+        "s113.uturn_near_far_a",
+        "s113.uturn_near_far_b",
+        "s113.uturn_far_near_a",
+        "s113.uturn_far_near_b"
+      ],
+      "center_lat": 41.29365500445789,
+      "center_lon": -95.90094566345216,
+      "heading_deg": 0.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s114",
+      "structure_type": "station",
+      "cp_ids": [
+        "s114.CP_near_far",
+        "s114.CP_far_near"
+      ],
+      "node_ids": [
+        "s114.guideway_near_out_end",
+        "s114.guideway_near_in_end",
+        "s114.guideway_far_in_end",
+        "s114.guideway_far_out_end",
+        "s114.platform_out_end",
+        "s114.platform_in_end",
+        "s114.platform_parking",
+        "s114.uturn_near_far_mid",
+        "s114.uturn_far_near_mid",
+        "s114.guideway_near_out_tip",
+        "s114.guideway_far_in_tip",
+        "s114.guideway_near_in_tip",
+        "s114.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s114.guideway_near_in",
+        "s114.guideway_near_main",
+        "s114.guideway_near_out",
+        "s114.guideway_far_in",
+        "s114.guideway_far_main",
+        "s114.guideway_far_out",
+        "s114.platform_in",
+        "s114.platform_parking_a",
+        "s114.platform_parking_b",
+        "s114.platform_out",
+        "s114.uturn_near_far_a",
+        "s114.uturn_near_far_b",
+        "s114.uturn_far_near_a",
+        "s114.uturn_far_near_b"
+      ],
+      "center_lat": 41.29946020877551,
+      "center_lon": -95.9007740020752,
+      "heading_deg": 0.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s115",
+      "structure_type": "station",
+      "cp_ids": [
+        "s115.CP_near_far",
+        "s115.CP_far_near"
+      ],
+      "node_ids": [
+        "s115.guideway_near_out_end",
+        "s115.guideway_near_in_end",
+        "s115.guideway_far_in_end",
+        "s115.guideway_far_out_end",
+        "s115.platform_out_end",
+        "s115.platform_in_end",
+        "s115.platform_parking",
+        "s115.uturn_near_far_mid",
+        "s115.uturn_far_near_mid",
+        "s115.guideway_near_out_tip",
+        "s115.guideway_far_in_tip",
+        "s115.guideway_near_in_tip",
+        "s115.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s115.guideway_near_in",
+        "s115.guideway_near_main",
+        "s115.guideway_near_out",
+        "s115.guideway_far_in",
+        "s115.guideway_far_main",
+        "s115.guideway_far_out",
+        "s115.platform_in",
+        "s115.platform_parking_a",
+        "s115.platform_parking_b",
+        "s115.platform_out",
+        "s115.uturn_near_far_a",
+        "s115.uturn_near_far_b",
+        "s115.uturn_far_near_a",
+        "s115.uturn_far_near_b"
+      ],
+      "center_lat": 41.305651948198346,
+      "center_lon": -95.90686798095705,
+      "heading_deg": 135.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s117",
+      "structure_type": "station",
+      "cp_ids": [
+        "s117.CP_near_far",
+        "s117.CP_far_near"
+      ],
+      "node_ids": [
+        "s117.guideway_near_out_end",
+        "s117.guideway_near_in_end",
+        "s117.guideway_far_in_end",
+        "s117.guideway_far_out_end",
+        "s117.platform_out_end",
+        "s117.platform_in_end",
+        "s117.platform_parking",
+        "s117.uturn_near_far_mid",
+        "s117.uturn_far_near_mid",
+        "s117.guideway_near_out_tip",
+        "s117.guideway_far_in_tip",
+        "s117.guideway_near_in_tip",
+        "s117.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s117.guideway_near_in",
+        "s117.guideway_near_main",
+        "s117.guideway_near_out",
+        "s117.guideway_far_in",
+        "s117.guideway_far_main",
+        "s117.guideway_far_out",
+        "s117.platform_in",
+        "s117.platform_parking_a",
+        "s117.platform_parking_b",
+        "s117.platform_out",
+        "s117.uturn_near_far_a",
+        "s117.uturn_near_far_b",
+        "s117.uturn_far_near_a",
+        "s117.uturn_far_near_b"
+      ],
+      "center_lat": 41.26780069760948,
+      "center_lon": -95.94295978546143,
+      "heading_deg": 90.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "c67",
+      "structure_type": "traffic_circle",
+      "cp_ids": [
+        "c67.CP0",
+        "c67.CP1",
+        "c67.CP2",
+        "c67.CP3"
+      ],
+      "node_ids": [
+        "c67.A0_div",
+        "c67.A0_merge",
+        "c67.A0_out",
+        "c67.A0_in",
+        "c67.A3_div",
+        "c67.A3_merge",
+        "c67.A3_out",
+        "c67.A3_in",
+        "c67.A2_div",
+        "c67.A2_merge",
+        "c67.A2_out",
+        "c67.A2_in",
+        "c67.A1_div",
+        "c67.A1_merge",
+        "c67.A1_out",
+        "c67.A1_in"
+      ],
+      "line_ids": [
+        "c67.RL0a",
+        "c67.RL0b",
+        "c67.RL3a",
+        "c67.RL3b",
+        "c67.RL2a",
+        "c67.RL2b",
+        "c67.RL1a",
+        "c67.RL1b",
+        "c67.A0_out_stub",
+        "c67.A0_in_stub",
+        "c67.A3_out_stub",
+        "c67.A3_in_stub",
+        "c67.A2_out_stub",
+        "c67.A2_in_stub",
+        "c67.A1_out_stub",
+        "c67.A1_in_stub"
+      ],
+      "center_lat": 41.26868049180518,
+      "center_lon": -95.92942669278985,
+      "heading_deg": 0.0,
+      "arm_headings": [
+        0,
+        90,
+        180,
+        270
+      ]
+    },
+    {
+      "structure_id": "s135",
+      "structure_type": "station",
+      "cp_ids": [
+        "s135.CP_near_far",
+        "s135.CP_far_near"
+      ],
+      "node_ids": [
+        "s135.guideway_near_out_end",
+        "s135.guideway_near_in_end",
+        "s135.guideway_far_in_end",
+        "s135.guideway_far_out_end",
+        "s135.platform_out_end",
+        "s135.platform_in_end",
+        "s135.platform_parking",
+        "s135.uturn_near_far_mid",
+        "s135.uturn_far_near_mid",
+        "s135.guideway_near_out_tip",
+        "s135.guideway_far_in_tip",
+        "s135.guideway_near_in_tip",
+        "s135.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s135.guideway_near_in",
+        "s135.guideway_near_main",
+        "s135.guideway_near_out",
+        "s135.guideway_far_in",
+        "s135.guideway_far_main",
+        "s135.guideway_far_out",
+        "s135.platform_in",
+        "s135.platform_parking_a",
+        "s135.platform_parking_b",
+        "s135.platform_out",
+        "s135.uturn_near_far_a",
+        "s135.uturn_near_far_b",
+        "s135.uturn_far_near_a",
+        "s135.uturn_far_near_b"
+      ],
+      "center_lat": 41.267855759956745,
+      "center_lon": -95.93273722055159,
+      "heading_deg": 90.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s136",
+      "structure_type": "station",
+      "cp_ids": [
+        "s136.CP_near_far",
+        "s136.CP_far_near"
+      ],
+      "node_ids": [
+        "s136.guideway_near_out_end",
+        "s136.guideway_near_in_end",
+        "s136.guideway_far_in_end",
+        "s136.guideway_far_out_end",
+        "s136.platform_out_end",
+        "s136.platform_in_end",
+        "s136.platform_parking",
+        "s136.uturn_near_far_mid",
+        "s136.uturn_far_near_mid",
+        "s136.guideway_near_out_tip",
+        "s136.guideway_far_in_tip",
+        "s136.guideway_near_in_tip",
+        "s136.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s136.guideway_near_in",
+        "s136.guideway_near_main",
+        "s136.guideway_near_out",
+        "s136.guideway_far_in",
+        "s136.guideway_far_main",
+        "s136.guideway_far_out",
+        "s136.platform_in",
+        "s136.platform_parking_a",
+        "s136.platform_parking_b",
+        "s136.platform_out",
+        "s136.uturn_near_far_a",
+        "s136.uturn_near_far_b",
+        "s136.uturn_far_near_a",
+        "s136.uturn_far_near_b"
+      ],
+      "center_lat": 41.25701453297672,
+      "center_lon": -95.92913398088363,
+      "heading_deg": 0.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s142",
+      "structure_type": "station",
+      "cp_ids": [
+        "s142.CP_near_far",
+        "s142.CP_far_near"
+      ],
+      "node_ids": [
+        "s142.guideway_near_out_end",
+        "s142.guideway_near_in_end",
+        "s142.guideway_far_in_end",
+        "s142.guideway_far_out_end",
+        "s142.platform_out_end",
+        "s142.platform_in_end",
+        "s142.platform_parking",
+        "s142.uturn_near_far_mid",
+        "s142.uturn_far_near_mid",
+        "s142.guideway_near_out_tip",
+        "s142.guideway_far_in_tip",
+        "s142.guideway_near_in_tip",
+        "s142.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s142.guideway_near_in",
+        "s142.guideway_near_main",
+        "s142.guideway_near_out",
+        "s142.guideway_far_in",
+        "s142.guideway_far_main",
+        "s142.guideway_far_out",
+        "s142.platform_in",
+        "s142.platform_parking_a",
+        "s142.platform_parking_b",
+        "s142.platform_out",
+        "s142.uturn_near_far_a",
+        "s142.uturn_near_far_b",
+        "s142.uturn_far_near_a",
+        "s142.uturn_far_near_b"
+      ],
+      "center_lat": 41.27816304371104,
+      "center_lon": -95.9146182323019,
+      "heading_deg": 45.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s143",
+      "structure_type": "station",
+      "cp_ids": [
+        "s143.CP_near_far",
+        "s143.CP_far_near"
+      ],
+      "node_ids": [
+        "s143.guideway_near_out_end",
+        "s143.guideway_near_in_end",
+        "s143.guideway_far_in_end",
+        "s143.guideway_far_out_end",
+        "s143.platform_out_end",
+        "s143.platform_in_end",
+        "s143.platform_parking",
+        "s143.uturn_near_far_mid",
+        "s143.uturn_far_near_mid",
+        "s143.guideway_near_out_tip",
+        "s143.guideway_far_in_tip",
+        "s143.guideway_near_in_tip",
+        "s143.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s143.guideway_near_in",
+        "s143.guideway_near_main",
+        "s143.guideway_near_out",
+        "s143.guideway_far_in",
+        "s143.guideway_far_main",
+        "s143.guideway_far_out",
+        "s143.platform_in",
+        "s143.platform_parking_a",
+        "s143.platform_parking_b",
+        "s143.platform_out",
+        "s143.uturn_near_far_a",
+        "s143.uturn_near_far_b",
+        "s143.uturn_far_near_a",
+        "s143.uturn_far_near_b"
+      ],
+      "center_lat": 41.282382493316504,
+      "center_lon": -95.91144427355158,
+      "heading_deg": 45.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s145",
+      "structure_type": "station",
+      "cp_ids": [
+        "s145.CP_near_far",
+        "s145.CP_far_near"
+      ],
+      "node_ids": [
+        "s145.guideway_near_out_end",
+        "s145.guideway_near_in_end",
+        "s145.guideway_far_in_end",
+        "s145.guideway_far_out_end",
+        "s145.platform_out_end",
+        "s145.platform_in_end",
+        "s145.platform_parking",
+        "s145.uturn_near_far_mid",
+        "s145.uturn_far_near_mid",
+        "s145.guideway_near_out_tip",
+        "s145.guideway_far_in_tip",
+        "s145.guideway_near_in_tip",
+        "s145.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s145.guideway_near_in",
+        "s145.guideway_near_main",
+        "s145.guideway_near_out",
+        "s145.guideway_far_in",
+        "s145.guideway_far_main",
+        "s145.guideway_far_out",
+        "s145.platform_in",
+        "s145.platform_parking_a",
+        "s145.platform_parking_b",
+        "s145.platform_out",
+        "s145.uturn_near_far_a",
+        "s145.uturn_near_far_b",
+        "s145.uturn_far_near_a",
+        "s145.uturn_far_near_b"
+      ],
+      "center_lat": 41.27059649491812,
+      "center_lon": -95.92294269707004,
+      "heading_deg": 45.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s146",
+      "structure_type": "station",
+      "cp_ids": [
+        "s146.CP_near_far",
+        "s146.CP_far_near"
+      ],
+      "node_ids": [
+        "s146.guideway_near_out_end",
+        "s146.guideway_near_in_end",
+        "s146.guideway_far_in_end",
+        "s146.guideway_far_out_end",
+        "s146.platform_out_end",
+        "s146.platform_in_end",
+        "s146.platform_parking",
+        "s146.uturn_near_far_mid",
+        "s146.uturn_far_near_mid",
+        "s146.guideway_near_out_tip",
+        "s146.guideway_far_in_tip",
+        "s146.guideway_near_in_tip",
+        "s146.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s146.guideway_near_in",
+        "s146.guideway_near_main",
+        "s146.guideway_near_out",
+        "s146.guideway_far_in",
+        "s146.guideway_far_main",
+        "s146.guideway_far_out",
+        "s146.platform_in",
+        "s146.platform_parking_a",
+        "s146.platform_parking_b",
+        "s146.platform_out",
+        "s146.uturn_near_far_a",
+        "s146.uturn_near_far_b",
+        "s146.uturn_far_near_a",
+        "s146.uturn_far_near_b"
+      ],
+      "center_lat": 41.308664072838226,
+      "center_lon": -95.90993642807008,
+      "heading_deg": 135.0,
+      "arm_headings": []
+    },
+    {
+      "structure_id": "s147",
+      "structure_type": "station",
+      "cp_ids": [
+        "s147.CP_near_far",
+        "s147.CP_far_near"
+      ],
+      "node_ids": [
+        "s147.guideway_near_out_end",
+        "s147.guideway_near_in_end",
+        "s147.guideway_far_in_end",
+        "s147.guideway_far_out_end",
+        "s147.platform_out_end",
+        "s147.platform_in_end",
+        "s147.platform_parking",
+        "s147.uturn_near_far_mid",
+        "s147.uturn_far_near_mid",
+        "s147.guideway_near_out_tip",
+        "s147.guideway_far_in_tip",
+        "s147.guideway_near_in_tip",
+        "s147.guideway_far_out_tip"
+      ],
+      "line_ids": [
+        "s147.guideway_near_in",
+        "s147.guideway_near_main",
+        "s147.guideway_near_out",
+        "s147.guideway_far_in",
+        "s147.guideway_far_main",
+        "s147.guideway_far_out",
+        "s147.platform_in",
+        "s147.platform_parking_a",
+        "s147.platform_parking_b",
+        "s147.platform_out",
+        "s147.uturn_near_far_a",
+        "s147.uturn_near_far_b",
+        "s147.uturn_far_near_a",
+        "s147.uturn_far_near_b"
+      ],
+      "center_lat": 41.31092058706907,
+      "center_lon": -95.91169595718385,
+      "heading_deg": 135.0,
+      "arm_headings": []
+    }
+  ],
+  "cps": [
+    {
+      "cp_id": "s113.CP_near_far",
+      "structure_id": "s113",
+      "heading_deg": 0.0,
+      "inbound_node": "s113.guideway_far_in_tip",
+      "outbound_node": "s113.guideway_near_out_tip",
+      "center_lat": 41.29405924448663,
+      "center_lon": -95.90094566345216,
+      "connected_to": "s114.CP_far_near"
+    },
+    {
+      "cp_id": "s113.CP_far_near",
+      "structure_id": "s113",
+      "heading_deg": 180.0,
+      "inbound_node": "s113.guideway_near_in_tip",
+      "outbound_node": "s113.guideway_far_out_tip",
+      "center_lat": 41.293250764429146,
+      "center_lon": -95.90094566345216,
+      "connected_to": "s143.CP_near_far"
+    },
+    {
+      "cp_id": "s114.CP_near_far",
+      "structure_id": "s114",
+      "heading_deg": 0.0,
+      "inbound_node": "s114.guideway_far_in_tip",
+      "outbound_node": "s114.guideway_near_out_tip",
+      "center_lat": 41.29986444880425,
+      "center_lon": -95.9007740020752,
+      "connected_to": "s115.CP_near_far"
+    },
+    {
+      "cp_id": "s114.CP_far_near",
+      "structure_id": "s114",
+      "heading_deg": 180.0,
+      "inbound_node": "s114.guideway_near_in_tip",
+      "outbound_node": "s114.guideway_far_out_tip",
+      "center_lat": 41.299055968746764,
+      "center_lon": -95.9007740020752,
+      "connected_to": "s113.CP_near_far"
+    },
+    {
+      "cp_id": "s115.CP_near_far",
+      "structure_id": "s115",
+      "heading_deg": 135.0,
+      "inbound_node": "s115.guideway_far_in_tip",
+      "outbound_node": "s115.guideway_near_out_tip",
+      "center_lat": 41.305366107332794,
+      "center_lon": -95.90648746812828,
+      "connected_to": "s114.CP_near_far"
+    },
+    {
+      "cp_id": "s115.CP_far_near",
+      "structure_id": "s115",
+      "heading_deg": 315.0,
+      "inbound_node": "s115.guideway_near_in_tip",
+      "outbound_node": "s115.guideway_far_out_tip",
+      "center_lat": 41.3059377890639,
+      "center_lon": -95.90724849378581,
+      "connected_to": "s146.CP_near_far"
+    },
+    {
+      "cp_id": "s117.CP_near_far",
+      "structure_id": "s117",
+      "heading_deg": 90.0,
+      "inbound_node": "s117.guideway_far_in_tip",
+      "outbound_node": "s117.guideway_near_out_tip",
+      "center_lat": 41.26780069760948,
+      "center_lon": -95.94242197113796,
+      "connected_to": "s135.CP_far_near"
+    },
+    {
+      "cp_id": "s117.CP_far_near",
+      "structure_id": "s117",
+      "heading_deg": 270.0,
+      "inbound_node": "s117.guideway_near_in_tip",
+      "outbound_node": "s117.guideway_far_out_tip",
+      "center_lat": 41.26780069760948,
+      "center_lon": -95.94349759978489,
+      "connected_to": null
+    },
+    {
+      "cp_id": "c67.CP0",
+      "structure_id": "c67",
+      "heading_deg": 0,
+      "inbound_node": "c67.A0_in",
+      "outbound_node": "c67.A0_out",
+      "center_lat": 41.26888261181955,
+      "center_lon": -95.92942669278985,
+      "connected_to": null
+    },
+    {
+      "cp_id": "c67.CP1",
+      "structure_id": "c67",
+      "heading_deg": 90,
+      "inbound_node": "c67.A1_in",
+      "outbound_node": "c67.A1_out",
+      "center_lat": 41.26868049180518,
+      "center_lon": -95.9291577820046,
+      "connected_to": "s145.CP_far_near"
+    },
+    {
+      "cp_id": "c67.CP2",
+      "structure_id": "c67",
+      "heading_deg": 180,
+      "inbound_node": "c67.A2_in",
+      "outbound_node": "c67.A2_out",
+      "center_lat": 41.268478371790806,
+      "center_lon": -95.92942669278985,
+      "connected_to": "s136.CP_near_far"
+    },
+    {
+      "cp_id": "c67.CP3",
+      "structure_id": "c67",
+      "heading_deg": 270,
+      "inbound_node": "c67.A3_in",
+      "outbound_node": "c67.A3_out",
+      "center_lat": 41.26868049180518,
+      "center_lon": -95.9296956035751,
+      "connected_to": "s135.CP_near_far"
+    },
+    {
+      "cp_id": "s135.CP_near_far",
+      "structure_id": "s135",
+      "heading_deg": 90.0,
+      "inbound_node": "s135.guideway_far_in_tip",
+      "outbound_node": "s135.guideway_near_out_tip",
+      "center_lat": 41.267855759956745,
+      "center_lon": -95.93219940577457,
+      "connected_to": "c67.CP3"
+    },
+    {
+      "cp_id": "s135.CP_far_near",
+      "structure_id": "s135",
+      "heading_deg": 270.0,
+      "inbound_node": "s135.guideway_near_in_tip",
+      "outbound_node": "s135.guideway_far_out_tip",
+      "center_lat": 41.267855759956745,
+      "center_lon": -95.9332750353286,
+      "connected_to": "s117.CP_near_far"
+    },
+    {
+      "cp_id": "s136.CP_near_far",
+      "structure_id": "s136",
+      "heading_deg": 0.0,
+      "inbound_node": "s136.guideway_far_in_tip",
+      "outbound_node": "s136.guideway_near_out_tip",
+      "center_lat": 41.25741877300546,
+      "center_lon": -95.92913398088363,
+      "connected_to": "c67.CP2"
+    },
+    {
+      "cp_id": "s136.CP_far_near",
+      "structure_id": "s136",
+      "heading_deg": 180.0,
+      "inbound_node": "s136.guideway_near_in_tip",
+      "outbound_node": "s136.guideway_far_out_tip",
+      "center_lat": 41.256610292947975,
+      "center_lon": -95.92913398088363,
+      "connected_to": null
+    },
+    {
+      "cp_id": "s142.CP_near_far",
+      "structure_id": "s142",
+      "heading_deg": 45.0,
+      "inbound_node": "s142.guideway_far_in_tip",
+      "outbound_node": "s142.guideway_near_out_tip",
+      "center_lat": 41.27844888457659,
+      "center_lon": -95.91423787977601,
+      "connected_to": "s143.CP_far_near"
+    },
+    {
+      "cp_id": "s142.CP_far_near",
+      "structure_id": "s142",
+      "heading_deg": 225.0,
+      "inbound_node": "s142.guideway_near_in_tip",
+      "outbound_node": "s142.guideway_far_out_tip",
+      "center_lat": 41.27787720284549,
+      "center_lon": -95.9149985848278,
+      "connected_to": "s145.CP_near_far"
+    },
+    {
+      "cp_id": "s143.CP_near_far",
+      "structure_id": "s143",
+      "heading_deg": 45.0,
+      "inbound_node": "s143.guideway_far_in_tip",
+      "outbound_node": "s143.guideway_near_out_tip",
+      "center_lat": 41.282668334182056,
+      "center_lon": -95.91106389643423,
+      "connected_to": "s113.CP_far_near"
+    },
+    {
+      "cp_id": "s143.CP_far_near",
+      "structure_id": "s143",
+      "heading_deg": 225.0,
+      "inbound_node": "s143.guideway_near_in_tip",
+      "outbound_node": "s143.guideway_far_out_tip",
+      "center_lat": 41.28209665245095,
+      "center_lon": -95.91182465066893,
+      "connected_to": "s142.CP_near_far"
+    },
+    {
+      "cp_id": "s145.CP_near_far",
+      "structure_id": "s145",
+      "heading_deg": 45.0,
+      "inbound_node": "s145.guideway_far_in_tip",
+      "outbound_node": "s145.guideway_near_out_tip",
+      "center_lat": 41.27088233578367,
+      "center_lon": -95.92256238862977,
+      "connected_to": "s142.CP_far_near"
+    },
+    {
+      "cp_id": "s145.CP_far_near",
+      "structure_id": "s145",
+      "heading_deg": 225.0,
+      "inbound_node": "s145.guideway_near_in_tip",
+      "outbound_node": "s145.guideway_far_out_tip",
+      "center_lat": 41.270310654052565,
+      "center_lon": -95.92332300551031,
+      "connected_to": "c67.CP1"
+    },
+    {
+      "cp_id": "s146.CP_near_far",
+      "structure_id": "s146",
+      "heading_deg": 135.0,
+      "inbound_node": "s146.guideway_far_in_tip",
+      "outbound_node": "s146.guideway_near_out_tip",
+      "center_lat": 41.308378231972675,
+      "center_lon": -95.90955589766243,
+      "connected_to": "s115.CP_far_near"
+    },
+    {
+      "cp_id": "s146.CP_far_near",
+      "structure_id": "s146",
+      "heading_deg": 315.0,
+      "inbound_node": "s146.guideway_near_in_tip",
+      "outbound_node": "s146.guideway_far_out_tip",
+      "center_lat": 41.30894991370378,
+      "center_lon": -95.91031695847774,
+      "connected_to": "s147.CP_near_far"
+    },
+    {
+      "cp_id": "s147.CP_near_far",
+      "structure_id": "s147",
+      "heading_deg": 135.0,
+      "inbound_node": "s147.guideway_far_in_tip",
+      "outbound_node": "s147.guideway_near_out_tip",
+      "center_lat": 41.31063474620352,
+      "center_lon": -95.91131541360534,
+      "connected_to": "s146.CP_far_near"
+    },
+    {
+      "cp_id": "s147.CP_far_near",
+      "structure_id": "s147",
+      "heading_deg": 315.0,
+      "inbound_node": "s147.guideway_near_in_tip",
+      "outbound_node": "s147.guideway_far_out_tip",
+      "center_lat": 41.31120642793462,
+      "center_lon": -95.91207650076237,
+      "connected_to": null
+    }
+  ]
+}

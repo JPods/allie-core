@@ -1,0 +1,3431 @@
+{
+  "format": "jpd",
+  "version": 2,
+  "network_id": "untitled",
+  "saved_at": 1783462450626,
+  "settings": {
+    "accInG": 1.0,
+    "deccInG": 1.0,
+    "maxVelocityInKMPH": 60,
+    "podLen": 3,
+    "minHeadwaySec": 0.25,
+    "disembarkingTimeInSec": 20,
+    "embarkingTimeInSec": 20,
+    "ticketingTimeInSec": 30,
+    "stationEntryTimeInSec": 40,
+    "stationExitTimeInSec": 40,
+    "walkingSpeedKmh": 4.8,
+    "walkToStationSec": 300,
+    "walkFromStationSec": 300,
+    "timeResolutionPerSec": 9,
+    "podsPerStation": 8,
+    "graceDistance": 1,
+    "simSpeedMultiplier": 360,
+    "stationLabelSize": 3
+  },
+  "switches": [],
+  "stations": [],
+  "lines": [],
+  "structures": [],
+  "cps": [],
+  "overlays": {
+    "city": "nc_021",
+    "files": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "overlay_data": {
+    "population_density": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "population_density",
+        "count": 65
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 1317,
+            "name": "Census Tract 1; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 3520,
+            "intensity": 3520
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5532037,
+              35.59488
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 1352,
+            "name": "Census Tract 2; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2624,
+            "intensity": 2624
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.565826,
+              35.5971433
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000300",
+            "value": 2387,
+            "name": "Census Tract 3; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2999,
+            "intensity": 2999
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5707619,
+              35.6063401
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 3988,
+            "name": "Census Tract 4; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 3915,
+            "intensity": 3915
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5622271,
+              35.6147195
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 3681,
+            "name": "Census Tract 5; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1675,
+            "intensity": 1675
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5424249,
+              35.6230445
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000600",
+            "value": 1818,
+            "name": "Census Tract 6; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2790,
+            "intensity": 2790
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5470874,
+              35.6041522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000700",
+            "value": 1519,
+            "name": "Census Tract 7; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2334,
+            "intensity": 2334
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5453765,
+              35.5904452
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 3455,
+            "name": "Census Tract 8; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1912,
+            "intensity": 1912
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5369077,
+              35.5807763
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 2971,
+            "name": "Census Tract 9; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1640,
+            "intensity": 1640
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5590767,
+              35.5787633
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 4952,
+            "name": "Census Tract 10; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 3474,
+            "intensity": 3474
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5753719,
+              35.5762366
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001100",
+            "value": 5583,
+            "name": "Census Tract 11; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 3846,
+            "intensity": 3846
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5919985,
+              35.5738595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001200",
+            "value": 4818,
+            "name": "Census Tract 12; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1707,
+            "intensity": 1707
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6094464,
+              35.5706757
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001300",
+            "value": 4461,
+            "name": "Census Tract 13; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2119,
+            "intensity": 2119
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6227506,
+              35.5806246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001401",
+            "value": 4166,
+            "name": "Census Tract 14.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1239,
+            "intensity": 1239
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6010698,
+              35.6074471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001402",
+            "value": 3020,
+            "name": "Census Tract 14.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2408,
+            "intensity": 2408
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5839564,
+              35.5980457
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001500",
+            "value": 2911,
+            "name": "Census Tract 15; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1987,
+            "intensity": 1987
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5881639,
+              35.6306935
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001601",
+            "value": 4448,
+            "name": "Census Tract 16.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2286,
+            "intensity": 2286
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5632184,
+              35.6324526
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001602",
+            "value": 3481,
+            "name": "Census Tract 16.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 665,
+            "intensity": 665
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5631461,
+              35.6595008
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 2983,
+            "name": "Census Tract 17; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 439,
+            "intensity": 439
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5155282,
+              35.6458553
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001801",
+            "value": 3389,
+            "name": "Census Tract 18.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1029,
+            "intensity": 1029
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5222156,
+              35.6035315
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001802",
+            "value": 5295,
+            "name": "Census Tract 18.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1425,
+            "intensity": 1425
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5004234,
+              35.608999
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 4032,
+            "name": "Census Tract 19; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1256,
+            "intensity": 1256
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.498582,
+              35.5774596
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002000",
+            "value": 7026,
+            "name": "Census Tract 20; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 2353,
+            "intensity": 2353
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5236113,
+              35.5624626
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002101",
+            "value": 1654,
+            "name": "Census Tract 21.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 178,
+            "intensity": 178
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5583688,
+              35.5359675
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002102",
+            "value": 5367,
+            "name": "Census Tract 21.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1585,
+            "intensity": 1585
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5143859,
+              35.5420616
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 5959,
+            "name": "Census Tract 22.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 962,
+            "intensity": 962
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5325623,
+              35.4541608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 9317,
+            "name": "Census Tract 22.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1448,
+            "intensity": 1448
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.543587,
+              35.4961979
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002205",
+            "value": 7041,
+            "name": "Census Tract 22.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1594,
+            "intensity": 1594
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4974417,
+              35.4657305
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002206",
+            "value": 5112,
+            "name": "Census Tract 22.06; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1010,
+            "intensity": 1010
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5053243,
+              35.5020846
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 6807,
+            "name": "Census Tract 23.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 977,
+            "intensity": 977
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5726108,
+              35.4598034
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 1524,
+            "name": "Census Tract 23.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 126,
+            "intensity": 126
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6154836,
+              35.4677235
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002305",
+            "value": 5570,
+            "name": "Census Tract 23.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 379,
+            "intensity": 379
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6417599,
+              35.5066613
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002306",
+            "value": 4042,
+            "name": "Census Tract 23.06; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 397,
+            "intensity": 397
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5996582,
+              35.5358033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002401",
+            "value": 3248,
+            "name": "Census Tract 24.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 136,
+            "intensity": 136
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7549939,
+              35.485319
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002402",
+            "value": 5483,
+            "name": "Census Tract 24.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 277,
+            "intensity": 277
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993203,
+              35.4899863
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 4845,
+            "name": "Census Tract 25.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1025,
+            "intensity": 1025
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7196783,
+              35.5435554
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 5176,
+            "name": "Census Tract 25.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 439,
+            "intensity": 439
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7256343,
+              35.5676668
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 6532,
+            "name": "Census Tract 25.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 1125,
+            "intensity": 1125
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6680939,
+              35.5681755
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 3653,
+            "name": "Census Tract 25.06; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 814,
+            "intensity": 814
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6432804,
+              35.5818373
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002603",
+            "value": 3577,
+            "name": "Census Tract 26.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 67,
+            "intensity": 67
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7893106,
+              35.6461407
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 6053,
+            "name": "Census Tract 26.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 204,
+            "intensity": 204
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6795819,
+              35.6938725
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 6327,
+            "name": "Census Tract 26.06; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 833,
+            "intensity": 833
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6590655,
+              35.643985
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002607",
+            "value": 4227,
+            "name": "Census Tract 26.07; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 669,
+            "intensity": 669
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6180676,
+              35.6355179
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002608",
+            "value": 4559,
+            "name": "Census Tract 26.08; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 385,
+            "intensity": 385
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6858471,
+              35.6106682
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 2360,
+            "name": "Census Tract 26.09; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 779,
+            "intensity": 779
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993953,
+              35.6451236
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 3981,
+            "name": "Census Tract 27.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 634,
+            "intensity": 634
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5966127,
+              35.6699055
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002702",
+            "value": 5237,
+            "name": "Census Tract 27.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 802,
+            "intensity": 802
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5790166,
+              35.7071247
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 4868,
+            "name": "Census Tract 27.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 338,
+            "intensity": 338
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5232384,
+              35.6888391
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002705",
+            "value": 1213,
+            "name": "Census Tract 27.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 64,
+            "intensity": 64
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4605811,
+              35.701162
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002803",
+            "value": 5419,
+            "name": "Census Tract 28.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 471,
+            "intensity": 471
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6163247,
+              35.7351251
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 5134,
+            "name": "Census Tract 28.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 246,
+            "intensity": 246
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5373328,
+              35.7504108
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002900",
+            "value": 4143,
+            "name": "Census Tract 29; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 70,
+            "intensity": 70
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4169239,
+              35.7659059
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003002",
+            "value": 8923,
+            "name": "Census Tract 30.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 467,
+            "intensity": 467
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4027866,
+              35.6153051
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003003",
+            "value": 5558,
+            "name": "Census Tract 30.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 455,
+            "intensity": 455
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4646274,
+              35.5996994
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003004",
+            "value": 2828,
+            "name": "Census Tract 30.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 186,
+            "intensity": 186
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4382932,
+              35.6459043
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 2056,
+            "name": "Census Tract 31.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 273,
+            "intensity": 273
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3384121,
+              35.5918971
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003105",
+            "value": 3284,
+            "name": "Census Tract 31.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 355,
+            "intensity": 355
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2953338,
+              35.621317
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003106",
+            "value": 1356,
+            "name": "Census Tract 31.06; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 74,
+            "intensity": 74
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3126915,
+              35.6876103
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003107",
+            "value": 4047,
+            "name": "Census Tract 31.07; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 924,
+            "intensity": 924
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3462779,
+              35.6279471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003108",
+            "value": 2163,
+            "name": "Census Tract 31.08; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 128,
+            "intensity": 128
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3584543,
+              35.671715
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003201",
+            "value": 1792,
+            "name": "Census Tract 32.01; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 441,
+            "intensity": 441
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4839761,
+              35.541365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 3664,
+            "name": "Census Tract 32.02; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 227,
+            "intensity": 227
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4617214,
+              35.4927908
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 6349,
+            "name": "Census Tract 32.03; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 566,
+            "intensity": 566
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4358398,
+              35.5399479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 4621,
+            "name": "Census Tract 32.04; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 139,
+            "intensity": 139
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3719525,
+              35.522082
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003205",
+            "value": 1327,
+            "name": "Census Tract 32.05; Buncombe County; North Carolina",
+            "layer": "population_density",
+            "density": 33,
+            "intensity": 33
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2697836,
+              35.5270929
+            ]
+          }
+        }
+      ]
+    },
+    "property_values": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "property_values",
+        "count": 64
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 875000,
+            "name": "Census Tract 1; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 875000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5532037,
+              35.59488
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 460000,
+            "name": "Census Tract 2; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 460000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.565826,
+              35.5971433
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000300",
+            "value": 489200,
+            "name": "Census Tract 3; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 489200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5707619,
+              35.6063401
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 432100,
+            "name": "Census Tract 4; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 432100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5622271,
+              35.6147195
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 697000,
+            "name": "Census Tract 5; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 697000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5424249,
+              35.6230445
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000600",
+            "value": 498500,
+            "name": "Census Tract 6; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 498500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5470874,
+              35.6041522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000700",
+            "value": 410700,
+            "name": "Census Tract 7; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 410700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5453765,
+              35.5904452
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 415400,
+            "name": "Census Tract 8; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 415400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5369077,
+              35.5807763
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 341500,
+            "name": "Census Tract 9; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 341500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5590767,
+              35.5787633
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 416900,
+            "name": "Census Tract 10; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 416900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5753719,
+              35.5762366
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001100",
+            "value": 381000,
+            "name": "Census Tract 11; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 381000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5919985,
+              35.5738595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001200",
+            "value": 346200,
+            "name": "Census Tract 12; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 346200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6094464,
+              35.5706757
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001300",
+            "value": 267000,
+            "name": "Census Tract 13; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 267000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6227506,
+              35.5806246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001401",
+            "value": 144800,
+            "name": "Census Tract 14.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 144800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6010698,
+              35.6074471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001500",
+            "value": 229100,
+            "name": "Census Tract 15; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 229100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5881639,
+              35.6306935
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001601",
+            "value": 580500,
+            "name": "Census Tract 16.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 580500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5632184,
+              35.6324526
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001602",
+            "value": 618100,
+            "name": "Census Tract 16.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 618100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5631461,
+              35.6595008
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 553400,
+            "name": "Census Tract 17; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 553400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5155282,
+              35.6458553
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001801",
+            "value": 355700,
+            "name": "Census Tract 18.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 355700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5222156,
+              35.6035315
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001802",
+            "value": 471600,
+            "name": "Census Tract 18.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 471600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5004234,
+              35.608999
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 285000,
+            "name": "Census Tract 19; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 285000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.498582,
+              35.5774596
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002000",
+            "value": 263400,
+            "name": "Census Tract 20; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 263400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5236113,
+              35.5624626
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002101",
+            "value": 1165300,
+            "name": "Census Tract 21.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 1165300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5583688,
+              35.5359675
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002102",
+            "value": 208100,
+            "name": "Census Tract 21.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 208100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5143859,
+              35.5420616
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 174500,
+            "name": "Census Tract 22.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 174500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5325623,
+              35.4541608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 702600,
+            "name": "Census Tract 22.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 702600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.543587,
+              35.4961979
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002205",
+            "value": 337100,
+            "name": "Census Tract 22.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 337100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4974417,
+              35.4657305
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002206",
+            "value": 441500,
+            "name": "Census Tract 22.06; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 441500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5053243,
+              35.5020846
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 324400,
+            "name": "Census Tract 23.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 324400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5726108,
+              35.4598034
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 638400,
+            "name": "Census Tract 23.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 638400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6154836,
+              35.4677235
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002305",
+            "value": 393100,
+            "name": "Census Tract 23.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 393100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6417599,
+              35.5066613
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002306",
+            "value": 307900,
+            "name": "Census Tract 23.06; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 307900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5996582,
+              35.5358033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002401",
+            "value": 186100,
+            "name": "Census Tract 24.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 186100
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7549939,
+              35.485319
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002402",
+            "value": 271000,
+            "name": "Census Tract 24.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 271000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993203,
+              35.4899863
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 225000,
+            "name": "Census Tract 25.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 225000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7196783,
+              35.5435554
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 242200,
+            "name": "Census Tract 25.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 242200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7256343,
+              35.5676668
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 292500,
+            "name": "Census Tract 25.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 292500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6680939,
+              35.5681755
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 208300,
+            "name": "Census Tract 25.06; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 208300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6432804,
+              35.5818373
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002603",
+            "value": 222500,
+            "name": "Census Tract 26.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 222500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7893106,
+              35.6461407
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 265500,
+            "name": "Census Tract 26.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 265500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6795819,
+              35.6938725
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 275900,
+            "name": "Census Tract 26.06; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 275900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6590655,
+              35.643985
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002607",
+            "value": 286900,
+            "name": "Census Tract 26.07; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 286900
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6180676,
+              35.6355179
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002608",
+            "value": 271600,
+            "name": "Census Tract 26.08; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 271600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6858471,
+              35.6106682
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 318400,
+            "name": "Census Tract 26.09; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 318400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993953,
+              35.6451236
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 353300,
+            "name": "Census Tract 27.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 353300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5966127,
+              35.6699055
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002702",
+            "value": 432700,
+            "name": "Census Tract 27.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 432700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5790166,
+              35.7071247
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 394500,
+            "name": "Census Tract 27.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 394500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5232384,
+              35.6888391
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002705",
+            "value": 379200,
+            "name": "Census Tract 27.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 379200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4605811,
+              35.701162
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002803",
+            "value": 262300,
+            "name": "Census Tract 28.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 262300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6163247,
+              35.7351251
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 322400,
+            "name": "Census Tract 28.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 322400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5373328,
+              35.7504108
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002900",
+            "value": 275300,
+            "name": "Census Tract 29; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 275300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4169239,
+              35.7659059
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003002",
+            "value": 221500,
+            "name": "Census Tract 30.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 221500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4027866,
+              35.6153051
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003003",
+            "value": 316600,
+            "name": "Census Tract 30.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 316600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4646274,
+              35.5996994
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003004",
+            "value": 344400,
+            "name": "Census Tract 30.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 344400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4382932,
+              35.6459043
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 292700,
+            "name": "Census Tract 31.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 292700
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3384121,
+              35.5918971
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003105",
+            "value": 298600,
+            "name": "Census Tract 31.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 298600
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2953338,
+              35.621317
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003106",
+            "value": 307500,
+            "name": "Census Tract 31.06; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 307500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3126915,
+              35.6876103
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003107",
+            "value": 312000,
+            "name": "Census Tract 31.07; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 312000
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3462779,
+              35.6279471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003108",
+            "value": 339500,
+            "name": "Census Tract 31.08; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 339500
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3584543,
+              35.671715
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003201",
+            "value": 382300,
+            "name": "Census Tract 32.01; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 382300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4839761,
+              35.541365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 546200,
+            "name": "Census Tract 32.02; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 546200
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4617214,
+              35.4927908
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 371800,
+            "name": "Census Tract 32.03; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 371800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4358398,
+              35.5399479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 281400,
+            "name": "Census Tract 32.04; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 281400
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3719525,
+              35.522082
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003205",
+            "value": 262300,
+            "name": "Census Tract 32.05; Buncombe County; North Carolina",
+            "layer": "property_values",
+            "intensity": 262300
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2697836,
+              35.5270929
+            ]
+          }
+        }
+      ]
+    },
+    "jobs": {
+      "type": "FeatureCollection",
+      "metadata": {
+        "layer": "jobs",
+        "count": 65
+      },
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000100",
+            "value": 268,
+            "name": "Census Tract 1; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 268
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5532037,
+              35.59488
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000200",
+            "value": 698,
+            "name": "Census Tract 2; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 698
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.565826,
+              35.5971433
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000300",
+            "value": 1292,
+            "name": "Census Tract 3; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1292
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5707619,
+              35.6063401
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000400",
+            "value": 2010,
+            "name": "Census Tract 4; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2010
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5622271,
+              35.6147195
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000500",
+            "value": 1905,
+            "name": "Census Tract 5; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1905
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5424249,
+              35.6230445
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000600",
+            "value": 1114,
+            "name": "Census Tract 6; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1114
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5470874,
+              35.6041522
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000700",
+            "value": 1006,
+            "name": "Census Tract 7; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1006
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5453765,
+              35.5904452
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000800",
+            "value": 1875,
+            "name": "Census Tract 8; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1875
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5369077,
+              35.5807763
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "000900",
+            "value": 1301,
+            "name": "Census Tract 9; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1301
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5590767,
+              35.5787633
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001000",
+            "value": 2827,
+            "name": "Census Tract 10; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2827
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5753719,
+              35.5762366
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001100",
+            "value": 3351,
+            "name": "Census Tract 11; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3351
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5919985,
+              35.5738595
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001200",
+            "value": 2575,
+            "name": "Census Tract 12; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2575
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6094464,
+              35.5706757
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001300",
+            "value": 2346,
+            "name": "Census Tract 13; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2346
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6227506,
+              35.5806246
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001401",
+            "value": 2372,
+            "name": "Census Tract 14.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2372
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6010698,
+              35.6074471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001402",
+            "value": 1442,
+            "name": "Census Tract 14.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1442
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5839564,
+              35.5980457
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001500",
+            "value": 1669,
+            "name": "Census Tract 15; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1669
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5881639,
+              35.6306935
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001601",
+            "value": 2240,
+            "name": "Census Tract 16.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2240
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5632184,
+              35.6324526
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001602",
+            "value": 1464,
+            "name": "Census Tract 16.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1464
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5631461,
+              35.6595008
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001700",
+            "value": 1391,
+            "name": "Census Tract 17; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1391
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5155282,
+              35.6458553
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001801",
+            "value": 1562,
+            "name": "Census Tract 18.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1562
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5222156,
+              35.6035315
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001802",
+            "value": 3129,
+            "name": "Census Tract 18.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3129
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5004234,
+              35.608999
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "001900",
+            "value": 1968,
+            "name": "Census Tract 19; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1968
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.498582,
+              35.5774596
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002000",
+            "value": 3685,
+            "name": "Census Tract 20; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3685
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5236113,
+              35.5624626
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002101",
+            "value": 671,
+            "name": "Census Tract 21.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 671
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5583688,
+              35.5359675
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002102",
+            "value": 2598,
+            "name": "Census Tract 21.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2598
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5143859,
+              35.5420616
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002203",
+            "value": 2805,
+            "name": "Census Tract 22.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2805
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5325623,
+              35.4541608
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002204",
+            "value": 4640,
+            "name": "Census Tract 22.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 4640
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.543587,
+              35.4961979
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002205",
+            "value": 3442,
+            "name": "Census Tract 22.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3442
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4974417,
+              35.4657305
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002206",
+            "value": 2253,
+            "name": "Census Tract 22.06; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2253
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5053243,
+              35.5020846
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002303",
+            "value": 3861,
+            "name": "Census Tract 23.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3861
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5726108,
+              35.4598034
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002304",
+            "value": 742,
+            "name": "Census Tract 23.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 742
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6154836,
+              35.4677235
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002305",
+            "value": 2825,
+            "name": "Census Tract 23.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2825
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6417599,
+              35.5066613
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002306",
+            "value": 2502,
+            "name": "Census Tract 23.06; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2502
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5996582,
+              35.5358033
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002401",
+            "value": 1441,
+            "name": "Census Tract 24.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1441
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7549939,
+              35.485319
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002402",
+            "value": 2604,
+            "name": "Census Tract 24.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2604
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993203,
+              35.4899863
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002503",
+            "value": 1996,
+            "name": "Census Tract 25.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1996
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7196783,
+              35.5435554
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002504",
+            "value": 2502,
+            "name": "Census Tract 25.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2502
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7256343,
+              35.5676668
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002505",
+            "value": 3374,
+            "name": "Census Tract 25.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3374
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6680939,
+              35.5681755
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002506",
+            "value": 1602,
+            "name": "Census Tract 25.06; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1602
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6432804,
+              35.5818373
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002603",
+            "value": 1572,
+            "name": "Census Tract 26.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1572
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.7893106,
+              35.6461407
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002604",
+            "value": 2977,
+            "name": "Census Tract 26.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2977
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6795819,
+              35.6938725
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002606",
+            "value": 3044,
+            "name": "Census Tract 26.06; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3044
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6590655,
+              35.643985
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002607",
+            "value": 1919,
+            "name": "Census Tract 26.07; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1919
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6180676,
+              35.6355179
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002608",
+            "value": 2818,
+            "name": "Census Tract 26.08; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2818
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6858471,
+              35.6106682
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002609",
+            "value": 1141,
+            "name": "Census Tract 26.09; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1141
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6993953,
+              35.6451236
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002701",
+            "value": 1666,
+            "name": "Census Tract 27.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1666
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5966127,
+              35.6699055
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002702",
+            "value": 2800,
+            "name": "Census Tract 27.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2800
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5790166,
+              35.7071247
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002704",
+            "value": 2021,
+            "name": "Census Tract 27.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2021
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5232384,
+              35.6888391
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002705",
+            "value": 591,
+            "name": "Census Tract 27.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 591
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4605811,
+              35.701162
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002803",
+            "value": 2434,
+            "name": "Census Tract 28.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2434
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.6163247,
+              35.7351251
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002804",
+            "value": 2390,
+            "name": "Census Tract 28.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2390
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.5373328,
+              35.7504108
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "002900",
+            "value": 1460,
+            "name": "Census Tract 29; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1460
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4169239,
+              35.7659059
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003002",
+            "value": 3967,
+            "name": "Census Tract 30.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3967
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4027866,
+              35.6153051
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003003",
+            "value": 2728,
+            "name": "Census Tract 30.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2728
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4646274,
+              35.5996994
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003004",
+            "value": 1299,
+            "name": "Census Tract 30.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1299
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4382932,
+              35.6459043
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003103",
+            "value": 955,
+            "name": "Census Tract 31.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 955
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3384121,
+              35.5918971
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003105",
+            "value": 1543,
+            "name": "Census Tract 31.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1543
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2953338,
+              35.621317
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003106",
+            "value": 708,
+            "name": "Census Tract 31.06; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 708
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3126915,
+              35.6876103
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003107",
+            "value": 1672,
+            "name": "Census Tract 31.07; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1672
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3462779,
+              35.6279471
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003108",
+            "value": 370,
+            "name": "Census Tract 31.08; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 370
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3584543,
+              35.671715
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003201",
+            "value": 767,
+            "name": "Census Tract 32.01; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 767
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4839761,
+              35.541365
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003202",
+            "value": 1664,
+            "name": "Census Tract 32.02; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 1664
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4617214,
+              35.4927908
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003203",
+            "value": 3365,
+            "name": "Census Tract 32.03; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 3365
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.4358398,
+              35.5399479
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003204",
+            "value": 2009,
+            "name": "Census Tract 32.04; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 2009
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.3719525,
+              35.522082
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "tract": "003205",
+            "value": 655,
+            "name": "Census Tract 32.05; Buncombe County; North Carolina",
+            "layer": "jobs",
+            "intensity": 655
+          },
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -82.2697836,
+              35.5270929
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

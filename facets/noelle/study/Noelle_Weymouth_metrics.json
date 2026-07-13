@@ -1,0 +1,64 @@
+{
+  "filename": "Noelle_Weymouth.jpd",
+  "name": "Noelle_Weymouth",
+  "state": "",
+  "city": "Noelle Weymouth",
+  "analyzed_at": "2026-07-12T01:28:45Z",
+  "topology": {
+    "total_structures": 261,
+    "stations": 237,
+    "traffic_circles": 24,
+    "station_to_circle_ratio": 9.9,
+    "lines": 3948,
+    "cps_total": 570,
+    "cps_connected": 246,
+    "cps_open": 324,
+    "orphans": 81,
+    "orphan_ids": [
+      "s5",
+      "s8",
+      "s11",
+      "s12",
+      "s14",
+      "c5",
+      "s27",
+      "s30",
+      "s38",
+      "s43"
+    ],
+    "connected_components": 138,
+    "component_sizes": [
+      11,
+      8,
+      5,
+      5,
+      5
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 13.8,
+    "extent_ew_mi": 11.6,
+    "area_sq_mi": 159.4,
+    "nn_avg_mi": 0.4,
+    "nn_min_mi": 0.24,
+    "nn_max_mi": 1.23,
+    "density_per_sq_mi": 1.6
+  },
+  "center": {
+    "lat": 42.1991,
+    "lon": -70.9647
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "aadt",
+      "accidents",
+      "crash_density"
+    ]
+  },
+  "quality": {
+    "connectivity": 0,
+    "spacing_uniformity": 0,
+    "completeness": 100
+  }
+}

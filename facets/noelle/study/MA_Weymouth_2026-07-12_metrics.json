@@ -1,0 +1,49 @@
+{
+  "filename": "MA_Weymouth_2026-07-12.jpd",
+  "name": "MA_Weymouth_2026-07-12",
+  "state": "MA",
+  "city": "Weymouth 2026-07-12",
+  "analyzed_at": "2026-07-12T01:30:13Z",
+  "topology": {
+    "total_structures": 220,
+    "stations": 175,
+    "traffic_circles": 45,
+    "station_to_circle_ratio": 3.9,
+    "lines": 3662,
+    "cps_total": 530,
+    "cps_connected": 492,
+    "cps_open": 38,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      220
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 15.4,
+    "extent_ew_mi": 10.9,
+    "area_sq_mi": 167.4,
+    "nn_avg_mi": 0.55,
+    "nn_min_mi": 0.3,
+    "nn_max_mi": 1.23,
+    "density_per_sq_mi": 1.3
+  },
+  "center": {
+    "lat": 42.2118,
+    "lon": -70.9872
+  },
+  "overlays": {
+    "city_label": "Weymouth, Norfolk County, Massachusetts",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 16,
+    "completeness": 100
+  }
+}

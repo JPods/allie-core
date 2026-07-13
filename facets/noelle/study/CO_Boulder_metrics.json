@@ -1,0 +1,45 @@
+{
+  "filename": "CO_Boulder.jpd",
+  "name": "CO_Boulder",
+  "state": "CO",
+  "city": "Boulder",
+  "analyzed_at": "2026-07-12T01:28:41Z",
+  "topology": {
+    "total_structures": 53,
+    "stations": 34,
+    "traffic_circles": 19,
+    "station_to_circle_ratio": 1.8,
+    "lines": 900,
+    "cps_total": 144,
+    "cps_connected": 120,
+    "cps_open": 24,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      53
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 5.5,
+    "extent_ew_mi": 5.5,
+    "area_sq_mi": 30.1,
+    "nn_avg_mi": 0.72,
+    "nn_min_mi": 0.7,
+    "nn_max_mi": 1.0,
+    "density_per_sq_mi": 1.8
+  },
+  "center": {
+    "lat": 40.0148,
+    "lon": -105.2502
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 79,
+    "completeness": 100
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "filename": "NC_Asheville_2026-07-07.jpd",
+  "name": "NC_Asheville_2026-07-07",
+  "state": "NC",
+  "city": "Asheville 2026-07-07",
+  "analyzed_at": "2026-07-12T01:28:43Z",
+  "topology": {
+    "total_structures": 0,
+    "stations": 0,
+    "traffic_circles": 0,
+    "station_to_circle_ratio": 0.0,
+    "lines": 0,
+    "cps_total": 0,
+    "cps_connected": 0,
+    "cps_open": 0,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 0,
+    "component_sizes": []
+  },
+  "spacing": {
+    "extent_ns_mi": 0,
+    "extent_ew_mi": 0,
+    "area_sq_mi": 0,
+    "nn_avg_mi": 0,
+    "nn_min_mi": 0,
+    "nn_max_mi": 0,
+    "density_per_sq_mi": 0.0
+  },
+  "center": {
+    "lat": 0,
+    "lon": 0
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": [
+      "population_density",
+      "property_values",
+      "jobs"
+    ]
+  },
+  "quality": {
+    "connectivity": 120,
+    "spacing_uniformity": 0,
+    "completeness": 0
+  }
+}

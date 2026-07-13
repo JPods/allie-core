@@ -2,60 +2,60 @@
 
 ## Where We Left Off
 
-Massive architecture session. Built CrashHarvester as a standalone data supply chain app. MeshMobility reads ALL overlay data from the CH library — no government API calls, no legacy fallbacks, no _overlay_path. 566 lines of government code removed from api.py. Drawing tools built for designer-drawn corridor networks.
+Two major sessions back-to-back:
 
-## What Was Built
+**Session 1 (2026-07-10/11) — WC3 Architecture:**
+DataBrowser is now the sole list engine. 63 ModelList.tsx deleted. `/db/:model` routing. Template resolution API. WCHQ Setting. Small-Stings. Five subform types. Calculated column approval chain. All committed and pushed.
 
-1. **CrashHarvester** — standalone app at `00_working_code/CrashHarvester/` with full README
-2. **mobility_data/** — library package (reader, schemas, registry, harvesters for FARS, HPMS, state DOT)
-3. **309 datasets registered** — crash, fatal, traffic, census across 50 states
-4. **Drawing tools** — Cmd+click draws corridors, Option+click adjusts, Shift deletes. Build on Lines places stations along drawn corridors
-5. **Crash Mesh algorithm** — auto-extracts corridors from top 10% crash density cells
-6. **Line tool** — click two points, stations every mile (airport-to-city)
-7. **Threshold slider** — min crashes filter on All Crashes overlay, reveals corridors from noise
-8. **Morgantown comparison** — Stockdale paradox + roadkill count per city in overlay panel
-9. **Tooltips toggle** — overlays non-interactive by default, toggle for presentations
-10. **City switch cleanup** — save prompt, clear overlays, fresh start on Find City
+**Session 2 (2026-07-11/12) — MeshMobility + CrashHarvester:**
+Built CrashHarvester as standalone data supply chain. 309 datasets registered. Drawing tools for designer-drawn corridor networks. 566 lines of government code removed from api.py. Crash Mesh algorithm. Threshold slider. DC network iterations.
 
-## Tuesday Release Target
+## Do This First Next Session
 
-Bill wants to release MeshMobility + CrashHarvester Tuesday July 15. Next session must:
+### If WC3 Polish:
+1. Review printable forms — Report records now have `parent_model`, demo records (zz-demo-*) seeded with lines
+2. Add print icon to DataBrowser rows — click → pick template → render PDF for that record
+3. Wire BrowserDetail row-click cascade — `detail_route` + `detail_mode` already set on 13 workbench_fields Settings
+4. Keyboard modifiers — Cmd+Shift+Click (BrowserDetail), Cmd+Shift+Option+Click (ModelDetail)
+5. Polish Dashboard — Action POLISH-DASHBOARD (#339)
 
+### If MeshMobility Release:
 1. Move `mobility_data/` into `CrashHarvester/` as one app
-2. Run FARS harvester for all 50 states — county-level files
-3. Run HPMS harvester for all 50 states
-4. Remove fake crash data (crashes:fatal ratio < 3:1 = FARS repackaged)
-5. Real all-severity states: AK, CO, DC, DE, IA, ID, IL, MA, OK, OR, PA, TN, UT, VA, WA
-6. Rebuild registry.json from disk
-7. Test end-to-end: DC, Greenville SC, Tulsa OK
+2. Run FARS + HPMS harvesters for all 50 states
+3. Remove fake crash data (crashes:fatal ratio < 3:1)
+4. Test end-to-end: DC, Greenville SC, Tulsa OK
+5. Target: Tuesday July 15 release
 
-## Key Principles Established
+## WC3 Architecture Decisions (permanent — from 07-10/11 session)
 
-- **More doors > bigger doors** — station density is coverage, not capacity
-- **Noelle owns slot count** from data unless user explicitly overrides
-- **Crash corridors = guideways, walk circles = stations** — two signals, one network
-- **Parallel mesh beats hub-and-spoke** — no single point of failure, V ∝ n²/p
-- **Highway POLICIES roadkill people** — not highways
-- **Designer draws, algorithm builds** — Build on Lines is the primary workflow
-- **Noelle algorithm library** — never lose an algorithm, add new ones
-- **Overlays non-interactive by default** — work mode vs presentation mode
+- **No ModelList.tsx** — DataBrowser at `/db/:model` is the only list engine
+- **Five subform types** — flat, JSON, BOM/tree, grouped, calculated columns
+- **JS display, backend saves** — front-back mismatch is FAULT
+- **zz/qq never tally** — permanent exclusion rule
+- **JSON viewer read-only default** — authority-gated unlock
+- **WCHQ Setting #439** — monthly admin review with dt_approved
+- **Small-Stings** — `file_small_sting` manage action, Alice reports to WCHQ
+- **Template API** — `/wcapi/resolve-template/` and `/wcapi/template-fields/`
+- **Letters/emails** — WC3 is data source, Word/Pages for composition
+- **Keyboard modifiers** — Cmd+Shift=BrowserDetail, Cmd+Shift+Option=ModelDetail
+- **Calculated functions** — Athena approval chain, Setting purpose='calculated_function'
+- **Alice metadata.alice** — predictions, actuals, gap, retrospection per record
+- **Alice metadata.features** — report.metadata.features for print, transaction.metadata.features for data
+- **DataBrowser detail cascade** — detail_route in workbench_fields Setting, detail_mode='custom' or 'databrowser'
 
-## Key Files
+## Database State
 
-| What | Where |
-|------|-------|
-| CrashHarvester README | `00_working_code/CrashHarvester/README.md` |
-| Library | `00_working_code/mobility_data/library/` |
-| Reader | `00_working_code/mobility_data/reader.py` |
-| Harvesters | `00_working_code/mobility_data/harvest/` |
-| MeshMobility API | `00_working_code/mesh_mobility/gui/api.py` |
-| Drawn lines | `00_working_code/mesh_mobility/drawn_lines/` |
-| DC network iterations | `00_working_code/mesh_mobility_maps/WA_Washington_2026-07-12_v*.jpd` |
+- 32 Report records with parent_model set
+- 8 zz-demo-* transaction records + 12 lines (metadata.alice.demo=True)
+- 13 workbench_fields Settings with detail_route + detail_mode
+- WCHQ Setting #439 seeded
+- Payment, Receipt, PaymentMethod, PaymentTerm added to model_registry.py
+- Action POLISH-DASHBOARD (#339), STING test (#340)
+- Alice observations 88-95 promoted
 
-## Open Issues
+## Open Problems
 
-- `mobility_data/` needs to move into `CrashHarvester/` — currently a sibling
-- Snap radius on drawing tools may need tuning (currently ~200m)
-- Traffic circles not always detected at line crossings if angle is wide
-- SC, MN, and most states lack real all-severity crash data — need state DOT harvesting
-- Census auto-fetch still in Fetch Data endpoint — should move to CH
+- Router.tsx has duplicate route definitions overlapping protectedRoutesConfig.tsx — needs consolidation
+- Some `/db/orgs.Employee` style routes use dotpath model names — verify wcapi registry resolves
+- DataBrowser detail pane doesn't navigate to custom Detail.tsx yet — cascade logic not wired in useDataBrowser
+- wrapperPage.ts still exports CustomerDetailPage/AddPage/EditPage — verify these routes still work

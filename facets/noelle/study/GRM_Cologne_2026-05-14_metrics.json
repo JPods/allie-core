@@ -1,0 +1,50 @@
+{
+  "filename": "GRM_Cologne_2026-05-14.jpd",
+  "name": "GRM_Cologne_2026-05-14",
+  "state": "",
+  "city": "GRM Cologne 2026-05-14",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 122,
+    "stations": 80,
+    "traffic_circles": 42,
+    "station_to_circle_ratio": 1.9,
+    "lines": 2082,
+    "cps_total": 328,
+    "cps_connected": 290,
+    "cps_open": 38,
+    "orphans": 2,
+    "orphan_ids": [
+      "s75",
+      "s84"
+    ],
+    "connected_components": 3,
+    "component_sizes": [
+      120,
+      1,
+      1
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 6.8,
+    "extent_ew_mi": 9.7,
+    "area_sq_mi": 65.5,
+    "nn_avg_mi": 0.51,
+    "nn_min_mi": 0.19,
+    "nn_max_mi": 1.17,
+    "density_per_sq_mi": 1.9
+  },
+  "center": {
+    "lat": 50.9317,
+    "lon": 6.9766
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 40,
+    "spacing_uniformity": 3,
+    "completeness": 100
+  }
+}

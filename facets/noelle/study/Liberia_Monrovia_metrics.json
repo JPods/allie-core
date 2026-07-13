@@ -1,0 +1,45 @@
+{
+  "filename": "Liberia_Monrovia.jpd",
+  "name": "Liberia_Monrovia",
+  "state": "",
+  "city": "Liberia Monrovia",
+  "analyzed_at": "2026-07-12T01:28:42Z",
+  "topology": {
+    "total_structures": 156,
+    "stations": 102,
+    "traffic_circles": 54,
+    "station_to_circle_ratio": 1.9,
+    "lines": 2668,
+    "cps_total": 420,
+    "cps_connected": 376,
+    "cps_open": 44,
+    "orphans": 0,
+    "orphan_ids": [],
+    "connected_components": 1,
+    "component_sizes": [
+      156
+    ]
+  },
+  "spacing": {
+    "extent_ns_mi": 12.4,
+    "extent_ew_mi": 9.1,
+    "area_sq_mi": 112.6,
+    "nn_avg_mi": 0.61,
+    "nn_min_mi": 0.16,
+    "nn_max_mi": 1.15,
+    "density_per_sq_mi": 1.4
+  },
+  "center": {
+    "lat": 6.3454,
+    "lon": -10.7556
+  },
+  "overlays": {
+    "city_label": "",
+    "files_loaded": []
+  },
+  "quality": {
+    "connectivity": 100,
+    "spacing_uniformity": 19,
+    "completeness": 100
+  }
+}
