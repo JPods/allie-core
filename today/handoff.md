@@ -1,61 +1,47 @@
 # Handoff — 2026-07-12
 
 ## Where We Left Off
-
-Two major sessions back-to-back:
-
-**Session 1 (2026-07-10/11) — WC3 Architecture:**
-DataBrowser is now the sole list engine. 63 ModelList.tsx deleted. `/db/:model` routing. Template resolution API. WCHQ Setting. Small-Stings. Five subform types. Calculated column approval chain. All committed and pushed.
-
-**Session 2 (2026-07-11/12) — MeshMobility + CrashHarvester:**
-Built CrashHarvester as standalone data supply chain. 309 datasets registered. Drawing tools for designer-drawn corridor networks. 566 lines of government code removed from api.py. Crash Mesh algorithm. Threshold slider. DC network iterations.
+Built CrashHarvester as a standalone data supply chain app (`00_working_code/CrashHarvester/`, pushed to `JPods/CrashHarvester`). MeshMobility reads ALL overlay data from the CH library only — 566 lines of government API code removed from `api.py`. Drawing tools built (Cmd+click corridors, Option+click adjust, Shift delete). Build on Lines places stations along designer-drawn corridors. Bill drew DC corridors and built a network from them. All three repos pushed: mesh_mobility `e4d0e52`, CrashHarvester `9c94e69`, allie-core `bc7741b`. Target: Tuesday July 15 release.
 
 ## Do This First Next Session
 
+### If MeshMobility Release (PRIORITY — Tuesday July 15):
+1. **Populate CrashHarvester library** — run FARS harvester all 50 states county-level, run HPMS all 50 states. Bill has a full prompt for this task.
+2. **Move `mobility_data/` into `CrashHarvester/`** — consolidate. Update import in `mesh_mobility/gui/api.py`.
+3. **Remove fake crash data** — crashes:fatal ratio < 3:1 = FARS repackaged. Real states: AK, CO, DC, DE, IA, ID, IL, MA, OK, OR, PA, TN, UT, VA, WA.
+4. **Test end-to-end** — DC, Greenville SC, Tulsa OK. Drawing tools + Build on Lines.
+5. **Tighten traffic circle detection** at corridor crossings.
+
 ### If WC3 Polish:
-1. Review printable forms — Report records now have `parent_model`, demo records (zz-demo-*) seeded with lines
-2. Add print icon to DataBrowser rows — click → pick template → render PDF for that record
-3. Wire BrowserDetail row-click cascade — `detail_route` + `detail_mode` already set on 13 workbench_fields Settings
-4. Keyboard modifiers — Cmd+Shift+Click (BrowserDetail), Cmd+Shift+Option+Click (ModelDetail)
-5. Polish Dashboard — Action POLISH-DASHBOARD (#339)
-
-### If MeshMobility Release:
-1. Move `mobility_data/` into `CrashHarvester/` as one app
-2. Run FARS + HPMS harvesters for all 50 states
-3. Remove fake crash data (crashes:fatal ratio < 3:1)
-4. Test end-to-end: DC, Greenville SC, Tulsa OK
-5. Target: Tuesday July 15 release
-
-## WC3 Architecture Decisions (permanent — from 07-10/11 session)
-
-- **No ModelList.tsx** — DataBrowser at `/db/:model` is the only list engine
-- **Five subform types** — flat, JSON, BOM/tree, grouped, calculated columns
-- **JS display, backend saves** — front-back mismatch is FAULT
-- **zz/qq never tally** — permanent exclusion rule
-- **JSON viewer read-only default** — authority-gated unlock
-- **WCHQ Setting #439** — monthly admin review with dt_approved
-- **Small-Stings** — `file_small_sting` manage action, Alice reports to WCHQ
-- **Template API** — `/wcapi/resolve-template/` and `/wcapi/template-fields/`
-- **Letters/emails** — WC3 is data source, Word/Pages for composition
-- **Keyboard modifiers** — Cmd+Shift=BrowserDetail, Cmd+Shift+Option=ModelDetail
-- **Calculated functions** — Athena approval chain, Setting purpose='calculated_function'
-- **Alice metadata.alice** — predictions, actuals, gap, retrospection per record
-- **Alice metadata.features** — report.metadata.features for print, transaction.metadata.features for data
-- **DataBrowser detail cascade** — detail_route in workbench_fields Setting, detail_mode='custom' or 'databrowser'
-
-## Database State
-
-- 32 Report records with parent_model set
-- 8 zz-demo-* transaction records + 12 lines (metadata.alice.demo=True)
-- 13 workbench_fields Settings with detail_route + detail_mode
-- WCHQ Setting #439 seeded
-- Payment, Receipt, PaymentMethod, PaymentTerm added to model_registry.py
-- Action POLISH-DASHBOARD (#339), STING test (#340)
-- Alice observations 88-95 promoted
+1. Wire BrowserDetail row-click cascade — `detail_route` + `detail_mode` Settings
+2. Keyboard modifiers — Cmd+Shift+Click (BrowserDetail), Cmd+Shift+Option+Click (ModelDetail)
+3. Polish Dashboard — Action POLISH-DASHBOARD (#339)
 
 ## Open Problems
+- `mobility_data/` exists both as sibling and copied into `CrashHarvester/` — needs consolidation
+- Snap radius on drawing tools (~200m) may need tuning for dense urban areas
+- Traffic circles not detected at line crossings when angle is wide
+- Most states lack real all-severity crash data — need state DOT harvesting
+- Census auto-fetch still in Fetch Data endpoint — should move to CH
+- Drawn lines not saved in .jpd format — only in `drawn_lines/` directory
+- Router.tsx duplicate routes (WC3)
+- DataBrowser detail cascade not wired (WC3)
 
-- Router.tsx has duplicate route definitions overlapping protectedRoutesConfig.tsx — needs consolidation
-- Some `/db/orgs.Employee` style routes use dotpath model names — verify wcapi registry resolves
-- DataBrowser detail pane doesn't navigate to custom Detail.tsx yet — cascade logic not wired in useDataBrowser
-- wrapperPage.ts still exports CustomerDetailPage/AddPage/EditPage — verify these routes still work
+## What Was Decided (and Why)
+- **No legacy fallbacks in api.py** — library or nothing. Break and fix. No `_overlay_path`, no government API calls from MeshMobility.
+- **County-level library files** — `{type}/{state}_{county}.geojson`. Consumer decides granularity.
+- **Modifier keys for drawing** — Cmd=draw, Option=adjust, Shift=delete. No toggle mode.
+- **Overlays non-interactive by default** — tooltips OFF for work, ON for presentations.
+- **Noelle owns slot count** — sets from data, user overrides only with explicit instruction.
+- **Highway policies roadkill people** — not highways. Morgantown 1972 in overlay panel.
+- **Algorithm library** — City Mesh, Crash Mesh, Build on Lines, Line, Custom. Never lose one.
+- **More doors > bigger doors** — V ∝ n²/p. 50 slots handles 10K/hr. 15-min walk fine.
+
+## Files Changed This Session
+- `mesh_mobility/gui/api.py` — removed govt code, added library reader, crash_mesh, build_on_lines, line, drawn lines endpoints
+- `mesh_mobility/gui/static/index.html` — DrawTool, CrashMesh, LineTool, threshold slider, Morgantown panel, tooltips, modifier keys
+- `mesh_mobility/gui/static/overlays.js` — spatial params, threshold, crash cache, Morgantown stats, clearAll, setInteractive
+- `mesh_mobility/gui/static/app.js` — unsaved check on Find City, clear overlays on city switch
+- `mesh_mobility/gui/static/style.css` — ov-signal button
+- `CrashHarvester/README.md` — full architecture doc
+- `mobility_data/*.py` — library package (reader, schemas, registry, harvesters)
