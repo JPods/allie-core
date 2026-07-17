@@ -236,16 +236,321 @@ Venvs are local, machine-specific, and reproducible from `requirements.txt`.
 
 ---
 
-## GEEKOM IT15 — Python Setup
+## GEEKOM IT15 — Ubuntu Server 24.04
 
-When the GEEKOM arrives (~2026-07-20), Python setup on Ubuntu Server is simpler:
+When the GEEKOM arrives (~2026-07-20), services shift from macOS to Ubuntu.
+Full deployment guide: `readmes/58-production-deployment.md`.
+
+### Python on Ubuntu
 
 ```bash
-sudo apt install python3.12 python3.12-venv python3-pip
+# Ubuntu 24.04 ships Python 3.12. For 3.13:
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.13 python3.13-venv python3.13-dev
 ```
 
 Same rules apply: one venv per project, always named `venv/`, always activate first.
 Ubuntu's system Python stays untouched — venvs isolate everything.
+
+### What moves to Ubuntu (always-on)
+
+| Service | macOS (current) | Ubuntu (GEEKOM) |
+|---------|----------------|-----------------|
+| **WC3 Django** | `./runserver.sh` (dev server) | Gunicorn + Nginx (production) |
+| **Celery** | `./runserver.sh` (background) | systemd service (always on) |
+| **PostgreSQL** | Homebrew, sleeps with MacBook | `apt install`, always on |
+| **Redis** | Homebrew | `apt install`, always on |
+| **MeshMobility** | manual terminal | systemd service (always on) |
+| **Chroma** | embedded in MCP servers | standalone HTTP server, systemd |
+| **CrashHarvester** | manual | systemd service (when needed) |
+| **Nginx + SSL** | none | Let's Encrypt via certbot |
+| **5TB Allie drive** | mounted when MacBook awake | USB-C, always mounted |
+
+### What stays on MacBook
+
+| Service | Why it stays |
+|---------|-------------|
+| **Ollama** (allie:latest) | Needs Apple Silicon unified memory (200 GB/s) |
+| **Claude Code** | Interactive sessions with Bill |
+| **SketchUp** | macOS only |
+| **iCloud sync** | macOS only |
+| **MCP servers** | stdio processes for Claude Code (connect to GEEKOM backends) |
+| **Allie capture** | Writes to ~/Allie/ (synced to GEEKOM via 5TB) |
+
+### macOS → Ubuntu translation
+
+| macOS | Ubuntu | Notes |
+|-------|--------|-------|
+| `launchctl load/unload *.plist` | `systemctl enable/start/stop *.service` | |
+| `~/Library/LaunchAgents/` | `/etc/systemd/system/` | |
+| `brew install` | `apt install` | |
+| `brew services start/stop` | `systemctl start/stop` | |
+| `manage.py runserver` | `gunicorn wsgi:application` | Behind Nginx |
+| `python3 -m celery ...` | systemd service | Auto-restart on failure |
+| Homebrew Python 3.13 | deadsnakes PPA Python 3.13 | Same version, different source |
+| `pkill -f` | `systemctl restart` | Managed services, not loose processes |
+| No firewall | `ufw` — SSH + HTTP + HTTPS only | |
+| No SSL | Let's Encrypt (certbot) | Auto-renews every 90 days |
+
+### MCP servers after migration
+
+MCP servers stay on MacBook as stdio processes for Claude Code. Only their
+backend connection strings change:
+
+```
+Before:  localhost:5432  (PostgreSQL on MacBook)
+After:   geekom:5432    (PostgreSQL on GEEKOM)
+
+Before:  embedded Chroma (in-process)
+After:   geekom:8100    (Chroma HTTP on GEEKOM)
+```
+
+### Startup after migration
+
+**On GEEKOM** — everything starts automatically via systemd at boot:
+```bash
+# Check all services
+sudo systemctl status webclerk3 webclerk3-celery meshmobility chroma postgresql redis nginx
+```
+
+**On MacBook** — same as today:
+```bash
+cd ~/Allie && claude       # Claude Code + MCP servers
+ollama serve               # when needed for Allie LLM
+```
+
+No more `./runserver.sh`. No more terminal management. The GEEKOM runs services;
+the MacBook runs interactive tools.
+
+---
+
+## Running Processes (cleaned up 2026-07-16)
+
+All processes now run on Python 3.13.3 via venvs. Problems fixed:
+- ~~`allie-api.py` on Xcode Python 3.9~~ → fixed launchd plist to use `~/Allie/venv/bin/python3`
+- ~~`alice-patterns.py` on `/usr/bin/python3`~~ → fixed launchd plist
+- ~~`allie-reflect.py` on `/usr/bin/python3`~~ → fixed launchd plist
+- ~~WC3 `runserver.sh` using `bin/python`~~ → fixed to use `venv/bin/python`
+- ~~WC3 `start_celery.sh` using `source bin/activate`~~ → fixed to `source venv/bin/activate`
+- ~~Duplicate MCP servers from prior sessions~~ → killed, clean restart
+- ~~WC3 venv on Python 3.12~~ → rebuilt on 3.13.3
+- ~~MeshMobility `.venv`~~ → rebuilt as `venv/` on 3.13.3
+
+---
+
+## Startup Sequence — After Python Cleanup
+
+Run these in order after a reboot or cleanup. Each step is a separate terminal
+or background process. **Copy-paste each block exactly.**
+
+### Terminal 1 — WC3 (Django + Celery)
+
+```bash
+cd ~/Documents/CommerceExpert/webClerk3
+source venv/bin/activate
+python manage.py runserver &
+python -m celery -A webclerk3_api worker -l info --concurrency=2 -P solo --without-heartbeat -B -s /tmp/celerybeat-webclerk3-schedule &
+```
+
+Verify: Open http://localhost:8000/admin/ — should see Django admin.
+
+### Terminal 2 — Allie API
+
+```bash
+cd ~/Allie
+source venv/bin/activate
+python scripts/allie-api.py --port 5001 &
+```
+
+Verify: `curl http://localhost:5001/health` — should respond.
+
+### Terminal 3 — MCP Servers (for Claude Code)
+
+These start automatically when Claude Code launches, but if you need to restart
+them manually:
+
+```bash
+cd ~/Allie
+source venv/bin/activate
+python scripts/allie-mcp-server.py &
+python scripts/alice-mcp-server.py &
+python scripts/noelle-mcp-server.py &
+python scripts/allie_db_mcp.py &
+python scripts/commerce_db_mcp.py &
+python scripts/wc_mcp_server.py &
+```
+
+### Terminal 4 — Ollama (for Allie LLM)
+
+```bash
+ollama serve &
+# Wait a few seconds, then verify:
+ollama list   # should show allie:latest
+```
+
+### Terminal 5 — MeshMobility (when needed)
+
+```bash
+cd ~/Documents/MeshMobility    # or wherever it lives
+source venv/bin/activate
+python api.py &
+```
+
+Verify: Open http://localhost:5000/ (or whatever port MeshMobility uses).
+
+---
+
+## Kill Everything (before restart)
+
+If you need a clean slate:
+
+```bash
+# Kill all Python processes (careful — this kills EVERYTHING Python)
+pkill -f python3
+
+# Or be surgical — kill by name:
+pkill -f allie-api.py
+pkill -f allie-mcp-server.py
+pkill -f alice-mcp-server.py
+pkill -f noelle-mcp-server.py
+pkill -f allie_db_mcp.py
+pkill -f commerce_db_mcp.py
+pkill -f wc_mcp_server.py
+pkill -f "manage.py runserver"
+pkill -f celery
+
+# Verify nothing is left:
+ps aux | grep python | grep -v grep
+```
+
+---
+
+## Master Startup Guide — All Systems
+
+Everything runs on Python 3.13.3 via project venvs. This is the single
+reference for starting all systems after a reboot or cleanup.
+
+### What Starts Automatically (launchd — at login)
+
+| Service | What | Python | How to check |
+|---------|------|--------|-------------|
+| `com.allie.api` | Allie API on port 5001 | `~/Allie/venv/bin/python3` | `curl http://localhost:5001/health` |
+| `com.allie.reflect` | Nightly synthesis at 10 PM | `~/Allie/venv/bin/python3` | `launchctl list \| grep reflect` |
+| `com.allie.alice-patterns` | Pattern recognition every 4 hrs | `~/Allie/venv/bin/python3` | `launchctl list \| grep alice` |
+| `com.allie.watcher` | File change monitoring | shell | `launchctl list \| grep watcher` |
+| `com.allie.sync` | Backup to 5TB when mounted | shell | `launchctl list \| grep sync` |
+| `com.allie.icloud-sync` | iCloud sync 60s after change | shell | `launchctl list \| grep icloud` |
+
+**You don't need to start these.** They run at login. If one dies, restart with:
+```bash
+launchctl unload ~/Library/LaunchAgents/com.allie.api.plist
+launchctl load   ~/Library/LaunchAgents/com.allie.api.plist
+```
+
+### What You Start Manually
+
+#### 1. WC3 — Django + Celery (Terminal 1)
+
+```bash
+cd ~/Documents/CommerceExpert/webClerk3
+./runserver.sh              # starts Django + Celery + Ollama
+```
+
+Or manually:
+```bash
+cd ~/Documents/CommerceExpert/webClerk3
+source venv/bin/activate
+python manage.py runserver &
+python -m celery -A webclerk3_api worker -l info --concurrency=2 -P solo --without-heartbeat -B -s /tmp/celerybeat-webclerk3-schedule &
+```
+
+**Verify:** http://localhost:8000/admin/
+
+**Startup script:** `runserver.sh` — accepts `local` or `remote` for DB mode.
+Uses `venv/bin/python`. See `readmes/startup.md` in the WC3 repo for details.
+
+#### 2. MeshMobility (Terminal 2 — when needed)
+
+**Run from `00_working_code/`, not from inside `mesh_mobility/`.**
+Python needs `mesh_mobility/` as a package below the cwd.
+
+```bash
+cd ~/Documents/08_JPods/03_Technology/00_working_code
+source mesh_mobility/venv/bin/activate
+python -m mesh_mobility.gui
+```
+
+**Verify:** http://localhost:5050/
+
+**Note:** `CrashHarvester` symlink must exist in `00_working_code/`:
+`CrashHarvester → crash_harvester`. MeshMobility imports from it.
+
+#### 3. CrashHarvester API (Terminal 3 — when needed)
+
+```bash
+cd ~/Documents/08_JPods/03_Technology/00_working_code/crash_harvester
+python3 -m crash_harvester serve --port 5055
+```
+
+**Verify:** http://localhost:5055/api/schema/crash
+
+Note: CrashHarvester is also imported as a library by MeshMobility. The API
+server is only needed when harvesting new data or serving standalone.
+
+#### 4. Ollama — Allie LLM (Terminal 4 — when needed)
+
+```bash
+ollama serve
+```
+
+**Verify:** `ollama list` — should show `allie:latest`
+
+Ollama is also started by `runserver.sh` if installed. Check if already running
+before starting manually: `curl http://localhost:11434/api/tags`
+
+#### 5. Claude Code (any terminal)
+
+```bash
+cd ~/Allie && claude
+```
+
+MCP servers start automatically with Claude Code. No manual action needed.
+
+#### 6. JPods Robots / Pi Fleet (when needed)
+
+See `readmes/23-jpods-robot-startup.md` for full robot startup sequence.
+
+```bash
+# On Mac — start MQTT broker
+brew services start mosquitto
+
+# On each Pi (SSH)
+sudo python launcher.py 1 "<mac_ip>"
+```
+
+### Project Locations and venvs
+
+| Project | Location | venv | requirements.txt |
+|---------|----------|------|-----------------|
+| **Allie** | `~/Allie/` | `venv/` (3.13.3) | in venv |
+| **WC3** | `~/Documents/CommerceExpert/webClerk3/` | `venv/` (3.13.3) | `requirements.txt` |
+| **MeshMobility** | `~/Documents/08_JPods/03_Technology/00_working_code/mesh_mobility/` | `venv/` (3.13.3) | `requirements.txt` |
+| **CrashHarvester** | `~/Documents/08_JPods/03_Technology/00_working_code/crash_harvester/` | (uses MM venv or system) | — |
+| **JPodsSM_RPi** | `~/Documents/08_JPods/03_Technology/00_working_code/JPodsSM_RPi/` | (runs on Pi) | — |
+| **SketchUp Plugin** | `su_jpods/` (SketchUp Ruby) | N/A | N/A |
+
+### Startup Docs in Each Project
+
+| Project | Startup doc |
+|---------|------------|
+| **Allie** | `readmes/06-startup-shutdown.md` — LaunchAgents, orient sequence, shutdown |
+| **Allie** | `readmes/57-python-setup.md` — this file (master overview) |
+| **WC3** | `readmes/startup.md` — runserver.sh, DB modes, health checks |
+| **WC3** | `readmes/02-dev-setup.md` — initial venv creation, testing |
+| **MeshMobility** | `README.md` — quick start, links to readmes/ |
+| **CrashHarvester** | `README.md` — CLI reference, API server |
+| **JPodsSM_RPi** | `readmes/23-jpods-robot-startup.md` (in Allie) |
 
 ---
 
