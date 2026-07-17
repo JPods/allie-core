@@ -1,27 +1,48 @@
 # Handoff — 2026-07-17
 
 ## Where We Left Off
-MeshMobility Draw tool enhancement session. Changed drawn line colors from yellow/orange to bright blue (#00bfff/#0099ff) for visibility against map roads. Fixed modifier-key bug where Shift+click, Shift+dblclick, and Option+click were unreachable in Draw mode (latched check swallowed all clicks before modifier checks). Added hide/show toggle button (eye icon) for drawn lines. Fixed double-click duplicate point bug in `_finishLine`. Replaced the crude vertex-proximity crossing detection in `build_on_lines` with true segment-segment intersection math. Added debug print statements to verify crossing detection fires. **Not yet tested after restart** — Bill stopped for the night before restarting MeshMobility. Vector store pushes for GEEKOM IT15 architecture completed (Claude, Noelle, Alice stores).
+Major MeshMobility session: auth layer, Draw tool polish, crossing detection, code cleanup, and WC3 Document integration. Cloudflare Access gates server-side saves; guest browsing is free. Draw tool now uses magenta lines, true segment intersection for traffic circle placement, and modifier keys work properly in Draw mode. WC3 Document.model_name field removed (conflicts with wcapi keyword). Network saves will create Document records in WC3 with refs.keywords name:value pairs and security_level for publish control. Vector store pushes for GEEKOM IT15 completed (Claude, Noelle, Alice).
 
 ## Do This First Next Session
-1. **Restart MeshMobility and test crossing detection** — draw two crossing lines, hit Build on Lines, check terminal for `[build_on_lines] CROSSING` messages. If crossings detected but no traffic circle appears, debug the circle placement code in `builders.py:1191+`. File: `mesh_mobility/gui/builders.py`
-2. **Test all Draw tool modifiers** — Shift+click (delete point), Shift+dblclick (delete line), Option+click (insert/drag point), hide/show button. File: `mesh_mobility/gui/static/index.html`
-3. **Capital and MOA plan** — Bill's priority for tomorrow. Review MOA-2026 actions in Google Sheet. Pull with: `~/Allie/venv/bin/python3 ~/Allie/scripts/allie-sheets-sync.py --pull`
-4. **Fix MeshMobility bugs** — Bill mentioned other bugs besides the Draw tool. Ask what they are.
-5. **Verify IT15 readiness** — GEEKOM expected ~2026-07-20. Review readmes/58 checklist.
+1. **Test crossing detection end-to-end** — restart MeshMobility, draw two crossing lines, Build on Lines, verify traffic circle at intersection with station→circle→station connections
+2. **Test auth flow with Cloudflare** — verify email verification gates save/clone but not browsing on meshmobility.com
+3. **Capital and MOA plan** — Bill's priority. Pull Google Sheet: `~/Allie/venv/bin/python3 ~/Allie/scripts/allie-sheets-sync.py --pull`
+4. **Library testing** — load/clone from 5TB library, verify auth gate on clone
+5. **WC3 restart** — migration applied (removed Document.model_name). Restart WC3 to confirm no breakage
 
 ## Open Problems
-- Crossing detection code is in place but untested after server restart — unknown if traffic circles actually appear at intersections
-- The crossing-to-circle heading calculation uses overall line direction (first→last point), not local heading at the crossing — may produce misaligned circle arms
-- Google Drive MCP auth doesn't work from CLI — only web app. Workaround: allie-sheets-sync.py
-- MeshMobility has other unspecified bugs Bill wants to fix
+- Auth profile form not tested with live Cloudflare headers — only tested guest path
+- WC3 wcapi contact creation/lookup not tested from MeshMobility (WC3 was running but integration not exercised)
+- Network save → Document record creation not tested (depends on WC3 wcapi being reachable)
+- MyCarryon offline identity deferred — Cloudflare email-only for now
+- MeshMobility has other unspecified bugs Bill mentioned but didn't specify
+- Google Drive MCP auth doesn't work from CLI — workaround: allie-sheets-sync.py
+- GEEKOM IT15 expected ~2026-07-20
 
 ## What Was Decided (and Why)
-- **True segment intersection replaces vertex proximity** — old code checked if any vertex on line A was within 400m of any vertex on line B. This missed crossings between vertices entirely. New code computes exact lat/lon where line segments cross.
-- **Modifier keys checked before latched-draw handler** — Shift and Alt clicks must take priority over plain draw-mode clicks, otherwise the user can't edit lines while in Draw mode.
-- **Bright blue (#00bfff active, #0099ff finished) for drawn lines** — yellow/orange was invisible against the yellow roads on the map. Blue stands out on all map tiles.
-- **Duplicate trailing points stripped in _finishLine** — double-click fires a click event (adding a point) then dblclick (finishing). The duplicate caused zero-length segments.
+- **Cloudflare email verification, no passwords** — passwords are liability; email-only is modern pattern; MyCarryon handles offline identity later
+- **Guest browsing free, only server persistence gated** — users should play with all tools; auth only when impacting our storage
+- **Local file download ungated** — browser Save downloads .jpd blob, nothing hits our storage
+- **Document.model_name removed from WC3** — conflicts with wcapi routing keyword; document type now in refs.keywords as "type:network"
+- **Network metadata in refs.keywords as name:value pairs** — searchable, structured, follows WC3 pattern
+- **security_level for publish control** — 0=draft (unpublished), 1=published (library), 5000=superuser; refs.published boolean for quick checks
+- **Noelle + Bill approve networks before library** — prevents junk; Noelle reviews quality, Bill approves
+- **wc_mobility database deferred to IT15** — use existing WC3 commerce_expert for testing
+- **True segment intersection replaces vertex proximity** — old code missed crossings between vertices
+- **Interposed circle detection improved** — checks distance to both stations, not just midpoint
+- **Auto-save recovery cap 2 hours** — multi-user scenario; stale saves shouldn't prompt other users
 
 ## Files Changed This Session
-- `mesh_mobility/gui/static/index.html` — Draw tool: blue colors, modifier-key priority fix, hide/show toggle button, duplicate point fix, help table color update
-- `mesh_mobility/gui/builders.py` — `build_on_lines`: replaced vertex-proximity crossing detection with true segment-segment intersection math, added debug logging
+- `mesh_mobility/gui/auth.py` — NEW: Cloudflare auth, WC3 contact integration, Document registration, my_networks endpoint
+- `mesh_mobility/gui/static/auth.js` — NEW: client-side auth check, profile form modal, requireAuth gate
+- `mesh_mobility/gui/app.py` — Register auth blueprint
+- `mesh_mobility/gui/builders.py` — build_on_lines: true intersection, local headings, extracted helpers, named constants, removed debug prints
+- `mesh_mobility/gui/network_io.py` — save_network registers Document in WC3
+- `mesh_mobility/gui/static/app.js` — Default Tulsa, auto-save 2hr cap, dismiss clears auto-save, ungated local download
+- `mesh_mobility/gui/static/index.html` — Draw tool: magenta, modifiers, hide/show, dedup, Find City smart button, auth gate on save/build
+- `mesh_mobility/gui/static/library.html` — Auth gate on clone, auth.js loaded
+- `mesh_mobility/requirements.txt` — Added requests dependency
+- `webClerk3/apps/docs/models/document.py` — Removed model_name field
+- `webClerk3/apps/docs/admin.py` — Removed model_name from admin
+- `webClerk3/apps/docs/choices.py` — Removed DOCUMENT_MODEL_CHOICES
+- `webClerk3/apps/docs/migrations/0005_remove_document_model_name.py` — Migration
