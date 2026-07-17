@@ -1,13 +1,19 @@
 ---
-name: Allie hardware — MacBook Pro, Mac Mini discussion pending
-description: Allie runs on Bill's MacBook Pro M1 Max (32GB). Bill asked to discuss dedicated always-on hardware at next session.
+name: Allie hardware — GEEKOM IT15 hybrid architecture
+description: GEEKOM IT15 ordered 2026-07-16 as always-on app server (PostgreSQL, WC3, MeshMobility, Chroma, 5TB). MacBook keeps Ollama/Allie LLM. Ubuntu Server 24.04.
 type: project
 ---
 
-Allie currently runs on Bill's primary laptop: MacBook Pro M1 Max, 32GB. All LaunchAgents, the outward API (port 5001), the watcher, and reflect run on this machine.
+**Hybrid architecture decided 2026-07-16.** GEEKOM IT15 (Intel Ultra 9 285H, 32GB DDR5 upgradeable to 128GB, 1TB NVMe, 2.5GbE) ordered — expected ~2026-07-20.
 
-**Why:** When the laptop sleeps or is away, Allie stops — nightly reflect may not run, Pi robot API is unavailable.
+**Split:**
+- MacBook Pro M1 Max: Ollama (allie:latest 20b), allie-reflect, allie-whatif, iCloud sync, Claude Code, SketchUp, MCP servers (stdio)
+- GEEKOM IT15: PostgreSQL, Django/WC3, React servers, MeshMobility, Chroma (Alice+Noelle), 5TB drive (USB4, always mounted, NFS shared)
 
-**Pending discussion:** Raise at next session start whether a dedicated always-on Mac Mini makes sense as Allie's permanent home. Bill asked to bring this up.
+**Why:** Closing MacBook kills database, WC3, and MeshMobility. GEEKOM stays on 24/7 for those services. Ollama stays on MacBook because Apple Silicon unified memory runs the 20b model efficiently.
 
-**How to apply:** Open next session by surfacing this before diving into code work.
+**OS:** Wipe Windows 11 Pro, install Ubuntu Server 24.04 LTS headless.
+
+**Future:** Mac Mini M4 Pro (48GB) may eventually replace MacBook as Allie's LLM home. GEEKOM stays permanent as app server.
+
+**How to apply:** Migration plan at readmes/55-mac-mini-migration.md. Setup begins ~2026-07-20.
