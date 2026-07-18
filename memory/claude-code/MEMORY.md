@@ -118,7 +118,9 @@
 - [Station density is coverage not capacity](feedback_station_density_coverage.md) — More doors > bigger doors; 50 slots handles 10K/hr; 15-min walk OK; crash corridors = guideways, walk circles = stations
 - [Noelle owns slot count](project_noelle_slot_authority.md) — Noelle sets slots from data unless user explicitly overrides; single (1-2), standard (8-16), hub (50-100)
 - [Noelle algorithm library](project_noelle_algorithm_library.md) — Library of algorithms not just one; keep grid mesh; build crash-corridor algorithm; 15-min walk + more doors as constraints
-- [MeshMobility data overlays](project_rt_overlays.md) — 7 cities with AADT + fatal crashes + all-crash density; census overlays (pop density, property values, jobs); embedded in .jpd
+- [MeshMobility data overlays](project_rt_overlays.md) — AADT, crashes, census overlays + Custom Points overlay (generic coordinate loader)
+- [Custom Points overlay](project_custom_points_overlay.md) — Generic point overlay; presets dropdown; DART stations first; readmes/60
+- [DFW DART demo](project_dart_demo.md) — JPods feeder networks extending DART rail; 86 stations; coverage circles show gap fill
 - [MeshMobility CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
