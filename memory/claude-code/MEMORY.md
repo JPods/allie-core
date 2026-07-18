@@ -2,6 +2,7 @@
 
 - [TFTS troubleshooting index](reference_tfts_index.md) — 47 solved problems indexed by symptom; at readmes/sketchup/tfts-index.md
 
+- [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
 - [Tool boundaries are logging opportunities](feedback_tool_boundary_logging.md) — Reload/run/deploy = test boundary = highest-value moment to log; prompt user for fault/dnw/tf at that moment
 - [JPods GUI visual design](feedback_jpods_gui_visual.md) — System-wide color standard: red=inbound (hot), blue=outbound (cool); CP marker shapes; no confirmation dialogs
