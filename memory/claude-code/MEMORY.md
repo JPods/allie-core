@@ -139,3 +139,8 @@
 - [MOA-2026 demo project](project_moa_demo.md) — MOA MOU exists; 17 actions in WC3+Sheet; permitting at readmes/55; capital at readmes/53+capital-pages/
 - [GEEKOM IT15 deployment](reference_it15_deployment.md) — Ubuntu Server; 4 WC3 instances; Gunicorn+Nginx+SSL; git deploy; readmes/58
 - [MyCarryOn plugin architecture](reference_mycarryon_plugins.md) — Plugin framework; 6 permission levels; data fades after 7 days; readmes/59
+- [Tactile principle](feedback_tactile_principle.md) — Humans are tactile; outputs must feel balanced and sturdy; Alice reads confusion before user speaks
+- [Bend to perception](feedback_bend_to_perception.md) — User connected to data not program; program bends to her; trellis serves the rose
+- [The Loop](feedback_the_loop.md) — Define→try→measure→adjust→converge→inspect frame; constrain variability first; scars = wisdom
+- [Fear and delight](feedback_fear_and_delight.md) — Weed aggressively; clutter cost daily, recovery cost once; coaching calms fear, excites delight
+- [Desktop Hosting leverage](project_desktop_hosting_leverage.md) — Cloudflare+Apple+WC3 for 30M small businesses; DynamicCatalogs funds it; Bill has CF/Apple connections
