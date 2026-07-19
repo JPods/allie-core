@@ -121,6 +121,8 @@
 - [MeshMobility data overlays](project_rt_overlays.md) — AADT, crashes, census overlays + Custom Points overlay (generic coordinate loader)
 - [Custom Points overlay](project_custom_points_overlay.md) — Generic point overlay; presets dropdown; DART stations first; readmes/60
 - [DFW DART demo](project_dart_demo.md) — JPods feeder networks extending DART rail; 86 stations; coverage circles show gap fill
+- [Fusion360 BOM extraction](project_fusion360_bom.md) — Read Fusion360 exports for BOM; deferred to next session
+- [Structure UUIDs + network merge](project_uuid_merge.md) — Serialized structures; UUID survives merge; local IDs renumber
 - [MeshMobility CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
