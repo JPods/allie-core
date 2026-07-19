@@ -137,7 +137,9 @@
 - [10xMakers + PiratesAndPatriots](project_pirates_and_patriots.md) — 10xMakers.com = student platform (leaderboard, kits, viral); PiratesAndPatriots.com = punchline (identity, not storefront)
 - [Prime Law of Networks](reference_prime_law_of_networks.md) — V ∝ n²/p; Metcalfe extended to physical systems; packet size toward 1 = full network value; JPods is packet-switching for transit
 - [Patent portfolio + capital strategy](reference_patent_portfolio.md) — 9 filed patents + expired 6,810,817; freight/datacenter/energy = valuation floor; DirtPods = unregulated entry; "we invented solar-powered transport networks"
-- [Government in its proper role](feedback_government_proper_role.md) — Not anti-government; coercion enforces safety, liberty allows innovation; each in proper role; ASTM F24 serves both; never frame as "government bad"
+- [Government in its proper role](feedback_government_proper_role.md) — Not anti-government; coercion enforces safety; ASTM F24 serves both
+- [JPods specs architecture](project_specs_architecture.md) — 12 specs, 304 reqs, Y/O/R flags; QA→Document; Gordy QM→Alice; ASTM F24+FTA 673
+- [Spare parts system — SEGA model](project_spare_parts_system.md) — Exploded view→click→order→QA; Fusion360 BOM extractor built; Bogie v22 + 170m BOM
 - [MeshMobility platform](project_meshmobility_platform.md) — Library (browse/clone/fork), user tokens for points, protected JPods_primary networks, for-fee support line; viral loop
 - [Cargo and utility overlays](project_cargo_utility_overlays.md) — Future data layers: USPS/UPS/FedEx/grocery locations + water/sewage/recycling as cassettes; DO NOT BUILD YET
 - [60% reduction already done](reference_60pct_already_done.md) — "Can't be done" has been done; US/Europe diverged post-1973; 60% less oil, 400-600% fewer deaths
