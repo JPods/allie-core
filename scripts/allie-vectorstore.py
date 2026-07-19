@@ -31,6 +31,8 @@ INDEX_DIRS = [
     ("facets", ALLIE_HOME / "facets"),
     ("snippets", ALLIE_HOME / "process" / "snippets"),
     ("wisdom", ALLIE_HOME / "readmes" / "wisdom"),
+    ("specs", ALLIE_HOME / "specs"),
+    ("fusion", ALLIE_HOME / "Fusion"),
 ]
 
 # File extensions to index
