@@ -1,5 +1,5 @@
 # Ouch List (OSL) — JPods Risk Register
-**Last Updated:** 2026-04-20
+**Last Updated:** 2026-07-17
 **Purpose:** Every risk we can see, no matter how long-tail. Flags, not blockers. Better here than surprising us later.
 
 Bill's framing: *"OSL — Oh Shit List. Things we must address."*
@@ -12,6 +12,34 @@ Bill's framing: *"OSL — Oh Shit List. Things we must address."*
 **Must Fix** = already in code or design; reaches someone if not corrected. Everything else is a risk we can see but cannot yet address.
 
 Add to this list freely. Removing an item requires either a resolution or a conscious decision that the risk does not apply to our design.
+
+---
+
+## The Ouch List Is Not the Flag System
+
+The **flag system** (red/orange/yellow — see `readmes/agents/agent-flags.md`)
+handles **operational events** — things happening right now to running systems.
+
+The **ouch list** is different. It is a register of **risks we think we know
+about but are intentionally not addressing at this time.** Each entry requires:
+
+1. **What the risk is** — specific enough to recognize if it materializes
+2. **Why we think it's long-tail** — our reasoning for not addressing it now
+3. **Why we are not addressing it** — resource constraint, design not mature enough,
+   insufficient data, other priorities
+4. **What would prove us wrong** — the observable event that would move this
+   from "accepted risk" to "active problem"
+
+**If we are proven wrong** — if the risk materializes — we have the data
+to improve our retrospection. The entry's "why we think it's long-tail"
+reasoning becomes the lesson: what did we misjudge? Was it probability,
+severity, or timeline? That's how the team calibrates its risk assessment
+over time.
+
+**No colors.** The ouch list does not use the red/orange/yellow flag system.
+Flags are for operational events with urgency. The ouch list is for risks
+that are consciously deferred — they have no urgency until they materialize,
+at which point they become flags.
 
 ---
 
@@ -32,9 +60,9 @@ These are mistakes already in the code or design. They are not future risks. The
 
 ## Civil / Structural — Cilia's Domain
 
-| # | Risk | Why it could bite us | Severity | Status |
-|---|------|----------------------|----------|--------|
-| C-01 | Gradual guideway settlement in soft soils or engineered fill | Stanchion differential settlement misaligns guideway geometry over years; vehicles lose contact or jam switches | High | Unaddressed |
+| # | Risk | Why it could bite us | Severity | Status | Why long-tail | What proves us wrong |
+|---|------|----------------------|----------|--------|---------------|---------------------|
+| C-01 | Gradual guideway settlement in soft soils or engineered fill | Stanchion differential settlement misaligns guideway geometry over years; vehicles lose contact or jam switches | High | Unaddressed | Years to manifest; pre-deployment geotech survey will catch worst sites; settlement monitoring is standard civil practice | Nora reports increasing encoder slip on the same segment over months — geometry is shifting |
 | C-02 | Thermal expansion of steel guideway in extreme temperature swings | Texas summer to Minnesota winter: a 200-ft span can move 1-2 inches; joints and switches must accommodate | Medium | Unaddressed |
 | C-03 | Seismic risk for elevated guideways | Elevated structures in earthquake zones need lateral bracing that is not in current stanchion design | High | Unaddressed |
 | C-04 | Buried utility conflicts during pile driving | Gas lines, fiber trunk, high-voltage conduit, stormwater vaults — permit maps are often wrong; we hit something | High | Unaddressed |

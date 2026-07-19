@@ -15,11 +15,17 @@ Continuity lives in files — CarryOn, alice_log, WhatIf store, session logs. Wi
 
 Allie runs from `/Users/williamjames/Allie/` — no external drive required. Three LaunchAgents start automatically on login:
 
-| Service | What it does |
-|---------|-------------|
-| `com.allie.watcher` | File change monitoring + app detection; logs to `today/YYYY-MM-DD-activity.log` |
-| `com.allie.sync` | Backs up to `/Volumes/Allie/` when external drive is mounted |
-| `com.webclerk.server` | Starts Django + Celery + Ollama via `runserver.sh local`; serves on port 8000 |
+| Service | What it does | Python |
+|---------|-------------|--------|
+| `com.allie.watcher` | File change monitoring + app detection; logs to `today/YYYY-MM-DD-activity.log` | — (shell) |
+| `com.allie.sync` | Backs up to `/Volumes/Allie/` when external drive is mounted | — (shell) |
+| `com.allie.icloud-sync` | Syncs `~/Allie/` to iCloud 60s after any change | — (shell) |
+| `com.allie.api` | Allie outward-facing API on port 5001 | `~/Allie/venv/bin/python3` |
+| `com.allie.reflect` | Nightly synthesis at 10 PM | `~/Allie/venv/bin/python3` |
+| `com.allie.alice-patterns` | Alice pattern recognition every 4 hours | `~/Allie/venv/bin/python3` |
+
+**Python:** All LaunchAgents use `~/Allie/venv/bin/python3` (3.13.3).
+See `readmes/57-python-setup.md` for the single-version rule.
 
 Open a session simply with:
 ```bash

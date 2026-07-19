@@ -1,63 +1,69 @@
-# Handoff — 2026-07-18 (late evening)
+# Handoff — 2026-07-18 (final)
 
 ## Where We Left Off
 
-Built the JPods specs + quality + BOM infrastructure in one session. Key deliverables:
+Two sessions today. Morning: MeshMobility overlay tools + transit data + UUID serialization + network merge. Evening: Fusion360 BOM + specs + QA architecture.
 
-**12 unified specs** at `~/Allie/specs/` — 304 requirements, Yellow/Orange/Red flags, uniform format. 13 RED flags that need resolution before deployment (temp range conflict, HSS mismatch, battery fire protection, V2V collision avoidance, SIL classification, fail-safe decision).
+## What Was Built (Morning)
 
-**Fusion360 BOM extraction** working for both .f3d and .f3z formats. 170Meter_Full (22 components, 76 instances) and Bogie v22 (17 parts, 42 per bogie) extracted and saved as JSON.
+### 1. Custom Points Overlay (MeshMobility)
+- Generic point overlay tool in Overlays panel → "Custom Points" button
+- Three input methods: presets dropdown, file upload, paste (JSON/CSV/GeoJSON)
+- Persists with .jpd save/load
+- Code: `overlays.js` (CustomPoints module) + `overlays.py` (4 API endpoints)
+- Readme: `readmes/60-custom-points-overlay.md`
 
-**SEGA-style spare parts demo** at `~/Allie/Fusion/bogie_spare_parts.html` — clickable exploded view with 17 numbered callouts, detail panel, Reorder/InstallDoc/QA buttons. Bill confirmed it looks good, will get specific about parts and ordering.
+### 2. CrashHarvester Transit Data Type
+- Full data type: schema, harvester, reader, CLI
+- `python3 -m crash_harvester harvest --transit tx ma ny ca`
+- 12 states pre-configured with GTFS feed URLs
+- Harvested: TX (86 DART), MA (356 MBTA), NY (484 MTA), CA (220 BART+Caltrain+LA Metro)
 
-**QA architecture migrated** from Setting to Document in WC3. Migration 0006 adds `document_id` FK to QuestionAnswer. QAService has new Document-based methods. 5 inspection checklists + 3 training quizzes written at `~/Allie/specs/qa-documents.json`.
+### 3. Structure UUIDs (Serialized Items)
+- `Structure.structure_uuid` and `ConnectionPoint.cp_uuid` added
+- Auto-generated on creation, persisted in .jpd
+- Same pattern as WC3 serialized inventory
 
-**Gordy's quality manual** (29 files) read and mapped to Alice/WC3 equivalents.
+### 4. Network Merge
+- `POST /api/network/merge` — combines two .jpd files by UUID matching
+- New structures renumbered; guideways preserved; cross-network connections manual
 
-**Compliance framework** mapped: ASTM F24 (F2291, F770, F1193, F2974, F3598) + FTA 49 CFR 673 (SMS 4 pillars).
+## What Was Built (Evening)
 
-## Do This First Next Session
+### 5. Fusion360 BOM + Specs
+- .f3d/.f3z parser (Zstandard decompression, ACT segment, DesignDescription.json)
+- 170Meter_Full: 22 components, 76 instances; HSS mismatch flagged
+- Bogie v22: 17 parts, 42 per bogie
+- 12 unified specs (SPEC-01 through SPEC-12), 304 requirements, 13 RED flags
+- Gordy's Quality Manual mapped to Alice/WC3
+- QA architecture: Document FK on QuestionAnswer model
+- Spare parts demo: SEGA exploded-view pattern
 
-1. **Run migration 0006** on WC3 — `python manage.py migrate docs` to add document_id column
-2. **Load qa-documents.json** — create Document records for the 5 inspection checklists and 3 quizzes
-3. **Resolve RED flags** — start with temperature range conflict (chassis -40C vs bogie -10C) and HSS 18/20 mismatch (email Marwan)
-4. **Spare parts — real data** — Bill will provide specific manufacturer part numbers, suppliers, prices for the Bogie v22 BOM. Update `bogie_spare_parts.html` with real procurement data
-5. **Andi on IT15** — hardware arrives Monday 2026-07-21. Deploy Andi per `readmes/agents/andi.md`
-6. **Write `readmes/61-specs-architecture.md`** — the "clear path" document for onboarding. How Gordy's QM + spec library + Alice + Fusion360 BOMs connect
+## What Needs Attention Next
 
-## Open Problems
+1. Test merge with two adjacent city .jpd files
+2. Noelle + Alice database design for serialized station assets (Bill flagged)
+3. DFW demo: DART overlay + JPods feeder network + Coverage circles
+4. Fusion360: Bill may bring more .f3d files; parser ready
+5. Specs need Bill's review for flag severity
 
-- 170m BOM instance counts may be undercounted (ACT parse vs browser tree discrepancy)
-- Bogie BOM has metric/imperial variants (Housing vs Housing_inch) — need to decide authoritative version
-- Spare parts callout positions are approximate — need exact placement
-- WC3 migration 0006 not yet applied
-- qa-documents.json not yet loaded into WC3 Document records
-- `andi-reflect.py` not yet written
-- Cloudflare email gate still not tested
-- ReportsDialog server-side filter still needed
+## Files Changed (MeshMobility)
+- `gui/static/overlays.js` — CustomPoints module
+- `gui/static/index.html` — Custom Points UI
+- `gui/overlays.py` — 5 new endpoints
+- `gui/network_io.py` — merge endpoint + custom_points persistence
+- `engine/structures.py` — UUID fields
+- `gui/state.py` — UUID restore on load
 
-## What Was Decided (and Why)
+## Files Changed (CrashHarvester)
+- `schemas.py` — TRANSIT schema
+- `harvest/transit.py` — GTFS harvester (new file)
+- `reader.py` — get_transit()
+- `__main__.py` — --transit CLI
 
-- **QA moves from Setting to Document** — Document has body (WHY), refs (standards), config (questions), retention, search. Settings are configuration; Documents are knowledge.
-- **Mind-the-Gap: 17mm H / ±8mm V target** — 1/3 below ASCE 21.2-2008 maximum (25mm / ±12mm). Sensors at every door, both sides. Unloaded + loaded measurement. Door locked until loaded gap verified.
-- **Spare parts = SEGA pattern** — Exploded view → click → order → install doc → QA. Proven zero misorders in 3 years.
-- **SketchUp stays art for now** — until GIS integration gives a reason to make it real drawings. Fusion360 is the CAD authority.
-- **Item numbering: pure sequential integers** — no leading zeros, no prefixes. WC3 auto-generates. Decision captured in ItemNumberingSystem gdoc.
-- **Andi parks until Monday** — IT15 hardware not yet arrived
-- **Flag system: Yellow/Orange/Red** — Yellow = don't understand. Orange = understand problem, no solution. Red = stop everything.
-
-## Files Created This Session
-
-**Allie:**
-- `specs/00-TEMPLATE.md` through `specs/12-quality-program.md` (13 files)
-- `specs/qa-documents.json`
-- `Fusion/170Meter_Full_BOM.json`, `Fusion/Bogie_v22_BOM.json`
-- `Fusion/bogie_spare_parts.html`, `Fusion/bogie_extract/` (preview images)
-
-**WC3:**
-- `apps/docs/models/question_answer.py` — added document FK
-- `apps/docs/services/qa_service.py` — added Document-based methods
-- `apps/docs/migrations/0006_questionanswer_document.py`
-
-**Memory:**
-- `project_specs_architecture.md`, `project_spare_parts_system.md`
+## Files Changed (Allie)
+- `readmes/60-custom-points-overlay.md` — new
+- `readmes/27-route-time.md` — updated
+- `readmes/retrospections/2026-07-18.md` — full retrospection
+- `specs/` — 12 spec files (new directory)
+- `Fusion/` — BOM JSON files + spare parts HTML

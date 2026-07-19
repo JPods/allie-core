@@ -48,11 +48,18 @@ Every agent file uses this structure. Add sections as needed; do not remove them
 
 ## Ecosystem Agents
 
-| Agent | Role | File | WC Connection |
-|-------|------|------|---------------|
-| Alice | WebClerk specialist — data quality, billing, patterns | [alice.md](alice.md) | 24 |
-| Allie | Bill's personal AI — cross-domain, sovereignty review | [allie.md](allie.md) | 22 |
-| Athena | Adversarial reviewer — security, privacy, action gate | [athena.md](athena.md) | 23 |
+| Agent | Role | File | Location |
+|-------|------|------|----------|
+| Alice | WebClerk specialist — data quality, billing, patterns | [alice.md](alice.md) | IT15 (WC3) |
+| Allie | Bill's personal AI — cross-domain, sovereignty review | [allie.md](allie.md) | MacBook (portable) |
+| Andi | Production observer — 24/7 monitoring, pattern learning | [andi.md](andi.md) | IT15 (always-on) |
+| Athena | Adversarial reviewer — security, privacy, action gate | [athena.md](athena.md) | IT15 (WC3) |
+
+## Cross-Agent Protocols
+
+| Protocol | File | What |
+|----------|------|------|
+| Red / Yellow Flags | [agent-flags.md](agent-flags.md) | Nora/Sally raise flags → Noelle manages → Andi/Allie collaborate → Alice creates Actions |
 
 ## Allie — Cross-Environment Architecture
 

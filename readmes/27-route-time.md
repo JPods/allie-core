@@ -592,5 +592,28 @@ route_time/
 | GET/POST | `/api/demand` | Demand config |
 | GET | `/api/overlays/aadt` | AADT traffic overlay |
 | GET | `/api/overlays/accidents` | Accident data overlay |
+| GET | `/api/overlays/crash_density` | All-severity crash density |
+| GET | `/api/overlays/population_density` | Census population density |
+| GET | `/api/overlays/property_values` | Census property values |
+| GET | `/api/overlays/jobs` | Census jobs data |
 | GET | `/api/overlays/mobility` | Cell mobility overlay |
+| GET/POST | `/api/overlays/custom_points` | Custom point overlay (get/save) |
+| GET | `/api/overlays/custom_points/presets` | List available preset files |
+| GET | `/api/overlays/custom_points/preset/<file>` | Load a preset file |
 | POST | `/api/ai/recommend` | Allie network recommendation (stub) |
+
+---
+
+## Custom Points Overlay
+
+Generic coordinate overlay tool for displaying external point data on the map.
+Full documentation: `readmes/60-custom-points-overlay.md`.
+
+Accepts JSON array `[{lat, lon, label}]`, GeoJSON FeatureCollection, or CSV with lat/lon columns.
+Three input methods: presets dropdown, file upload, paste.
+
+**Presets:** Any `.json` file in `mesh_mobility/overlays/` that isn't a crash/census/aadt file
+appears automatically in the presets dropdown. Current presets:
+- `dart_stations.json` — 86 DART (Dallas) rail stations across all 6 lines
+
+Points persist with `.jpd` save/load.

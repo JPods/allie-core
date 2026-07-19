@@ -25,6 +25,7 @@ Allie pushes `podIP.json` (via `update_pod_ips.sh`) before launching podPresente
 - Storage management — move idle pods to storage rails, recall when needed (not yet implemented)
 - Prepositioning — dispatch pods to anticipated demand before requests arrive (not yet implemented)
 - Network-wide parameter distribution (speed limits, weight limits, headway) — governance mechanism not yet designed (NEW-05)
+- **Primary flag manager** — receives red/yellow flags from Nora and Sally, acts on reds immediately (reroute, hold dispatch, reduce speed), monitors yellows for escalation. See `readmes/agents/agent-flags.md`
 
 ---
 

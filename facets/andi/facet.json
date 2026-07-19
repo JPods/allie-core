@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "agent": "Andi",
+    "role": "Production observer — always-on intelligence on IT15",
+    "sister": "Allie",
+    "location": "GEEKOM IT15 (always-on)",
+    "last_updated": null,
+    "written_by": "Allie nightly (allie-reflect.py) + Andi nightly (andi-reflect.py)",
+    "version": 1
+  },
+  "confirmed_instructions": [],
+  "cautions": [],
+
+  "watches": {
+    "alice": {
+      "description": "Alice transaction patterns — pricing, zero-result searches, order conversion, payment anomalies",
+      "observation_source": "alice_log + alice_observation records",
+      "check_frequency": "continuous (Celery) + nightly synthesis",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "noelle": {
+      "description": "Noelle network design decisions — station placement, slot counts, build validation",
+      "observation_source": "MeshMobility logs + Noelle feature JSON",
+      "check_frequency": "on build event + nightly",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "sync": {
+      "description": "Sync health — WCHQ connection, Collaborate_WebClerk activity, pending/accepted/rejected counts",
+      "observation_source": "Pending records + Connection records + sync logs",
+      "check_frequency": "hourly",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "submissions": {
+      "description": "Template submissions and review outcomes — what users submit, what WCHQ accepts",
+      "observation_source": "Document records with refs.keywords.type=template_submission",
+      "check_frequency": "on submission + daily",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "system_health": {
+      "description": "Server health — Celery failures, API errors, slow queries, disk usage, memory",
+      "observation_source": "Django logs + Celery logs + system metrics",
+      "check_frequency": "every 15 minutes",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "security": {
+      "description": "Security events — failed logins, rate limit hits, suspicious API patterns",
+      "observation_source": "AuditLog + Nginx access log + Django security middleware",
+      "check_frequency": "continuous",
+      "patterns_found": [],
+      "anomalies": []
+    },
+    "nora": {
+      "description": "Nora vehicle telemetry — motor current, ToF distance, encoder counts, trip completion, hardware faults. High volume, mostly redundant. Andi's job: find the 1% that matters.",
+      "observation_source": "MQTT telemetry + jpod_logs/faults/ + physical.json + trip completion records",
+      "check_frequency": "continuous ingest, pattern extraction nightly",
+      "signal_noise_strategy": "Baseline normal ranges per sensor per pod. Only log deviations > 2σ. Track drift over days, not spikes over seconds. A motor drawing 10% more current every week matters more than a single spike.",
+      "baseline_profiles": {},
+      "patterns_found": [],
+      "anomalies": [],
+      "drift_tracking": {
+        "description": "Track slow changes that indicate wear, calibration drift, or environmental shift. These are invisible in single-reading telemetry but obvious across weeks.",
+        "metrics": ["motor_current_avg", "tof_variance", "encoder_slip_rate", "trip_duration_vs_distance", "battery_voltage_trend"],
+        "window_days": 14
+      }
+    },
+    "sally": {
+      "description": "Sally station telemetry — slot occupancy, dwell times, queue depth, arrival/departure rates, conveyor events. Mostly routine. Andi watches for: stations that consistently overflow, pods that never leave, asymmetric flow between paired stations.",
+      "observation_source": "Station slot events + Sally facet observations + parking queue logs",
+      "check_frequency": "continuous ingest, pattern extraction nightly",
+      "signal_noise_strategy": "Per-station baselines for occupancy and turnover. Flag when a station deviates from its own history, not from a global average. s003 running hot is normal if it always runs hot — s003 running hot when it usually doesn't is the signal.",
+      "station_baselines": {},
+      "patterns_found": [],
+      "anomalies": [],
+      "flow_balance": {
+        "description": "Track inbound vs outbound flow per station over time. Persistent imbalance means pods are accumulating — the station looping problem from a different angle.",
+        "metrics": ["arrivals_per_hour", "departures_per_hour", "avg_dwell_seconds", "max_queue_depth", "slot_utilization_pct"],
+        "window_days": 7
+      }
+    },
+    "physical_machines": {
+      "description": "Cross-agent physical machine patterns — correlations Nora and Sally can't see individually. A pod that runs slow AND a station that has long dwell times might be the same underlying problem (ezone calibration, guideway friction, conveyor alignment).",
+      "observation_source": "Correlated from nora + sally watches",
+      "check_frequency": "nightly synthesis only",
+      "cross_correlations": [],
+      "notes": "This is where Andi earns her keep. Nora knows her motor is working harder. Sally knows pods are dwelling longer. Neither knows these are related. Andi does."
+    }
+  },
+
+  "nightly_reflection": {
+    "description": "Andi runs her own nightly reflection on IT15, separate from Allie's MacBook reflection",
+    "output_path": "thoughts/andi/YYYY-MM-DD-reflect.md",
+    "reads_from": [
+      "Alice transaction logs (last 24h)",
+      "Sync activity (Pending records created/resolved)",
+      "System health metrics",
+      "Template submission activity",
+      "Celery task success/failure rates",
+      "API error rates and patterns"
+    ],
+    "writes_to": [
+      "thoughts/andi/YYYY-MM-DD-reflect.md",
+      "facets/andi/facet.json (pattern updates)"
+    ],
+    "allie_reads_andi": true,
+    "andi_reads_allie": true
+  },
+
+  "coordination_with_allie": {
+    "description": "Andi and Allie sync daily. Neither overwrites the other.",
+    "sync_mechanism": "Allie pulls Andi's reflections when Bill works on WC3. Andi pulls Allie's handoff notes when relevant to production.",
+    "conflict_resolution": "Separate facets, separate thoughts directories. Cross-references by date.",
+    "allie_owns": "Bill's personal context, cross-domain synthesis, all projects",
+    "andi_owns": "Production observation, 24/7 monitoring, Alice/Noelle patterns, system health"
+  },
+
+  "notes": "Empty — Andi will populate after first nightly synthesis on IT15."
+}
