@@ -1,0 +1,173 @@
+{
+  "project": "JPods Middle East Iraq \u2014 170 Meter Full Guideway",
+  "source_model": "170Meter_Full.f3d",
+  "specs_doc": "Truss_Tekla_Tedds_details_2024-04-30.pdf",
+  "engineer": "Marwan Nesheiwat / Mohd K",
+  "date_extracted": "2026-07-18",
+  "notes": [
+    "Instance counts from Fusion360 ACT segment parse",
+    "Spec cross-reference from Tekla Tedds calc sheets 1-20",
+    "Some sub-component counts (bolts, rebar) are per-assembly, multiply by parent count"
+  ],
+  "assemblies": [
+    {
+      "item": 1,
+      "name": "TrussSeg8_4",
+      "description": "8-panel truss segment (primary guideway span)",
+      "quantity": 1,
+      "note": "Browser shows TrussSeg8_1:1 through :3 \u2014 likely 3+ instances; model may use pattern"
+    },
+    {
+      "item": 2,
+      "name": "TrussSeg9",
+      "description": "9-panel truss segment",
+      "quantity": 1
+    },
+    {
+      "item": 3,
+      "name": "TrussShort",
+      "description": "Short truss segment (transition/end piece)",
+      "quantity": 1
+    },
+    {
+      "item": 4,
+      "name": "Pier_Turnabout1",
+      "description": "Turnabout pier/column assembly",
+      "quantity": 1,
+      "spec_ref": "Sheets 11-13: A1085 HSS 20x0.5, L=307in (25.6ft), Fy=60ksi",
+      "base_plate_spec": "Sheets 18-19: 85x85x5in plate, 20 anchor bolts (2.5in dia, 40in embed)",
+      "footing_spec": "Sheets 1-7: 3ft x 3ft x 18in pad, 4000psi concrete, 10 No.6 bars each way",
+      "flag": "MISMATCH: Column spec says HSS 20x0.5 but base plate spec says HSS 18x0.5 \u2014 verify with Marwan"
+    },
+    {
+      "item": 5,
+      "name": "Pier_Turnabout",
+      "description": "Turnabout pier (variant)",
+      "quantity": 2
+    },
+    {
+      "item": 6,
+      "name": "Circle",
+      "description": "Turnabout/roundabout loop structure",
+      "quantity": 1
+    },
+    {
+      "item": 7,
+      "name": "Turnabout_Passthrough",
+      "description": "Passthrough section at turnabout",
+      "quantity": 1
+    },
+    {
+      "item": 8,
+      "name": "Pier1",
+      "description": "Standard guideway pier/column type 1",
+      "quantity": 10,
+      "spec_ref": "Sheets 8-10: A1085 HSS 16x0.5, L=207in (17.25ft), Fy=60ksi, UR=0.971",
+      "base_plate_spec": "Sheets 14-15: 60x60x5in plate, 10 anchor bolts (2.5in dia, 50in embed)"
+    },
+    {
+      "item": 9,
+      "name": "Pier2",
+      "description": "Standard guideway pier/column type 2",
+      "quantity": 6
+    },
+    {
+      "item": 10,
+      "name": "Pier",
+      "description": "Generic pier (may be parent assembly)",
+      "quantity": 10
+    },
+    {
+      "item": 11,
+      "name": "Pier_2024-04-23",
+      "description": "Pier variant dated 2024-04-23",
+      "quantity": 1
+    },
+    {
+      "item": 12,
+      "name": "Pier_SideOnly",
+      "description": "Single-side pier bracket",
+      "quantity": 3
+    },
+    {
+      "item": 13,
+      "name": "Pier_SideOnlyc2",
+      "description": "Single-side pier bracket variant c2",
+      "quantity": 2
+    },
+    {
+      "item": 14,
+      "name": "RibSegment",
+      "description": "Structural rib/cross-frame segment",
+      "quantity": 10
+    },
+    {
+      "item": 15,
+      "name": "rib",
+      "description": "Individual rib element (sub-component of RibSegment)",
+      "quantity": 10
+    },
+    {
+      "item": 16,
+      "name": "C1",
+      "description": "Connection/clip element type 1",
+      "quantity": 7
+    },
+    {
+      "item": 17,
+      "name": "CenterPole",
+      "description": "Center pole (turnabout center support)",
+      "quantity": 1
+    },
+    {
+      "item": 18,
+      "name": "PassengerSideGuideway",
+      "description": "Passenger-side guideway rail",
+      "quantity": 2
+    },
+    {
+      "item": 19,
+      "name": "LandingGuideway",
+      "description": "Landing/approach guideway section",
+      "quantity": 1
+    },
+    {
+      "item": 20,
+      "name": "Feeder",
+      "description": "Feeder guideway section",
+      "quantity": 1
+    },
+    {
+      "item": 21,
+      "name": "StationSide",
+      "description": "Station-side assembly",
+      "quantity": 1
+    },
+    {
+      "item": 22,
+      "name": "109Pod-DFW_APM v6",
+      "description": "Pod/vehicle model (DFW APM reference design)",
+      "quantity": 2
+    }
+  ],
+  "materials_from_specs": {
+    "structural_steel": {
+      "columns_truss": "A1085 HSS 16x0.5 (Fy=60ksi, Fu=80ksi)",
+      "columns_turnabout": "A1085 HSS 20x0.5 (Fy=60ksi, Fu=80ksi)",
+      "base_plates": "A36 (Fy=36ksi), 5in thick"
+    },
+    "concrete": {
+      "footings": "f'c=4000psi (truss) / f'c=6000psi (turnabout base plate) / f'c=3000psi (turnabout anchor)",
+      "density": "150 lb/ft3 normal weight"
+    },
+    "reinforcement": {
+      "footing_bars": "No.6 bars, fy=60ksi, 3.2in spacing",
+      "cover": "3in all sides"
+    },
+    "anchor_bolts": {
+      "type": "Cast-in headed stud anchor",
+      "diameter": "2.5in",
+      "material": "fya=36ksi, futa=58ksi"
+    }
+  }
+}

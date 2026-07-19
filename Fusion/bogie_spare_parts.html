@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods Bogie v22 — Spare Parts</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .header { background: #16213e; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f3460; }
+  .header h1 { font-size: 18px; color: #e94560; }
+  .header .subtitle { font-size: 13px; color: #888; }
+  .main { display: flex; height: calc(100vh - 52px); }
+  .image-panel { flex: 1; position: relative; overflow: hidden; background: #0a0a1a; }
+  .image-panel img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* Numbered callout circles */
+  .callout {
+    position: absolute; width: 28px; height: 28px; border-radius: 50%;
+    background: #e94560; color: white; font-size: 12px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 2px solid white; transition: all 0.2s;
+    z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .callout:hover { transform: scale(1.3); background: #ff6b6b; }
+  .callout.active { background: #0f3460; border-color: #e94560; transform: scale(1.3); }
+
+  /* Detail panel */
+  .detail-panel {
+    width: 360px; background: #16213e; border-left: 2px solid #0f3460;
+    overflow-y: auto; padding: 0;
+  }
+  .detail-header { padding: 16px; background: #0f3460; }
+  .detail-header h2 { font-size: 16px; color: #e94560; margin-bottom: 4px; }
+  .detail-header .part-id { font-size: 12px; color: #888; }
+  .detail-body { padding: 16px; }
+  .detail-body .field { margin-bottom: 12px; }
+  .detail-body .label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .detail-body .value { font-size: 14px; }
+
+  .btn {
+    display: inline-block; padding: 8px 16px; border-radius: 4px;
+    font-size: 13px; cursor: pointer; border: none; margin: 4px 4px 4px 0;
+    text-decoration: none; color: white;
+  }
+  .btn-order { background: #e94560; }
+  .btn-order:hover { background: #ff6b6b; }
+  .btn-doc { background: #0f3460; }
+  .btn-doc:hover { background: #1a4a8a; }
+  .btn-qa { background: #2d6a4f; }
+  .btn-qa:hover { background: #40916c; }
+
+  .spec-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .spec-table td { padding: 4px 8px; font-size: 13px; border-bottom: 1px solid #0f3460; }
+  .spec-table td:first-child { color: #888; width: 40%; }
+
+  .welcome { padding: 40px 24px; text-align: center; color: #666; }
+  .welcome h2 { color: #888; margin-bottom: 12px; }
+
+  .qty-badge {
+    display: inline-block; background: #e94560; color: white;
+    padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>BOGIE v22 — SPARE PARTS</h1>
+    <div class="subtitle">Clicking on a Part Number or Numbered circle will display an item to order</div>
+  </div>
+  <div class="subtitle">JPods | ASTM F770 Compliant Parts System</div>
+</div>
+
+<div class="main">
+  <div class="image-panel" id="imagePanel">
+    <img src="Bogie_v22_exploded.png" alt="Bogie v22 Exploded View" id="bogieImage">
+
+    <!-- Callouts positioned over the image -->
+    <!-- Left side - Channel_left and motor -->
+    <div class="callout" style="left: 8%; top: 32%;" onclick="showPart(1)" id="c1">1</div>
+    <div class="callout" style="left: 18%; top: 22%;" onclick="showPart(2)" id="c2">2</div>
+    <div class="callout" style="left: 5%; top: 62%;" onclick="showPart(3)" id="c3">3</div>
+    <div class="callout" style="left: 14%; top: 72%;" onclick="showPart(4)" id="c4">4</div>
+
+    <!-- Top center - spacers and fasteners -->
+    <div class="callout" style="left: 35%; top: 8%;" onclick="showPart(5)" id="c5">5</div>
+    <div class="callout" style="left: 37%; top: 18%;" onclick="showPart(6)" id="c6">6</div>
+    <div class="callout" style="left: 39%; top: 28%;" onclick="showPart(7)" id="c7">7</div>
+
+    <!-- Center - Boss/Switch assembly -->
+    <div class="callout" style="left: 42%; top: 38%;" onclick="showPart(8)" id="c8">8</div>
+    <div class="callout" style="left: 48%; top: 30%;" onclick="showPart(9)" id="c9">9</div>
+    <div class="callout" style="left: 45%; top: 52%;" onclick="showPart(10)" id="c10">10</div>
+    <div class="callout" style="left: 40%; top: 65%;" onclick="showPart(11)" id="c11">11</div>
+
+    <!-- Right side - motor, drive, channel -->
+    <div class="callout" style="left: 58%; top: 18%;" onclick="showPart(12)" id="c12">12</div>
+    <div class="callout" style="left: 55%; top: 10%;" onclick="showPart(13)" id="c13">13</div>
+    <div class="callout" style="left: 72%; top: 15%;" onclick="showPart(14)" id="c14">14</div>
+
+    <!-- Right wheels and aligner -->
+    <div class="callout" style="left: 65%; top: 42%;" onclick="showPart(15)" id="c15">15</div>
+    <div class="callout" style="left: 78%; top: 55%;" onclick="showPart(16)" id="c16">16</div>
+    <div class="callout" style="left: 85%; top: 68%;" onclick="showPart(17)" id="c17">17</div>
+  </div>
+
+  <div class="detail-panel" id="detailPanel">
+    <div class="welcome" id="welcomeMsg">
+      <h2>Select a Part</h2>
+      <p>Click any numbered circle on the exploded view to see part details, specifications, and reorder options.</p>
+      <p style="margin-top: 24px; font-size: 12px;">17 unique parts &bull; 42 total per bogie &bull; 84 per vehicle</p>
+    </div>
+    <div id="partDetail" style="display: none;">
+      <div class="detail-header">
+        <h2 id="partName"></h2>
+        <div class="part-id" id="partId"></div>
+      </div>
+      <div class="detail-body">
+        <div class="field">
+          <div class="label">Quantity per Bogie</div>
+          <div class="value" id="partQty"></div>
+        </div>
+        <div class="field">
+          <div class="label">Category</div>
+          <div class="value" id="partCategory"></div>
+        </div>
+        <div class="field">
+          <div class="label">Description</div>
+          <div class="value" id="partDesc"></div>
+        </div>
+        <div class="field">
+          <div class="label">Specifications</div>
+          <table class="spec-table" id="partSpecs"></table>
+        </div>
+        <div class="field">
+          <div class="label">Spec Reference</div>
+          <div class="value" id="partSpecRef"></div>
+        </div>
+        <div class="field" style="margin-top: 16px;">
+          <button class="btn btn-order" onclick="alert('Order flow — connect to Alice/WC3')">Reorder Part</button>
+          <button class="btn btn-doc" onclick="alert('Installation document — Document record')">Install Guide</button>
+          <button class="btn btn-qa" onclick="alert('QA Checklist — QuestionAnswer from Document template')">QA Checklist</button>
+        </div>
+        <div class="field" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #0f3460;">
+          <div class="label">Used In</div>
+          <div class="value" id="partUsedIn" style="font-size: 12px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const parts = {
+  1: {
+    name: "Channel_left",
+    id: "Part #1 — Channel_left",
+    qty: "1",
+    category: "Frame / Structure",
+    desc: "Left-side main channel — structural backbone of the bogie. Houses motor mount, wheel bearings, and Boss assembly attachment points.",
+    specs: [["Material", "Steel channel"], ["Color code", "Yellow"], ["Fasteners", "Bolted to cross-members"]],
+    specRef: "SPEC-02 Bogie, R-02-008",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  2: {
+    name: "48V 72V 2-3 KW 4000RPM BLDC",
+    id: "Part #2 — BLDC Motor",
+    qty: "1",
+    category: "Powertrain",
+    desc: "Brushless DC motor, 3-phase. Primary drive motor. 48-72V, 2-3 kW continuous, 4000 RPM max. Field Oriented Control (FOC) preferred.",
+    specs: [["Voltage", "48-72V"], ["Power", "2-3 kW continuous"], ["RPM", "4000 max"], ["Type", "BLDC 3-phase"], ["Control", "FOC preferred"]],
+    specRef: "SPEC-02 Bogie, R-02-001 through R-02-004",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  3: {
+    name: "Wheel_20mm (outrigger)",
+    id: "Part #3 — Outrigger Wheel 20mm",
+    qty: "5",
+    category: "Rolling Stock",
+    desc: "20mm shaft outrigger/guide wheel. Constrains bogie laterally within guideway channel. Prevents derailment. Critical safety component.",
+    specs: [["Shaft", "20mm"], ["Count", "5 per bogie"], ["Function", "Lateral constraint"], ["Safety", "Critical — derailment prevention"]],
+    specRef: "SPEC-02 Bogie, R-02-012",
+    usedIn: "Bogie v22 (×5 per bogie, ×10 per vehicle), Aligner2 (×2), Blades_Bogie_Chassis (×1)"
+  },
+  4: {
+    name: "Wheel_20mm (outrigger)",
+    id: "Part #4 — Outrigger Wheel 20mm",
+    qty: "(see Part #3)",
+    category: "Rolling Stock",
+    desc: "Same part as #3 — additional outrigger wheel position on left channel.",
+    specs: [["See Part #3", ""]],
+    specRef: "SPEC-02 Bogie, R-02-012",
+    usedIn: "See Part #3"
+  },
+  5: {
+    name: "Cleat_channel_spacer",
+    id: "Part #5 — Cleat/Channel Spacer",
+    qty: "11",
+    category: "Fastener / Spacer",
+    desc: "Channel spacer cleat — highest-volume part in the bogie. Used in housing, aligner, base, and span assemblies. COMMON PARTS candidate #1.",
+    specs: [["Count per bogie", "11"], ["Count per vehicle", "22"], ["Material", "Steel flat bar"], ["Color code", "Yellow"], ["Common Parts", "YES — standardize first"]],
+    specRef: "SPEC-02 Bogie — Common Parts System per QM Spec Template 8",
+    usedIn: "Housing (×3), Aligner2 (×2 each, ×3 instances), Base (×1), span_Switchhousing_top (×1), Housing_inch (×2)"
+  },
+  6: {
+    name: "Cleat_channel_spacer",
+    id: "Part #6 — Cleat/Channel Spacer",
+    qty: "(see Part #5)",
+    category: "Fastener / Spacer",
+    desc: "Same part as #5 — second spacer bar visible in exploded view.",
+    specs: [["See Part #5", ""]],
+    specRef: "See Part #5",
+    usedIn: "See Part #5"
+  },
+  7: {
+    name: "Shaft_Alignment_Offset",
+    id: "Part #7 — Shaft Alignment Offset",
+    qty: "5",
+    category: "Alignment",
+    desc: "Shaft alignment offset shim/spacer. Used in Aligner2 assemblies to set precise wheel alignment. Critical for ride quality and wheel wear.",
+    specs: [["Count per bogie", "5"], ["Count per vehicle", "10"], ["Function", "Wheel alignment precision"]],
+    specRef: "SPEC-02 Bogie, R-02-012",
+    usedIn: "Aligner2 (×2 per instance, 3 instances)"
+  },
+  8: {
+    name: "Bogie, Boss v20",
+    id: "Part #8 — Boss Assembly v20",
+    qty: "1 (assembly)",
+    category: "Steering / Switch",
+    desc: "Boss steering assembly — sets left-right turning action at guideway diverge points. Contains plate_boss_switch and Wheel_20x4x1.5. The Boss rides against the Switch V-structure to select path.",
+    specs: [["Sub-parts", "plate_boss_switch (×1), Wheel_20x4x1.5 (×1)"], ["Function", "Path selection at diverge"], ["Actuator", "Linear — selection TBD (ORANGE flag)"]],
+    specRef: "SPEC-02 Bogie, R-02-013 through R-02-015",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  9: {
+    name: "plate_boss_switch",
+    id: "Part #9 — Boss Switch Plate",
+    qty: "2",
+    category: "Steering / Switch",
+    desc: "Mounting plate for Boss steering mechanism. Connects Boss to linear actuator and guideway switch interface.",
+    specs: [["Count per bogie", "2"], ["Material", "Steel plate"], ["Color code", "Green"]],
+    specRef: "SPEC-02 Bogie, R-02-013",
+    usedIn: "Bogie, Boss v20 (×1 per Boss instance)"
+  },
+  10: {
+    name: "vertical switchhousing",
+    id: "Part #10 — Vertical Switch Housing",
+    qty: "3",
+    category: "Switch Housing",
+    desc: "Vertical structural member of the switch housing assembly. Provides rigid frame for switch mechanism.",
+    specs: [["Count per bogie", "3"], ["Material", "Steel"], ["Color code", "Green"]],
+    specRef: "SPEC-02 Bogie",
+    usedIn: "Housing (×1), Housing_inch (×2)"
+  },
+  11: {
+    name: "riser_switchhousing",
+    id: "Part #11 — Switch Housing Riser",
+    qty: "2",
+    category: "Switch Housing",
+    desc: "Riser element connecting switch housing base to vertical members. Sets the height of the switch mechanism relative to guideway.",
+    specs: [["Count per bogie", "2"], ["Material", "Steel"], ["Color code", "Green"]],
+    specRef: "SPEC-02 Bogie",
+    usedIn: "Housing (×1), Housing_inch (×1)"
+  },
+  12: {
+    name: "10\" Drive 1.5",
+    id: "Part #12 — 10-inch Drive Wheel",
+    qty: "1",
+    category: "Powertrain",
+    desc: "10-inch drive wheel — primary traction wheel powered by BLDC motor. Direct or belt drive to motor output shaft.",
+    specs: [["Diameter", "10 inches (254mm)"], ["Drive ratio", "1.5"], ["Function", "Primary traction"]],
+    specRef: "SPEC-02 Bogie, R-02-009 through R-02-011",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  13: {
+    name: "Wheel_20x4x1.5",
+    id: "Part #13 — Boss Wheel 20×4×1.5",
+    qty: "2",
+    category: "Steering / Switch",
+    desc: "Boss steering wheel — rides against the Switch V-structure in the guideway to select path at diverge points.",
+    specs: [["Dimensions", "20×4×1.5"], ["Count per bogie", "2"], ["Function", "Switch path selection"]],
+    specRef: "SPEC-02 Bogie, R-02-013",
+    usedIn: "Bogie, Boss v20 (×1 per Boss instance)"
+  },
+  14: {
+    name: "Channel_right",
+    id: "Part #14 — Channel_right",
+    qty: "1",
+    category: "Frame / Structure",
+    desc: "Right-side main channel — mirrors Channel_left. Structural backbone, houses motor mount, wheel bearings. Shown lifted off in exploded view.",
+    specs: [["Material", "Steel channel"], ["Color code", "Yellow"], ["Mirror of", "Channel_left (#1)"]],
+    specRef: "SPEC-02 Bogie, R-02-008",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  15: {
+    name: "Aligner2",
+    id: "Part #15 — Aligner Assembly",
+    qty: "2 assemblies (+ 1 Aligner2_inch)",
+    category: "Alignment",
+    desc: "Wheel alignment assembly — positions outrigger wheels precisely relative to channel. Contains Cleat_channel_spacer, Shaft_Alignment_Offset, and Wheel_20mm.",
+    specs: [["Sub-parts", "Cleat_channel_spacer, Shaft_Alignment_Offset, Wheel_20mm"], ["Instances", "3 total (2× Aligner2, 1× Aligner2_inch)"]],
+    specRef: "SPEC-02 Bogie, R-02-012",
+    usedIn: "Bogie v22 (×3 instances per bogie)"
+  },
+  16: {
+    name: "Housing",
+    id: "Part #16 — Switch Housing Assembly",
+    qty: "1 (assembly)",
+    category: "Switch Housing",
+    desc: "Main switch housing — contains span_Switchhousing_top, tabgrab_switchhousing, riser, vertical members, and base. The structural frame that holds the entire switch/Boss mechanism.",
+    specs: [["Sub-parts", "span, tabgrab (×2), riser, vertical (×1), Cleat_spacer (×1), Base"], ["Housing variants", "Housing (metric) + Housing_inch (imperial)"]],
+    specRef: "SPEC-02 Bogie, R-02-013 through R-02-015",
+    usedIn: "Bogie v22 (×1 per bogie, ×2 per vehicle)"
+  },
+  17: {
+    name: "Rib-Rail-2024-01-24",
+    id: "Part #17 — Rib Rail Section",
+    qty: "1",
+    category: "Guideway Interface",
+    desc: "Rib-Rail section — the guideway running surface/rail that the bogie rides on. Reference piece included in bogie assembly for fit verification.",
+    specs: [["Date", "2024-01-24"], ["Function", "Guideway interface / fit check"], ["Cross-ref", "SPEC-04 Guideway"]],
+    specRef: "SPEC-04 Guideway, R-04-010",
+    usedIn: "Bogie v22 (×1 reference piece)"
+  }
+};
+
+let activeCallout = null;
+
+function showPart(num) {
+  const part = parts[num];
+  if (!part) return;
+
+  // Update active callout
+  if (activeCallout) activeCallout.classList.remove('active');
+  activeCallout = document.getElementById('c' + num);
+  activeCallout.classList.add('active');
+
+  // Show detail
+  document.getElementById('welcomeMsg').style.display = 'none';
+  document.getElementById('partDetail').style.display = 'block';
+
+  document.getElementById('partName').textContent = part.name;
+  document.getElementById('partId').textContent = part.id;
+  document.getElementById('partQty').innerHTML = part.qty + (parseInt(part.qty) > 1 ? ' <span class="qty-badge">HIGH USAGE</span>' : '');
+  document.getElementById('partCategory').textContent = part.category;
+  document.getElementById('partDesc').textContent = part.desc;
+  document.getElementById('partSpecRef').textContent = part.specRef;
+  document.getElementById('partUsedIn').textContent = part.usedIn;
+
+  // Build specs table
+  const table = document.getElementById('partSpecs');
+  table.innerHTML = '';
+  part.specs.forEach(([label, value]) => {
+    if (value) {
+      const row = table.insertRow();
+      row.insertCell(0).textContent = label;
+      row.insertCell(1).textContent = value;
+    }
+  });
+}
+</script>
+
+</body>
+</html>

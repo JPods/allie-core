@@ -1,0 +1,127 @@
+{
+  "project": "JPods Bogie v22",
+  "source_model": "Bogie v22.f3z",
+  "date_extracted": "2026-07-18",
+  "top_level_children": [
+    {
+      "name": "48V 72V 2-3 KW 4000RPM BLDC",
+      "type": "part"
+    },
+    {
+      "name": "Rib-Rail-2024-01-24",
+      "type": "part"
+    },
+    {
+      "name": "Aligner2_inch",
+      "type": "assembly"
+    },
+    {
+      "name": "Channel_right",
+      "type": "part"
+    },
+    {
+      "name": "Bogie, Boss v20",
+      "type": "assembly"
+    },
+    {
+      "name": "Switch",
+      "type": "assembly"
+    },
+    {
+      "name": "Channel_left",
+      "type": "part"
+    },
+    {
+      "name": "Blades_Bogie_Chassis",
+      "type": "assembly"
+    },
+    {
+      "name": "Housing",
+      "type": "assembly"
+    },
+    {
+      "name": "Aligner2",
+      "type": "assembly"
+    },
+    {
+      "name": "10\" Drive 1.5",
+      "type": "part"
+    },
+    {
+      "name": "Aligner2",
+      "type": "assembly"
+    }
+  ],
+  "flattened_parts": [
+    {
+      "name": "Cleat_channel_spacer",
+      "quantity": 11
+    },
+    {
+      "name": "Shaft_Alignment_Offset",
+      "quantity": 5
+    },
+    {
+      "name": "Wheel_20mm",
+      "quantity": 5
+    },
+    {
+      "name": "vertical switchhousing",
+      "quantity": 3
+    },
+    {
+      "name": "tabgrab_switchhousing",
+      "quantity": 3
+    },
+    {
+      "name": "Wheel_20x4x1.5",
+      "quantity": 2
+    },
+    {
+      "name": "plate_boss_switch",
+      "quantity": 2
+    },
+    {
+      "name": "riser_switchhousing",
+      "quantity": 2
+    },
+    {
+      "name": "48V 72V 2-3 KW 4000RPM BLDC",
+      "quantity": 1
+    },
+    {
+      "name": "Rib-Rail-2024-01-24",
+      "quantity": 1
+    },
+    {
+      "name": "Channel_right",
+      "quantity": 1
+    },
+    {
+      "name": "Base_inch",
+      "quantity": 1
+    },
+    {
+      "name": "Base-5_inch",
+      "quantity": 1
+    },
+    {
+      "name": "riser_switchhousing_inch",
+      "quantity": 1
+    },
+    {
+      "name": "span_Switchhousing_top_inch",
+      "quantity": 1
+    },
+    {
+      "name": "Channel_left",
+      "quantity": 1
+    },
+    {
+      "name": "10\" Drive 1.5",
+      "quantity": 1
+    }
+  ],
+  "total_parts": 42,
+  "unique_part_types": 17
+}

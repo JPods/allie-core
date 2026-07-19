@@ -1,0 +1,235 @@
+{
+  "_note": "JPods QA Document templates — load via manage.py or QAService.create_question_group_from_document()",
+  "_replaces": "Legacy qa.json (printing industry questions)",
+  "_format": "Each entry becomes a Document record with questions in config, narrative in body",
+
+  "inspections": [
+    {
+      "name": "JPods Daily Pre-Op Vehicle Inspection",
+      "description": "Daily vehicle inspection before first passenger service — ASTM F770, FTA 49 CFR 673",
+      "body": "WHY: ASTM F770 requires daily pre-operation inspection of all amusement rides and devices before opening to patrons. FTA 49 CFR 673.27 requires safety assurance through performance monitoring. A vehicle that passes daily pre-op is cleared for passenger service. A vehicle that fails any RED item is pulled from service until corrected (NCR per QM-13). This inspection takes approximately 10 minutes per vehicle and must be completed by a trained operator (QM-18 qualified).",
+      "refs": {
+        "keywords": ["qa_template", "inspection", "daily", "vehicle", "pre-op"],
+        "standards": ["ASTM F770", "FTA 49 CFR 673.27"],
+        "spec_refs": ["SPEC-01", "SPEC-02", "SPEC-11"]
+      },
+      "config": {
+        "template": {
+          "allow_freeform": false,
+          "require_image": false,
+          "parent_model": "item"
+        },
+        "questions": [
+          {"question": "Vehicle exterior: any visible damage, cracks, or deformation?", "answers": ["Pass — no damage", "Fail — damage found (describe in notes)"], "category": "structural"},
+          {"question": "Doors: open and close fully, latch securely?", "answers": ["Pass", "Fail"], "category": "doors"},
+          {"question": "Door seals: intact, no gaps?", "answers": ["Pass", "Fail"], "category": "doors"},
+          {"question": "Interior: seats secure, upholstery intact, floor clean?", "answers": ["Pass", "Fail"], "category": "interior"},
+          {"question": "Lighting: interior and exterior lights functional?", "answers": ["Pass", "Fail"], "category": "electrical"},
+          {"question": "Cameras: all cameras (forward, rear, merge, interior) producing image?", "answers": ["Pass", "Fail — specify which camera"], "category": "sensors"},
+          {"question": "ToF sensors: forward, rear, merge sensors responding?", "answers": ["Pass", "Fail — specify which sensor"], "category": "sensors"},
+          {"question": "Smoke detector: test button confirms alarm?", "answers": ["Pass", "Fail"], "category": "safety"},
+          {"question": "Emergency communication: mic and speakers functional?", "answers": ["Pass", "Fail"], "category": "safety"},
+          {"question": "Bogie 1: visual inspection — no loose fasteners, no fluid leaks, wheels intact?", "answers": ["Pass", "Fail"], "category": "bogie"},
+          {"question": "Bogie 2: visual inspection — no loose fasteners, no fluid leaks, wheels intact?", "answers": ["Pass", "Fail"], "category": "bogie"},
+          {"question": "Battery state of charge: above minimum for first trip?", "answers": ["Pass", "Fail — charge level: ___"], "category": "power"},
+          {"question": "Bumpers: front and rear bumpers secure?", "answers": ["Pass", "Fail"], "category": "structural"},
+          {"question": "No Smoking signs: visible interior and exterior?", "answers": ["Pass", "Fail"], "category": "compliance"},
+          {"question": "USB ports: functional?", "answers": ["Pass", "N/A — no ports on this vehicle"], "category": "passenger"},
+          {"question": "Climate control: HVAC responding to setpoint?", "answers": ["Pass", "Fail", "N/A — outdoor temp within comfort range"], "category": "passenger"},
+          {"question": "Low-speed test run: vehicle moves smoothly, no unusual noise or vibration?", "answers": ["Pass", "Fail — describe anomaly"], "category": "dynamic"},
+          {"question": "Braking test: vehicle stops within expected distance?", "answers": ["Pass", "Fail"], "category": "dynamic"},
+          {"question": "Vehicle cleared for passenger service?", "answers": ["Yes — all items pass", "No — NCR required"], "category": "disposition"}
+        ]
+      }
+    },
+    {
+      "name": "JPods Daily Pre-Op Station Inspection",
+      "description": "Daily station inspection before first passenger service — ASTM F770, FTA 49 CFR 673",
+      "body": "WHY: Every station must be inspected before accepting passengers. The Mind-the-Gap system is safety-critical — a station that cannot verify gap compliance cannot open doors. Platform surfaces, guardrails, gates, lighting, and emergency systems must all be confirmed operational. ASTM F770 requires this daily. FTA 49 CFR 673.27 requires safety assurance monitoring. Station failures are logged as FAULT files and trigger NCR per QM-13.",
+      "refs": {
+        "keywords": ["qa_template", "inspection", "daily", "station", "pre-op"],
+        "standards": ["ASTM F770", "FTA 49 CFR 673.27", "OSHA 1910.25", "OSHA 1910.29"],
+        "spec_refs": ["SPEC-05", "SPEC-11"]
+      },
+      "config": {
+        "template": {
+          "allow_freeform": false,
+          "require_image": false,
+          "parent_model": "item"
+        },
+        "questions": [
+          {"question": "Platform surface: clean, dry, anti-slip intact, no debris?", "answers": ["Pass", "Fail"], "category": "platform"},
+          {"question": "Guardrails: secure, no damage, no loose connections?", "answers": ["Pass", "Fail", "N/A — at-grade station"], "category": "safety"},
+          {"question": "Gates: open and close, interlock functional?", "answers": ["Pass", "Fail"], "category": "safety"},
+          {"question": "Emergency stop buttons: all functional (test each)?", "answers": ["Pass", "Fail — specify location"], "category": "safety"},
+          {"question": "Lighting: platform >= 50 lux, boarding zone >= 100 lux?", "answers": ["Pass", "Fail"], "category": "electrical"},
+          {"question": "Mind-the-Gap sensors: all door positions responding?", "answers": ["Pass", "Fail — specify position"], "category": "mtg"},
+          {"question": "Mind-the-Gap: test vehicle dock — gap within 17mm H / +/-8mm V?", "answers": ["Pass", "Fail — measured gap: ___"], "category": "mtg"},
+          {"question": "Mind-the-Gap: correction actuator functional?", "answers": ["Pass", "Fail"], "category": "mtg"},
+          {"question": "Elevator: operational, emergency phone working?", "answers": ["Pass", "Fail", "N/A — no elevator"], "category": "access"},
+          {"question": "Stairs: handrails secure, treads intact, anti-slip?", "answers": ["Pass", "Fail", "N/A — at-grade"], "category": "access"},
+          {"question": "Tactile paving: intact at platform edges?", "answers": ["Pass", "Fail", "N/A — not yet installed"], "category": "access"},
+          {"question": "Surveillance cameras: all producing image?", "answers": ["Pass", "Fail — specify camera"], "category": "security"},
+          {"question": "Weather protection: canopy intact, drainage clear?", "answers": ["Pass", "Fail", "N/A"], "category": "structure"},
+          {"question": "Anemometer: reading plausible, responding to wind?", "answers": ["Pass", "Fail"], "category": "sensors"},
+          {"question": "Station cleared for passenger service?", "answers": ["Yes — all items pass", "No — NCR required"], "category": "disposition"}
+        ]
+      }
+    },
+    {
+      "name": "JPods Weekly Guideway Inspection",
+      "description": "Weekly guideway segment inspection — ASTM F770, structural monitoring",
+      "body": "WHY: Guideways are the circulatory system. A guideway failure during operation is catastrophic. Weekly visual inspection catches problems that daily vehicle telemetry might miss: corrosion, loose fasteners, settlement, vegetation encroachment, drainage blockage. ASTM F770 requires routine inspections at appropriate intervals. This inspection covers one guideway segment (pier-to-pier). Each segment must be inspected at least weekly.",
+      "refs": {
+        "keywords": ["qa_template", "inspection", "weekly", "guideway"],
+        "standards": ["ASTM F770", "AISC360-16"],
+        "spec_refs": ["SPEC-03", "SPEC-04"]
+      },
+      "config": {
+        "template": {
+          "allow_freeform": true,
+          "require_image": false,
+          "parent_model": "item"
+        },
+        "questions": [
+          {"question": "Truss: visual check for cracks, deformation, or corrosion?", "answers": ["Pass", "Fail — describe and photograph"], "category": "structural"},
+          {"question": "Pier/column: plumb, no visible settlement, base plate intact?", "answers": ["Pass", "Fail"], "category": "structural"},
+          {"question": "Anchor bolts: all present, no visible corrosion, nuts tight?", "answers": ["Pass", "Fail — count missing/loose"], "category": "structural"},
+          {"question": "Footing: no visible cracking, settlement, or erosion around base?", "answers": ["Pass", "Fail"], "category": "structural"},
+          {"question": "Running surface: smooth, no debris, no foreign objects?", "answers": ["Pass", "Fail — describe obstruction"], "category": "guideway"},
+          {"question": "Guideway channel: drainage clear, no standing water?", "answers": ["Pass", "Fail"], "category": "guideway"},
+          {"question": "Expansion joints: functional, not seized or jammed?", "answers": ["Pass", "Fail", "N/A — no joints on this segment"], "category": "guideway"},
+          {"question": "Solar panels: intact, no damage, connections secure?", "answers": ["Pass", "Fail", "N/A — no panels on this segment"], "category": "power"},
+          {"question": "Position markers: present and readable?", "answers": ["Pass", "Fail — specify missing marker"], "category": "sensors"},
+          {"question": "Vegetation: no encroachment within 1m of guideway?", "answers": ["Pass", "Fail — trim required"], "category": "clearance"},
+          {"question": "Lighting: guideway-mounted lights functional?", "answers": ["Pass", "Fail", "N/A"], "category": "electrical"},
+          {"question": "Notes / observations:", "allow_freeform": true, "category": "notes"}
+        ]
+      }
+    },
+    {
+      "name": "JPods Monthly Mind-the-Gap Calibration",
+      "description": "Monthly calibration verification of station gap sensors — QM-11, ASCE 21.2-2008",
+      "body": "WHY: Gap sensors drift. QM-11 requires calibrated measurement equipment. ASCE 21.2-2008 sets the hard compliance limits (25mm H / +/-12mm V). Our target (17mm / +/-8mm) requires sensor accuracy of +/-1mm. Monthly calibration verification confirms sensors are reading true. Use calibrated gauge blocks at each door position. Record both the gauge reading and the sensor reading. Difference > 1mm = recalibrate. Difference > 2mm = sensor replacement.",
+      "refs": {
+        "keywords": ["qa_template", "calibration", "monthly", "mind-the-gap", "sensors"],
+        "standards": ["ASCE 21.2-2008", "QM-11"],
+        "spec_refs": ["SPEC-05", "SPEC-11"]
+      },
+      "config": {
+        "template": {
+          "allow_freeform": true,
+          "require_image": false,
+          "parent_model": "item"
+        },
+        "questions": [
+          {"question": "Station ID and name:", "allow_freeform": true, "category": "identification"},
+          {"question": "Door position 1 — left sensor: gauge reading (mm) vs sensor reading (mm):", "allow_freeform": true, "category": "calibration"},
+          {"question": "Door position 1 — right sensor: gauge reading vs sensor reading:", "allow_freeform": true, "category": "calibration"},
+          {"question": "Door position 1 — vertical sensor: gauge reading vs sensor reading:", "allow_freeform": true, "category": "calibration"},
+          {"question": "Door position 2 — left sensor: gauge reading vs sensor reading:", "allow_freeform": true, "category": "calibration"},
+          {"question": "Door position 2 — right sensor: gauge reading vs sensor reading:", "allow_freeform": true, "category": "calibration"},
+          {"question": "Door position 2 — vertical sensor: gauge reading vs sensor reading:", "allow_freeform": true, "category": "calibration"},
+          {"question": "Maximum deviation found (mm):", "allow_freeform": true, "category": "result"},
+          {"question": "All sensors within +/-1mm tolerance?", "answers": ["Pass — all within tolerance", "Fail — recalibration performed", "Fail — sensor replacement required"], "category": "disposition"},
+          {"question": "Calibration gauge ID and cert date:", "allow_freeform": true, "category": "traceability"}
+        ]
+      }
+    },
+    {
+      "name": "JPods Annual Engineering Review",
+      "description": "Annual structural and systems engineering review — ASTM F770, ASTM F2974",
+      "body": "WHY: ASTM F770 requires annual engineering reviews. ASTM F2974 provides the audit framework. This is the comprehensive review that covers everything the daily/weekly/monthly inspections don't reach: structural fatigue analysis, foundation settlement survey, electrical system integrity, control system software verification, emergency system full-function test, documentation review. Must be performed by or under supervision of a licensed PE. Results feed into the annual management review per QM-01.",
+      "refs": {
+        "keywords": ["qa_template", "inspection", "annual", "engineering", "review"],
+        "standards": ["ASTM F770", "ASTM F2974", "ASTM F2291", "FTA 49 CFR 673"],
+        "spec_refs": ["SPEC-01", "SPEC-02", "SPEC-03", "SPEC-04", "SPEC-05", "SPEC-06", "SPEC-09", "SPEC-12"]
+      },
+      "config": {
+        "template": {
+          "allow_freeform": true,
+          "require_image": true,
+          "parent_model": "project"
+        },
+        "questions": [
+          {"question": "Structural survey: all piers plumb within tolerance, no settlement > 5mm from baseline?", "answers": ["Pass", "Fail — document deviations"], "require_image": true, "category": "structural"},
+          {"question": "Fatigue review: any evidence of fatigue cracking in truss members or connections?", "answers": ["Pass — no cracks found", "Fail — crack location documented"], "require_image": true, "category": "structural"},
+          {"question": "Foundation inspection: borings/GPR if settlement detected; compare to original design basis?", "answers": ["Pass", "Fail", "N/A — no settlement detected"], "category": "structural"},
+          {"question": "Corrosion assessment: steel protection system intact, no section loss?", "answers": ["Pass", "Fail — section loss measured"], "category": "structural"},
+          {"question": "Electrical system: insulation resistance test, ground fault protection, all circuits?", "answers": ["Pass", "Fail"], "category": "electrical"},
+          {"question": "Control system: software version current, all safety interlocks verified?", "answers": ["Pass", "Fail"], "category": "software"},
+          {"question": "Emergency systems: all e-stops tested, evacuation equipment present and serviceable?", "answers": ["Pass", "Fail"], "category": "safety"},
+          {"question": "Vehicle fleet: review all daily inspection logs for trends — any recurring failures?", "answers": ["No recurring issues", "Recurring issues documented"], "category": "fleet"},
+          {"question": "Mind-the-Gap: review 12 months of gap trend data — any station showing progressive drift?", "answers": ["No drift trends", "Drift trends documented — investigation required"], "category": "mtg"},
+          {"question": "Documentation review: all QM records current, retention periods met, training records up to date?", "answers": ["Pass", "Fail — deficiencies listed"], "category": "compliance"},
+          {"question": "Open NCRs/CARs: all reviewed, none overdue?", "answers": ["Pass — all current", "Fail — overdue items listed"], "category": "compliance"},
+          {"question": "Reviewing engineer name and PE license number:", "allow_freeform": true, "category": "certification"},
+          {"question": "Overall system cleared for continued operation?", "answers": ["Yes — no restrictions", "Yes — with restrictions (documented)", "No — shutdown required until corrections made"], "category": "disposition"}
+        ]
+      }
+    }
+  ],
+
+  "training_quizzes": [
+    {
+      "name": "QUIZ-SAFETY-DAILY",
+      "description": "Training quiz: daily inspection knowledge — must pass before conducting inspections",
+      "body": "WHY: QM-18 requires training before personnel perform quality-affecting work. FTA 49 CFR 673.29 requires safety promotion through training. This quiz verifies that an inspector knows what to check, why each item matters, and what to do when something fails. Passing score: 80%. Must be retaken annually.",
+      "refs": {
+        "keywords": ["qa_template", "quiz", "training", "daily", "inspection"],
+        "standards": ["QM-18", "FTA 49 CFR 673.29"],
+        "spec_refs": ["SPEC-01", "SPEC-05", "SPEC-11", "SPEC-12"]
+      },
+      "config": {
+        "questions": [
+          {"category": "procedure", "difficulty": "beginner", "question": "What standard requires daily pre-operation inspection of amusement rides before opening to patrons?", "choices": ["A) ASTM F2291", "B) ASTM F770", "C) ASTM F2974", "D) OSHA 1910.25"], "answer": "B", "explanation": "ASTM F770 — Standard Practice for Ownership, Operation, Maintenance, and Inspection — requires daily pre-op checks."},
+          {"category": "procedure", "difficulty": "beginner", "question": "If a vehicle fails any item on the daily pre-op inspection, what is the correct action?", "choices": ["A) Note it and continue service", "B) Pull vehicle from service and file an NCR per QM-13", "C) Notify Noelle to reroute around it", "D) Schedule repair for next week"], "answer": "B", "explanation": "Failed pre-op = vehicle pulled from service immediately. NCR documents the nonconformance for tracking and corrective action."},
+          {"category": "mtg", "difficulty": "intermediate", "question": "What is the JPods target for Mind-the-Gap horizontal clearance?", "choices": ["A) 5mm", "B) 17mm", "C) 25mm", "D) 50mm"], "answer": "B", "explanation": "17mm is the JPods target (1/3 below the ASCE 21.2-2008 maximum of 25mm). 25mm is the hard compliance floor."},
+          {"category": "mtg", "difficulty": "intermediate", "question": "Why do gap sensors measure with AND without vehicle load?", "choices": ["A) To calibrate the sensors", "B) To detect wheel wear and suspension faults by comparing unloaded baseline to loaded measurement", "C) To measure passenger weight", "D) To test the correction actuator"], "answer": "B", "explanation": "Unloaded baseline drifting over weeks = wheel wear or guideway settlement. Loaded gap exceeding target on one vehicle = suspension fault on that vehicle."},
+          {"category": "safety", "difficulty": "beginner", "question": "When does the vehicle door open at a station?", "choices": ["A) When the vehicle stops", "B) When Sally confirms the vehicle is docked", "C) After the loaded gap is verified within limits AND the gate interlock is confirmed", "D) When a passenger presses the door button"], "answer": "C", "explanation": "The door does not open until: (1) gap is verified under actual load, and (2) gate interlock confirms safe boarding path. This is the safety interlock chain."},
+          {"category": "procedure", "difficulty": "intermediate", "question": "What is the difference between an NCR and a CAR?", "choices": ["A) They are the same thing", "B) NCR documents the nonconformance; CAR investigates root cause and implements corrective action", "C) NCR is for vehicles; CAR is for stations", "D) NCR is temporary; CAR is permanent"], "answer": "B", "explanation": "NCR (QM-13) documents WHAT is wrong and its disposition. CAR (QM-14) investigates WHY it happened and prevents recurrence. An NCR may trigger a CAR if the cause needs investigation."},
+          {"category": "compliance", "difficulty": "advanced", "question": "What are the four pillars of the FTA Safety Management System (49 CFR 673)?", "choices": ["A) Design, Build, Test, Operate", "B) Safety Policy, Safety Risk Management, Safety Assurance, Safety Promotion", "C) Inspect, Report, Fix, Verify", "D) Plan, Do, Check, Act"], "answer": "B", "explanation": "49 CFR 673 Subpart D defines four SMS components: Policy (§673.23), Risk Management (§673.25), Assurance (§673.27), and Promotion (§673.29). Daily inspections fall under Safety Assurance."},
+          {"category": "procedure", "difficulty": "beginner", "question": "How often must Mind-the-Gap sensors be calibration-verified?", "choices": ["A) Daily", "B) Weekly", "C) Monthly", "D) Annually"], "answer": "C", "explanation": "Monthly calibration verification per QM-11 and SPEC-11. Use calibrated gauge blocks. Deviation > 1mm = recalibrate. Deviation > 2mm = replace sensor."}
+        ]
+      }
+    },
+    {
+      "name": "QUIZ-SPEC-CHASSIS",
+      "description": "Training quiz: chassis specification knowledge",
+      "body": "WHY: Everyone working on or around JPods vehicles must understand the chassis spec. This includes mechanical limits, safety features, and passenger protection systems. Knowing the spec prevents damage, injury, and warranty-voiding modifications. Passing score: 80%.",
+      "refs": {
+        "keywords": ["qa_template", "quiz", "training", "chassis", "spec"],
+        "spec_refs": ["SPEC-01"]
+      },
+      "config": {
+        "questions": [
+          {"category": "specs", "difficulty": "beginner", "question": "What is the maximum gross mass of a JPods vehicle?", "choices": ["A) 500 kg", "B) 750 kg", "C) 1000 kg", "D) 1500 kg"], "answer": "B", "explanation": "750 kg gross (vehicle + payload). Payload capacity is 500 kg."},
+          {"category": "specs", "difficulty": "beginner", "question": "At what sustained wind speed does the JPods network cease operation?", "choices": ["A) 25 mph", "B) 45 mph (72 km/hr)", "C) 65 mph", "D) 90 mph"], "answer": "B", "explanation": "45 mph sustained = network shutdown. 90 mph = no permanent deformation (structural design load, not operating limit)."},
+          {"category": "specs", "difficulty": "intermediate", "question": "How many bogies does each JPods vehicle have, and why?", "choices": ["A) 1 — simplicity", "B) 2 — independent power per bogie for safety redundancy", "C) 3 — one per axle", "D) 4 — one per wheel"], "answer": "B", "explanation": "Two bogies, each with independent power. If one bogie loses power, the other can bring the vehicle to the nearest station. This is a safety architecture requirement."},
+          {"category": "specs", "difficulty": "intermediate", "question": "What acceleration must the chassis withstand without cracking, unlimited cycles?", "choices": ["A) 0.2g", "B) 0.4g", "C) 0.6g", "D) 1.0g"], "answer": "B", "explanation": "0.4g starts and stops, unlimited fatigue life. This drives the structural design of all chassis-mounted components."},
+          {"category": "safety", "difficulty": "advanced", "question": "What happens when children travel alone in a JPods vehicle?", "choices": ["A) Nothing special", "B) Cameras stay on and parents can view the feed", "C) A chaperone pod follows", "D) Speed is reduced to 50%"], "answer": "B", "explanation": "Per R-01-032: cameras remain active and parents/guardians have live viewing access. This is a passenger safety and trust requirement."},
+          {"category": "specs", "difficulty": "beginner", "question": "What is the minimum door opening width?", "choices": ["A) 1.0m", "B) 1.2m", "C) 1.5m", "D) 2.0m"], "answer": "C", "explanation": "1.5m minimum — must accommodate wheelchairs, strollers, and luggage."}
+        ]
+      }
+    },
+    {
+      "name": "QUIZ-NCR-PROCESS",
+      "description": "Training quiz: nonconformance and corrective action process — QM-13, QM-14",
+      "body": "WHY: Every team member must know how to identify, report, and disposition nonconforming products and services. This is not optional — it's the core quality loop. A team member who doesn't file an NCR when they see a problem is the most dangerous person in the organization. Gordy's quality policy: 'There shall never be an injury of a JPods customer due to JPods negligence, ignorance or lack of quality.' Passing score: 90%.",
+      "refs": {
+        "keywords": ["qa_template", "quiz", "training", "ncr", "car", "quality"],
+        "standards": ["QM-13", "QM-14", "QM-13.1", "ISO 9001"],
+        "spec_refs": ["SPEC-12"]
+      },
+      "config": {
+        "questions": [
+          {"category": "ncr", "difficulty": "beginner", "question": "You notice a crack in a pier column during a weekly guideway inspection. What is your FIRST action?", "choices": ["A) Take a photo and email it to Bill", "B) Segregate the area (block the segment) and write an NCR immediately", "C) Monitor it for another week to see if it grows", "D) File a CAR"], "answer": "B", "explanation": "QM-13: Originator identifies and segregates FIRST, then completes NCR fields 1-8. Segregation prevents the nonconforming item from being used. NCR documents it. A crack in a structural member is a potential RED — stop-everything issue."},
+          {"category": "ncr", "difficulty": "intermediate", "question": "What are the six possible dispositions for a nonconforming item per QM-13?", "choices": ["A) Fix, scrap, return, ignore, defer, waive", "B) Use as is, return to supplier, scrap, rework, repair, regrade", "C) Accept, reject, defer, escalate, investigate, close", "D) Pass, fail, conditional, hold, release, destroy"], "answer": "B", "explanation": "QM-13 defines exactly six: use as is, return to supplier, scrap, rework, repair, regrade. 'Use as is' and 'repair' require a Deviation/Waiver per QM-13.1."},
+          {"category": "car", "difficulty": "intermediate", "question": "What triggers a CAR (Corrective Action Request)?", "answers": ["A) Every NCR automatically generates a CAR", "B) Only when the root cause of a nonconformance needs investigation to prevent recurrence", "C) Only the Quality Manager can issue a CAR", "D) CARs are only for customer complaints"], "answer": "B", "explanation": "Not every NCR needs a CAR. A CAR is warranted when the nonconformance suggests a systemic problem that could recur. The CAR investigates root cause and implements corrective/preventive action."},
+          {"category": "dw", "difficulty": "advanced", "question": "When is a Deviation/Waiver (D/W) required per QM-13.1?", "choices": ["A) Whenever an NCR is filed", "B) When the disposition is 'use as is' or 'repair' and it affects coordination, life expectancy, interface, function, or safety", "C) Only for structural items", "D) Only when the customer requests it"], "answer": "B", "explanation": "D/W is required for 'use as is' or 'repair' dispositions that affect: coordination (external requirements), life expectancy, interface, function, or safety. The D/W has an approval chain: Responsible Manager -> Program/Project Manager -> Code Q Director -> Customer."},
+          {"category": "culture", "difficulty": "beginner", "question": "A colleague tells you 'don't write that up, it's a small thing.' What do you do?", "choices": ["A) Agree — it's probably fine", "B) Write the NCR anyway — the quality system depends on honest reporting", "C) Ask your supervisor first", "D) Take a photo and wait"], "answer": "B", "explanation": "Gordy's quality policy is clear: 'never an injury due to negligence, ignorance, or lack of quality.' Small things become big things. The NCR is the system's immune response — suppressing it is how organizations fail."}
+        ]
+      }
+    }
+  ]
+}
