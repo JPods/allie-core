@@ -297,39 +297,94 @@ ssh andi ln -sf /var/www/mesh_mobility_app/CrashHarvester /var/www/mesh_mobility
 
 ---
 
-## Andi File Structure (Current State)
+## Phase 4 — Chroma Vector Store
+
+```bash
+sudo mkdir -p /opt/andi/services/chroma/{data,venv}
+python3 -m venv /opt/andi/services/chroma/venv
+/opt/andi/services/chroma/venv/bin/pip install chromadb
+```
+
+Systemd: `/etc/systemd/system/chroma.service`
+- ExecStart: `venv/bin/chroma run --host 0.0.0.0 --port 8100 --path /opt/andi/services/chroma/data`
+
+---
+
+## Phase 5 — Ollama (LLM)
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull deepseek-r1:8b
+```
+
+Ollama installs its own systemd service automatically. CPU-only on IT15 (no NVIDIA/AMD GPU).
+Model: deepseek-r1:8b (5.2 GB), port 11434.
+
+---
+
+## Andi File Structure (Final)
 
 ```
-/var/www/
-├── webclerk3/              # WC3 codebase (shared by all instances)
-│   ├── .env                # JPods instance config
-│   ├── venv/
-│   ├── staticfiles/
-│   ├── manage.py
-│   ├── apps/
-│   ├── common/
-│   └── webclerk3_api/
-├── mesh_mobility_app/      # MeshMobility parent
-│   ├── mesh_mobility/      # the package
-│   ├── CrashHarvester/     # data library
-│   └── crash_harvester -> CrashHarvester
-├── wc-jpods/               # (future) per-instance env/static/media
-├── wc-mobility/            # (future)
-├── wc-demo/                # (future)
-└── wc-carryon/             # (future)
+/opt/andi/                      # everything Andi owns
+├── apps/
+│   ├── webclerk3/              # WC3 codebase + venv + .env
+│   │   ├── .env
+│   │   ├── venv/
+│   │   ├── staticfiles/
+│   │   ├── manage.py
+│   │   ├── apps/
+│   │   ├── common/
+│   │   └── webclerk3_api/
+│   ├── mesh_mobility/          # MeshMobility package + venv
+│   │   ├── gui/
+│   │   ├── engine/
+│   │   ├── overlays/
+│   │   └── venv/
+│   ├── crash_harvester/        # data library
+│   └── CrashHarvester -> crash_harvester  # symlink (import name)
+├── services/
+│   └── chroma/                 # vector store
+│       ├── venv/
+│       └── data/
+├── data/                       # persistent data (networks, overlays)
+├── logs/                       # wc3-access.log, wc3-error.log
+└── scripts/                    # deploy.sh, backup (future)
 
 /etc/systemd/system/
-├── webclerk3.service       # Gunicorn :8000
-├── webclerk3-celery.service # Celery worker + beat
-└── meshmobility.service    # MeshMobility :5050
+├── webclerk3.service           # Gunicorn :8000
+├── webclerk3-celery.service    # Celery worker + beat
+├── meshmobility.service        # MeshMobility :5050
+├── chroma.service              # Chroma :8100
+└── ollama.service              # Ollama :11434 (auto-installed)
 ```
+
+---
+
+## Gotcha: Moving venvs breaks them
+
+Python venvs hardcode absolute paths. When we moved from `/var/www/` to `/opt/andi/`,
+all three venvs broke. **Solution:** delete and recreate venvs at the new path.
+This is a key lesson for the one-touch installer — create venvs in place, never move them.
+
+---
+
+## Service Summary
+
+| Service | Port | Status | Access |
+|---------|------|--------|--------|
+| WC3 (Gunicorn) | :8000 (via Nginx :80) | active | http://192.168.1.122 |
+| MeshMobility | :5050 | active | http://192.168.1.122:5050 |
+| Celery | — | active | background tasks |
+| Chroma | :8100 | active | vector store API |
+| Ollama | :11434 | active | deepseek-r1:8b |
+| PostgreSQL | :5432 | active | 4 databases |
+| Redis | :6379 | active | Celery broker |
+| Nginx | :80 | active | reverse proxy |
 
 ---
 
 ## Still To Do
 
-- [ ] Chroma vector store (Alice + Noelle) on :8100
-- [ ] Ollama for Andi's LLM
 - [ ] Static IP (DHCP reservation on router)
 - [ ] Git init on server for deploy workflow
 - [ ] deploy.sh scripts
@@ -337,4 +392,5 @@ ssh andi ln -sf /var/www/mesh_mobility_app/CrashHarvester /var/www/mesh_mobility
 - [ ] Create superuser in WC3
 - [ ] Andi reflection service (andi-reflect.py)
 - [ ] Mount 5TB drive
-- [ ] Standardize Andi directory structure for replication
+- [ ] React frontend build + serve via Nginx
+- [ ] Multi-instance WC3 (when single instance is proven)
