@@ -151,3 +151,6 @@
 - [The Loop](feedback_the_loop.md) — Define→try→measure→adjust→converge→inspect frame; constrain variability first; scars = wisdom
 - [Fear and delight](feedback_fear_and_delight.md) — Weed aggressively; clutter cost daily, recovery cost once; coaching calms fear, excites delight
 - [Desktop Hosting leverage](project_desktop_hosting_leverage.md) — Cloudflare+Apple+WC3 for 30M small businesses; DynamicCatalogs funds it; Bill has CF/Apple connections
+- [Use balenaEtcher for Linux installers](feedback_balenaetcher.md) — Proven reliable; don't suggest dd; graphical and just works
+- [Andi — hardware-bundled local agent](project_andi_hardware_agent.md) — Ships with Mac Mini/IT15; each business owns box+AI+data; Desktop Hosting realized
+- [Andi one-touch installer](project_andi_installer_tool.md) — Future: pre-loaded or single-command install; manual IT15 session is the spec
