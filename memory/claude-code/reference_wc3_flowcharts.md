@@ -1,6 +1,6 @@
 ---
-name: WC3 flow charts — 12 diagrams
-description: 12 Graphviz DOT flow charts at readmes/flowcharts/ covering master flow, inventory, payment, serials, project, QA, action, contact, signin, customer-centered sales
+name: WC3 flow charts — 13 diagrams
+description: 13 Graphviz DOT flow charts at readmes/flowcharts/ covering master flow, inventory, payment, serials, project, QA, action, contact, signin, customer-centered sales, print system
 type: reference
 ---
 
@@ -20,3 +20,4 @@ All at `~/Allie/readmes/flowcharts/` and `webClerk3/readmes/flowcharts/`. Editab
 | wc3-contact | Central identity → references any record |
 | wc3-signin-register | Login/Register→Contact→role assignment |
 | wc3-customer-centered-sales | Customer's cloud of options perspective |
+| wc3-print-system | WC2-heritage print flow: Cmd+P/Cmd+Opt+P, Report Selector, pdfme, multi-output |
