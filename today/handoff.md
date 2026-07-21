@@ -1,31 +1,59 @@
 # Handoff — 2026-07-21
 
 ## Where We Left Off
-GEEKOM IT15 has Ubuntu 26.04 LTS installed successfully. Machine hostname is "andi". Sitting at the login prompt but Bill doesn't remember the username/password he set during install. May need to reinstall — the USB installer (8GB SD card via balenaEtcher) is ready and the process is now well-understood. No services deployed yet — still at Phase 1 (bare OS).
+GEEKOM IT15 (Andi) fully operational. Ubuntu 26.04, all services running from `/opt/andi/`.
+Both webclerk.com and meshmobility.com live through Cloudflare tunnel.
+CF Access gates `/home` on webclerk.com — email OTP verification.
+Landing page at webclerk.com root is open.
+CloudflareAccessMiddleware in WC3 already built — reads CF email header, finds/creates Contact, logs in.
 
 ## Do This First Next Session
-1. Log into the IT15 or reinstall Ubuntu if credentials are lost. During reinstall, use username `bill` and a memorable password — write it down.
-2. Run `ip addr` on the IT15 to get the IP address.
-3. From Mac: `ssh bill@192.168.x.x` to confirm SSH works, then set up `~/.ssh/config` with `Host andi` alias.
-4. Run `ssh-copy-id bill@192.168.x.x` for passwordless access.
-5. Begin Phase 1 of deployment guide: `sudo apt update && sudo apt upgrade -y`, install PostgreSQL, Redis, Nginx, Python, ufw.
+1. Fix CF Access app names ("WebClerk" and "MeshMobility" instead of unknown)
+2. Test full auth flow: visit webclerk.com/home → CF email OTP → Django login → React routes by role
+3. Create WC3 superuser on Andi (`manage.py createsuperuser`)
+4. MeshMobility: add library browse from `/opt/andi/apps/mesh_mobility/library/drafts/`
+5. MeshMobility: CF Access for save (user must verify email before saving networks)
+6. Fix case-sensitivity issues for production build (Mac→Linux `.tsx` imports)
+7. Set static IP via DHCP reservation on router
 
 ## Open Problems
-- Bill may not remember IT15 login credentials — reinstall may be needed (fast, ~15 min with existing USB)
-- No static IP assigned yet — need DHCP reservation on router or netplan config
-- First monitor (LG) couldn't display IT15 output — likely resolution mismatch, not input source. Second monitor worked. Once headless (SSH only), this doesn't matter.
+- CF Access shows "unknown application" — need to set app name in dashboard
+- React Vite running in dev mode (not production build) — case-sensitive import `rawJsonCard` blocks build
+- WC3 database is empty (no superuser, no seed data)
+- webclerk.com React proxy to :8000 — need to verify API calls work through CF tunnel
+- MeshMobility library browse not yet coded
+- Email not configured (cleaned out old DNS records intentionally)
 
 ## What Was Decided (and Why)
-- **Andi is hardware-bundled**: Andi ships with physical hardware (Mac Mini, IT15, etc). Each business owns their box + AI + data. This is Desktop Hosting (2002 Wiley book) made real — not SaaS.
-- **Opt-in sharing with Allie**: Users can choose to share patterns/learnings from their Andi back to Allie. Follows CarryOn sovereignty model — enumerated, revocable. Allie gets patterns, not raw data.
-- **Future: one-touch installer**: Current manual process (ISO + Etcher + USB boot + walk through installer) is the specification for a future automated tool. Box should ship pre-loaded or install via single network command.
-- **balenaEtcher is the standard**: dd command failed (sudo issues, no feedback). balenaEtcher is proven reliable for Linux USB installers. Saved to memory.
-- **Ubuntu 26.04 LTS** (not 24.04 as originally planned) — newer, Bill already downloaded it, everything applies the same.
+- **`/opt/andi/` as root** — clean Linux standard, not `/var/www/`. Separates code/data/logs/services.
+- **Single WC3 instance first** — prove one works before multi-instance.
+- **CF Access for auth, app decides roles** — CF just verifies email, passes header. WC3 middleware finds/creates Contact. React routes by Contact.is_staff/vendor/manufacturer/role.
+- **Landing page open, `/home` gated** — visitors see the storefront. Sign In triggers CF Access.
+- **Andi is the product** — ships with hardware. Each business owns their box + AI + data. Desktop Hosting realized.
+- **balenaEtcher for Linux installers** — dd failed; Etcher proven reliable.
+- **Ubuntu 26.04 LTS** — newer than planned, works fine. Python 3.14.
+- **GPU packages removed** — 4.4GB of NVIDIA/CUDA/torch/triton useless on CPU-only IT15.
+- **JPods3D public repo** — MIT license, Copyright JPods LLC, at github.com/JPods/jpods3d.
+- **Training video scripts** — dedicated future session. Review code → write 1-4 min scripts per feature.
 
 ## Files Changed This Session
-- `readmes/agents/andi.md` — already existed from prior session (no changes this session)
-- `readmes/58-production-deployment.md` — already existed (no changes this session)
-- `.claude/projects/-Users-williamjames-Allie/memory/feedback_balenaetcher.md` — new: balenaEtcher preference
-- `.claude/projects/-Users-williamjames-Allie/memory/project_andi_hardware_agent.md` — new: Andi = hardware + intelligence product
-- `.claude/projects/-Users-williamjames-Allie/memory/project_andi_installer_tool.md` — new: future one-touch installer spec
-- `.claude/projects/-Users-williamjames-Allie/memory/MEMORY.md` — updated with new entries
+- `readmes/61-it15-setup-log.md` — complete IT15 setup documentation
+- `readmes/retrospections/2026-07-21.md` — retrospection with lessons for Allie
+- `process/inbox/20260721T151500-tfts.md` — TFTS for the deployment arc
+- `~/.zshrc` — deploy-wc3, deploy-mm, deploy-react, andi-status aliases
+- `~/.ssh/config` — Host andi entry
+- Memory files: balenaEtcher, Andi hardware agent, Andi installer tool, training videos, access RBAC
+
+## Andi Service Status
+| Service | Port | Status |
+|---------|------|--------|
+| WC3 Gunicorn | :8000 | active |
+| React (Vite) | :5173 | active |
+| Celery | — | active |
+| MeshMobility | :5050 | active |
+| Chroma | :8100 | active |
+| Ollama | :11434 | active (deepseek-r1:8b) |
+| PostgreSQL | :5432 | active (4 databases) |
+| Redis | :6379 | active |
+| Nginx | :80 | active |
+| Cloudflared | — | active (andi-tunnel) |

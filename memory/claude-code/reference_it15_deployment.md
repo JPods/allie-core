@@ -1,21 +1,34 @@
 ---
-name: GEEKOM IT15 production deployment
-description: IT15 Ubuntu Server deployment guide; multi-instance WebClerk; Gunicorn+Nginx+SSL; MyCarryOn; git deploy; at readmes/58
+name: GEEKOM IT15 (Andi) — deployed and live
+description: IT15 running Ubuntu 26.04; 10 services at /opt/andi/; webclerk.com + meshmobility.com live via CF tunnel; setup log at readmes/61
 type: reference
 ---
 
-GEEKOM IT15 arriving ~2026-07-20. Ubuntu Server 24.04, always-on.
+GEEKOM IT15 deployed 2026-07-21. Hostname: andi. Ubuntu 26.04 LTS.
+Intel Core Ultra 9 285H, 32GB RAM, 100GB SSD. CPU-only (no GPU).
 
-Full guide: readmes/58-production-deployment.md
+**SSH:** `ssh andi` (192.168.1.114 ethernet, 192.168.1.122 wifi)
 
-**4 WebClerk instances, one codebase:**
-- jpods.webclerk.com :8000 (wc_jpods) — commerce, Alice, capital
-- meshmobility.com :8001 (wc_mobility) — network planner, students (separate DB from JPods — Alice promotes qualified leads)
-- demo.webclerk.com :8002 (wc_demo) — demo store
-- mycarryon.io :8003 (wc_carryon) — portable identity
+**Directory structure:** `/opt/andi/`
+- `apps/webclerk3/` — WC3 + venv + .env
+- `apps/react2025/` — React frontend (Vite :5173)
+- `apps/mesh_mobility/` — MeshMobility + venv
+- `apps/crash_harvester/` — data library
+- `services/chroma/` — vector store + venv
+- `data/networks/` — (empty, moved to library/drafts)
+- `logs/`, `scripts/`
 
-**Stack:** Gunicorn + Nginx + Let's Encrypt + systemd template services + PostgreSQL + Redis
+**Services (all active):**
+WC3 Gunicorn :8000, React Vite :5173, Celery, MeshMobility :5050,
+Chroma :8100, Ollama :11434 (deepseek-r1:8b), PostgreSQL :5432 (4 DBs),
+Redis :6379, Nginx :80, Cloudflared (andi-tunnel)
 
-**Deploy:** Option A (SSH manual), Option B (deploy.sh + MacBook aliases), Option C (git webhook)
+**Domains:** webclerk.com and meshmobility.com via Cloudflare tunnel (andi-tunnel, ID 996d51b4).
+CF Access gates webclerk.com/home (email OTP). Landing page at / is open.
+CloudflareAccessMiddleware reads CF header → finds/creates Contact → Django login.
 
-**How to apply:** When IT15 arrives, follow the 5-phase checklist in readmes/58.
+**Deploy from Mac:** `deploy-wc3`, `deploy-mm`, `deploy-react`, `andi-status` (aliases in ~/.zshrc)
+
+**Setup logs:** readmes/61-it15-setup-log.md (commands), readmes/58-production-deployment.md (original plan)
+
+**MeshMobility library:** `/opt/andi/apps/mesh_mobility/library/{drafts,approved,user}` — 74 draft networks
