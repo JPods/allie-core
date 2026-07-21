@@ -154,3 +154,4 @@
 - [Use balenaEtcher for Linux installers](feedback_balenaetcher.md) — Proven reliable; don't suggest dd; graphical and just works
 - [Andi — hardware-bundled local agent](project_andi_hardware_agent.md) — Ships with Mac Mini/IT15; each business owns box+AI+data; Desktop Hosting realized
 - [Andi one-touch installer](project_andi_installer_tool.md) — Future: pre-loaded or single-command install; manual IT15 session is the spec
+- [Training video scripts](project_training_videos.md) — Review features of JPods3D/WC3/MeshMobility; write 1-4 min scripts per feature; dedicated session
