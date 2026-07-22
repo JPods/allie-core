@@ -154,6 +154,11 @@
 - [Use balenaEtcher for Linux installers](feedback_balenaetcher.md) — Proven reliable; don't suggest dd; graphical and just works
 - [Andi — hardware-bundled local agent](project_andi_hardware_agent.md) — Ships with Mac Mini/IT15; each business owns box+AI+data; Desktop Hosting realized
 - [Andi one-touch installer](project_andi_installer_tool.md) — Future: pre-loaded or single-command install; manual IT15 session is the spec
-- [Training video scripts](project_training_videos.md) — Review features of JPods3D/WC3/MeshMobility; write 1-4 min scripts per feature; dedicated session
-- [WC3 access + RBAC](project_access_rbac.md) — CF Access email OTP; storefront open; is_staff gates admin; vendor/mfr see own products via Setting
+- [Training video scripts](project_training_videos.md) — 1-4 min scripts per feature; dedicated session
+- [Training video hosting](reference_training_videos_hosting.md) — Vimeo (internal) + YouTube (public); Document holds both links
+- [MM UI cleanup + path security](project_mm_ui_cleanup.md) — Server-only save; path whitelist; Compete; mobile; 10 training features
+- [Specs architecture](project_specs_architecture.md) — 14 specs, 324 reqs, Y/O/R flags; QA→Document; ASTM+FTA
+- [Spare parts — SEGA model](project_spare_parts_system.md) — Exploded view→click→order→QA; Fusion360 BOM
+- [Apply to Selection](project_apply_to_selection.md) — af_ admin functions; JSON in/out; user scripts in Documents
+- [WC3 access + RBAC](project_access_rbac.md) — CF Access email OTP; storefront open; is_staff gates admin
 - [WC3 print system — WC2 heritage](project_wc3_print_system.md) — Cmd+P=primary, Cmd+Opt+P=selector, pdfme templates, Report model; flow chart at readmes/flowcharts/
