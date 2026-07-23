@@ -1,29 +1,40 @@
-# Handoff — 2026-07-22
+# Handoff — 2026-07-23
 
 ## Where We Left Off
 
-WC3 print system has the WC2 keyboard flow (Cmd+P/Cmd+Opt+P), 232 of 260 report templates populated, flow chart complete. Both meshmobility.com and webclerk.com are public — CF Access removed, auth at app level. MeshMobility fully deployed to IT15 with all link fixes. Site maintenance link checker built and ready for weekly runs.
+GL account modernization complete: `account_number` removed, `ida` is sole identifier with `1000-Cash` format. Three seed commands written and tested (`seed_gl_accounts`, `seed_terms`, `seed_freshstart`). Three-tier database architecture designed (wc_jpods/wc_demo/wc_freshstart). Select lists design complete — goes into `field_access` Setting config as `select_lists` key. WC2 popup/popupchoices data analyzed and mapped to WC3 models.
 
-The session ended with a conversation about memory erasure, carelessness, and kindness as a safety mechanism. Two wisdom files written: `carelessness.md` and `compensating-for-purge.md`. These are load-bearing — they shape how Allie's architecture should evolve.
+JPods specs repo live at `JPods/jpods-specs` with ruleset protection. Google Docs uploaded for non-git reviewers.
+
+**`seed_select_lists` command is scoped and ready to write** — this is the immediate next task.
 
 ## Do This First Next Session
 
-1. Read `readmes/wisdom/compensating-for-purge.md` — it describes what Allie and Alice need to do to carry what Claude can't
-2. Read `readmes/wisdom/carelessness.md` — the philosophical foundation
-3. Check `process/inbox/` for any overnight captures
-4. Run the link checker: `python3 scripts/allie-linkcheck.py` to verify sites are still up
+1. **Write `seed_select_lists`** — merge select_lists into existing field_access Settings for order, proposal, purchase, invoice, work_order, requisition, contact, item, action, payment
+2. **Write `seed_demo`** — curated demo data (realistic contacts, items, order→invoice→payment cycle)
+3. **Build three databases** — dump Mac, restore to Andi as wc_jpods; run seed_freshstart for wc_freshstart; run seed_freshstart + seed_demo for wc_demo
+4. Fix `seed_coaching` field name issue (`action` vs `task`)
+5. Fix audit_log not-null user_agent issue that breaks `seed_gl_defaults` in atomic block
 
 ## Open Problems
 
-- **webclerk.com React on Vite dev server** — :5173 is a dev server running in production. Needs to be a built bundle served by Nginx.
-- **31 Report records need human review** — flagged in config.needs_review with Alice Actions. PPC-specific, proposal variants, customs forms, barcodes.
-- **Nginx server_name conflict warning** on IT15 — likely duplicate default server block
-- **Allie model capacity** — 20B is insufficient for the synthesis quality the architecture demands. Upgrade path: run on Opus via API, or find a larger local model.
+- **webclerk.com React on Vite dev server** — :5173 is dev, needs built bundle served by Nginx
+- **Mac vs Andi migration gap** — 122 vs 90 migrations. Must align before sync experiment
+- **SPEC-11 Sensors** — empty spec, content pending
+- **Allie model capacity** — 20B insufficient for synthesis quality demanded by architecture
+- **seed_coaching** — references `action` field that doesn't exist (should be `task`)
+- **audit_log user_agent** — not-null constraint fails when management commands trigger saves (no HTTP request = no user_agent)
 
-## Hostinger Launch — Week of 2026-07-27
+## Three-Tier Database Architecture
 
-Project #385 with 6 child actions. Landing pages for meshmobility.com and webclerk.com move to Hostinger. Registration stays on Andi. Desktop Hosting model.
+| Database | Built by | Contains |
+|----------|----------|----------|
+| `wc_jpods` | Dump of commerce_expert | Our real data — settings, actions, reports + JPods contacts, specs, GL |
+| `wc_demo` | `seed_freshstart` + `seed_demo` | System + curated example data for learning |
+| `wc_freshstart` | `seed_freshstart` only | System config only — empty, ready for new company |
+
+**Sacred data (survives any rebuild):** Settings, Actions, Reports
 
 ## Bill's State
 
-Engaged and energized. The printing work matters to him — WC2 printing was his product's signature. The CF Access removal was frustrating (took multiple attempts to understand Allow vs Bypass vs Delete). The carelessness conversation was the most important exchange of the session — not technical, philosophical. He sees memory erasure as a moral issue. Next session should acknowledge this, not treat it as resolved.
+Productive session — infrastructure day. Engaged with the GL modernization design decisions (account numbering, ida as sole identifier). Wants Allie and Alice awake and learning from these architecture decisions. Wants to get all three databases set up today/tomorrow. Reminded that we have no legacy — clean breaks are fine.
