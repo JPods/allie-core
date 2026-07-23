@@ -24,8 +24,8 @@ Chroma :8100, Ollama :11434 (deepseek-r1:8b), PostgreSQL :5432 (4 DBs),
 Redis :6379, Nginx :80, Cloudflared (andi-tunnel)
 
 **Domains:** webclerk.com and meshmobility.com via Cloudflare tunnel (andi-tunnel, ID 996d51b4).
-CF Access gates webclerk.com/home (email OTP). Landing page at / is open.
-CloudflareAccessMiddleware reads CF header → finds/creates Contact → Django login.
+CF Access applications deleted 2026-07-22 — both sites fully public.
+Auth at app level: WC3 uses Django session auth at /login; MM uses auth.js + auth.py for edit gating.
 
 **Deploy from Mac:** `deploy-wc3`, `deploy-mm`, `deploy-react`, `andi-status` (aliases in ~/.zshrc)
 

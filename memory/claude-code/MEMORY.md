@@ -162,3 +162,6 @@
 - [Apply to Selection](project_apply_to_selection.md) — af_ admin functions; JSON in/out; user scripts in Documents
 - [WC3 access + RBAC](project_access_rbac.md) — CF Access email OTP; storefront open; is_staff gates admin
 - [WC3 print system — WC2 heritage](project_wc3_print_system.md) — Cmd+P=primary, Cmd+Opt+P=selector, pdfme templates, Report model; flow chart at readmes/flowcharts/
+- [CF Access removed — sites public](project_cf_access_removal.md) — Both sites public; auth at app level; Desktop Hosting pattern
+- [IT15 network + deployment](reference_it15_network.md) — IP 192.168.1.114; /opt/andi/apps/; rsync deploy; tunnel config; nginx note
+- [Site maintenance — link checker](project_site_maintenance.md) — allie-linkcheck.py; 9 sites weekly; red/orange flags; Action #392
