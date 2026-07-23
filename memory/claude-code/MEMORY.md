@@ -165,3 +165,4 @@
 - [CF Access removed — sites public](project_cf_access_removal.md) — Both sites public; auth at app level; Desktop Hosting pattern
 - [IT15 network + deployment](reference_it15_network.md) — IP 192.168.1.114; /opt/andi/apps/; rsync deploy; tunnel config; nginx note
 - [Site maintenance — link checker](project_site_maintenance.md) — allie-linkcheck.py; 9 sites weekly; red/orange flags; Action #392
+- [leftshoe — team intelligence](reference_leftshoe.md) — handshake+store+retro.db+MCP; .chroma_db_leftshoe; everyone builds; quiet not secret
