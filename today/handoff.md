@@ -1,40 +1,71 @@
-# Handoff — 2026-07-23
+# Handoff — 2026-07-24T04:00Z
 
-## Where We Left Off
+## What Was Done This Session (2026-07-22 to 2026-07-24)
 
-GL account modernization complete: `account_number` removed, `ida` is sole identifier with `1000-Cash` format. Three seed commands written and tested (`seed_gl_accounts`, `seed_terms`, `seed_freshstart`). Three-tier database architecture designed (wc_jpods/wc_demo/wc_freshstart). Select lists design complete — goes into `field_access` Setting config as `select_lists` key. WC2 popup/popupchoices data analyzed and mapped to WC3 models.
+### CrashHarvester — 39 States with All-Severity Data
+- Overnight harvest: 22 states from ArcGIS endpoints (zero failures)
+- Probe script (`probe_states.py`): searched all 21 portal-required states, found usable endpoints in all 21
+- Harvested 15 new states tonight: AL(116K), AR, GA(3K), IN(180K), KY, LA, MI(72K), NE, NH(5K), NJ(11K), OH(23K), SC(9K), SD(36K), WV(5K), WY(2K)
+- **OK data issue**: The `ok_all` FeatureServer (`CrashDataReportforGISstory`) returns Arizona data, not Oklahoma. Removed. OK needs OHSO contact (Action #395). FARS fatal covers OK statewide.
+- All crash data synced to Andi
 
-JPods specs repo live at `JPods/jpods-specs` with ruleset protection. Google Docs uploaded for non-git reviewers.
+### Mac↔Andi Sync
+- `allie-andi-sync.sh` — syncs knowledge, apps, vectors
+- launchd agent `com.allie.andi-sync` — every 4 hours, knowledge only
+- Aliases: `andi-sync`, `andi-sync full`
 
-**`seed_select_lists` command is scoped and ready to write** — this is the immediate next task.
+### Vector Stores — All Updated on Both Machines
+- Mac: Allie(4207), Claude(1997), Alice(5536), Noelle(51347)
+- Andi: Allie(3295), Claude(1299), Alice(79), Noelle(49670)
 
-## Do This First Next Session
+### 10xMakers.com — Live
+- Deployed to Hostinger (GoDaddy addon domain on jpods.com hosting)
+- Physical Internet framing, Digital/Physical parallel, Tesla/Lamarr/Edison/Congress quotes
+- 5X5 Free Market section, liberty mechanism, community/information/learning tools
+- Domain portfolio documented (7 GoDaddy domains) — Action #393 to transfer to Cloudflare (needs helper, due 2026-08-20)
 
-1. **Write `seed_select_lists`** — merge select_lists into existing field_access Settings for order, proposal, purchase, invoice, work_order, requisition, contact, item, action, payment
-2. **Write `seed_demo`** — curated demo data (realistic contacts, items, order→invoice→payment cycle)
-3. **Build three databases** — dump Mac, restore to Andi as wc_jpods; run seed_freshstart for wc_freshstart; run seed_freshstart + seed_demo for wc_demo
-4. Fix `seed_coaching` field name issue (`action` vs `task`)
-5. Fix audit_log not-null user_agent issue that breaks `seed_gl_defaults` in atomic block
+### MeshMobility Updates
+- **Save**: server save (requires auth) + Save Local (File System Access API, no auth)
+- **Auth**: email verification with 6-digit code via Gmail SMTP, 30-day session, profile form creates WC3 contact with source_name=meshmobility.com
+- **Session fix**: SESSION_COOKIE_SECURE=False for CF tunnel, permanent on every request
+- **Local auth bypass**: localhost requests auto-authenticated as bill@jpods.com
+- **Run**: instant Dijkstra travel times (no simulation needed), enables Isochrone immediately
+- **Isochrone**: disabled until Run completes (travel times for all station pairs)
+- **Library**: US states sorted to top, Open zooms to network, Clone works
+- **Build on Lines**: preserves existing network (no longer erases)
+- **Landing**: 10xMakers + Training Videos buttons added
+- **Training page**: `/training` route with video card grid, sections by category
+- **Emails from Andi**: `bill.james+ar@jpods.com` (SMTP via Gmail)
 
-## Open Problems
+### WC_HQ Architecture
+- Connection/Bundle for ALL sync (commerce + operational + deploy)
+- `deploy` and `training` purpose choices added to sync app
+- Readmes updated: 21-sync-integration.md, dual-hosting-model.md
+- Training video script: WC3-SYNC-01 (3-4 min, DataBrowser for Connections/Bundles)
+- Decision: WC_HQ is not a separate app — same WC3, different role
 
-- **webclerk.com React on Vite dev server** — :5173 is dev, needs built bundle served by Nginx
-- **Mac vs Andi migration gap** — 122 vs 90 migrations. Must align before sync experiment
-- **SPEC-11 Sensors** — empty spec, content pending
-- **Allie model capacity** — 20B insufficient for synthesis quality demanded by architecture
-- **seed_coaching** — references `action` field that doesn't exist (should be `task`)
-- **audit_log user_agent** — not-null constraint fails when management commands trigger saves (no HTTP request = no user_agent)
+### WC3 Database
+- Local Mac DB (commerce_expert) restored to Andi (wc_jpods) — 2233 contacts, all actions
+- DB permissions fixed for webclerk user
+- MeshMobility service account created (meshmobility@jpods.com)
+- wcapi auth fixed to use JWT tokens + correct /wcapi/save/ pattern
 
-## Three-Tier Database Architecture
+### Contacts & Actions
+- 7 crash data researchers created: Mehrara Molan (Ole Miss/MS), Wang (JSU/MS), Vachal (NDSU/ND), Edara+Sun (Mizzou/MO), Abbate (RIDOT/RI), Williams (MS DPS)
+- Action #393: Transfer domains to Cloudflare (due 2026-08-20)
+- Action #394: MM Library — WC3 Document records for maps (due 2026-07-30)
+- Action #395: Reach out to crash data researchers (due 2026-07-30)
 
-| Database | Built by | Contains |
-|----------|----------|----------|
-| `wc_jpods` | Dump of commerce_expert | Our real data — settings, actions, reports + JPods contacts, specs, GL |
-| `wc_demo` | `seed_freshstart` + `seed_demo` | System + curated example data for learning |
-| `wc_freshstart` | `seed_freshstart` only | System config only — empty, ready for new company |
+## Next Session Should
+1. Fix OK crash data — contact OHSO or find real statewide endpoint
+2. WC3 wcapi `/wcapi/get/` returns 500 — serialization bug from DB restore, needs debugging
+3. MeshMobility training videos — Bill has 5-10 to add
+4. Test full auth flow on meshmobility.com (session persistence after refresh)
+5. Run probe_states.py periodically to discover new endpoints
+6. Sync local DB to Andi after any contact/action changes
 
-**Sacred data (survives any rebuild):** Settings, Actions, Reports
-
-## Bill's State
-
-Productive session — infrastructure day. Engaged with the GL modernization design decisions (account numbering, ida as sole identifier). Wants Allie and Alice awake and learning from these architecture decisions. Wants to get all three databases set up today/tomorrow. Reminded that we have no legacy — clean breaks are fine.
+## Open Issues
+- wcapi GET endpoint 500 error on Andi (Contact serialization)
+- OK statewide crash data unavailable (OHSO contact needed)
+- NJ only partial (Burlington County + Newark, not statewide — CSV download at nj.gov is the statewide source)
+- Alice on Andi has only 79 chunks (WC3 model files not synced)
