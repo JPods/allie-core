@@ -2,6 +2,7 @@
 
 - [TFTS troubleshooting index](reference_tfts_index.md) — 47 solved problems indexed by symptom; at readmes/sketchup/tfts-index.md
 - [R25 multi-app form architecture](feedback_r25_multiapp_forms.md) — Forms in domain app pages/, Alice report records point to .tsx print options
+- [Gordy quality manual digitization](project_gordy_quality_manual.md) — ISO 9001 manual → WC3 Action model; nuclear discipline for every installation
 - [Alice's MeshMobility role](project_mm_alice_role.md) — Front-line for MM: intercept faults, track submissions, data gaps, library curation
 
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
