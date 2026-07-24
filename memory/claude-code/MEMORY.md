@@ -1,6 +1,8 @@
 # Memory Index
 
 - [TFTS troubleshooting index](reference_tfts_index.md) — 47 solved problems indexed by symptom; at readmes/sketchup/tfts-index.md
+- [R25 multi-app form architecture](feedback_r25_multiapp_forms.md) — Forms in domain app pages/, Alice report records point to .tsx print options
+- [Alice's MeshMobility role](project_mm_alice_role.md) — Front-line for MM: intercept faults, track submissions, data gaps, library curation
 
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
