@@ -1,71 +1,65 @@
-# Handoff — 2026-07-24T04:00Z
+# Handoff — 2026-07-24
 
-## What Was Done This Session (2026-07-22 to 2026-07-24)
+## Where We Left Off
+DataBrowser App mode working — list on left, full modelDetail.tsx on right. Contact dedup review workflow built: risk records show match candidates with Merge/View/Delete buttons. Bill is actively reviewing 205 `mac_contacts_risk` records. The "Apply to N..." bulk action dropdown is live. Multi-card stacked detail view (showing multiple match candidates side by side) is the next build.
 
-### CrashHarvester — 39 States with All-Severity Data
-- Overnight harvest: 22 states from ArcGIS endpoints (zero failures)
-- Probe script (`probe_states.py`): searched all 21 portal-required states, found usable endpoints in all 21
-- Harvested 15 new states tonight: AL(116K), AR, GA(3K), IN(180K), KY, LA, MI(72K), NE, NH(5K), NJ(11K), OH(23K), SC(9K), SD(36K), WV(5K), WY(2K)
-- **OK data issue**: The `ok_all` FeatureServer (`CrashDataReportforGISstory`) returns Arizona data, not Oklahoma. Removed. OK needs OHSO contact (Action #395). FARS fatal covers OK statewide.
-- All crash data synced to Andi
+## Do This First Next Session
+1. **Build multi-card detail view in DataBrowser right panel** — when reviewing risk/dedup records, show a scrollable list of detail cards on the right instead of one at a time. Each card has Merge and Delete. Bill wants to clear 424 records in an hour.
+2. **Fix the 219 failed risk imports** — duplicate `ida` constraint blocked them. Regenerate with unique ida values and retry.
+3. **Test auth flow on meshmobility.com** — session persistence after refresh still untested (Action #398). Users lose session on page refresh.
+4. **Harvest NV crash data** — available at dot.nv.gov, just not collected. Lowest-effort win on missing states.
+5. **Delete test layout names** — Bill3, ShellTest, FinalTest, ConfigShell still in DataBrowser layout dropdown. Del button works but needs to be more visible.
 
-### Mac↔Andi Sync
-- `allie-andi-sync.sh` — syncs knowledge, apps, vectors
-- launchd agent `com.allie.andi-sync` — every 4 hours, knowledge only
-- Aliases: `andi-sync`, `andi-sync full`
+## Open Problems
+- wcapi GET 500 on Andi — Contact serialization bug from DB restore
+- 799 contacts failed to import (duplicate email constraint) — data in `/tmp/mac_contacts_merged.json`
+- AuditLog `user_agent` NOT NULL constraint fails on shell operations — non-fatal but noisy
+- `action` column on `actions` table is a JSONField (i18n format `{en: "..."}`) — easy to forget
 
-### Vector Stores — All Updated on Both Machines
-- Mac: Allie(4207), Claude(1997), Alice(5536), Noelle(51347)
-- Andi: Allie(3295), Claude(1299), Alice(79), Noelle(49670)
+## What Was Decided (and Why)
+- **`config` JSONField added to BaseModel** — every model gets an application data container separate from `metadata` (system behavior). Metadata has auto-scaffolding; config is clean user data. Gordy's quality form data lives here.
+- **Quality records are Action records** — no separate model. `metadata.quality_type` discriminates NCR/CAR/deviation/DCR/request. WC2 lesson: controlling actions by model fields sucked.
+- **`project_metadata` is for the parent project** — never use it for action-level data. Bill corrected this explicitly.
+- **Sprint projects named `{Project}_{600+week}`** — JPods_630, WebClerk_631, etc. Year digit + ISO week. Wednesday 3PM boundaries (accommodates religious observances, 2+3 workday split).
+- **DataBrowser App mode renders modelDetail.tsx inline** — right panel shows full detail component, not a new tab. List stays at ~45% width. Double-click opens new tab for comparison.
+- **Plain click toggles selection, never clears** — users were losing carefully built selections on accidental clicks. Clear via Shift+Show All only.
+- **Import pipeline: parse what you can, preserve what you can't** — `config.original_mac` holds raw data. `refs.import=risk` flags uncertain records. `refs.contact` holds scored match candidates. Alice teaches this to every user.
+- **Request framework is core WC3** — every installation ships it. Not a JPods feature. RI DOT NextRequest pattern. Alice tracks submissions, times responses, aggregates demand signal. n² pressure.
+- **Traffic circles use cardinal (N/E/S/W) or diagonal (45°) only** — no custom headings. Pick whichever fits the crossing lines better. Users drag to refine.
 
-### 10xMakers.com — Live
-- Deployed to Hostinger (GoDaddy addon domain on jpods.com hosting)
-- Physical Internet framing, Digital/Physical parallel, Tesla/Lamarr/Edison/Congress quotes
-- 5X5 Free Market section, liberty mechanism, community/information/learning tools
-- Domain portfolio documented (7 GoDaddy domains) — Action #393 to transfer to Cloudflare (needs helper, due 2026-08-20)
+## Files Changed This Session
 
-### MeshMobility Updates
-- **Save**: server save (requires auth) + Save Local (File System Access API, no auth)
-- **Auth**: email verification with 6-digit code via Gmail SMTP, 30-day session, profile form creates WC3 contact with source_name=meshmobility.com
-- **Session fix**: SESSION_COOKIE_SECURE=False for CF tunnel, permanent on every request
-- **Local auth bypass**: localhost requests auto-authenticated as bill@jpods.com
-- **Run**: instant Dijkstra travel times (no simulation needed), enables Isochrone immediately
-- **Isochrone**: disabled until Run completes (travel times for all station pairs)
-- **Library**: US states sorted to top, Open zooms to network, Clone works
-- **Build on Lines**: preserves existing network (no longer erases)
-- **Landing**: 10xMakers + Training Videos buttons added
-- **Training page**: `/training` route with video card grid, sections by category
-- **Emails from Andi**: `bill.james+ar@jpods.com` (SMTP via Gmail)
+### MeshMobility
+- `gui/static/app.js` — Save Local uses /api/network/download (JPD round-trip fix), CamelCase filenames via `_jpdFilename()`, silent archive to Noelle
+- `gui/static/overlays.js` — Crash contact dialog with phone/URL/request portal, `_showCrashContact()` function
+- `gui/overlays.py` — Loads crash-data-status.json, returns contact info on 404, `ARCHIVE_LOCAL_SAVES` admin flag
+- `gui/builders.py` — Station dedup (300m exclusion), cardinal/diagonal traffic circles, `_align_score()`
+- `gui/network_io.py` — `archive_local_save` endpoint, `ARCHIVE_LOCAL_SAVES` flag
+- `overlays/crash-data-status.json` — 5 missing + 5 weak states with contacts, RI updated to "requested"
+- `overlays/crashes_all_*.geojson` — 46 states synced (was 18)
 
-### WC_HQ Architecture
-- Connection/Bundle for ALL sync (commerce + operational + deploy)
-- `deploy` and `training` purpose choices added to sync app
-- Readmes updated: 21-sync-integration.md, dual-hosting-model.md
-- Training video script: WC3-SYNC-01 (3-4 min, DataBrowser for Connections/Bundles)
-- Decision: WC_HQ is not a separate app — same WC3, different role
+### React2025 (WC3 Frontend)
+- `src/pages/admin/AdminWorkbench.tsx` — App mode detail in right panel (lazy-loaded components), Apply-to-Selection dropdown, sprint project loader, match candidates panel
+- `src/pages/admin/AdminWorkbench.css` — `.db-detail-pane--app` (55% width, no max)
+- `src/components/common/DataGrid.tsx` — Plain click toggles without clearing selection
+- `src/components/common/FieldOrderDialog.tsx` — Delete button more visible (red, "Delete" not "Del")
+- `src/routes/Router.tsx` — Added PurchasePrint route
+- `src/apps/transactions/print/PurchasePrint.tsx` — New: purchase order print page
+- `src/apps/support/models/quality/` — New: types, schemas, API, QualityDetail, QualityDashboard (Action-based)
+
+### WC3 Backend
+- `common/models.py` — `ConfigMixin` added to BaseModel (config JSONField on every model)
+- `apps/*/migrations/` — 6 migration files adding config field across all apps
+
+### Allie
+- `readmes/capital-pages/inclusive-institutions/index.html` — Landing page draft
+- `process/inbox/20260724T162800-tfts.md` — Crash data pain → request framework → inclusive institutions
+- `Downloads/JPods Quality Program - 2014/WC3-Quality-Flowchart.dot/.pdf/.png` — Quality system flowchart
+- `Downloads/JPods Quality Program - 2014/WC3-Digitization-Map.md` — Every QM section → WC3 mapping
 
 ### WC3 Database
-- Local Mac DB (commerce_expert) restored to Andi (wc_jpods) — 2233 contacts, all actions
-- DB permissions fixed for webclerk user
-- MeshMobility service account created (meshmobility@jpods.com)
-- wcapi auth fixed to use JWT tokens + correct /wcapi/save/ pattern
-
-### Contacts & Actions
-- 7 crash data researchers created: Mehrara Molan (Ole Miss/MS), Wang (JSU/MS), Vachal (NDSU/ND), Edara+Sun (Mizzou/MO), Abbate (RIDOT/RI), Williams (MS DPS)
-- Action #393: Transfer domains to Cloudflare (due 2026-08-20)
-- Action #394: MM Library — WC3 Document records for maps (due 2026-07-30)
-- Action #395: Reach out to crash data researchers (due 2026-07-30)
-
-## Next Session Should
-1. Fix OK crash data — contact OHSO or find real statewide endpoint
-2. WC3 wcapi `/wcapi/get/` returns 500 — serialization bug from DB restore, needs debugging
-3. MeshMobility training videos — Bill has 5-10 to add
-4. Test full auth flow on meshmobility.com (session persistence after refresh)
-5. Run probe_states.py periodically to discover new endpoints
-6. Sync local DB to Andi after any contact/action changes
-
-## Open Issues
-- wcapi GET endpoint 500 error on Andi (Contact serialization)
-- OK statewide crash data unavailable (OHSO contact needed)
-- NJ only partial (Burlington County + Newark, not statewide — CSV download at nj.gov is the statewide source)
-- Alice on Andi has only 79 chunks (WC3 model files not synced)
+- All transactions, line items, ledger, payments deleted (test junk)
+- All OrgBase/Customer records deleted (5,445 — rebuild from contacts)
+- 8,475 contacts (1,832 enriched from Mac, 2,699 created, 205 risk-flagged)
+- 72 sprint Action records created (JPods/WebClerk/General × W30-W53)
+- Actions #396-404 created for Alice
