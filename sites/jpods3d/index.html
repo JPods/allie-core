@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods3D — Design Transit Networks in 3D</title>
+<meta name="description" content="JPods3D lets students and planners design, simulate, and visualize solar-powered transit networks in SketchUp. See it before you build it.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1a1a1a;
+  line-height: 1.6;
+  background: #fafafa;
+}
+
+a { color: #7cf; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(160deg, #0a1a2e 0%, #1a3a5c 40%, #2a6a4a 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px 64px;
+}
+.hero h1 {
+  font-size: 3.2em;
+  font-weight: 300;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+.hero h1 span { color: #7cf; font-weight: 600; }
+.hero .tagline {
+  font-size: 1.25em;
+  font-weight: 300;
+  color: rgba(255,255,255,0.85);
+  max-width: 620px;
+  margin: 0 auto 32px;
+}
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: #fff;
+  color: #0a1a2e;
+  padding: 14px 32px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.2); text-decoration: none; }
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 1em;
+  border: 2px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-decoration: none;
+}
+.btn-secondary:hover { opacity: 0.85; text-decoration: none; }
+
+/* ── Sections ── */
+section { padding: 56px 0; border-bottom: 1px solid #e0e0e0; }
+section:last-of-type { border-bottom: none; }
+section h2 {
+  font-size: 1.8em;
+  font-weight: 400;
+  color: #0a1a2e;
+  margin-bottom: 16px;
+}
+section h2 span { color: #2a6a4a; }
+section p.lead {
+  font-size: 1.1em;
+  color: #4a4a4a;
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+
+/* ── Parallel cards ── */
+.parallel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+.card-light {
+  background: #e8f0f8;
+  border-radius: 10px;
+  padding: 32px;
+}
+.card-dark {
+  background: #0a1a2e;
+  color: #ccc;
+  border-radius: 10px;
+  padding: 32px;
+}
+.card-dark h3 { color: #7cf; }
+.card-light h3, .card-dark h3 { font-size: 1.2em; font-weight: 600; margin-bottom: 12px; }
+
+/* ── Workflow steps ── */
+.workflow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 32px;
+}
+.step {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 16px;
+  text-align: center;
+  width: 130px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.step:hover { border-color: #2a6a4a; transform: translateY(-2px); }
+.step .icon { font-size: 2em; margin-bottom: 8px; }
+.step .name { font-weight: 600; font-size: 0.9em; color: #0a1a2e; }
+.step .num { font-size: 0.75em; color: #6a8a9a; margin-bottom: 4px; }
+.arrow { display: flex; align-items: center; color: #2a6a4a; font-size: 1.4em; font-weight: 700; }
+
+/* ── Video grid ── */
+.city-section { margin-bottom: 48px; }
+.city-section:last-child { margin-bottom: 0; }
+.city-section h3 {
+  font-size: 1.35em;
+  font-weight: 600;
+  color: #0a1a2e;
+  margin-bottom: 6px;
+}
+.city-section .city-desc {
+  color: #4a4a4a;
+  margin-bottom: 16px;
+  font-size: 0.95em;
+}
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+.video-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.15s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.video-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.video-thumb {
+  position: relative;
+  padding-bottom: 56.25%;
+  background: #0a1a2e;
+  overflow: hidden;
+}
+.video-thumb img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.video-card:hover .video-thumb img { opacity: 1; }
+.play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px; height: 56px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  transition: transform 0.15s;
+  z-index: 2;
+}
+.video-card:hover .play-btn { transform: translate(-50%, -50%) scale(1.1); }
+.play-btn::after {
+  content: '';
+  display: block;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 18px;
+  border-color: transparent transparent transparent #0a1a2e;
+  margin-left: 3px;
+}
+.video-card .video-label {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #0a1a2e;
+}
+
+/* ── Video lightbox ── */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox.active { display: flex; }
+.lightbox-inner {
+  position: relative;
+  width: 90%;
+  max-width: 960px;
+}
+.lightbox-inner .embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+.lightbox-inner .embed iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+.lightbox-close {
+  position: absolute;
+  top: -40px; right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+}
+.lightbox-close:hover { color: #7cf; }
+
+/* ── Three pillars ── */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+.pillar {
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.pillar .icon { font-size: 2.4em; margin-bottom: 12px; }
+.pillar h3 { font-size: 1.1em; font-weight: 600; color: #0a1a2e; margin-bottom: 8px; }
+.pillar p { color: #4a4a4a; font-size: 0.95em; }
+
+/* ── Stats row ── */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding: 32px 0;
+}
+.stat { text-align: center; }
+.stat .number { font-size: 2.2em; font-weight: 700; color: #0a1a2e; }
+.stat .label { font-size: 0.85em; color: #6a8a9a; margin-top: 4px; }
+
+/* ── Quote ── */
+.quote-block {
+  background: #f0f4f8;
+  border-left: 4px solid #2a6a4a;
+  padding: 24px 32px;
+  margin: 32px 0;
+  border-radius: 0 8px 8px 0;
+}
+.quote-block p {
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-size: 1.1em;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.quote-block .attr { font-style: normal; font-size: 0.9em; color: #6a8a9a; }
+
+/* ── Screenshot gallery ── */
+.screenshot-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.screenshot-gallery img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  transition: transform 0.2s;
+}
+.screenshot-gallery img:hover { transform: scale(1.02); }
+.screenshot-gallery .caption {
+  font-size: 0.85em;
+  color: #6a8a9a;
+  margin-top: 6px;
+  text-align: center;
+}
+
+/* ── Footer ── */
+footer {
+  background: #0a1a2e;
+  color: #6a8a9a;
+  text-align: center;
+  padding: 40px 24px;
+}
+footer .footer-tagline { color: #fff; font-size: 1.1em; margin-bottom: 16px; }
+footer .footer-links { margin-bottom: 16px; }
+footer .footer-links a { color: #7cf; margin: 0 12px; font-size: 0.95em; }
+footer .copyright { font-size: 0.85em; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .hero h1 { font-size: 2.4em; }
+  .parallel { grid-template-columns: 1fr; }
+  .pillars { grid-template-columns: 1fr; }
+  .workflow { flex-direction: column; align-items: center; }
+  .arrow { transform: rotate(90deg); }
+  .hero-cta { flex-direction: column; align-items: center; }
+  .stats { gap: 32px; }
+  .video-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ HERO ════════ -->
+<header class="hero">
+  <div class="container">
+    <h1>Design Transit Networks<br>in <span>3D</span></h1>
+    <p class="tagline">JPods3D is a SketchUp plugin that lets students and planners build, simulate, and visualize solar-powered transit networks on real terrain.</p>
+    <div class="hero-cta">
+      <a href="#videos" class="btn-primary">Watch It Work</a>
+      <a href="#how-it-works" class="btn-secondary">How It Works</a>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ WHAT IS JPODS3D ════════ -->
+<section>
+  <div class="container">
+    <h2>See It <span>Before</span> You Build It</h2>
+    <p class="lead">JPods3D turns SketchUp into a transit design studio. Place stations on satellite terrain, connect guideways, validate the physics, and watch pods move &mdash; all before breaking ground.</p>
+
+    <div class="parallel">
+      <div class="card-light">
+        <h3>For Students</h3>
+        <p>Learn transit engineering by building networks in your own neighborhood. Place stations at real locations, connect them with solar-powered guideways, and simulate passenger flow. The plugin teaches physics, geometry, and infrastructure design through hands-on 3D modeling.</p>
+      </div>
+      <div class="card-dark">
+        <h3>For Planners</h3>
+        <p>Evaluate JPods networks against real terrain, traffic data, and crash corridors. Generate bills of materials. Test capacity at stations. Export simulation data for economic analysis. See what your city looks like with solar-powered transit above the streets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ HOW IT WORKS ════════ -->
+<section id="how-it-works">
+  <div class="container">
+    <h2>8 Steps to a <span>Working Network</span></h2>
+    <p class="lead">Students build a complete JPods network in eight steps &mdash; from geolocating the model to watching pods animate along the guideways.</p>
+
+    <div class="workflow">
+      <div class="step"><div class="num">1</div><div class="icon">&#127758;</div><div class="name">Geolocate</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">2</div><div class="icon">&#127963;</div><div class="name">Place Stations</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">3</div><div class="icon">&#128204;</div><div class="name">Calc CPs</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">4</div><div class="icon">&#128268;</div><div class="name">Connect</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">5</div><div class="icon">&#128681;</div><div class="name">Waypoints</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">6</div><div class="icon">&#128295;</div><div class="name">Build</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">7</div><div class="icon">&#9989;</div><div class="name">Review</div></div>
+      <div class="arrow">&#8594;</div>
+      <div class="step"><div class="num">8</div><div class="icon">&#9654;</div><div class="name">Animate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ THE AGENTS ════════ -->
+<section>
+  <div class="container">
+    <h2>Built-In <span>Intelligence</span></h2>
+    <p class="lead">JPods3D includes an agent team that validates, routes, and balances your network automatically.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">&#128752;</div>
+        <h3>Noelle</h3>
+        <p>Network validator and load balancer. Reviews every build for safety, connectivity, and clearance height. Flags defects before you animate.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128739;</div>
+        <h3>Natalie</h3>
+        <p>Router and trip planner. Assigns passengers to paths, balances demand across stations, and calculates travel times through the network.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128664;</div>
+        <h3>Nora</h3>
+        <p>Vehicle navigator. Controls individual pods along guideways, manages station parking, handles merges and diverges in real time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ VIDEOS ════════ -->
+<section id="videos">
+  <div class="container">
+    <h2>See It in <span>Action</span></h2>
+    <p class="lead">JPods3D networks designed on real terrain in cities across America. Click any video to watch it full size.</p>
+
+    <!-- JPods 90-second summary -->
+    <div class="city-section">
+      <h3>&#9654; JPods in 90 Seconds</h3>
+      <p class="city-desc">The concept, the technology, the mission &mdash; in a minute and a half.</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('151269750')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/151269750.jpg" alt="JPods 90-second summary">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">JPods Summary</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOA Bloomington -->
+    <div class="city-section">
+      <h3>&#127963; Mall of America &mdash; Bloomington, MN</h3>
+      <p class="city-desc">An 8-station network connecting IKEA, Mall of America, hotels, and Walmart. The first complete JPods3D demonstration network.</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('1204937716')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1204937716.jpg" alt="Network Design">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Network Design</div>
+        </div>
+        <div class="video-card" onclick="openVideo('1204937714')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1204937714.jpg" alt="Station Naming">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Station Naming</div>
+        </div>
+        <div class="video-card" onclick="openVideo('1204937713')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1204937713.jpg" alt="Capacity and BOM">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Capacity &amp; BOM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brighter Days -->
+    <div class="city-section">
+      <h3>&#9834; Brighter Days</h3>
+      <p class="city-desc">What does a city look like when solar-powered transit replaces car dependency?</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('1196072299')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1196072299.jpg" alt="Brighter Days">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Brighter Days</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Greenville -->
+    <div class="city-section">
+      <h3>&#127963; Greenville, SC</h3>
+      <p class="city-desc">A city-scale network designed using crash data corridors and MeshMobility analysis. JPods guideways follow where the crashes are worst.</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('1207256064')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1207256064.jpg" alt="Greenville Network">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Greenville Network</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Secaucus -->
+    <div class="city-section">
+      <h3>&#127963; Secaucus, NJ</h3>
+      <p class="city-desc">Connecting the Meadowlands &mdash; transit where density and traffic demand alternatives to highways.</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('1211192072')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1211192072.jpg" alt="Secaucus Network">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Secaucus Network</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Asheville -->
+    <div class="city-section">
+      <h3>&#127963; Asheville, NC</h3>
+      <p class="city-desc">Mountain terrain challenges every transit system. JPods3D handles elevation changes with terrain-following guideways and variable-height columns.</p>
+      <div class="video-grid">
+        <div class="video-card" onclick="openVideo('1205295003')">
+          <div class="video-thumb">
+            <img src="https://vumbnail.com/1205295003.jpg" alt="Asheville Network">
+            <div class="play-btn"></div>
+          </div>
+          <div class="video-label">Asheville Network</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════ WHAT JPODS IS ════════ -->
+<section>
+  <div class="container">
+    <h2>What Is <span>JPods</span>?</h2>
+
+    <div class="quote-block">
+      <p>JPods is a circulatory system for a city. Blood does not run once a week &mdash; it runs continuously. JPods moves small packets streaming resources to where they are needed on demand.</p>
+      <div class="attr">&mdash; The Physical Internet</div>
+    </div>
+
+    <div class="parallel">
+      <div class="card-light">
+        <h3>Middle Mile Transit</h3>
+        <p>JPods is the WiFi of the Physical Internet &mdash; station-to-station, neighborhood-to-neighborhood. Solar-powered guideways above the streets, 500&thinsp;kg pods on demand. Last-mile modes (bikes, walking, scooters) bridge from stations to front doors.</p>
+      </div>
+      <div class="card-dark">
+        <h3>Cargo &amp; Waste</h3>
+        <p>Not just passengers. Pre-sorted goods from warehouses to neighborhood stations by day. Waste streamed continuously out of the city for sorting. Fresh waste sorted on arrival supports far higher recycling rates than weekly collection of rotted, compressed, mixed bags.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="number">5&times;5</div><div class="label">Standard<br>(5x energy profit, 5x land use)</div></div>
+      <div class="stat"><div class="number">500 kg</div><div class="label">Pod capacity</div></div>
+      <div class="stat"><div class="number">4.6 m</div><div class="label">Clearance height</div></div>
+      <div class="stat"><div class="number">0</div><div class="label">Gallons of gas</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ MESH MOBILITY ════════ -->
+<section>
+  <div class="container">
+    <h2>Data-Driven <span>Network Design</span></h2>
+    <p class="lead">MeshMobility analyzes crash data, traffic counts, and census data to determine where JPods networks are needed most. Crash corridors become guideway corridors. Walk circles become station placement.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">&#128165;</div>
+        <h3>Crash Data</h3>
+        <p>FARS fatal crash records mapped by location. Red circles show where people are dying on roads. Guideways follow crash corridors.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128663;</div>
+        <h3>Traffic Counts</h3>
+        <p>AADT data shows vehicle volume. High-count corridors with high crash rates are the strongest candidates for JPods networks.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128101;</div>
+        <h3>Walk Circles</h3>
+        <p>15-minute walk radius from each station. When circles overlap with full coverage, the network serves the whole city. More doors, not bigger doors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA ════════ -->
+<section style="background: linear-gradient(160deg, #0a1a2e 0%, #1a3a5c 40%, #2a6a4a 100%); color: #fff; border-bottom: none;">
+  <div class="container" style="text-align: center;">
+    <h2 style="color: #fff;">Ready to <span style="color: #7cf;">Design</span>?</h2>
+    <p class="lead" style="color: rgba(255,255,255,0.85); margin: 0 auto 32px;">JPods3D runs in SketchUp 2026. Download the plugin, pick a city, and start building.</p>
+    <div class="hero-cta">
+      <a href="https://jpods.com" class="btn-primary">Visit JPods.com</a>
+      <a href="https://10xmakers.com" class="btn-secondary">10xMakers Program</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-tagline">JPods3D &mdash; See it before you build it.</div>
+    <div class="footer-links">
+      <a href="https://jpods.com">JPods</a>
+      <a href="https://10xmakers.com">10xMakers</a>
+      <a href="https://webclerk.com">WebClerk</a>
+      <a href="https://dividedsovereignty.com">Divided Sovereignty</a>
+    </div>
+    <div class="copyright">&copy; 2026 JPods, LLC. Solar-powered mobility, locally governed.</div>
+  </div>
+</footer>
+
+<!-- ════════ VIDEO LIGHTBOX ════════ -->
+<div class="lightbox" id="videoLightbox" onclick="closeVideo(event)">
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="closeVideo(event)">&times;</button>
+    <div class="embed">
+      <iframe id="lightboxFrame" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+function openVideo(id) {
+  var lb = document.getElementById('videoLightbox');
+  var frame = document.getElementById('lightboxFrame');
+  frame.src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&badge=0&autopause=0';
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideo(e) {
+  if (e.target === document.querySelector('.lightbox-inner') ||
+      e.target.tagName === 'IFRAME') return;
+  var lb = document.getElementById('videoLightbox');
+  var frame = document.getElementById('lightboxFrame');
+  lb.classList.remove('active');
+  frame.src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeVideo(e);
+});
+</script>
+
+</body>
+</html>
