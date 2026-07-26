@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10xMakers — The Physical Internet</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #1a1a1a; background: #fafafa; }
+  a { color: #1a6bb5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Hero ─────────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(160deg, #0a1a2e 0%, #1a3a5c 40%, #2a6a4a 100%);
+    color: white; padding: 70px 24px 60px; text-align: center;
+  }
+  .hero h1 { font-size: 3.2em; font-weight: 300; letter-spacing: -1px; margin-bottom: 6px; }
+  .hero h1 span { font-weight: 700; color: #7cf; }
+  .hero .big-idea {
+    font-size: 1.5em; opacity: 0.95; max-width: 700px; margin: 16px auto 8px;
+    line-height: 1.4; font-weight: 300;
+  }
+  .hero .sub-idea {
+    font-size: 1.1em; opacity: 0.7; max-width: 640px; margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+  .cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 30px; border-radius: 10px; font-size: 1.05em; font-weight: 600;
+    transition: transform 0.15s, box-shadow 0.2s; cursor: pointer;
+  }
+  .cta:hover { transform: translateY(-2px); text-decoration: none; }
+  .cta-primary { background: white; color: #1a3a5c; box-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+  .cta-primary:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.35); }
+  .cta-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.25); }
+  .cta-secondary:hover { background: rgba(255,255,255,0.2); color: white; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .section { padding: 48px 0; border-bottom: 1px solid #e4e8ec; }
+  .section:last-child { border-bottom: none; }
+  .section h2 { font-size: 1.7em; margin-bottom: 20px; color: #1a2a3a; font-weight: 400; }
+
+  /* ── Parallel cards ──────────────────────────────────────────── */
+  .parallel {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    margin: 30px 0; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  .parallel-side {
+    padding: 28px 24px;
+  }
+  .parallel-side h3 { font-size: 1.2em; margin-bottom: 12px; font-weight: 600; }
+  .parallel-side p { font-size: 0.95em; line-height: 1.6; margin-bottom: 10px; }
+  .parallel-left { background: #e8f0f8; color: #1a2a3a; }
+  .parallel-right { background: #1a2a3a; color: #dde8f0; }
+  .parallel-right h3 { color: #7cf; }
+
+  /* ── Three pillars ───────────────────────────────────────────── */
+  .pillars {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    margin: 30px 0;
+  }
+  .pillar {
+    background: white; border-radius: 12px; padding: 28px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    text-align: center;
+  }
+  .pillar .icon { font-size: 2.4em; margin-bottom: 10px; }
+  .pillar h3 { color: #1a3a5c; font-size: 1.15em; margin-bottom: 10px; }
+  .pillar p { font-size: 0.9em; color: #555; line-height: 1.5; }
+
+  /* ── Video ───────────────────────────────────────────────────── */
+  .video-feature {
+    background: #111; border-radius: 12px; overflow: hidden;
+    margin: 30px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .video-feature iframe {
+    width: 100%; aspect-ratio: 16/9; border: none; display: block;
+  }
+  .video-feature .caption {
+    padding: 16px 20px; color: #aaa; font-size: 0.95em; line-height: 1.5;
+  }
+  .video-feature .caption strong { color: #7cf; }
+
+  /* ── Loop ─────────────────────────────────────────────────────── */
+  .loop {
+    display: flex; gap: 0; justify-content: center; align-items: center;
+    flex-wrap: wrap; margin: 30px 0;
+  }
+  .loop-step {
+    text-align: center; padding: 20px 16px; min-width: 140px; flex: 1;
+  }
+  .loop-step .icon { font-size: 2em; margin-bottom: 6px; }
+  .loop-step .name { font-weight: 700; color: #1a2a3a; font-size: 1.05em; }
+  .loop-step .desc { font-size: 0.85em; color: #666; margin-top: 4px; }
+  .loop-arrow { font-size: 1.5em; color: #2a6a4a; padding: 0 4px; }
+
+  /* ── Kits ─────────────────────────────────────────────────────── */
+  .kit-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px; margin: 24px 0;
+  }
+  .kit-card {
+    background: white; border: 2px solid #dde8f0; border-radius: 10px;
+    padding: 20px; text-align: center;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .kit-card:hover { border-color: #2a6a4a; transform: translateY(-3px); }
+  .kit-card .price { font-size: 1.8em; font-weight: 700; color: #1a3a5c; }
+  .kit-card .name { font-weight: 600; color: #1a2a3a; margin: 6px 0; font-size: 1.1em; }
+  .kit-card .desc { font-size: 0.85em; color: #666; line-height: 1.4; }
+
+  /* ── Quote ────────────────────────────────────────────────────── */
+  .quote-block {
+    background: #f0f4f8; border-left: 4px solid #2a6a4a;
+    padding: 20px 24px; margin: 24px 0; border-radius: 0 8px 8px 0;
+  }
+  .quote-block p { font-size: 1.1em; color: #333; font-style: italic; line-height: 1.6; }
+  .quote-block .attr { font-style: normal; font-size: 0.85em; color: #888; margin-top: 8px; }
+
+  /* ── Stat row ─────────────────────────────────────────────────── */
+  .stat-row {
+    display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
+    margin: 30px 0; text-align: center;
+  }
+  .stat { min-width: 120px; }
+  .stat .number { font-size: 2.2em; font-weight: 700; color: #1a3a5c; line-height: 1; }
+  .stat .label { font-size: 0.85em; color: #666; margin-top: 4px; }
+
+  /* ── Tools ────────────────────────────────────────────────────── */
+  .tools-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+  .tool-card {
+    flex: 1; min-width: 200px; background: white; border: 1px solid #dde8f0;
+    border-radius: 8px; padding: 16px; text-align: center;
+  }
+  .tool-card strong { display: block; color: #1a2a3a; margin-bottom: 4px; font-size: 1.05em; }
+  .tool-card p { font-size: 0.85em; color: #666; }
+
+  /* ── Footer ───────────────────────────────────────────────────── */
+  .footer {
+    background: #0a1a2e; color: #6a8a9a; padding: 36px 24px; text-align: center;
+    font-size: 0.9em;
+  }
+  .footer a { color: #7cf; }
+  .footer .tagline { font-size: 1.15em; color: white; margin-bottom: 10px; font-weight: 300; }
+  .footer .links { margin: 10px 0; }
+  .footer .links a { margin: 0 10px; }
+  .footer .copy { margin-top: 14px; font-size: 0.8em; color: #4a6a7a; }
+
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 2.4em; }
+    .hero .big-idea { font-size: 1.2em; }
+    .cta-row { flex-direction: column; align-items: center; }
+    .parallel { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+    .loop { flex-direction: column; }
+    .loop-arrow { transform: rotate(90deg); }
+    .kit-grid { grid-template-columns: 1fr 1fr; }
+    .stat-row { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<div class="hero">
+  <h1><span>10x</span>Makers</h1>
+  <p class="big-idea">Building the Physical Internet</p>
+  <p class="sub-idea">
+    JPods applies the principles of distributed collaborative computer networks
+    to transportation and energy &mdash; personalizing mobility, empowering everyone
+    to be energy and mobility self-reliant.
+  </p>
+
+  <div class="cta-row">
+    <a href="https://meshmobility.com" class="cta cta-primary" target="_blank">Design a Network</a>
+    <a href="#community" class="cta cta-secondary">Join the Community</a>
+    <a href="#learn" class="cta cta-secondary">Start Learning</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════ THE PARALLEL ═══════════════════════ -->
+<div class="container">
+
+  <div class="section">
+    <h2>What the Internet Did for Information, JPods Does for Transportation</h2>
+
+    <div class="parallel">
+      <div class="parallel-side parallel-left">
+        <h3>Digital Internet</h3>
+        <p>Before the internet, information moved in <strong>big batches</strong> &mdash; newspapers, broadcast TV, scheduled mailings. Centrally planned. One size fits all.</p>
+        <p>The internet broke information into <strong>small packets</strong>, routed them through <strong>distributed networks</strong>, and delivered exactly what each person needed, when they needed it.</p>
+        <p>Result: everyone became a publisher. Information costs dropped 1000x. Innovation exploded.</p>
+      </div>
+      <div class="parallel-side parallel-right">
+        <h3>Physical Internet</h3>
+        <p>Today, traffic jams, oil supply shocks, and streets unsafe to walk and bike result from <strong>batch processes on analog roads</strong>. Electrical outages as the century-old analog grid breaks during storms.</p>
+        <p>JPods' patent for <strong>solar-powered transport networks</strong> digitizes and personalizes both energy and mobility &mdash; small pods (up to 500 kg) routed through <strong>distributed networks</strong> above traffic, on demand.</p>
+        <p>Result: everyone empowered to be <strong>mobility and energy self-reliant</strong>.</p>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="number">10x</div>
+        <div class="label">lower cost per mile</div>
+      </div>
+      <div class="stat">
+        <div class="number">5x</div>
+        <div class="label">more energy efficient</div>
+      </div>
+      <div class="stat">
+        <div class="number">3000x</div>
+        <div class="label">safer than roads</div>
+      </div>
+      <div class="stat">
+        <div class="number">0</div>
+        <div class="label">emissions (solar powered)</div>
+      </div>
+    </div>
+    <!-- Regulation is the issue -->
+    <div style="max-width:760px;margin:0 auto;padding:30px 0 0">
+      <h3 style="color:#1a2a3a;font-size:1.3em;margin-bottom:16px;text-align:center">Regulations Are the Issue</h3>
+      <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:20px">
+        For a century we knew the Internet was practical, but federal monopolies blocked
+        innovation between 1918 and 1991 &mdash; free markets were not restored until
+        The High-Performance Computing Act of 1991.
+      </p>
+
+      <div class="quote-block" style="margin-bottom:16px">
+        <p>"When wireless is perfectly applied the whole earth will be converted into a huge brain&hellip;
+          We shall be able to communicate with one another instantly, irrespective of distance.
+          Not only this, but through television and telephony we shall see and hear one another
+          as perfectly as though we were face to face, despite intervening distances of thousands
+          of miles; and the instruments through which we shall be able to do this will be amazingly
+          simple compared with our present telephone. A man will be able to carry one in his vest pocket."</p>
+        <div class="attr">&mdash; Nikola Tesla, <a href="https://www.geekwire.com/2015/nikola-tesla-predicted-smartphones-in-1926-like-a-boss/" target="_blank" style="color:#888">Collier's magazine, 1926</a></div>
+      </div>
+
+      <p style="font-size:0.95em;color:#444;line-height:1.7;margin-bottom:10px">
+        <strong>1942:</strong> <a href="https://en.wikipedia.org/wiki/Hedy_Lamarr" target="_blank">Hedy Lamarr</a> patented the technology behind WiFi and Bluetooth.
+        The Navy rejected it until 1957&ndash;62. Bluetooth did not commercialize until 1997.
+      </p>
+      <p style="font-size:0.95em;color:#444;line-height:1.7;margin-bottom:10px">
+        <strong>1968:</strong> The
+        <a href="https://www.youtube.com/watch?v=yJDv-zdhzMY&t=1800s" target="_blank">Mother of All Demos</a>
+        documents most aspects of the Internet and modern computing.
+        Start at minute 30 for 4 minutes to watch the "mouse," video conferencing,
+        clicking on URLs &mdash; everything we use daily, demonstrated 57 years ago.
+      </p>
+      <p style="font-size:1.05em;color:#333;line-height:1.7;margin-top:16px">
+        The same pattern is repeating with transportation. The technology exists.
+        Congress identified it in 1975. Morgantown has run injury-free since 1975.
+        The barrier is regulatory, not technical. We're breaking it &mdash; city by city, maker by maker.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ 5X5 ═══════════════════════ -->
+  <div class="section">
+    <h2><a href="https://www.5x5FreeMarket.com" target="_blank" style="color:#1a2a3a">5X5 Free Market</a></h2>
+    <p style="font-size:1.1em;color:#333;line-height:1.7;margin-bottom:20px">
+      <a href="https://www.5x5FreeMarket.com" target="_blank">5X5 Free Market</a> does for energy
+      and transportation what the High-Performance Computing Act did for communications &mdash;
+      restores a free market:
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2.2;margin-left:20px;margin-bottom:24px">
+      <li>Privately funded transport networks <strong>5 times more efficient</strong> than roads.</li>
+      <li>Pay <strong>5% of gross transport revenues</strong> to use airspace over existing public
+        Rights of Way to deploy solar-powered networks.</li>
+      <li>Regulated by the same standard as theme park thrill rides &mdash;
+        a <strong><a href="https://jpods.com/safer/" target="_blank" rel="noreferrer noopener">3,000 times better safety record</a></strong> than DOT roads.</li>
+    </ul>
+
+    <img src="https://jpodssc.com/images/ingenuity/BottomUpTopDownHighwayCommunity.png"
+         alt="Built to plan vs Evolved by signaling — Top-Down coercion produces highways and traffic jams; Bottom-Up liberty produces walkable communities and JPods networks"
+         style="max-width:100%;border-radius:10px;margin:0 0 24px;box-shadow:0 2px 16px rgba(0,0,0,0.12)">
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      5X5 replaces top-down government planning with bottom-up liberty to innovate.
+      The roles of government and innovators are restored:
+    </p>
+    <p style="font-size:1.05em;color:#444;line-height:1.7;margin-bottom:16px">
+      Governments are essential to minimize violence from war and crimes. Governments coerce
+      compliance with law &mdash; <em>innovation is a compliance failure</em>.
+    </p>
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:6px">
+      Two aspects of liberty innovate the general welfare:
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2;margin-left:20px;margin-bottom:20px">
+      <li>Tolerance of <strong>Disruptive Minorities</strong> offering choices.</li>
+      <li>Tolerance of the <strong>Wisdom of the Many</strong> sorting choices in free markets and free speech.</li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════ THREE PILLARS ═══════════════════════ -->
+  <div class="section" id="community">
+    <h2>Community, Information, and Learning Tools</h2>
+    
+    <p style="font-size:1.1em;color:#333;line-height:1.7;margin-bottom:12px">
+      Build and own part of the future by building your skills and helping to change
+      the economic lifeblood from oil to ingenuity.
+    </p>
+    <p style="font-size:1.1em;color:#333;line-height:1.7;margin-bottom:12px">
+      Oil depletes with use. <strong>Ingenuity increases with use.</strong>
+    </p>
+    <p style="font-size:1.1em;color:#333;line-height:1.7;margin-bottom:20px">
+      Millions of jobs were created building the Internet.
+      Millions of jobs will be created building the Physical Internet.
+    </p>
+        <p style="font-size:1.1em;color:#333;line-height:1.7;margin-bottom:12px">
+      Individuals pulling together in a community provides what is needed to build skills and get governments to adopt 5x5FreeMarket. This is similar to the computer user groups of the 1980-1990s.
+    </p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">&#129309;</div>
+        <h3>Community</h3>
+        <p>Connect with people building networks for their cities. Share designs, compare results, improve together. Every network strengthens every other network.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128218;</div>
+        <h3>Information</h3>
+        <p>Crash data, traffic volumes, census data for all 50 states. The evidence base for why your city needs this &mdash; and the tools to prove it with real numbers.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">&#128736;</div>
+        <h3>Learning Tools</h3>
+        <p>Free software to design networks. Kits to build physical models. Training videos. STEM curriculum. Everything you need to go from idea to city council presentation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ GARDEN GIRLS ═══════════════════════ -->
+  <div class="section">
+    <h2>6th Graders Did This. So Can You.</h2>
+    <div class="video-feature">
+      <a href="https://www.youtube.com/watch?v=4AQSQ1wUGeA&t=59s" target="_blank"
+         style="display:block;position:relative;background:#000">
+        <img src="https://img.youtube.com/vi/4AQSQ1wUGeA/0.jpg"
+             alt="Garden Girls present JPods to Fremont City Council"
+             style="width:100%;display:block">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                    width:68px;height:48px;background:#e00;border-radius:14px;
+                    display:flex;align-items:center;justify-content:center">
+          <div style="width:0;height:0;border-style:solid;border-width:12px 0 12px 20px;
+                      border-color:transparent transparent transparent white;margin-left:3px"></div>
+        </div>
+      </a>
+      <div class="caption">
+        <strong>Garden Girls</strong> &mdash; 6th grade students designed a JPods network
+        for Fremont, California and presented it to the city council. They researched
+        the problem, designed the solution with real data, and presented it to elected
+        officials. That's what 10xMakers looks like.
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p>"Want a sustainable future? Create it."</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ THE LOOP ═══════════════════════ -->
+  <div class="section">
+    <h2>Design. Survey. Build. Ride.</h2>
+    <div class="loop">
+      <div class="loop-step">
+        <div class="icon">&#127758;</div>
+        <div class="name">Design</div>
+        <div class="desc">Use MeshMobility to design a JPods network for your city. Free. Real data.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128205;</div>
+        <div class="name">Survey</div>
+        <div class="desc">Walk the route. GPS-mark where columns go. Ground-truth beats theory.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128295;</div>
+        <div class="name">Build</div>
+        <div class="desc">Kits from $20 to $300. Cargo robots, scale models, rideable vehicles.</div>
+      </div>
+      <div class="loop-arrow">&#8594;</div>
+      <div class="loop-step">
+        <div class="icon">&#128752;</div>
+        <div class="name">Ride</div>
+        <div class="desc">Test it. Prove it works. Take it to your city council with real numbers.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ FREE SOFTWARE ═══════════════════════ -->
+  <div class="section" id="learn">
+    <h2>Free Software</h2>
+    <div class="tools-row">
+      <div class="tool-card">
+        <strong><a href="https://meshmobility.com" target="_blank">MeshMobility</a></strong>
+        <p>Design a JPods network for any US city. Crash data, traffic, census for all 50 states. Save, share, and score your design.</p>
+      </div>
+      <div class="tool-card">
+        <strong><a href="https://personalizetransit.com" target="_blank">Personalize Transit</a></strong>
+        <p>Type any city. See build cost, savings, and payback period in 10 seconds. Real data, conservative estimates.</p>
+      </div>
+      <div class="tool-card">
+        <strong><a href="https://meshmobility.com/library" target="_blank">Network Library</a></strong>
+        <p>Browse networks designed by others. Clone, improve, compare. Every design teaches the next designer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ KITS ═══════════════════════ -->
+  <div class="section">
+    <h2>Kits</h2>
+    <p style="margin-bottom:6px">Every kit sold is a sensor deployed. Every student is a surveyor. Every design trains the AI that makes the next design better.</p>
+    <div class="kit-grid">
+      <div class="kit-card">
+        <div class="price">$20</div>
+        <div class="name">Survey Kit</div>
+        <div class="desc">Phone mount, measuring wheel, marker flags, printed map. Walk the route. Mark reality.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$50</div>
+        <div class="name">Cargo Carrier</div>
+        <div class="desc">Motors, Arduino, chassis, ToF sensor, battery. Carries packages. Learns obstacles.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$150</div>
+        <div class="name">Scale Model</div>
+        <div class="desc">Raspberry Pi, track sections, pod, camera. Multi-vehicle control. The full network system.</div>
+      </div>
+      <div class="kit-card">
+        <div class="price">$300</div>
+        <div class="name">Rider</div>
+        <div class="desc">90W motors, Pi, frame, brakes. Build it. Ride it in a parking lot. Prove it works.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ WHY 10X ═══════════════════════ -->
+  <div class="section">
+    <h2>Why 10x?</h2>
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      There is a <a href="https://bext.in/larry-page-10x-rule-innovation-mindset-2026/" target="_blank">10X rule</a>
+      that to drive a paradigm shift requires a 10 times improvement.
+    </p>
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      In 1916 every US city over 10,000 people had one or more privately funded streetcar
+      networks providing Mobility As A Service (MaaS). There were 260,000 miles of railroads.
+      Top-down government planning since 1916 replaced the liberty to innovate and
+      Wisdom of the Many sorting innovations:
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2;margin-left:20px;margin-bottom:20px">
+      <li>Streetcar networks were wiped out.</li>
+      <li>45% of 470 ton-mpg railroads were replaced by roads with the 25 mpg efficiency
+        of the Model-T.
+        <a href="https://library.jpods.com/metrics/" target="_blank">Warren Buffett on the efficiency of railroads.</a></li>
+    </ul>
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      Railroads are 188 times more efficient than roads, but top-down government planning &mdash;
+      with no retrospection on the consequences &mdash; replaced 45% of railroads.
+    </p>
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      Similarly, in 1935, 50% of US electricity was from renewables. The wind industry was making
+      80,000 windmills a year. The Rural Electrification Act of 1936 destroyed the renewable
+      industry and blocked for a century achieving what Thomas Edison noted as practical in 1910:
+    </p>
+
+    <div class="quote-block">
+      <p>Sunshine is spread out thin and so is electricity. Perhaps they are the same. This scheme of combustion to get power makes me sick to think of it. It is so wasteful. It is just the old, foolish Prometheus idea, and the father of Prometheus was a baboon.</p>
+      <p style="margin-top:12px">When we learn how to store electricity, we will cease being apes ourselves; until then we are tailless orangutans. You see, we should utilize natural forces and thus get all of our power. Sunshine is a form of energy, and the winds and the tides are manifestations of energy&hellip; Do we use them? Oh, no! We burn up wood and coal, as renters burn up the front fence for fuel. We live like squatters, not as if we owned the property.</p>
+      <p style="margin-top:12px">There must surely come a time when heat and power will be stored in unlimited quantities in every community, all gathered by natural forces. Electricity ought to be as cheap as oxygen&hellip;</p>
+      <div class="attr">&mdash; Thomas Edison, 1910</div>
+    </div>
+
+    <h2>JPods Are 10x</h2>
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      JPods patent 6,810,817 is for solar-powered transport networks:
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2;margin-left:20px;margin-bottom:20px">
+      <li>Robots on grade-separated guideways: "A method of controlling a transportation System for moving people, freight, and any combination whereof using a distributed network of intelligent devices without requiring the aid of a human driver"</li>
+      <li>Networks are solar-powered: "The method&hellip; providing&hellip; Solar and wind power generators integrated into the physical Structure of Said transportation System&hellip;."</li>
+    </ul>
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      JPods implementation:
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2;margin-left:20px;margin-bottom:20px">
+      <li>Overhead guideways, grade separation, and automation removes repetitive applications of power required of cars on roads.</li>
+      <li>Suspended vehicles removes 75% of the parasitic mass (mass we burn energy to move that is not payload).</li>
+      <li>Solar collectors deployed over the guideways gather 40,000 vehicle-miles of power per mile per day. This is 4 times the energy required to payback the network.</li>
+      <li>Better Physics results in JPods being 10X more efficient than cars.</li>
+      <li>Watt-hours/passenger-mile: freight-railroads 5.5, bikes 15, JPods 78, walking 116, motorcycles 545, commuter rail 881, cars 1,032, buses 1,245, and taxis 4,204.</li>
+      <li>Watt-hours/passenger-km: freight-railroads 3.4, bikes 10, JPods 47, walking 73, motorcycles 339, commuter rail 548, cars 641, buses 774, and taxis 2,613.</li>
+    </ul>
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:16px">
+      Three layers to the Physical Internet &mdash; similar to the Internet's fiber optics (high speed), Bluetooth (last device), and WiFi (local area):
+    </p>
+    <ul style="font-size:1.05em;color:#333;line-height:2;margin-left:20px;margin-bottom:24px">
+      <li>High speed and heavy lift between cities: airplanes, freight railroads, and tube mobility.</li>
+      <li>Last-mile: bikes, walking, scooters, proximity, Uber&hellip;</li>
+      <li>JPods are the middle-mile &mdash; between neighborhoods, not in them. Most places in cities will be within about a 15-minute walk of a JPods mesh network.</li>
+    </ul>
+
+    <div class="video-feature" style="max-width:700px;margin:24px auto">
+      <iframe title="vimeo-player" src="https://player.vimeo.com/video/1076844728?h=80db18cb37"
+              style="width:100%;aspect-ratio:16/9;border:none;display:block"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+              allowfullscreen></iframe>
+    </div>
+
+    <img src="https://jpods.com/wp-content/uploads/2025/03/ShareOf_Change_TripsByMile_cost_snelling-980x291.png"
+         alt="JPods cost per passenger-mile vs cars, buses, trains, taxis"
+         style="max-width:100%;border-radius:10px;margin:24px 0;box-shadow:0 2px 16px rgba(0,0,0,0.12)">
+
+    <p style="font-size:1.05em;color:#333;line-height:1.7;margin-bottom:20px">
+      The 10X reduction in costs and energy were identified by
+      <a href="https://library.jpods.com/congressionalstudy/" target="_blank">Congressional Study PB-244854, "Automated Guideway Transit"</a>,
+      as the solution to the 1973 Oil Embargo. It also noted the need for the 5X5 Free Market regulatory change:
+    </p>
+
+    <div class="quote-block">
+      <p>"Institutional failures" had blocked such innovations
+        for "four to six decades."</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ SELF-RELIANCE ═══════════════════════ -->
+  <div class="section" style="text-align:center">
+    <h2>Energy and Mobility Self-Reliance</h2>
+    <p style="max-width:650px;margin:0 auto 20px;font-size:1.05em;color:#444;line-height:1.7">
+      The Digital Internet made everyone a publisher. The Physical Internet makes everyone
+      energy and mobility self-reliant. Solar panels on the guideways generate the power.
+      The network is locally owned, locally governed, locally maintained. No foreign oil.
+      No central authority deciding who moves and when.
+    </p>
+    <p style="max-width:650px;margin:0 auto;font-size:1.05em;color:#444;line-height:1.7">
+      Start small. Iterate relentlessly. Excellence is the process of relentlessly improving.
+    </p>
+  </div>
+
+  <!-- ═══════════════════════ REFERENCES ═══════════════════════ -->
+  <div class="section">
+    <h2>Learn More</h2>
+    <div style="font-size:0.95em;color:#444">
+
+    <h3 style="color:#1a2a3a;margin:16px 0 8px">JPods Resources</h3>
+    <ul style="line-height:2">
+      <li><a href="https://jpods.com" target="_blank">JPods.com</a> &mdash; the company, the technology, the vision</li>
+      <li><a href="https://meshmobility.com" target="_blank">MeshMobility</a> &mdash; design transit networks with real data</li>
+      <li><a href="https://www.5x5FreeMarket.com" target="_blank">5X5 FreeMarket</a> &mdash; performance-based regulation: zero cost to cities, private capital takes the risk</li>
+      <li><a href="https://www.ClimateChangeRootCause.com" target="_blank">Climate Change Root Cause</a> &mdash; how Federal highway monopolies created the crisis</li>
+      <li><a href="https://jpods.substack.com" target="_blank">JPods Substack</a> &mdash; weekly updates, city spotlights, the journey</li>
+      <li><a href="https://library.jpods.com/stem/" target="_blank">STEM Resources</a> &mdash; lesson plans, curriculum, project templates for educators</li>
+    </ul>
+
+    <h3 style="color:#1a2a3a;margin:16px 0 8px">The Intellectual Foundation</h3>
+    <ul style="line-height:2">
+      <li><strong>Jane Jacobs</strong> &mdash; <em>The Death and Life of Great American Cities</em> (1961). The original case for walkable, bottom-up urbanism.</li>
+      <li><strong>Chuck Marohn</strong> &mdash; <em>Strong Towns</em> (2019). Cities are insolvent. The smallest next step wins.</li>
+      <li><strong>Donald Shoup</strong> &mdash; <em>The High Cost of Free Parking</em> (2005). Free parking costs more than schools.</li>
+      <li><strong>Jeff Speck</strong> &mdash; <em>Walkable City</em> (2012). The practical guide to walkability.</li>
+      <li><a href="https://www.strongtowns.org" target="_blank">Strong Towns</a> &mdash; bottom-up fiscal responsibility for infrastructure</li>
+      <li><a href="https://www.jpods.com/walkable" target="_blank">References on walkability.</a></li>
+      <li><a href="https://www.jpods.com/bikes" target="_blank">Bikes</a> are very important for health, mobility equity, and affordability.</li>
+      
+    </ul>
+
+    <h3 style="color:#1a2a3a;margin:16px 0 8px">Evidence</h3>
+    <ul style="line-height:2">
+      <li><a href="https://www.youtube.com/watch?v=4AQSQ1wUGeA&t=59s" target="_blank">Garden Girls: 6th graders present JPods to Fremont City Council</a></li>
+      <li><a href="https://www.postroads.com/vetoes/" target="_blank">Presidential Vetoes of Federal Roads</a> &mdash; 4 of the first 5 presidents vetoed Federal roads as unconstitutional</li>
+      <li>Morgantown PRT &mdash; injury-free since 1975, over 100 million passenger-miles</li>
+      <li>Massachusetts 5X5 Standard &mdash; funded unanimously 2021, signed into law</li>
+    </ul>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════ JOIN ═══════════════════════ -->
+  <div class="section" id="join" style="text-align:center;padding:40px 0">
+    <h2>Join 10xMakers</h2>
+    <p style="margin-bottom:24px;font-size:1.1em;color:#444;max-width:550px;margin-left:auto;margin-right:auto;line-height:1.6">
+      Design a network for your city. Build a kit. Walk a route. Present to your city council.
+      Every maker strengthens the Physical Internet.
+    </p>
+    <div class="cta-row">
+      <a href="https://meshmobility.com" class="cta cta-primary" style="background:#1a3a5c;color:white" target="_blank">Design a Network</a>
+      <a href="https://jpods.substack.com" class="cta cta-secondary" style="border-color:#1a3a5c;color:#1a3a5c" target="_blank">Follow on Substack</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<div class="footer">
+  <div class="tagline">The Physical Internet &mdash; empowering everyone to be energy and mobility self-reliant.</div>
+  <div class="links">
+    <a href="https://jpods.com" target="_blank">JPods</a>
+    <a href="https://meshmobility.com" target="_blank">MeshMobility</a>
+    <a href="https://jpods.substack.com" target="_blank">Substack</a>
+    <a href="https://www.5x5FreeMarket.com" target="_blank">5X5 FreeMarket</a>
+    <a href="https://www.ClimateChangeRootCause.com" target="_blank">Climate Change Root Cause</a>
+    <a href="https://library.jpods.com/stem/" target="_blank">STEM</a>
+  </div>
+  <div class="copy">&copy; 2026 JPods LLC &mdash; 10xMakers.com</div>
+</div>
+
+</body>
+</html>

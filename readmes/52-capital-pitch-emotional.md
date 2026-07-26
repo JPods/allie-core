@@ -44,8 +44,8 @@ Government produces more of what is failing. We empower people to create what wo
 
 **See it working — it takes 60 seconds:**
 
-- **CityTool** — type any US city, see the numbers: [meshmobility.com/citytool](https://meshmobility.com/citytool)
+- **Personalize Transit** — type any US city, see the numbers: [personalizetransit.com](https://personalizetransit.com)
 - **MeshMobility** — design a network yourself: [meshmobility.com](https://meshmobility.com)
-- **Training videos** — 60-second CityTool hook, 5-minute first network, full design workflow
+- **Training videos** — 60-second Personalize Transit hook, 5-minute first network, full design workflow
 
 *10xMakers.com — Pirates and Patriots.*

@@ -716,7 +716,7 @@ meshmobility.com                          jpods.webclerk.com
 - Every signup, every network saved, every simulation run
 - Student kit purchases (Alice handles commerce in this DB)
 - 10xMakers leaderboard scores
-- Casual visitors who try CityTool once
+- Casual visitors who try Personalize Transit once
 
 **What promotes to wc_jpods:**
 - City planner who runs 5+ simulations or contacts JPods
@@ -742,7 +742,7 @@ pattern → recommend → Bill activates.
 | Instance | Domain | Port | Database | Purpose |
 |----------|--------|------|----------|---------|
 | JPods | jpods.webclerk.com | :8000 | wc_jpods | Commerce, Alice, capital |
-| MeshMobility | meshmobility.com | :8001 | wc_mobility | Network planner, students, CityTool |
+| MeshMobility | meshmobility.com | :8001 | wc_mobility | Network planner, students, Personalize Transit |
 | Demo | demo.webclerk.com | :8002 | wc_demo | "See how WebClerk works" |
 
 ### Operations — multi-instance

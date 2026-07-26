@@ -42,7 +42,7 @@ Precedent: JPods has executed this structure with Stadia Construction (Georgia) 
 **Basis for valuation:**
 - Patent portfolio: 9 filed patents + foundational US 6,810,817 covering the category
 - Regulatory precedents: only company with state-funded legislation (MA $1.3M) and signed franchise (GSP 30-year)
-- Software + AI: MeshMobility, Noelle, CityTool — all 50 states, 7 cities modeled
+- Software + AI: MeshMobility, Noelle, Personalize Transit — all 50 states, 7 cities modeled
 - Brand: 549 domains, 28-year track record, inventor provenance
 - Market comp: Glydways already established that podcar companies are worth $500M+ — and they have weaker IP, no solar, no private-funding model, no legislative wins. JPods at $220M is a discount to the proven market comp
 - Revenue pathway: $2.01/passenger-mile, MOA fare revenue, kit sales, franchise royalties
@@ -157,11 +157,11 @@ The F&F round isn't speculative. It's the final gap between 28 years of proof an
 
 | Tool | What it does | Link |
 |------|-------------|------|
-| **CityTool** | Type any US city → population, households, road miles, build cost, savings, payback | [meshmobility.com/citytool](https://meshmobility.com/citytool) |
+| **Personalize Transit** | Type any US city → population, households, road miles, build cost, savings, payback | [personalizetransit.com](https://personalizetransit.com) |
 | **MeshMobility** | Design a JPods network yourself — crash data, traffic, census overlays for all 50 states | [meshmobility.com](https://meshmobility.com) |
-| **Training Videos** | 60-second CityTool hook · 5-minute first network · Noelle design workflow · simulation · capital report | Available at meshmobility.com |
+| **Training Videos** | 60-second Personalize Transit hook · 5-minute first network · Noelle design workflow · simulation · capital report | Available at meshmobility.com |
 
-A capital source can type "Austin, TX" into CityTool and see the build cost, annual savings, and payback in 10 seconds. Then open MeshMobility, click Custom Mesh, set 25° for Austin's street grid, and generate a scored network in under a minute. The tools are radically simple. The ROI is radical.
+A capital source can type "Austin, TX" into Personalize Transit and see the build cost, annual savings, and payback in 10 seconds. Then open MeshMobility, click Custom Mesh, set 25° for Austin's street grid, and generate a scored network in under a minute. The tools are radically simple. The ROI is radical.
 
 ---
 
@@ -181,4 +181,4 @@ A capital source can type "Austin, TX" into CityTool and see the build cost, ann
 | MeshMobility software | 7 cities modeled, all 50 states crash data |
 | DOE LPO discussions | $600M pathway at TRL 7 |
 | Glydways $170M+ (2026) | Market validation — pod transit is investable |
-| CityTool analysis | Conservative 7-year payback, $2.01/passenger-mile |
+| Personalize Transit analysis | Conservative 7-year payback, $2.01/passenger-mile |

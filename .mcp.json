@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "leftshoe": {
+      "command": "python3",
+      "args": ["/Users/williamjames/Allie/scripts/leftshoe-mcp.py"]
+    }
+  }
+}

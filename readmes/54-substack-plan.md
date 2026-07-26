@@ -15,7 +15,7 @@ Email list is the asset. Social media rents attention. Substack owns it. Every s
 
 | Tier | Price | What they get |
 |------|-------|--------------|
-| **Free** | $0 | Weekly posts, CityTool/MeshMobility links, training videos |
+| **Free** | $0 | Weekly posts, Personalize Transit/MeshMobility links, training videos |
 | **Builder** | $7/mo | Early access to new city networks, library priority, monthly Q&A with Bill |
 | **10xMaker** | $20/mo | Kit discounts, direct support line, network design review, name on leaderboard |
 
@@ -24,8 +24,8 @@ Email list is the asset. Social media rents attention. Substack owns it. Every s
 ## Launch Sequence (first 10 posts)
 
 ### Post 1: "Luck Is When Preparation Meets Opportunity"
-The elevator pitch. Three forces converging. 28 years of preparation. Horizontal Elevators. Links to CityTool and MeshMobility.
-*End with: Type your city into CityTool. See what happens.*
+The elevator pitch. Three forces converging. 28 years of preparation. Horizontal Elevators. Links to Personalize Transit and MeshMobility.
+*End with: Type your city into Personalize Transit. See what happens.*
 
 ### Post 2: "The Prime Law of Networks"
 V = n²/p. Why packet size determines network value. Why JPods is packet-switching for physical movement. The Internet analogy — precise, not metaphorical.
@@ -53,7 +53,7 @@ The safety argument. ASTM F24 — 3,000x safer. Mike Teske — 110 Disney/Univer
 
 ### Post 8: "1.2% of Land Produces 20% of GDP"
 The walkability/prosperity argument. Shoup, Jane Jacobs, StrongTowns, Urban3. Arlington VA: 10% walkable = 50% GDP. Car infrastructure destroys the tax base it depends on. JPods converts parking lots to productive land.
-*End with: Run CityTool for your city. See the fiscal impact.*
+*End with: Run Personalize Transit for your city. See the fiscal impact.*
 
 ### Post 9: "Want a Sustainable Future? Create It"
 The student kit program. 10xMakers. Design → Survey → Build → Ride. $50 cargo robot. $300 rideable vehicle. Every kit is a sensor. Every student is a surveyor. Pirates and Patriots.
@@ -84,7 +84,7 @@ Every post ends with:
 ```
 ---
 Try it:
-- CityTool: meshmobility.com/citytool
+- Personalize Transit: personalizetransit.com
 - Design a network: meshmobility.com/app
 - Browse the library: meshmobility.com/library
 - Training videos: meshmobility.com/videos

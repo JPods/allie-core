@@ -356,7 +356,7 @@ Alice already has the infrastructure for this:
 The Mall of America demo is the **perfect venue** for the student kit program:
 - Students who designed networks in MeshMobility see real hardware
 - Kit sales at the demo booth (Alice handles commerce)
-- "Design a JPods network for YOUR city" interactive station with MeshMobility + CityTool
+- "Design a JPods network for YOUR city" interactive station with MeshMobility + Personalize Transit
 - Leaderboard display showing student network scores
 - Direct connection: classroom → design tool → real system
 - 10xMakers.com landing page ready (`readmes/capital-pages/10xmakers-landing.html`)

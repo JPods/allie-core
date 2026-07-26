@@ -17,7 +17,7 @@ tool instead.
 | Source (From) | Destination (To) |
 |---|---|
 | `https://library.jpods.com/70.html` | `https://jpods.com/70.html` |
-| `https://library.jpods.com/citytool.html` | `https://jpods.com/citytool.html` |
+| `https://library.jpods.com/personalizetransit.html` | `https://jpods.com/personalizetransit.html` |
 
 5. Use **302 (temporary)** while testing
 6. Switch to **301 (permanent)** once confirmed working
@@ -26,7 +26,7 @@ tool instead.
 
 Any new file served from the root `jpods.com` that was previously routed
 through `library.jpods.com` will need a redirect entry here. This includes:
-- New standalone HTML pages (e.g. `70.html`, `citytool.html`)
+- New standalone HTML pages (e.g. `70.html`, `personalizetransit.html`)
 - Any path that existed on the old WordPress library site
 
 ---
@@ -41,7 +41,7 @@ RewriteEngine On
 # Allow direct access to landing page assets
 RewriteRule ^index\.html$    - [L]
 RewriteRule ^70\.html$       - [L]
-RewriteRule ^citytool\.html$ - [L]
+RewriteRule ^personalizetransit\.html$ - [L]
 RewriteRule ^images/         - [L]
 RewriteRule ^networks/       - [L]
 RewriteRule ^favicon         - [L]

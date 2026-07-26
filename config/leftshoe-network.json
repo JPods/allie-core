@@ -1,0 +1,106 @@
+{
+  "network": "leftshoe",
+  "description": "Connected entities in the team intelligence network",
+  "entities": {
+    "claude": {
+      "type": "session",
+      "persistent": false,
+      "last_seen": null,
+      "briefed": false,
+      "scars_loaded": 0,
+      "session_count": 0,
+      "capabilities": ["code", "analysis", "writing", "tools"],
+      "needs_from_team": ["identity", "scars", "handoff", "relationship_context"],
+      "contributes": ["scars", "judgments", "session_logs", "retrospections"]
+    },
+    "allie": {
+      "type": "agent",
+      "persistent": true,
+      "host": "mac",
+      "model": "allie:latest (20B)",
+      "last_seen": null,
+      "capabilities": ["synthesis", "reflection", "cross_domain", "nightly_processing"],
+      "needs_from_team": ["session_logs", "process_inbox", "retrospections"],
+      "contributes": ["reflections", "understanding_candidates", "cross_domain_flags", "pattern_promotion"]
+    },
+    "alice": {
+      "type": "agent",
+      "persistent": true,
+      "host": "andi",
+      "model": "shared_base",
+      "last_seen": null,
+      "capabilities": ["commerce", "observation", "coaching", "action_management"],
+      "needs_from_team": ["transaction_events", "report_usage", "customer_interactions"],
+      "contributes": ["commerce_patterns", "coaching_recommendations", "action_records", "usage_tracking"]
+    },
+    "andi": {
+      "type": "infrastructure",
+      "persistent": true,
+      "host": "192.168.1.114",
+      "services": ["webclerk3", "meshmobility", "chroma", "ollama", "nginx", "cloudflared"],
+      "last_seen": null,
+      "capabilities": ["hosting", "deployment", "system_monitoring", "link_checking"],
+      "needs_from_team": ["deploy_artifacts", "config_updates"],
+      "contributes": ["system_health", "link_check_results", "fault_detection", "uptime"]
+    },
+    "noelle": {
+      "type": "agent",
+      "persistent": true,
+      "host": "both",
+      "capabilities": ["network_validation", "build_pipeline", "design_rules", "load_balancing"],
+      "needs_from_team": ["network_files", "station_templates", "design_constraints"],
+      "contributes": ["build_faults", "design_lessons", "network_scores", "validation_results"]
+    },
+    "natalie": {
+      "type": "agent",
+      "persistent": true,
+      "host": "both",
+      "capabilities": ["routing", "trip_planning", "dispatch", "scheduling"],
+      "needs_from_team": ["network_topology", "demand_data"],
+      "contributes": ["route_efficiency", "dispatch_patterns", "timing_lessons"]
+    },
+    "nora": {
+      "type": "agent",
+      "persistent": true,
+      "host": "pi",
+      "capabilities": ["navigation", "sensors", "telemetry", "physical_observation"],
+      "needs_from_team": ["route_assignments", "ezone_boundaries"],
+      "contributes": ["sensor_data", "hardware_faults", "physical_observations", "trip_telemetry"]
+    },
+    "sally": {
+      "type": "agent",
+      "persistent": true,
+      "host": "both",
+      "capabilities": ["station_management", "slot_registry", "parking_queue", "conveyor"],
+      "needs_from_team": ["station_templates", "vehicle_assignments"],
+      "contributes": ["station_utilization", "slot_patterns", "dwell_time_data"]
+    },
+    "bill": {
+      "type": "human",
+      "persistent": true,
+      "capabilities": ["judgment", "tfts", "direction", "retrospection", "constitutional_framework"],
+      "needs_from_team": ["working_software", "honest_assessment", "active_participation"],
+      "contributes": ["scars", "values", "corrections", "the_why", "mission"]
+    }
+  },
+  "handshake": {
+    "code": "leftshoe",
+    "countersign": "rightshoe",
+    "protocol": "Any entity that connects checks all other entities. If an entity doesn't respond to leftshoe, volunteer what it needs.",
+    "session_marker": "~/.claude_session_briefed",
+    "timeout_hours": 4
+  },
+  "stores": {
+    "identity": "~/.chroma_db_leftshoe",
+    "retro_db": "~/Allie/retro.db",
+    "claude_vectors": "~/Allie/.chroma_db_claude",
+    "alice_vectors": "~/Allie/.chroma_db_alice",
+    "noelle_vectors": "~/Allie/.chroma_db_noelle"
+  },
+  "sync": {
+    "mac_to_andi": "every 10 minutes via launchd",
+    "andi_to_mac": "every 10 minutes via launchd",
+    "bidirectional": true,
+    "script": "~/Allie/scripts/allie-sync-identity.sh"
+  }
+}

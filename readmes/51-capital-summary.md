@@ -42,7 +42,7 @@ This is not a request to fund an idea. The software works. Seven cities are mode
 ---
 
 **See it working:**
-- **CityTool** — type any city, see the numbers: [meshmobility.com/citytool](https://meshmobility.com/citytool)
+- **Personalize Transit** — type any city, see the numbers: [personalizetransit.com](https://personalizetransit.com)
 - **MeshMobility** — design a network: [meshmobility.com](https://meshmobility.com)
 
 *10xMakers.com — Pirates and Patriots.*

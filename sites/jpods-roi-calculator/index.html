@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods ROI Calculator</title>
+<style>
+  :root { --navy: #0b3954; --gold: #c5a55a; --green: #2d5016; --red: #8b2500; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f4f4f4; color: #1a1a1a; }
+  .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+  header { background: var(--navy); color: #fff; padding: 30px 24px; text-align: center; }
+  header h1 { font-size: 1.8rem; margin-bottom: 6px; }
+  header p { color: #b0c4d8; font-size: 0.95rem; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+  .card h2 { font-size: 1rem; color: var(--navy); margin-bottom: 12px; border-bottom: 2px solid var(--gold); padding-bottom: 6px; }
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 2px; }
+  .field input, .field select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+  .field input:focus { border-color: var(--navy); outline: none; }
+  .field .hint { font-size: 0.7rem; color: #999; margin-top: 2px; }
+  .result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .label { color: #666; }
+  .result-row .value { font-weight: 700; }
+  .result-row .value.positive { color: var(--green); }
+  .result-row .value.negative { color: var(--red); }
+  .big-number { text-align: center; padding: 16px; }
+  .big-number .num { font-size: 2.2rem; font-weight: 800; }
+  .big-number .sub { font-size: 0.85rem; color: #666; }
+  .section-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin: 24px 0 8px; }
+  .bom-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .bom-table th { text-align: left; padding: 4px 8px; background: #f0f0f0; border-bottom: 1px solid #ccc; }
+  .bom-table td { padding: 4px 8px; border-bottom: 1px solid #eee; }
+  .bom-table td:last-child, .bom-table th:last-child { text-align: right; }
+  .note { font-size: 0.75rem; color: #888; margin-top: 16px; line-height: 1.5; }
+  button.print { background: var(--navy); color: #fff; border: none; padding: 10px 24px; border-radius: 4px; font-size: 1rem; cursor: pointer; margin: 16px auto; display: block; }
+  @media print { .no-print { display: none !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JPods ROI Calculator</h1>
+  <p>Solar-powered mobility network — 5-year financial projection</p>
+</header>
+
+<div class="container">
+
+  <!-- INPUTS -->
+  <div class="grid no-print">
+    <div class="card">
+      <h2>Network Parameters</h2>
+      <div class="field" style="margin-bottom:4px">
+        <label style="display:flex;align-items:center;gap:8px">
+          <span>Units:</span>
+          <label style="font-size:0.9rem;cursor:pointer"><input type="radio" name="units" value="miles" checked onchange="toggleUnits()"> Miles</label>
+          <label style="font-size:0.9rem;cursor:pointer"><input type="radio" name="units" value="km" onchange="toggleUnits()"> Km</label>
+        </label>
+      </div>
+      <div class="field">
+        <label id="length-label">Network Length (miles)</label>
+        <input type="number" id="length_input" value="0.6" min="0.1" step="0.1" oninput="calc()">
+      </div>
+      <div class="field">
+        <label id="span-label">Span Length (yards)</label>
+        <input type="number" id="span_input" value="27" min="10" step="1" oninput="calc()">
+        <div class="hint" id="span-hint">~81 feet per span (25m truss)</div>
+      </div>
+      <div class="field">
+        <label id="stations-label">Stations per mile</label>
+        <input type="number" id="stations_input" value="2" min="1" step="1" oninput="calc()">
+      </div>
+      <div class="field">
+        <label id="vehicles-label">Vehicles per mile</label>
+        <input type="number" id="vehicles_input" value="80" min="10" step="5" oninput="calc()">
+      </div>
+      <div class="field">
+        <label>NCC → LMC Markup</label>
+        <input type="number" id="markup" value="1.5" min="1.0" max="3.0" step="0.1" oninput="calc()">
+        <div class="hint">1.5 = LMC pays 50% over NCC cost</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Revenue Assumptions</h2>
+      <div class="field">
+        <label id="tickets-label">Tickets per day per mile</label>
+        <input type="number" id="tickets_day_unit" value="10000" min="100" step="100" oninput="calc()">
+        <div class="hint">Scales with network length</div>
+      </div>
+      <div class="field">
+        <label id="price-label">Average ticket price per mile ($)</label>
+        <input type="number" id="ticket_price_unit" value="2.01" min="0.25" step="0.01" oninput="calc()">
+        <div class="hint">Uber charges ~$2.11/mile for comparison</div>
+      </div>
+      <div class="field">
+        <label id="trip-label">Average trip length (miles)</label>
+        <input type="number" id="avg_trip_unit" value="1.0" min="0.5" step="0.5" oninput="calc()">
+        <div class="hint">Average distance per rider</div>
+      </div>
+      <div class="field">
+        <label>Months to full capacity</label>
+        <input type="number" id="ramp_months" value="9" min="3" max="24" step="1" oninput="calc()">
+      </div>
+      <div class="field">
+        <label>Operating days per month</label>
+        <input type="number" id="days_month" value="30" min="20" max="31" step="1" oninput="calc()">
+      </div>
+      <div class="field">
+        <label>Cars/day on corridor (AADT)</label>
+        <input type="number" id="aadt" value="40000" min="0" step="1000" oninput="calc()">
+        <div class="hint" id="aadt-hint" style="color:#2d5016">✓ Above 10,000 threshold — viable corridor</div>
+      </div>
+      <div class="field">
+        <label>People per km (staff)</label>
+        <input type="number" id="people_per_km" value="6" min="2" step="1" oninput="calc()">
+        <div class="hint">Monthly cost per person: $10,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="grid">
+    <div class="card">
+      <h2>Capital Required</h2>
+      <div id="bom-summary"></div>
+      <div class="big-number">
+        <div class="num" id="ncc-total">—</div>
+        <div class="sub">NCC Build Cost</div>
+      </div>
+      <div class="big-number">
+        <div class="num" id="lmc-total">—</div>
+        <div class="sub">LMC Purchase Price</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>LMC Operating Projection</h2>
+      <div id="operating-summary"></div>
+      <div class="big-number">
+        <div class="num" id="payback">—</div>
+        <div class="sub">Months to Breakeven</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Bill of Materials — NCC Cost per km</h2>
+    <table class="bom-table" id="bom-table">
+      <thead><tr><th>Category</th><th>Item</th><th>Unit Cost</th><th>Qty</th><th>Total</th></tr></thead>
+      <tbody id="bom-body"></tbody>
+      <tfoot><tr><th colspan="4">Total per km</th><th id="bom-per-km">—</th></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>5-Year P&L Summary (LMC)</h2>
+    <table class="bom-table">
+      <thead><tr><th></th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th></tr></thead>
+      <tbody id="pl-body"></tbody>
+    </table>
+  </div>
+
+  <button class="print no-print" onclick="window.print()">Print / Save PDF</button>
+
+  <div class="card">
+    <h2>The Market — Profit by Converting Middle Mile from Cars to JPods</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;align-items:center;margin-bottom:12px">
+      <img src="/static/pbc/ShareOf_Change_TripsByMile_cost_snelling.png"
+           alt="Profit by cutting costs per passenger-mile by 10X — trip distance, cost comparison, car dependency, JPods rendering"
+           style="max-width:100%;border-radius:4px;border:1px solid #ddd"
+           onerror="this.src='ShareOf_Change_TripsByMile_cost_snelling.png'">
+    </div>
+    <p style="font-size:0.9rem;line-height:1.6;text-align:center">
+      <strong>JPods cost per passenger-mile: $0.03</strong> — 50× less than buses ($1.45), 25× less than trains, 10× less than cars ($0.38).<br>
+      51% of trips are 1-10 miles. North America forces 92% into cars. <strong>80% of trips can shift.</strong>
+    </p>
+    <p style="font-size:0.9rem;font-weight:700;text-align:center;color:#8b2500;margin-top:8px">
+      If we cannot remove 10,000 cars a day from a road network, we do not build.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Find Your Corridor — State Traffic Maps (AADT)</h2>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:10px">
+      Look for corridors with 30,000+ vehicles/day. These are target routes where JPods can remove 10,000+ cars.
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;font-size:0.85rem">
+      <a href="https://scdottrafficdata.drakewell.com/publicmultinodemap.asp" target="_blank" style="color:#2563eb">SC Traffic Map</a>
+      <a href="https://txdot.maps.arcgis.com/apps/webappviewer/index.html?id=9d1099e114b64fabb831e1e185e2e51e" target="_blank" style="color:#2563eb">TX Traffic Map</a>
+      <a href="https://gis.dot.state.oh.us/tims/Data/Traffic" target="_blank" style="color:#2563eb">OH Traffic Map</a>
+      <a href="https://tdot.maps.arcgis.com/apps/webappviewer/index.html?id=a15a798e98d3412eabe3654920f3c8b6" target="_blank" style="color:#2563eb">TN Traffic Map</a>
+      <a href="https://mndot.maps.arcgis.com/apps/webappviewer/index.html?id=7b3be07daed84e7fa170a91f5c576c89" target="_blank" style="color:#2563eb">MN Traffic Map</a>
+      <a href="https://www.dot.ga.gov/GDOT/Pages/AADT.aspx" target="_blank" style="color:#2563eb">GA Traffic Map</a>
+      <a href="https://gis.penndot.pa.gov/paprojects/RTMS" target="_blank" style="color:#2563eb">PA Traffic Map</a>
+      <a href="https://www.dot.state.fl.us/planning/statistics/trafficdata/" target="_blank" style="color:#2563eb">FL Traffic Data</a>
+      <a href="https://www.dot.state.mn.us/traffic/data/" target="_blank" style="color:#2563eb">MN Traffic Data</a>
+      <a href="https://meshmobility.com" target="_blank" style="color:#2563eb;font-weight:700">★ MeshMobility — Launch Tool, click Overlays → Traffic</a>
+    </div>
+    <p style="font-size:0.75rem;color:#999;margin-top:8px">
+      Search "[your state] DOT traffic count map" for your state's AADT data. Or use MeshMobility's built-in AADT overlay.
+    </p>
+  </div>
+
+  <div class="card" style="background:#f0f8f0;border-left:4px solid #2d5016">
+    <h2 style="color:#2d5016;border-bottom-color:#2d5016">JPods is the Middle Mile — Making Streets Safe</h2>
+    <p style="font-size:0.9rem;line-height:1.6;margin-bottom:8px">
+      <strong>~1 mile of JPods guideways per 14 miles of roads.</strong>
+      JPods handles station-to-station (Middle Mile). Walking, bikes, scooters, Uber, and local-use vehicles
+      handle door-to-station (Last Mile). JPods is the WiFi of the Physical Internet — Last Mile modes are Bluetooth.
+    </p>
+    <p style="font-size:0.9rem;line-height:1.6;margin-bottom:8px">
+      By removing 10,000+ cars from roads, JPods makes streets safe to walk and bike.
+      If JPods rates are too high, people use the safe streets JPods created — the network self-regulates through market discipline.
+    </p>
+    <p style="font-size:0.85rem;color:#555;line-height:1.5">
+      <strong>City ROI beyond farebox:</strong> Reduced road maintenance (fewer heavy vehicles),
+      increased property tax from walkable streets (20× tax revenue per acre vs parking),
+      reduced crash costs, reduced emergency response, healthier residents.
+      None of these are counted in the projections above.
+    </p>
+  </div>
+
+  <div class="note">
+    <strong>Conservative assumptions:</strong> No electrical generation revenue. No cargo revenue. No advertising revenue.
+    No city fiscal benefits (reduced road costs, increased property tax). All are upside not included.<br>
+    Based on JPods 5YearPLBS model. Morgantown PRT: 54 years, zero deaths, 100M+ passenger-miles.<br>
+    <strong>Contact:</strong> Bill James, 612.414.4211, bill.james@JPods.com
+  </div>
+</div>
+
+<script>
+function isMetric() { return document.querySelector('input[name="units"]:checked')?.value === 'km'; }
+
+function toggleUnits() {
+  const metric = isMetric();
+  const u = metric ? 'km' : 'mile';
+  const U = metric ? 'km' : 'miles';
+  const spanU = metric ? 'meters' : 'yards';
+  document.getElementById('length-label').textContent = `Network Length (${U})`;
+  document.getElementById('span-label').textContent = `Span Length (${spanU})`;
+  document.getElementById('stations-label').textContent = `Stations per ${u}`;
+  document.getElementById('vehicles-label').textContent = `Vehicles per ${u}`;
+  document.getElementById('tickets-label').textContent = `Tickets per day per ${u} (at capacity)`;
+  document.getElementById('price-label').textContent = `Average ticket price per ${u} ($)`;
+  document.getElementById('trip-label').textContent = `Average trip length (${U})`;
+  // Convert values
+  const lengthInput = document.getElementById('length_input');
+  const spanInput = document.getElementById('span_input');
+  const stationsInput = document.getElementById('stations_input');
+  const vehiclesInput = document.getElementById('vehicles_input');
+  const spanHint = document.getElementById('span-hint');
+  if (metric) {
+    lengthInput.value = (+lengthInput.value * 1.6).toFixed(1);
+    spanInput.value = Math.round(+spanInput.value * 0.9144); // yards to meters
+    stationsInput.value = Math.round(+stationsInput.value * 1.6); // per mile to per km
+    vehiclesInput.value = Math.round(+vehiclesInput.value / 1.6); // per mile to per km
+    spanHint.textContent = `${spanInput.value}m per span`;
+  } else {
+    lengthInput.value = (+lengthInput.value / 1.6).toFixed(1);
+    spanInput.value = Math.round(+spanInput.value / 0.9144); // meters to yards
+    stationsInput.value = Math.round(+stationsInput.value / 1.6); // per km to per mile
+    vehiclesInput.value = Math.round(+vehiclesInput.value * 1.6); // per km to per mile
+    spanHint.textContent = `~${Math.round(+spanInput.value * 3)} feet per span`;
+  }
+  calc();
+}
+
+const fmt = n => {
+  if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+  if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + n.toFixed(0);
+};
+
+// BOM unit costs from System sheet (base currency, per item)
+const BOM = {
+  structures: [
+    { item: 'Spans (straight)', unit: 75000, qtyFn: (km, span) => Math.round(km * 1000 / span * 0.85) },
+    { item: 'Spans (curved, 15%)', unit: 95000, qtyFn: (km, span) => Math.round(km * 1000 / span * 0.15) },
+    { item: 'Piers', unit: 9990, qtyFn: (km, span) => Math.round(km * 1000 / span) },
+    { item: 'Footings', unit: 5472, qtyFn: (km, span) => Math.round(km * 1000 / span) },
+  ],
+  vehicles: [
+    { item: 'Chassis', unit: 12529, qtyFn: (km, span, st, veh) => veh * km },
+    { item: 'Bogies', unit: 1121, qtyFn: (km, span, st, veh) => veh * 2.5 * km },
+    { item: 'Cleaning system', unit: 50000, qtyFn: (km) => km },
+  ],
+  stations: [
+    { item: 'Platform', unit: 330000, qtyFn: (km, span, st) => st * km },
+    { item: 'Stairs', unit: 15000, qtyFn: (km, span, st) => st * km },
+    { item: 'Barriers', unit: 2000, qtyFn: (km, span, st) => 5 * st * km },
+    { item: 'Switches', unit: 3000, qtyFn: (km, span, st) => 6 * st * km },
+    { item: 'Security', unit: 14000, qtyFn: (km, span, st) => 5 * st * km },
+    { item: 'Lift', unit: 60000, qtyFn: (km, span, st) => st * km },
+  ],
+  controls: [
+    { item: 'Computers', unit: 1000, qtyFn: (km, span, st, veh) => veh * 1.3 * km },
+    { item: 'Sensors', unit: 80, qtyFn: (km) => 50 * 80 * km },
+    { item: 'Communications', unit: 200000, qtyFn: (km) => km },
+  ],
+  power: [
+    { item: 'Solar collectors', unit: 2240000, qtyFn: (km) => km },
+    { item: 'Power rail', unit: 202661, qtyFn: (km) => km },
+  ],
+  engineering: [
+    { item: 'Software', unit: 2300000, qtyFn: () => 1 },
+    { item: 'Station eng.', unit: 400000, qtyFn: () => 1 },
+    { item: 'Truss eng.', unit: 400000, qtyFn: () => 1 },
+    { item: 'Bogie eng.', unit: 200000, qtyFn: () => 1 },
+    { item: 'Placement eng.', unit: 250000, qtyFn: () => 1 },
+  ],
+};
+
+function calc() {
+  const metric = isMetric();
+  const lengthInput = +document.getElementById('length_input').value || 1;
+  const km = metric ? lengthInput : lengthInput * 1.6; // always work in km internally
+  const spanInput = +document.getElementById('span_input').value || 27;
+  const stationsInput = +document.getElementById('stations_input').value || 2;
+  const vehiclesInput = +document.getElementById('vehicles_input').value || 80;
+
+  // Convert to metric internally
+  const span = metric ? spanInput : spanInput * 0.9144; // yards to meters
+  const stPerKm = metric ? stationsInput : stationsInput / 1.6; // per mile to per km
+  const vehPerKm = metric ? vehiclesInput : vehiclesInput / 1.6; // per mile to per km
+
+  // Update span hint
+  const spanHint = document.getElementById('span-hint');
+  if (metric) { spanHint.textContent = `${Math.round(span)}m per span`; }
+  else { spanHint.textContent = `~${Math.round(spanInput * 3)} feet per span`; }
+  const markup = +document.getElementById('markup').value || 1.5;
+
+  const ticketsDayUnit = +document.getElementById('tickets_day_unit').value || 5000;
+  const ticketPriceUnit = +document.getElementById('ticket_price_unit').value || 2.01;
+  const avgTripUnit = +document.getElementById('avg_trip_unit').value || 1.0;
+
+  // Convert everything to per-km internally
+  const ticketsDayKm = metric ? ticketsDayUnit : ticketsDayUnit * 1.6; // per mile → per km
+  const ticketPriceKm = metric ? ticketPriceUnit : ticketPriceUnit / 1.6; // per mile → per km
+  const avgTripKm = metric ? avgTripUnit : avgTripUnit * 1.6; // miles → km
+
+  // Total daily: riders per km × network km; revenue per ride: price/km × avg trip km
+  const ticketsDay = ticketsDayKm * km;
+  const ticketPrice = ticketPriceKm * avgTripKm;
+
+  // AADT threshold check
+  const aadt = +document.getElementById('aadt').value || 0;
+  const hint = document.getElementById('aadt-hint');
+  const captureRate = 0.25;
+  const estimatedRiders = aadt * captureRate;
+  if (aadt < 10000) {
+    hint.style.color = '#8b2500';
+    hint.textContent = '⚠ Below 10,000 threshold — corridor may not be viable';
+  } else {
+    hint.style.color = '#2d5016';
+    hint.textContent = `✓ ${aadt.toLocaleString()} AADT × 25% capture = ${Math.round(estimatedRiders).toLocaleString()} potential riders/day`;
+  }
+  const rampMonths = +document.getElementById('ramp_months').value || 9;
+  const daysMonth = +document.getElementById('days_month').value || 25;
+  const peoplePerKm = +document.getElementById('people_per_km').value || 6;
+
+  // BOM calculation
+  let bomRows = [];
+  let totalNCC = 0;
+  for (const [cat, items] of Object.entries(BOM)) {
+    for (const item of items) {
+      const qty = item.qtyFn(km, span, stPerKm, vehPerKm);
+      const total = item.unit * qty;
+      bomRows.push({ cat, item: item.item, unit: item.unit, qty, total });
+      totalNCC += total;
+    }
+  }
+
+  // Construction cost (40% of components)
+  const constructionCost = totalNCC * 0.4;
+  totalNCC += constructionCost;
+  bomRows.push({ cat: 'construction', item: 'Construction (40%)', unit: constructionCost, qty: 1, total: constructionCost });
+
+  const totalLMC = totalNCC * markup;
+  const perKmNCC = totalNCC / km;
+
+  // Render BOM
+  const bomBody = document.getElementById('bom-body');
+  bomBody.innerHTML = bomRows.map(r =>
+    `<tr><td>${r.cat}</td><td>${r.item}</td><td>${fmt(r.unit)}</td><td>${r.qty}</td><td>${fmt(r.total)}</td></tr>`
+  ).join('');
+  document.getElementById('bom-per-km').textContent = fmt(perKmNCC);
+
+  // Capital summary
+  document.getElementById('ncc-total').textContent = fmt(totalNCC);
+  document.getElementById('lmc-total').textContent = fmt(totalLMC);
+
+  const uLabel = metric ? 'km' : 'mile';
+  const displayLen = metric ? km.toFixed(1) + ' km' : (km/1.6).toFixed(1) + ' miles';
+  const perUnit = metric ? perKmNCC : perKmNCC * 1.6;
+  document.getElementById('bom-summary').innerHTML = `
+    <div class="result-row"><span class="label">Network</span><span class="value">${displayLen}</span></div>
+    <div class="result-row"><span class="label">NCC cost/${uLabel}</span><span class="value">${fmt(perUnit)}</span></div>
+    <div class="result-row"><span class="label">LMC cost/${uLabel}</span><span class="value">${fmt(perUnit * markup)}</span></div>
+  `;
+
+  // Operating projection
+  const personCost = 10000; // monthly per person
+  const staff = Math.round(peoplePerKm * km);
+  const monthlyStaff = staff * personCost;
+  const monthlyInsurance = 50000 / 12 * km;
+  const monthlyMaint = totalNCC * 0.1 / 12;
+  const monthlyDebt = totalLMC * 0.06 / 12; // interest
+  const monthlyPrincipal = totalLMC / (18 * 12); // 18yr payoff
+  const monthlyFixed = monthlyStaff + monthlyInsurance + monthlyMaint + monthlyDebt + monthlyPrincipal;
+
+  const monthlyRevenueMax = ticketsDay * ticketPrice * daysMonth;
+
+  // 5-year P&L
+  const years = [];
+  let cumProfit = 0;
+  let breakeven = 0;
+  for (let yr = 1; yr <= 5; yr++) {
+    let revenue = 0;
+    let costs = 0;
+    for (let mo = 1; mo <= 12; mo++) {
+      const absMonth = (yr - 1) * 12 + mo;
+      const rampFactor = absMonth <= rampMonths ? absMonth / rampMonths : 1;
+      const moRevenue = monthlyRevenueMax * rampFactor;
+      const cogs = moRevenue * 0.3; // 30% COGS
+      const moTotal = moRevenue;
+      const moCost = monthlyFixed + cogs;
+      revenue += moRevenue;
+      costs += moCost;
+      cumProfit += (moRevenue - moCost);
+      if (breakeven === 0 && cumProfit > 0) breakeven = absMonth;
+    }
+    years.push({
+      revenue,
+      costs,
+      profit: revenue - costs,
+      margin: revenue > 0 ? ((revenue - costs) / revenue * 100).toFixed(0) : 0,
+    });
+  }
+
+  if (breakeven === 0) breakeven = '>60';
+
+  document.getElementById('operating-summary').innerHTML = `
+    <div class="result-row"><span class="label">Riders/day (total)</span><span class="value">${Math.round(ticketsDay).toLocaleString()} (${ticketsDayUnit.toLocaleString()}/${uLabel} × ${displayLen})</span></div>
+    <div class="result-row"><span class="label">Revenue/ride</span><span class="value">$${ticketPrice.toFixed(2)} ($${ticketPriceUnit.toFixed(2)}/${uLabel} × ${avgTripUnit} ${uLabel} avg)</span></div>
+    <div class="result-row"><span class="label">Monthly revenue (capacity)</span><span class="value">${fmt(monthlyRevenueMax)}</span></div>
+    <div class="result-row"><span class="label">Monthly operating cost</span><span class="value">${fmt(monthlyFixed)}</span></div>
+    <div class="result-row"><span class="label">Staff</span><span class="value">${staff} people</span></div>
+    <div class="result-row"><span class="label">Monthly debt service</span><span class="value">${fmt(monthlyDebt + monthlyPrincipal)}</span></div>
+    <div class="result-row"><span class="label">Year 5 annual profit</span><span class="value ${years[4].profit > 0 ? 'positive' : 'negative'}">${fmt(years[4].profit)}</span></div>
+  `;
+
+  document.getElementById('payback').textContent = breakeven + (typeof breakeven === 'number' ? ' months' : '');
+
+  // P&L table
+  document.getElementById('pl-body').innerHTML = `
+    <tr><td><strong>Revenue</strong></td>${years.map(y => `<td style="text-align:right">${fmt(y.revenue)}</td>`).join('')}</tr>
+    <tr><td><strong>Total Costs</strong></td>${years.map(y => `<td style="text-align:right">${fmt(y.costs)}</td>`).join('')}</tr>
+    <tr><td><strong>Profit</strong></td>${years.map(y => `<td style="text-align:right;color:${y.profit>0?'green':'red'}">${fmt(y.profit)}</td>`).join('')}</tr>
+    <tr><td><strong>Margin</strong></td>${years.map(y => `<td style="text-align:right">${y.margin}%</td>`).join('')}</tr>
+  `;
+}
+
+calc(); // initial calculation
+</script>
+
+</body>
+</html>

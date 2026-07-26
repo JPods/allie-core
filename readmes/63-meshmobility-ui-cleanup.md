@@ -4,7 +4,7 @@
 
 ### Left Panel (Palette) — Simplified
 
-**Before:** New, Open, Save, Refresh, Clipboard, Report, Guide, Examples, CityTool, Regulations, Root Cause, Run, Reload, Replay, Isochrone, Demand, Slots
+**Before:** New, Open, Save, Refresh, Clipboard, Report, Guide, Examples, Personalize Transit, Regulations, Root Cause, Run, Reload, Replay, Isochrone, Demand, Slots
 
 **After:**
 ```
@@ -18,7 +18,7 @@ Map:      [tile selector]
 
 ```
 Row 1: 🔍 Find City | ⚙ Tools | 🌐 Overlays | ⚙ Settings
-Row 2: 💰 CityTool | ⚖ Regulations | 🌱 Root Cause
+Row 2: 💰 Personalize Transit | ⚖ Regulations | 🌱 Root Cause
 ```
 
 All Row 2 buttons open `target="_blank"`.
@@ -29,7 +29,7 @@ Demand + Slots moved into Settings panel under "Passenger Demand" group.
 - **Refresh** — browser reload suffices
 - **Reload** — same as Refresh
 - **Clipboard** — replaced by Compete
-- **CityTool from left panel** — moved to right sidebar Row 2
+- **Personalize Transit from left panel** — moved to right sidebar Row 2
 
 ### Added
 - **🏆 Compete** — saves network + submits to Alice for evaluation (action record)

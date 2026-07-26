@@ -179,6 +179,149 @@ This is the sovereign integration model: the user controls what connects, what i
 
 ---
 
+## WC_HQ — Hub-to-Instance Sync for Many Andis
+
+When many Andi boxes are deployed — each running Alice + WC3 for a different business — WC_HQ is the hub that keeps them current. **WC_HQ is not a separate application.** It is a WC3 instance configured as a hub, using the same Connection/Bundle models to manage both commerce data and operational updates.
+
+### What Flows Through Connection/Bundle
+
+Everything. Commerce data AND operational updates use the same audit trail:
+
+| Purpose | Direction | What travels | What stays private |
+|---------|-----------|-------------|-------------------|
+| `ingest` | HQ → instance | Product catalogs, pricing templates, category data | Instance's margins, customer-specific pricing |
+| `deploy` | HQ → instance | Software updates (manifest + checksums, rsync does transfer) | Nothing — code is the same everywhere |
+| `training` | HQ → instance | Knowledge files, vector store content, Alice training, design rules | Instance's alice_log, local pattern learning |
+| `sync` | bidirectional | Theme library, layout templates, complication reports | Instance's customer contacts, transaction history |
+| `export` | instance → HQ | Complication flags, anonymized usage metrics | All PII, all transaction detail |
+| `monitor` | HQ ← instance | Service health, version numbers, store sizes | Business data |
+
+### The Three Data Types Applied
+
+From `data-library-ecosystem.md` — every piece of data on every Andi falls into one of three categories:
+
+| Type | Examples | Sync rule |
+|------|----------|-----------|
+| **Common** | Product catalog, pricing templates, software code, training content, design rules | Pushed from HQ to all instances. Published to compete. |
+| **Transactional** | Distribution agreements, per-instance pricing, complication reports | Shared only between HQ and the specific instance it concerns. |
+| **Proprietary** | Customer lists, transaction history, margins, alice_log, business intelligence | Never leaves the instance. Period. |
+
+### Connection Per Instance
+
+Each Andi gets one Connection record on WC_HQ:
+
+```json
+{
+  "name": "andi-greenville-hardware-001",
+  "type": "api",
+  "purpose": "sync",
+  "status": "active",
+  "config": {
+    "endpoint": "https://greenville-hardware.webclerk.com/wcapi/",
+    "instance_id": "andi-001",
+    "hardware": "GEEKOM IT15",
+    "deploy_via": "rsync",
+    "deploy_host": "andi-001.local"
+  },
+  "rules": {
+    "push_models": ["item", "item_variant", "category", "setting"],
+    "never_read": ["contact", "invoice", "order", "payment", "gl_journal"],
+    "deploy_apps": ["webclerk3", "mesh_mobility", "crash_harvester"],
+    "knowledge_dirs": ["readmes", "wisdom", "agents", "specs"]
+  },
+  "encryption": {
+    "transport": "https_only",
+    "token_scope": "catalog_and_deploy_only"
+  }
+}
+```
+
+### Bundle Examples
+
+**Software deploy:**
+```json
+{
+  "connection": "andi-greenville-hardware-001",
+  "direction": "push",
+  "payload": {
+    "type": "deploy",
+    "app": "mesh_mobility",
+    "version": "2026-07-22",
+    "files_changed": 14,
+    "checksums": { "gui/overlays.py": "a8f3...", "gui/static/index.html": "b2c1..." }
+  },
+  "response": {
+    "deploy_exit": 0,
+    "services_restarted": ["meshmobility"],
+    "duration_ms": 4200
+  },
+  "status": "success"
+}
+```
+
+**Knowledge sync:**
+```json
+{
+  "connection": "andi-greenville-hardware-001",
+  "direction": "push",
+  "payload": {
+    "type": "knowledge",
+    "dirs": ["readmes", "wisdom", "agents", "facets"],
+    "files": 624,
+    "checksum": "a8f3..."
+  },
+  "response": {
+    "vectors_rebuilt": { "allie": 3295, "claude": 1299, "noelle": 49670 }
+  },
+  "status": "success"
+}
+```
+
+**Complication report (instance → HQ):**
+```json
+{
+  "connection": "andi-greenville-hardware-001",
+  "direction": "pull",
+  "payload": {
+    "type": "complication",
+    "model": "item_variant",
+    "variant_ida": "SKU-12345",
+    "issue": "price_mismatch",
+    "expected": 24.99,
+    "actual_invoice": 27.50,
+    "distributor": "ACE Hardware"
+  },
+  "status": "success"
+}
+```
+
+### DataBrowser as the Interface
+
+Users manage Connections and Bundles through DataBrowser at `/db/connection` and `/db/bundle`. No custom admin pages. DataBrowser shows:
+
+- **Connection list:** all Andi instances, their status, last bundle timestamp
+- **Connection detail:** config, rules, maps, encryption — all editable JSON fields
+- **Bundle list:** filtered by connection, status, purpose — the audit trail
+- **Bundle detail:** full payload and response for any exchange
+
+HQ operators see all connections. Instance operators see only their own.
+
+### Multi-Instance Operations
+
+HQ needs to push to many instances at once. The pattern:
+
+1. HQ creates a Bundle record for each target Connection (status: `queued`)
+2. A deploy script reads queued Bundles, executes rsync for each, updates status
+3. Alice on HQ monitors for failed Bundles and flags them
+
+This is not a custom orchestration system. It is Bundles + a script that processes them. The script is simple because the data model already handles identity (Connection), intent (payload), result (response), and status.
+
+### What This Replaces
+
+No Ansible. No Puppet. No Kubernetes. No custom deployment platform. The same two models — Connection and Bundle — that handle commerce data also handle operational updates. One system to learn, one audit trail to query, one DataBrowser interface to manage.
+
+---
+
 ## Key Files (wc3)
 
 - `apps/sync/models/connection.py` — Connection model
