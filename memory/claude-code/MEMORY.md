@@ -6,6 +6,9 @@
 - [Alice's MeshMobility role](project_mm_alice_role.md) — Front-line for MM: intercept faults, track submissions, data gaps, library curation
 - [JPods3D.com site](project_jpods3d_site.md) — SketchUp plugin landing page; video lightbox; Hostinger
 - [Personalize Transit](project_personalize_transit.md) — personalizetransit.com; 5-tab AI tool; renamed from CityTool; 58 cities
+- [PrimeLawOfNetworks.com](project_prime_law_site.md) — V ∝ n²/p; DC Metro comparison; S-curves; regulatory century; mercantile blind spot
+- [Desktop Hosting site](project_desktop_hosting_site.md) — desktophosting.com pending; Bill's Wiley book; build next session
+- [Apple / Adrian Perica](project_apple_perica.md) — Email sent 2026-07-26; MOA MOU; Shenzhen cluster; WebClerk open source
 
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
