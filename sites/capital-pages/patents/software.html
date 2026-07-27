@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods® Software Portfolio</title>
+<style>
+  :root { --navy: #0b3954; --gold: #c5a55a; --green: #2d5016; --red: #8b2500; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f9f6ef; color: #1a1a1a; line-height: 1.6; }
+  .container { max-width: 860px; margin: 0 auto; padding: 20px; }
+  header { background: var(--navy); color: #fff; padding: 30px 24px; text-align: center; }
+  header h1 { font-size: 1.8rem; margin-bottom: 4px; }
+  header p { color: #b0c4d8; font-size: 0.95rem; }
+  h2 { font-size: 1.2rem; color: var(--navy); margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--gold); }
+  .tool-card { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid var(--gold); display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; }
+  .tool-card.platform { border-left-color: var(--navy); }
+  .tool-card.data { border-left-color: var(--green); }
+  .tool-card .title { font-weight: 700; font-size: 1.05rem; color: var(--navy); }
+  .tool-card .title a { color: var(--navy); text-decoration: none; }
+  .tool-card .title a:hover { text-decoration: underline; }
+  .tool-card .desc { font-size: 0.9rem; color: #444; margin-top: 4px; }
+  .tool-card .value-tag { background: #f0ece0; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: var(--navy); white-space: nowrap; text-align: center; }
+  .tool-card .value-tag .label { font-size: 0.65rem; color: #888; display: block; }
+  .insight { background: #fff; padding: 14px 20px; border-left: 4px solid var(--green); margin: 16px 0; font-size: 0.9rem; color: #444; }
+  .insight strong { color: var(--navy); }
+  .val-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 12px 0; }
+  .val-table th { text-align: left; padding: 6px 10px; background: var(--navy); color: #fff; }
+  .val-table td { padding: 6px 10px; border-bottom: 1px solid #e8e4da; }
+  .val-table td:nth-child(2), .val-table td:nth-child(3), .val-table th:nth-child(2), .val-table th:nth-child(3) { text-align: right; }
+  .val-table tr:last-child td { font-weight: 700; border-top: 2px solid var(--navy); }
+  .moat-item { display: flex; gap: 10px; margin-bottom: 8px; font-size: 0.9rem; }
+  .moat-item .icon { font-size: 1.2rem; flex-shrink: 0; }
+  .prompt-box { background: #1a1a2e; color: #e0e0e0; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap; position: relative; margin: 16px 0; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--gold); color: #000; border: none; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: 600; }
+  .copy-btn:hover { background: #d4b46a; }
+  .note { font-size: 0.75rem; color: #888; margin-top: 20px; line-height: 1.5; }
+  footer { background: var(--navy); color: #b0c4d8; text-align: center; padding: 20px; font-size: 0.85rem; margin-top: 30px; }
+  footer a { color: var(--gold); }
+  @media print { .no-print { display: none !important; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JPods® Software Portfolio</h1>
+  <p>Integrated tools that create mobility network experts — free to use, impossible to replicate</p>
+</header>
+
+<div class="container">
+
+  <h2>The Principle</h2>
+
+  <div class="insight">
+    <strong>These tools are JPods' version of AOL's "You've got mail" disks.</strong> AOL didn't sell internet access — they distributed the on-ramp. JPods doesn't sell transit — we distribute the design tools. Every city that runs MeshMobility is a potential $3 million NCC/LMC license. The tools are free. The value is in what people build with them.
+  </div>
+
+  <h2>The Suite — 8 Integrated Tools</h2>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://meshmobility.com" target="_blank">MeshMobility.com</a></div>
+      <div class="desc">Design a JPods network for any city in 20 minutes. Draw corridors, auto-place stations, overlay crash data (46 states) and traffic counts (AADT). Run instant Dijkstra travel times. View isochrone coverage. Save, share, and iterate. The core tool — everything else feeds into or out of this.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$20-50M</div>
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://personalizetransit.com" target="_blank">PersonalizeTransit.com</a></div>
+      <div class="desc">AI-powered city assessment. 5 tabs: Your City (calculator), Real Estate (tax revenue impact), Energy & Carbon (live calculator), Cost Model (per-mile breakdown), Library (58 cities with full metrics). A consultant charges $5-50K for what this tool produces in minutes.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$5-15M</div>
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://meshmobility.com/pbc" target="_blank">Payback Calculator (PBC)</a></div>
+      <div class="desc">Interactive 5-year P&L from JPods' financial model. Miles/km toggle. BOM with unit costs. AADT threshold validation (10,000 car rule). Monthly revenue and operating costs. Breakeven projection. The closer — converts curiosity into a financial decision.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$2-5M</div>
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://jpods3d.com" target="_blank">JPods3D.com</a></div>
+      <div class="desc">SketchUp plugin for 3D JPods network design. 8-step student workflow: geolocate → place stations → connect guideways → build → animate. Students and professionals see and ride their network in 3D. The visualization that converts interest into commitment.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$3-8M</div>
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://10xmakers.com" target="_blank">10xMakers.com</a></div>
+      <div class="desc">Student kit program. Design → Survey → Build → Ride loop. Kit tiers from $20 to $300. Scored across 4 platforms. GPS survey provides ground truth for Noelle's network design AI. Creates the workforce AND the demand simultaneously. The American Shenzhen seed.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$2-5M</div>
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title"><a href="https://webclerk.com" target="_blank">WebClerk.com</a></div>
+      <div class="desc">Open source enterprise commerce platform. Every NCC and LMC runs WebClerk. Alice AI bookkeeper manages inventory, orders, invoices, purchasing, payments, quality (Gordy's nuclear-grade ISO 9001). Desktop Hosting model — sovereign, local-first, owner-controlled. 36 million small businesses in America could use this on a Mac Mini with free Cloudflare.</div>
+    </div>
+    <div class="value-tag"><span class="label">Standalone</span>$10-30M</div>
+  </div>
+
+  <div class="tool-card data">
+    <div>
+      <div class="title">CrashHarvester — 46-State Crash Database</div>
+      <div class="desc">All-severity crash data harvested from state DOT ArcGIS endpoints, normalized to 200m grid cells. 46 states covered. Gridded with injury, fatal, pedestrian, bicycle counts. No one else has this assembled, normalized, and ready for overlay on network designs. This is the data that makes MeshMobility's crash corridors visible.</div>
+    </div>
+    <div class="value-tag"><span class="label">Data Asset</span>$3-10M</div>
+  </div>
+
+  <div class="tool-card data">
+    <div>
+      <div class="title">Noelle's Intelligence — 51,000+ Chunks</div>
+      <div class="desc">Vector store of network design intelligence built from every network designed, every city assessed, every build validated. Noelle reviews station placement, coverage, crash corridors, and design rules. Gets smarter with every user. A competitor starting today would have zero chunks and years of accumulation to match.</div>
+    </div>
+    <div class="value-tag"><span class="label">AI Asset</span>$5-15M</div>
+  </div>
+
+  <h2>The Consulting Business Model</h2>
+
+  <div class="insight">
+    A city planner, real estate developer, or transit consultant can use MeshMobility + PersonalizeTransit + the payback calculator to deliver a <strong>$50,000 consulting engagement in one week</strong>. The tools do the analysis. The consultant provides the judgment. Charge for the judgment — the tools are free.
+    <br><br>
+    <strong>1,000 consultants × $20,000/year license = $20M annual recurring revenue.</strong>
+    <br>
+    At a 10× SaaS multiple, that's a $200M business from consulting licenses alone.
+  </div>
+
+  <h2>Valuation Summary</h2>
+
+  <table class="val-table">
+    <thead>
+      <tr><th>Scenario</th><th>Value</th><th>Basis</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Fire sale (code + data + domains)</td><td>$5-10M</td><td>GitHub repos, databases, 7 domains, crash data</td></tr>
+      <tr><td>Consulting platform (license model)</td><td>$20-50M</td><td>1,000 consultants × $20K/yr = $20M ARR × 2.5×</td></tr>
+      <tr><td>SaaS for NCCs/LMCs</td><td>$50-100M</td><td>100 companies × $50K/yr = $5M ARR × 10-20× SaaS</td></tr>
+      <tr><td>Integrated ecosystem (standard for industry)</td><td>$100-200M</td><td>The suite IS the standard. No competitor has this stack.</td></tr>
+      <tr><td><strong>Mid-range assessment</strong></td><td><strong>$50-100M</strong></td><td><strong>Tools + data + AI + network effects</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Why It's Defensible — The Data Moat</h2>
+
+  <div class="moat-item"><span class="icon">🗺️</span><div><strong>46 states of crash data</strong> — harvested, normalized, gridded. Nobody else has assembled this. Each state we add widens the moat.</div></div>
+  <div class="moat-item"><span class="icon">🧠</span><div><strong>51,000+ chunks of network design intelligence</strong> — every network designed teaches Noelle. Every city assessed enriches PersonalizeTransit. A competitor starts at zero.</div></div>
+  <div class="moat-item"><span class="icon">📐</span><div><strong>Accumulated network designs</strong> — every user's work becomes training data. 58 cities pre-assessed. Hundreds of network designs saved. The more users, the smarter the AI.</div></div>
+  <div class="moat-item"><span class="icon">⚡</span><div><strong>Integrated stack</strong> — MeshMobility feeds PersonalizeTransit feeds the Payback Calculator feeds JPods3D. No single tool is the moat. The integration is. A competitor would have to build all 8.</div></div>
+  <div class="moat-item"><span class="icon">🔧</span><div><strong>WebClerk as operating system</strong> — every NCC and LMC that deploys runs WebClerk. Alice learns from every transaction. The commerce data feeds the network intelligence. Switching costs are real.</div></div>
+  <div class="moat-item"><span class="icon">🎓</span><div><strong>10xMakers pipeline</strong> — students learn on JPods tools, compete using JPods standards, graduate into the JPods ecosystem. The workforce IS the moat.</div></div>
+
+  <h2>Combined Portfolio Value</h2>
+
+  <table class="val-table">
+    <thead>
+      <tr><th>Asset Class</th><th>Conservative</th><th>Mid-Range</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Patent portfolio (9 families)</td><td>$91M</td><td>$281M</td></tr>
+      <tr><td>Software + data + AI</td><td>$50M</td><td>$100M</td></tr>
+      <tr><td>Physical Internet® trademark</td><td>$50M</td><td>$150M</td></tr>
+      <tr><td>Legislative approvals + contracts</td><td>$10M</td><td>$30M</td></tr>
+      <tr><td>54-year Morgantown operational data</td><td>$5M</td><td>$15M</td></tr>
+      <tr><td><strong>Total JPods LLC</strong></td><td><strong>$206M</strong></td><td><strong>$576M</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight">
+    The <strong>$220 million valuation</strong> for the upcoming raise is less than the conservative floor of the combined asset base. An investor at $220M is buying in below liquidation value — meaning even in the worst case, the assets cover the valuation.
+  </div>
+
+  <h2>Assess It Yourself</h2>
+
+  <h2>WebClerk as Desktop Hosting Platform — The Library Services Opportunity</h2>
+
+  <div class="insight">
+    <strong>Desktop Hosting is the modernization of Yellow Pages.</strong> Every small business needs to be found, display their products, take orders, and manage their operations. Yellow Pages charged for listings. Yelp charges for prominence. Both are top-down — the platform owns the customer relationship.
+    <br><br>
+    WebClerk inverts this. The business owns their store, their data, their customer relationships. WC_HQ (WebClerk Headquarters) provides <strong>library services</strong> — normalized product data, distribution agreements, landed costs — flowing downstream to every WebClerk installation. This is DynamicCatalogs: the data supply chain.
+    <br><br>
+    <strong>36 million small businesses in America.</strong> A florist in Providence, a bike shop in Tulsa, a fireplace installer in Minneapolis — each installs WebClerk on a Mac Mini, gets a free Cloudflare account, and has enterprise-grade commerce with Alice as their AI bookkeeper. The library service feeds them product data the way a library feeds readers books — curated, normalized, always current.
+    <br><br>
+    Revenue model: <strong>$29-99/month per business</strong> for library services (product data, supplier connections, distribution agreements). At 1% penetration of 36M businesses = 360,000 subscribers × $50/month = <strong>$216M annual recurring revenue</strong>. At a 10× SaaS multiple = <strong>$2.16 billion</strong>.
+    <br><br>
+    This is not fantasy — it's the model Bill James described in his <a href="https://library.jpods.com/desktop-hosting" target="_blank">Desktop Hosting</a> book (Wiley, 2002). Apple invited him on two national tours to present it. The technology has caught up to the vision. Cloudflare provides the edge. The Mac Mini provides the server. WebClerk provides the software. Alice provides the intelligence. The business owns everything.
+  </div>
+
+  <div class="tool-card platform">
+    <div>
+      <div class="title">Library Services Revenue Model</div>
+      <div class="desc">
+        <strong>Tier 1 — Free:</strong> WebClerk open source install, Alice basic, local-only<br>
+        <strong>Tier 2 — $29/mo:</strong> Library product data feed, basic supplier connections, cloud backup<br>
+        <strong>Tier 3 — $99/mo:</strong> Full DynamicCatalogs (distribution agreements, landed costs, cross-company sync), Alice advanced coaching, email validation, phone normalization<br>
+        <strong>Tier 4 — $299/mo:</strong> WC_HQ services (campaign ROI, manufacturer collaboration, multi-location sync)
+      </div>
+    </div>
+    <div class="value-tag"><span class="label">At 1% penetration</span>$2.16B</div>
+  </div>
+
+  <h2>Assess It Yourself</h2>
+
+  <p style="font-size:0.9rem;margin-bottom:12px">Two prompts — one for the software tools, one for the Desktop Hosting platform. Copy into any AI:</p>
+
+  <h3 style="font-size:0.95rem;color:var(--navy);margin:16px 0 8px">Prompt 1: Software Tools Portfolio</h3>
+  <p style="font-size:0.9rem;margin-bottom:12px">Copy this prompt into any AI for an independent assessment:</p>
+
+  <div class="prompt-box" id="prompt-text">
+    <button class="copy-btn no-print" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text').innerText.replace('Copy','').trim()); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+I am evaluating a software portfolio owned by JPods LLC. Please assess its value.
+
+The portfolio includes 8 integrated tools:
+
+1. MeshMobility.com — Network design tool. Users draw JPods corridors on any
+   city map, auto-place stations, overlay crash data (46 US states harvested),
+   AADT traffic counts, run travel time simulation, view isochrone coverage.
+   Used by city planners, developers, and consultants.
+
+2. PersonalizeTransit.com — AI city assessment. 5 tabs covering transportation,
+   real estate tax impact, energy/carbon, cost models. 58 US cities pre-loaded.
+   Produces consultant-grade analysis in minutes.
+
+3. Payback Calculator — Interactive 5-year P&L with BOM, miles/km toggle,
+   AADT threshold validation. Based on detailed financial model.
+
+4. JPods3D.com — SketchUp plugin for 3D network design. 8-step workflow.
+   Students and professionals visualize and ride their networks.
+
+5. 10xMakers.com — Student kit program with design competitions. Creates
+   workforce pipeline and demand simultaneously.
+
+6. WebClerk.com — Open source enterprise commerce platform with AI bookkeeper
+   (Alice). ISO 9001 quality system digitized. Every operating company uses it.
+
+7. CrashHarvester — 46-state crash database, all-severity, normalized to 200m
+   grid cells. No other assembled dataset like this exists publicly.
+
+8. Noelle AI — 51,000+ chunk vector store of network design intelligence.
+   Gets smarter with every network designed.
+
+Context:
+- Glydways (similar transit tech) raised $272M at $700M valuation with NO
+  comparable software tools
+- A consultant can deliver a $50K city assessment using these tools in one week
+- Every network designed feeds the AI training data (deepening moat)
+- WebClerk is the operating system for every JPods franchise (recurring revenue)
+- 36 million small businesses in America could use WebClerk independently
+
+Questions:
+1. What is this software portfolio worth as a standalone business?
+2. What is the value of the 46-state crash database as a data asset?
+3. How does the integrated nature of these tools create defensibility?
+4. What recurring revenue model is most appropriate?
+5. How does this compare to the software assets of companies valued at $500M+?
+  </div>
+
+  <h3 style="font-size:0.95rem;color:var(--navy);margin:24px 0 8px">Prompt 2: Desktop Hosting / Library Services Platform</h3>
+
+  <div class="prompt-box" id="prompt-text2">
+    <button class="copy-btn no-print" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text2').innerText.replace('Copy','').trim()); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+I am evaluating a commerce platform called WebClerk, created by Bill James
+(JPods LLC). The concept is called "Desktop Hosting" — described in a book
+published by Wiley in 2002, which led to two Apple national tour invitations.
+
+Please assess the value of this platform and business model.
+
+The Platform:
+- WebClerk is open source enterprise commerce software
+- Runs on a Mac Mini ($599) with free Cloudflare account (edge CDN + security)
+- Alice is an AI bookkeeper built into every installation
+- ISO 9001 quality system (nuclear industry standard) digitized into the platform
+- Handles: inventory, orders, invoices, purchasing, payments, contacts, actions
+- DataBrowser: universal record browser — any model, one interface
+- Dedup tools, phone/email normalization, data quality automation
+
+The Library Services Model (DynamicCatalogs):
+- WC_HQ (WebClerk Headquarters) provides normalized product data downstream
+  to every WebClerk installation — like a library feeds readers books
+- Distribution agreements, landed costs, supplier connections flow automatically
+- Each business owns their data, their store, their customer relationships
+- The platform is bottom-up (each store is sovereign) not top-down (platform
+  owns the relationship like Amazon, Shopify, or Yelp)
+- Revenue: $29-99/month per business for library services
+
+The Market:
+- 36 million small businesses in America
+- Yellow Pages generated $14B/year at peak (2007) for just listings
+- Yelp generates $1.3B/year for reviews and advertising
+- Shopify generates $7.1B/year but owns the merchant relationship (top-down)
+- WebClerk's model is sovereign/local-first — the merchant owns everything
+- Each WebClerk installation can connect to others via Connection/Bundle sync
+  (the same model used for manufacturer→distributor→retailer data supply chains)
+
+The AI Layer (Alice):
+- Every installation has Alice — AI bookkeeper that learns the business
+- Three-tier processing: algorithms → local LLM → general LLM
+- Distillation: knowledge flows down, cost goes to zero over time
+- Alice manages: data quality, email validation, dedup, archival, coaching
+- Alice tracks every request, times every response, follows up automatically
+
+Context:
+- Desktop Hosting book published by Wiley (2002) — the foundation
+- Apple invited the author on 2 national tours to present the concept
+- The internet is becoming the top-down nightmare of Apple's 1984 Super Bowl ad
+- WebClerk is the bottom-up alternative: Divided Sovereignty applied to commerce
+- JPods NCCs and LMCs all run WebClerk (built-in franchise operating system)
+
+Questions:
+1. What is this platform worth as a standalone SaaS/library-services business?
+2. How does the "library services" model compare to Yellow Pages, Yelp, and
+   Shopify in terms of revenue potential and defensibility?
+3. What is the value of sovereign/local-first commerce vs platform-dependent
+   commerce (Shopify, Amazon) as consumer privacy concerns grow?
+4. How does having an AI bookkeeper (Alice) in every installation create
+   network effects and switching costs?
+5. At 1% penetration of 36M US small businesses ($50/mo avg), what is the
+   implied valuation at standard SaaS multiples?
+6. How does this compare to Shopify's $7.1B revenue on a top-down model?
+  </div>
+
+  <p style="font-size:0.9rem;margin-top:16px;text-align:center">
+    <a href="/patents" style="font-weight:700">View Patent Portfolio →</a> &nbsp;|&nbsp;
+    <a href="/pbc" style="font-weight:700">Try the Payback Calculator →</a> &nbsp;|&nbsp;
+    <a href="https://meshmobility.com" style="font-weight:700">Launch MeshMobility →</a>
+  </p>
+
+</div>
+
+<footer>
+  <p><strong>JPods LLC</strong> — Inventor of solar-powered transport networks</p>
+  <p>US Patent 6,810,817 · Physical Internet® · Est. 1998</p>
+  <p style="margin-top:10px">
+    <a href="https://jpods.com">JPods.com</a> ·
+    <a href="https://meshmobility.com">MeshMobility.com</a> ·
+    <a href="https://meshmobility.com/pbc">Payback Calculator</a> ·
+    <a href="https://10xmakers.com">10xMakers.com</a> ·
+    <a href="https://webclerk.com">WebClerk.com</a>
+  </p>
+  <p style="margin-top:10px;font-size:0.75rem;color:#7a99b0">
+    Contact: Bill James | 612.414.4211 | bill.james@JPods.com | West Point 1972
+  </p>
+</footer>
+
+</body>
+</html>

@@ -117,3 +117,4 @@
 {"event": "allie-reflect-error", "model": "allie:latest", "fallback": "deepseek-r1:8b", "error": "<urlopen error [Errno 61] Connection refused>", "ts": "2026-07-24T22:00:07"}
 {"event": "allie-reflect-error", "model": "allie:latest", "fallback": "deepseek-r1:8b", "error": "<urlopen error [Errno 61] Connection refused>", "ts": "2026-07-25T22:00:04"}
 {"event": "allie-ask-claude", "mode": "api", "model": "claude-sonnet-4-6", "domain": "universal", "prompt": "Weekly PRT Intelligence Digest \u2014 week of 2026-07-26\n\n## News (12 articles)\n- [West Virginia University - Encyclopedia Britannica](https://news.google.com/rss/articles/CBMiaEFVX3lxTE5UVXAwTHJhN1ZJMFZOd", "elapsed_s": 25.7, "chars": 3997, "error": null, "ts": "2026-07-26T11:00:59"}
+{"event": "allie-reflect-error", "model": "allie:latest", "fallback": "deepseek-r1:8b", "error": "<urlopen error [Errno 61] Connection refused>", "ts": "2026-07-26T22:00:05"}

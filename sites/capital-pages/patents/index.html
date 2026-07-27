@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods® Patent Portfolio</title>
+<style>
+  :root { --navy: #0b3954; --gold: #c5a55a; --green: #2d5016; --red: #8b2500; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f9f6ef; color: #1a1a1a; line-height: 1.6; }
+  .container { max-width: 860px; margin: 0 auto; padding: 20px; }
+  header { background: var(--navy); color: #fff; padding: 30px 24px; text-align: center; }
+  header h1 { font-size: 1.8rem; margin-bottom: 4px; }
+  header p { color: #b0c4d8; font-size: 0.95rem; }
+  h2 { font-size: 1.2rem; color: var(--navy); margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 2px solid var(--gold); }
+  .patent-card { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid var(--gold); }
+  .patent-card.hot { border-left-color: #e05252; }
+  .patent-card .title { font-weight: 700; font-size: 1.05rem; color: var(--navy); }
+  .patent-card .nums { font-size: 0.85rem; color: #888; margin: 2px 0 6px; font-family: monospace; }
+  .patent-card .desc { font-size: 0.9rem; color: #444; }
+  .patent-card .market { font-size: 0.8rem; color: var(--green); font-weight: 600; margin-top: 6px; }
+  .patent-card .hot-label { display: inline-block; background: #e05252; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 1px 8px; border-radius: 10px; margin-left: 8px; }
+  .core-quote { background: #fff; padding: 16px 20px; border-left: 4px solid var(--navy); margin: 16px 0; font-style: italic; font-size: 0.9rem; color: #444; }
+  .core-quote .source { font-style: normal; font-weight: 600; color: var(--navy); font-size: 0.8rem; }
+  .val-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 12px 0; }
+  .val-table th { text-align: left; padding: 6px 10px; background: var(--navy); color: #fff; }
+  .val-table td { padding: 6px 10px; border-bottom: 1px solid #e8e4da; }
+  .val-table tr:last-child td { font-weight: 700; border-top: 2px solid var(--navy); }
+  .val-table td:nth-child(2), .val-table td:nth-child(3), .val-table td:nth-child(4),
+  .val-table th:nth-child(2), .val-table th:nth-child(3), .val-table th:nth-child(4) { text-align: right; }
+  .prompt-box { background: #1a1a2e; color: #e0e0e0; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap; position: relative; margin: 16px 0; }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--gold); color: #000; border: none; padding: 4px 12px; border-radius: 4px; font-size: 0.8rem; cursor: pointer; font-weight: 600; }
+  .copy-btn:hover { background: #d4b46a; }
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 12px 0; }
+  .comp-table th { text-align: left; padding: 6px 10px; background: #f0ece0; }
+  .comp-table td { padding: 6px 10px; border-bottom: 1px solid #e8e4da; }
+  .note { font-size: 0.75rem; color: #888; margin-top: 20px; line-height: 1.5; }
+  a { color: var(--navy); }
+  footer { background: var(--navy); color: #b0c4d8; text-align: center; padding: 20px; font-size: 0.85rem; margin-top: 30px; }
+  footer a { color: var(--gold); }
+  @media print { .no-print { display: none !important; } .container { max-width: 100%; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JPods® Patent Portfolio</h1>
+  <p>9 patent families covering solar-powered transport, cargo, energy, data centers, and defense</p>
+</header>
+
+<div class="container">
+
+  <h2>Core Patent</h2>
+
+  <div class="patent-card">
+    <div class="title">Self-driving Solar-powered Transport Networks</div>
+    <div class="nums">US 6,810,817 — <a href="https://patents.google.com/patent/US6810817B1/en" target="_blank">View on Google Patents</a></div>
+    <div class="desc">The foundational invention. Filed before Tesla, Waymo, or any autonomous vehicle company. Combines self-driving transport with integrated solar power generation.</div>
+  </div>
+
+  <div class="core-quote">
+    "A method of controlling a transportation System for moving people, freight, and any combination whereof using a distributed network of intelligent devices without requiring the aid of a human driver"
+    <br><br>
+    "The method... providing... Solar and wind power generators integrated into the physical Structure of Said transportation System"
+    <div class="source">— US Patent 6,810,817</div>
+  </div>
+
+  <h2>Patent Families</h2>
+
+  <div class="patent-card">
+    <div class="title">Cargo — 3-Tiered Automated Guideway Shipments</div>
+    <div class="nums">63/706,634 · 19/356,062 — <a href="https://docs.google.com/document/d/e/2PACX-1vTb3HIed7CRmxxz9GR2FLfT5f3updxE8v1DelIHWuoDdRNFo4bVadlmc41ed-ghrl56Bo8iXcP3neTT/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Middle-mile freight automation. Continuous flow replaces batch delivery. Amazon, FedEx, UPS dead-head return at ~1/10th cost above street level.</div>
+    <div class="market">Market: $500B+ logistics</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">Energy — Self-reliant Automated Guideway Networks</div>
+    <div class="nums">63/706,637 · 19/356,011 — <a href="https://docs.google.com/document/d/e/2PACX-1vQM6f96RRmUbL-NTXWLrnK37TcNVs5RYHjq38tLgnIlONCTRFh2hAWjfBK9QXJ-TimBAgv7TwaW0bft/pub" target="_blank">View Patent</a></div>
+    <div class="desc">1 MW solar generation per mile of guideway. Generates 4× the energy required for network operation. Excess available for grid, data centers, EV charging.</div>
+    <div class="market">Market: $400B+ solar energy</div>
+  </div>
+
+  <div class="patent-card hot">
+    <div class="title">Data Centers — Distributed Power via Guideway Networks <span class="hot-label">HIGHEST GROWTH</span></div>
+    <div class="nums">63/921,369 · 73259682 — <a href="https://docs.google.com/document/d/e/2PACX-1vSmHpe5zLT2NcCvXAISq6nkh6AQ16RvN5yzCCDW2FHPoTtlar7nedebUWJXRIsBfwjTIgQI1olzQ1TS/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Powering distributed data clusters using automated guideway transit networks. Edge compute nodes powered by guideway solar. Microsoft spent $10B+ on nuclear for data center power. Amazon spent $650M on a nuclear campus. This patent covers the same problem with distributed solar — scalable, no transmission losses, co-located power and compute.</div>
+    <div class="market">Market: $250B+ data centers — severely power-constrained, demand doubling by 2030</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">Disasters — Temporary Guideway Implementations</div>
+    <div class="nums">63/706,638 · 19/356,061 — <a href="https://docs.google.com/document/d/e/2PACX-1vSX0WhOLkSAIJKG7rx_JKWxWtb674ioH4Sup7p6589Epjubokx4TPgiNJV-gInffwqPe3lFPK7OKXfd/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Rapid-deploy guideway networks for disaster response. Freestanding baseplate installation — deploy in days, not years.</div>
+    <div class="market">Market: $70B+ emergency management</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">Borders — Security using Automated Guideway Networks</div>
+    <div class="nums">63/768,958 — <a href="https://docs.google.com/document/d/e/2PACX-1vReH2Y2rEe2CsaaRhjczrjFzZGErTvFzVrPNs-hnWpEOlTNpFoZ_jZfsNBxGwk-R0rvh0TGClboHZHa/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Automated surveillance and logistics along border infrastructure. Guideway structure provides camera mounting, lighting, and continuous patrol.</div>
+    <div class="market">Market: $70B+ border security</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">FROGs — Factories Roving Over Ground</div>
+    <div class="nums"><a href="https://docs.google.com/document/d/e/2PACX-1vQ1XtqkbC0e-9-qIXrteV3xZb37Ke3HmCDFjSFEQil-DcCWUF43ClcLtzvv9lmSj6GK1klI6iQiZsj7/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Mobile manufacturing platforms. Factory capability moves to the work site.</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">LADS — Layered Aerostat Defense Swarm</div>
+    <div class="nums"><a href="https://docs.google.com/document/d/e/2PACX-1vRt_be52UnJXq9XZIT0vvxw3E_K-GyEU1VOz3oLAxihB7-AHAxO7jSsk-pqD_5DY7jJiqRAhZ80IlSk/pub" target="_blank">View Patent</a></div>
+    <div class="desc">Layered defense system using tethered aerostats for perimeter security, surveillance, and area denial.</div>
+  </div>
+
+  <div class="patent-card">
+    <div class="title">Physical Internet® — Registered Trademark</div>
+    <div class="desc">As data centers, microgrids, and automated vehicles converge, "Physical Internet" is becoming the standard term for integrated physical logistics networks. Independent AI assessment: <strong>$50-500 million</strong> as a brand/licensing asset.</div>
+    <div class="market">Market: The entire physical logistics industry</div>
+  </div>
+
+  <h2>Valuation Summary</h2>
+
+  <table class="val-table">
+    <thead>
+      <tr><th>Patent Family</th><th>Conservative</th><th>Mid-Range</th><th>Hot Market</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Core (6,810,817) — self-driving solar</td><td>$15M</td><td>$40M</td><td>$100M</td></tr>
+      <tr><td>Cargo — guideway shipments</td><td>$5M</td><td>$15M</td><td>$50M</td></tr>
+      <tr><td>Energy — self-reliant networks</td><td>$5M</td><td>$10M</td><td>$30M</td></tr>
+      <tr><td>Data Centers — distributed power ⚡</td><td>$10M</td><td>$50M</td><td>$200M</td></tr>
+      <tr><td>Disasters — temporary guideways</td><td>$2M</td><td>$5M</td><td>$20M</td></tr>
+      <tr><td>Borders — security networks</td><td>$2M</td><td>$5M</td><td>$20M</td></tr>
+      <tr><td>FROGs + LADS</td><td>$2M</td><td>$6M</td><td>$25M</td></tr>
+      <tr><td>Physical Internet® trademark</td><td>$50M</td><td>$150M</td><td>$500M</td></tr>
+      <tr><td><strong>Total Portfolio</strong></td><td><strong>$91M</strong></td><td><strong>$281M</strong></td><td><strong>$945M</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Market Comparables</h2>
+
+  <table class="comp-table">
+    <thead><tr><th>Company / Deal</th><th>Valuation</th><th>JPods Comparison</th></tr></thead>
+    <tbody>
+      <tr><td>Glydways (Series C, 2026)</td><td>$700M</td><td>No foundational patents, no 54-yr safety record, no legislative approvals</td></tr>
+      <tr><td>Microsoft / Constellation (nuclear data center)</td><td>$10B+</td><td>Same power constraint — JPods patent addresses it with distributed solar</td></tr>
+      <tr><td>Amazon / Talen Energy (nuclear campus)</td><td>$650M</td><td>Centralized nuclear vs distributed solar — JPods scales better</td></tr>
+      <tr><td>Morgantown PRT (54 years operating)</td><td>Proven</td><td>JPods builds on the only proven automated guideway system</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Do Your Own Assessment</h2>
+
+  <p style="font-size:0.9rem;margin-bottom:12px">Don't take our word for it. Copy this prompt into <strong>ChatGPT, Claude, Grok, Gemini, or any AI</strong> and get an independent valuation opinion:</p>
+
+  <div class="prompt-box" id="prompt-text">
+    <button class="copy-btn no-print" onclick="navigator.clipboard.writeText(document.getElementById('prompt-text').innerText.replace('Copy','').trim()); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+I am evaluating a patent portfolio owned by JPods LLC (founder Bill James).
+Please assess the potential value and novelty of this portfolio given current market conditions.
+
+The portfolio includes 9 patent families:
+
+1. US 6,810,817 — Self-driving solar-powered transport networks: "A method of
+   controlling a transportation System for moving people, freight, and any
+   combination whereof using a distributed network of intelligent devices without
+   requiring the aid of a human driver" with "Solar and wind power generators
+   integrated into the physical Structure of Said transportation System"
+
+2. 63/706,634 · 19/356,062 — Cargo: 3-Tiered Automated Guideway Cargo Shipments
+
+3. 63/706,637 · 19/356,011 — Energy: Self-reliant Automated Guideway Transit Networks
+   (1 MW solar generation per mile of guideway)
+
+4. 63/921,369 · 73259682 — Data Centers: Powering Distributed Data Clusters using
+   Automated Guideway Transit Networks (edge compute nodes powered by guideway solar)
+
+5. 63/706,638 · 19/356,061 — Disasters: Temporary Implementations of Automated
+   Guideway Transit Networks
+
+6. 63/768,958 — Borders: Security using Automated Guideway Transit Networks
+
+7. FROGs — Factories Roving Over Ground
+
+8. LADS — Layered Aerostat Defense Swarm
+
+9. Physical Internet® — Registered trademark for integrated physical logistics networks
+
+Context:
+- Glydways (similar tech, no patents) raised $272M at $700M valuation (2026)
+- Morgantown PRT has operated for 54 years with zero deaths
+- Microsoft spent $10B+ on nuclear power for data centers
+- Amazon spent $650M on a nuclear-powered data center campus
+- Data center power demand projected to double by 2030
+- US traffic costs $2.7 trillion/year
+- Laws passed in Massachusetts (H5248) and New Jersey for deployment
+- DFW voted to certify for deployment
+
+Questions:
+1. Assess the novelty of each patent — what prior art exists and how do these
+   claims differ from existing patents in autonomous vehicles, solar energy,
+   and data center infrastructure?
+2. What is a defensible floor valuation for this patent portfolio?
+3. What is the potential value if the data center power patent gains traction
+   given that hyperscalers are spending $10B+ per deal to solve power constraints?
+4. What is the Physical Internet® trademark worth as the industry scales?
+5. How does this portfolio compare to Glydways' $700M valuation with no patents?
+6. Which patent family has the highest novelty and commercial value today?
+  </div>
+
+  <h2>Legislative Validation</h2>
+
+  <table class="comp-table">
+    <thead><tr><th>Jurisdiction</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td>Massachusetts</td><td>Law H5248 passed for JPods deployment</td></tr>
+      <tr><td>New Jersey (Secaucus)</td><td>Ordinance approved for JPods</td></tr>
+      <tr><td>DFW, Texas</td><td>Vote to certify JPods for deployment</td></tr>
+      <tr><td>Macon, Georgia</td><td>Contract for JPods deployment</td></tr>
+      <tr><td>Oklahoma</td><td>Approval for JPods deployment</td></tr>
+      <tr><td>Mall of America</td><td>MOU signed for JPods network (2026)</td></tr>
+    </tbody>
+  </table>
+
+</div>
+
+<footer>
+  <p><strong>JPods LLC</strong> — Inventor of solar-powered transport networks</p>
+  <p>US Patent 6,810,817 · Physical Internet® · Est. 1998</p>
+  <p style="margin-top:10px">
+    <a href="https://jpods.com">JPods.com</a> ·
+    <a href="https://meshmobility.com">MeshMobility.com</a> ·
+    <a href="https://meshmobility.com/pbc">Payback Calculator</a> ·
+    <a href="https://10xmakers.com">10xMakers.com</a>
+  </p>
+  <p style="margin-top:10px;font-size:0.75rem;color:#7a99b0">
+    Contact: Bill James | 612.414.4211 | bill.james@JPods.com | West Point 1972
+  </p>
+</footer>
+
+</body>
+</html>
