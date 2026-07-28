@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>60% Reduction — Remove Sovereign Immunity to Stop the Roadkill</title>
+<meta name="description" content="DOTs severely injure 11,200 per million people. Theme parks injure 3.7 per million. The difference is sovereign immunity. Remove it and roadkills drop 60-90% in 3-5 years.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1a1a1a; line-height: 1.7; background: #fafafa; }
+a { color: #dc2626; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+.hero { background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%); color: #fff; text-align: center; padding: 64px 24px 48px; }
+.hero h1 { font-size: 2.6em; font-weight: 700; margin-bottom: 12px; line-height: 1.15; }
+.hero h1 span { color: #ef4444; }
+.hero .tagline { font-size: 1.1em; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 700px; margin: 0 auto 24px; }
+
+.hero .compare { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 28px; }
+.hero .compare .side { text-align: center; }
+.hero .compare .big { font-size: 3em; font-weight: 700; line-height: 1; }
+.hero .compare .big.red { color: #ef4444; }
+.hero .compare .big.green { color: #4ade80; }
+.hero .compare .lbl { font-size: 0.85em; color: rgba(255,255,255,0.6); margin-top: 4px; }
+.hero .compare .vs { font-size: 1.4em; color: rgba(255,255,255,0.3); align-self: center; font-weight: 700; }
+.hero .ratio { font-size: 1.3em; color: #ef4444; font-weight: 700; margin-top: 20px; }
+
+.tabs { display: flex; gap: 0; background: #1a0a0a; border-bottom: 2px solid rgba(239,68,68,0.3); padding: 0 24px; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+.tab { padding: 12px 18px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45); background: none; border: none; border-bottom: 3px solid transparent; text-decoration: none; white-space: nowrap; }
+.tab:hover { color: rgba(255,255,255,0.8); text-decoration: none; }
+.tab.active { color: #ef4444; border-bottom-color: #ef4444; }
+
+section { padding: 48px 0; border-bottom: 1px solid #e0e0e0; }
+section:last-of-type { border-bottom: none; }
+section h2 { font-size: 1.7em; font-weight: 400; color: #1a1a1a; margin-bottom: 14px; }
+section h2 span { color: #dc2626; }
+section p.lead { font-size: 1.05em; color: #4a4a4a; max-width: 720px; margin-bottom: 24px; }
+
+.quote-block { background: #fef2f2; border-left: 4px solid #dc2626; padding: 24px 32px; margin: 28px 0; border-radius: 0 8px 8px 0; }
+.quote-block p { font-style: italic; font-family: Georgia, serif; font-size: 1.1em; color: #1a1a1a; margin-bottom: 8px; }
+.quote-block .attr { font-style: normal; font-size: 0.9em; color: #6a6a7a; }
+
+.parallel { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+.card { border-radius: 10px; padding: 24px; }
+.card-light { background: #fef2f2; }
+.card-dark { background: #1a0a0a; color: #ccc; }
+.card-dark h3 { color: #ef4444; }
+.card-green { background: #f0fdf4; }
+.card-green h3 { color: #16a34a; }
+.card h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; }
+.card p { font-size: 0.93em; line-height: 1.6; }
+
+.comp-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+.comp-table th { text-align: left; padding: 12px 14px; font-size: 0.8em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #dc2626; border-bottom: 2px solid #dc2626; }
+.comp-table td { padding: 10px 14px; font-size: 0.95em; border-bottom: 1px solid #eee; }
+.comp-table td:nth-child(2), .comp-table td:nth-child(3) { text-align: right; font-family: Georgia, serif; font-weight: 700; }
+.comp-table tr.highlight td { background: #f0fdf4; }
+.comp-table tr.danger td { background: #fef2f2; }
+
+.stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin: 28px 0; }
+.stat { text-align: center; }
+.stat .number { font-size: 2em; font-weight: 700; }
+.stat .number.red { color: #dc2626; }
+.stat .number.green { color: #16a34a; }
+.stat .label { font-size: 0.8em; color: #6a6a7a; margin-top: 4px; }
+
+.cta-section { background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%); color: #fff; text-align: center; border-bottom: none; }
+.cta-section h2 { color: #fff; }
+.cta-section p.lead { color: rgba(255,255,255,0.8); margin: 0 auto 28px; }
+.cta-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary { background: #fff; color: #1a0a0a; padding: 14px 32px; border-radius: 6px; font-weight: 600; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.15s; }
+.btn-primary:hover { transform: translateY(-2px); text-decoration: none; }
+.btn-secondary { background: transparent; color: #fff; padding: 14px 32px; border-radius: 6px; font-weight: 500; border: 2px solid rgba(255,255,255,0.4); text-decoration: none; }
+.btn-secondary:hover { opacity: 0.85; text-decoration: none; }
+
+footer { background: #1a0a0a; color: #6a5a5a; text-align: center; padding: 36px 24px; }
+footer .footer-links a { color: #ef4444; margin: 0 10px; font-size: 0.9em; }
+footer .copyright { font-size: 0.8em; margin-top: 12px; }
+
+@media (max-width: 700px) { .hero h1 { font-size: 2em; } .parallel { grid-template-columns: 1fr; } .hero .compare { gap: 24px; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>60% <span>Reduction</span></h1>
+    <p class="tagline">Remove sovereign immunity from transportation. Apply theme park safety regulations to streets. Roadkills drop 60-90% in 3-5 years.</p>
+    <div class="compare">
+      <div class="side">
+        <div class="big red">11,200</div>
+        <div class="lbl">Severe injuries per million<br>DOT-managed roads</div>
+      </div>
+      <div class="vs">vs</div>
+      <div class="side">
+        <div class="big green">3.7</div>
+        <div class="lbl">Injuries per million<br>Theme parks</div>
+      </div>
+    </div>
+    <div class="ratio">3,000&times; safer at theme parks</div>
+  </div>
+</header>
+
+<div class="tabs">
+  <a class="tab" href="index.html">Stop Child Murder</a>
+  <a class="tab active" href="sovereign-immunity.html">60% Reduction</a>
+  <a class="tab" href="tx_arlington/">Arlington</a>
+  <a class="tab" href="ca_paloalto/">Palo Alto</a>
+  <a class="tab" href="sc_columbia/">Columbia</a>
+  <a class="tab" href="index.html#panel-library">Library</a>
+  <a class="tab" href="index.html#panel-template">Template</a>
+</div>
+
+<!-- ════════ THE ARGUMENT ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Argument</span></h2>
+    <p class="lead">The difference between DOT roads and theme parks is not technology. It is accountability. Theme parks have no sovereign immunity. Every injury faces a jury. DOTs kill with impunity.</p>
+
+    <div class="parallel">
+      <div class="card card-dark">
+        <h3>DOT Roads &mdash; Sovereign Immunity</h3>
+        <p>"I complied with the rule, so I am protected." That is the defense. It does not matter that the rule kills people. It does not matter that the road design is known to be dangerous. It does not matter that safer alternatives exist. If the DOT followed its own standards, no jury will hear the case. The dead are a cost of compliance.</p>
+      </div>
+      <div class="card card-green">
+        <h3>Theme Parks &mdash; No Immunity</h3>
+        <p>Every injury is subject to the judgment of a jury. The operator and builder are responsible to preempt even the normal foolish behaviors of children. You cannot hide behind a rule. You must actually be safe. The result: 3.7 injuries per million visitors. 3,000 times safer than DOT roads.</p>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p>Sovereign immunity does not make roads safe. It makes DOTs unaccountable. Remove the immunity and every road design decision faces the same test as a roller coaster: will a jury agree this was safe enough?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ THE NUMBERS ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Numbers</span></h2>
+    <p class="lead">Same country. Same people. Same laws of physics. Radically different safety outcomes based on one variable: accountability.</p>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>System</th><th>Injuries per Million</th><th>Sovereign Immunity?</th></tr>
+      </thead>
+      <tbody>
+        <tr class="danger"><td>DOT-managed roads</td><td>11,200</td><td>Yes &mdash; protected</td></tr>
+        <tr><td>Airlines</td><td>~1</td><td>No</td></tr>
+        <tr><td>Freight railroads</td><td>~2</td><td>No</td></tr>
+        <tr class="highlight"><td>Theme parks</td><td>3.7</td><td>No</td></tr>
+        <tr class="highlight"><td>Morgantown PRT (54 years)</td><td>~0</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <div class="stats">
+      <div class="stat"><div class="number red">40,000+</div><div class="label">Americans killed<br>on roads per year</div></div>
+      <div class="stat"><div class="number red">4.5M</div><div class="label">Seriously injured<br>on roads per year</div></div>
+      <div class="stat"><div class="number green">0</div><div class="label">Serious injuries<br>Morgantown PRT (54 years)</div></div>
+      <div class="stat"><div class="number green">3-5 yrs</div><div class="label">To achieve 60-90%<br>reduction</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ WHY IT WORKS ════════ -->
+<section>
+  <div class="container">
+    <h2>Why It <span>Works</span></h2>
+    <p class="lead">Theme park regulations work because they harness the Wisdom of the Many. Every injury faces a jury of citizens. No bureaucrat decides what is "safe enough." The people decide.</p>
+
+    <div class="parallel">
+      <div class="card card-light">
+        <h3>The Wisdom of the Many</h3>
+        <p>A jury is the Wisdom of the Many applied to safety. Twelve citizens, no expertise required, judging whether the operator did enough to protect people &mdash; including from their own foolishness. This is why theme parks design for the worst case: a child doing something stupid. DOTs design for the average case: an adult paying attention. The child dies. The DOT is protected.</p>
+      </div>
+      <div class="card card-dark">
+        <h3>Compliance vs Accountability</h3>
+        <p>DOT sovereign immunity creates a compliance culture: follow the standard, avoid the lawsuit. Theme park liability creates an accountability culture: prevent the injury, regardless of what the standard says. Compliance asks "did we follow the rule?" Accountability asks "is anyone hurt?" These produce radically different outcomes &mdash; 3,000x different.</p>
+      </div>
+    </div>
+
+    <div class="parallel">
+      <div class="card card-green">
+        <h3>What DOTs Fight</h3>
+        <p>DOTs fight theme park regulations because there is no sovereign immunity. Every design decision becomes subject to a jury. Every intersection where a child is killed becomes a question: did the designer do enough to prevent this? The answer, 11,200 injuries per million, is indefensible before a jury. That is why they fight. That is why it works.</p>
+      </div>
+      <div class="card card-light">
+        <h3>Preempt Foolishness</h3>
+        <p>Under theme park regulations, the operator must preempt even the normal foolish behaviors of children. A child will run. A child will not look. A child will do the wrong thing. The system must protect them anyway. DOT roads punish the child for being a child. Theme parks protect the child for being a child. That is the 3,000x difference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ THE PATH ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Path</span></h2>
+    <p class="lead">Remove sovereign immunity from DOTs. Apply theme park safety regulations to urban streets. Let juries judge road design. The market will respond in 3-5 years.</p>
+
+    <div class="quote-block">
+      <p>When every road injury faces a jury, road designers will do what theme park designers already do: build systems that protect people from themselves. Grade separation. Physical barriers. Automated guidance. The technology exists &mdash; Morgantown proved it in 1972. The obstacle is not engineering. The obstacle is immunity from consequences.</p>
+    </div>
+
+    <div class="parallel">
+      <div class="card card-light">
+        <h3>Year 1-2: Liability Drives Design</h3>
+        <p>Without sovereign immunity, the most dangerous intersections become lawsuit targets. Cities redesign the worst corridors first &mdash; the same corridors that show up on every crash map. Speed limits drop. Physical barriers go up. Grade separation begins.</p>
+      </div>
+      <div class="card card-dark">
+        <h3>Year 3-5: PRT Networks Scale</h3>
+        <p>The 5X5 Standard allows privately funded PRT networks. Once DOTs face jury liability for road injuries, the economic case for grade-separated alternatives becomes overwhelming. Insurance costs drive the transition. The market does what regulation couldn't: make streets safe.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="number green">60-90%</div><div class="label">Roadkill reduction<br>in 3-5 years</div></div>
+      <div class="stat"><div class="number green">$0</div><div class="label">Taxpayer cost<br>5X5 privately funded</div></div>
+      <div class="stat"><div class="number green">3,000&times;</div><div class="label">Safety improvement<br>theme park standard</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA ════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Demand <span style="color: #ef4444;">Accountability</span></h2>
+    <p class="lead">Your city council votes for the policies that protect DOTs from consequences. Ask them: why should roads be 3,000 times more dangerous than theme parks?</p>
+    <div class="cta-links">
+      <a href="index.html" class="btn-primary">Stop Child Murder</a>
+      <a href="https://meshmobility.com" class="btn-secondary">Map Your City's Crashes</a>
+      <a href="https://personalizetransit.com" class="btn-secondary">Run the Numbers</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://jpods.com">JPods</a>
+      <a href="https://physicalinternet.com">Physical Internet&reg;</a>
+      <a href="https://meshmobility.com">MeshMobility</a>
+      <a href="https://personalizetransit.com">Personalize Transit</a>
+      <a href="https://cityroadkills.com">CityRoadkills</a>
+      <a href="https://primelawofnetworks.com">Prime Law</a>
+    </div>
+    <div class="copyright">&copy; 2026 JPods, LLC. Policies blocking PRT networks kill.</div>
+  </div>
+</footer>
+
+</body>
+</html>
