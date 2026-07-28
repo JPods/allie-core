@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confront Your City — Stop the Roadkill</title>
+<meta name="description" content="A template for citizens to confront their city governments with crash data, economic evidence, and a privately-funded alternative to car-centric infrastructure.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1a1a1a;
+  line-height: 1.7;
+  background: #fafafa;
+}
+
+a { color: #dc2626; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Hero ── */
+.hero {
+  background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px 56px;
+}
+.hero h1 {
+  font-size: 2.8em;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+.hero h1 span { color: #ef4444; }
+.hero .tagline {
+  font-size: 1.15em;
+  font-weight: 300;
+  color: rgba(255,255,255,0.8);
+  max-width: 680px;
+  margin: 0 auto 24px;
+}
+.hero .hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.hero .hs { text-align: center; }
+.hero .hs .num { font-size: 2.2em; font-weight: 700; color: #ef4444; }
+.hero .hs .lbl { font-size: 0.85em; color: rgba(255,255,255,0.6); }
+
+/* ── Sections ── */
+section { padding: 56px 0; border-bottom: 1px solid #e0e0e0; }
+section:last-of-type { border-bottom: none; }
+section h2 {
+  font-size: 1.8em;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+section h2 span { color: #dc2626; }
+section p.lead {
+  font-size: 1.05em;
+  color: #4a4a4a;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+/* ── Image blocks ── */
+.img-block {
+  margin: 32px 0;
+  text-align: center;
+}
+.img-block img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
+.img-block .caption {
+  font-size: 0.85em;
+  color: #6a6a7a;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* ── Quote ── */
+.quote-block {
+  background: #fef2f2;
+  border-left: 4px solid #dc2626;
+  padding: 24px 32px;
+  margin: 32px 0;
+  border-radius: 0 8px 8px 0;
+}
+.quote-block p {
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-size: 1.1em;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.quote-block .attr { font-style: normal; font-size: 0.9em; color: #6a6a7a; }
+
+/* ── Parallel cards ── */
+.parallel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+.card {
+  border-radius: 10px;
+  padding: 28px;
+}
+.card-light { background: #fef2f2; }
+.card-dark { background: #1a0a0a; color: #ccc; }
+.card-dark h3 { color: #ef4444; }
+.card-green { background: #f0fdf4; }
+.card-green h3 { color: #16a34a; }
+.card h3 { font-size: 1.15em; font-weight: 600; margin-bottom: 10px; }
+.card p { font-size: 0.95em; line-height: 1.6; }
+
+/* ── Template email ── */
+.template-box {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  margin: 32px 0;
+  overflow: hidden;
+}
+.template-header {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 16px 24px;
+  font-weight: 600;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.template-header .copy-btn {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.template-header .copy-btn:hover { background: #b91c1c; }
+.template-body {
+  padding: 24px;
+  font-size: 0.95em;
+  line-height: 1.8;
+}
+.template-body .placeholder {
+  background: #fef3c7;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+/* ── Steps ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+.step-card {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px 16px;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.step-card:hover { border-color: #dc2626; }
+.step-card .step-num {
+  font-size: 2em;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+.step-card h4 { font-size: 0.95em; font-weight: 600; margin-bottom: 6px; }
+.step-card p { font-size: 0.8em; color: #6a6a7a; }
+.step-card a { color: #dc2626; font-weight: 600; }
+
+/* ── CTA ── */
+.cta-section {
+  background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%);
+  color: #fff;
+  text-align: center;
+  border-bottom: none;
+}
+.cta-section h2 { color: #fff; }
+.cta-section p.lead { color: rgba(255,255,255,0.8); margin: 0 auto 32px; }
+.cta-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: #fff; color: #1a0a0a; padding: 14px 32px; border-radius: 6px;
+  font-weight: 600; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.15s;
+}
+.btn-primary:hover { transform: translateY(-2px); text-decoration: none; }
+.btn-secondary {
+  background: transparent; color: #fff; padding: 14px 32px; border-radius: 6px;
+  font-weight: 500; border: 2px solid rgba(255,255,255,0.4);
+  text-decoration: none; transition: opacity 0.15s;
+}
+.btn-secondary:hover { opacity: 0.85; text-decoration: none; }
+
+/* ── Footer ── */
+footer {
+  background: #1a0a0a; color: #6a5a5a; text-align: center; padding: 40px 24px;
+}
+footer .footer-tagline { color: #fff; font-size: 1.1em; margin-bottom: 16px; }
+footer .footer-links a { color: #ef4444; margin: 0 12px; font-size: 0.95em; }
+footer .copyright { font-size: 0.85em; margin-top: 16px; }
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .hero h1 { font-size: 2em; }
+  .parallel { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .cta-links { flex-direction: column; align-items: center; }
+  .hero .hero-stats { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ HERO ════════ -->
+<header class="hero">
+  <div class="container">
+    <h1>Stop the <span>Roadkill</span></h1>
+    <p class="tagline">In 1971, the Dutch launched "Stop de Kindermoord" &mdash; Stop Child Murder &mdash; after car-centric highway policies killed too many children. The Netherlands changed. America didn't.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="num">4&times;</div><div class="lbl">U.S. pedestrian death rate<br>vs Netherlands, Denmark</div></div>
+      <div class="hs"><div class="num">2&times;</div><div class="lbl">U.S. oil consumption<br>per person vs Europe</div></div>
+      <div class="hs"><div class="num">40,000+</div><div class="lbl">Americans killed on roads<br>every year</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ════════ THE DIVERGENCE ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Divergence</span></h2>
+    <p class="lead">Before the 1973 Oil Embargo, the U.S., Sweden, and Denmark had nearly identical per-capita oil use and roadkill rates. All three nations had the same car-centric transport policies. After 1973, Sweden and Denmark changed course. The U.S. doubled down.</p>
+
+    <div class="img-block">
+      <img src="BikeDeaths_Comparison.jpg" alt="US vs Sweden, Denmark — oil consumption, roadkill rates, mode share divergence after 1973">
+      <div class="caption">Per-capita oil use, pedestrian and cyclist fatality rates, and mode share: U.S. vs Europe. Same starting point in 1973. Radically different outcomes. Sources: Streetsblog/Buehler &amp; Pucher, Environmental International 2024, IIASA.</div>
+    </div>
+
+    <div class="parallel">
+      <div class="card card-light">
+        <h3>What Sweden &amp; Denmark Did</h3>
+        <p>After 1973, they invested in walking, biking, and transit infrastructure. Per-person oil consumption dropped 60%. Pedestrian and cyclist fatality rates dropped to one-quarter of U.S. rates. Their economies grew. Their cities became more livable. They proved the alternative works.</p>
+      </div>
+      <div class="card card-dark">
+        <h3>What America Did</h3>
+        <p>Borrowed trillions to buy foreign oil. Fought oil wars in Iraq and Afghanistan ($6.4 trillion, Brown University). Built more highways. Killed 40,000+ people per year on roads. North America: 92% car, 5% public transport, 4% walking/biking. The Bragdon Committee warned of exactly this outcome in 1959.</p>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <p>80% of all trips in America are under 10 miles &mdash; distances that are walkable or bikeable if the infrastructure were safe. JPods provides the Middle Mile that makes walking and biking the natural choice for the last mile. About 1 mile of JPods guideways per 14 miles of roads.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ YOUR CITY'S ROADKILL ════════ -->
+<section>
+  <div class="container">
+    <h2>Your City's <span>Roadkill</span></h2>
+    <p class="lead">Every city has a crash map. Every crash map tells the same story &mdash; the same corridors, the same intersections, the same predictable violence. The data designs the network. Crash corridors become guideway corridors. Walk circles become station placement.</p>
+
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h4>Map the Crashes</h4>
+        <p>Open <a href="https://meshmobility.com">MeshMobility</a>. Find your city. Turn on crash overlays. See where people are dying.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h4>Design the Network</h4>
+        <p>Place stations. Connect guideways. The crash corridors tell you where. 135 stations covers a city like Columbia, SC.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h4>Run the Numbers</h4>
+        <p>Open <a href="https://personalizetransit.com">Personalize Transit</a>. Enter your city. Get the investment cost, annual savings, and CO&sup2; reduction.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h4>Confront Your Council</h4>
+        <p>Send the email below with your city's data. The crash map is the indictment. The network is the solution. The math is the proof.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ THE TEMPLATE ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Email</span></h2>
+    <p class="lead">Copy this template. Replace the highlighted fields with your city's data from MeshMobility and Personalize Transit. Attach your crash map and network design screenshots. Send it to your mayor and city council.</p>
+
+    <div class="template-box">
+      <div class="template-header">
+        Email Template — Customize for Your City
+        <button class="copy-btn" onclick="copyTemplate()">Copy Template</button>
+      </div>
+      <div class="template-body" id="emailTemplate">
+<strong>Subject: Privately Funded Solar Transit Network for <span class="placeholder">[YOUR CITY]</span></strong>
+
+Dear Mayor and City Councilmembers,
+
+<strong>People are dying on our roads.</strong> <span class="placeholder">[YOUR CITY]</span> has <span class="placeholder">[NUMBER]</span> fatal crashes and <span class="placeholder">[NUMBER]</span> total crashes per year. These are not accidents &mdash; they are predictable outcomes of car-centric infrastructure. The crash map attached shows the same corridors, the same intersections, year after year.
+
+In 1971, the Netherlands faced the same crisis and launched "Stop de Kindermoord" &mdash; Stop Child Murder. They redesigned their cities for people instead of cars. Today, their pedestrian death rate is one-quarter of ours. Their per-person oil consumption is 60% lower. Their economy is stronger.
+
+<strong>JPods would like to fund the building of a solar-powered transport network in <span class="placeholder">[YOUR CITY]</span>.</strong> This is a roughly <span class="placeholder">[$X BILLION]</span> privately-funded investment requiring no taxpayer money.
+
+The numbers for <span class="placeholder">[YOUR CITY]</span> (from PersonalizeTransit.com):
+&bull; Network Cost: <span class="placeholder">[$XXX MILLION]</span>
+&bull; Annual Savings: <span class="placeholder">[$XXX MILLION/YR]</span>
+&bull; One-Time Value: <span class="placeholder">[$X.X BILLION]</span>
+&bull; CO&sup2; Reduction: <span class="placeholder">[XXX,XXX TONS/YR]</span>
+
+<strong>This is not theoretical.</strong> The Morgantown PRT has been solving urban traffic for 54 years with zero injuries and 150 million+ trips:
+&bull; www.JPods.com/Morgantown
+&bull; www.JPods.com/CongressionalStudy
+
+<strong>Attached:</strong>
+1. Map of roadkill locations in <span class="placeholder">[YOUR CITY]</span> (from MeshMobility.com)
+2. Example JPods network that would cut roadkills by 60-80%
+3. Travel time isochrones &mdash; walk-ride-walk times without a car, 24x7, powered by sunshine
+   (Green = 5 min, Blue = 10 min, Yellow = 20 min, Red = 30 min)
+
+<strong>Tools to explore this yourself:</strong>
+&bull; www.MeshMobility.com &mdash; map your city's crashes and design a network
+&bull; www.PersonalizeTransit.com &mdash; calculate your city's economic payback
+&bull; www.5x5FreeMarket.com &mdash; the regulatory framework
+
+Privately funded JPods networks would cut roadkills by 60-80% by building on the proven success of the Morgantown PRT. On-demand, personalized transit. No schedules. No car required. Powered by sunshine.
+
+Please let us know if you are interested.
+
+<span class="placeholder">[YOUR NAME]</span>
+<span class="placeholder">[YOUR PHONE]</span>
+<span class="placeholder">[YOUR EMAIL]</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ THE PROOF ════════ -->
+<section>
+  <div class="container">
+    <h2>The <span>Proof</span></h2>
+    <p class="lead">This is not a proposal. It is a demonstrated technology with 54 years of operational history and zero fatalities.</p>
+
+    <div class="parallel">
+      <div class="card card-green">
+        <h3>Morgantown PRT &mdash; Since 1972</h3>
+        <p>Opened by President Nixon's daughter. "More fun than Disneyland." 150 million+ trips. Zero injuries. Grade-separated. Self-driving since 1972 &mdash; decades before Tesla. Congressional study confirmed it works. Government "institutional failures" blocked deployment for "four to six decades."</p>
+      </div>
+      <div class="card card-dark">
+        <h3>The 5&times;5 Standard</h3>
+        <p>Privately funded networks 5&times; more efficient than roads, for 5% of gross revenues as rights-of-way. No taxpayer money. No bonds. No government debt. The city provides the right-of-way over existing roads. JPods provides the capital, builds the network, and operates it. Revenue from fares and energy pays for everything.</p>
+      </div>
+    </div>
+
+    <div class="parallel" style="margin-top: 24px;">
+      <div class="card card-light">
+        <h3>What Your City Gets</h3>
+        <p>&bull; 60-80% reduction in roadkills<br>
+        &bull; Mobility without a car &mdash; 24/7, any age, any ability<br>
+        &bull; Parking lots converted to taxable productive land<br>
+        &bull; Reduced road maintenance costs<br>
+        &bull; Solar energy surplus powering the neighborhood<br>
+        &bull; No taxpayer cost</p>
+      </div>
+      <div class="card card-green">
+        <h3>What You Say to Your Council</h3>
+        <p>&bull; "People are dying on predictable corridors. Here is the map."<br>
+        &bull; "A proven technology exists. It has worked since 1972."<br>
+        &bull; "A private company will fund the entire network."<br>
+        &bull; "The only thing you need to provide is the right-of-way."<br>
+        &bull; "Sweden and Denmark proved this works at a national scale."<br>
+        &bull; "Why are we still killing people?"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA ════════ -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Build Your City's <span style="color: #ef4444;">Case</span></h2>
+    <p class="lead">Use the tools. Map the crashes. Design the network. Run the numbers. Send the email. The data does the confronting.</p>
+    <div class="cta-links">
+      <a href="https://meshmobility.com" class="btn-primary">Map Your City's Crashes</a>
+      <a href="https://personalizetransit.com" class="btn-secondary">Run the Numbers</a>
+      <a href="https://primelawofnetworks.com" class="btn-secondary">Why Networks Win</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-tagline">Stop the roadkill. Build the network. Fund it privately.</div>
+    <div class="footer-links">
+      <a href="https://jpods.com">JPods</a>
+      <a href="https://physicalinternet.com">Physical Internet</a>
+      <a href="https://personalizetransit.com">Personalize Transit</a>
+      <a href="https://jpods3d.com">JPods3D</a>
+      <a href="https://primelawofnetworks.com">Prime Law</a>
+      <a href="https://meshmobility.com">MeshMobility</a>
+      <a href="https://10xmakers.com">10xMakers</a>
+    </div>
+    <div class="copyright">&copy; 2026 JPods, LLC. Solar-powered mobility, locally governed.</div>
+  </div>
+</footer>
+
+<script>
+function copyTemplate() {
+  const el = document.getElementById('emailTemplate');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = 'Copy Template'; }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>

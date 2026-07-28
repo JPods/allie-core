@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arlington, TX — City Roadkills</title>
+<meta name="description" content="Roadkills in Arlington, TX. Map the crashes. Design the PRT network. Cut roadkills 60-80%.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1a1a1a; line-height: 1.7; background: #fafafa; }
+a { color: #dc2626; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+.hero { background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%); color: #fff; text-align: center; padding: 56px 24px 40px; }
+.hero h1 { font-size: 2.4em; font-weight: 700; margin-bottom: 8px; }
+.hero h1 span { color: #ef4444; }
+.hero .tagline { font-size: 1em; color: rgba(255,255,255,0.7); max-width: 640px; margin: 0 auto; }
+.tabs { display: flex; gap: 0; background: #1a0a0a; border-bottom: 2px solid rgba(239,68,68,0.3); padding: 0 24px; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+.tab { padding: 12px 18px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45); background: none; border: none; border-bottom: 3px solid transparent; text-decoration: none; white-space: nowrap; }
+.tab:hover { color: rgba(255,255,255,0.8); text-decoration: none; }
+.tab.active { color: #ef4444; border-bottom-color: #ef4444; }
+section { padding: 40px 0; }
+section h2 { font-size: 1.5em; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+section h2 span { color: #dc2626; }
+.img-block { margin: 20px 0; text-align: center; }
+.img-block img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+.img-block .missing { background: #1a1a2e; color: #888; padding: 80px 24px; border-radius: 8px; font-size: 0.95em; text-align: center; }
+.quote-block { background: #fef2f2; border-left: 4px solid #dc2626; padding: 20px 28px; margin: 24px 0; border-radius: 0 8px 8px 0; }
+.quote-block p { font-style: italic; font-family: Georgia, serif; font-size: 1em; color: #1a1a1a; margin-bottom: 6px; }
+.quote-block .attr { font-style: normal; font-size: 0.85em; color: #6a6a7a; }
+.letter-box { background: #fff; border: 2px solid #e0e0e0; border-radius: 12px; margin: 28px 0; overflow: hidden; }
+.letter-header { background: #1a1a1a; color: #fff; padding: 14px 24px; font-weight: 600; font-size: 0.85em; letter-spacing: 1px; text-transform: uppercase; }
+.letter-body { padding: 24px; font-size: 0.93em; line-height: 1.8; }
+footer { background: #1a0a0a; color: #6a5a5a; text-align: center; padding: 36px 24px; }
+footer .footer-links a { color: #ef4444; margin: 0 10px; font-size: 0.9em; }
+footer .copyright { font-size: 0.8em; margin-top: 12px; }
+@media (max-width: 700px) { .hero h1 { font-size: 1.8em; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <h1>Arlington, <span>TX</span></h1>
+    <p class="tagline">Tarrant County &mdash; 155 stations, 226.6 miles of guideways</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <a class="tab" href="../index.html">Stop Child Murder</a>
+  <a class="tab active" href="../tx_arlington/">Arlington</a>
+  <a class="tab" href="../ca_paloalto/">Palo Alto</a>
+  <a class="tab" href="../sc_columbia/">Columbia</a>
+  <a class="tab" href="../sc_greenville/">Greenville</a>
+  <a class="tab" href="../ok_tulsa/">Tulsa</a>
+  <a class="tab" href="../index.html#panel-library">Library</a>
+  <a class="tab" href="../index.html#panel-template">Template</a>
+</div>
+
+<section>
+  <div class="container">
+    <h2>Roadkill <span>Locations</span></h2>
+    <p>Where people are being killed and injured on roads in Arlington, Tarrant County. Data from NHTSA FARS via MeshMobility.com.</p>
+    <div class="img-block">
+      <img src="RoadKills.png" alt="Arlington, TX — fatal crash locations">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Example PRT <span>Network</span></h2>
+    <p>A JPods network designed to cut roadkills 60-80%. Crash corridors become guideway corridors.</p>
+    <div class="img-block">
+      <img src="NetworkGuess.png" alt="Arlington, TX — example PRT network">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Travel <span>Times</span></h2>
+    <p>Walk-ride-walk travel times from the city center on a PRT network. Without a car, without crashes, available 24x7, powered by sunshine. Green = 5 min, Blue = 10 min, Yellow = 20 min, Red = 30 min.</p>
+    <div class="img-block">
+      <div class="missing">Screenshot needed: IsoChrones.png<br>Create at <a href="https://meshmobility.com">MeshMobility.com</a></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>The <span>Letter</span></h2>
+
+    <div class="letter-box">
+      <div class="letter-header">Letter to Arlington City Council</div>
+      <div class="letter-body">
+Dear Mayor and City Councilmembers,
+
+<strong>People are dying on predictable corridors in Arlington.</strong> The crash map above shows the same locations, year after year. These are not accidents &mdash; they are outcomes of car-centric infrastructure policy.
+
+In 1971, the Netherlands launched "Stop de Kindermoord" &mdash; Stop Child Murder. They redesigned their cities. Child road deaths fell from 450 to 14 &mdash; a 97% reduction. Their pedestrian death rate is now one-quarter of ours.
+
+<strong>JPods would like to privately fund a solar-powered PRT network in Arlington.</strong> No taxpayer money required.
+
+The Morgantown PRT has been solving urban traffic for 54 years with zero serious injuries and 150 million+ trips:
+&bull; www.JPods.com/Morgantown
+&bull; www.JPods.com/CongressionalStudy
+
+<strong>Tools to explore this:</strong>
+&bull; www.MeshMobility.com &mdash; map crashes and design a network
+&bull; www.PersonalizeTransit.com &mdash; calculate Arlington's payback
+&bull; www.CityRoadkills.com &mdash; why this matters
+
+Privately funded JPods networks cut roadkills 60-80%. On-demand, personalized transit. No schedules. No car required. Powered by sunshine.
+
+Please let us know if you are interested.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://jpods.com">JPods</a>
+      <a href="https://meshmobility.com">MeshMobility</a>
+      <a href="https://personalizetransit.com">Personalize Transit</a>
+      <a href="https://cityroadkills.com">CityRoadkills</a>
+      <a href="https://primelawofnetworks.com">Prime Law</a>
+    </div>
+    <div class="copyright">&copy; 2026 JPods, LLC. Policies blocking PRT networks kill.</div>
+  </div>
+</footer>
+
+</body>
+</html>
