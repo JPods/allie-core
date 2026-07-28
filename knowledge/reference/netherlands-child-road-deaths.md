@@ -6,8 +6,8 @@
 
 | Year | Child road deaths (0-14) | Notes |
 |------|--------------------------|-------|
-| 1971 | 500 | Peak — triggered Stop de Kindermoord movement |
-| 1973 | 450 | Movement gains political support; infrastructure redesign begins |
+| 1971 | ~450 | Peak — triggered Stop de Kindermoord movement. Sources vary: ~400 (Wikibooks/EJ Atlas), ~450 (Streetsblog/Dutch Reach), ~500 (some secondary). Total road deaths 3,300. We use ~450. |
+| 1973 | declining | Movement gains political support; infrastructure redesign begins |
 | ~1990 | ~100 | 80% reduction in 19 years — bike lanes, speed limits, car-free zones |
 | 1996-2000 | ~65/yr avg | 87% reduction — SWOV data |
 | 2010 | 14 | 97% reduction — often cited as the benchmark |
@@ -19,7 +19,7 @@
 ## Key Facts
 
 - **Total Dutch road deaths peaked at 3,300 in 1971** (all ages)
-- **500 of those were children** — the trigger for the movement
+- **~450 of those were children** — the trigger for the movement (sources range 400-500; we use ~450 per Streetsblog/Dutch Reach)
 - **Steepest drop: first 20 years** (1971-1990, 500→~100) — infrastructure redesign period
 - **Child risk now 1/20th of 1973 level** — even better than the overall 1/4 improvement for adults
 - **Plateau since 2010** at ~14-18/year — suggests remaining deaths require next infrastructure shift (grade separation)
