@@ -18,7 +18,13 @@ cityroadkills/
     IsoChrones.png
 ```
 
-**Cities built:** tx_arlington (2 of 3 images), ca_paloalto (all images + SafeRoutes + IslandOfSafety), sc_columbia (needs screenshots), sc_greenville (needs screenshots), ok_tulsa (needs screenshots)
+**Cities built:** tx_arlington (3 images), ca_paloalto (5 images — SafeRoutes + IslandOfSafety), sc_columbia (3 images + EmailColumbia.pdf), sc_greenville (needs screenshots), ok_tulsa (needs screenshots)
+
+**Key reframings:** "Restore juries" not "remove sovereign immunity." "Childish" not "foolish." Juries are retrospection. Judgment not compliance, wisdom not obedience.
+
+**Shared files:** style.css (one CSS), nav.js (one nav). All pages reference both. Constitutional is flat file, not subfolder.
+
+**GitHub:** JPods/cityroadkills. Live on Hostinger.
 
 **Palo Alto special:** 5 images total — Safe Routes to School (57% biking), IslandOfSafety (safe locally, dangerous surrounding cities), plus the standard 3. Most roadkills on 101 freeway (federal infrastructure).
 
