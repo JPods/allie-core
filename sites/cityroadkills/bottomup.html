@@ -5,76 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bottom Up — The Plan to End Roadkills</title>
 <meta name="description" content="TopDown central planning of the economy using a mercantile highway monopoly is the root cause of oil wars, traffic jams, $40 trillion in debt, and climate change. BottomUp accountability to juries is the plan.">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1a1a1a; line-height: 1.7; background: #fafafa; }
-a { color: #dc2626; text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-
-.hero { background: linear-gradient(160deg, #1a0a0a 0%, #3a0a0a 40%, #5a1a1a 100%); color: #fff; text-align: center; padding: 64px 24px 48px; }
-.hero h1 { font-size: 2.6em; font-weight: 700; margin-bottom: 12px; line-height: 1.15; }
-.hero h1 span { color: #ef4444; }
-.hero h1 .green { color: #4ade80; }
-.hero .tagline { font-size: 1.1em; font-weight: 300; color: rgba(255,255,255,0.8); max-width: 700px; margin: 0 auto 24px; }
-
-.tabs { display: flex; gap: 0; background: #1a0a0a; border-bottom: 2px solid rgba(239,68,68,0.3); padding: 0 24px; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
-.tab { padding: 12px 18px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.45); background: none; border: none; border-bottom: 3px solid transparent; text-decoration: none; white-space: nowrap; }
-.tab:hover { color: rgba(255,255,255,0.8); text-decoration: none; }
-.tab.active { color: #ef4444; border-bottom-color: #ef4444; }
-
-section { padding: 48px 0; border-bottom: 1px solid #e0e0e0; }
-section:last-of-type { border-bottom: none; }
-section h2 { font-size: 1.7em; font-weight: 400; color: #1a1a1a; margin-bottom: 14px; }
-section h2 span { color: #dc2626; }
-section h2 .green { color: #16a34a; }
-section p.lead { font-size: 1.05em; color: #4a4a4a; max-width: 720px; margin-bottom: 24px; }
-
-.quote-block { background: #fef2f2; border-left: 4px solid #dc2626; padding: 24px 32px; margin: 28px 0; border-radius: 0 8px 8px 0; }
-.quote-block.green { background: #f0fdf4; border-left-color: #16a34a; }
-.quote-block p { font-style: italic; font-family: Georgia, serif; font-size: 1.1em; color: #1a1a1a; margin-bottom: 8px; }
-.quote-block .attr { font-style: normal; font-size: 0.9em; color: #6a6a7a; }
-
-.parallel { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
-.card { border-radius: 10px; padding: 24px; }
-.card-light { background: #fef2f2; }
-.card-dark { background: #1a0a0a; color: #ccc; }
-.card-dark h3 { color: #ef4444; }
-.card-green { background: #f0fdf4; }
-.card-green h3 { color: #16a34a; }
-.card h3 { font-size: 1.1em; font-weight: 600; margin-bottom: 8px; }
-.card p { font-size: 0.93em; line-height: 1.6; }
-
-.comp-table { width: 100%; border-collapse: collapse; margin: 24px 0; }
-.comp-table th { text-align: left; padding: 12px 14px; font-size: 0.8em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; border-bottom: 2px solid; }
-.comp-table th:nth-child(2) { color: #dc2626; border-bottom-color: #dc2626; }
-.comp-table th:nth-child(3) { color: #16a34a; border-bottom-color: #16a34a; }
-.comp-table td { padding: 10px 14px; font-size: 0.95em; border-bottom: 1px solid #eee; }
-.comp-table tr.highlight td { background: #f0fdf4; }
-.comp-table tr.danger td { background: #fef2f2; }
-
-.stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin: 28px 0; }
-.stat { text-align: center; }
-.stat .number { font-size: 2em; font-weight: 700; }
-.stat .number.red { color: #dc2626; }
-.stat .number.green { color: #16a34a; }
-.stat .label { font-size: 0.8em; color: #6a6a7a; margin-top: 4px; }
-
-.cta-section { background: linear-gradient(160deg, #0a1a0a 0%, #0a2a1a 40%, #1a4a2a 100%); color: #fff; text-align: center; border-bottom: none; }
-.cta-section h2 { color: #fff; }
-.cta-section p.lead { color: rgba(255,255,255,0.8); margin: 0 auto 28px; }
-.cta-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.btn-primary { background: #fff; color: #1a0a0a; padding: 14px 32px; border-radius: 6px; font-weight: 600; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: transform 0.15s; }
-.btn-primary:hover { transform: translateY(-2px); text-decoration: none; }
-.btn-secondary { background: transparent; color: #fff; padding: 14px 32px; border-radius: 6px; font-weight: 500; border: 2px solid rgba(255,255,255,0.4); text-decoration: none; }
-.btn-secondary:hover { opacity: 0.85; text-decoration: none; }
-
-footer { background: #1a0a0a; color: #6a5a5a; text-align: center; padding: 36px 24px; }
-footer .footer-links a { color: #ef4444; margin: 0 10px; font-size: 0.9em; }
-footer .copyright { font-size: 0.8em; margin-top: 12px; }
-
-@media (max-width: 700px) { .hero h1 { font-size: 2em; } .parallel { grid-template-columns: 1fr; } }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -85,21 +16,21 @@ footer .copyright { font-size: 0.8em; margin-top: 12px; }
   </div>
 </header>
 
-<div class="tabs">
-  <a class="tab" href="index.html">Stop Child Murder</a>
-  <a class="tab" href="sovereign-immunity.html">60% Reduction</a>
-  <a class="tab" href="constitutional.html">Constitutional</a>
-  <a class="tab active" href="bottomup.html">BottomUp</a>
-  <a class="tab" href="tx_arlington/">Arlington</a>
-  <a class="tab" href="ca_paloalto/">Palo Alto</a>
-  <a class="tab" href="index.html#panel-library">Library</a>
-  <a class="tab" href="index.html#panel-template">Template</a>
-</div>
+<div class="tabs" id="crk-nav" data-active="bottomup"></div>
+<script src="nav.js"></script>
 
 <!-- ════════ TWO APPROACHES ════════ -->
 <section>
   <div class="container">
     <h2><span>TopDown</span> vs <span class="green">BottomUp</span></h2>
+
+<p>
+When you are sitting in a traffic jam, consider it was planned. When you enjoy the walkable part of the city consider it evolved based on signalling and liberty: tolerance of individuals offering choices and the Wisdom of the Many sorting those choice in free market and free speech.
+</p>
+<div class="img-block">
+  <img src="https://jpodssc.com/images/ingenuity/BottomUpTopDownHighwayCommunity.png" alt="TopDown highway vs BottomUp community — planned congestion vs evolved walkability">
+</div>
+
 
     <table class="comp-table">
       <thead>
@@ -186,7 +117,7 @@ footer .copyright { font-size: 0.8em; margin-top: 12px; }
 
     <div class="stats">
       <div class="stat"><div class="number red">$40T</div><div class="label">National debt<br>mortgaged onto children</div></div>
-      <div class="stat"><div class="number red">40,000+</div><div class="label">Americans killed<br>on roads per year</div></div>
+      <div class="stat"><div class="number red">2M+</div><div class="label">Americans killed on roads<br>since the 1975 study</div></div>
       <div class="stat"><div class="number red">$6.4T</div><div class="label">Oil wars<br>Iraq + Afghanistan</div></div>
       <div class="stat"><div class="number red">#1</div><div class="label">NASA: road transport<br>key driver of warming</div></div>
     </div>
@@ -194,11 +125,11 @@ footer .copyright { font-size: 0.8em; margin-top: 12px; }
     <div class="parallel">
       <div class="card card-light">
         <h3>Oil Wars</h3>
-        <p>Ten presidents declared foreign oil addiction a threat to national security. None ended it. American soldiers have been trading blood to buy time since 1990. The highway monopoly created the addiction. The addiction created the wars. The wars created $6.4 trillion in debt (Brown University).</p>
+        <p>Ten presidents declared foreign oil addiction a threat to national security. None ended it. American soldiers have been trading blood to buy time since 1990. The highway monopoly created the addiction. The addiction created the wars. The wars created $6.4 trillion in debt (Brown University). <a href="constitutional/" style="color:#dc2626;">Read all 10 presidents' oil warnings &rarr;</a></p>
       </div>
       <div class="card card-light">
         <h3>Traffic Deaths</h3>
-        <p>40,000+ Americans killed every year. 4.5 million seriously injured. DOTs are protected by sovereign immunity. The same intersections kill people year after year. The crash map is the indictment. The compliance system is the cause.</p>
+        <p>40,000+ Americans killed every year. 4.5 million seriously injured. DOTs are protected by sovereign immunity. The compliance system is the cause. <a href="sovereign-immunity.html" style="color:#dc2626;">See the 3,000x safety gap &rarr;</a></p>
       </div>
     </div>
 
@@ -270,7 +201,7 @@ footer .copyright { font-size: 0.8em; margin-top: 12px; }
       <a href="https://primelawofnetworks.com">Prime Law</a>
       <a href="https://dividedsovereignty.com">Divided Sovereignty</a>
     </div>
-    <div class="copyright">&copy; 2026 JPods, LLC. BottomUp, not TopDown.</div>
+    <div class="copyright">&copy; 2026 JPods, LLC. Judgment not compliance. Wisdom not obedience.</div>
   </div>
 </footer>
 
