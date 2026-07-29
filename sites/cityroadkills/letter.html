@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Draft Letter</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; line-height: 1.8; background: #fff; padding: 40px; max-width: 800px; margin: 0 auto; }
+
+.letter-header { text-align: center; margin-bottom: 32px; border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; }
+.letter-header img { height: 40px; margin-bottom: 8px; }
+.letter-header h1 { font-size: 1.4em; font-weight: 700; margin-bottom: 4px; }
+.letter-header .date { font-size: 0.9em; color: #666; }
+
+.letter-to { margin-bottom: 24px; }
+.letter-to p { margin-bottom: 4px; font-size: 0.95em; }
+
+.letter-body p { margin-bottom: 16px; font-size: 1em; }
+.letter-body strong { font-weight: 700; }
+.letter-body ul { margin: 12px 0 12px 32px; }
+.letter-body li { margin-bottom: 6px; }
+
+.letter-img { margin: 24px 0; text-align: center; }
+.letter-img img { max-width: 100%; border: 1px solid #ccc; border-radius: 4px; }
+.letter-img .caption { font-size: 0.8em; color: #666; margin-top: 6px; font-style: italic; }
+
+.letter-sig { margin-top: 40px; }
+.letter-sig p { margin-bottom: 4px; font-size: 0.95em; }
+
+.letter-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ccc; font-size: 0.8em; color: #888; text-align: center; }
+
+/* Edit bar — hidden in print */
+.edit-bar { position: fixed; top: 0; left: 0; right: 0; background: #1a1a1a; color: #fff; padding: 10px 24px; display: flex; align-items: center; gap: 16px; z-index: 100; font-family: -apple-system, sans-serif; }
+.edit-bar input, .edit-bar select { padding: 6px 10px; border: 1px solid #444; border-radius: 4px; background: #333; color: #fff; font-size: 13px; }
+.edit-bar input { width: 180px; }
+.edit-bar button { padding: 6px 16px; background: #dc2626; color: #fff; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 13px; }
+.edit-bar button:hover { background: #b91c1c; }
+.edit-bar label { font-size: 12px; color: #aaa; }
+body { padding-top: 70px; }
+
+@media print {
+  .edit-bar { display: none; }
+  body { padding: 0; margin: 0; }
+  @page { size: letter; margin: 0.75in; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ EDIT BAR ═══ -->
+<div class="edit-bar">
+  <label>City: <input type="text" id="inp-city" placeholder="Columbia" oninput="updateLetter()"></label>
+  <label>State: <input type="text" id="inp-state" placeholder="SC" style="width:50px;" oninput="updateLetter()"></label>
+  <label>County: <input type="text" id="inp-county" placeholder="Richland County" oninput="updateLetter()"></label>
+  <label>Deaths/yr: <input type="text" id="inp-deaths" placeholder="47" style="width:50px;" oninput="updateLetter()"></label>
+  <label>Worst spot: <input type="text" id="inp-intersection" placeholder="Main & 5th" style="width:140px;" oninput="updateLetter()"></label>
+  <label>Cost: <input type="text" id="inp-cost" placeholder="$860M" style="width:80px;" oninput="updateLetter()"></label>
+  <label>Savings: <input type="text" id="inp-savings" placeholder="$420M/yr" style="width:80px;" oninput="updateLetter()"></label>
+  <button onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ═══ LETTER ═══ -->
+<div class="letter-header">
+  <h1>STOP THE CHILD MURDER</h1>
+  <div class="date" id="letter-date"></div>
+</div>
+
+<div class="letter-to">
+  <p>Dear Mayor and City Councilmembers,</p>
+</div>
+
+<div class="letter-body">
+
+<p>If a child is killed or injured at your house because you left knives on the floor would you face the consequences of a jury trial. The answer should be yes.</p>
+
+<p>Every death, every injury, should be at risk of legal review and the judgment of a jury. By this means our society forces those who are not careful for children because it is the moral thing to do to be careful for children because there are financial liabilities.</p>
+
+<p><strong>Last year, <span class="deaths-val">___</span> people were killed on roads in <span class="city-name">your city</span>.</strong> At the NHTSA value of $1.7 million per statistical life, that is <span class="death-cost-val">$___</span> million your community absorbed. The worst corridor is <span class="intersection-val">___</span> &mdash; the same location, year after year. This is not random. It is designed.</p>
+
+<p>An exception to accountability to juries for harms is the killing of children on roads. DOTs and government policymakers unconstitutionally created a mercantile highway monopoly and granted themselves sovereign immunity and immunity from jury review for killing children on roads.</p>
+
+<p>The result in America is we kill children on roads at 4 times the rate they are killed in other developed economies. The Netherlands provides an example of what is possible through accountability. In 1971 the US and Netherlands had very similar car-centric road policies, the same per person oil use, and the same roadkill rate for people. That year ~450 children were killed on Dutch roads triggering STOP DE KINDERMOORD &mdash; STOP THE CHILD MURDER.</p>
+
+<p>Over the next 40 years, killing of children on Dutch roads gradually dropped from ~450 to 14.</p>
+
+<p>US city governments just keep killing children. That behavior, every child death, should be subject to jury review. <a href="https://5x5FreeMarket.com">5x5 Free Market</a> is a one-page law that government can adopt that would allow privately funded competition to the current highway monopoly and implement the 3,000 times better safety record of theme park thrill rides:</p>
+<ul>
+  <li>Privately funded transport networks 5 times more efficient than roads</li>
+  <li>Pay 5% of gross transport revenues to use air space over approved public Rights of Way.</li>
+  <li>To deploy and operate transport networks on which every injury and death is subject to review by a jury.</li>
+</ul>
+
+<p>Ending the mercantile highway monopoly and allowing alternative networks to highways can cut roadkill in most cities by 60-80% in 3-5 years.</p>
+
+<p>An example of an alternate to the highway monopoly is the PRT network in Morgantown, WV. It is a grade-separated network of self-driving cars. It was so important that President Nixon sent his daughter to open it in 1972. In 54 years there have been no serious injuries. In that same period 1.8 million Americans have been roadkilled and 2.4 million have had serious injuries each year.</p>
+
+<p>Here is a letter from the Mayor of Morgantown on the efficacy of the Morgantown PRT.</p>
+
+<div class="letter-img">
+  <img src="MorgantownMayorLetter.jpg" alt="Morgantown Mayor letter endorsing PRT system">
+</div>
+
+<p>Following are 3 maps. The first shows roadkills in <span class="city-name">your city</span>. The second shows an example PRT network that can be privately funded and is expected to cut roadkills by 60-80%. The last shows travel times from downtown <span class="city-name">your city</span>.</p>
+
+<div class="letter-img">
+  <img id="img-roadkills" src="" alt="Roadkill locations">
+  <div class="caption">Map 1: Roadkills in <span class="city-name">your city</span></div>
+</div>
+
+<div class="letter-img">
+  <img id="img-network" src="" alt="Example PRT network">
+  <div class="caption">Map 2: Example PRT network expected to cut roadkills 60-80% by providing an alternative to driving a car.</div>
+</div>
+
+<div class="letter-img">
+  <img id="img-isochrones" src="" alt="Travel time isochrones">
+  <div class="caption">Map 3: Example travel times without a car 24x7. Green = 5 min, Blue = 10 min, Yellow = 20 min, Red = 30 min.</div>
+</div>
+
+<p><a href="https://www.jpods.com/CongressionalStudy">Congressional Study PB-244854, Automated Guideway Transit</a> was published in 1975 to identify solutions to traffic and the hardships of the 1973 Oil Embargo. The study stated government &ldquo;institutional failures&rdquo; (not being subject to jury review) block PRT innovation for &ldquo;<em>four to six decades:</em></p>
+
+<blockquote style="margin: 16px 0 16px 32px; padding-left: 16px; border-left: 3px solid #999; font-style: italic;">
+PRT can provide a very much higher level of service than other modes of public transportation. Thus, it is argued that PRT systems would attract a significant percentage of the rides now being made in private automobiles and offer obvious benefits:
+<ul style="margin-top: 8px;">
+  <li>less traffic congestion in urban areas.</li>
+  <li>less land and fewer facilities used for automobile storage. reduced travel time under more comfortable circumstances. less noise and air pollution.</li>
+  <li>reduction in consumption of petroleum-derived fuels.</li>
+  <li>reduction in requirements for new arterial roads and urban freeways.</li>
+  <li>It is contended that PRT would provide greater mobility for the transportation disadvantaged, i.e., the young, the elderly, the poor, and the handicapped.&rdquo;</li>
+</ul>
+</blockquote>
+
+<p>Helsinki, Finland (660,000 people) achieved <strong>zero road deaths in 2025</strong> &mdash; twelve consecutive months without a single pedestrian, cyclist, or driver killed. <span class="city-name">Your city</span> killed <span class="deaths-val">___</span> people. The technology and the policy knowledge exist. The question is whether your city council will act.</p>
+
+<p>Adopt 5x5 Free Market so every death is subject to review by a jury and the &ldquo;institutional barriers&rdquo; to radically reducing roadkills will evaporate. Roadkills can be reduced 60-80% in 3-5 years.</p>
+
+<p><strong>We ask directly: Will you adopt the 5x5 Free Market standard? If not, what is your plan to stop killing people on the corridors shown in the crash map above?</strong></p>
+
+<p><strong>Tools to explore this yourself:</strong></p>
+<ul>
+  <li>www.MeshMobility.com &mdash; map crashes and design a network</li>
+  <li>www.PersonalizeTransit.com &mdash; calculate your city&rsquo;s payback</li>
+  <li>www.CityRoadkills.com &mdash; why this matters</li>
+  <li>www.5x5FreeMarket.com &mdash; the regulatory framework</li>
+</ul>
+
+<p>Please let us know if you are interested.</p>
+
+<p style="font-size:0.9em; color:#555; margin-top:24px; padding-top:16px; border-top:1px solid #ddd;">This letter was sent on <span id="record-date"></span> and is published at <a href="https://cityroadkills.com">CityRoadkills.com/<span class="city-name-lower">your-city</span></a>. The public record of your response begins now.</p>
+
+<p style="font-size:0.85em; color:#888;"><em>Recommendation: CC your local newspaper when sending this letter.</em></p>
+
+</div>
+
+<div class="letter-sig">
+  <p><strong>Bill James</strong></p>
+  <p>612.414.4211</p>
+  <p>bill.james@jpods.com</p>
+  <p>www.JPods.com</p>
+</div>
+
+<div class="letter-footer">
+  <p>CityRoadkills.com &mdash; Judgment not compliance. Wisdom not obedience.</p>
+</div>
+
+<script>
+// Parse URL params: ?city=Columbia&state=SC&county=Richland+County&folder=sc_columbia&cost=$860M&savings=$420M/yr
+var params = new URLSearchParams(window.location.search);
+var city = params.get('city') || '';
+var state = params.get('state') || '';
+var county = params.get('county') || '';
+var folder = params.get('folder') || '';
+var cost = params.get('cost') || '';
+var savings = params.get('savings') || '';
+var deaths = params.get('deaths') || '';
+var intersection = params.get('intersection') || '';
+
+// Pre-fill inputs
+if (city) document.getElementById('inp-city').value = city;
+if (state) document.getElementById('inp-state').value = state;
+if (county) document.getElementById('inp-county').value = county;
+if (cost) document.getElementById('inp-cost').value = cost;
+if (savings) document.getElementById('inp-savings').value = savings;
+if (deaths) document.getElementById('inp-deaths').value = deaths;
+if (intersection) document.getElementById('inp-intersection').value = intersection;
+
+// Set date
+document.getElementById('letter-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+// Set images from city folder
+if (folder) {
+  document.getElementById('img-roadkills').src = folder + '/RoadKills.png';
+  document.getElementById('img-network').src = folder + '/NetworkGuess.png';
+  document.getElementById('img-isochrones').src = folder + '/IsoChrones.png';
+}
+
+function updateLetter() {
+  city = document.getElementById('inp-city').value || 'your city';
+  state = document.getElementById('inp-state').value || 'ST';
+  county = document.getElementById('inp-county').value || 'your county';
+  cost = document.getElementById('inp-cost').value || '$X';
+  savings = document.getElementById('inp-savings').value || '$X/yr';
+  deaths = document.getElementById('inp-deaths').value || '___';
+  intersection = document.getElementById('inp-intersection').value || '___';
+
+  var deathCost = deaths !== '___' ? Math.round(parseFloat(deaths) * 1.7) : '___';
+
+  document.querySelectorAll('.city-name').forEach(function(el) { el.textContent = city; });
+  document.querySelectorAll('.state-name').forEach(function(el) { el.textContent = state; });
+  document.querySelectorAll('.county-name').forEach(function(el) { el.textContent = county; });
+  document.querySelectorAll('.cost-val').forEach(function(el) { el.textContent = cost; });
+  document.querySelectorAll('.savings-val').forEach(function(el) { el.textContent = savings; });
+  document.querySelectorAll('.deaths-val').forEach(function(el) { el.textContent = deaths; });
+  document.querySelectorAll('.intersection-val').forEach(function(el) { el.textContent = intersection; });
+  document.querySelectorAll('.death-cost-val').forEach(function(el) { el.textContent = '$' + deathCost; });
+  document.querySelectorAll('.city-name-lower').forEach(function(el) { el.textContent = city.toLowerCase().replace(/\s+/g, '-'); });
+
+  document.getElementById('record-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.title = 'Letter to ' + city + ', ' + state + ' — STOP THE CHILD MURDER';
+}
+
+// Initial fill
+updateLetter();
+</script>
+
+</body>
+</html>
