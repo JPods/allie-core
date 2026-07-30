@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JPods Trip Editor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Top toolbar ──────────────────────────────────────────────────────── */
+    #toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #2d2d2d;
+      border-bottom: 1px solid #444;
+      flex-shrink: 0;
+    }
+    #toolbar-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d4d4d4;
+      margin-right: auto;
+      user-select: none;
+    }
+
+    button {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    button:hover  { filter: brightness(1.2); }
+    button:active { filter: brightness(0.85); }
+
+    #btn-refresh { background: #0e639c; color: #fff; }
+
+    /* ── Main content: two columns ────────────────────────────────────────── */
+    #content {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── LEFT: trip list ─────────────────────────────────────────────────── */
+    #panel-left {
+      width: 300px;
+      min-width: 220px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #3c3c3c;
+      background: #252526;
+    }
+    #list-header {
+      padding: 7px 10px;
+      font-size: 11px;
+      color: #888;
+      background: #2d2d2d;
+      border-bottom: 1px solid #3c3c3c;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    #trip-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 8px;
+    }
+    #trip-list::-webkit-scrollbar { width: 6px; }
+    #trip-list::-webkit-scrollbar-track { background: #1e1e1e; }
+    #trip-list::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+    .trip-row {
+      background: #252526;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      padding: 7px 9px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .trip-row:hover {
+      border-color: #5a7fa0;
+      background: #2a3b4a;
+    }
+    .trip-row.selected {
+      border-color: #0e639c;
+      background: #1e3a52;
+    }
+    .trip-row-nora {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 10px;
+      color: #666;
+      background: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 3px;
+      padding: 2px 5px;
+      display: inline-block;
+      margin-bottom: 4px;
+      user-select: none;
+    }
+    .trip-row-route {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      color: #4ec9b0;
+      display: block;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .trip-row-badge {
+      font-size: 10px;
+      color: #888;
+      background: #333;
+      border-radius: 3px;
+      padding: 1px 5px;
+      display: inline-block;
+      user-select: none;
+    }
+
+    #empty-state {
+      padding: 30px 10px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.8;
+    }
+    #empty-state strong { color: #ce9178; }
+
+    /* ── RIGHT: detail panel ─────────────────────────────────────────────── */
+    #panel-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #1e1e1e;
+    }
+
+    /* Status bar */
+    #status-bar {
+      flex-shrink: 0;
+      padding: 7px 10px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+    }
+    #status-text {
+      flex: 1;
+      font-size: 12px;
+      color: #9cdcfe;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #btn-clear-overlay {
+      background: #3a3a3a;
+      color: #ccc;
+      border: 1px solid #555;
+      padding: 4px 10px;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    #btn-clear-trip {
+      background: #6b1a1a;
+      color: #f0a0a0;
+      padding: 4px 10px;
+      font-size: 11px;
+      flex-shrink: 0;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    #btn-clear-trip.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* JSON viewer */
+    #json-section {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #json-label {
+      padding: 5px 10px;
+      font-size: 11px;
+      color: #555;
+      background: #252526;
+      border-bottom: 1px solid #2d2d2d;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    #json-pre {
+      flex: 1;
+      overflow: auto;
+      margin: 0;
+      padding: 10px 12px;
+      background: #1e1e1e;
+      color: #ce9178;
+      font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre;
+      border: none;
+      outline: none;
+    }
+    #json-pre::-webkit-scrollbar { width: 6px; height: 6px; }
+    #json-pre::-webkit-scrollbar-track { background: #1e1e1e; }
+    #json-pre::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+    #json-placeholder {
+      padding: 30px 12px;
+      color: #555;
+      font-size: 12px;
+      font-style: italic;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Toolbar ──────────────────────────────────────────────────────────── -->
+  <div id="toolbar">
+    <span id="toolbar-title">Trip Editor</span>
+    <button id="btn-refresh" onclick="refreshTrips()">Refresh</button>
+  </div>
+
+  <!-- ── Two-column content ───────────────────────────────────────────────── -->
+  <div id="content">
+
+    <!-- LEFT: trip list -->
+    <div id="panel-left">
+      <div id="list-header">Vehicles with assigned trips</div>
+      <div id="trip-list">
+        <div id="empty-state">
+          <strong>No trips assigned</strong><br>
+          Use Run &rarr; Random or the Console<br>
+          to assign trips, then Refresh.
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: detail panel -->
+    <div id="panel-right">
+      <div id="status-bar">
+        <span id="status-text">Select a trip to inspect.</span>
+        <button id="btn-clear-overlay" onclick="doClearOverlay()">Clear Overlay</button>
+        <button id="btn-clear-trip"    onclick="doClearTrip()">Clear This Trip</button>
+      </div>
+      <div id="json-section">
+        <div id="json-label">trip.json</div>
+        <pre id="json-pre"><span id="json-placeholder">Select a vehicle from the list.</span></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── State ──────────────────────────────────────────────────────────────
+    var _selectedNoraId = null;
+    var _tripRows = [];
+
+    // ── Toolbar ────────────────────────────────────────────────────────────
+    function refreshTrips() {
+      setStatus('Refreshing…');
+      try { sketchup.get_trips('{}'); } catch(e) { setStatus('Bridge error: ' + e); }
+    }
+
+    // ── Called by Ruby: loadTrips(rows) ───────────────────────────────────
+    // rows: [{nora_id, origin, dest, connections, hops}, ...]
+    function loadTrips(rows) {
+      _tripRows = Array.isArray(rows) ? rows : [];
+      var list = document.getElementById('trip-list');
+
+      if (_tripRows.length === 0) {
+        list.innerHTML =
+          '<div id="empty-state"><strong>No trips assigned</strong><br>' +
+          'Use Run &rarr; Random or the Console<br>to assign trips, then Refresh.</div>';
+        setStatus('No trips found.');
+        return;
+      }
+
+      var html = '';
+      _tripRows.forEach(function(row) {
+        var selected = (row.nora_id === _selectedNoraId) ? ' selected' : '';
+        var origin = escHtml(row.origin || '?');
+        var dest   = escHtml(row.dest   || '?');
+        var badge  = row.connections + ' connection' + (row.connections === 1 ? '' : 's');
+        if (row.hops && row.hops !== row.connections) {
+          badge += ', ' + row.hops + ' hop' + (row.hops === 1 ? '' : 's');
+        }
+        html +=
+          '<div class="trip-row' + selected + '" ' +
+               'data-nora-id="' + escAttr(row.nora_id) + '" ' +
+               'onclick="selectTrip(this)">' +
+            '<span class="trip-row-nora">' + escHtml(row.nora_id) + '</span>' +
+            '<span class="trip-row-route">' + origin + ' &rarr; ' + dest + '</span>' +
+            '<span class="trip-row-badge">' + badge + '</span>' +
+          '</div>';
+      });
+      list.innerHTML = html;
+
+      var count = _tripRows.length;
+      setStatus(count + ' vehicle' + (count === 1 ? '' : 's') + ' with trips.');
+    }
+
+    // ── Called by Ruby: showTripDetail(nora_id, jsonText) ─────────────────
+    function showTripDetail(nora_id, jsonText) {
+      _selectedNoraId = nora_id;
+      var pre = document.getElementById('json-pre');
+      var placeholder = document.getElementById('json-placeholder');
+      if (placeholder) placeholder.remove();
+
+      try {
+        var obj = (typeof jsonText === 'string') ? JSON.parse(jsonText) : jsonText;
+        pre.textContent = JSON.stringify(obj, null, 2);
+      } catch(e) {
+        pre.textContent = (typeof jsonText === 'string') ? jsonText : String(jsonText);
+      }
+
+      // Activate the "Clear This Trip" button
+      var btn = document.getElementById('btn-clear-trip');
+      btn.classList.add('active');
+
+      setStatus('Vehicle ' + nora_id);
+    }
+
+    // ── Row click ─────────────────────────────────────────────────────────
+    function selectTrip(el) {
+      var noraId = el.getAttribute('data-nora-id');
+
+      // Update highlight
+      var rows = document.querySelectorAll('.trip-row');
+      rows.forEach(function(r) { r.classList.remove('selected'); });
+      el.classList.add('selected');
+
+      _selectedNoraId = noraId;
+
+      setStatus('Loading trip ' + noraId + '…');
+
+      // Clear old overlay, then request new one
+      try { sketchup.clear_overlay('{}'); } catch(e) {}
+      try {
+        sketchup.show_trip(JSON.stringify({ nora_id: noraId }));
+      } catch(e) {
+        setStatus('Bridge error: ' + e);
+      }
+    }
+
+    // ── Overlay buttons ────────────────────────────────────────────────────
+    function doClearOverlay() {
+      try { sketchup.clear_overlay('{}'); } catch(e) {}
+      setStatus('Overlay cleared.');
+    }
+
+    function doClearTrip() {
+      if (!_selectedNoraId) return;
+      var nid = _selectedNoraId;
+      if (!confirm('Remove trip assignment for vehicle ' + nid + '?\n\nThis deletes the trip from the model attribute and any .trip.json file on disk.')) {
+        return;
+      }
+      setStatus('Clearing trip for ' + nid + '…');
+      _selectedNoraId = null;
+      document.getElementById('btn-clear-trip').classList.remove('active');
+      document.getElementById('json-pre').textContent = '';
+      try {
+        sketchup.clear_trip(JSON.stringify({ nora_id: nid }));
+      } catch(e) {
+        setStatus('Bridge error: ' + e);
+      }
+    }
+
+    // ── Status helper ──────────────────────────────────────────────────────
+    function setStatus(msg) {
+      document.getElementById('status-text').textContent = msg || '';
+    }
+
+    // ── HTML escape helpers ────────────────────────────────────────────────
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+    function escAttr(s) {
+      return String(s).replace(/"/g, '&quot;');
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────────
+    window.addEventListener('load', function() {
+      setStatus('Loading…');
+      try { sketchup.get_trips('{}'); } catch(e) { setStatus('Waiting for SketchUp bridge…'); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "schema": "jpods-noelle-features-v2",
+  "note": "Noelle's authority on what each formation template is and what it is physically allowed to do. Keyed by model_id (folder name under templates/track_formations/). structure_type is the canonical type — written to each placed instance at placement time. Noelle generates {model}.feature.json from this on every Build and Validate.",
+
+  "templates": {
+
+    "station_thru_dip": {
+      "structure_type": "station",
+      "note": "Two connection points. Through station. landing_chains and exit_chains defined in lines.json — model designer authority. pass_far/pass_near defined here (Noelle behavioral policy, not geometry). Updated 2026-05-31.",
+      "cp_count": 2,
+      "pass_far": {
+        "in_cp1": ["gw_cp_in_1", "gw_cp_in_lead_1", "gw_far_main", "gw_cp_out_lead_0", "gw_cp_out_0"]
+      },
+      "pass_near": {
+        "in_cp0": ["gw_cp_in_0", "gw_cp_in_lead_0", "gw_near_main_1", "gw_near_main_2", "gw_cp_out_lead_1", "gw_cp_out_1"]
+      }
+    },
+
+    "station_line_end": {
+      "structure_type": "station",
+      "note": "One connection point. End-of-line terminus. Departure requires uturn_1 + far_main + far_out to reverse direction. Arrival includes platform_parking.",
+      "cp_count": 1,
+      "originating": {
+        "shuffle": [],
+        "out_cp0": ["gw_platform", "gw_uturn_1", "gw_far_main", "gw_far_out", "gw_cp_out_0"]
+      },
+      "landing": {
+        "in_cp0": ["gw_cp_in_0", "gw_platform_in", "gw_platform_parking", "gw_platform"]
+      }
+    },
+
+    "station_parking": {
+      "structure_type": "station",
+      "note": "Single CP parking station with internal U-turn. Pods park in platform bays.",
+      "cp_count": 1,
+      "originating": {
+        "shuffle": [],
+        "out_cp0": ["gw_platform", "gw_uturn_0", "gw_cp_out_0"]
+      },
+      "landing": {
+        "in_cp0": ["gw_cp_in_0", "gw_platform_in", "gw_platform"]
+      }
+    },
+
+    "traffic_circle7": {
+      "structure_type": "traffic_circle",
+      "note": "Traffic circle with 4 connection points (CP0–CP3). The '7' in the name is the 7m diameter, not the CP count. Pods enter on any gw_N_in arm, traverse the ring (gw_c_N_M arcs), exit on any gw_N_out arm. No passenger platform — pods do not dwell.",
+      "cp_count": 4,
+      "pass": true
+    }
+
+  }
+}

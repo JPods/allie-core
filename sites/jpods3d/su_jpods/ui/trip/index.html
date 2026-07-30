@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>JPods</title>
+<style>
+/* ── Reset & base ──────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0d1117; --surface:#161b22; --surface2:#1c2128; --border:#30363d;
+  --blue:#2563eb; --blue-light:#3b82f6; --green:#22cc00; --green-d:#1a9900;
+  --text:#e6edf3; --muted:#8b949e; --ok:#22c55e;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --radius:14px; --radius-sm:10px;
+  --transition:0.28s cubic-bezier(0.4,0,0.2,1);
+}
+html,body{width:100%;height:100%;background:#000;font-family:var(--font);color:var(--text);overflow:hidden}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh}
+
+/* ── Phone shell ─────────────────────────────────────────────────────── */
+.phone-shell{
+  width:390px;height:844px;background:var(--bg);border-radius:48px;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 12px #1a1a1a,0 0 0 13px #333,0 32px 80px rgba(0,0,0,.8);
+  margin:auto;
+}
+@media(max-width:430px){.phone-shell{width:100%;height:100%;border-radius:0;box-shadow:none}}
+
+/* ── Status bar ──────────────────────────────────────────────────────── */
+.status-bar{
+  position:absolute;top:0;left:0;right:0;height:54px;
+  padding:14px 24px 0;display:flex;align-items:center;justify-content:space-between;
+  z-index:100;font-size:12px;font-weight:600;
+}
+.status-time{font-size:15px;font-weight:700}
+.status-icons{display:flex;gap:6px;align-items:center}
+
+/* ── Screens ──────────────────────────────────────────────────────────── */
+.screen{
+  position:absolute;inset:0;padding:54px 0 34px;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;pointer-events:none;transform:translateX(60px);
+  transition:opacity var(--transition),transform var(--transition);
+  overflow-y:auto;scrollbar-width:none;
+}
+.screen::-webkit-scrollbar{display:none}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.screen.exit-left{opacity:0;transform:translateX(-60px)}
+
+/* ── Logo ────────────────────────────────────────────────────────────── */
+.logo{display:flex;flex-direction:column;align-items:center;padding:18px 24px 10px}
+.logo-svg{width:140px;height:auto}
+.logo-sub{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ── Accordion ───────────────────────────────────────────────────────── */
+.accordion{width:100%;padding:0 16px 6px}
+.acc-header{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:13px 16px;cursor:pointer;
+  transition:background 0.18s,border-color 0.18s;
+  user-select:none;
+}
+.acc-header:active{background:var(--surface2)}
+.acc-header.open{
+  border-radius:var(--radius) var(--radius) 0 0;
+  border-bottom-color:var(--surface);
+  background:var(--surface2);
+}
+.acc-left{display:flex;align-items:center;gap:10px}
+.acc-icon{font-size:16px;line-height:1;opacity:0.75}
+.acc-title{font-size:14px;font-weight:600;color:var(--text)}
+.acc-hint{font-size:12px;color:var(--muted);margin-top:1px}
+.acc-chevron{
+  font-size:13px;color:var(--muted);
+  transition:transform 0.22s;display:inline-block;
+}
+.acc-header.open .acc-chevron{transform:rotate(180deg)}
+
+.acc-body{
+  background:var(--surface2);
+  border:1.5px solid var(--border);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  overflow:hidden;max-height:0;
+  transition:max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.acc-body.open{max-height:500px}
+.acc-inner{padding:10px 14px 14px}
+
+/* ── myCarryOn section ────────────────────────────────────────────────── */
+.carryon-row{display:flex;align-items:center;gap:12px;padding:6px 0}
+.carryon-avatar{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#1a3a6e,#2563eb);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.carryon-name{font-size:16px;font-weight:700}
+.carryon-id{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:0.04em}
+
+/* ── Preferences section ─────────────────────────────────────────────── */
+.pref-rows{display:flex;flex-direction:column;gap:1px}
+.pref-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 4px;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.pref-row:last-child{border-bottom:none}
+.pref-label{font-size:13px;color:var(--muted)}
+.pref-ctl{
+  font-size:13px;color:var(--text);background:rgba(255,255,255,0.07);
+  border:1px solid var(--border);border-radius:6px;padding:4px 8px;
+  font-family:var(--font);appearance:none;cursor:pointer;
+}
+.pref-ctl option{background:#1a1a2e}
+.pref-ctl.text-ctl{background:transparent;border:none;text-align:right;
+  color:var(--text);outline:none;width:160px}
+.pref-ctl.text-ctl::placeholder{color:var(--muted)}
+.vol-row{display:flex;align-items:center;gap:8px}
+.vol-row input[type=range]{
+  width:90px;height:3px;accent-color:var(--blue);cursor:pointer;
+}
+.vol-val{font-size:12px;color:var(--muted);min-width:14px;text-align:center}
+.toggle{position:relative;width:40px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:12px;transition:background 0.2s}
+.toggle input:checked+.toggle-track{background:var(--ok)}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.toggle input:checked~.toggle-thumb{transform:translateX(16px)}
+
+/* ── Stations section ────────────────────────────────────────────────── */
+.you-are-at{
+  font-size:11px;text-transform:uppercase;letter-spacing:0.09em;
+  color:var(--muted);padding:8px 4px 6px;
+}
+.you-are-name{color:var(--green);font-weight:700}
+.station-list{display:flex;flex-direction:column;gap:8px;padding-top:4px;max-height:400px;overflow-y:auto}
+.station-card{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:14px 14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:border-color 0.15s,background 0.15s,transform 0.12s;
+}
+.station-card:active{background:var(--surface2);border-color:var(--blue);transform:scale(0.98)}
+.station-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:rgba(37,99,235,0.14);display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+}
+.station-name{font-size:15px;font-weight:600}
+.station-hint{font-size:11px;color:var(--muted);margin-top:2px}
+.station-arrow{margin-left:auto;color:var(--muted);font-size:17px;flex-shrink:0}
+
+/* ── Boarding screen ─────────────────────────────────────────────────── */
+.pod-graphic{
+  width:200px;height:88px;margin:22px auto 6px;
+  background:linear-gradient(135deg,#1a3a6e,#2563eb);
+  border-radius:20px 20px 14px 14px;position:relative;
+  box-shadow:0 12px 40px rgba(37,99,235,0.35);
+  display:flex;align-items:center;justify-content:center;
+}
+.pod-graphic::before{
+  content:'';position:absolute;top:12px;left:20px;right:20px;height:26px;
+  background:rgba(180,220,255,0.18);border-radius:8px;
+}
+.pod-number{font-size:15px;font-weight:700;letter-spacing:0.08em;color:rgba(255,255,255,0.9);z-index:1}
+.pod-wheels{display:flex;justify-content:space-around;padding:0 30px;margin-top:-5px}
+.pod-wheel{width:22px;height:7px;background:#333;border-radius:4px}
+.boarding-info{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:14px 18px;margin:14px 20px;width:calc(100% - 40px);
+}
+.boarding-info-row{display:flex;justify-content:space-between;padding:5px 0}
+.bi-label{font-size:13px;color:var(--muted)}
+.bi-value{font-size:13px;font-weight:600}
+.welcome-msg{
+  background:linear-gradient(135deg,rgba(37,99,235,0.12),rgba(37,99,235,0.04));
+  border:1px solid rgba(37,99,235,0.25);border-radius:var(--radius);
+  padding:14px 18px;margin:0 20px;width:calc(100% - 40px);
+  font-size:13px;line-height:1.6;font-style:italic;color:var(--muted);
+}
+.welcome-msg strong{color:var(--text);font-style:normal}
+
+/* ── Buttons ─────────────────────────────────────────────────────────── */
+.btn{
+  width:calc(100% - 40px);padding:16px;border-radius:var(--radius);
+  border:none;cursor:pointer;font-size:17px;font-weight:700;
+  font-family:var(--font);letter-spacing:0.02em;
+  transition:all 0.18s ease;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:active{background:#1d4ed8;transform:scale(0.98)}
+.btn-secondary{background:var(--surface);color:var(--text);border:1.5px solid var(--border);margin-top:10px}
+.btn-secondary:active{background:var(--surface2);transform:scale(0.98)}
+.btn-enter{
+  background:linear-gradient(135deg,var(--blue),#7c3aed);color:#fff;
+  font-size:18px;margin-top:auto;margin-bottom:8px;
+  box-shadow:0 8px 24px rgba(37,99,235,0.4);
+}
+.btn-enter:active{transform:scale(0.97);box-shadow:0 4px 12px rgba(37,99,235,0.3)}
+
+/* ── In-trip ─────────────────────────────────────────────────────────── */
+.trip-header{width:100%;padding:18px 24px 0;display:flex;flex-direction:column;gap:4px}
+.trip-to{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em}
+.trip-dest{font-size:22px;font-weight:700}
+.trip-eta{font-size:12px;color:var(--blue-light);margin-top:2px}
+.progress-bar{
+  width:calc(100% - 40px);height:4px;background:var(--border);
+  border-radius:2px;margin:14px 0 6px;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width 1s linear;width:0%}
+.progress-label{font-size:11px;color:var(--muted);width:calc(100% - 40px);display:flex;justify-content:space-between}
+.activity-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  padding:18px 20px 8px;width:100%;
+}
+.activity-tile{
+  background:var(--surface);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:20px 14px 16px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;transition:all 0.18s;
+}
+.activity-tile:active{background:var(--surface2);border-color:var(--blue);transform:scale(0.97)}
+.activity-icon{font-size:28px;line-height:1}
+.activity-label{font-size:13px;font-weight:600;color:var(--muted)}
+
+/* ── Arrival ─────────────────────────────────────────────────────────── */
+.arrival-screen{background:linear-gradient(160deg,#0d1117 0%,#0f2044 60%,#0d1117 100%)}
+.arrival-animation{
+  width:110px;height:110px;margin:40px auto 18px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),#7c3aed);
+  display:flex;align-items:center;justify-content:center;font-size:48px;
+  box-shadow:0 0 60px rgba(37,99,235,0.5),0 0 120px rgba(37,99,235,0.2);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 60px rgba(37,99,235,.5),0 0 120px rgba(37,99,235,.2)}
+  50%{box-shadow:0 0 80px rgba(37,99,235,.7),0 0 160px rgba(37,99,235,.3)}
+}
+.arrival-msg{font-size:22px;font-weight:700;text-align:center;padding:0 28px;line-height:1.4}
+.arrival-dest{font-size:14px;color:var(--muted);text-align:center;margin-top:8px;padding:0 32px}
+.arrival-actions{display:flex;flex-direction:column;align-items:center;width:100%;padding:28px 20px 0;gap:0}
+
+/* ── Back btn ────────────────────────────────────────────────────────── */
+.back-btn{
+  position:absolute;top:60px;left:18px;
+  background:rgba(255,255,255,0.08);border:none;border-radius:50%;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;color:var(--text);z-index:50;
+}
+
+/* ── Misc ─────────────────────────────────────────────────────────────── */
+.home-indicator{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  width:130px;height:5px;background:rgba(255,255,255,0.3);border-radius:3px;
+}
+.spinner{
+  width:22px;height:22px;border:2.5px solid rgba(255,255,255,0.2);
+  border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spacer{flex:1}
+.screen-title{font-size:24px;font-weight:700;text-align:center;padding:16px 24px 4px;line-height:1.2}
+</style>
+</head>
+<body>
+<div class="phone-shell" id="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time" id="status-time">9:41</span>
+    <span class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4" y="2.5" width="3" height="9.5" rx="1"/><rect x="8" y="1" width="3" height="11" rx="1"/><rect x="12" y="0" width="3" height="12" rx="1" opacity=".3"/></svg>
+      <svg width="16" height="12" viewBox="0 0 18 12" fill="currentColor"><path d="M9 2.4C6.6 2.4 4.4 3.4 2.8 5L1.3 3.4C3.3 1.3 6 0 9 0s5.7 1.3 7.7 3.4L15.2 5C13.6 3.4 11.4 2.4 9 2.4zm0 4.8c-1.3 0-2.5.5-3.3 1.4L4.3 7.2C5.5 5.9 7.2 5 9 5s3.5.9 4.7 2.2L12.3 8.6C11.5 7.7 10.3 7.2 9 7.2zm0 2.4c-.8 0-1.5.3-2 .8L9 12l2-.8c-.5-.5-1.2-.8-2-.8z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0" y="1" width="21" height="10" rx="2" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.2"/><path d="M22 4.5v3a1.5 1.5 0 000-3z"/></svg>
+    </span>
+  </div>
+
+  <!-- ── Screen: Home (accordions) ──────────────────────────────────── -->
+  <div class="screen active" id="screen-home">
+
+    <div class="logo">
+      <svg class="logo-svg" viewBox="0 0 200 72" xmlns="http://www.w3.org/2000/svg" aria-label="JPods">
+        <rect x="4" y="4" width="192" height="14" rx="3" fill="#22cc00" stroke="#0011bb" stroke-width="2"/>
+        <rect x="4" y="20" width="192" height="46" rx="8" fill="#22cc00" stroke="#0011bb" stroke-width="3"/>
+        <text x="100" y="54" text-anchor="middle"
+              font-family="'Arial Black','Impact',sans-serif" font-weight="900"
+              font-size="34" letter-spacing="-1"
+              fill="#22cc00" stroke="#0011bb" stroke-width="5" paint-order="stroke fill">JPods</text>
+        <text x="172" y="30" font-family="Arial,sans-serif" font-weight="700" font-size="13" fill="#0011bb">®</text>
+      </svg>
+      <div class="logo-sub">Physical Internet®</div>
+    </div>
+
+    <!-- ① myCarryOn identity — collapsed by default -->
+    <div class="accordion">
+      <div class="acc-header" id="acc-hdr-carryon" onclick="toggleAcc('carryon')">
+        <div class="acc-left">
+          <span class="acc-icon">👤</span>
+          <div>
+            <div class="acc-title" id="acc-title-carryon">myCarryOn</div>
+            <div class="acc-hint" id="acc-hint-carryon">Sally Smith</div>
+          </div>
+        </div>
+        <span class="acc-chevron">▾</span>
+      </div>
+      <div class="acc-body" id="acc-body-carryon">
+        <div class="acc-inner">
+          <div class="carryon-row">
+            <div class="carryon-avatar">👤</div>
+            <div>
+              <div class="carryon-name" id="cy-name">Sally Smith</div>
+              <div class="carryon-id" id="cy-id">carryon://sally.smith · verified</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② Preferences — collapsed by default -->
+    <div class="accordion">
+      <div class="acc-header" id="acc-hdr-prefs" onclick="toggleAcc('prefs')">
+        <div class="acc-left">
+          <span class="acc-icon">⚙️</span>
+          <div>
+            <div class="acc-title">Preferences</div>
+            <div class="acc-hint" id="acc-hint-prefs">English · 76°F · Music</div>
+          </div>
+        </div>
+        <span class="acc-chevron">▾</span>
+      </div>
+      <div class="acc-body" id="acc-body-prefs">
+        <div class="acc-inner">
+          <div class="pref-rows">
+
+            <div class="pref-row">
+              <span class="pref-label">Language</span>
+              <select class="pref-ctl" id="pref-lang" onchange="setPrefLang(this.value)">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="pt">🇧🇷 Português</option>
+              </select>
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Temperature</span>
+              <select class="pref-ctl" id="pref-temp" onchange="savePref('temp',this.value);updatePrefsHint()">
+                <option value="76F">76°F</option>
+                <option value="68F">68°F</option>
+                <option value="72F">72°F</option>
+                <option value="78F">78°F</option>
+                <option value="20C">20°C</option>
+                <option value="22C">22°C</option>
+                <option value="24C">24°C</option>
+              </select>
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Currency</span>
+              <select class="pref-ctl" id="pref-currency" onchange="savePref('currency',this.value)">
+                <option value="USD">$ Dollars</option>
+                <option value="EUR">€ Euros</option>
+                <option value="GBP">£ Pounds</option>
+                <option value="JPY">¥ Yen</option>
+                <option value="CNY">¥ Yuan</option>
+                <option value="BRL">R$ Reais</option>
+              </select>
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Special Needs</span>
+              <input class="pref-ctl text-ctl" id="pref-special" type="text"
+                     value="None" placeholder="none"
+                     onchange="savePref('special_requirements',this.value)">
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Entertainment</span>
+              <input class="pref-ctl text-ctl" id="pref-entertain" type="text"
+                     value="Music.playlist.nora_jones" placeholder="playlist or silence"
+                     onchange="savePref('entertainment',this.value);updatePrefsHint()">
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Volume</span>
+              <div class="vol-row">
+                <input type="range" min="0" max="10" value="2" id="pref-volume"
+                       oninput="$('vol-val').textContent=this.value;savePref('volume',+this.value)">
+                <span class="vol-val" id="vol-val">2</span>
+              </div>
+            </div>
+
+            <div class="pref-row">
+              <span class="pref-label">Cameras</span>
+              <label class="toggle">
+                <input type="checkbox" id="pref-camera" onchange="savePref('camera',this.checked);updatePrefsHint()">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ Stations — open by default -->
+    <div class="accordion">
+      <div class="acc-header open" id="acc-hdr-stations" onclick="toggleAcc('stations')">
+        <div class="acc-left">
+          <span class="acc-icon">📍</span>
+          <div>
+            <div class="acc-title">Your Trip</div>
+            <div class="acc-hint">Select origin and destination</div>
+          </div>
+        </div>
+        <span class="acc-chevron" style="transform:rotate(180deg)">▾</span>
+      </div>
+      <div class="acc-body open" id="acc-body-stations">
+        <div class="acc-inner">
+          <div class="you-are-at">From</div>
+          <select class="pref-ctl" id="origin-select" style="width:100%;padding:10px 12px;font-size:14px;margin-bottom:12px"
+                  onchange="selectOrigin(this.value)">
+            <option value="">Select your station…</option>
+          </select>
+          <div class="you-are-at" style="margin-top:8px">Camera</div>
+          <select class="pref-ctl" id="camera-mode" style="width:100%;padding:10px 12px;font-size:14px;margin-bottom:12px">
+            <option value="user">User Position (orbit first, then follow)</option>
+            <option value="right-rear">Above Right-Rear</option>
+            <option value="front">Front Looking (windshield view)</option>
+          </select>
+          <div class="you-are-at" style="margin-top:8px">To</div>
+          <select class="pref-ctl" id="dest-select" style="width:100%;padding:10px 12px;font-size:14px;margin-bottom:12px"
+                  onchange="selectDestFromDropdown(this.value)">
+            <option value="">Select origin first</option>
+          </select>
+          <div style="display:flex; align-items:center; justify-content:flex-end;">
+            <button class="btn btn-primary" id="btn-make-trip" style="display:none;padding:8px 20px;font-size:14px;"
+                    onclick="makeTrip()">Make Trip</button>
+          </div>
+          <div id="station-list" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:16px"></div>
+  </div><!-- /screen-home -->
+
+  <!-- ── Screen: Boarding ────────────────────────────────────────────── -->
+  <div class="screen" id="screen-board">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <div class="screen-title" id="board-title">Your Vehicle</div>
+
+    <div class="pod-graphic">
+      <span class="pod-number" id="board-vehicle-id">…</span>
+    </div>
+    <div class="pod-wheels"><div class="pod-wheel"></div><div class="pod-wheel"></div></div>
+
+    <div class="boarding-info">
+      <div class="boarding-info-row">
+        <span class="bi-label">From</span>
+        <span class="bi-value" id="board-from">—</span>
+      </div>
+      <div class="boarding-info-row">
+        <span class="bi-label">To</span>
+        <span class="bi-value" id="board-to">—</span>
+      </div>
+      <div class="boarding-info-row">
+        <span class="bi-label">Slot</span>
+        <span class="bi-value" id="board-slot">—</span>
+      </div>
+      <div class="boarding-info-row">
+        <span class="bi-label">Est. Arrival</span>
+        <span class="bi-value" id="board-eta">—</span>
+      </div>
+    </div>
+
+    <div class="welcome-msg">
+      <strong id="welcome-greeting">Welcome, Sally.</strong>
+      <span id="welcome-body"> Your music is ready. Let me know if you need anything.</span>
+    </div>
+
+    <div id="scene-hint" style="display:none;margin:10px 20px 0;padding:9px 12px;
+         background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.35);
+         border-radius:8px;font-size:11px;color:#ca8a04;line-height:1.5">
+      <strong>SketchUp tip:</strong> Create a scene named
+      "<span id="scene-hint-name"></span>" to jump to this station's view
+      when you step in. <em>View menu → Scenes → Add Scene</em>
+    </div>
+
+    <div class="spacer"></div>
+    <button class="btn btn-enter" id="btn-enter" onclick="enterVehicle()">
+      <span id="btn-enter-label">Step In</span>
+    </button>
+  </div>
+
+  <!-- ── Screen: In-Trip ─────────────────────────────────────────────── -->
+  <div class="screen" id="screen-trip">
+    <div class="trip-header">
+      <span class="trip-to">En Route To</span>
+      <span class="trip-dest" id="trip-dest-name">—</span>
+      <span class="trip-eta" id="trip-eta-live">Calculating…</span>
+    </div>
+    <div class="progress-bar" style="margin-top:18px">
+      <div class="progress-fill" id="trip-progress"></div>
+    </div>
+    <div class="progress-label">
+      <span id="trip-origin-label">—</span>
+      <span id="trip-dest-label">—</span>
+    </div>
+    <div class="activity-grid">
+      <div class="activity-tile" onclick="activityTap('phone')">
+        <span class="activity-icon">📱</span>
+        <span class="activity-label">Phone</span>
+      </div>
+      <div class="activity-tile" onclick="activityTap('email')">
+        <span class="activity-icon">📧</span>
+        <span class="activity-label">Email</span>
+      </div>
+      <div class="activity-tile" onclick="activityTap('music')">
+        <span class="activity-icon">🎵</span>
+        <span class="activity-label" id="act-entertain">Music</span>
+      </div>
+      <div class="activity-tile" onclick="activityTap('calendar')">
+        <span class="activity-icon">📅</span>
+        <span class="activity-label">Calendar</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Screen: Arrival ─────────────────────────────────────────────── -->
+  <div class="screen arrival-screen" id="screen-arrival">
+    <div class="arrival-animation">🚉</div>
+    <div class="arrival-msg" id="arrival-msg">Arriving — thanks for riding with me.</div>
+    <div class="arrival-dest" id="arrival-dest">—</div>
+    <div class="arrival-actions">
+      <button class="btn btn-primary" onclick="goHome()" id="btn-new-trip">New Trip</button>
+      <button class="btn btn-secondary" onclick="openPrefs()" id="btn-prefs-link">Preferences</button>
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+</div><!-- /phone-shell -->
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+const state = {
+  lang: 'en',
+  prefs: {
+    lang:'en', temp:'76F', currency:'USD',
+    special_requirements:'None',
+    entertainment:'Music.playlist.nora_jones',
+    volume:2, camera:false,
+  },
+  origin_id: null, origin_name: null,
+  dest_id: null,   dest_name: null,
+  vehicle_id: null, slot: null,
+  trip_id: null,
+  screen_stack: [],
+  trip_start_s: null, trip_total_s: 60,
+  poll_timer: null,
+  demo_mode: false,
+};
+
+const API = (location.hostname && location.hostname !== 'localhost' && location.protocol !== 'file:')
+  ? `http://${location.hostname}:5051`
+  : 'http://localhost:5051';
+const IN_SKETCHUP = (typeof sketchup !== 'undefined');
+
+// ── SketchUp callback bridge ───────────────────────────────────────────────────
+// SketchUp HtmlDialog callbacks are fire-and-forget (sketchup.foo() returns
+// undefined, not a Promise). Ruby uses dlg.execute_script('_suCb(id, data)')
+// to push results back. We wrap this in a Promise so the rest of the app
+// can use async/await normally.
+let _suId = 0;
+const _suCbs = {};
+window._suCb = function(id, data) {
+  const cb = _suCbs[id]; if (!cb) return;
+  delete _suCbs[id];
+  if (data && data.error) cb.reject(new Error(data.error));
+  else cb.resolve(data);
+};
+function skCall(name, args) {
+  return new Promise((resolve, reject) => {
+    const id = ++_suId;
+    _suCbs[id] = {resolve, reject};
+    if (args !== undefined) sketchup[name](id, JSON.stringify(args));
+    else sketchup[name](id);
+  });
+}
+
+// ── API wrappers ──────────────────────────────────────────────────────────────
+async function apiStations() {
+  if (IN_SKETCHUP) return skCall('trip_stations');
+  const r = await fetch(`${API}/trip/stations`, {signal:AbortSignal.timeout(2000)});
+  return r.json();
+}
+async function apiBook(body) {
+  if (IN_SKETCHUP) return skCall('trip_book', body);
+  const r = await fetch(`${API}/trip/book`,{
+    method:'POST', signal:AbortSignal.timeout(2000),
+    headers:{'Content-Type':'application/json'}, body:JSON.stringify(body),
+  });
+  return r.json();
+}
+async function apiStatus(trip_id) {
+  if (IN_SKETCHUP) return skCall('trip_status', {trip_id});
+  const r = await fetch(`${API}/trip/status?trip_id=${trip_id}`,{signal:AbortSignal.timeout(800)});
+  return r.json();
+}
+async function apiEnter(body) {
+  if (IN_SKETCHUP) return skCall('trip_enter', body);
+  await fetch(`${API}/trip/enter`,{
+    method:'POST', signal:AbortSignal.timeout(2000),
+    headers:{'Content-Type':'application/json'}, body:JSON.stringify(body),
+  });
+}
+async function apiCameraPosition(body) {
+  if (IN_SKETCHUP) return skCall('trip_camera_position', body);
+}
+async function apiCameraStop() {
+  if (IN_SKETCHUP) return skCall('trip_camera_stop');
+}
+async function apiRenameStation(body) {
+  if (IN_SKETCHUP) return skCall('trip_rename_station', body);
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function $(id){ return document.getElementById(id); }
+
+// ── Clock ─────────────────────────────────────────────────────────────────────
+function tickClock(){
+  const n=new Date();
+  $('status-time').textContent = n.getHours()+':'+String(n.getMinutes()).padStart(2,'0');
+}
+setInterval(tickClock,10000); tickClock();
+
+// ── Accordion ─────────────────────────────────────────────────────────────────
+function toggleAcc(key) {
+  const hdr  = $(`acc-hdr-${key}`);
+  const body = $(`acc-body-${key}`);
+  const chevron = hdr.querySelector('.acc-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  hdr.classList.toggle('open', !isOpen);
+  chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+// ── Preferences ───────────────────────────────────────────────────────────────
+function savePref(key, value){ state.prefs[key] = value; }
+
+function setPrefLang(lang) {
+  state.lang = lang;
+  state.prefs.lang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  updatePrefsHint();
+}
+
+function updatePrefsHint() {
+  const langName = $('pref-lang').options[$('pref-lang').selectedIndex].text.replace(/^.+\s/,'');
+  const temp = $('pref-temp').value;
+  const ent = $('pref-entertain').value.split('.')[0];
+  const cam = $('pref-camera').checked ? ' · Cam On' : '';
+  $('acc-hint-prefs').textContent = `${langName} · ${temp} · ${ent}${cam}`;
+}
+
+// ── Station list ──────────────────────────────────────────────────────────────
+const ICONS = ['🏢','🏛️','🎓','⚓','🏥','🛍️','🏟️','🌿','🏘️','🏫'];
+
+let allStations = [];
+
+async function loadStations() {
+  const sel = $('origin-select');
+  const list = $('station-list');
+  list.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">Select an origin station above</div>';
+
+  try {
+    const d = await apiStations();
+    if (d.error) throw new Error(d.error);
+    allStations = d.stations || [];
+    if (allStations.length === 0) throw new Error('No stations with platforms found. Run Build to generate network.json with has_platform.');
+    state.demo_mode = false;
+  } catch(e) {
+    state.demo_mode = false;
+    allStations = [];
+    const list = $('station-list');
+    list.innerHTML = '<div style="color:#f44747;font-size:13px;padding:12px 0">' + e.message + '</div>';
+    return;
+  }
+
+  // Populate origin dropdown
+  sel.innerHTML = '<option value="">Select your station…</option>';
+  allStations.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.name;
+    sel.appendChild(opt);
+  });
+}
+
+async function renameStation(sid, currentName) {
+  const friendly = currentName.includes(' — ') ? currentName.split(' — ').slice(1).join(' — ') : '';
+  const newName = prompt(`Name for station ${sid}:`, friendly);
+  if (newName === null) return;  // cancelled
+  const trimmed = newName.trim();
+  if (trimmed.length === 0) return;
+  try { await apiRenameStation({ station_id: sid, name: trimmed }); } catch(e) {}
+  // Update local data and re-render
+  const st = allStations.find(s => s.id === sid);
+  if (st) {
+    st.name = `${sid} — ${trimmed}`;
+    st.friendly_name = trimmed;
+  }
+  // Re-render origin dropdown and destination list
+  const sel = $('origin-select');
+  const selectedOrigin = sel.value;
+  sel.innerHTML = '<option value="">Select your station…</option>';
+  allStations.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = s.name;
+    sel.appendChild(opt);
+  });
+  sel.value = selectedOrigin;
+  if (state.origin_id) selectOrigin(state.origin_id);
+}
+
+function selectOrigin(sid) {
+  console.log('[Travel] selectOrigin called with sid=' + sid + ', allStations=' + allStations.map(s => s.id).join(','));
+  const s = allStations.find(st => st.id === sid);
+  if (!s) { console.log('[Travel] station not found for sid=' + sid); return; }
+  state.origin_id = s.id;
+  state.origin_name = s.name;
+  state.dest_id = null; state.dest_name = null;
+  const ol = $('origin-label'); if (ol) ol.textContent = s.name;
+  $('btn-make-trip').style.display = 'none';
+
+  // Position camera at origin station (45° above-right)
+  if (IN_SKETCHUP) {
+    skCall('trip_camera_position', { station_id: s.id }).catch(() => {});
+  }
+
+  // Populate destination dropdown (all stations except origin)
+  const dests = allStations.filter(st => st.id !== sid);
+  const destSel = $('dest-select');
+  destSel.innerHTML = '<option value="">Select destination…</option>';
+  dests.forEach(ds => {
+    const opt = document.createElement('option');
+    opt.value = ds.id;
+    opt.textContent = ds.name;
+    destSel.appendChild(opt);
+  });
+}
+
+// ── Select destination from dropdown ──────────────────────────────────────────
+function selectDestFromDropdown(sid) {
+  const s = allStations.find(st => st.id === sid);
+  if (!s) {
+    state.dest_id = null; state.dest_name = null;
+    $('btn-make-trip').style.display = 'none';
+    return;
+  }
+  state.dest_id = s.id;
+  state.dest_name = s.name;
+  const btn = $('btn-make-trip');
+  btn.style.display = '';
+  btn.textContent = 'Make Trip → ' + s.name;
+}
+
+// Keep selectDest for any remaining references
+function selectDest(id, name) { selectDestFromDropdown(id); }
+
+// ── Make Trip — book trip, start animation, camera follow ────────────────────
+async function makeTrip() {
+  if (!state.origin_id || !state.dest_id) return;
+  console.log('[TripSim] Make Trip: ' + state.origin_id + ' → ' + state.dest_id);
+
+  // 1. Book the trip — Natalie assigns destination to pod
+  let vehicle_id = null, trip_id = null;
+  try {
+    const d = await apiBook({
+      origin_id: state.origin_id, destination_id: state.dest_id,
+      lang: state.lang, prefs: state.prefs,
+    });
+    if (d.error) throw new Error(d.error);
+    vehicle_id    = d.nora_id || d.vehicle_id;
+    trip_id       = d.trip_id;
+    state.trip_id    = trip_id;
+    state.vehicle_id = vehicle_id;
+    state.slot       = d.slot;
+    state.trip_total_s = d.eta_s || 60;
+    console.log('[TripSim] booked: ' + trip_id + ' nora=' + vehicle_id);
+  } catch(e) {
+    console.log('[TripSim] book error: ' + e.message);
+    const destSel = $('dest-select');
+    destSel.style.borderColor = '#f44747';
+    setTimeout(() => { destSel.style.borderColor = ''; }, 3000);
+    $('btn-make-trip').textContent = e.message;
+    $('btn-make-trip').style.background = '#f44747';
+    setTimeout(() => {
+      $('btn-make-trip').textContent = 'Make Trip';
+      $('btn-make-trip').style.background = '';
+    }, 4000);
+    return;
+  }
+
+  // 2. Step In — start animation + camera follow
+  const cameraMode = $('camera-mode').value;
+  try {
+    await apiEnter({trip_id: state.trip_id, nora_id: state.vehicle_id, camera_mode: cameraMode});
+    console.log('[TripSim] animation started, camera=' + cameraMode + ' following ' + state.vehicle_id);
+  } catch(e) {
+    console.log('[TripSim] enter error: ' + e.message);
+  }
+
+  // 3. Disable Make Trip button while trip is active
+  const mtBtn = $('btn-make-trip');
+  mtBtn.disabled = true;
+  mtBtn.style.opacity = '0.4';
+  mtBtn.textContent = 'Trip in progress…';
+
+  // 4. Go to in-trip screen
+  $('trip-dest-name').textContent   = state.dest_name   || '—';
+  $('trip-origin-label').textContent = state.origin_name || '—';
+  $('trip-dest-label').textContent   = state.dest_name   || '—';
+  $('act-entertain').textContent     = state.prefs.entertainment.split('.')[0] || 'Music';
+  goTo('screen-trip');
+  $('trip-eta-live').textContent = 'Waiting for dispatch…';
+  $('trip-progress').style.width = '0%';
+  startTripPoll();  // poll drives progress — no separate timer
+}
+
+// ── Boarding screen ───────────────────────────────────────────────────────────
+async function buildBoardingScreen() {
+  $('board-vehicle-id').textContent = '…';
+  $('board-from').textContent = state.origin_name || '—';
+  $('board-to').textContent   = state.dest_name   || '—';
+  $('board-slot').textContent = '…';
+  $('board-eta').textContent  = '…';
+
+  let vehicle_id = 'NORA_0001', slot = '1', eta = '';
+  try {
+    const d = await apiBook({
+      origin_id: state.origin_id, destination_id: state.dest_id,
+      lang: state.lang, prefs: state.prefs,
+    });
+    if (d.error) throw new Error(d.error);
+    vehicle_id = d.nora_id || d.vehicle_id || vehicle_id;
+    slot = d.slot || slot;
+    state.trip_id     = d.trip_id;
+    state.vehicle_id  = vehicle_id;
+    state.slot        = d.slot;
+    state.trip_total_s = d.eta_s || d.estimated_seconds || 60;
+  } catch(e) {
+    state.trip_id = 'demo-001'; state.vehicle_id = vehicle_id;
+    state.trip_total_s = 72;
+  }
+
+  const etaDate = new Date(Date.now() + state.trip_total_s * 1000);
+  eta = etaDate.toLocaleTimeString(state.lang, {hour:'2-digit',minute:'2-digit'});
+
+  $('board-vehicle-id').textContent = vehicle_id;
+  $('board-slot').textContent = slot;
+  $('board-eta').textContent  = eta;
+
+  // Personalise welcome from prefs
+  const firstName = ($('cy-name').textContent || 'Traveler').split(' ')[0];
+  const entFriendly = state.prefs.entertainment.split('.')[0];
+  $('welcome-greeting').textContent = `Welcome, ${firstName}.`;
+  $('welcome-body').textContent =
+    ` Your ${entFriendly} is ready. Estimated arrival ${eta}.`;
+
+  // Show scene hint if no scene named for origin station exists.
+  // In SketchUp the plugin will activate the scene automatically if it exists.
+  // If it doesn't, remind the user to create one.
+  const hint = $('scene-hint');
+  const hintName = $('scene-hint-name');
+  const sceneName = state.origin_name || state.origin_id || '';
+  if (hint && hintName && sceneName) {
+    hintName.textContent = sceneName;
+    hint.style.display = '';   // always show — Ruby logs will confirm whether scene was found
+  }
+}
+
+// ── Enter vehicle ─────────────────────────────────────────────────────────────
+async function enterVehicle() {
+  const btn = $('btn-enter');
+  btn.innerHTML = '<div class="spinner"></div>';
+  btn.disabled = true;
+  console.log('[TripSim] Step In: trip_id=' + state.trip_id + ' nora=' + state.vehicle_id);
+  try {
+    await apiEnter({trip_id: state.trip_id, nora_id: state.vehicle_id});
+    console.log('[TripSim] Step In: apiEnter succeeded');
+  } catch(e) {
+    console.log('[TripSim] Step In error: ' + e.message);
+  }
+
+  setTimeout(() => {
+    btn.innerHTML = '<span id="btn-enter-label">Step In</span>';
+    btn.disabled = false;
+    $('trip-dest-name').textContent   = state.dest_name   || '—';
+    $('trip-origin-label').textContent = state.origin_name || '—';
+    $('trip-dest-label').textContent   = state.dest_name   || '—';
+    $('act-entertain').textContent     = state.prefs.entertainment.split('.')[0] || 'Music';
+    goTo('screen-trip');
+    startTripProgress();
+    startTripPoll();
+  }, 1800);
+}
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+function startTripProgress() {
+  state.trip_start_s = Date.now() / 1000;
+  const bar = $('trip-progress');
+  const eta = $('trip-eta-live');
+  function tick() {
+    const elapsed = Date.now()/1000 - state.trip_start_s;
+    const pct = Math.min(100, (elapsed / state.trip_total_s) * 100);
+    bar.style.width = pct + '%';
+    const rem = Math.max(0, Math.round(state.trip_total_s - elapsed));
+    eta.textContent = rem <= 20 ? 'Shortly' : `${rem}s remaining`;
+    if(pct < 100) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ── Poll trip status — event-driven from actual pod state ─────────────────────
+function startTripPoll() {
+  clearInterval(state.poll_timer);
+  state.poll_timer = setInterval(async () => {
+    let status = 'waiting', progress = 0, elapsed_s = 0;
+    try {
+      const d = await apiStatus(state.trip_id);
+      status    = d.status || 'waiting';
+      progress  = d.progress_pct || 0;
+      elapsed_s = d.elapsed_s || 0;
+    } catch(e) {
+      return;  // skip this poll on error
+    }
+
+    const bar = $('trip-progress');
+    const eta = $('trip-eta-live');
+
+    if (status === 'waiting') {
+      eta.textContent = 'Waiting for dispatch…';
+      bar.style.width = '0%';
+    } else if (status === 'in_transit') {
+      bar.style.width = Math.min(progress, 95) + '%';  // cap at 95% until arrived
+      const rem = Math.max(0, state.trip_total_s - elapsed_s);
+      eta.textContent = rem <= 10 ? 'Arriving shortly' : `${Math.round(rem)}s remaining`;
+    } else if (status === 'arrived') {
+      bar.style.width = '100%';
+      eta.textContent = 'Arrived';
+      clearInterval(state.poll_timer);
+      showArrival();
+    } else if (status === 'unknown' || status === 'not found') {
+      // Pod not found — stop polling to prevent timer queue flooding
+      clearInterval(state.poll_timer);
+      eta.textContent = 'Trip ended';
+      bar.style.width = '0%';
+    }
+  }, 1000);
+}
+
+// ── Arrival ───────────────────────────────────────────────────────────────────
+function showArrival() {
+  $('arrival-dest').textContent = state.dest_name || '';
+  // Stop camera follow on arrival
+  if (IN_SKETCHUP) {
+    skCall('trip_camera_stop').catch(() => {});
+  }
+  goTo('screen-arrival');
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function goTo(screenId) {
+  const cur = document.querySelector('.screen.active');
+  if(cur) { state.screen_stack.push(cur.id); cur.classList.add('exit-left'); setTimeout(()=>cur.classList.remove('active','exit-left'),280); }
+  const next = $(screenId);
+  if(next) next.classList.add('active');
+}
+function goBack() {
+  const prev = state.screen_stack.pop(); if(!prev) return;
+  const cur = document.querySelector('.screen.active');
+  if(cur) cur.classList.remove('active');
+  const back = $(prev); if(back) back.classList.add('active');
+}
+function goHome() {
+  // Return to home and refresh stations
+  state.screen_stack = [];
+  document.querySelectorAll('.screen.active').forEach(s=>s.classList.remove('active'));
+  $('screen-home').classList.add('active');
+  // Re-enable Make Trip button
+  const mtBtn = $('btn-make-trip');
+  mtBtn.disabled = false;
+  mtBtn.style.opacity = '1';
+  mtBtn.style.display = 'none';
+  state.dest_id = null; state.dest_name = null;
+  loadStations();
+}
+function openPrefs() {
+  goHome();
+  // Open prefs accordion after transition
+  setTimeout(()=>{
+    const body = $('acc-body-prefs');
+    if(!body.classList.contains('open')) toggleAcc('prefs');
+  }, 320);
+}
+
+// ── Activity ──────────────────────────────────────────────────────────────────
+function activityTap(type){ console.log('activity:', type); }
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Delay to let SketchUp register Ruby callbacks before JS calls them
+  setTimeout(() => {
+    loadStations();
+    updatePrefsHint();
+  }, 500);
+});
+</script>
+</body>
+</html>

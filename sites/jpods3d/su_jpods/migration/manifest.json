@@ -1,0 +1,252 @@
+{
+  "version": "1.0",
+  "description": "Codearchive \u2192 v2 migration manifest. Each entry is one function or method group to migrate. Run 'migrate next' to process the next ready item.",
+  "phases": {
+    "1_foundation": {
+      "status": "ready",
+      "items": [
+        {
+          "id": "connection_point",
+          "source": "codearchive/jpod_connection_point.rb",
+          "target": "compute/compute_types.rb",
+          "methods": [
+            "ConnectionPoint.new",
+            "ConnectionPoint.parse",
+            "ConnectionPoint.normalize"
+          ],
+          "lines": 72,
+          "complexity": "S",
+          "depends_on": [],
+          "status": "done"
+        },
+        {
+          "id": "my_geom",
+          "source": "codearchive/my_geom.rb",
+          "target": "compute/compute_geometry.rb",
+          "methods": [
+            "place_adaptive_supports",
+            "curve_radius_at"
+          ],
+          "lines": 61,
+          "complexity": "S",
+          "depends_on": [],
+          "status": "done"
+        }
+      ]
+    },
+    "2_path_building": {
+      "status": "ready",
+      "items": [
+        {
+          "id": "path_builder",
+          "source": "codearchive/jpod_path_builder.rb",
+          "target": "build/build_path.rb",
+          "methods": [
+            "PathBuilder.build",
+            "apply_vertical_profile",
+            "terrain_snap"
+          ],
+          "lines": 398,
+          "complexity": "M",
+          "depends_on": [
+            "my_geom"
+          ],
+          "status": "done"
+        },
+        {
+          "id": "upright_extruder",
+          "source": "codearchive/upright_extruder.rb",
+          "target": "build/build_extrude.rb",
+          "methods": [
+            "extrude_along_path",
+            "beam_cross_section"
+          ],
+          "lines": 263,
+          "complexity": "M",
+          "depends_on": [],
+          "status": "done"
+        }
+      ]
+    },
+    "3_geometry": {
+      "status": "ready",
+      "blocked_by": [
+        "path_builder",
+        "upright_extruder"
+      ],
+      "items": [
+        {
+          "id": "entities_builder",
+          "source": "codearchive/jpod_entities_builder.rb",
+          "target": "build/build_columns.rb",
+          "methods": [
+            "JPodGuideway.build",
+            "place_columns",
+            "place_solar_columns"
+          ],
+          "lines": 629,
+          "complexity": "M",
+          "depends_on": [
+            "upright_extruder",
+            "path_builder"
+          ],
+          "status": "ready"
+        },
+        {
+          "id": "platform",
+          "source": "codearchive/jpod_platform.rb",
+          "target": "build/build_platform.rb",
+          "methods": [
+            "platform guards",
+            "integrity checks"
+          ],
+          "lines": 565,
+          "complexity": "M",
+          "depends_on": [
+            "entities_builder"
+          ],
+          "status": "ready"
+        },
+        {
+          "id": "network_build_segment",
+          "source": "codearchive/jpod_network.rb",
+          "target": "build/build.rb",
+          "methods": [
+            "Network.build_segment",
+            "Plan",
+            "PathResolver",
+            "BeamExtruder"
+          ],
+          "lines": 1861,
+          "complexity": "L",
+          "depends_on": [
+            "path_builder",
+            "upright_extruder",
+            "entities_builder"
+          ],
+          "status": "ready"
+        }
+      ]
+    },
+    "4_validation": {
+      "status": "blocked",
+      "blocked_by": [
+        "network_build_segment"
+      ],
+      "items": [
+        {
+          "id": "noelle_validator",
+          "source": "codearchive/noelle.rb",
+          "target": "noelle_v2/noelle_validator.rb",
+          "methods": [
+            "validate direction",
+            "check connectivity",
+            "naming rules",
+            "approach curves"
+          ],
+          "lines": 4491,
+          "complexity": "L",
+          "depends_on": [
+            "network_build_segment"
+          ],
+          "status": "blocked"
+        },
+        {
+          "id": "path_json_export",
+          "source": "codearchive/jpod_path_json.rb",
+          "target": "network/network_export.rb",
+          "methods": [
+            "PathJSON.export",
+            "proof_lines",
+            "load_raw"
+          ],
+          "lines": 3860,
+          "complexity": "L",
+          "depends_on": [
+            "noelle_validator"
+          ],
+          "status": "blocked"
+        },
+        {
+          "id": "noelle_bridge",
+          "source": "codearchive/jpod_noelle_bridge.rb",
+          "target": "build/build.rb (absorb)",
+          "methods": [
+            "NoelleNetworkBuilder.from_json",
+            "build_from_config"
+          ],
+          "lines": 940,
+          "complexity": "M",
+          "depends_on": [
+            "noelle_validator",
+            "network_build_segment"
+          ],
+          "status": "blocked"
+        }
+      ]
+    },
+    "5_ui_tools": {
+      "status": "blocked",
+      "blocked_by": [
+        "noelle_validator"
+      ],
+      "items": [
+        {
+          "id": "connect_tool",
+          "source": "codearchive/jpod_connect_tool.rb",
+          "target": "tools/connect_tool.rb",
+          "methods": [
+            "JPodConnectTool (viewport tool)",
+            "commit",
+            "build preview bezier"
+          ],
+          "lines": 1628,
+          "complexity": "L",
+          "depends_on": [
+            "network_build_segment"
+          ],
+          "status": "blocked"
+        },
+        {
+          "id": "network_editor",
+          "source": "codearchive/jpod_network_editor.rb",
+          "target": "dialogs/network_editor_v2.rb",
+          "methods": [
+            "HTML dialog",
+            "push_network_json",
+            "feature connections"
+          ],
+          "lines": 2520,
+          "complexity": "L",
+          "depends_on": [
+            "connect_tool"
+          ],
+          "status": "blocked"
+        },
+        {
+          "id": "followme_tool",
+          "source": "codearchive/jpod_followme_tool.rb",
+          "target": "animation/followme_viz.rb",
+          "methods": [
+            "viewport overlay",
+            "path visualization"
+          ],
+          "lines": 657,
+          "complexity": "M",
+          "depends_on": [
+            "path_json_export"
+          ],
+          "status": "blocked"
+        }
+      ]
+    }
+  },
+  "completed": [
+    "connection_point",
+    "my_geom",
+    "path_builder",
+    "upright_extruder"
+  ],
+  "total_source_lines": 17945,
+  "estimated_v2_lines": 4200
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "jpods-station-line-v2",
+  "formation": "cps",
+  "generated_at": "2026-05-27T02:45:00Z",
+  "generated_by": "math",
+  "note": "CP-with-Straight topology. Two parallel straight guideways. All 4 EPs are open boundary points wired by Noelle at Build time. Coordinates in cps template local space, mm.",
+  "eps": [
+    {
+      "id": 1,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 2,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 3,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 4,
+      "type": "open",
+      "in": [],
+      "out": []
+    }
+  ],
+  "lines": {
+    "gw_cp_out": {
+      "length_mm": 2500.0,
+      "start_point": [0.0, 250.0, 500.0],
+      "end_point": [2500.0, 250.0, 500.0],
+      "in": [],
+      "out": [],
+      "eps": [1, 2]
+    },
+    "gw_cp_in": {
+      "length_mm": 2500.0,
+      "start_point": [2500.0, 3750.0, 500.0],
+      "end_point": [0.0, 3750.0, 500.0],
+      "in": [],
+      "out": [],
+      "eps": [3, 4]
+    }
+  }
+}

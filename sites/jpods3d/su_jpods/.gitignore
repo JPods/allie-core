@@ -1,0 +1,19 @@
+.DS_Store
+hold/
+*.bak
+*.bak_*
+jpod_console.log
+# Timestamped debug backups written by migration and debug tools
+lines~*.json
+lines_draft.txt
+lines_myfix.json
+lines copy.json
+*_SAVE.json
+*.migration-backup.json
+# SketchUp auto-backup files
+*~.skp
+# Generated test artifacts — not project files
+station_test.map.json
+test_eol_station.map.json
+# Generated network files inside template subfolders — not source
+templates/**/*.network.json

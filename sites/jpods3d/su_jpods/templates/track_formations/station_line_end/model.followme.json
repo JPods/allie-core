@@ -1,0 +1,12 @@
+{
+  "network_definition": {
+    "connections": []
+  },
+  "connections": [],
+  "routing_policy": {
+    "strict_vehicle_trips": true,
+    "allow_trip_fallback": false,
+    "report_route_events": true,
+    "record_console_to_project": false
+  }
+}

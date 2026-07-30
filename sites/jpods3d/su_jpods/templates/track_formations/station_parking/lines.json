@@ -1,0 +1,675 @@
+{
+  "schema_version": "5.0",
+  "model": "station_parking",
+  "model_id": "station_parking",
+  "designer": {
+    "tracks": {
+      "gw_cp_in_0": {
+        "successors": [
+          "gw_cp_in_lead_0"
+        ],
+        "predecessors": [
+
+        ]
+      },
+      "gw_cp_in_1": {
+        "successors": [
+          "gw_cp_in_lead_1"
+        ],
+        "predecessors": [
+
+        ]
+      },
+      "gw_cp_in_lead_0": {
+        "successors": [
+          "gw_near_main",
+          "gw_platform_in1"
+        ],
+        "predecessors": [
+          "gw_cp_in_0",
+          "gw_uturn_0"
+        ]
+      },
+      "gw_cp_in_lead_1": {
+        "successors": [
+          "gw_far_main"
+        ],
+        "predecessors": [
+          "gw_cp_in_1",
+          "gw_uturn_1"
+        ]
+      },
+      "gw_cp_out_0": {
+        "successors": [
+
+        ],
+        "predecessors": [
+          "gw_cp_out_lead_0"
+        ]
+      },
+      "gw_cp_out_1": {
+        "successors": [
+
+        ],
+        "predecessors": [
+          "gw_cp_out_lead_1"
+        ]
+      },
+      "gw_cp_out_lead_0": {
+        "successors": [
+          "gw_cp_out_0",
+          "gw_uturn_0"
+        ],
+        "predecessors": [
+          "gw_far_main"
+        ]
+      },
+      "gw_cp_out_lead_1": {
+        "successors": [
+          "gw_cp_out_1",
+          "gw_uturn_1"
+        ],
+        "predecessors": [
+          "gw_near_main",
+          "gw_platform_out2"
+        ]
+      },
+      "gw_far_main": {
+        "successors": [
+          "gw_cp_out_lead_0"
+        ],
+        "predecessors": [
+          "gw_cp_in_lead_1"
+        ]
+      },
+      "gw_lift": {
+        "successors": [
+
+        ],
+        "predecessors": [
+          "gw_lift_parking"
+        ]
+      },
+      "gw_lift_parking": {
+        "successors": [
+          "gw_lift"
+        ],
+        "predecessors": [
+          "gw_lift_in"
+        ]
+      },
+      "gw_lift_in": {
+        "successors": [
+          "gw_lift_parking"
+        ],
+        "predecessors": [
+          "gw_platform_in1"
+        ]
+      },
+      "gw_near_main": {
+        "successors": [
+          "gw_cp_out_lead_1"
+        ],
+        "predecessors": [
+          "gw_cp_in_lead_0"
+        ]
+      },
+      "gw_platform": {
+        "successors": [
+          "gw_platform_out1"
+        ],
+        "predecessors": [
+          "gw_platform_in2"
+        ]
+      },
+      "gw_platform_in1": {
+        "successors": [
+          "gw_lift_in",
+          "gw_platform_in2"
+        ],
+        "predecessors": [
+          "gw_cp_in_lead_0"
+        ]
+      },
+      "gw_platform_in2": {
+        "successors": [
+          "gw_platform"
+        ],
+        "predecessors": [
+          "gw_platform_in1"
+        ]
+      },
+      "gw_platform_out1": {
+        "successors": [
+          "gw_platform_out2"
+        ],
+        "predecessors": [
+          "gw_platform"
+        ]
+      },
+      "gw_platform_out2": {
+        "successors": [
+          "gw_cp_out_lead_1"
+        ],
+        "predecessors": [
+          "gw_platform_out1"
+        ]
+      },
+      "gw_uturn_0": {
+        "successors": [
+          "gw_cp_in_lead_0"
+        ],
+        "predecessors": [
+          "gw_cp_out_lead_0"
+        ]
+      },
+      "gw_uturn_1": {
+        "successors": [
+          "gw_cp_in_lead_1"
+        ],
+        "predecessors": [
+          "gw_cp_out_lead_1"
+        ]
+      }
+    },
+    "cps": [
+      {
+        "id": 1,
+        "note": "CP0 start of stub_pair, must connect to station",
+        "type": "1-1",
+        "in": [
+          "gw_far_main"
+        ],
+        "out": [
+          "gw_cp_out_lead_0"
+        ]
+      },
+      {
+        "id": 2,
+        "note": "CP0 out to stub",
+        "type": "diverge",
+        "in": [
+          "gw_cp_out_lead_0"
+        ],
+        "out": [
+          "gw_cp_out_0",
+          "gw_uturn_0"
+        ]
+      },
+      {
+        "id": 3,
+        "note": "CP0 in stub",
+        "type": "open",
+        "in": [
+
+        ],
+        "out": [
+          "gw_cp_in_0"
+        ]
+      },
+      {
+        "id": 4,
+        "note": "CP0 in from stub",
+        "type": "merge",
+        "in": [
+          "gw_cp_in_0",
+          "gw_uturn_0"
+        ],
+        "out": [
+          "gw_cp_in_lead_0"
+        ]
+      },
+      {
+        "id": 5,
+        "note": "CP0 to platform and lift",
+        "type": "diverge",
+        "in": [
+          "gw_cp_in_lead_0"
+        ],
+        "out": [
+          "gw_near_main",
+          "gw_platform_in1"
+        ]
+      },
+      {
+        "id": 6,
+        "note": "to platform and lift",
+        "type": "diverge",
+        "in": [
+          "gw_platform_in1"
+        ],
+        "out": [
+          "gw_lift_in",
+          "gw_platform_in2"
+        ]
+      },
+      {
+        "id": 7,
+        "note": "CP0 to lift",
+        "type": "1-1",
+        "in": [
+          "gw_lift_in"
+        ],
+        "out": [
+          "gw_lift_parking"
+        ]
+      },
+      {
+        "id": 8,
+        "note": "CP0 to lift",
+        "type": "1-1",
+        "in": [
+          "gw_lift_parking"
+        ],
+        "out": [
+          "gw_lift"
+        ]
+      },
+      {
+        "id": 9,
+        "note": "to platform",
+        "type": "1-1",
+        "in": [
+          "gw_platform_in2"
+        ],
+        "out": [
+          "gw_platform"
+        ]
+      },
+      {
+        "id": 10,
+        "note": "platform exit",
+        "type": "1-1",
+        "in": [
+          "gw_platform"
+        ],
+        "out": [
+          "gw_platform_out1"
+        ]
+      },
+      {
+        "id": 11,
+        "note": "platform exit",
+        "type": "1-1",
+        "in": [
+          "gw_platform_out1"
+        ],
+        "out": [
+          "gw_platform_out2"
+        ]
+      },
+      {
+        "id": 12,
+        "note": "platform exit and near main",
+        "type": "merge",
+        "in": [
+          "gw_platform_out2",
+          "gw_near_main"
+        ],
+        "out": [
+          "gw_cp_out_lead_1"
+        ]
+      },
+      {
+        "id": 13,
+        "note": "CP1 out to stub",
+        "type": "diverge",
+        "in": [
+          "gw_cp_out_lead_1"
+        ],
+        "out": [
+          "gw_cp_out_1",
+          "gw_uturn_1"
+        ]
+      },
+      {
+        "id": 14,
+        "note": "CP1 in stub",
+        "type": "open",
+        "in": [
+
+        ],
+        "out": [
+          "gw_cp_in_1"
+        ]
+      },
+      {
+        "id": 15,
+        "note": "CP1 in from stub",
+        "type": "merge",
+        "in": [
+          "gw_cp_in_1",
+          "gw_uturn_1"
+        ],
+        "out": [
+          "gw_cp_in_lead_1"
+        ]
+      },
+      {
+        "id": 16,
+        "note": "CP1 to far_main",
+        "type": "1-1",
+        "in": [
+          "gw_cp_in_lead_1"
+        ],
+        "out": [
+          "gw_far_main"
+        ]
+      }
+    ],
+    "parking_slots": [
+      {
+        "slot": 1,
+        "track": "gw_platform",
+        "dist_mm": 1250.0,
+        "note": "entry end — pod arriving from gw_platform_in2 stops here first"
+      },
+      {
+        "slot": 2,
+        "track": "gw_platform",
+        "dist_mm": 3750.0
+      },
+      {
+        "slot": 3,
+        "track": "gw_platform",
+        "dist_mm": 6250.0
+      },
+      {
+        "slot": 4,
+        "track": "gw_platform",
+        "dist_mm": 8750.0
+      },
+      {
+        "slot": 5,
+        "track": "gw_platform",
+        "dist_mm": 11250.0
+      },
+      {
+        "slot": 6,
+        "track": "gw_platform",
+        "dist_mm": 13750.0
+      },
+      {
+        "slot": 7,
+        "track": "gw_platform",
+        "dist_mm": 16250.0
+      },
+      {
+        "slot": 8,
+        "track": "gw_platform",
+        "dist_mm": 18750.0
+      },
+      {
+        "slot": 9,
+        "track": "gw_platform",
+        "dist_mm": 21250.0,
+        "note": "exit end — closest to gw_platform_out1"
+      }
+    ],
+    "geometry_local": {
+    }
+  },
+  "noelle": {
+    "required_tracks": [
+      "gw_cp_in_0",
+      "gw_cp_in_1",
+      "gw_cp_in_lead_0",
+      "gw_cp_in_lead_1",
+      "gw_cp_out_0",
+      "gw_cp_out_1",
+      "gw_cp_out_lead_0",
+      "gw_cp_out_lead_1",
+      "gw_far_main",
+      "gw_lift",
+      "gw_lift_in",
+      "gw_lift_parking",
+      "gw_near_main",
+      "gw_platform",
+      "gw_platform_in1",
+      "gw_platform_in2",
+      "gw_platform_out1",
+      "gw_platform_out2",
+      "gw_uturn_0",
+      "gw_uturn_1"
+    ],
+    "validation_rules": {
+    }
+  },
+  "natalie": {
+    "pass_chains": {
+      "note": "Pass-through paths that bypass gw_platform. from_cp0_to_cp1: near main (CP0 in → gw_near_main → CP1 out). from_cp1_to_cp0: far main (CP1 in → gw_far_main → CP0 out). Both paths bypass gw_platform — Sally does not register pass-through pods.",
+      "from_cp0_to_cp1": {
+        "tracks": [
+          "gw_cp_in_0",
+          "gw_cp_in_lead_0",
+          "gw_near_main",
+          "gw_cp_out_lead_1",
+          "gw_cp_out_1"
+        ],
+        "switches": [
+          {
+            "ep_id": 5,
+            "at_track": "gw_cp_in_lead_0",
+            "setting": "gw_near_main"
+          },
+          {
+            "ep_id": 13,
+            "at_track": "gw_cp_out_lead_1",
+            "setting": "gw_cp_out_1"
+          }
+        ]
+      },
+      "from_cp1_to_cp0": {
+        "tracks": [
+          "gw_cp_in_1",
+          "gw_cp_in_lead_1",
+          "gw_far_main",
+          "gw_cp_out_lead_0",
+          "gw_cp_out_0"
+        ],
+        "switches": [
+          {
+            "ep_id": 2,
+            "at_track": "gw_cp_out_lead_0",
+            "setting": "gw_cp_out_0"
+          }
+        ]
+      }
+    },
+    "landing_chains": {
+      "in_cp0": {
+        "tracks": [
+          "gw_cp_in_0",
+          "gw_cp_in_lead_0",
+          "gw_platform_in1",
+          "gw_platform_in2"
+        ],
+        "switches": [
+          {
+            "ep_id": 5,
+            "at_track": "gw_cp_in_lead_0",
+            "setting": "gw_platform_in1"
+          },
+          {
+            "ep_id": 6,
+            "at_track": "gw_platform_in1",
+            "setting": "gw_platform_in2"
+          }
+        ]
+      },
+      "in_cp1": {
+        "tracks": [
+          "gw_cp_in_1",
+          "gw_cp_in_lead_1",
+          "gw_far_main",
+          "gw_cp_out_lead_0",
+          "gw_uturn_0",
+          "gw_cp_in_lead_0",
+          "gw_platform_in1",
+          "gw_platform_in2"
+        ],
+        "switches": [
+          {
+            "ep_id": 2,
+            "at_track": "gw_cp_out_lead_0",
+            "setting": "gw_uturn_0"
+          },
+          {
+            "ep_id": 5,
+            "at_track": "gw_cp_in_lead_0",
+            "setting": "gw_platform_in1"
+          },
+          {
+            "ep_id": 6,
+            "at_track": "gw_platform_in1",
+            "setting": "gw_platform_in2"
+          }
+        ]
+      }
+    },
+    "originating_chains": {
+      "out_cp0": {
+        "note": "Pod exits via CP0. Traverses full outer loop past CP1 area before exiting at gw_cp_out_lead_0 → gw_cp_out_0.",
+        "tracks": [
+          "gw_platform",
+          "gw_platform_out1",
+          "gw_platform_out2",
+          "gw_cp_out_lead_1",
+          "gw_uturn_1",
+          "gw_cp_in_lead_1",
+          "gw_far_main",
+          "gw_cp_out_lead_0",
+          "gw_cp_out_0"
+        ]
+      },
+      "out_cp1": {
+        "note": "Pod exits via CP1. Exits immediately at gw_cp_out_lead_1 → gw_cp_out_1 without traversing CP0 area.",
+        "tracks": [
+          "gw_platform",
+          "gw_platform_out1",
+          "gw_platform_out2",
+          "gw_cp_out_lead_1",
+          "gw_cp_out_1"
+        ]
+      }
+    },
+    "parking_chain": {
+      "note": "Ordered platform tracks, slot 1 = entry end (gw_platform_in2 side), slot N = exit end (gw_platform_out1 side). Slot count = sum(arc_length) / 2500mm. Passengers directed to highest empty slot.",
+      "tracks": [
+        "gw_platform"
+      ]
+    },
+    "hold_loop_chain": {
+      "note": "Direct-park pattern. Loop exits gw_platform, traverses outer ring, then takes platform approach at gw_cp_in_lead_0 → gw_platform_in1 → gw_platform_in2. to_platform=[] triggers direct-park code path in on_maneuver_complete — one dispatch, no race.",
+      "from_platform": [
+        "gw_platform",
+        "gw_platform_out1",
+        "gw_platform_out2"
+      ],
+      "to_platform": [
+
+      ],
+      "loop": [
+        "gw_cp_out_lead_1",
+        "gw_uturn_1",
+        "gw_cp_in_lead_1",
+        "gw_far_main",
+        "gw_cp_out_lead_0",
+        "gw_uturn_0",
+        "gw_cp_in_lead_0",
+        "gw_platform_in1",
+        "gw_platform_in2"
+      ]
+    },
+    "station_loop_chain": {
+      "note": "Full exit-loop-return. Vehicle exits gw_platform, traverses entire outer ring, returns to gw_platform. Used as yield maneuver: blocking vehicle loops once to free its slot for the designated vehicle to advance. Always terminates at gw_platform.",
+      "tracks": [
+        "gw_platform",
+        "gw_platform_out1",
+        "gw_platform_out2",
+        "gw_cp_out_lead_1",
+        "gw_uturn_1",
+        "gw_cp_in_lead_1",
+        "gw_far_main",
+        "gw_cp_out_lead_0",
+        "gw_uturn_0",
+        "gw_cp_in_lead_0",
+        "gw_platform_in1",
+        "gw_platform_in2"
+      ]
+    },
+    "exit_chains": {
+      "note": "Departure paths from gw_platform per exit CP. out_cp0: pod exits via CP0 — traverses CP1 uturn then far_main to CP0 stub. out_cp1: pod exits directly at CP1. clip_start:true trims gw_platform to pod's current slot position.",
+      "out_cp0": {
+        "tracks": [
+          "gw_platform",
+          "gw_platform_out1",
+          "gw_platform_out2",
+          "gw_cp_out_lead_1",
+          "gw_uturn_1",
+          "gw_cp_in_lead_1",
+          "gw_far_main",
+          "gw_cp_out_lead_0",
+          "gw_cp_out_0"
+        ],
+        "switches": [
+          {
+            "ep_id": 13,
+            "at_track": "gw_cp_out_lead_1",
+            "setting": "gw_uturn_1"
+          },
+          {
+            "ep_id": 2,
+            "at_track": "gw_cp_out_lead_0",
+            "setting": "gw_cp_out_0"
+          }
+        ]
+      },
+      "out_cp1": {
+        "tracks": [
+          "gw_platform",
+          "gw_platform_out1",
+          "gw_platform_out2",
+          "gw_cp_out_lead_1",
+          "gw_cp_out_1"
+        ],
+        "switches": [
+          {
+            "ep_id": 13,
+            "at_track": "gw_cp_out_lead_1",
+            "setting": "gw_cp_out_1"
+          }
+        ]
+      }
+    },
+    "speed_limits": {
+    },
+    "headway_rules": {
+    }
+  },
+  "nora": {
+    "state_machine": {
+      "states": [
+        "idle",
+        "dispatched",
+        "in_transit",
+        "arriving",
+        "dwell",
+        "departing",
+        "parked"
+      ]
+    },
+    "arc_radii": {
+      "gw_uturn_0": 1750,
+      "gw_uturn_1": 1750
+    },
+    "physical_limits": {
+    }
+  },
+  "deployment": {
+    "adjacency_constraints": [
+
+    ],
+    "clearance_notes": ""
+  }
+}

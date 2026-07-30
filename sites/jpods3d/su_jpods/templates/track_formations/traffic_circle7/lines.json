@@ -1,0 +1,676 @@
+{
+  "schema_version": "5.0",
+  "model": "traffic_circle7",
+  "model_id": "traffic_circle7",
+  "designer": {
+    "tracks": {
+      "gw_cp_in_0": {
+        "successors": [
+          "gw_in_0"
+        ],
+        "predecessors": []
+      },
+      "gw_cp_in_1": {
+        "successors": [
+          "gw_in_1"
+        ],
+        "predecessors": []
+      },
+      "gw_cp_in_2": {
+        "successors": [
+          "gw_in_2"
+        ],
+        "predecessors": []
+      },
+      "gw_cp_in_3": {
+        "successors": [
+          "gw_in_3"
+        ],
+        "predecessors": []
+      },
+      "gw_in_0": {
+        "successors": [
+          "gw_c_0_1"
+        ],
+        "note": "EP6 merge: gw_in_0 + gw_c_0_0 \u2192 gw_c_0_1",
+        "predecessors": [
+          "gw_cp_in_0"
+        ]
+      },
+      "gw_in_1": {
+        "successors": [
+          "gw_c_1_2"
+        ],
+        "note": "EP12 merge: gw_in_1 + gw_c_1_1 \u2192 gw_c_1_2",
+        "predecessors": [
+          "gw_cp_in_1"
+        ]
+      },
+      "gw_in_2": {
+        "successors": [
+          "gw_c_2_3"
+        ],
+        "note": "EP18 merge: gw_in_2 + gw_c_2_2 \u2192 gw_c_2_3",
+        "predecessors": [
+          "gw_cp_in_2"
+        ]
+      },
+      "gw_in_3": {
+        "successors": [
+          "gw_c_3_0"
+        ],
+        "note": "EP24 merge: gw_in_3 + gw_c_3_3 \u2192 gw_c_3_0",
+        "predecessors": [
+          "gw_cp_in_3"
+        ]
+      },
+      "gw_c_0_0": {
+        "successors": [
+          "gw_c_0_1"
+        ],
+        "note": "bypass arc 0 \u2192 EP6 merge into connector 0_1 (CCW)",
+        "predecessors": [
+          "gw_c_3_0"
+        ]
+      },
+      "gw_c_0_1": {
+        "successors": [
+          "gw_c_1_1",
+          "gw_out_1"
+        ],
+        "note": "EP7 diverge: connector 0\u21921, exit CP1 or continue CCW",
+        "predecessors": [
+          "gw_c_0_0",
+          "gw_in_0"
+        ]
+      },
+      "gw_c_1_1": {
+        "successors": [
+          "gw_c_1_2"
+        ],
+        "note": "bypass arc 1 \u2192 EP12 merge into connector 1_2 (CCW)",
+        "predecessors": [
+          "gw_c_0_1"
+        ]
+      },
+      "gw_c_1_2": {
+        "successors": [
+          "gw_c_2_2",
+          "gw_out_2"
+        ],
+        "note": "EP13 diverge: connector 1\u21922, exit CP2 or continue CCW",
+        "predecessors": [
+          "gw_c_1_1",
+          "gw_in_1"
+        ]
+      },
+      "gw_c_2_2": {
+        "successors": [
+          "gw_c_2_3"
+        ],
+        "note": "bypass arc 2 \u2192 EP18 merge into connector 2_3 (CCW)",
+        "predecessors": [
+          "gw_c_1_2"
+        ]
+      },
+      "gw_c_2_3": {
+        "successors": [
+          "gw_c_3_3",
+          "gw_out_3"
+        ],
+        "note": "EP19 diverge: connector 2\u21923, exit CP3 or continue CCW",
+        "predecessors": [
+          "gw_c_2_2",
+          "gw_in_2"
+        ]
+      },
+      "gw_c_3_3": {
+        "successors": [
+          "gw_c_3_0"
+        ],
+        "note": "bypass arc 3 \u2192 EP24 merge into connector 3_0 (CCW)",
+        "predecessors": [
+          "gw_c_2_3"
+        ]
+      },
+      "gw_c_3_0": {
+        "successors": [
+          "gw_c_0_0",
+          "gw_out_0"
+        ],
+        "note": "EP1 diverge: connector 3\u21920, exit CP0 or continue CCW",
+        "predecessors": [
+          "gw_c_3_3",
+          "gw_in_3"
+        ]
+      },
+      "gw_out_0": {
+        "successors": [
+          "gw_cp_out_0"
+        ],
+        "predecessors": [
+          "gw_c_3_0"
+        ]
+      },
+      "gw_out_1": {
+        "successors": [
+          "gw_cp_out_1"
+        ],
+        "predecessors": [
+          "gw_c_0_1"
+        ]
+      },
+      "gw_out_2": {
+        "successors": [
+          "gw_cp_out_2"
+        ],
+        "predecessors": [
+          "gw_c_1_2"
+        ]
+      },
+      "gw_out_3": {
+        "successors": [
+          "gw_cp_out_3"
+        ],
+        "predecessors": [
+          "gw_c_2_3"
+        ]
+      },
+      "gw_cp_out_0": {
+        "successors": [],
+        "predecessors": [
+          "gw_out_0"
+        ]
+      },
+      "gw_cp_out_1": {
+        "successors": [],
+        "predecessors": [
+          "gw_out_1"
+        ]
+      },
+      "gw_cp_out_2": {
+        "successors": [],
+        "predecessors": [
+          "gw_out_2"
+        ]
+      },
+      "gw_cp_out_3": {
+        "successors": [],
+        "predecessors": [
+          "gw_out_3"
+        ]
+      }
+    },
+    "cps": [
+      {
+        "id": 1,
+        "note": "CP0 out from circle",
+        "type": "diverge",
+        "in": [
+          "gw_c_3_0"
+        ],
+        "out": [
+          "gw_out_0",
+          "gw_c_0_0"
+        ]
+      },
+      {
+        "id": 2,
+        "note": "CP0 out to stub",
+        "type": "1-1",
+        "in": [
+          "gw_out_0"
+        ],
+        "out": [
+          "gw_cp_out_0"
+        ]
+      },
+      {
+        "id": 3,
+        "note": "CP0 out stub",
+        "type": "open",
+        "in": [
+          "gw_cp_in_0"
+        ],
+        "out": []
+      },
+      {
+        "id": 4,
+        "note": "CP0 in stub",
+        "type": "open",
+        "in": [],
+        "out": [
+          "gw_cp_in_0"
+        ]
+      },
+      {
+        "id": 5,
+        "note": "CP0 in from stub",
+        "type": "1-1",
+        "in": [
+          "gw_cp_in_0"
+        ],
+        "out": [
+          "gw_in_0"
+        ]
+      },
+      {
+        "id": 6,
+        "note": "CP0 into circle",
+        "type": "merge",
+        "in": [
+          "gw_in_0",
+          "gw_c_0_0"
+        ],
+        "out": [
+          "gw_c_0_1"
+        ]
+      },
+      {
+        "id": 7,
+        "note": "CP1 out from circle",
+        "type": "diverge",
+        "in": [
+          "gw_c_0_1"
+        ],
+        "out": [
+          "gw_c_1_1",
+          "gw_out_1"
+        ]
+      },
+      {
+        "id": 8,
+        "note": "CP1 out to stub",
+        "type": "1-1",
+        "in": [
+          "gw_out_1"
+        ],
+        "out": [
+          "gw_cp_out_1"
+        ]
+      },
+      {
+        "id": 9,
+        "note": "CP1 out stub",
+        "type": "open",
+        "in": [
+          "gw_cp_out_1"
+        ],
+        "out": []
+      },
+      {
+        "id": 10,
+        "note": "CP1 in stub",
+        "type": "open",
+        "in": [],
+        "out": [
+          "gw_cp_in_1"
+        ]
+      },
+      {
+        "id": 11,
+        "note": "CP1 in from stub",
+        "type": "1-1",
+        "in": [
+          "gw_cp_in_1"
+        ],
+        "out": [
+          "gw_in_1"
+        ]
+      },
+      {
+        "id": 12,
+        "note": "CP1 into circle",
+        "type": "merge",
+        "in": [
+          "gw_in_1",
+          "gw_c_1_1"
+        ],
+        "out": [
+          "gw_c_1_2"
+        ]
+      },
+      {
+        "id": 13,
+        "note": "CP2 out from circle",
+        "type": "diverge",
+        "in": [
+          "gw_c_1_2"
+        ],
+        "out": [
+          "gw_c_2_2",
+          "gw_out_2"
+        ]
+      },
+      {
+        "id": 14,
+        "note": "CP2 out to stub",
+        "type": "1-1",
+        "in": [
+          "gw_out_2"
+        ],
+        "out": [
+          "gw_cp_out_2"
+        ]
+      },
+      {
+        "id": 15,
+        "note": "CP2 out stub",
+        "type": "open",
+        "in": [
+          "gw_cp_out_2"
+        ],
+        "out": []
+      },
+      {
+        "id": 16,
+        "note": "CP2 in stub",
+        "type": "open",
+        "in": [],
+        "out": [
+          "gw_cp_in_2"
+        ]
+      },
+      {
+        "id": 17,
+        "note": "CP2 in from stub",
+        "type": "1-1",
+        "in": [
+          "gw_cp_in_2"
+        ],
+        "out": [
+          "gw_in_2"
+        ]
+      },
+      {
+        "id": 18,
+        "note": "CP2 into circle",
+        "type": "merge",
+        "in": [
+          "gw_in_2",
+          "gw_c_2_2"
+        ],
+        "out": [
+          "gw_c_2_3"
+        ]
+      },
+      {
+        "id": 19,
+        "note": "CP3 out from circle",
+        "type": "diverge",
+        "in": [
+          "gw_c_2_3"
+        ],
+        "out": [
+          "gw_c_3_3",
+          "gw_out_3"
+        ]
+      },
+      {
+        "id": 20,
+        "note": "CP3 out to stub",
+        "type": "1-1",
+        "in": [
+          "gw_out_3"
+        ],
+        "out": [
+          "gw_cp_out_3"
+        ]
+      },
+      {
+        "id": 21,
+        "note": "CP3 out stub",
+        "type": "open",
+        "in": [
+          "gw_cp_out_3"
+        ],
+        "out": []
+      },
+      {
+        "id": 22,
+        "note": "CP3 in stub",
+        "type": "open",
+        "in": [],
+        "out": [
+          "gw_cp_in_3"
+        ]
+      },
+      {
+        "id": 23,
+        "note": "CP3 in from stub",
+        "type": "1-1",
+        "in": [
+          "gw_cp_in_3"
+        ],
+        "out": [
+          "gw_in_3"
+        ]
+      },
+      {
+        "id": 24,
+        "note": "CP3 into circle",
+        "type": "merge",
+        "in": [
+          "gw_in_3",
+          "gw_c_3_3"
+        ],
+        "out": [
+          "gw_c_3_0"
+        ]
+      }
+    ],
+    "parking_slots": [],
+    "geometry_local": {
+      "cp_markers": {
+        "0": {
+          "hub_mm": [
+            0.0,
+            -1500.0,
+            0.0
+          ]
+        },
+        "1": {
+          "hub_mm": [
+            -14381.728,
+            15881.728,
+            0.0
+          ]
+        },
+        "2": {
+          "hub_mm": [
+            -31763.456,
+            1500.0,
+            0.0
+          ]
+        },
+        "3": {
+          "hub_mm": [
+            -17381.728,
+            -15881.728,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "noelle": {
+    "cps": [
+      {
+        "index": 0,
+        "center": [
+          1.1368683772161603e-13,
+          0.0,
+          0.0
+        ],
+        "tangent": [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        "half_offset": 68.8976377952756
+      },
+      {
+        "index": 1,
+        "center": [
+          -625.2648812458741,
+          625.2648812458795,
+          0.0
+        ],
+        "tangent": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "half_offset": 68.8976377952756
+      },
+      {
+        "index": 2,
+        "center": [
+          -1250.5297624917532,
+          6.139089236967266e-12,
+          3.583381462793357e-15
+        ],
+        "tangent": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "half_offset": 68.8976377952756
+      },
+      {
+        "index": 3,
+        "center": [
+          -625.2648812458796,
+          -625.2648812458744,
+          0.0
+        ],
+        "tangent": [
+          8.250416223225853e-16,
+          -1.0,
+          0.0
+        ],
+        "half_offset": 68.8976377952756
+      }
+    ],
+    "required_tracks": [
+      "gw_c_0_0",
+      "gw_c_0_1",
+      "gw_c_1_1",
+      "gw_c_1_2",
+      "gw_c_2_2",
+      "gw_c_2_3",
+      "gw_c_3_0",
+      "gw_c_3_3",
+      "gw_cp_in_0",
+      "gw_cp_in_1",
+      "gw_cp_in_2",
+      "gw_cp_in_3",
+      "gw_cp_out_0",
+      "gw_cp_out_1",
+      "gw_cp_out_2",
+      "gw_cp_out_3",
+      "gw_in_0",
+      "gw_in_1",
+      "gw_in_2",
+      "gw_in_3",
+      "gw_out_0",
+      "gw_out_1",
+      "gw_out_2",
+      "gw_out_3"
+    ],
+    "validation_rules": {}
+  },
+  "natalie": {
+    "speed_limits": {},
+    "headway_rules": {},
+    "pass_chains": {
+      "circle": [
+        "gw_c_0_0",
+        "gw_c_0_1",
+        "gw_c_1_1",
+        "gw_c_1_2",
+        "gw_c_2_2",
+        "gw_c_2_3",
+        "gw_c_3_3",
+        "gw_c_3_0"
+      ],
+      "entries": {
+        "cp0": [
+          "gw_cp_in_0",
+          "gw_in_0"
+        ],
+        "cp1": [
+          "gw_cp_in_1",
+          "gw_in_1"
+        ],
+        "cp2": [
+          "gw_cp_in_2",
+          "gw_in_2"
+        ],
+        "cp3": [
+          "gw_cp_in_3",
+          "gw_in_3"
+        ]
+      },
+      "exits": {
+        "cp0": [
+          "gw_out_0",
+          "gw_cp_out_0"
+        ],
+        "cp1": [
+          "gw_out_1",
+          "gw_cp_out_1"
+        ],
+        "cp2": [
+          "gw_out_2",
+          "gw_cp_out_2"
+        ],
+        "cp3": [
+          "gw_out_3",
+          "gw_cp_out_3"
+        ]
+      },
+      "entry_arc": {
+        "cp0": "gw_c_0_1",
+        "cp1": "gw_c_1_2",
+        "cp2": "gw_c_2_3",
+        "cp3": "gw_c_3_0"
+      },
+      "exit_arc": {
+        "cp0": "gw_c_3_0",
+        "cp1": "gw_c_0_1",
+        "cp2": "gw_c_1_2",
+        "cp3": "gw_c_2_3"
+      },
+      "note": "4-CP circle. Ring defined once (8 arcs CCW). Natalie builds from\u2192to at dispatch: entry + circle slice + exit."
+    }
+  },
+  "nora": {
+    "state_machine": {
+      "states": [
+        "idle",
+        "dispatched",
+        "in_transit",
+        "arriving",
+        "dwell",
+        "departing",
+        "parked"
+      ]
+    },
+    "arc_radii": {
+      "gw_c_0_0": 7500,
+      "gw_c_3_0": 7500,
+      "gw_c_3_3": 7500,
+      "gw_c_2_3": 7500,
+      "gw_c_2_2": 7500,
+      "gw_c_1_2": 7500,
+      "gw_c_1_1": 7500,
+      "gw_c_0_1": 7500
+    },
+    "physical_limits": {}
+  },
+  "deployment": {
+    "adjacency_constraints": [],
+    "clearance_notes": ""
+  }
+}

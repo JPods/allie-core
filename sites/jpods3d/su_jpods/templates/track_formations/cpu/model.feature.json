@@ -1,0 +1,41 @@
+{
+  "schema": "jpods-feature-v3",
+  "generated_at": "2026-06-04T21:58:43Z",
+  "connections": {
+    "cp_S001_cp0_S001_cp1": {
+      "via_markers": [
+        2,
+        1
+      ],
+      "seg_S001_cp0_S001_cp1": {
+        "from": {
+          "structure_id": "S001",
+          "stub": 0
+        },
+        "to": {
+          "structure_id": "S001",
+          "stub": 1
+        },
+        "length_mm": null
+      },
+      "seg_S001_cp1_S001_cp0": {
+        "from": {
+          "structure_id": "S001",
+          "stub": 1
+        },
+        "to": {
+          "structure_id": "S001",
+          "stub": 0
+        },
+        "length_mm": null
+      }
+    }
+  },
+  "u_turns": [
+
+  ],
+  "vehicle_trips": {
+  },
+  "routing_policy": {
+  }
+}

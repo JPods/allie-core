@@ -1,0 +1,55 @@
+{
+  "schema": "jpods-visits-v1",
+  "model": "model",
+  "updated_at": "2026-06-20T00:53:50Z",
+  "todo": "Add configurable archive limit when visit counts become large",
+  "visits": {
+    "connections": {
+      "station_thru_dip.hold_loop[13/13]": {
+        "count": 8,
+        "first_dt": "2026-06-16T19:48:06Z",
+        "last_dt": "2026-06-16T20:47:39Z"
+      },
+      "station_thru_dip.hold_loop[8/8]": {
+        "count": 30,
+        "first_dt": "2026-06-16T19:48:06Z",
+        "last_dt": "2026-06-20T00:53:34Z"
+      },
+      "station_thru_dip.gw_platform_park_ps2": {
+        "count": 31,
+        "first_dt": "2026-06-16T19:48:07Z",
+        "last_dt": "2026-06-20T00:53:20Z"
+      },
+      "station_thru_dip.hold_loop[5/5]": {
+        "count": 38,
+        "first_dt": "2026-06-16T19:52:20Z",
+        "last_dt": "2026-06-20T00:53:41Z"
+      },
+      "station_thru_dip.gw_platform_park_ps4": {
+        "count": 36,
+        "first_dt": "2026-06-16T19:52:20Z",
+        "last_dt": "2026-06-20T00:53:41Z"
+      },
+      "station_thru_dip.hold_loop[9/9]": {
+        "count": 30,
+        "first_dt": "2026-06-16T19:52:23Z",
+        "last_dt": "2026-06-20T00:53:50Z"
+      },
+      "station_thru_dip.gw_platform_park_ps3": {
+        "count": 24,
+        "first_dt": "2026-06-16T19:52:23Z",
+        "last_dt": "2026-06-20T00:53:50Z"
+      },
+      "station_thru_dip.hold_loop[12/12]": {
+        "count": 29,
+        "first_dt": "2026-06-16T20:52:45Z",
+        "last_dt": "2026-06-20T00:53:20Z"
+      },
+      "station_thru_dip.gw_platform_park_ps1": {
+        "count": 7,
+        "first_dt": "2026-06-19T04:38:05Z",
+        "last_dt": "2026-06-19T05:17:46Z"
+      }
+    }
+  }
+}

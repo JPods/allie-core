@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JPods Console v2</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12px;
+         background: #1e1e1e; color: #ccc; display: flex; flex-direction: column; height: 100vh; }
+
+  /* Top nav */
+  #top-nav { display: flex; gap: 0; background: #252526; border-bottom: 1px solid #333; flex-shrink: 0; }
+  .nav-btn { background: none; border: none; color: #888; padding: 8px 14px; cursor: pointer;
+             font-size: 12px; border-bottom: 2px solid transparent; }
+  .nav-btn:hover { color: #ccc; }
+  .nav-btn.active { color: #9cdcfe; border-bottom-color: #4a9eff; }
+  .nav-btn.active-pods { color: #b5e890; border-bottom-color: #6ac84a; }
+  .nav-btn.active-crew { color: #e0b0ff; border-bottom-color: #b060d0; }
+  .nav-btn.active-build { color: #e8c870; border-bottom-color: #c8980a; }
+
+  /* Panels */
+  .panel { display: none; flex: 1; flex-direction: column; overflow-y: auto; padding: 8px 12px; }
+  .panel.active { display: flex; }
+
+  /* Action bar */
+  .action-bar { display: flex; gap: 6px; padding: 6px 0; flex-wrap: wrap; align-items: center; }
+  .action-btn { background: #333; border: 1px solid #444; color: #ccc; padding: 4px 10px;
+                cursor: pointer; border-radius: 3px; font-size: 11px; }
+  .action-btn:hover { background: #444; }
+  .action-btn.primary { background: #2a5a2a; border-color: #4a8a4a; }
+  .action-btn.danger { background: #5a2a2a; border-color: #8a4a4a; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { background: #2a2a2a; color: #9cdcfe; text-align: left; padding: 4px 6px; position: sticky; top: 0; }
+  td { padding: 3px 6px; border-bottom: 1px solid #2a2a2a; }
+  tr:hover { background: #2a2d2e; }
+  tr.following { background: #2a3a2a; }
+  .mono { font-family: 'Cascadia Code', 'Fira Code', monospace; }
+
+  /* Station slots viz */
+  .slot { display: inline-block; width: 12px; height: 10px; margin: 0 1px; border-radius: 2px; }
+  .slot.occupied { background: #6ac84a; }
+  .slot.empty { background: #333; }
+
+  /* Sections */
+  .section { margin-bottom: 12px; }
+  .section-title { color: #9cdcfe; font-weight: bold; margin-bottom: 4px; font-size: 12px; }
+  .section-body { font-family: monospace; font-size: 11px; white-space: pre-wrap; max-height: 200px; overflow-y: auto; }
+
+  /* Health */
+  .health-ok { color: #6ac84a; }
+  .health-fault { color: #f44747; }
+
+  /* Expandable */
+  .expander { cursor: pointer; padding: 4px 8px; background: #252526; border-bottom: 1px solid #333;
+              font-size: 11px; color: #9cdcfe; }
+  .expander:hover { background: #2a2a2a; }
+  .expand-body { display: none; padding: 6px 10px; background: #1a1a2e; font-size: 11px; line-height: 1.5; }
+  .expand-body.open { display: block; }
+
+  /* Log output */
+  #log-output { font-family: monospace; font-size: 10px; background: #1a1a1a; padding: 6px;
+                max-height: 150px; overflow-y: auto; white-space: pre-wrap; color: #888; flex-shrink: 0;
+                border-top: 1px solid #333; }
+</style>
+</head>
+<body>
+
+<div id="top-nav">
+  <button class="nav-btn active" data-panel="network" onclick="showPanel('network')">Network</button>
+  <button class="nav-btn" data-panel="pods" onclick="showPanel('pods')">Pods</button>
+  <button class="nav-btn" data-panel="build" onclick="showPanel('build')">Build</button>
+  <button class="nav-btn" data-panel="crew" onclick="showPanel('crew')">Crew</button>
+</div>
+
+<!-- ═══ NETWORK PANEL ═══ -->
+<div id="panel-network" class="panel active">
+  <div class="expander" onclick="toggleExpand('help-workflow')">▶ Workflow Guide</div>
+  <div id="help-workflow" class="expand-body">
+    <b>JPods Network — 8-Step Student Workflow</b><br><br>
+    <b>1.</b> Geolocate — File › Geo-location<br>
+    <b>2.</b> Place Structures — drag from library<br>
+    <b>3.</b> CP Calculate — detect connection points<br>
+    <b>4.</b> Connect Guideways — click CP pairs, W for waypoints<br>
+    <b>5.</b> Build — bezier beams, columns, solar, network.json<br>
+    <b>6.</b> Populate — pods at ~70% capacity<br>
+    <b>7.</b> Animate — random dispatch through traffic circles<br>
+    <b>8.</b> Review — Crew Health Check
+  </div>
+  <div class="expander" onclick="toggleExpand('help-cp')">▶ Connection Points &amp; Waypoints</div>
+  <div id="help-cp" class="expand-body">
+    <span style="color:#dc4646;">● Red = inbound</span> &nbsp;
+    <span style="color:#3264dc;">● Blue = outbound</span><br>
+    CPs numbered: <b>S001.0</b>, <b>S001.1</b>. Each connects to one other station.<br>
+    Waypoints: press <b>W</b> while Connect tool active. Add to <b>via</b> field.<br>
+    Traffic circles: 4 CPs, CCW only, 1750mm min turn radius.
+  </div>
+  <div class="action-bar">
+    <button class="action-btn primary" onclick="cmd('calculate_cps')">CP Calculate</button>
+    <button class="action-btn primary" onclick="cmd('build_network_noelle')">Build</button>
+    <button class="action-btn" id="btn-show-track" onclick="toggleShowTrack()">Show Track</button>
+  </div>
+  <div class="section-title">Connections</div>
+  <div id="connections-list" style="font-size:11px;">(Run CP Calculate to load)</div>
+</div>
+
+<!-- ═══ PODS PANEL ═══ -->
+<div id="panel-pods" class="panel">
+  <div class="action-bar">
+    <button class="action-btn primary" onclick="cmd('populate_fleet')">Populate</button>
+    <button class="action-btn danger" onclick="cmd('clear_all_pods')">Clear All</button>
+    <button class="action-btn primary" onclick="cmd('start_animation')">▶ Start</button>
+    <button class="action-btn danger" onclick="cmd('graceful_stop')">■ Stop</button>
+    <button class="action-btn" onclick="cmd('trip_simulator')">Trip Simulator</button>
+    <button class="action-btn" onclick="refreshPods()">Refresh</button>
+  </div>
+  <div id="sally-stations" style="padding:4px 0; font-size:11px;"></div>
+  <table id="pod-table">
+    <thead>
+      <tr>
+        <th style="width:90px;">Pod</th>
+        <th style="width:55px;">Station</th>
+        <th style="width:30px;">Slot</th>
+        <th style="width:55px;">Dest</th>
+        <th style="width:50px;">State</th>
+        <th style="width:35px;">Trips</th>
+        <th style="width:50px;">Type</th>
+      </tr>
+    </thead>
+    <tbody id="pod-table-body">
+      <tr><td colspan="7" style="color:#666;">No pods. Run Populate.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ BUILD PANEL ═══ -->
+<div id="panel-build" class="panel">
+  <div class="action-bar">
+    <button class="action-btn primary" onclick="cmd('build_network_noelle')">Build Network</button>
+    <button class="action-btn" onclick="cmd('compute')">Compute Template</button>
+    <button class="action-btn" onclick="cmd('crew_health')">Health Check</button>
+  </div>
+  <div class="section">
+    <div class="section-title">Build Output</div>
+    <div id="build-output" class="section-body" style="min-height:100px;">(Run Build to see output)</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Network Info</div>
+    <div id="network-info" class="section-body">(Run Build to load)</div>
+  </div>
+</div>
+
+<!-- ═══ CREW PANEL ═══ -->
+<div id="panel-crew" class="panel">
+  <div class="action-bar">
+    <button class="action-btn primary" onclick="runCrewCheck()">Run Health Check</button>
+    <button class="action-btn" onclick="setLogLevel('all','normal')">All:normal</button>
+  </div>
+
+  <!-- Debug logging checkboxes with auto-timeout -->
+  <div style="padding:4px 0; display:flex; gap:12px; flex-wrap:wrap; font-size:11px; border-bottom:1px solid #333; margin-bottom:8px; padding-bottom:6px;">
+    <span style="color:#888;">Debug logging (5 min timeout):</span>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAgentDebug('sally', this.checked)"> <span style="color:#9cdcfe;">Sally</span></label>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAgentDebug('natalie', this.checked)"> <span style="color:#9cdcfe;">Natalie</span></label>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAgentDebug('nora', this.checked)"> <span style="color:#9cdcfe;">Nora</span></label>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAgentDebug('noelle', this.checked)"> <span style="color:#9cdcfe;">Noelle</span></label>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAgentDebug('animation', this.checked)"> <span style="color:#9cdcfe;">Animation</span></label>
+    <label style="cursor:pointer;"><input type="checkbox" onchange="toggleAllDebug(this.checked)" id="chk-all-debug"> <b style="color:#e0b0ff;">ALL</b></label>
+    <span id="debug-timer" style="color:#f44747;"></span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Agent Health</div>
+    <div id="crew-health" class="section-body" style="min-height:80px;">Click Run Health Check</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Network Journal</div>
+    <div id="crew-journal" class="section-body" style="max-height:180px;">Click Run Health Check</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Agent Memory (Facets)</div>
+    <div id="crew-facets" class="section-body" style="max-height:150px;">Click Run Health Check</div>
+  </div>
+</div>
+
+<!-- ═══ LOG OUTPUT ═══ -->
+<div id="log-output"></div>
+
+<script>
+var _followId = null;
+var _podTimer = null;
+
+// ── Navigation ──
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.remove('active', 'active-pods', 'active-crew', 'active-build');
+    if (b.dataset.panel === name) {
+      var cls = name === 'pods' ? 'active-pods' : name === 'crew' ? 'active-crew' : name === 'build' ? 'active-build' : 'active';
+      b.classList.add(cls);
+    }
+  });
+  var panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+  if (name === 'crew') cmd('crew_health');
+  if (name === 'pods') refreshPods();
+}
+
+// ── Commands → Ruby ──
+function cmd(taskId) { try { sketchup.cmd2_execute(taskId); } catch(e) {} }
+function refreshPods() { try { sketchup.cmd2_refresh_pods(); } catch(e) {} }
+function setLogLevel(agent, level) { try { sketchup.cmd2_set_log_level(agent, level); } catch(e) {} }
+
+// ── Expandable sections ──
+function toggleExpand(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var open = el.classList.toggle('open');
+  el.previousElementSibling.textContent = (open ? '▼ ' : '▶ ') + el.previousElementSibling.textContent.substr(2);
+}
+
+// ── Pod table ──
+function updatePods(rows) {
+  var tbody = document.getElementById('pod-table-body');
+  if (!tbody) return;
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" style="color:#666;">No pods. Run Populate.</td></tr>';
+    updateStations(null);
+    return;
+  }
+  updateStations(rows);
+  var html = '';
+  rows.forEach(function(r) {
+    var sc = r.state === 'traveling' ? '#6ac84a' : '#9cdcfe';
+    var icon = r.state === 'traveling' ? '▶' : '■';
+    var follow = _followId === r.nora_id;
+    html += '<tr class="' + (follow ? 'following' : '') + '" onclick="toggleFollow(\'' + r.nora_id + '\')" style="cursor:pointer;" title="Click → camera follow">' +
+      '<td class="mono" style="color:' + sc + ';">' + (follow ? '📷 ' : icon + ' ') + r.nora_id + '</td>' +
+      '<td>' + (r.station || '').replace(/^s0*/, 's') + '</td>' +
+      '<td style="text-align:center;">' + (r.slot > 0 ? r.slot : '—') + '</td>' +
+      '<td>' + (r.destination || '—').replace(/^s0*/, 's') + '</td>' +
+      '<td style="color:' + sc + ';">' + (r.state || '') + '</td>' +
+      '<td style="text-align:center;">' + (r.trip_count || 0) + '</td>' +
+      '<td>' + (r.template || '').replace('passenger_', '') + '</td></tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function updateStations(rows) {
+  var el = document.getElementById('sally-stations');
+  if (!el) return;
+  if (!rows) { el.innerHTML = ''; return; }
+  var stations = {};
+  rows.forEach(function(r) {
+    var sid = r.station || '?';
+    if (!stations[sid]) stations[sid] = { parked: 0, traveling: 0, slots: [] };
+    if (r.state === 'traveling') stations[sid].traveling++;
+    else { stations[sid].parked++; if (r.slot > 0) stations[sid].slots.push(r.slot); }
+  });
+  var html = '';
+  Object.keys(stations).sort().forEach(function(sid) {
+    var st = stations[sid];
+    var slots = '';
+    if (st.slots.length > 0) {
+      var max = Math.max.apply(null, st.slots);
+      for (var i = 1; i <= max; i++)
+        slots += '<span class="slot ' + (st.slots.indexOf(i) >= 0 ? 'occupied' : 'empty') + '" title="ps' + i + '"></span>';
+    }
+    html += '<span style="margin-right:10px;"><b style="color:#9cdcfe;">' + sid.replace(/^s0*/, 's') + '</b> ' + slots +
+      ' <span style="color:#666; font-size:10px;">' + st.parked + 'p' + (st.traveling > 0 ? ' ' + st.traveling + 't' : '') + '</span></span>';
+  });
+  el.innerHTML = html;
+}
+
+function toggleFollow(id) {
+  _followId = (_followId === id) ? null : id;
+  try { sketchup.cmd2_camera_follow(_followId || ''); } catch(e) {}
+  refreshPods();
+}
+
+// ── Crew Health ──
+var _debugTimers = {};
+var _debugCountdown = null;
+var _debugEndTime = null;
+
+function runCrewCheck() {
+  var h = document.getElementById('crew-health');
+  if (h) h.textContent = 'Running health check...';
+  try { sketchup.cmd2_execute('crew_health'); } catch(e) {
+    if (h) h.textContent = 'ERROR: ' + e.message;
+  }
+}
+
+function updateCrewHealth2(data) {
+  var h = document.getElementById('crew-health');
+  if (h && data && data.agents) {
+    var html = '';
+    data.agents.forEach(function(a) {
+      var c = a.ok ? '#6ac84a' : '#f44747';
+      var icon = a.ok ? '✓' : '⚠';
+      html += '<span style="color:' + c + ';">' + icon + '</span> <b>' + a.agent + '</b>: ' +
+        a.checks + ' checks, ' + a.faults + ' fault(s)\n';
+      (a.fault_list || []).forEach(function(f) { html += '    ⛔ ' + f + '\n'; });
+    });
+    html += '\n' + (data.total_faults === 0 ? '═══ ALL HEALTHY ═══' : '═══ ' + data.total_faults + ' FAULT(S) ═══');
+    h.textContent = html;
+  }
+  var j = document.getElementById('crew-journal');
+  if (j && data && data.journal) {
+    if (data.journal.length === 0) {
+      j.textContent = '(no journal entries — run animation to generate)';
+    } else {
+      j.textContent = data.journal.map(function(e) {
+        var sev = e.severity === 'fault' ? '⛔' : e.severity === 'warn' ? '⚠' : '·';
+        return sev + ' ' + (e.ts || '?') + ' [' + (e.agent || '?') + '] ' + (e.message || '');
+      }).join('\n');
+    }
+  }
+  var m = document.getElementById('crew-facets');
+  if (m && data && data.memory) {
+    if (data.memory.length === 0) {
+      m.textContent = '(no observations yet — agents learn during animation)';
+    } else {
+      m.textContent = data.memory.map(function(e) {
+        return '[' + e.agent + '] ' + e.count + ' observation(s)' + (e.latest ? '\n    latest: ' + e.latest : '');
+      }).join('\n');
+    }
+  }
+}
+
+function toggleAgentDebug(agent, on) {
+  if (on) {
+    setLogLevel(agent, 'debug');
+    _startDebugTimer();
+  } else {
+    setLogLevel(agent, 'normal');
+    _checkDebugTimerDone();
+  }
+}
+
+function toggleAllDebug(on) {
+  var boxes = document.querySelectorAll('#panel-crew input[type=checkbox]');
+  boxes.forEach(function(b) { if (b.id !== 'chk-all-debug') b.checked = on; });
+  if (on) {
+    setLogLevel('all', 'debug');
+    _startDebugTimer();
+  } else {
+    setLogLevel('all', 'normal');
+    _stopDebugTimer();
+  }
+}
+
+function _startDebugTimer() {
+  _debugEndTime = Date.now() + 5 * 60 * 1000; // 5 minutes
+  if (_debugCountdown) clearInterval(_debugCountdown);
+  _debugCountdown = setInterval(function() {
+    var remain = Math.max(0, Math.ceil((_debugEndTime - Date.now()) / 1000));
+    var el = document.getElementById('debug-timer');
+    if (el) el.textContent = remain > 0 ? remain + 's remaining' : '';
+    if (remain <= 0) {
+      // Auto-revert to normal
+      setLogLevel('all', 'normal');
+      var boxes = document.querySelectorAll('#panel-crew input[type=checkbox]');
+      boxes.forEach(function(b) { b.checked = false; });
+      _stopDebugTimer();
+      appendLog('[Crew] debug logging auto-expired after 5 minutes');
+    }
+  }, 1000);
+}
+
+function _stopDebugTimer() {
+  if (_debugCountdown) { clearInterval(_debugCountdown); _debugCountdown = null; }
+  var el = document.getElementById('debug-timer');
+  if (el) el.textContent = '';
+  _debugEndTime = null;
+}
+
+function _checkDebugTimerDone() {
+  var anyOn = false;
+  document.querySelectorAll('#panel-crew input[type=checkbox]').forEach(function(b) {
+    if (b.checked) anyOn = true;
+  });
+  if (!anyOn) _stopDebugTimer();
+}
+
+// ── Build output ──
+function updateBuildOutput(text) {
+  var el = document.getElementById('build-output');
+  if (el) el.textContent = text;
+}
+
+function updateNetworkInfo(text) {
+  var el = document.getElementById('network-info');
+  if (el) el.textContent = text;
+}
+
+// ── Connections list — rich cards with waypoints, notes, seg IDs ──
+function updateConnections(conns) {
+  var el = document.getElementById('connections-list');
+  if (!el) return;
+  if (!conns || conns.length === 0) {
+    el.innerHTML = '<div style="color:#666; padding:8px;">No connections. Run CP Calculate → Connect Guideways.</div>';
+    return;
+  }
+  var html = '';
+  conns.forEach(function(c, idx) {
+    var via = (c.via_markers || []).join(', ');
+    var from = c.from || '?';
+    var to = c.to || '?';
+    var cid = c.id || '';
+    // Derive seg IDs
+    var fromParts = from.split('.');
+    var toParts = to.split('.');
+    var fwd = 'seg_' + fromParts[0] + '_' + (fromParts[1]||0) + '_' + toParts[0] + '_' + (toParts[1]||0);
+    var rev = 'seg_' + toParts[0] + '_' + (toParts[1]||0) + '_' + fromParts[0] + '_' + (fromParts[1]||0);
+
+    html += '<div class="conn-card" style="background:#252526; border:1px solid #333; border-radius:4px; margin-bottom:6px; padding:6px 8px;">' +
+      // Row 1: endpoints + waypoints
+      '<div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">' +
+        '<span class="mono" style="color:#555; font-size:10px; min-width:90px;">' + cid + '</span>' +
+        '<span style="color:#9cdcfe; font-weight:bold;">' + from + '</span>' +
+        '<span style="color:#666;">↔</span>' +
+        '<span style="color:#9cdcfe; font-weight:bold;">' + to + '</span>' +
+        '<span style="color:#888; font-size:10px; margin-left:4px;">via:</span>' +
+        '<input type="text" value="' + via + '" placeholder="none" ' +
+          'style="background:#1e1e1e; border:1px solid #444; color:#ccc; padding:2px 4px; width:80px; font-size:10px; border-radius:2px;" ' +
+          'title="Marker waypoints — comma-separated: 1, 2 or M1, M2" ' +
+          'onchange="updateVia(\'' + cid + '\', this.value)">' +
+      '</div>' +
+      // Row 2: note
+      '<div style="display:flex; align-items:center; gap:4px; margin-top:3px;">' +
+        '<span style="color:#555; font-size:10px;">—</span>' +
+        '<input type="text" value="' + (c.comment || '') + '" placeholder="note…" ' +
+          'style="background:#1e1e1e; border:1px solid #333; color:#999; padding:2px 4px; flex:1; font-size:10px; border-radius:2px;" ' +
+          'title="Optional note for this connection" ' +
+          'onchange="updateNote(\'' + cid + '\', this.value)">' +
+      '</div>' +
+      // Row 3: seg IDs
+      '<div style="margin-top:3px; font-size:10px;">' +
+        '<span style="color:#555;">segs:</span> ' +
+        '<span style="color:#3264dc;" title="Outbound (blue)">' + fwd + '</span> ' +
+        '<span style="color:#dc4646;" title="Inbound (red)">' + rev + '</span>' +
+      '</div>' +
+    '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function updateVia(connId, value) {
+  var markers = value.replace(/[Mm]/g, '').split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+  try { sketchup.cmd2_update_via(connId, JSON.stringify(markers)); } catch(e) {}
+}
+
+function updateNote(connId, value) {
+  try { sketchup.cmd2_update_note(connId, value); } catch(e) {}
+}
+
+// ── Show Track toggle ──
+var _trackShown = false;
+function toggleShowTrack() {
+  cmd('show_formation_tracks');
+  _trackShown = !_trackShown;
+  var btn = document.getElementById('btn-show-track');
+  if (btn) btn.textContent = _trackShown ? 'Hide Track' : 'Show Track';
+}
+
+// ── Log ──
+function appendLog(text) {
+  var el = document.getElementById('log-output');
+  if (!el) return;
+  el.textContent += text + '\n';
+  el.scrollTop = el.scrollHeight;
+  // Cap at 200 lines
+  var lines = el.textContent.split('\n');
+  if (lines.length > 200) el.textContent = lines.slice(-200).join('\n');
+}
+
+// ── Animation state ──
+function setAnimState(running) {
+  if (running) {
+    if (!_podTimer) _podTimer = setInterval(refreshPods, 2000);
+  } else {
+    if (_podTimer) { clearInterval(_podTimer); _podTimer = null; }
+    _followId = null;
+    refreshPods();
+  }
+}
+</script>
+</body>
+</html>

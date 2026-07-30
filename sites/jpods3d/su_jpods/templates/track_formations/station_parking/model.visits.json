@@ -1,0 +1,55 @@
+{
+  "schema": "jpods-visits-v1",
+  "model": "model",
+  "updated_at": "2026-06-21T16:53:46Z",
+  "todo": "Add configurable archive limit when visit counts become large",
+  "visits": {
+    "connections": {
+      "station_parking.hold_loop[12/12]": {
+        "count": 41,
+        "first_dt": "2026-06-16T22:01:14Z",
+        "last_dt": "2026-06-21T16:53:25Z"
+      },
+      "station_parking.gw_platform_park_ps7": {
+        "count": 20,
+        "first_dt": "2026-06-16T22:01:14Z",
+        "last_dt": "2026-06-21T16:53:25Z"
+      },
+      "station_parking.hold_loop[9/9]": {
+        "count": 11,
+        "first_dt": "2026-06-16T22:01:23Z",
+        "last_dt": "2026-06-21T16:53:46Z"
+      },
+      "station_parking.hold_loop[4/4]": {
+        "count": 24,
+        "first_dt": "2026-06-16T22:01:28Z",
+        "last_dt": "2026-06-20T02:21:11Z"
+      },
+      "station_parking.gw_platform_park_ps9": {
+        "count": 25,
+        "first_dt": "2026-06-16T22:01:28Z",
+        "last_dt": "2026-06-21T16:53:35Z"
+      },
+      "station_parking.hold_loop[8/8]": {
+        "count": 17,
+        "first_dt": "2026-06-16T22:01:32Z",
+        "last_dt": "2026-06-20T02:21:22Z"
+      },
+      "station_parking.gw_platform_park_ps8": {
+        "count": 18,
+        "first_dt": "2026-06-16T22:01:32Z",
+        "last_dt": "2026-06-21T16:53:46Z"
+      },
+      "station_parking.gw_platform_park_ps6": {
+        "count": 18,
+        "first_dt": "2026-06-16T22:02:49Z",
+        "last_dt": "2026-06-20T02:20:40Z"
+      },
+      "station_parking.hold_loop[5/5]": {
+        "count": 1,
+        "first_dt": "2026-06-21T16:53:35Z",
+        "last_dt": "2026-06-21T16:53:35Z"
+      }
+    }
+  }
+}

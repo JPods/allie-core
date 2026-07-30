@@ -1,0 +1,16 @@
+{
+  "schema": "jpods-station-line-v2",
+  "formation": "cpb",
+  "generated_at": "2026-06-26T00:00:00Z",
+  "generated_by": "manual",
+  "note": "CP Barrier — no tracks. Placed at unconnected CPs to acknowledge the dead end. Contains cp_marker_b geometry. Noelle skips cpb during station registration.",
+  "chains_header": {
+    "approved_by": "bill",
+    "dt": "2026-06-26T00:00:00Z",
+    "note": "Barrier component — no chains, no tracks, no routing. Placement-only template."
+  },
+  "discovered_chains": {},
+  "landing_chains": [],
+  "exit_chains": [],
+  "lines": {}
+}

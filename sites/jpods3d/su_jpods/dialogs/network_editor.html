@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JPods Network Editor</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      background: #2d2d2d;
+      border-bottom: 1px solid #444;
+      flex-shrink: 0;
+    }
+    button {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    #btn-open     { background: #0e639c; color: #fff; }
+    #btn-save     { background: #388a34; color: #fff; }
+    #btn-build    { background: #6a4f9e; color: #fff; }
+    #btn-template { background: #5a6a7a; color: #fff; }
+    #btn-finder   { background: #3a3a3a; color: #ccc; border: 1px solid #555; }
+    #btn-constraints { background: #3a3a3a; color: #dcdcaa; border: 1px solid #555; }
+    #btn-constraints.active { background: #3a2e00; color: #ffdd55; border-color: #d4a800; }
+    button:hover  { filter: brightness(1.2); }
+    button:active { filter: brightness(0.85); }
+    #status {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      font-size: 11px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      color: #9cdcfe;
+      min-height: 22px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #struct-bar {
+      flex-shrink: 0;
+      padding: 4px 10px;
+      font-size: 11px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      color: #ce9178;
+      min-height: 22px;
+      display: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #struct-bar.visible { display: block; }
+    #action-bar {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #action-label {
+      font-size: 11px;
+      color: #ce9178;
+      user-select: none;
+      margin-right: auto;
+    }
+    #btn-action-start {
+      background: #1a6b2e;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    #btn-action-stop {
+      background: #6b1a1a;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+      display: none;
+    }
+    /* ── Connection list ─────────────────────────────────────────────────── */
+    #connections-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 10px;
+    }
+    #connections-list::-webkit-scrollbar { width: 6px; }
+    #connections-list::-webkit-scrollbar-track { background: #1e1e1e; }
+    #connections-list::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+    .conn-card {
+      background: #252526;
+      border: 1px solid #3c3c3c;
+      border-radius: 4px;
+      padding: 7px 10px;
+      margin-bottom: 6px;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.15s;
+    }
+    .conn-card-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .conn-card.highlight {
+      border-color: #0e639c;
+      background: #1e3a52;
+    }
+    .conn-id {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 10px;
+      color: #666;
+      background: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 3px;
+      padding: 2px 5px;
+      white-space: nowrap;
+      user-select: none;
+      min-width: 90px;
+      text-align: center;
+    }
+    .conn-ep {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      color: #4ec9b0;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .conn-arrow { color: #555; font-size: 14px; user-select: none; }
+    .conn-via-wrap { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
+    .conn-via-label { font-size: 11px; color: #777; user-select: none; }
+    .conn-via-input {
+      background: #3c3c3c;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #ce9178;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      padding: 2px 7px;
+      width: 110px;
+    }
+    .conn-via-input:focus { outline: none; border-color: #0e639c; }
+    .conn-via-input.invalid { border-color: #f44747; }
+    .conn-show {
+      background: none;
+      border: none;
+      color: #3a7a3a;
+      cursor: pointer;
+      font-size: 11px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    .conn-show:hover { background: #1a3a1a; color: #60dc60; filter: none; }
+    .conn-hl {
+      background: none;
+      border: 1px solid #555;
+      color: #ce9178;
+      cursor: pointer;
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 3px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .conn-hl:hover { background: #2a1800; border-color: #ce9178; color: #ffa040; filter: none; }
+    .conn-del {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    .conn-del:hover { background: #3c0000; color: #f44747; filter: none; }
+    .conn-comment-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 0 2px 0;
+      border-top: 1px solid #2d2d2d;
+      margin-top: 4px;
+    }
+    .conn-comment-label { font-size: 11px; color: #555; user-select: none; white-space: nowrap; }
+    .conn-comment-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #3c3c3c;
+      color: #888;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 1px 4px;
+    }
+    .conn-comment-input:focus { outline: none; border-bottom-color: #555; color: #b0b0b0; }
+    .conn-seg-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 0 1px 0;
+      border-top: 1px solid #2d2d2d;
+      margin-top: 4px;
+    }
+    .conn-seg-fwd {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 10px;
+      color: #569cd6;
+      background: #1a2a3a;
+      border: 1px solid #2a4a6a;
+      border-radius: 3px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      user-select: text;
+    }
+    .conn-seg-rev {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 10px;
+      color: #f44747;
+      background: #3a1a1a;
+      border: 1px solid #6a2a2a;
+      border-radius: 3px;
+      padding: 1px 5px;
+      white-space: nowrap;
+      user-select: text;
+    }
+    .conn-seg-label { font-size: 10px; color: #444; user-select: none; }
+    #empty-state {
+      padding: 30px 10px;
+      color: #888;
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.8;
+    }
+    #empty-state strong { color: #ce9178; }
+    #btn-raw { background: #3a3a3a; color: #9cdcfe; border: 1px solid #555; }
+    #btn-raw.active { background: #1e3a52; color: #4ec9b0; border-color: #0e639c; }
+    #btn-cp-labels { background: #3a3a3a; color: #dcdcaa; border: 1px solid #555; }
+    #btn-cp-labels.active { background: #3a2e00; color: #ffdd55; border-color: #d4a800; }
+    /* ── Vehicle bar ─────────────────────────────────────────────────── */
+    #vehicle-bar {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      display: none;
+    }
+    #vehicle-bar.visible { display: block; }
+    #vehicle-bar-header {
+      font-size: 11px;
+      color: #ce9178;
+      margin-bottom: 5px;
+      user-select: none;
+    }
+    .vehicle-type-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .vehicle-type-label {
+      font-size: 12px;
+      color: #9cdcfe;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .vehicle-qty-input {
+      width: 52px;
+      background: #3c3c3c;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #d4d4d4;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      padding: 2px 5px;
+      text-align: right;
+    }
+    .vehicle-qty-input:focus { outline: none; border-color: #0e639c; }
+    #vehicle-speed-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px solid #3c3c3c;
+    }
+    #vehicle-speed-label { font-size: 11px; color: #777; user-select: none; }
+    #vehicle-speed {
+      width: 60px;
+      background: #3c3c3c;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #d4d4d4;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      padding: 2px 5px;
+      text-align: right;
+    }
+    #vehicle-speed:focus { outline: none; border-color: #0e639c; }
+    #vehicle-speed-unit { font-size: 11px; color: #555; user-select: none; }
+    #btn-place-vehicles {
+      margin-left: auto;
+      background: #8b4513;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    #btn-save-itineraries {
+      background: #2a5a7a;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    #btn-load-itineraries {
+      background: #2a4a2a;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+          }
+          #btn-audit-itineraries {
+            background: #3a3a1a;
+            color: #dcdcaa;
+            padding: 4px 10px;
+            font-size: 11px;
+          }
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    #btn-animate {
+      background: #1a6b2e;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    #btn-stop-animate {
+      background: #6b1a1a;
+      color: #fff;
+      padding: 4px 10px;
+      font-size: 11px;
+      display: none;
+    }
+    #btn-check-continuity {
+      background: #4a3a00;
+      color: #dcdcaa;
+      padding: 4px 10px;
+      font-size: 11px;
+    }
+    /* ── Route Inspector bar ─────────────────────────────────────────────── */
+    #route-bar {
+      flex-shrink: 0;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      background: #1e2a1e;
+      border-bottom: 1px solid #2a4a2a;
+      font-size: 11px;
+    }
+    #route-bar.visible { display: flex; }
+    #route-bar label { color: #8fbc8f; white-space: nowrap; }
+    #route-from, #route-to {
+      background: #2d3d2d;
+      color: #d4d4d4;
+      border: 1px solid #3a5a3a;
+      border-radius: 3px;
+      padding: 3px 5px;
+      font-size: 11px;
+      flex: 1;
+      min-width: 60px;
+      max-width: 100px;
+    }
+    #btn-show-route {
+      background: #1a4a1a;
+      color: #60dc60;
+      border: 1px solid #2a6a2a;
+      border-radius: 3px;
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    #btn-show-route:hover { filter: brightness(1.3); }
+    #btn-clear-route {
+      background: none;
+      color: #666;
+      border: none;
+      font-size: 11px;
+      cursor: pointer;
+      padding: 3px 6px;
+    }
+    #btn-clear-route:hover { color: #aaa; }
+    #btn-show-followme {
+      background: #1a3a1a;
+      color: #60dc60;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid #2a5a2a;
+    }
+    #btn-show-followme:hover  { filter: brightness(1.3); }
+    #btn-show-followme.active { background: #0a2a0a; border-color: #4ec9b0; color: #4ec9b0; font-weight: bold; }
+    #btn-toggle-route {
+      background: #1a2a3a;
+      color: #9cdcfe;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid #2a4a6a;
+    }
+    #btn-toggle-route:hover { filter: brightness(1.3); }
+    #btn-toggle-route.active { background: #0e3a5a; border-color: #0e639c; }
+    /* ── Trips panel ─────────────────────────────────────────────────── */
+    #trips-bar {
+      flex-shrink: 0;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+    }
+    #trips-bar-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      color: #ce9178;
+      cursor: pointer;
+      user-select: none;
+    }
+    #trips-bar-header:hover { background: #2d2d2d; }
+    #trips-count {
+      color: #666;
+      font-size: 10px;
+    }
+    #btn-generate-trips {
+      margin-left: auto;
+      background: #2a3a2a;
+      color: #8fbc8f;
+      border: 1px solid #3a5a3a;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    #btn-generate-trips:hover { background: #1a4a1a; color: #60dc60; filter: none; }
+    #trips-list {
+      max-height: 140px;
+      overflow-y: auto;
+      padding: 0 10px 6px;
+      display: none;
+    }
+    #trips-list.visible { display: block; }
+    #trips-list::-webkit-scrollbar { width: 5px; }
+    #trips-list::-webkit-scrollbar-track { background: #1e1e1e; }
+    #trips-list::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+    .trip-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 0;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 11px;
+    }
+    .trip-row:last-child { border-bottom: none; }
+    .trip-od {
+      font-family: 'Menlo', 'Consolas', monospace;
+      color: #4ec9b0;
+      white-space: nowrap;
+      min-width: 90px;
+    }
+    .trip-meta {
+      color: #666;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .trip-show {
+      margin-left: auto;
+      background: #1a2030;
+      border: 1px solid #2a3a5a;
+      color: #7ab0e0;
+      cursor: pointer;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      white-space: nowrap;
+    }
+    .trip-show:hover { background: #0e3a5a; color: #9cdcfe; filter: none; }
+    #trips-empty {
+      color: #555;
+      font-size: 11px;
+      font-style: italic;
+      padding: 4px 0;
+    }
+    /* ── Constraints panel ─────────────────────────────────────────────── */
+    #constraints-panel {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+      display: block;
+    }
+    #constraints-header {
+      font-size: 11px;
+      color: #dcdcaa;
+      margin-bottom: 6px;
+      user-select: none;
+    }
+    #constraints-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 80px 84px 84px;
+      gap: 4px 8px;
+      align-items: center;
+      font-size: 11px;
+    }
+    .constraints-colhead {
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 10px;
+      user-select: none;
+      padding-top: 2px;
+    }
+    .constraint-label { color: #9cdcfe; }
+    .constraint-input {
+      width: 80px;
+      background: #3c3c3c;
+      border: 1px solid #555;
+      border-radius: 3px;
+      color: #d4d4d4;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 11px;
+      padding: 2px 5px;
+      text-align: right;
+    }
+    .constraint-input:focus { outline: none; border-color: #0e639c; }
+    .constraint-default { color: #888; text-align: right; font-family: 'Menlo', 'Consolas', monospace; }
+    .constraint-unit { color: #666; user-select: none; }
+    #constraints-actions {
+      margin-top: 7px;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    #btn-constraints-save {
+      background: #0e639c;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      font-size: 11px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    /* ── Marker panel ─────────────────────────────────────────────── */
+    .conn-card.active-for-marker { border-color: #ff8c00; }
+    #btn-constraints-reset {
+      background: #4a3a00;
+      color: #dcdcaa;
+      border: 1px solid #7a5d00;
+      border-radius: 3px;
+      font-size: 11px;
+      padding: 3px 10px;
+      cursor: pointer;
+    }
+    #raw-editor {
+      display: none;
+      flex: 1;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border: none;
+      border-top: 1px solid #3c3c3c;
+      padding: 10px;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+    }
+    #raw-editor.visible { display: block; }
+    #connections-list.hidden { display: none; }
+    /* ── Network quick-action bar ──────────────────────────────────────── */
+    #network-quick-actions {
+      flex-shrink: 0;
+      padding: 7px 10px 8px;
+      background: linear-gradient(135deg, #0a2a1a 0%, #0a1a2e 100%);
+      border-top: 1px solid #1a4a2a;
+      border-bottom: 1px solid #1a3a4a;
+    }
+    #nqa-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4a9a6a;
+      margin-bottom: 5px;
+    }
+    #nqa-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .nqa-btn {
+      font-size: 11px;
+      font-family: inherit;
+      padding: 4px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+      background: #0d3a22;
+      color: #7adfa0;
+      border: 1px solid #2a6a44;
+    }
+    .nqa-btn:hover { background: #1a5a34; color: #a0ffb8; border-color: #3a9a60; }
+    .nqa-btn.nqa-blue {
+      background: #0d2a3a;
+      color: #7ab8df;
+      border: 1px solid #2a5a7a;
+    }
+    .nqa-btn.nqa-blue:hover { background: #1a4a60; color: #a0d8ff; border-color: #3a80aa; }
+    .nqa-btn.nqa-green {
+      background: #0d2a1a;
+      color: #7adf9a;
+      border: 1px solid #2a6a3a;
+    }
+    .nqa-btn.nqa-green:hover { background: #1a4a28; color: #a0ffb8; border-color: #3a9a60; }
+
+    #runtime-console {
+      border-top: 1px solid #2a2a2a;
+      margin-top: 8px;
+      background: #171717;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+    }
+    #runtime-console-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      background: #121212;
+      color: #9cdcfe;
+      font-size: 12px;
+      border-bottom: 1px solid #2a2a2a;
+      gap: 8px;
+    }
+    #runtime-console-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    #runtime-console-actions button {
+      background: #2d2d2d;
+      color: #d4d4d4;
+      border: 1px solid #555;
+      border-radius: 3px;
+      padding: 2px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    #runtime-console-actions button:hover {
+      border-color: #8a8a8a;
+    }
+    #runtime-console-path {
+      color: #6a9955;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 8px;
+      flex: 1;
+      text-align: right;
+    }
+    #runtime-console-output {
+      margin: 0;
+      padding: 8px 10px;
+      color: #dcdcdc;
+      font: 11px/1.35 Menlo, Monaco, Consolas, monospace;
+      overflow: auto;
+      max-height: 220px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      flex: 1;
+    }
+    #runtime-console-output::-webkit-scrollbar { width: 6px; }
+    #runtime-console-output::-webkit-scrollbar-track { background: #1e1e1e; }
+    #runtime-console-output::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+    /* ── Connections save bar ──────────────────────────────────────────────── */
+    #connections-save-bar {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 10px;
+      background: #252526;
+      border-bottom: 1px solid #3c3c3c;
+    }
+    #connections-save-status {
+      font-size: 11px;
+      color: #6a9955;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      margin-right: 8px;
+    }
+    #btn-save-network {
+      background: #388a34;
+      color: #fff;
+      padding: 3px 14px;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="toolbar" style="display:none"></div>
+
+<div id="status">Ready — open the canonical .followme.json or click Get Template.</div>
+<div id="struct-bar"></div>
+
+<div id="constraints-panel">
+  <div id="constraints-header">Primary Constraints (single source of truth)</div>
+  <div id="constraints-grid"></div>
+  <div id="constraints-actions">
+  </div>
+</div>
+
+<div id="connections-save-bar">
+  <span id="connections-save-status"></span>
+</div>
+
+<div id="connections-list">
+  <div id="empty-state">
+    No connections defined.<br>
+    Use the Connect Guideways tool in the viewport to click CP pairs.
+  </div>
+</div>
+
+
+
+
+<textarea id="raw-editor" spellcheck="false"></textarea>
+
+<div id="network-quick-actions">
+  <div id="nqa-label">Next step</div>
+  <div id="nqa-btns">
+    <button class="nqa-btn" onclick="nqaRun('calculate_cps')">CP Calculate</button>
+    <button class="nqa-btn" onclick="nqaRun('build_network_noelle')">Build</button>
+    <button class="nqa-btn" onclick="nqaRun('show_in_finder')">Finder</button>
+    <button class="nqa-btn" onclick="nqaRun('show_formation_tracks')">Show Tracks</button>
+    <button class="nqa-btn nqa-blue" onclick="nqaRun('set_label_size')">Label Size</button>
+  </div>
+</div>
+
+<!-- Runtime console removed — use SU Console button in main console Result bar -->
+
+<script>
+  // Network quick-action bar — delegate to parent Console frame.
+  // Tasks with known defaults execute directly; others open the params panel.
+  var NQA_DIRECT = {
+    'show_formation_tracks': { ribbon_above: true },
+    'calculate_cps':         {},
+    'build_network_noelle':  {},
+    'validate_and_show':     {},
+    'start_animation':       {},
+    'set_label_size':        {},
+    'show_in_finder':        {}
+  };
+  function nqaRun(taskId) {
+    if (!window.parent || window.parent === window) return;
+    const directParams = NQA_DIRECT[taskId];
+    if (directParams !== undefined &&
+        typeof window.parent.executeTaskDirect === 'function') {
+      window.parent.executeTaskDirect(taskId, directParams);
+    } else if (typeof window.parent.selectTask === 'function') {
+      window.parent.selectTask(taskId);
+    }
+  }
+
+  // Called by parent Console after a toggle task completes to update button text.
+  function updateNqaBtnLabel(taskId, label) {
+    document.querySelectorAll('#nqa-btns .nqa-btn').forEach(function(btn) {
+      if (btn.getAttribute('onclick') === "nqaRun('" + taskId + "')") {
+        btn.textContent = label;
+      }
+    });
+  }
+
+  var connections   = [];   // [{id, from:{structure_id,stub}, to:{structure_id,stub}, via_markers:[], comment:''}]
+  var uTurns        = [];   // [{structure_id, stub}]
+  var savedComments = null;
+  var _stationNames = {};   // {sid_lower: friendly_name}
+
+  function setStationNames(names) {
+    _stationNames = names || {};
+    renderConnections();  // re-render to show names
+  }
+
+  function stationLabel(sid) {
+    var name = _stationNames[(sid || '').toLowerCase()] || '';
+    return name;
+  }
+  var currentPath   = null;
+  var libraryDir    = null;
+  var previewTimer  = null;
+  var vehicleTypes  = [];   // [{id, label}] populated from Ruby on load
+  var constraintsPayload = { fields: [] };
+  var constraintsVisible = false;
+  var logSeq        = 0;
+  var activeConnIdx = null; // index into connections[] for marker insertion
+  var logPaused     = false;
+  var logTimer      = null;
+
+  // ── Render ──────────────────────────────────────────────────────────────────
+
+  // U-turns panel removed — stubs retain JSON round-trip so u_turns data is preserved in saved files.
+  function renderUTurns() {}
+  function addUTurn() {}
+
+  function renderConnections() {
+    var list = document.getElementById('connections-list');
+    list.innerHTML = '';
+    if (connections.length === 0) {
+      list.innerHTML = '<div id="empty-state">No connections defined.<br>' +
+        'Click <strong>Get Template</strong> to start, or use the Network Editor tool<br>' +
+        'in the viewport to Shift+click connection points.</div>';
+      return;
+    }
+    connections.forEach(function(conn, idx) {
+      var card = document.createElement('div');
+      card.className = 'conn-card';
+      card.id = 'card-' + conn.id;
+
+      var idBadge = document.createElement('span');
+      idBadge.className = 'conn-id';
+      idBadge.textContent = conn.id;
+      idBadge.title = 'Connection ID — auto-assigned, read-only';
+
+      var fromSid = conn.from.structure_id.toLowerCase();
+      var toSid   = conn.to.structure_id.toLowerCase();
+      var fromName = stationLabel(fromSid);
+      var toName   = stationLabel(toSid);
+
+      var fromEp = document.createElement('span');
+      fromEp.className = 'conn-ep';
+      fromEp.textContent = fromSid + '.' + conn.from.stub;
+      fromEp.title = fromName ? fromName : 'From (read-only)';
+
+      var fromLabel = document.createElement('span');
+      fromLabel.style.cssText = 'color:#888; font-size:10px; margin-left:4px;';
+      fromLabel.textContent = fromName;
+
+      var arrow = document.createElement('span');
+      arrow.className = 'conn-arrow';
+      arrow.textContent = '→';
+
+      var toEp = document.createElement('span');
+      toEp.className = 'conn-ep';
+      toEp.textContent = toSid + '.' + conn.to.stub;
+      toEp.title = toName ? toName : 'To (read-only)';
+
+      var toLabel = document.createElement('span');
+      toLabel.style.cssText = 'color:#888; font-size:10px; margin-left:4px;';
+      toLabel.textContent = toName;
+
+      var viaWrap = document.createElement('span');
+      viaWrap.className = 'conn-via-wrap';
+      var viaLabel = document.createElement('span');
+      viaLabel.className = 'conn-via-label';
+      viaLabel.textContent = 'via:';
+      var viaInput = document.createElement('input');
+      viaInput.type = 'text';
+      viaInput.className = 'conn-via-input';
+      viaInput.placeholder = 'none';
+      viaInput.title = 'Marker waypoints — comma-separated numbers or M-labels, e.g. 1, 2  or  M1, M2';
+      var viaArr = Array.isArray(conn.via_markers) ? conn.via_markers : [];
+      viaInput.value = viaArr.length > 0 ? viaArr.join(', ') : '';
+      viaInput.dataset.idx = idx;
+      viaInput.addEventListener('input', function() {
+        var i = parseInt(this.dataset.idx);
+        var raw = this.value.trim();
+        if (raw === '') {
+          connections[i].via_markers = [];
+          this.classList.remove('invalid');
+          setStatus('');
+        } else {
+          // Accept both bare numbers ("1, 2") and M-prefixed labels ("M1, M2")
+          var parts = raw.split(/[\s,]+/).filter(function(s) { return s !== ''; });
+          var nums  = parts.map(function(s) { return Number(s.replace(/^[Mm]/, '')); });
+          if (nums.some(isNaN)) {
+            this.classList.add('invalid');
+            setStatus('via_markers: use numbers or M-labels, e.g. 1, 2 or M1, M2', '#f44747');
+            return;
+          }
+          this.classList.remove('invalid');
+          connections[i].via_markers = nums;
+          setStatus('via_markers set to [' + nums.join(', ') + '] — click \u25b6 Build to apply.', '#4ec9b0');
+        }
+        schedulePreview();
+      });
+      viaWrap.appendChild(viaLabel);
+      viaWrap.appendChild(viaInput);
+
+      var hlBtn = document.createElement('button');
+      hlBtn.className = 'conn-hl';
+      hlBtn.textContent = '\u25ce Highlight';
+      hlBtn.title = 'Color both seg_ guideways in viewport: blue=outbound, red=inbound';
+      (function(fromSid, fromStub, toSid, toStub) {
+        hlBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          setStatus('Highlighting ' + fromSid.toLowerCase() + '.' + fromStub + ' \u2194 ' + toSid.toLowerCase() + '.' + toStub + '\u2026', '#9cdcfe');
+          sketchup.cmd_highlight_connection(JSON.stringify({
+            from_sid: fromSid, from_stub: fromStub,
+            to_sid:   toSid,   to_stub:   toStub
+          }));
+        });
+      })(conn.from.structure_id, conn.from.stub, conn.to.structure_id, conn.to.stub);
+
+      var showBtn = document.createElement('button');
+      showBtn.className = 'conn-show';
+      showBtn.textContent = '\u25a0';
+      showBtn.title = 'Inspect this connection\'s built guideways (cyan overlay + zoom)';
+      showBtn.dataset.connid = conn.id;
+      showBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        sketchup.cmd_show_connection(this.dataset.connid);
+      });
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'conn-del';
+      delBtn.textContent = '×';
+      delBtn.title = 'Remove this connection';
+      delBtn.dataset.idx = idx;
+      delBtn.addEventListener('click', function() {
+        var connId = connections[parseInt(this.dataset.idx)].id;
+        connections.splice(parseInt(this.dataset.idx), 1);
+        renderConnections();
+        schedulePreview();
+        if (window.sketchup && sketchup.cmd_delete_connection) {
+          sketchup.cmd_delete_connection(connId);
+        }
+        setStatus('Connection removed: ' + connId, '#dcdcaa');
+      });
+
+      var mainRow = document.createElement('div');
+      mainRow.className = 'conn-card-row';
+      mainRow.appendChild(idBadge);
+      mainRow.appendChild(fromEp);
+      mainRow.appendChild(fromLabel);
+      mainRow.appendChild(arrow);
+      mainRow.appendChild(toEp);
+      mainRow.appendChild(toLabel);
+      mainRow.appendChild(viaWrap);
+      mainRow.appendChild(hlBtn);
+      mainRow.appendChild(showBtn);
+      mainRow.appendChild(delBtn);
+      card.appendChild(mainRow);
+
+      // Comment row
+      var commentRow   = document.createElement('div');
+      commentRow.className = 'conn-comment-row';
+      var commentLabel = document.createElement('span');
+      commentLabel.className = 'conn-comment-label';
+      commentLabel.textContent = '\u2014';
+      var commentInput = document.createElement('input');
+      commentInput.type = 'text';
+      commentInput.className = 'conn-comment-input';
+      commentInput.placeholder = 'note…';
+      commentInput.title = 'Optional note for this segment';
+      commentInput.value = conn.comment || '';
+      commentInput.dataset.idx = idx;
+      commentInput.addEventListener('input', function() {
+        connections[parseInt(this.dataset.idx)].comment = this.value;
+      });
+      commentInput.addEventListener('click', function(e) { e.stopPropagation(); });
+      commentRow.appendChild(commentLabel);
+      commentRow.appendChild(commentInput);
+      card.appendChild(commentRow);
+
+      // Seg names row — the two seg_ lines this connection produces
+      var segFwdId = 'seg_' + conn.from.structure_id + '_cp' + conn.from.stub +
+                     '_' + conn.to.structure_id + '_cp' + conn.to.stub;
+      var segRevId = 'seg_' + conn.to.structure_id + '_cp' + conn.to.stub +
+                     '_' + conn.from.structure_id + '_cp' + conn.from.stub;
+      var segRow  = document.createElement('div');
+      segRow.className = 'conn-seg-row';
+      var segLbl  = document.createElement('span');
+      segLbl.className = 'conn-seg-label';
+      segLbl.textContent = 'segs:';
+      var segFwd  = document.createElement('span');
+      segFwd.className = 'conn-seg-fwd';
+      segFwd.textContent = segFwdId;
+      segFwd.title = 'Outbound (blue) — vehicle departs ' + conn.from.structure_id;
+      var segRev  = document.createElement('span');
+      segRev.className = 'conn-seg-rev';
+      segRev.textContent = segRevId;
+      segRev.title = 'Inbound (red) — vehicle arrives ' + conn.from.structure_id;
+      segRow.appendChild(segLbl);
+      segRow.appendChild(segFwd);
+      segRow.appendChild(segRev);
+      card.appendChild(segRow);
+
+      // Click anywhere on the card (except the delete button, via input, or comment)
+      // to flash the connection in the viewport.
+      card.addEventListener('click', function(e) {
+        if (e.target === delBtn || e.target === viaInput || e.target === commentInput) return;
+        // Track which connection is active for marker-panel insertion
+        activeConnIdx = idx;
+        document.querySelectorAll('.conn-card.active-for-marker').forEach(function(c) {
+          c.classList.remove('active-for-marker');
+        });
+        card.classList.add('active-for-marker');
+        sketchup.cmd_highlight(conn.id);
+        // Brief visual pulse on the card itself
+        card.style.borderColor = '#f5e642';
+        card.style.background  = '#2a2800';
+        setTimeout(function() {
+          card.style.borderColor = '';
+          card.style.background  = '';
+          if (activeConnIdx === idx) card.classList.add('active-for-marker');
+        }, 2500);
+      });
+      card.style.cursor = 'pointer';
+      list.appendChild(card);
+    });
+  }
+
+  // ── JSON assembly ────────────────────────────────────────────────────────────
+
+  function getJSON() {
+    var data = {
+      connections: connections.map(function(c) {
+        var entry = {
+          id:          c.id,
+          from:        { structure_id: c.from.structure_id, stub: c.from.stub },
+          to:          { structure_id: c.to.structure_id,   stub: c.to.stub   },
+          via_markers: c.via_markers.slice()
+        };
+        if (c.comment) entry.comment = c.comment;
+        if (c.next)    entry.next    = c.next;   // preserve routing topology
+        return entry;
+      }),
+      u_turns: uTurns.map(function(u) {
+        return { structure_id: u.structure_id, stub: u.stub };
+      })
+    };
+    if (savedComments) data._comments = savedComments;
+    return JSON.stringify(data, null, 2);
+  }
+
+  // ── Preview (debounced 500 ms) ────────────────────────────────────────────────
+
+  function schedulePreview() {
+    clearTimeout(previewTimer);
+    // Push current state to parent Console window so it can flush via_markers
+    // to disk without needing cross-frame contentWindow access.
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent._neJsonCache = getJSON();
+      }
+    } catch(e) {}
+    previewTimer = setTimeout(function() {
+      if (typeof sketchup !== 'undefined' && sketchup !== null) {
+        sketchup.cmd_preview(getJSON());
+      }
+    }, 500);
+  }
+
+  // ── Status helpers ──────────────────────────────────────────────────────────
+
+  // ── Feature panel ────────────────────────────────────────────────────────────
+
+  // Stub — feature panel removed; Ruby still calls this, no-op is safe.
+  function loadFeatureConnections(conns) {}
+  function toggleFeaturePanel() {}
+
+  function setStatus(msg, color) {
+    var el = document.getElementById('status');
+    el.textContent = msg;
+    el.style.color = color || '#9cdcfe';
+  }
+
+  function appendLogBatch(batch) {
+    if (!batch) return;
+
+    if (batch.path) {
+      var pathEl = document.getElementById('runtime-console-path');
+      pathEl.textContent = batch.path;
+      pathEl.title = batch.path;
+    }
+
+    var output = document.getElementById('runtime-console-output');
+    var nearBottom = (output.scrollTop + output.clientHeight) >= (output.scrollHeight - 24);
+    var lines = Array.isArray(batch.lines) ? batch.lines : [];
+
+    if (lines.length > 0) {
+      var chunk = lines.map(function(line) {
+        return (line.ts || '') + ' [' + (line.level || 'info') + '] ' + (line.msg || '');
+      }).join('\n') + '\n';
+      output.textContent += chunk;
+
+      if (output.textContent.length > 180000) {
+        output.textContent = output.textContent.slice(-120000);
+      }
+
+      if (nearBottom) {
+        output.scrollTop = output.scrollHeight;
+      }
+    }
+
+    if (typeof batch.seq === 'number') {
+      logSeq = Math.max(logSeq, batch.seq);
+    }
+  }
+
+  function pollRuntimeLog() {
+    if (logPaused) return;
+    if (!window.sketchup || !sketchup.cmd_log_tail) return;
+    sketchup.cmd_log_tail(String(logSeq));
+  }
+
+  function startRuntimeLogPolling() {
+    if (logTimer) clearInterval(logTimer);
+    pollRuntimeLog();
+    logTimer = setInterval(pollRuntimeLog, 1000);
+  }
+
+  function toggleLogPause() {
+    logPaused = !logPaused;
+    document.getElementById('btn-log-pause').textContent = logPaused ? 'Resume' : 'Pause';
+  }
+
+  function clearLogView() {
+    document.getElementById('runtime-console-output').textContent = '';
+  }
+
+  function clearLogSource() {
+    if (window.sketchup && sketchup.cmd_log_clear) {
+      sketchup.cmd_log_clear();
+    }
+    clearLogView();
+    logSeq = 0;
+  }
+
+  function setStructInfo(msg) {
+    var el = document.getElementById('struct-bar');
+    if (msg) {
+      el.textContent = '\u25a0 Structures in model: ' + msg;
+      el.classList.add('visible');
+    } else {
+      el.classList.remove('visible');
+    }
+  }
+
+  // Called by Ruby to store the library folder path on the JS side.
+  function setLibraryDir(dir) {
+    libraryDir = dir;
+  }
+
+  // setVehicleTypes — vehicle bar removed; stub retained so Ruby cmd_ready call is harmless.
+  function setVehicleTypes(types) { }
+
+  function loadConstraints(payload) {
+    constraintsPayload = payload && payload.fields ? payload : { fields: [] };
+    renderConstraints();
+  }
+
+  function renderConstraints() {
+    var grid = document.getElementById('constraints-grid');
+    grid.innerHTML = '';
+    if (!constraintsPayload.fields || constraintsPayload.fields.length === 0) {
+      grid.textContent = 'No constraints available.';
+      return;
+    }
+
+    var headers = ['Constraint', 'Value', 'Default', 'Unit'];
+    headers.forEach(function(h) {
+      var cell = document.createElement('div');
+      cell.className = 'constraints-colhead';
+      cell.textContent = h;
+      grid.appendChild(cell);
+    });
+
+    constraintsPayload.fields.forEach(function(field) {
+      var label = document.createElement('div');
+      label.className = 'constraint-label';
+      label.textContent = field.label;
+      label.title = field.key;
+
+      var input = document.createElement('input');
+      input.type = 'number';
+      input.className = 'constraint-input';
+      input.dataset.key = field.key;
+      input.value = field.value;
+      if (field.min !== undefined) input.min = field.min;
+      if (field.max !== undefined) input.max = field.max;
+      if (field.step !== undefined) input.step = field.step;
+
+      var def = document.createElement('div');
+      def.className = 'constraint-default';
+      def.textContent = Number(field.default_value).toFixed(3).replace(/\.?0+$/, '');
+
+      var unit = document.createElement('div');
+      unit.className = 'constraint-unit';
+      unit.textContent = field.unit || '';
+
+      grid.appendChild(label);
+      grid.appendChild(input);
+      grid.appendChild(def);
+      grid.appendChild(unit);
+    });
+  }
+
+  // Constraints are always visible — load them on ready.
+  function loadConstraintsOnReady() {
+    if (window.sketchup && sketchup.cmd_get_constraints) {
+      sketchup.cmd_get_constraints();
+    }
+  }
+
+  function saveConstraints() {
+    if (!window.sketchup || !sketchup.cmd_set_constraints) return;
+    var values = {};
+    var valid = true;
+    document.querySelectorAll('.constraint-input').forEach(function(input) {
+      var n = parseFloat(input.value);
+      if (!isFinite(n) || n <= 0) {
+        valid = false;
+        input.style.borderColor = '#f44747';
+      } else {
+        input.style.borderColor = '';
+        values[input.dataset.key] = n;
+      }
+    });
+    if (!valid) {
+      setStatus('Constraints not saved: all values must be positive numbers.', '#f44747');
+      return;
+    }
+    setStatus('Applying primary constraints…', '#dcdcaa');
+    sketchup.cmd_set_constraints(JSON.stringify(values));
+  }
+
+  function resetConstraints() {
+    if (!window.sketchup || !sketchup.cmd_reset_constraints) return;
+    setStatus('Resetting constraints to defaults…', '#dcdcaa');
+    sketchup.cmd_reset_constraints();
+  }
+
+
+  // ── Called from Ruby ────────────────────────────────────────────────────────
+
+  // Insert a new connection entry.
+  // Called by Ruby when the user clicks a second CP in the viewport.
+  function addConnection(fromStructId, fromStub, toStructId, toStub, connId, viaMarkers) {
+    // Reject if either CP is already used in any connection (FROM or TO).
+    // Each physical stub/gate can mate with exactly one other stub/gate.
+    var fromUsed = connections.some(function(c) {
+      return (c.from.structure_id === fromStructId && c.from.stub === fromStub) ||
+             (c.to.structure_id   === fromStructId && c.to.stub   === fromStub);
+    });
+    var toUsed = connections.some(function(c) {
+      return (c.from.structure_id === toStructId && c.from.stub === toStub) ||
+             (c.to.structure_id   === toStructId && c.to.stub   === toStub);
+    });
+    if (fromUsed || toUsed) {
+      var which = fromUsed
+        ? (fromStructId.toLowerCase() + '.' + fromStub)
+        : (toStructId.toLowerCase()   + '.' + toStub);
+      setStatus(
+        which + ' is already connected. Shift-click to delete first.',
+        '#f4a747'
+      );
+      return;
+    }
+    connections.push({
+      id:          connId,
+      from:        { structure_id: fromStructId, stub: fromStub },
+      to:          { structure_id: toStructId,   stub: toStub   },
+      via_markers: Array.isArray(viaMarkers) ? viaMarkers : [],
+      comment:     ''
+    });
+    renderConnections();
+    schedulePreview();
+
+    // Scroll the new card into view.
+    var card = document.getElementById('card-' + connId);
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    var viaStr = (Array.isArray(viaMarkers) && viaMarkers.length > 0)
+      ? '  via M' + viaMarkers.join(', M')
+      : '  (direct)';
+    setStatus(
+      'Added: ' + connId + '  (' +
+      fromStructId.toLowerCase() + '.' + fromStub + ' \u2192 ' +
+      toStructId.toLowerCase()   + '.' + toStub   + viaStr + ')',
+      '#4ec9b0'
+    );
+  }
+
+  // Load JSON text into the card list (called by Ruby after open/template/auto-load).
+  function loadContent(text, path) {
+    try {
+      var data = text && text.trim() ? JSON.parse(text) : {};
+      // Normalise every connection so renderConnections never crashes on
+      // missing fields (files saved before via_markers was added, etc.).
+      connections = (Array.isArray(data.connections) ? data.connections : []).map(function(c) {
+        var entry = {
+          id:          c.id   || '(unnamed)',
+          from:        c.from || { structure_id: '', stub: 0 },
+          to:          c.to   || { structure_id: '', stub: 0 },
+          via_markers: Array.isArray(c.via_markers) ? c.via_markers : [],
+          comment:     c.comment || ''
+        };
+        if (c.next) entry.next = c.next;   // preserve routing topology
+        return entry;
+      });
+      uTurns = (Array.isArray(data.u_turns) ? data.u_turns : []).map(function(u) {
+        return { structure_id: (u.structure_id || '').toUpperCase(), stub: parseInt(u.stub) || 0 };
+      });
+      savedComments = data._comments || null;
+    } catch(e) {
+      setStatus('JSON parse error: ' + e.message, '#f44747');
+      return;
+    }
+    currentPath = path || null;
+    // Sort connections by left-side CP (from structure_id, then stub)
+    connections.sort(function(a, b) {
+      var aFrom = (a.from.structure_id || '').toLowerCase();
+      var bFrom = (b.from.structure_id || '').toLowerCase();
+      if (aFrom !== bFrom) return aFrom.localeCompare(bFrom);
+      return (a.from.stub || 0) - (b.from.stub || 0);
+    });
+    renderConnections();
+    renderUTurns();
+    setStatus(path ? ('Loaded: ' + path.split('/').pop()) : 'Unsaved buffer — click Save to choose a location.');
+    schedulePreview();
+  }
+
+  // Update a connection's via_markers in-place and refresh the preview.
+  // Called from Ruby after a W-key marker drop so the green plan path updates
+  // immediately without the user editing the via field manually.
+  function updateConnectionVia(connId, markerNums) {
+    var conn = connections.find(function(c) { return c.id === connId; });
+    if (!conn) return;
+    conn.via_markers = Array.isArray(markerNums) ? markerNums : [];
+    var viaInput = document.querySelector('#card-' + connId + ' .conn-via-input');
+    if (viaInput) {
+      viaInput.value = conn.via_markers.length > 0 ? conn.via_markers.join(', ') : '';
+      viaInput.classList.remove('invalid');
+    }
+    schedulePreview();
+  }
+
+  // ── Marker panel ─────────────────────────────────────────────────────────────
+
+  // Populate the marker panel from Ruby: markers = [{num: N, label: 'MN'}, ...]
+  function setMarkerList(markers) {
+    var listEl = document.getElementById('marker-btn-list');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    if (!markers || markers.length === 0) {
+      listEl.innerHTML = '<span style="color:#555;font-size:11px;font-style:italic">No markers in model — use Place Markers tool or press W inside Connect Guideways.</span>';
+      return;
+    }
+    markers.slice().sort(function(a, b) { return a.num - b.num; }).forEach(function(mk) {
+      var btn = document.createElement('button');
+      btn.className = 'marker-btn';
+      btn.textContent = mk.label;
+      btn.title = 'Add ' + mk.label + ' to via list of selected connection';
+      (function(num) {
+        btn.addEventListener('click', function() { addMarkerToActiveVia(num); });
+      })(mk.num);
+      listEl.appendChild(btn);
+    });
+  }
+
+  // Append markerNum to the via list of the currently active connection.
+  // Markers are kept in ascending numeric order (matching the coordinate-sort
+  // the Bezier builder applies at build time).
+  function addMarkerToActiveVia(markerNum) {
+    if (activeConnIdx === null || activeConnIdx < 0 || activeConnIdx >= connections.length) {
+      setStatus('Click a connection card first to select it, then click a marker.', '#dcdcaa');
+      return;
+    }
+    var conn = connections[activeConnIdx];
+    if (!conn) return;
+    var viaArr = Array.isArray(conn.via_markers) ? conn.via_markers.slice() : [];
+    if (viaArr.indexOf(markerNum) >= 0) {
+      setStatus(conn.id + ': M' + markerNum + ' is already in the via list.', '#dcdcaa');
+      return;
+    }
+    viaArr.push(markerNum);
+    viaArr.sort(function(a, b) { return a - b; });
+    conn.via_markers = viaArr;
+    // Sync the visible input field
+    var viaInput = document.querySelector('#card-' + conn.id + ' .conn-via-input');
+    if (viaInput) {
+      viaInput.value = viaArr.join(', ');
+      viaInput.classList.remove('invalid');
+    }
+    setStatus('M' + markerNum + ' added to ' + conn.id + ' via: [' + viaArr.join(', ') + '] — Build to apply.', '#4ec9b0');
+    schedulePreview();
+  }
+
+  // Show which structures are in the model (called from Ruby on open).
+  function showStructures(infoLines) {
+    setStructInfo(infoLines.join('   |   '));
+  }
+
+  // Scroll the card for structureId/stubIndex into view.
+  // Called by Ruby when the user clicks a CP in the viewport.
+  function jumpToStub(structureId, stubIndex) {
+    var found = connections.find(function(c) {
+      return (c.from.structure_id === structureId && c.from.stub === stubIndex) ||
+             (c.to.structure_id   === structureId && c.to.stub   === stubIndex);
+    });
+    if (found) {
+      var card = document.getElementById('card-' + found.id);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.outline = '2px solid #569cd6';
+        setTimeout(function() { card.style.outline = ''; }, 1500);
+      }
+      setStatus('Jumped to ' + structureId.toLowerCase() + '.' + stubIndex + ' → ' + found.id, '#4ec9b0');
+    } else {
+      setStatus(structureId.toLowerCase() + '.' + stubIndex + ' not in any connection yet.', '#dcdcaa');
+    }
+  }
+
+  // ── Toolbar actions ─────────────────────────────────────────────────────────
+
+  function showInFinder() { sketchup.cmd_show_in_finder(currentPath || ''); }
+
+  function showTrips() {
+    if (window.sketchup && sketchup.cmd_show_trips) {
+      sketchup.cmd_show_trips();
+    }
+  }
+
+  function buildNetwork(event) {
+    var json    = getJSON();
+    var addMode = (event && event.altKey) ? 1 : 0;
+    setStatus(addMode ? 'Building (add mode — keeping existing)…' : 'Building…', '#dcdcaa');
+    sketchup.cmd_build(json, addMode);
+  }
+
+  // Save current connection list and via_markers to disk.
+  // When embedded in Console: calls window.parent.saveNetworkFromIframe (→ cmd_save_network).
+  // When standalone: calls sketchup.cmd_save directly.
+  function saveNetworkDef() {
+    var json = getJSON();
+    var statusEl = document.getElementById('connections-save-status');
+    if (statusEl) statusEl.textContent = 'Saving…';
+    if (window.parent && window.parent !== window &&
+        typeof window.parent.saveNetworkFromIframe === 'function') {
+      window.parent.saveNetworkFromIframe(json);
+    } else if (typeof sketchup !== 'undefined' && sketchup !== null) {
+      sketchup.cmd_save(json, currentPath || '');
+    } else {
+      if (statusEl) statusEl.textContent = 'Cannot save — no SketchUp bridge.';
+    }
+  }
+
+  // Called by Console Ruby (via execute_script) after cmd_save_network completes.
+  function onNetworkSaved(filename) {
+    var statusEl = document.getElementById('connections-save-status');
+    if (statusEl) {
+      statusEl.textContent = 'Saved — ' + (filename || '');
+      setTimeout(function() { statusEl.textContent = ''; }, 4000);
+    }
+    setStatus('Saved: ' + (filename || 'network'), '#6a9955');
+  }
+
+  // Fire cmd_ready so Ruby auto-loads the network JSON for this model.
+  window.addEventListener('load', function() {
+    // When embedded as an iframe inside the Console dialog, window.sketchup is
+    // not available — the SketchUp bridge only exists in the top-level window.
+    // Guard the call so it doesn't throw; the Console's cmd_ready will push
+    // the network content into this iframe via loadNetworkEditorContent().
+    if (typeof sketchup !== 'undefined' && sketchup !== null) {
+      sketchup.cmd_ready();
+      loadConstraintsOnReady();
+      // CP Labels on by default when the editor opens
+      if (sketchup.cmd_toggle_cp_labels) sketchup.cmd_toggle_cp_labels();
+    }
+    startRuntimeLogPolling();
+  });
+</script>
+</body>
+</html>

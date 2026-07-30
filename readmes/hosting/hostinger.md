@@ -1,4 +1,75 @@
-# Hostinger — Configuration Notes for JPods.com
+# Hostinger — Configuration Notes for JPods Sites
+
+## Account
+
+- **Plan:** Business Web Hosting (28 of 100 websites)
+- **Account:** bill.james@jpods.com
+- **Member since:** 2022-03-10
+- **2FA:** Enabled
+- **GitHub:** Connected to JPods organization
+
+---
+
+## Deployment — Use Git, Not SSH
+
+**Use Git push → auto-deploy for all static sites.** Do not use SSH.
+
+**Why Git, not SSH:**
+- Git push → auto-deploy is one command, live in seconds
+- Git gives version history — every deploy is a commit you can roll back
+- Git is the backup — GitHub has the code, Hostinger serves it, Mac is source of truth
+- SSH adds a manual step (rsync/scp) — unnecessary for static HTML sites
+- Hostinger File Manager works for debugging if needed — no SSH required
+
+**SSH would only matter if** running Python, Node, or a database on Hostinger. All JPods sites are static HTML/CSS/JS. Git deploy is the right tool.
+
+**Workflow:**
+```bash
+cd ~/Allie/sites/cityroadkills
+# edit files
+git add -A && git commit -m "description" && git push
+# Hostinger auto-deploys from GitHub
+```
+
+**Setup per site:**
+1. Create GitHub repo under JPods org (e.g., JPods/cityroadkills)
+2. Push site files to repo
+3. In Hostinger dashboard for that domain → Advanced → Git
+4. Connect repo, branch: main, directory: public_html
+5. Enable auto-deploy
+
+**GitHub repos for sites:**
+- `JPods/cityroadkills` → cityroadkills.com
+
+---
+
+## Sites on Hostinger
+
+| Domain | Source | Deploy method | Status |
+|--------|--------|--------------|--------|
+| jpods.com | WordPress + static | Manual / File Manager | Live (has malware-prone WP) |
+| library.jpods.com | WordPress | Manual | Live (Divi theme compromised 3x) |
+| cityroadkills.com | ~/Allie/sites/cityroadkills | Git auto-deploy | Live |
+| jpods3d.com | ~/Allie/sites/jpods3d | Manual upload | Live |
+| personalizetransit.com | ~/Allie/sites/personalizetransit | Manual upload | Needs deploy |
+| primelawofnetworks.com | ~/Allie/sites/primelawofnetworks | Manual upload | Needs deploy |
+| physicalinternet.com | ~/Allie/sites/physicalinternet | Manual upload | Needs deploy |
+| 10xmakers.com | readmes/capital-pages/10xMakers.com | Manual upload | Live |
+| meshmobility.com | Andi (Flask app) | Not on Hostinger | On Andi |
+| webclerk.com | Andi (Django app) | Not on Hostinger | On Andi |
+
+**Migration plan:** Create GitHub repos for each static site, connect to Hostinger, switch to git deploy. Priority: sites that change frequently.
+
+---
+
+## Security
+
+- **Malware:** Hostinger scans automatically. 3 compromised Divi theme files found 2026-07-28, auto-cleaned.
+- **Root cause:** Old WordPress installs at jpods.com — `/public_html/jpods-04-02-2026/` (deleted) and `/public_html/library/` (still active).
+- **Action:** Migrate library.jpods.com from WordPress to static. 452 pages harvested 2026-07-29 to ~/Allie/knowledge/library/.
+- **2FA:** Enabled on Hostinger account.
+
+---
 
 ## Subdomain Redirects
 

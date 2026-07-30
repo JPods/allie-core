@@ -1,0 +1,41 @@
+{
+  "schema": "jpods-template-extracted-v1",
+  "formation": "cps",
+  "generated_at": "2026-06-04T21:57:57Z",
+  "generated_by": "PathJSON.populate_from_open_template",
+  "note": "Generated — do not edit. Re-run Extract Template to update.",
+  "tracks": {
+    "gw_cp_out_#": {
+      "pts_mm": [
+        [
+          0.0,
+          250.0,
+          187.5
+        ],
+        [
+          2500.0,
+          250.0,
+          187.5
+        ]
+      ],
+      "length_mm": 2500.0,
+      "radius_mm": 0.0
+    },
+    "gw_cp_in_#": {
+      "pts_mm": [
+        [
+          0.0,
+          3750.0,
+          187.5
+        ],
+        [
+          2500.0,
+          3750.0,
+          187.5
+        ]
+      ],
+      "length_mm": 2500.0,
+      "radius_mm": 0.0
+    }
+  }
+}

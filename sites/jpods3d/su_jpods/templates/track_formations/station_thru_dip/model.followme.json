@@ -1,0 +1,13 @@
+{
+  "_note": "LOCAL ANIMATION ONLY \u2014 This file controls solo vehicle animation on the template model in SketchUp. It is NOT the network topology. Network topology and platform data live in the network model's network.json (e.g. 2_thru_dip.network.json). This file has no connections because the template model has no inter-station segments.",
+  "network_definition": {
+    "connections": []
+  },
+  "connections": [],
+  "routing_policy": {
+    "strict_vehicle_trips": true,
+    "allow_trip_fallback": false,
+    "report_route_events": true,
+    "record_console_to_project": false
+  }
+}

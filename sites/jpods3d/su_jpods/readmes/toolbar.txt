@@ -1,0 +1,28 @@
+JPods Console
+Place Structurs
+Station Names
+CP Calculate
+Populate (toggle fill/clear)
+Trip Simulator
+Camera
+Animate (toggle start/stop)
+Note
+
+
+ How it works:                                                                 
+  - At animation start: builds ezones from every merge/diverge EP in lines.json
+  - Every tick: checks if two pods approach the same merge junction             
+  - Ring pod keeps full speed (priority)                           
+  - Entry pod speed scales linearly: full at zone boundary (3m out), zero at    
+  junction                                                                  
+  - Every stop-wait logged as a fault for capacity analysis                     
+  - Session totals printed at stop                                
+                                                                                
+  The EZoneDef object is rich and extensible — carries shape, timing, priority,
+  and experience counters. Ready for future parameters as you learn what each   
+  junction needs.                                                 
+                                                                                
+  Restart SketchUp (new file jpod_ezone.rb needs boot.rb to load it), Build, and
+   test on 3+circle. You should see [Noelle] N ezone(s) built at animation start
+   and entry pods slowing at merge junctions.                                   
+                                                  

@@ -1,0 +1,110 @@
+{
+  "_comment": "JPods FollowMe — travel_segment example. See readmes/followme.md for full schema.",
+  "model_id": "example_network",
+  "generated_at": "2026-04-25T00:00:00Z",
+  "variant": "travel_segment",
+  "description": "Guideways between structures plus structure-internal travel routes (CPx.1 -> CPy.2). Coordinates included; Nora can ignore if not needed.",
+  "summary": {
+    "guideway_count": 2,
+    "track_count": 4,
+    "structure_route_count": 2,
+    "structure_lines": 4
+  },
+  "guideways": [
+    {
+      "connection_id": "C001",
+      "from": { "structure_id": "S001", "stub": 0 },
+      "to":   { "structure_id": "S002", "stub": 1 },
+      "tracks": [
+        {
+          "id": "C001|0",
+          "track_index": 0,
+          "length_mm": 45230.0,
+          "start": { "x_mm": 0.0,     "y_mm": -1750.0, "z_mm": 5500.0 },
+          "end":   { "x_mm": 45230.0, "y_mm": -1750.0, "z_mm": 5500.0 },
+          "direction": { "ux": 1.0, "uy": 0.0, "uz": 0.0, "heading_deg": 0.0 },
+          "connections": {
+            "start": { "lines": [], "behavior": "origin" },
+            "end":   { "lines": [{ "id": "C002|0" }], "behavior": "continuing" },
+            "direction": "start_to_end"
+          }
+        },
+        {
+          "id": "C001|1",
+          "track_index": 1,
+          "length_mm": 45230.0,
+          "start": { "x_mm": 45230.0, "y_mm": 1750.0, "z_mm": 5500.0 },
+          "end":   { "x_mm": 0.0,     "y_mm": 1750.0, "z_mm": 5500.0 },
+          "direction": { "ux": -1.0, "uy": 0.0, "uz": 0.0, "heading_deg": 180.0 },
+          "connections": {
+            "start": { "lines": [{ "id": "C002|1" }], "behavior": "continuing" },
+            "end":   { "lines": [], "behavior": "terminal" },
+            "direction": "start_to_end"
+          }
+        }
+      ]
+    },
+    {
+      "connection_id": "C002",
+      "from": { "structure_id": "S002", "stub": 0 },
+      "to":   { "structure_id": "S003", "stub": 1 },
+      "tracks": [
+        {
+          "id": "C002|0",
+          "track_index": 0,
+          "length_mm": 31500.0,
+          "start": { "x_mm": 45230.0, "y_mm": -1750.0, "z_mm": 5500.0 },
+          "end":   { "x_mm": 76730.0, "y_mm": -1750.0, "z_mm": 5500.0 },
+          "direction": { "ux": 1.0, "uy": 0.0, "uz": 0.0, "heading_deg": 0.0 },
+          "connections": {
+            "start": { "lines": [{ "id": "C001|0" }], "behavior": "continuing" },
+            "end":   { "lines": [], "behavior": "terminal" },
+            "direction": "start_to_end"
+          }
+        },
+        {
+          "id": "C002|1",
+          "track_index": 1,
+          "length_mm": 31500.0,
+          "start": { "x_mm": 76730.0, "y_mm": 1750.0, "z_mm": 5500.0 },
+          "end":   { "x_mm": 45230.0, "y_mm": 1750.0, "z_mm": 5500.0 },
+          "direction": { "ux": -1.0, "uy": 0.0, "uz": 0.0, "heading_deg": 180.0 },
+          "connections": {
+            "start": { "lines": [], "behavior": "origin" },
+            "end":   { "lines": [{ "id": "C001|1" }], "behavior": "continuing" },
+            "direction": "start_to_end"
+          }
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "structure_id": "S002",
+      "travel_routes": [
+        {
+          "id": "S002_route_0",
+          "from_cp": { "connection_id": "C001", "stub": 1 },
+          "to_cp":   { "connection_id": "C002", "stub": 0 },
+          "length_mm": 3500.0,
+          "tracks": [
+            {
+              "id": "S002_route_0|0",
+              "track_index": 0,
+              "length_mm": 3500.0,
+              "start": { "x_mm": 45230.0, "y_mm": -1750.0, "z_mm": 5500.0 },
+              "end":   { "x_mm": 45230.0, "y_mm": -1750.0, "z_mm": 5500.0 },
+              "direction": { "ux": 1.0, "uy": 0.0, "uz": 0.0, "heading_deg": 0.0 },
+              "connections": {
+                "start": { "lines": [{ "id": "C001|0" }], "behavior": "continuing" },
+                "end":   { "lines": [{ "id": "C002|0" }], "behavior": "continuing" },
+                "direction": "start_to_end"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structure_tracks": []
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "jpods-formation-map-v1",
+  "formation": "station_line_end",
+  "structure_type": "station",
+  "cp_count": 1,
+  "generated_at": "2026-06-04T03:29:55Z",
+  "generated_by": "Noelle",
+  "note": "Verified once per template. BUILD uses this for CP data and will not regenerate it. Delete to force regeneration.",
+  "cps": [
+    {
+      "index": 0,
+      "center": [
+        1867.1256777945218,
+        118.14447281275538,
+        395.8751863768397
+      ],
+      "tangent": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "half_offset": 68.8976377952756
+    }
+  ]
+}

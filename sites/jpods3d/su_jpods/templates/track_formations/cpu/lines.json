@@ -1,0 +1,164 @@
+{
+  "schema": "jpods-station-line-v2",
+  "formation": "cpu",
+  "generated_at": "2026-05-27T02:30:00Z",
+  "generated_by": "math",
+  "note": "CP-with-Uturn topology. gw_uturn arcs from the diverge junction (EP2) to the merge junction (EP5), connecting the opposing outbound and inbound flow vectors. EPs 1,3,4,6 are open boundary points wired by Noelle at Build time. Coordinates in cpu template local space, mm.",
+  "chains_header": {
+    "approved_by": "",
+    "dt": "2026-05-31T00:00:00Z",
+    "note": "CP component template \u2014 no landing/exit chains. Wired by Noelle at Build time. Sally topology inventory only."
+  },
+  "discovered_chains": {
+    "note": "All 5 tracks in two orderings. CCW: CP-unit grouping (out_lead \u2192 uturn \u2192 out_stub \u2192 in_stub \u2192 in_lead). Alpha: alphabetical with CCW position number.",
+    "CCW": [
+      [
+        1,
+        "gw_cp_out_lead_#"],
+      [
+        2,
+        "gw_uturn_#"
+      ],
+      [
+        3,
+        "gw_cp_out_#"
+      ],
+      [
+        4,
+        "gw_cp_in_#"
+      ],
+      [
+        5,
+        "gw_cp_in_lead_#"
+      ]
+    ],
+    "alpha": [
+      [
+        4,
+        "gw_cp_in_#"
+      ],
+      [
+        5,
+        "gw_cp_in_lead_#"
+      ],
+      [
+        3,
+        "gw_cp_out_#"
+      ],
+      [
+        1,
+        "gw_cp_out_lead_#"
+      ],
+      [
+        2,
+        "gw_uturn_#"
+      ]
+    ]
+  },
+  "eps": [
+    {
+      "id": 1,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 2,
+      "type": "diverge",
+      "in": [
+        "gw_cp_out_lead_#"
+      ],
+      "out": [
+        "gw_cp_out_#",
+        "gw_uturn_#"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 4,
+      "type": "open",
+      "in": [],
+      "out": []
+    },
+    {
+      "id": 5,
+      "type": "merge",
+      "in": [
+        "gw_cp_in_#",
+        "gw_uturn_#"
+      ],
+      "out": [
+        "gw_cp_in_lead_#"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "open",
+      "in": [],
+      "out": []
+    }
+  ],
+  "lines": {
+    "gw_cp_out_lead_#": {
+      "in": [],
+      "out": [
+        "gw_cp_out_#",
+        "gw_uturn_#"
+      ],
+      "eps": [
+        1,
+        2
+      ]
+    },
+    "gw_cp_out_#": {
+      "in": [
+        "gw_cp_out_lead_#"
+      ],
+      "out": [],
+      "eps": [
+        2,
+        3
+      ]
+    },
+    "gw_uturn_#": {
+      "radius_mm": 1750.0,
+      "sweep_deg": 180,
+      "in": [
+        "gw_cp_out_lead_#"
+      ],
+      "out": [
+        "gw_cp_in_lead_#"
+      ],
+      "eps": [
+        2,
+        5
+      ]
+    },
+    "gw_cp_in_#": {
+      "in": [],
+      "out": [
+        "gw_cp_in_lead_#"
+      ],
+      "eps": [
+        4,
+        5
+      ]
+    },
+    "gw_cp_in_lead_#": {
+      "in": [
+        "gw_cp_in_#",
+        "gw_uturn_#"
+      ],
+      "out": [],
+      "eps": [
+        5,
+        6
+      ]
+    }
+  }
+}

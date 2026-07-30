@@ -1,0 +1,20 @@
+{
+  "schema": "jpods-station-line-v2",
+  "formation": "uturn",
+  "generated_at": "2026-05-27T02:30:00Z",
+  "generated_by": "math",
+  "note": "180-degree arc, centerline radius 1750mm, CCW from top. Endpoints in template local space at beam centerline Z=250mm. Always instantiated inside cpu — topology lives in cpu/lines.json.",
+  "eps": [],
+  "lines": {
+    "gw_uturn": {
+      "length_mm": 5497.8,
+      "radius_mm": 1750.0,
+      "sweep_deg": 180,
+      "start_point": [0.0, 250.0, 250.0],
+      "end_point": [0.0, 3750.0, 250.0],
+      "in": [],
+      "out": [],
+      "eps": []
+    }
+  }
+}

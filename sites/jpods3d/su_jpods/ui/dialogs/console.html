@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JPods Console</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1e1e1e; color: #d4d4d4;
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+      font-size: 13px;
+    }
+
+    /* ── Header ── */
+    #header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; background: #252526;
+      border-bottom: 1px solid #3c3c3c; flex-shrink: 0;
+    }
+    .header-btn {
+      border: 1px solid #4d4d4d; border-radius: 3px; padding: 3px 9px;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      background: #2d2d2d; color: #d4d4d4;
+    }
+    .header-btn:hover { border-color: #7a7a7a; }
+    .header-btn.start  { background: #1a6b2e; color: #fff; border-color: #2f8f45; }
+    .header-btn.stop   { background: #6b1a1a; color: #fff; border-color: #964040; }
+    .header-btn.reload { background: #3a3a3a; }
+    .header-btn.execute {
+      background: #0e639c; color: #fff; border-color: #1f7bbb;
+    }
+    .header-btn.execute:disabled {
+      background: #444; color: #777; border-color: #555; cursor: not-allowed;
+    }
+    #athena-badge {
+      font-size: 11px; padding: 3px 9px; border-radius: 10px;
+      font-weight: 600; letter-spacing: 0.03em; margin-left: auto;
+    }
+    .badge-active  { background: #1b4a2e; color: #4ec98c; border: 1px solid #2d7a4f; }
+    .badge-blocked { background: #4a1b1b; color: #e05252; border: 1px solid #7a2d2d; }
+
+    /* ── Body ── */
+    #body { display: flex; flex: 1; overflow: hidden; }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 170px; min-width: 150px; flex-shrink: 0;
+      background: #252526; border-right: 1px solid #3c3c3c;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #task-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .category-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #888; padding: 10px 14px 4px; user-select: none;
+    }
+    .task-btn {
+      display: block; width: 100%; text-align: left;
+      padding: 7px 14px; border: none; background: none;
+      color: #cccccc; cursor: pointer; font-size: 12.5px; font-family: inherit;
+      border-left: 3px solid transparent; transition: background 0.1s;
+    }
+    .task-btn:hover  { background: #2d2d2d; color: #fff; }
+    .task-btn.active { background: #37373d; color: #fff; border-left-color: #0e639c; }
+    .task-btn:disabled, .task-btn.task-disabled {
+      color: #555; cursor: not-allowed; opacity: 0.5; pointer-events: none;
+    }
+    .task-btn .risk-dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; margin-right: 6px; vertical-align: middle;
+    }
+    .risk-safe        { background: #4ec98c; }
+    .risk-caution     { background: #e5c94a; }
+    .risk-destructive { background: #e05252; }
+
+    /* ── Models panel (pinned to sidebar bottom) ── */
+    #models-panel {
+      flex-shrink: 0; border-top: 1px solid #3c3c3c;
+      padding: 8px 10px; background: #1e1e1e;
+    }
+    #models-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+      color: #666; margin-bottom: 5px; user-select: none;
+    }
+    #model-name {
+      font-size: 11px; color: #9cdcfe; margin-bottom: 6px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .model-action-btn {
+      display: inline-block; width: 48%; font-size: 11px; font-weight: 600;
+      padding: 4px 0; text-align: center; cursor: pointer;
+      border: 1px solid #4d4d4d; border-radius: 3px;
+      background: #2d2d2d; color: #d4d4d4;
+    }
+    .model-action-btn:last-child { margin-left: 4%; }
+    .model-action-btn:hover:not(:disabled) { border-color: #7a7a7a; background: #383838; }
+    .model-action-btn.build-btn { background: #1a3a1a; border-color: #2f6a2f; color: #7ec87e; }
+    .model-action-btn.build-btn:hover:not(:disabled) { background: #214a21; }
+    .model-action-btn:disabled {
+      opacity: 0.35; cursor: not-allowed;
+    }
+
+    /* ── Right panel ── */
+    #right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* Info panel — always shown when a task is selected, hidden otherwise */
+    #info-panel {
+      display: none; flex-direction: column; flex-shrink: 0;
+      background: #1a1a1a; border-bottom: 1px solid #3c3c3c;
+      height: 220px; min-height: 60px; overflow-y: auto;
+    }
+
+    /* ── Drag splitter between info panel and NE iframe ── */
+    #ne-splitter {
+      display: none; flex-shrink: 0; height: 5px;
+      background: #2c2c2c; cursor: ns-resize; position: relative;
+      border-top: 1px solid #3c3c3c; border-bottom: 1px solid #3c3c3c;
+    }
+    #ne-splitter:hover, #ne-splitter.dragging { background: #0e639c; }
+    #ne-splitter::after {
+      content: ''; position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 28px; height: 2px; background: #555; border-radius: 1px;
+    }
+    #info-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 12px; background: #252526;
+      border-bottom: 1px solid #333; flex-shrink: 0;
+    }
+    #info-title { font-size: 13px; font-weight: 600; color: #9cdcfe; flex: 1; }
+    #info-desc  { font-size: 11px; color: #888; padding: 5px 12px 6px; line-height: 1.6; flex-shrink: 0; }
+    #info-desc b { color: #c8c8c8; }
+    #info-desc em { color: #9cdcfe; font-style: normal; }
+    #info-desc kbd {
+      font-family: monospace; font-size: 11px;
+      background: #333; color: #d4d4d4;
+      border: 1px solid #555; border-radius: 3px;
+      padding: 1px 5px;
+    }
+    #info-close { background: none; border: none; color: #666; cursor: pointer; font-size: 14px; padding: 0 4px; }
+    #info-close:hover { color: #ccc; }
+
+    /* Athena review */
+    #athena-review {
+      display: none; flex-shrink: 0; padding: 7px 12px;
+      border-bottom: 1px solid #3c3c3c; font-size: 12px; line-height: 1.6;
+    }
+    #athena-review .review-head {
+      font-weight: 600; margin-bottom: 2px; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    #athena-msgs { color: #d4d4d4; }
+    .review-safe        { background: #0d2a1a; border-left: 3px solid #4ec98c; }
+    .review-caution     { background: #2a2100; border-left: 3px solid #e5c94a; }
+    .review-destructive { background: #2a0d0d; border-left: 3px solid #e05252; }
+    .review-blocked     { background: #2a0d0d; border-left: 3px solid #e05252; }
+    .review-head.safe        { color: #4ec98c; }
+    .review-head.caution     { color: #e5c94a; }
+    .review-head.destructive { color: #e05252; }
+    .review-head.blocked     { color: #e05252; }
+
+    /* Params */
+    #params-area { display: none; flex-shrink: 0; padding: 8px 12px; border-bottom: 1px solid #3c3c3c; }
+    .param-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .param-row label { font-size: 11.5px; color: #bbb; width: 200px; flex-shrink: 0; }
+    .param-row input[type=number], .param-row input[type=text], .param-row select {
+      background: #3c3c3c; border: 1px solid #555; border-radius: 3px;
+      color: #d4d4d4; padding: 3px 7px; font-size: 12px; font-family: monospace; width: 170px;
+    }
+    .param-row select { cursor: pointer; }
+
+    /* Confirm row */
+    #confirm-row { display: none; flex-shrink: 0; padding: 7px 12px; border-bottom: 1px solid #3c3c3c; }
+    #confirm-row label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #e5c94a; cursor: pointer; }
+    #confirm-check { width: 14px; height: 14px; cursor: pointer; accent-color: #e5c94a; }
+
+    /* Execute row */
+    #execute-row { display: none; flex-shrink: 0; padding: 7px 12px; border-bottom: 1px solid #3c3c3c; }
+    #execute-status { font-size: 11px; color: #888; margin-left: 8px; }
+
+    /* Output */
+    #output-wrap { flex-shrink: 0; max-height: 100px; overflow-y: auto; }
+    #output-label {
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em;
+      color: #666; padding: 4px 12px 2px; display: flex; align-items: center;
+    }
+    #btn-copy-output {
+      background: none; border: none; color: #555; cursor: pointer;
+      font-size: 11px; padding: 2px 6px; margin-left: auto;
+    }
+    #btn-copy-output:hover { color: #9cdcfe; }
+    #btn-clear-output {
+      background: none; border: none; color: #555; cursor: pointer;
+      font-size: 11px; padding: 2px 6px;
+    }
+    #btn-clear-output:hover { color: #999; }
+    #output {
+      padding: 4px 12px 8px; font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 11.5px; line-height: 1.6; white-space: pre-wrap; word-break: break-all;
+      color: #b5cea8;
+    }
+    #output.error   { color: #f44747; }
+    #output.blocked { color: #e5c94a; }
+    #output.ok      { color: #b5cea8; }
+
+    /* Vehicle trip table — controlled via element.style.display, not a CSS class */
+    #trip-table-wrap { display: none; flex-shrink: 0; padding: 6px 10px 8px; border-bottom: 1px solid #3c3c3c; background: #1f1f1f; }
+    #trip-table-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    #trip-table-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #9cdcfe; font-weight: 700; }
+    #trip-table {
+      width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 11px;
+    }
+    #trip-table th, #trip-table td {
+      border: 1px solid #3a3a3a; padding: 3px 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    #trip-table th { background: #262626; color: #bcd7ea; font-weight: 600; text-align: left; }
+    #trip-table td { background: #1f1f1f; color: #d0d0d0; }
+    #trip-table .mono { font-family: 'Menlo', 'Consolas', monospace; font-size: 10.5px; }
+    .trip-btn {
+      border: 1px solid #3f6f9a; border-radius: 3px; background: #1d4463;
+      color: #def3ff; font-size: 10px; padding: 2px 5px; cursor: pointer;
+    }
+    .trip-btn:hover { background: #24557c; }
+    .trip-json-btn {
+      border: 1px solid #5a7a3a; border-radius: 3px; background: #2a4a1a;
+      color: #c8f0a0; font-size: 10px; padding: 2px 5px; cursor: pointer; margin-left: 3px;
+    }
+    .trip-json-btn:hover { background: #3a6022; }
+
+    /* ── NE wrapper ── */
+    #ne-wrap { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+    #ne-toolbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 10px; background: #252526;
+      border-bottom: 1px solid #3c3c3c; flex-shrink: 0;
+    }
+    #ne-toolbar-label { font-size: 11px; color: #666; flex: 1; text-transform: uppercase; letter-spacing: 0.05em; }
+    #ne-frame { flex: 1; border: none; display: block; width: 100%; }
+
+    /* Status toast — overlaid on NE frame */
+    #status-toast {
+      display: none; position: absolute; bottom: 12px; left: 50%;
+      transform: translateX(-50%); background: #2a2a2a; color: #d4d4d4;
+      padding: 6px 18px; border-radius: 4px; font-size: 12px;
+      border: 1px solid #555; z-index: 100; max-width: 80%; text-align: center;
+      pointer-events: none;
+    }
+    #status-toast.visible    { display: block; }
+    #status-toast.ok         { color: #b5cea8; border-color: #4ec98c44; }
+    #status-toast.error      { color: #f44747; border-color: #f4474744; }
+    #status-toast.running    { color: #9cdcfe; border-color: #0e639c44; }
+
+    /* Trip JSON modal */
+    #trip-json-modal {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.65); align-items: center; justify-content: center;
+    }
+    #trip-json-modal.open { display: flex; }
+    #trip-json-box {
+      background: #1e1e1e; border: 1px solid #4a4a4a; border-radius: 5px;
+      width: 88%; max-height: 80vh; display: flex; flex-direction: column;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.7);
+    }
+    #trip-json-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 12px; border-bottom: 1px solid #3a3a3a;
+      background: #262626; border-radius: 5px 5px 0 0;
+    }
+    #trip-json-title { font-size: 11px; font-weight: 700; color: #9cdcfe; text-transform: uppercase; letter-spacing: 0.05em; }
+    #trip-json-close { background: none; border: none; color: #aaa; font-size: 16px; cursor: pointer; padding: 0 4px; line-height: 1; }
+    #trip-json-close:hover { color: #fff; }
+    #trip-json-pre {
+      flex: 1; overflow: auto; margin: 0; padding: 10px 12px;
+      font-family: 'Menlo', 'Consolas', monospace; font-size: 10.5px;
+      color: #d4d4d4; background: #1e1e1e; white-space: pre; border-radius: 0 0 5px 5px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div id="header">
+  <button class="header-btn execute" id="btn-execute-top" disabled>Execute</button>
+  <button class="header-btn start"  onclick="quickRun('start_animation')">Start</button>
+  <button class="header-btn stop"   onclick="quickRun('stop_animation')">Stop</button>
+  <button class="header-btn reload" onclick="reloadPlugin()">Reload Plugin</button>
+  <span id="athena-badge" class="badge-active">⚔ Athena Active</span>
+</div>
+
+<!-- ── Body ── -->
+<div id="body">
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div id="task-list">
+      <div style="padding:12px 14px;color:#666;font-size:12px;">Loading…</div>
+    </div>
+    <!-- Models panel — pinned to sidebar bottom -->
+    <div id="models-panel">
+      <div id="models-label">Model</div>
+      <div id="model-name" title="">—</div>
+      <div style="display:flex;">
+        <button class="model-action-btn build-btn" id="btn-model-build" disabled
+                onclick="modelBuild()">Build</button>
+        <button class="model-action-btn" id="btn-model-finder" disabled
+                onclick="modelFinder()">Finder</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Right: info panel (hidden until task selected) + NE iframe (always visible) -->
+  <div id="right">
+
+    <!-- Info panel: shows instructions for the selected task; hidden on load -->
+    <div id="info-panel">
+      <div id="info-header">
+        <span id="info-title"></span>
+        <button class="header-btn execute" id="btn-execute-strip" disabled>Execute</button>
+        <button id="info-close" onclick="closeInfo()" title="Close">✕</button>
+      </div>
+      <div id="info-desc"></div>
+      <div id="athena-review">
+        <div class="review-head" id="athena-head">Athena Review</div>
+        <div id="athena-msgs"></div>
+      </div>
+      <div id="params-area"></div>
+      <div id="confirm-row">
+        <label>
+          <input type="checkbox" id="confirm-check">
+          <span id="confirm-label"></span>
+        </label>
+      </div>
+      <div id="execute-row">
+        <span id="execute-status"></span>
+      </div>
+      <div id="output-wrap">
+        <div id="output-label">
+          Output
+          <button id="btn-copy-output"  onclick="copyOutput()"  title="Copy output">&#128203; Copy</button>
+          <button id="btn-clear-output" onclick="clearOutput()" title="Clear">✕ clear</button>
+        </div>
+        <div id="output" class="ok">—</div>
+      </div>
+      <!-- Vehicles & Trips: only shown when a Vehicle/Animation task is selected -->
+      <div id="trip-table-wrap">
+        <div id="trip-table-head">
+          <div id="trip-table-title">Vehicles &amp; Trips</div>
+          <button class="header-btn" onclick="refreshTripTable()" style="font-size:10px;padding:2px 7px;">Refresh</button>
+          <button class="header-btn" onclick="toggleCapacity()" style="font-size:10px;padding:2px 7px;">Capacity</button>
+        </div>
+        <div id="camera-offset-bar" style="padding:4px 8px; background:#1e1e2e; border-bottom:1px solid #333; display:flex; align-items:center; gap:10px; font-size:11px;">
+          <span style="color:#9cdcfe;">Camera:</span>
+          <label style="color:#aaa;" title="Metres behind pod">Back
+            <input id="cam-back" type="number" min="1" max="100" step="5" value="25"
+                   style="width:40px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;">
+          </label>
+          <label style="color:#aaa;" title="Metres right of travel">Right
+            <input id="cam-right" type="number" min="0" max="50" step="5" value="20"
+                   style="width:40px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;">
+          </label>
+          <label style="color:#aaa;" title="Metres above pod">Up
+            <input id="cam-up" type="number" min="0" max="50" step="1" value="5"
+                   style="width:40px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;">
+          </label>
+          <button onclick="applyCameraOffsets()" style="background:#3a3a3a; color:#9cdcfe; border:1px solid #555; padding:2px 6px; font-size:11px; cursor:pointer;">Set</button>
+          <span style="color:#666; font-size:10px;">Click pod row → follow</span>
+        </div>
+        <table id="trip-table">
+          <thead>
+            <tr>
+              <th style="width:110px;">Nora</th>
+              <th style="width:80px;">Lines</th>
+              <th style="width:100px;">Start</th>
+              <th style="width:100px;">End</th>
+              <th>Preview</th>
+              <th style="width:110px;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="trip-table-body">
+            <tr><td colspan="6" style="color:#7e7e7e;">No trips loaded.</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Capacity Estimator -->
+        <div id="capacity-panel" style="display:none; padding:6px 8px; background:#1a1a2e; border-top:1px solid #333; font-size:11px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+            <span style="color:#9cdcfe; font-weight:600;">Hourly Capacity</span>
+            <label style="color:#aaa;">Pax/pod
+              <input id="cap-pax" type="number" min="0" max="4" step="0.1" value="2.1"
+                     style="width:30px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;"
+                     onchange="updateCapacity()">
+            </label>
+            <label style="color:#aaa;">Load
+              <input id="cap-load" type="number" min="5" max="120" step="5" value="20"
+                     style="width:35px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;"
+                     onchange="updateCapacity()">
+              <span style="color:#666;">s</span>
+            </label>
+            <label style="color:#aaa;">Lift
+              <input id="cap-lift" type="number" min="10" max="120" step="5" value="40"
+                     style="width:35px; background:#2d2d2d; color:#dcdcaa; border:1px solid #555; padding:2px 3px; font-size:11px;"
+                     onchange="updateCapacity()">
+              <span style="color:#666;">s</span>
+            </label>
+            <button onclick="sketchup.cmd2_capacity_data()" style="background:#3a3a3a; color:#9cdcfe; border:1px solid #555; padding:2px 6px; font-size:11px; cursor:pointer;">Refresh</button>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:11px;">
+            <thead><tr style="color:#bcd7ea;">
+              <th style="text-align:left; padding:2px 4px;"></th>
+              <th style="text-align:right; padding:2px 4px;">Current</th>
+              <th style="text-align:right; padding:2px 4px;">5× Fleet</th>
+              <th style="text-align:right; padding:2px 4px;">Net Max</th>
+            </tr></thead>
+            <tbody id="capacity-body">
+              <tr><td colspan="4" style="color:#666;">Click Refresh after Populate + Build</td></tr>
+            </tbody>
+          </table>
+          <div id="capacity-bottleneck" style="color:#666; font-size:10px; margin-top:2px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag splitter: visible only when info panel is open -->
+    <div id="ne-splitter"></div>
+
+    <!-- NE iframe: always visible, fills remaining space -->
+    <div id="ne-wrap">
+      <div id="ne-toolbar">
+        <span id="ne-toolbar-label">Network Editor</span>
+        <button class="header-btn" id="btn-reload-editor" onclick="reloadEditor()" title="Reload the Network Editor iframe">&#8635; Reload Editor</button>
+      </div>
+      <iframe id="ne-frame" src="network_editor.html"></iframe>
+      <div id="status-toast"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Trip JSON modal -->
+<div id="trip-json-modal">
+  <div id="trip-json-box">
+    <div id="trip-json-header">
+      <span id="trip-json-title">Trip Detail</span>
+      <button id="trip-json-close" onclick="closeTripJson()">&times;</button>
+    </div>
+    <pre id="trip-json-pre"></pre>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── State ────────────────────────────────────────────────────────────────────
+let currentTask     = null;
+let allTasksGrouped = {};
+let vehicleList     = [];
+let paramValues     = {};
+let athenaOk        = false;
+let activeTripNoraId = null;
+let toastTimer      = null;
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+window.onload = function() { sketchup.cmd_ready(); };
+
+// ── Ruby → JS ─────────────────────────────────────────────────────────────────
+
+function initTasks(grouped) {
+  allTasksGrouped = grouped;
+  renderSidebar();
+  closeInfo();  // always start clean — NE iframe fills the full right panel
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('task-list');
+  nav.innerHTML = '';
+  for (const [category, tasks] of Object.entries(allTasksGrouped)) {
+    const cat = document.createElement('div');
+    cat.className = 'category-label';
+    cat.textContent = category;
+    nav.appendChild(cat);
+    tasks.forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'task-btn';
+      btn.dataset.id = t.id;
+      if (currentTask && currentTask.id === t.id) btn.classList.add('active');
+      if (t.disabled) {
+        btn.classList.add('task-disabled');
+        btn.disabled = true;
+        btn.title = 'Complete previous steps first';
+      }
+      btn.innerHTML = `<span class="risk-dot risk-${esc(t.risk)}"></span>${esc(t.label)}`;
+      btn.addEventListener('click', () => selectTask(t.id));
+      nav.appendChild(btn);
+    });
+  }
+}
+
+// Update a task button label in-place (e.g. CP Calculate ↔ CP Hide).
+function updateTaskLabel(taskId, newLabel) {
+  const btn = document.querySelector(`.task-btn[data-id="${taskId}"]`);
+  if (btn) {
+    const dot = btn.querySelector('.risk-dot');
+    btn.textContent = newLabel;
+    if (dot) btn.prepend(dot);
+  }
+  for (const tasks of Object.values(allTasksGrouped || {})) {
+    const t = tasks.find(t => t.id === taskId);
+    if (t) { t.label = newLabel; break; }
+  }
+}
+
+// Push NE content into the embedded iframe.
+// ndJson is the JSON string (or object) representing the flat-array nd.
+function loadNetworkEditorContent(ndJson, path) {
+  const f = document.getElementById('ne-frame');
+  if (!f || !f.contentWindow) return;
+  try {
+    const text = (typeof ndJson === 'string') ? ndJson : JSON.stringify(ndJson);
+    f.contentWindow.loadContent(text, path || '');
+  } catch(e) { /* iframe not ready yet — will load from feature.json on its own */ }
+}
+
+// Pass feature connections (nested cp_ hash) into the NE iframe feature panel.
+function loadFeatureConnections(connsHash) {
+  const f = document.getElementById('ne-frame');
+  if (!f || !f.contentWindow) return;
+  try { f.contentWindow.loadFeatureConnections(connsHash); } catch(e) {}
+}
+
+// No-op: kept for Ruby compatibility (old design had console/NE pane toggle).
+function showConsolePane() {}
+
+function setVehicleList(list) { vehicleList = list; }
+
+function setTripTable(rows) {
+  const body = document.getElementById('trip-table-body');
+  body.innerHTML = '';
+  if (!rows || rows.length === 0) {
+    activeTripNoraId = null;
+    body.innerHTML = '<tr><td colspan="6" style="color:#7e7e7e;">No vehicles/trips found.</td></tr>';
+    return;
+  }
+  const knownNoras = new Set(rows.map(r => (r.nora_id || '').toString()));
+  if (activeTripNoraId && !knownNoras.has(activeTripNoraId)) activeTripNoraId = null;
+  rows.forEach(r => {
+    const tr  = document.createElement('tr');
+    const nid = (r.nora_id || '').toString();
+    const isActive = activeTripNoraId === nid;
+    const start  = (r.platform_start || '').toString() || '—';
+    const ending = (r.platform_end   || '').toString() || '—';
+    const preview = (r.trip_preview || '').toString();
+    const jsonBtn = r.has_trip_json
+      ? `<button class="trip-json-btn" data-nora="${esc(nid)}">JSON</button>` : '';
+    const isFollowed = _c2FollowId === nid;
+    tr.innerHTML =
+      `<td class="mono" style="cursor:pointer;${isFollowed?'color:#7ac878;':''}" title="Click to follow camera" onclick="toggleC2Follow('${esc(nid)}')">${isFollowed?'📷 ':''}${esc(nid)}</td>` +
+      `<td class="mono">${esc(String(r.line_count||0))}</td>` +
+      `<td class="mono" title="${esc(start)}">${esc(start)}</td>` +
+      `<td class="mono" title="${esc(ending)}">${esc(ending)}</td>` +
+      `<td class="mono" title="${esc(preview)}">${esc(preview)}</td>` +
+      `<td><button class="trip-btn" data-nora="${esc(nid)}">${isActive?'ClearTrip':'ShowTrip'}</button>${jsonBtn}</td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll('button.trip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nid = btn.getAttribute('data-nora') || '';
+      if (!nid) return;
+      if (activeTripNoraId === nid) { sketchup.cmd_clear_trip(); activeTripNoraId = null; }
+      else { sketchup.cmd_show_trip(nid); activeTripNoraId = nid; }
+      refreshTripTable();
+    });
+  });
+  body.querySelectorAll('button.trip-json-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nid = btn.getAttribute('data-nora') || '';
+      if (nid) sketchup.cmd_show_trip_json(nid);
+    });
+  });
+}
+
+function showTripJson(noraId, text) {
+  document.getElementById('trip-json-title').textContent = 'Trip Detail — ' + noraId;
+  document.getElementById('trip-json-pre').textContent = text;
+  document.getElementById('trip-json-modal').classList.add('open');
+}
+function closeTripJson() {
+  document.getElementById('trip-json-modal').classList.remove('open');
+}
+
+// Called by Ruby when a task is selected (details + Athena review).
+function showTask(payload) {
+  currentTask = payload;
+  paramValues = {};
+
+  // Highlight sidebar
+  document.querySelectorAll('.task-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.id === payload.id);
+  });
+
+  // Always show the info panel with the task's instructions.
+  showInfo(payload);
+
+  const isWorkflow = (payload.category === 'Workflow');
+  const hasParams  = payload.params && payload.params.length > 0;
+
+  if (isWorkflow && !hasParams && payload.risk !== 'destructive') {
+    // Workflow step with no params: execute immediately; result lands in output row.
+    const execPayload = { task_id: payload.id, params: {}, network_json: getNEJson() };
+    document.getElementById('btn-execute-top').disabled = true;
+    showToast('Running ' + payload.label + '…', 'running');
+    sketchup.cmd_execute(JSON.stringify(execPayload));
+  }
+}
+
+// Called by Ruby with task output.
+function showOutput(text, status) {
+  // Always show result in the info panel output row.
+  const el = document.getElementById('output');
+  el.className = status || 'ok';
+  el.textContent = text;
+  document.getElementById('execute-status').textContent =
+    status === 'ok' ? '✓ Done' : status === 'error' ? '✗ Error' : '';
+  // Also flash a toast so the result is visible even if the panel scrolled.
+  showToast(text, status || 'ok');
+  document.getElementById('btn-execute-top').disabled   = false;
+  document.getElementById('btn-execute-strip').disabled = false;
+}
+
+// ── Info panel ────────────────────────────────────────────────────────────────
+
+// Show the info panel with the task's instructions and controls.
+function showInfo(payload) {
+  document.getElementById('info-title').textContent = payload.label || '';
+
+  const descEl = document.getElementById('info-desc');
+  if (payload.description_html) {
+    descEl.innerHTML = payload.description_html;
+  } else {
+    descEl.textContent = payload.description || '';
+  }
+
+  renderAthena(payload.athena, payload.risk);
+  renderParams(payload.params || []);
+
+  const confirmRow = document.getElementById('confirm-row');
+  const confirmChk = document.getElementById('confirm-check');
+  if (payload.risk === 'destructive' && payload.confirm_text) {
+    document.getElementById('confirm-label').textContent = payload.confirm_text;
+    confirmChk.checked = false;
+    confirmRow.style.display = '';
+    confirmChk.onchange = () => updateExecuteButton();
+  } else {
+    confirmRow.style.display = 'none';
+    confirmChk.checked = false;
+  }
+
+  // Vehicles & Trips: only for Vehicle/Animation tasks.
+  const showTrips = ['Vehicles', 'Animation'].includes(payload.category);
+  document.getElementById('trip-table-wrap').style.display = showTrips ? 'block' : 'none';
+  if (showTrips) sketchup.cmd_refresh_trip_table();
+
+  // Execute button: only for tasks that need it (params or destructive).
+  const hasParams = payload.params && payload.params.length > 0;
+  const needsExecute = hasParams || payload.risk === 'destructive';
+  document.getElementById('execute-row').style.display = needsExecute ? '' : 'none';
+  updateExecuteButton();
+
+  document.getElementById('output').textContent = '';
+  document.getElementById('output').className = 'ok';
+  document.getElementById('execute-status').textContent = '';
+
+  document.getElementById('info-panel').style.display = 'flex';
+  document.getElementById('ne-splitter').style.display = 'block';
+}
+
+function closeInfo() {
+  document.getElementById('info-panel').style.display = 'none';
+  document.getElementById('ne-splitter').style.display = 'none';
+  currentTask = null;
+}
+
+// Compatibility shims — Ruby and old code may still call these.
+function openStrip(p) { showInfo(p); }
+function closeStrip()  { closeInfo(); }
+function openInfo(p)   { showInfo(p); }
+
+// ── Info/NE splitter drag ─────────────────────────────────────────────────────
+(function() {
+  var splitter  = null;
+  var panel     = null;
+  var startY    = 0;
+  var startH    = 0;
+  var MIN_H     = 60;
+  var MAX_H_PX  = 0;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    splitter = document.getElementById('ne-splitter');
+    panel    = document.getElementById('info-panel');
+    splitter.addEventListener('mousedown', onDown);
+  });
+
+  function onDown(e) {
+    e.preventDefault();
+    startY = e.clientY;
+    startH = panel.getBoundingClientRect().height;
+    MAX_H_PX = document.getElementById('right').getBoundingClientRect().height - 80;
+    splitter.classList.add('dragging');
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  }
+
+  function onMove(e) {
+    var newH = Math.min(Math.max(startH + (e.clientY - startY), MIN_H), MAX_H_PX);
+    panel.style.height = newH + 'px';
+  }
+
+  function onUp() {
+    splitter.classList.remove('dragging');
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup',   onUp);
+  }
+})();
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+function showToast(text, status) {
+  const t = document.getElementById('status-toast');
+  t.textContent = text;
+  t.className = 'visible ' + (status || 'ok');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 4000);
+}
+
+// ── Execute ───────────────────────────────────────────────────────────────────
+
+// Read the live NE editor state from the iframe.
+// Included in every cmd_execute so Ruby can sync network.json to exactly
+// what the NE editor shows before any task that touches the network runs.
+// Returns '' if the iframe hasn't loaded yet — Ruby guards on empty string.
+function getNEJson() {
+  try {
+    const f = document.getElementById('ne-frame');
+    return (f && f.contentWindow && f.contentWindow.getJSON) ? f.contentWindow.getJSON() : '';
+  } catch(e) { return ''; }
+}
+
+function executeCurrentTask() {
+  if (!currentTask) return;
+  const btn1 = document.getElementById('btn-execute-top');
+  const btn2 = document.getElementById('btn-execute-strip');
+  btn1.disabled = true;
+  btn2.disabled = true;
+  document.getElementById('execute-status').textContent = 'Running…';
+  document.getElementById('output').textContent = '';
+  document.getElementById('output').className = 'ok';
+  const payload = { task_id: currentTask.id, params: Object.assign({}, paramValues), network_json: getNEJson() };
+  sketchup.cmd_execute(JSON.stringify(payload));
+}
+
+document.getElementById('btn-execute-top').addEventListener('click', executeCurrentTask);
+document.getElementById('btn-execute-strip').addEventListener('click', executeCurrentTask);
+
+function updateExecuteButton() {
+  const needConfirm = currentTask && currentTask.risk === 'destructive';
+  const confirmed   = !needConfirm || document.getElementById('confirm-check').checked;
+  const ok = athenaOk && confirmed;
+  document.getElementById('btn-execute-top').disabled   = !ok;
+  document.getElementById('btn-execute-strip').disabled = !ok;
+}
+
+// ── Internal helpers ──────────────────────────────────────────────────────────
+
+function selectTask(id) {
+  sketchup.cmd_select_task(id);
+}
+
+function renderAthena(review, risk) {
+  const wrap = document.getElementById('athena-review');
+  const head = document.getElementById('athena-head');
+  const msgs = document.getElementById('athena-msgs');
+  const effectiveClass = review.ok ? (risk || 'safe') : 'blocked';
+  const riskLabel = { safe: '✅ Safe', caution: '⚠ Caution', destructive: '🔴 Destructive', blocked: '⚔ Blocked' };
+  wrap.className = `review-${effectiveClass}`;
+  head.className = `review-head ${effectiveClass}`;
+  head.textContent = `Athena — ${riskLabel[effectiveClass] || effectiveClass}`;
+  msgs.textContent = review.messages.join('\n');
+  wrap.style.display = '';
+  athenaOk = review.ok;
+  updateExecuteButton();
+}
+
+function renderParams(params) {
+  const area = document.getElementById('params-area');
+  area.innerHTML = '';
+  if (!params || params.length === 0) { area.style.display = 'none'; return; }
+  area.style.display = '';
+  params.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'param-row';
+    const label = document.createElement('label');
+    label.textContent = p.label;
+    label.htmlFor = `param-${p.id}`;
+    row.appendChild(label);
+    let input;
+    if (p.type === 'select') {
+      input = document.createElement('select');
+      const opts = (p.options && p.options.length > 0) ? p.options : vehicleList;
+      opts.forEach(opt => {
+        const o = document.createElement('option');
+        if (opt && typeof opt === 'object') {
+          o.value = opt.value; o.textContent = opt.label || opt.value;
+          if (opt.value === p.default) o.selected = true;
+        } else {
+          o.value = opt; o.textContent = opt;
+          if (opt === p.default) o.selected = true;
+        }
+        input.appendChild(o);
+      });
+      paramValues[p.id] = input.value;
+      input.addEventListener('change', () => { paramValues[p.id] = input.value; });
+    } else if (p.type === 'float') {
+      input = document.createElement('input'); input.type = 'number'; input.step = '0.01';
+      if (p.min !== undefined) input.min = p.min;
+      if (p.max !== undefined) input.max = p.max;
+      input.value = p.default !== undefined ? p.default : '';
+    } else if (p.type === 'integer') {
+      input = document.createElement('input'); input.type = 'number'; input.step = '1';
+      if (p.min !== undefined) input.min = p.min;
+      if (p.max !== undefined) input.max = p.max;
+      input.value = p.default !== undefined ? p.default : '';
+    } else if (p.type === 'boolean') {
+      input = document.createElement('input'); input.type = 'checkbox';
+      const dv = String(p.default === undefined ? 'false' : p.default).toLowerCase();
+      input.checked = (dv === 'true' || dv === '1' || dv === 'yes' || dv === 'on');
+    } else {
+      input = document.createElement('input'); input.type = 'text';
+      input.value = p.default !== undefined ? p.default : '';
+    }
+    input.id = `param-${p.id}`;
+    if (p.type === 'select') {
+      // already initialized
+    } else if (p.type === 'boolean') {
+      paramValues[p.id] = input.checked;
+      input.addEventListener('change', () => { paramValues[p.id] = input.checked; });
+    } else {
+      paramValues[p.id] = input.value;
+      input.addEventListener('input', () => { paramValues[p.id] = input.value; });
+    }
+    row.appendChild(input);
+    area.appendChild(row);
+  });
+}
+
+function clearOutput() {
+  document.getElementById('output').textContent = '—';
+  document.getElementById('output').className = 'ok';
+  document.getElementById('execute-status').textContent = '';
+}
+
+function copyOutput() {
+  const label = currentTask ? currentTask.label : 'JPods';
+  const text  = document.getElementById('output').textContent || '';
+  const payload = '=== ' + label + ' ===\n' + text;
+  navigator.clipboard.writeText(payload).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = payload; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+function refreshTripTable()  { sketchup.cmd_refresh_trip_table(); }
+
+let _c2FollowId = null;
+function toggleC2Follow(noraId) {
+  if (_c2FollowId === noraId) {
+    _c2FollowId = null;
+    sketchup.cmd2_camera_follow('');
+  } else {
+    _c2FollowId = noraId;
+    applyCameraOffsets();
+    sketchup.cmd2_camera_follow(noraId);
+  }
+  refreshTripTable();
+}
+
+function applyCameraOffsets() {
+  var b = parseFloat(document.getElementById('cam-back').value)  || 25;
+  var r = parseFloat(document.getElementById('cam-right').value) || 20;
+  var u = parseFloat(document.getElementById('cam-up').value)    || 5;
+  sketchup.cmd2_set_camera_offsets(JSON.stringify({ back: b, right: r, up: u }));
+}
+
+// ── Capacity Estimator ──────────────────────────────────────────────
+var _capacityData = null;
+
+function toggleCapacity() {
+  var panel = document.getElementById('capacity-panel');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    sketchup.cmd2_capacity_data();
+  } else {
+    panel.style.display = 'none';
+  }
+}
+
+function loadCapacityData(data) { _capacityData = data; updateCapacity(); }
+function updateCapacity() {
+  var body = document.getElementById('capacity-body');
+  var bn   = document.getElementById('capacity-bottleneck');
+  if (!_capacityData || !_capacityData.pod_count) {
+    body.innerHTML = '<tr><td colspan="4" style="color:#666;">Click Refresh after Populate + Build</td></tr>';
+    bn.textContent = ''; return;
+  }
+  var d = _capacityData, pax = parseFloat(document.getElementById('cap-pax').value)||2.1;
+  var loadS = parseInt(document.getElementById('cap-load').value)||20;
+  var liftS = parseInt(document.getElementById('cap-lift').value)||40, liftsPerSt = 3;
+  var speedMs = d.speed_ms||8.3, avgTripS = d.avg_trip_m > 0 ? d.avg_trip_m/speedMs : 60;
+  var cycleS = avgTripS + loadS, tripsPerPodHr = 3600/cycleS;
+  var gwMax = d.total_guideway_m > 0 ? Math.floor(d.total_guideway_m/5.0) : 999;
+  var stMax = d.total_slots > 0 ? Math.floor(d.total_slots*(3600/loadS)) : 999;
+  var netMax = Math.min(gwMax, stMax), bottleneck = gwMax < stMax ? 'guideway' : 'stations';
+  var liftPaxHr = d.station_count * liftsPerSt * (3600/liftS) * pax;
+  var cur = d.pod_count, x5 = cur*5;
+  function row(l,c,f,m){return '<tr><td style="color:#aaa;padding:2px 4px;">'+l+'</td><td style="text-align:right;padding:2px 4px;color:#dcdcaa;">'+c+'</td><td style="text-align:right;padding:2px 4px;color:#dcdcaa;">'+f+'</td><td style="text-align:right;padding:2px 4px;color:#dcdcaa;">'+m+'</td></tr>';}
+  var h = row('Pods',cur,x5,netMax) +
+    row('Trips/pod/hr',tripsPerPodHr.toFixed(1),tripsPerPodHr.toFixed(1),tripsPerPodHr.toFixed(1)) +
+    row('Pax/hr',Math.round(cur*tripsPerPodHr*pax).toLocaleString(),Math.round(x5*tripsPerPodHr*pax).toLocaleString(),Math.round(netMax*tripsPerPodHr*pax).toLocaleString()) +
+    row('Avg trip',avgTripS.toFixed(0)+'s',avgTripS.toFixed(0)+'s',avgTripS.toFixed(0)+'s') +
+    row('ADA lifts/hr',Math.round(liftPaxHr).toLocaleString(),Math.round(liftPaxHr).toLocaleString(),Math.round(liftPaxHr).toLocaleString());
+  body.innerHTML = h;
+  bn.style.color = '#9cdcfe';
+  bn.textContent = 'Bottleneck: '+bottleneck+' | Guideway: '+d.total_guideway_m.toFixed(0)+'m | Stations: '+d.station_count+' ('+d.total_slots+' slots, '+(d.station_count*liftsPerSt)+' lifts)';
+}
+function reloadPlugin()       { sketchup.cmd_reload_plugin(); }
+function openNetworkEditor()  { sketchup.cmd_open_network_editor(); }
+function reloadEditor() {
+  const f = document.getElementById('ne-frame');
+  if (!f) return;
+  // Append a timestamp to bust the iframe's cache.
+  const base = f.src.split('?')[0];
+  f.src = base + '?v=' + Date.now();
+}
+
+function quickRun(taskId) {
+  document.getElementById('output').textContent = '';
+  document.getElementById('output').className = 'ok';
+  const payload = { task_id: taskId, params: {}, network_json: getNEJson() };
+  sketchup.cmd_execute(JSON.stringify(payload));
+}
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Models panel ──────────────────────────────────────────────────────────────
+
+// Called by Ruby with { name, path, in_skp_jpods } when Console opens or model changes.
+function updateModelPanel(info) {
+  const name = info.name || '—';
+  const active = !!info.in_skp_jpods;
+  const nameEl = document.getElementById('model-name');
+  nameEl.textContent = name;
+  nameEl.title = info.path || '';
+  document.getElementById('btn-model-build').disabled  = !active;
+  document.getElementById('btn-model-finder').disabled = !active;
+  if (!active) {
+    nameEl.style.color = '#666';
+    nameEl.title = (info.path || '') + '\n(not in skp_jpods — actions disabled)';
+  } else {
+    nameEl.style.color = '#9cdcfe';
+  }
+}
+
+function modelBuild()  { sketchup.cmd_model_build();  }
+function modelFinder() { sketchup.cmd_model_finder(); }
+</script>
+</body>
+</html>

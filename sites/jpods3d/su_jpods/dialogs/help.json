@@ -1,0 +1,65 @@
+{
+  "_version": "1.0",
+  "_standard": "readmes/wisdom/shift-for-help.md",
+  "_note": "Shift+hover shows tooltip, Shift+click opens deep help. Keyed by element id or css selector. Content rules: second person, start with verb, state consequences, under 30 words for tooltips.",
+
+  "nav": {
+    "network":       "Connects stations with guideways, manages the network, builds 3D geometry, and runs animation.",
+    "vehicles":      "Shows pod vehicles in the current network. View positions, assign trips, monitor status.",
+    "models":        "Opens, places, and tests station templates. Run Compute, chains, health checks, and the approval workflow.",
+    "documentation": "Generates and views network documentation — BOM, reports, and readmes.",
+    "travel":        "Shows trip data, travel times, and passenger flow for the current network.",
+    "crew":          "Displays agent status — Sally (slots), Natalie (routing), Nora (vehicles), Noelle (validation).",
+    "note":          "Sends a message to Bill or the team. Saved to the exchange log."
+  },
+
+  "header": {
+    "jpods-save": "Saves the model and ensures its folder and associated JSON files (network, crew, README) exist. Use before CP Calculate or Build.",
+    "reload-plugin": "Reloads all Ruby plugin code. Required after changing templates, adding files, or switching networks. Restart SU if reload fails."
+  },
+
+  "network": {
+    "refresh":       "Reloads all connections from the .network.json file on disk. Use after editing the file or placing new stations.",
+    "build":         "Generates 3D guideways, columns, and solar panels for all connections. Save the model first (⌘S) — reads from the saved file.",
+    "cp-calculate":  "Scans all station instances for cp_marker groups and calculates connection points. Save the model first (⌘S) — reads from the saved file.",
+    "finder":        "Opens the current network's folder in Finder. Contains the .network.json file and built output.",
+    "show-tracks":   "Draws every track as a color-coded ribbon. Red = inbound, blue = outbound. Click again to hide.",
+    "label-size":    "Adjusts the size of station and CP labels in the 3D view."
+  },
+
+  "workflow": {
+    "compute":       "Validates template topology, builds behavioral chains, and extracts geometry from cp_markers. Writes lines.computed.json.",
+    "chains":        "Sally maps track topology to behavioral chains. Writes chain sections to lines.json. Must run after Compute.",
+    "health":        "Each agent (Sally, Natalie, Nora, Noelle) verifies their domain. Opens the Crew tab. Read-only — does not modify files.",
+    "compute-final": "Scans cp_markers and gw_* geometry, computes track and chain lengths. Writes lines.computed.json. Run after chains are built."
+  },
+
+  "model-testing": {
+    "show-tracks":   "Draws every track as a color-coded ribbon. Red = inbound, blue = outbound. Click again to hide.",
+    "shuffle-test":  "Tests Sally's behavioral chains. One pod departs, others compact forward, departing pod returns. Validates slot management.",
+    "depart-test":   "Fills all slots, then dispatches all pods to both outbound guideways simultaneously. Tests departure sequencing.",
+    "arrival-test":  "Places pods at both inbound guideways. Tests arrival routing and Sally's slot assignment.",
+    "quiet-log":     "Toggles Ruby console verbosity. Orange = quiet (suppressed). Green = loud (all logs).",
+    "approve":       "Confirms all tests pass. Stamps approved_at in lines.computed.json and copies log to Allie for team review."
+  },
+
+  "model-table": {
+    "open":          "Opens this template's .skp file for editing. Run Compute after making changes.",
+    "place":         "Places this template as a new station instance in the current network. Click a location in the model after clicking.",
+    "finder":        "Opens this template's folder in Finder. Contains lines.json, lines.computed.json, and the .skp model file."
+  },
+
+  "pods": {
+    "populate":      "Places pod vehicles at all stations according to Sally's slot assignments.",
+    "clear-pods":    "Removes all pod vehicle instances from the model. Does not affect stations or guideways.",
+    "animate":       "Starts network animation. Pods travel between stations on built guideways following Natalie's routing.",
+    "stop":          "Pauses animation. Pods freeze in place. Click Animate to resume."
+  },
+
+  "crew": {
+    "sally":         "Station processor — manages per-station slot registry and parking queue. Owns vehicle placement and departure sequencing.",
+    "natalie":       "Router — generates trip plans and route sequences. Owns dispatch timing and path selection.",
+    "nora":          "Vehicle — handles navigation, encoders, and telemetry. Executes trips assigned by Natalie.",
+    "noelle":        "Network validator and load balancer. Validates builds, checks connectivity, and balances traffic flow."
+  }
+}
