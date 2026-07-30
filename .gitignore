@@ -72,6 +72,10 @@ __pycache__/
 
 # Large files — too big for GitHub
 process/inbox/*.log
+# Crash geojson files over 50MB (OK=105MB, CA=59MB, PA=51MB)
+**/crashes_all_ok.geojson
+**/crashes_all_ca.geojson
+**/crashes_all_pa.geojson
 .chroma_db/*.sqlite3
 .chroma_db_claude/*.sqlite3
 .chroma_db_alice/*.sqlite3
