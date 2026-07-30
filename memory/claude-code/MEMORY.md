@@ -141,6 +141,7 @@
 - [Conservative payback estimates](feedback_payback_conservative.md) — 7yr minimum for capital; car ownership unwinds slowly; aggressive numbers lose credibility
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
 - [Gantt enhancements](project_gantt_enhancements.md) — Open-source SVAR upgrades; CSS variable technique; ERP bridge
+- [Print must match screen richness](feedback_print_matches_screen.md) — All output modes carry full visual encoding; renderPrintBar helper
 - [AliceInsight model](project_alice_insight_model.md) — Multi-agent per-user insight records; BaseModel; agents write understanding
 - [No font size limits](feedback_no_font_limits.md) — A+/A- unlimited; persist to contact.metadata.wcui
 - [Double-click for detail](feedback_double_click_detail.md) — Single click=5s emphasis; double click=open; meeting-friendly
