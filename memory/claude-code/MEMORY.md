@@ -140,6 +140,10 @@
 - [Books on sovereignty and usufruct free markets](project_books_sovereignty.md) — Mercantile monopoly, Liberty mechanism, constitutional evidence chain, oil vs ingenuity; keep notes
 - [Conservative payback estimates](feedback_payback_conservative.md) — 7yr minimum for capital; car ownership unwinds slowly; aggressive numbers lose credibility
 - [60% mode shift revenue model](project_60pct_mode_shift.md) — 30% JPods + 30% walk/bike; $2.01/mi; Greenville 2.1yr payback; stress test at readmes/49
+- [Gantt enhancements](project_gantt_enhancements.md) — Open-source SVAR upgrades; CSS variable technique; ERP bridge
+- [AliceInsight model](project_alice_insight_model.md) — Multi-agent per-user insight records; BaseModel; agents write understanding
+- [No font size limits](feedback_no_font_limits.md) — A+/A- unlimited; persist to contact.metadata.wcui
+- [Double-click for detail](feedback_double_click_detail.md) — Single click=5s emphasis; double click=open; meeting-friendly
 - [MeshMobility keyboard shortcuts](reference_rt_keyboard_shortcuts.md) — Keys 1-6 placement; closest-CP connect; save handle; dead end/orphan highlighting on Run
 - [Noelle network design rules](reference_noelle_design_rules.md) — Draft pattern: stations only, highways as boundaries, crash rate signal, 1:14 road ratio, 1x2 grid, both-side access, Local Knowledge QA; 7 cities
 - [JPods evidence base](reference_evidence_base.md) — Harvard $64B, Morgantown PRT, Praetor $45B, Glydways $420M, walkability 20x tax revenue; all in vector stores
