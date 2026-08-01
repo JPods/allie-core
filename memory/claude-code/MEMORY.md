@@ -19,6 +19,7 @@
 - [.config vs sync tokens](feedback_config_vs_sync.md) — Individual tokens in contact record (CarryOn); sync tokens between databases
 
 - [List selection standard](feedback_list_selection_standard.md) — No checkboxes; click=select, shift=range, cmd/ctrl=toggle; all WC list views
+- [AskUserQuestion at decision points](feedback_ask_user_question.md) — Bill likes question UI for steering; use at decision points
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
 - [Tool boundaries are logging opportunities](feedback_tool_boundary_logging.md) — Reload/run/deploy = test boundary = highest-value moment to log; prompt user for fault/dnw/tf at that moment
@@ -142,6 +143,8 @@
 - [Structure UUIDs + network merge](project_uuid_merge.md) — Serialized structures; UUID survives merge; local IDs renumber
 - [MeshMobility CloudFlare deployment](project_cloudflare_deploy.md) — webclerk.com on CF; markmystation concept; tunnel login started
 - [Cloudflare alliance for WC3](project_cloudflare_alliance.md) — Missing piece from 2002 Desktop Hosting; edge-serves-origin = local-first sovereignty
+- [QuickQuote separate window](project_qq_separate_plan.md) — QQ is its own window/process; push/pull between any transaction; needs own plan
+- [Create PO from Order](project_create_po_from_order.md) — Select order lines→Create PO; groups by vendor; needs own plan
 - [Never restart RT without confirming save](feedback_never_restart_rt_without_save.md) — Server restart destroys in-memory network; lost 1hr Greenville work 2026-07-05
 - [Books on sovereignty and usufruct free markets](project_books_sovereignty.md) — Mercantile monopoly, Liberty mechanism, constitutional evidence chain, oil vs ingenuity; keep notes
 - [Conservative payback estimates](feedback_payback_conservative.md) — 7yr minimum for capital; car ownership unwinds slowly; aggressive numbers lose credibility
