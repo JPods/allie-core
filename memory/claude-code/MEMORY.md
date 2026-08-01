@@ -1,5 +1,6 @@
 # Memory Index
 
+- [Statement Sorter standalone](project_statement_sorter_standalone.md) — Free tool: Python + HTML; sort statements; lead gen for WebClerk
 - [StatementHarvester JSON architecture](project_statement_harvester.md) — CSV→JSON→classify→promote; personal never in psql; UUID per line
 - [Payment checkbook architecture](project_payment_checkbook.md) — Signed amounts, received/expense, category→GL, method CharField, dashboard buttons
 - [Prefs/metadata/refs architecture](reference_prefs_architecture.md) — Three-tier Settings, JSON envelope policy, Pydantic schemas, schema_map Setting
@@ -17,6 +18,7 @@
 - [CityRoadkills.com](project_cityroadkills.md) — Folder-per-city; Stop Child Murder; 5 cities; red theme
 - [.config vs sync tokens](feedback_config_vs_sync.md) — Individual tokens in contact record (CarryOn); sync tokens between databases
 
+- [List selection standard](feedback_list_selection_standard.md) — No checkboxes; click=select, shift=range, cmd/ctrl=toggle; all WC list views
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
 - [Tool boundaries are logging opportunities](feedback_tool_boundary_logging.md) — Reload/run/deploy = test boundary = highest-value moment to log; prompt user for fault/dnw/tf at that moment
