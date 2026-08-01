@@ -1,5 +1,6 @@
 # Memory Index
 
+- [StatementHarvester JSON architecture](project_statement_harvester.md) — CSV→JSON→classify→promote; personal never in psql; UUID per line
 - [Payment checkbook architecture](project_payment_checkbook.md) — Signed amounts, received/expense, category→GL, method CharField, dashboard buttons
 - [Prefs/metadata/refs architecture](reference_prefs_architecture.md) — Three-tier Settings, JSON envelope policy, Pydantic schemas, schema_map Setting
 - [Schema review cycle](feedback_schema_review_cycle.md) — Alice flags changes to WC_HQ; quarterly forced admin review; atrophy prevention
