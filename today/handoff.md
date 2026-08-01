@@ -1,9 +1,25 @@
-# Handoff — 2026-08-01 (Session 2)
+# Handoff — 2026-08-01 (Session 2, updated post-deploy)
 
 ## Where We Left Off
-Built and deployed Statement Sorter to webclerk.com/sort — a free, 100% client-side bank statement classification tool. Single HTML file, no server, no uploads. Serves as the db.list reference implementation and top-of-funnel for WebClerk.
+Built and deployed full WebClerk ecosystem to webclerk.com:
 
-Deployed to Andi (IT15) at `/var/www/webclerk-static/sort/`. Nginx serves at `/sort` with CSP header for script integrity. Athena self-verification hash embedded.
+- **webclerk.com/sort** — Statement Sorter, Athena-signed, live
+- **webclerk.com/app/** — Full React app (DataBrowser, Gantt, all WC3), live with commerce_expert data (9,412 contacts)
+- **webclerk.com/wcapi/** — Django API, live, requires auth
+- **webclerk.com/admin/** — Django admin, live
+
+Also built and deployed Athena integrity verification system:
+- `athena_sign` management command on Andi — signs files, manages manifest
+- `task_athena_verify` Celery task — runs every 4 hours, hashes all checkpoints
+- Document ida='athena-manifest' — 5 checkpoints signed and verified
+- Immediate FAULT files on integrity failure
+
+Key fixes during deploy:
+- `SECURE_PROXY_SSL_HEADER` added (Cloudflare terminates SSL, Nginx forwards HTTP)
+- `X-Forwarded-Proto: https` forced in Nginx (Cloudflare→Nginx is HTTP)
+- `/assets/` aliased to React dist (was pointing to landing page)
+- Permissions fixed on `/opt/andi/apps/react2025/dist/`
+- Database: `commerce_expert` pg_dump'd from Mac, restored on Andi, `webclerk` user granted access
 
 ## Do This First Next Session
 1. **Verify webclerk.com/sort is publicly accessible** — check through Cloudflare (may need a CF rule or DNS check if not already proxying /sort)

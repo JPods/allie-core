@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statement Sorter — Free by WebClerk</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body { background:#0d1117; color:#c9d1d9; font-family:-apple-system,system-ui,"Segoe UI",sans-serif; font-size:13px;
+  display:flex; flex-direction:column; }
+
+.top { position:sticky; top:0; z-index:10; background:#161b22; border-bottom:1px solid #30363d; padding:8px 16px; }
+.top h1 { font-size:18px; color:#fff; display:flex; align-items:center; gap:8px; }
+.top h1 .brand { font-size:11px; color:#8b949e; font-weight:normal; background:#21262d; padding:2px 8px; border-radius:10px; }
+.stats { display:flex; gap:12px; font-size:12px; color:#8b949e; margin-top:4px; flex-wrap:wrap; }
+.stats span { padding:2px 8px; border-radius:4px; }
+.s-biz { background:#1a3a1a; color:#4ade80; }
+.s-per { background:#3a1a1a; color:#f87171; }
+.s-unk { background:#1a1a3a; color:#8b949e; }
+
+.bar { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; align-items:center; }
+.bar button, .bar select { padding:4px 10px; border:1px solid #30363d; background:#21262d; color:#c9d1d9;
+  border-radius:4px; cursor:pointer; font-size:11px; white-space:nowrap; }
+.bar button:hover { background:#30363d; }
+.grn { background:#1a6b35 !important; border-color:#2ea043 !important; color:#fff !important; }
+.red { background:#6b1a1a !important; border-color:#da3633 !important; color:#fff !important; }
+.blu { background:#1a3a6b !important; border-color:#388bfd !important; color:#fff !important; }
+.org { background:#ea580c !important; border-color:#f97316 !important; color:#fff !important; }
+
+#drop-zone { flex:1; min-width:200px; padding:12px 16px; background:#21262d; border:2px dashed #30363d;
+  border-radius:6px; text-align:center; cursor:pointer; color:#8b949e; font-size:13px; transition:all 0.2s; }
+#drop-zone:hover, #drop-zone.active { border-color:#ea580c; color:#ea580c; background:rgba(234,88,12,0.08); }
+#drop-zone.active { font-size:16px; font-weight:700; }
+
+#toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#21262d; color:#c9d1d9;
+  border:1px solid #30363d; border-radius:6px; padding:10px 20px; font-size:13px; z-index:999;
+  opacity:0; transition:opacity 0.3s; pointer-events:none; }
+#toast.show { opacity:1; }
+#toast.error { border-color:#da3633; color:#f87171; }
+
+.welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:60vh; gap:16px; }
+.welcome h2 { font-size:28px; color:#fff; }
+.welcome p { color:#8b949e; max-width:500px; text-align:center; line-height:1.6; }
+
+table { width:100%; border-collapse:collapse; table-layout:fixed; }
+col.c-dt { width:82px; } col.c-desc { } col.c-amt { width:85px; } col.c-src { width:55px; }
+col.c-cls { width:32px; } col.c-cat { width:110px; } col.c-bcat { width:78px; }
+col.c-rec { width:82px; } col.c-conf { width:30px; }
+th { position:sticky; top:0; background:#161b22; padding:4px 6px; text-align:left; font-size:inherit;
+  color:#8b949e; border-bottom:1px solid #30363d; z-index:5; cursor:pointer; user-select:none; }
+th:hover { color:#c9d1d9; }
+th { position:relative; }
+th .resize { position:absolute; right:0; top:0; bottom:0; width:4px; cursor:col-resize; }
+th .resize:hover { background:#388bfd; }
+td { padding:1px 5px; border-bottom:1px solid #21262d; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; line-height:1.2; font-size:inherit; }
+tr.row { cursor:pointer; }
+tr.row:hover { background:#1c2432 !important; }
+tr.row.selected { outline:2px solid #388bfd; outline-offset:-2px; background:#1a2a3a !important; }
+tr.row.recommended { background:#2a2a1a !important; }
+.dt { width:78px; color:#8b949e; }
+.desc { max-width:280px; }
+.amt { width:80px; text-align:right; font-family:monospace; }
+.src { width:65px; color:#8b949e; }
+.cls-label { width:55px; font-size:11px; }
+.cat select { background:#21262d; color:#c9d1d9; border:1px solid #30363d; border-radius:2px;
+  padding:0 2px; font-size:inherit; max-width:120px; }
+.bcat { color:#6e7681; width:90px; max-width:90px; }
+.rec { color:#eab308; width:90px; max-width:90px; }
+.conf { color:#8b949e; font-family:monospace; width:30px; text-align:right; }
+
+.footer { text-align:center; padding:24px; color:#484f58; font-size:11px; border-top:1px solid #21262d; margin-top:24px; }
+.footer a { color:#58a6ff; text-decoration:none; }
+
+/* Category editor dialog */
+.dialog-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; }
+.dialog-overlay.open { display:flex; align-items:center; justify-content:center; }
+.dialog { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px; width:640px; max-width:90vw; max-height:85vh; overflow-y:auto; }
+.dialog h3 { color:#fff; margin-bottom:12px; font-size:16px; }
+.dialog .cols { display:flex; gap:16px; }
+.dialog .col { flex:1; }
+.dialog .col label { display:block; font-size:12px; color:#8b949e; margin-bottom:4px; font-weight:600; }
+.dialog .col textarea { width:100%; height:280px; background:#0d1117; color:#c9d1d9; border:1px solid #30363d;
+  border-radius:4px; padding:8px; font-family:inherit; font-size:12px; line-height:1.6; resize:vertical; }
+.dialog .actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+.dialog .actions button { padding:6px 14px; border:1px solid #30363d; background:#21262d; color:#c9d1d9;
+  border-radius:4px; cursor:pointer; font-size:12px; }
+.dialog .actions button:hover { background:#30363d; }
+.dialog .actions button.primary { background:#1a6b35; border-color:#2ea043; color:#fff; }
+.dialog .actions button.primary:hover { background:#2ea043; }
+.dialog .hint { color:#484f58; font-size:11px; margin-top:10px; line-height:1.5; }
+
+@media (max-width:768px) {
+  td { font-size:11px; padding:2px 4px; }
+  .desc { max-width:150px; }
+  .bcat { display:none; }
+  .dialog .cols { flex-direction:column; }
+}
+</style>
+</head><body>
+<div id="toast"></div>
+
+<div id="cat-dialog" class="dialog-overlay" onclick="if(event.target===this)closeCatDialog()">
+  <div class="dialog">
+    <h3>Edit Categories</h3>
+    <div class="cols">
+      <div class="col">
+        <label>Business (one per line)</label>
+        <textarea id="cat-biz"></textarea>
+      </div>
+      <div class="col">
+        <label>Personal (one per line)</label>
+        <textarea id="cat-per"></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="applyCatEdits()">Apply</button>
+      <button onclick="closeCatDialog()">Cancel</button>
+      <span style="flex:1"></span>
+      <button onclick="saveCatsToFile()">Save Categories</button>
+      <button onclick="document.getElementById('cat-file-input').click()">Load Categories</button>
+      <input type="file" id="cat-file-input" accept=".json" style="display:none" onchange="loadCatsFromFile(this.files)">
+      <button onclick="resetCatsToDefault()">Reset to Defaults</button>
+      <span style="color:#30363d">|</span>
+      <button onclick="saveRulesToFile()">Save Rules</button>
+      <button onclick="document.getElementById('rules-file-input').click()">Load Rules</button>
+      <input type="file" id="rules-file-input" accept=".json" style="display:none" onchange="loadRulesFromFile(this.files)">
+    </div>
+    <div class="hint">
+      <strong>Categories:</strong> Edit lists above. One per line. Save/Load keeps your lists as <code>categories.json</code>.<br>
+      <strong>Rules:</strong> Save/Load exports categories + learned merchant classifications as <code>rules.json</code>.<br>
+      Load rules before importing statements — recommendations appear in yellow with confidence scores.
+    </div>
+  </div>
+</div>
+
+<div class="top">
+  <h1>Statement Sorter <span class="brand">Free by <a href="https://webclerk.com" target="_blank" style="color:#58a6ff;text-decoration:none">WebClerk</a></span></h1>
+  <div class="stats" id="stats"></div>
+  <div class="bar">
+    <button onclick="selectAllVisible()">Select All</button>
+    <button onclick="deselectAll()">Clear Selection</button>
+    <span id="sel-count" style="color:#58a6ff;font-size:11px;min-width:80px"></span>
+    <button onclick="lines=[];selectedIds.clear();render();saveLocal();toast('All data cleared')">Unload</button>
+    <span style="color:#30363d">|</span>
+    <button onclick="adjustFontSize(1)" title="Increase text size" style="font-weight:bold;min-width:24px">A+</button>
+    <button onclick="adjustFontSize(-1)" title="Decrease text size" style="font-weight:bold;min-width:24px">A-</button>
+    <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+      Drop CSV or JSON files here — or click to browse
+    </div>
+    <input type="file" id="file-input" accept=".json,.csv" multiple style="display:none" onchange="handleFiles(this.files)">
+  </div>
+  <div class="bar" id="toolbar" style="display:none">
+    <button class="org" onclick="acceptRecommendations()">Accept Recommendations</button>
+    <button onclick="openCatDialog()" title="Edit category lists">Edit Categories</button>
+    <select id="cat-bulk" onchange="if(this.value){bulkSetCategory(this.value);this.selectedIndex=0}">
+      <option value="">Set Category...</option>
+    </select>
+    <span style="color:#30363d">|</span>
+    <select id="filter-cls" onchange="filterRows()">
+      <option value="">Show All</option>
+      <option value="unknown">unknown only</option>
+      <option value="business">business only</option>
+      <option value="personal">personal only</option>
+    </select>
+    <select id="filter-src" onchange="filterRows()">
+      <option value="">All Sources</option>
+    </select>
+    <span style="flex:1"></span>
+    <button class="blu" onclick="exportData('business','csv')">Business CSV</button>
+    <button class="blu" onclick="exportData('business','json')">Business JSON</button>
+    <button onclick="exportData('personal','csv')">Personal CSV</button>
+    <button onclick="exportData('personal','json')">Personal JSON</button>
+    <button onclick="exportData('all','csv')">All CSV</button>
+  </div>
+</div>
+
+<div id="welcome" class="welcome">
+  <h2>Sort your bank statements</h2>
+  <p>Drop your bank or credit card CSV files above. Classify each line as business or personal.
+     Export when done. <strong>Your data never leaves your browser.</strong></p>
+  <p style="font-size:14px;color:#4ade80;font-weight:600">Your files never leave your computer.</p>
+  <p style="font-size:11px;color:#484f58">Everything runs in your browser. Nothing is uploaded. Nothing is stored on any server.<br>
+  Supports: Wells Fargo, USAA, Wise, GoDaddy, and any CSV with date + amount + description.</p>
+</div>
+
+<div id="grid-wrap" style="display:none;overflow-y:auto">
+<table id="grid">
+  <colgroup>
+    <col class="c-dt"><col class="c-rec"><col class="c-conf"><col class="c-cat">
+    <col class="c-cls"><col class="c-amt"><col class="c-src"><col class="c-desc"><col class="c-bcat">
+  </colgroup>
+  <thead><tr>
+    <th onclick="sortBy('date')">date</th>
+    <th>recommended</th>
+    <th>conf</th>
+    <th onclick="sortBy('category')">category</th>
+    <th onclick="sortBy('classification')">class</th>
+    <th onclick="sortBy('amount')">amount</th>
+    <th onclick="sortBy('source')">source</th>
+    <th onclick="sortBy('description')">description</th>
+    <th>bank_cat</th>
+  </tr></thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="footer">
+  Your data stays in your browser. Nothing is uploaded. Nothing is stored.
+  <br><a href="https://webclerk.com" target="_blank">WebClerk</a> — open source commerce for sovereign businesses.
+</div>
+
+<script>
+// ─── Athena integrity check ────────────────────────────────────────
+// If this script has been tampered with, the page will not function.
+// The hash is verified on load. Athena signs each release.
+(function athenaVerify() {
+  const ATHENA_SIG = '8c70184548145648e4c6738e919e1bb6b3645bfa90dd801b582702f86c99a300'; // replaced by build script
+  if (ATHENA_SIG.startsWith('%%')) return; // dev mode — unsigned
+  const scripts = document.querySelectorAll('script');
+  const src = scripts[scripts.length - 1].textContent;
+  // Hash everything after the athenaVerify closure
+  const payload = src.substring(src.indexOf('// ─── Toast'));
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(payload)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash !== ATHENA_SIG) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0d1117;color:#f87171;font-family:system-ui;font-size:18px;text-align:center;padding:40px"><div><h2 style="color:#fff;margin-bottom:12px">Integrity Check Failed</h2>This page has been modified and cannot be trusted.<br>Download the original from <a href="https://webclerk.com/sort" style="color:#58a6ff">webclerk.com/sort</a></div></div>';
+      throw new Error('Athena: integrity check failed');
+    }
+  });
+})();
+
+// ─── Toast (non-blocking message) ──────────────────────────────────
+function toast(msg, ms = 3000, isError = false) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = isError ? 'show error' : 'show';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.className = '', ms);
+}
+
+// ─── State ──────────────────────────────────────────────────────────
+let lines = [];
+let selectedIds = new Set();
+let lastClickedIdx = null;
+let sortField = 'date';
+let sortDir = -1;
+let pageSize = 200;
+let currentPage = 0;
+let merchants = {};  // normalized_desc → { category, classification, count }
+
+const BIZ_CATEGORIES = [
+  'Advertising','Bank Fees','Domains','Equipment','Hosting',
+  'Insurance','Materials','Meals','Miscellaneous','Office Supplies',
+  'Payroll','Phone','Professional Services','Rent',
+  'Repairs & Maintenance','Shipping','Software','Subscriptions',
+  'Taxes','Travel','Utilities','Vehicle',
+];
+const PER_CATEGORIES = [
+  'Clothing','Dining Out','Education','Entertainment','Gifts',
+  'Groceries','Health & Medical','Household','Personal Care',
+  'Pet Care','Recreation','Subscriptions','Transportation',
+];
+// Combined flat list for backwards compat
+const CATEGORIES = [...BIZ_CATEGORIES, ...PER_CATEGORIES];
+
+function categoryClass(cat) {
+  if (BIZ_CATEGORIES.includes(cat)) return 'business';
+  if (PER_CATEGORIES.includes(cat)) return 'personal';
+  // Check custom categories
+  const customs = getCustomCategories();
+  const entry = customs.find(c => typeof c === 'object' ? c.name === cat : c === cat);
+  if (entry && typeof entry === 'object') return entry.cls;
+  return null;
+}
+
+function buildCatOptions(selectedVal) {
+  let html = '<option value="">--</option>';
+  html += `<option value="__unknown__" ${selectedVal==='__unknown__'?'selected':''}>Unknown</option>`;
+  html += '<optgroup label="Business">';
+  for (const c of BIZ_CATEGORIES) html += `<option value="${c}" ${c===selectedVal?'selected':''}>${c}</option>`;
+  html += '</optgroup><optgroup label="Personal">';
+  for (const c of PER_CATEGORIES) html += `<option value="${c}" ${c===selectedVal?'selected':''}>${c}</option>`;
+  html += '</optgroup>';
+  const customs = getCustomCategories();
+  if (customs.length) {
+    html += '<optgroup label="Custom">';
+    for (const c of customs) {
+      const name = typeof c === 'object' ? c.name : c;
+      html += `<option value="${name}" ${name===selectedVal?'selected':''}>${name}</option>`;
+    }
+    html += '</optgroup>';
+  }
+  return html;
+}
+
+// ─── Parsers ────────────────────────────────────────────────────────
+function parseDate(s) {
+  s = s.trim().replace(/^"|"$/g, '');
+  for (const [re, fn] of [
+    [/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, (m,d,y) => `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`],
+    [/^(\d{4})-(\d{2})-(\d{2})/, (y,m,d) => `${y}-${m}-${d}`],
+    [/^(\d{1,2})\/(\d{1,2})\/(\d{2})$/, (m,d,y) => `20${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`],
+  ]) {
+    const match = s.match(re);
+    if (match) return fn(...match.slice(1));
+  }
+  return null;
+}
+
+function parseAmount(s) {
+  s = s.trim().replace(/^"|"$/g, '').replace(/\$/g, '').replace(/,/g, '');
+  if (s.startsWith('(') && s.endsWith(')')) s = '-' + s.slice(1, -1);
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+function makeLine(date, desc, amount, source, raw, bankCat) {
+  return {
+    uuid: uuid(), date, description: desc, amount, source, raw,
+    classification: 'unknown', category: '', bank_category: bankCat || '',
+  };
+}
+
+function detectAndParse(text) {
+  const rows = [];
+  // Simple CSV parser that handles quoted fields
+  let current = ''; let inQuote = false; let row = []; let lines_raw = text.split('\n');
+  for (const line of lines_raw) {
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQuote = !inQuote; }
+      else if (ch === ',' && !inQuote) { row.push(current); current = ''; }
+      else { current += ch; }
+    }
+    row.push(current); current = '';
+    if (!inQuote) { rows.push(row); row = []; }
+    else { current = row.pop() + '\n'; }
+  }
+  if (!rows.length) return [];
+
+  const h = rows[0].map(c => c.trim().toLowerCase());
+  const first = rows[1] || [];
+  const result = [];
+
+  // Wells Fargo CC 2025
+  if (h.includes('month') && h.includes('post date')) {
+    for (const r of rows.slice(1)) {
+      if (r.length < 4) continue;
+      const parts = r[0].trim().split(/\s+/);
+      const year = parts.length === 2 ? parseInt(parts[1]) : new Date().getFullYear();
+      const md = r[1].trim().split('/');
+      if (md.length !== 2) continue;
+      const date = `${year}-${md[0].padStart(2,'0')}-${md[1].padStart(2,'0')}`;
+      const amt = parseAmount(r[3]);
+      if (amt === null) continue;
+      result.push(makeLine(date, r[2].trim(), amt, 'wellsfargo_cc', r.join(','), r[4]?.trim() || ''));
+    }
+    return result;
+  }
+
+  // USAA
+  if (h.includes('original description') || (h.includes('description') && h.includes('status') && h.includes('category'))) {
+    for (const r of rows.slice(1)) {
+      if (r.length < 5) continue;
+      const date = parseDate(r[0]);
+      const amt = parseAmount(r[4]);
+      if (!date || amt === null) continue;
+      result.push(makeLine(date, r[1].trim().replace(/^"|"$/g,''), amt, 'usaa', r.join(','),
+        r[3]?.trim().replace(/^"|"$/g,'') || ''));
+    }
+    return result;
+  }
+
+  // Wise
+  if (h.includes('direction') && h.includes('source fee amount')) {
+    for (const r of rows.slice(1)) {
+      if (r.length < 11) continue;
+      const dtMatch = r[3]?.trim().replace(/^"|"$/g,'').match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!dtMatch) continue;
+      const date = `${dtMatch[1]}-${dtMatch[2]}-${dtMatch[3]}`;
+      let amt = parseAmount(r[10]);
+      if (amt === null) continue;
+      const dir = r[2].trim().replace(/^"|"$/g,'').toUpperCase();
+      if (dir === 'OUT') amt = -Math.abs(amt);
+      const target = r[12]?.trim().replace(/^"|"$/g,'') || '';
+      result.push(makeLine(date, target ? `Wise → ${target}` : 'Wise transfer', amt, 'wise', r.join(',')));
+    }
+    return result;
+  }
+
+  // Domain Registrar
+  if (h.includes('receipt number') && h.includes('order total')) {
+    for (const r of rows.slice(1)) {
+      if (r.length < 10) continue;
+      const dtStr = r[2]?.trim().replace(/^"|"$/g,'');
+      const dtMatch = dtStr?.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (!dtMatch) continue;
+      const date = `${dtMatch[1]}-${dtMatch[2]}-${dtMatch[3]}`;
+      const amt = parseAmount(r[9]);
+      if (amt === null) continue;
+      const product = r[3]?.trim().replace(/^"|"$/g,'') || '';
+      const name = r[4]?.trim().replace(/^"|"$/g,'') || '';
+      const desc = name ? `${product}: ${name.slice(0,60)}` : product;
+      result.push(makeLine(date, desc, -Math.abs(amt), 'registrar', r.slice(0,6).join(',')));
+    }
+    return result;
+  }
+
+  // Wells Fargo legacy (no header)
+  if (first.length >= 4 && parseDate(first[0]) && parseAmount(first[1]) !== null && first[2]?.trim() === '*') {
+    for (const r of rows) {
+      if (r.length < 5) continue;
+      const date = parseDate(r[0]);
+      const amt = parseAmount(r[1]);
+      if (!date || amt === null) continue;
+      result.push(makeLine(date, (r[4] || r[3]).trim().replace(/^"|"$/g,''), amt, 'wellsfargo', r.join(',')));
+    }
+    return result;
+  }
+
+  // Generic
+  if (h.includes('date') && h.includes('amount')) {
+    const di = h.findIndex(c => ['date','post_date','post date','transaction_date','transaction date'].includes(c));
+    const ai = h.findIndex(c => c === 'amount');
+    const dsi = h.findIndex(c => ['description','memo','payee','name'].includes(c));
+    const ci = h.findIndex(c => ['category','type'].includes(c));
+    for (const r of rows.slice(1)) {
+      if (r.length <= Math.max(di, ai, dsi >= 0 ? dsi : 0)) continue;
+      const date = parseDate(r[di]);
+      const amt = parseAmount(r[ai]);
+      if (!date || amt === null) continue;
+      const desc = dsi >= 0 ? r[dsi].trim().replace(/^"|"$/g,'') : '';
+      const bcat = ci >= 0 && ci < r.length ? r[ci].trim() : '';
+      result.push(makeLine(date, desc, amt, 'generic', r.join(','), bcat));
+    }
+    return result;
+  }
+
+  return result;
+}
+
+// ─── A+- font size ─────────────────────────────────────────────────
+let fontSize = parseInt(localStorage.getItem('ss_fontsize') || '12');
+
+function adjustFontSize(delta) {
+  fontSize = Math.max(9, Math.min(18, fontSize + delta));
+  document.getElementById('grid').style.fontSize = fontSize + 'px';
+  localStorage.setItem('ss_fontsize', fontSize);
+  toast(fontSize + 'px');
+}
+
+// ─── Draggable column widths ───────────────────────────────────────
+function initColumnResize() {
+  const table = document.getElementById('grid');
+  if (!table) return;
+  table.style.fontSize = fontSize + 'px';
+
+  const ths = table.querySelectorAll('thead th');
+  ths.forEach((th, i) => {
+    // Remove old handles
+    const old = th.querySelector('.resize');
+    if (old) old.remove();
+
+    const handle = document.createElement('div');
+    handle.className = 'resize';
+    th.appendChild(handle);
+
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const startX = e.clientX;
+      const col = table.querySelector(`colgroup col:nth-child(${i + 1})`);
+      const startW = th.offsetWidth;
+
+      function onMove(e2) {
+        const w = Math.max(25, startW + e2.clientX - startX);
+        if (col) col.style.width = w + 'px';
+      }
+      function onUp() {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        saveColumnWidths();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+
+  // Restore saved widths
+  loadColumnWidths();
+}
+
+function saveColumnWidths() {
+  const cols = document.querySelectorAll('#grid colgroup col');
+  const widths = [...cols].map(c => c.style.width || '');
+  localStorage.setItem('ss_colwidths', JSON.stringify(widths));
+}
+
+function loadColumnWidths() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('ss_colwidths') || '[]');
+    if (!saved.length) return;
+    const cols = document.querySelectorAll('#grid colgroup col');
+    saved.forEach((w, i) => { if (w && cols[i]) cols[i].style.width = w; });
+  } catch {}
+}
+
+// ─── Merchant learning + recommendations ───────────────────────────
+function normalizeDesc(desc) {
+  // Strip dates, amounts, card numbers, trailing IDs — keep the merchant name
+  return (desc || '').toUpperCase()
+    .replace(/\d{2}\/\d{2}\/?(\d{2,4})?/g, '')  // dates
+    .replace(/\b\d{4,}\b/g, '')                   // long numbers
+    .replace(/#\w+/g, '')                          // reference numbers
+    .replace(/\s+/g, ' ').trim();
+}
+
+function learnMerchant(desc, category, classification) {
+  if (!desc || !category) return;
+  const key = normalizeDesc(desc);
+  if (key.length < 3) return;
+  const existing = merchants[key];
+  if (existing) {
+    existing.category = category;
+    existing.classification = classification;
+    existing.count = (existing.count || 0) + 1;
+  } else {
+    merchants[key] = { category, classification, count: 1 };
+  }
+}
+
+function recommendLine(line) {
+  if (!line.description) return null;
+  const desc = normalizeDesc(line.description);
+  // Exact match first — high confidence
+  if (merchants[desc]) {
+    const m = merchants[desc];
+    return { category: m.category, classification: m.classification, confidence: Math.min(99, 50 + m.count * 10) };
+  }
+  // Substring match — find longest matching key
+  let bestMatch = null, bestLen = 0, bestKey = '';
+  for (const [key, rule] of Object.entries(merchants)) {
+    if (key.length > bestLen && desc.includes(key)) {
+      bestMatch = rule; bestLen = key.length; bestKey = key;
+    }
+    if (key.length > bestLen && key.includes(desc) && desc.length > 5) {
+      bestMatch = rule; bestLen = key.length; bestKey = key;
+    }
+  }
+  if (bestMatch) {
+    // Confidence based on match coverage and usage count
+    const coverage = bestLen / Math.max(desc.length, 1);
+    const conf = Math.min(95, Math.round(coverage * 60 + Math.min(bestMatch.count * 5, 30)));
+    return { category: bestMatch.category, classification: bestMatch.classification, confidence: conf };
+  }
+  return null;
+}
+
+function applyRecommendations() {
+  let count = 0;
+  for (const l of lines) {
+    if (l.classification !== 'unknown') continue;
+    const rec = recommendLine(l);
+    if (rec) {
+      l._recommended = rec.category;
+      l._rec_cls = rec.classification;
+      l._rec_conf = rec.confidence;
+      count++;
+    }
+  }
+  return count;
+}
+
+function acceptRecommendations() {
+  if (!selectedIds.size) {
+    // Accept all recommendations
+    let count = 0;
+    for (const l of lines) {
+      if (l._recommended) {
+        l.category = l._recommended;
+        l.classification = l._rec_cls || categoryClass(l._recommended) || 'unknown';
+        delete l._recommended; delete l._rec_cls;
+        count++;
+      }
+    }
+    if (!count) { toast('No recommendations to accept', 3000, true); return; }
+    toast(`Accepted ${count} recommendations`);
+  } else {
+    // Accept only for selected rows
+    let count = 0;
+    selectedIds.forEach(idx => {
+      const l = lines[idx];
+      if (l._recommended) {
+        l.category = l._recommended;
+        l.classification = l._rec_cls || categoryClass(l._recommended) || 'unknown';
+        delete l._recommended; delete l._rec_cls;
+        count++;
+      }
+    });
+    if (!count) { toast('No recommendations in selection', 3000, true); return; }
+    toast(`Accepted ${count} recommendations`);
+  }
+  saveLocal();
+  render();
+}
+
+// ─── File handling ──────────────────────────────────────────────────
+async function handleFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.name.endsWith('.csv') || f.name.endsWith('.json'));
+  if (!files.length) { toast('No .csv or .json files found', 3000, true); return; }
+
+  const existingHashes = new Set(lines.map(l => hashRaw(l.raw || '')));
+  let added = 0;
+
+  for (const file of files) {
+    const text = await file.text();
+    if (file.name.endsWith('.json')) {
+      try {
+        const data = JSON.parse(text);
+        if (Array.isArray(data)) {
+          for (const l of data) {
+            if (!l.uuid) l.uuid = uuid();
+            const h = hashRaw(l.raw || '');
+            if (!existingHashes.has(h)) { lines.push(l); existingHashes.add(h); added++; }
+          }
+        }
+      } catch (e) { toast(`Invalid JSON: ${file.name}`, 4000, true); }
+    } else {
+      const parsed = detectAndParse(text);
+      for (const l of parsed) {
+        const h = hashRaw(l.raw || '');
+        if (!existingHashes.has(h)) { lines.push(l); existingHashes.add(h); added++; }
+      }
+    }
+  }
+
+  saveLocal();
+  const recs = applyRecommendations();
+  render();
+  const msg = `Loaded ${added} new lines from ${files.length} file(s). Total: ${lines.length}`;
+  toast(recs ? msg + `. ${recs} recommendations applied.` : msg);
+}
+
+function hashRaw(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) { h = ((h << 5) - h + s.charCodeAt(i)) | 0; }
+  return String(h);
+}
+
+// ─── Drag and drop ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const dz = document.getElementById('drop-zone');
+  document.body.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('active'); dz.textContent = 'Drop here!'; });
+  document.body.addEventListener('dragleave', e => { if (!e.relatedTarget) { dz.classList.remove('active'); dz.textContent = 'Drop CSV or JSON files here — or click to browse'; } });
+  document.body.addEventListener('drop', async e => {
+    e.preventDefault();
+    dz.classList.remove('active');
+    dz.textContent = 'Loading...';
+
+    try {
+      let files = [];
+      const items = e.dataTransfer.items ? Array.from(e.dataTransfer.items) : [];
+      const entries = items.map(i => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+      const hasDir = entries.some(en => en.isDirectory);
+
+      if (hasDir) {
+        // Folder dropped — walk directory tree via entry API
+        async function readDir(entry) {
+          if (entry.isFile) return new Promise((res, rej) => entry.file(f => res(f), rej));
+          if (entry.isDirectory) {
+            const reader = entry.createReader();
+            let all = [];
+            while (true) {
+              const batch = await new Promise((res, rej) => reader.readEntries(r => res(r), rej));
+              if (!batch.length) break;
+              for (const de of batch) {
+                const f = await readDir(de);
+                if (Array.isArray(f)) all.push(...f);
+                else if (f) all.push(f);
+              }
+            }
+            return all;
+          }
+        }
+        for (const entry of entries) {
+          const result = await readDir(entry);
+          if (Array.isArray(result)) files.push(...result);
+          else if (result) files.push(result);
+        }
+      } else {
+        files = Array.from(e.dataTransfer.files);
+      }
+
+      files = files.filter(f => f.name.endsWith('.csv') || f.name.endsWith('.json'));
+      if (files.length) {
+        await handleFiles(files);
+      } else {
+        toast('No .csv or .json files found in drop', 3000, true);
+      }
+    } catch (err) {
+      console.error('Drop error:', err);
+      toast('Error reading files: ' + err.message, 4000, true);
+    }
+    dz.textContent = 'Drop CSV or JSON files here — or click to browse';
+  });
+
+  // Always start clean — no auto-load from localStorage
+  render();
+
+  // Populate category dropdown — refresh on each render to include custom cats
+  refreshCatDropdown();
+});
+
+// ─── Custom categories ──────────────────────────────────────────────
+function getCustomCategories() {
+  try { return JSON.parse(localStorage.getItem('statement_sorter_categories') || '[]'); } catch { return []; }
+}
+function addCustomCategory(cat) {
+  if (!cat || CATEGORIES.includes(cat)) return;
+  const custom = getCustomCategories();
+  if (!custom.includes(cat)) { custom.push(cat); custom.sort(); localStorage.setItem('statement_sorter_categories', JSON.stringify(custom)); }
+}
+function getAllCategories() { return [...CATEGORIES, ...getCustomCategories()].sort(); }
+
+// ─── localStorage persistence ───────────────────────────────────────
+function saveLocal() {
+  try {
+    // Strip 'raw' field to save space — only needed during import for dedup
+    const slim = lines.map(l => { const {raw, ...rest} = l; return rest; });
+    localStorage.setItem('statement_sorter_lines', JSON.stringify(slim));
+  } catch {}
+}
+function loadLocal() {
+  try {
+    const stored = localStorage.getItem('statement_sorter_lines');
+    if (stored) lines = JSON.parse(stored);
+  } catch {}
+}
+
+// ─── Render ─────────────────────────────────────────────────────────
+function render() {
+  const welcome = document.getElementById('welcome');
+  const gridWrap = document.getElementById('grid-wrap');
+  const toolbar = document.getElementById('toolbar');
+
+  if (!lines.length) {
+    welcome.style.display = 'flex';
+    gridWrap.style.display = 'none';
+    toolbar.style.display = 'none';
+    document.getElementById('stats').innerHTML = '';
+    refreshCatDropdown();
+    return;
+  }
+
+  welcome.style.display = 'none';
+  gridWrap.style.display = 'flex';
+  toolbar.style.display = 'flex';
+
+  // Stats
+  const total = lines.length;
+  const biz = lines.filter(l => l.classification === 'business');
+  const per = lines.filter(l => l.classification === 'personal');
+  const unk = total - biz.length - per.length;
+  const bizTotal = biz.reduce((s, l) => s + l.amount, 0);
+  const perTotal = per.reduce((s, l) => s + l.amount, 0);
+  document.getElementById('stats').innerHTML =
+    `<span>${total} total</span>` +
+    `<span class="s-biz">${biz.length} business ($${Math.abs(bizTotal).toLocaleString(undefined,{minimumFractionDigits:2})})</span>` +
+    `<span class="s-per">${per.length} personal ($${Math.abs(perTotal).toLocaleString(undefined,{minimumFractionDigits:2})})</span>` +
+    `<span class="s-unk">${unk} unknown</span>`;
+
+  // Source filter
+  const srcSel = document.getElementById('filter-src');
+  const curSrc = srcSel.value;
+  const sources = [...new Set(lines.map(l => l.source))].sort();
+  srcSel.innerHTML = '<option value="">All Sources</option>' +
+    sources.map(s => `<option value="${s}" ${s===curSrc?'selected':''}>${s}</option>`).join('');
+
+  // Sort
+  const sorted = [...lines].sort((a, b) => {
+    let va = a[sortField], vb = b[sortField];
+    if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * sortDir;
+    return String(va || '').localeCompare(String(vb || '')) * sortDir;
+  });
+
+  // Paginate
+  const totalPages = Math.ceil(sorted.length / pageSize);
+  if (currentPage >= totalPages) currentPage = Math.max(0, totalPages - 1);
+  const pageStart = currentPage * pageSize;
+  const pageLines = sorted.slice(pageStart, pageStart + pageSize);
+
+  // Build rows — only visible page
+  // Category options built per-row below
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = pageLines.map((l, si) => {
+    const idx = lines.indexOf(l);
+    const cls = l.classification;
+    const bg = cls === 'business' ? '#1a2a1a' : cls === 'personal' ? '#2a1a1a' : '#1a1a2a';
+    const amtColor = l.amount > 0 ? '#4ade80' : l.amount < 0 ? '#f87171' : '#888';
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    const sel = selectedIds.has(idx) ? ' selected' : '';
+    const hasRec = l._recommended ? ' recommended' : '';
+    const rowCls = sel || hasRec;
+    const rowBg = sel ? '' : (hasRec ? '' : 'background:'+bg);
+    return `<tr data-idx="${idx}" class="row${sel}${hasRec}" style="${rowBg}" onclick="handleRowClick(event,${idx})">
+      <td class="dt">${l.date}</td>
+      <td class="rec">${l._recommended ? esc(l._recommended) : ''}</td>
+      <td class="conf">${l._rec_conf ? l._rec_conf + '%' : ''}</td>
+      <td class="cat"><select data-idx="${idx}" onchange="setField(${idx},'category',this.value)">${buildCatOptions(l.category)}</select></td>
+      <td class="cls-label" style="color:${cls==='business'?'#4ade80':cls==='personal'?'#f87171':'#6e7681'}">${cls==='business'?'biz':cls==='personal'?'per':''}</td>
+      <td class="amt" style="color:${amtColor}">${l.amount.toLocaleString(undefined,{minimumFractionDigits:2})}</td>
+      <td class="src">${l.source}</td>
+      <td class="desc" title="${esc(l.description)}">${esc((l.description||'').slice(0,55))}</td>
+      <td class="bcat">${esc(l.bank_category)}</td>
+    </tr>`;
+  }).join('');
+
+  // Pagination controls
+  let pagDiv = document.getElementById('pagination');
+  if (!pagDiv) {
+    pagDiv = document.createElement('div');
+    pagDiv.id = 'pagination';
+    pagDiv.style.cssText = 'display:flex;gap:8px;align-items:center;justify-content:center;padding:8px;background:#161b22;border-top:1px solid #30363d;position:sticky;bottom:0;z-index:10';
+    document.getElementById('grid-wrap').after(pagDiv);
+  }
+  pagDiv.innerHTML = `
+    <button onclick="currentPage=0;render()" ${currentPage===0?'disabled':''} style="padding:3px 8px;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:11px">First</button>
+    <button onclick="currentPage=Math.max(0,currentPage-1);render()" ${currentPage===0?'disabled':''} style="padding:3px 8px;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:11px">← Prev</button>
+    <span style="color:#8b949e;font-size:12px">Page ${currentPage+1} of ${totalPages} (${sorted.length} lines)</span>
+    <button onclick="currentPage=Math.min(${totalPages-1},currentPage+1);render()" ${currentPage>=totalPages-1?'disabled':''} style="padding:3px 8px;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:11px">Next →</button>
+    <button onclick="currentPage=${totalPages-1};render()" ${currentPage>=totalPages-1?'disabled':''} style="padding:3px 8px;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;cursor:pointer;font-size:11px">Last</button>
+    <select onchange="pageSize=parseInt(this.value);currentPage=0;render()" style="padding:2px 4px;background:#21262d;color:#c9d1d9;border:1px solid #30363d;border-radius:3px;font-size:11px">
+      <option value="100" ${pageSize===100?'selected':''}>100/page</option>
+      <option value="200" ${pageSize===200?'selected':''}>200/page</option>
+      <option value="500" ${pageSize===500?'selected':''}>500/page</option>
+      <option value="99999" ${pageSize>=99999?'selected':''}>All</option>
+    </select>
+  `;
+
+  refreshCatDropdown();
+  filterRows();
+  initColumnResize();
+}
+
+// ─── Actions ────────────────────────────────────────────────────────
+function refreshCatDropdown() {
+  const sel = document.getElementById('cat-bulk');
+  sel.innerHTML = '<option value="">Set Category...</option>' + buildCatOptions('');
+}
+
+function bulkSetCategory(cat) {
+  if (!selectedIds.size) { toast('Select rows first', 3000, true); return; }
+  if (cat === '__unknown__') {
+    selectedIds.forEach(idx => {
+      lines[idx].category = ''; lines[idx].classification = 'unknown';
+      delete lines[idx]._recommended; delete lines[idx]._rec_cls;
+    });
+  } else {
+    const cls = categoryClass(cat);
+    selectedIds.forEach(idx => {
+      const l = lines[idx];
+      l.category = cat;
+      if (cls) l.classification = cls;
+      learnMerchant(l.description, cat, l.classification);
+      delete l._recommended; delete l._rec_cls;
+    });
+    if (cat) addCustomCategory(cat);
+  }
+  saveLocal();
+  render();
+}
+
+function setField(idx, field, value) {
+  const l = lines[idx];
+  if (field === 'category') {
+    if (value === '__unknown__') {
+      l.category = ''; l.classification = 'unknown';
+    } else {
+      l.category = value;
+      if (value) {
+        const cls = categoryClass(value);
+        if (cls) l.classification = cls;
+        learnMerchant(l.description, value, l.classification);
+        addCustomCategory(value);
+      }
+    }
+    delete l._recommended; delete l._rec_cls;
+  } else {
+    l[field] = value;
+  }
+  saveLocal();
+  render();
+}
+
+// ─── Row selection — WC standard ───────────────────────────────────
+// Click = select (clears others). Shift+click = range. Cmd/Ctrl+click = toggle.
+function handleRowClick(e, idx) {
+  // Don't intercept clicks on selects/inputs inside the row
+  if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+  // Don't fire if the click was on a row hidden under the sticky header
+  const header = document.querySelector('.top');
+  if (header && e.clientY < header.getBoundingClientRect().bottom) return;
+
+  if (e.shiftKey && lastClickedIdx !== null) {
+    // Range select: add all rows between last click and this one
+    const sortedRows = getVisibleIndices();
+    const lastPos = sortedRows.indexOf(lastClickedIdx);
+    const curPos = sortedRows.indexOf(idx);
+    if (lastPos !== -1 && curPos !== -1) {
+      const start = Math.min(lastPos, curPos);
+      const end = Math.max(lastPos, curPos);
+      for (let i = start; i <= end; i++) selectedIds.add(sortedRows[i]);
+    }
+  } else if (e.metaKey || e.ctrlKey) {
+    // Toggle individual
+    if (selectedIds.has(idx)) selectedIds.delete(idx);
+    else selectedIds.add(idx);
+  } else {
+    // Plain click — select only this row
+    selectedIds.clear();
+    selectedIds.add(idx);
+  }
+  lastClickedIdx = idx;
+  updateRowStyles();
+}
+
+function getVisibleIndices() {
+  return [...document.querySelectorAll('tr.row')]
+    .filter(r => r.style.display !== 'none')
+    .map(r => parseInt(r.dataset.idx));
+}
+
+function updateRowStyles() {
+  document.querySelectorAll('tr.row').forEach(r => {
+    const idx = parseInt(r.dataset.idx);
+    const l = lines[idx];
+    if (selectedIds.has(idx)) {
+      r.classList.add('selected');
+      r.style.background = '';
+    } else {
+      r.classList.remove('selected');
+      const cls = l?.classification;
+      r.style.background = cls === 'business' ? '#1a2a1a' : cls === 'personal' ? '#2a1a1a' : '#1a1a2a';
+    }
+  });
+  const count = selectedIds.size;
+  document.getElementById('sel-count').textContent = count ? `${count} selected` : '';
+}
+
+function selectAllVisible() {
+  getVisibleIndices().forEach(idx => selectedIds.add(idx));
+  updateRowStyles();
+}
+
+function deselectAll() {
+  selectedIds.clear();
+  lastClickedIdx = null;
+  updateRowStyles();
+}
+
+function bulkSet(field, value) {
+  if (!selectedIds.size) { toast('Select rows first', 3000, true); return; }
+  selectedIds.forEach(idx => { lines[idx][field] = value; });
+  saveLocal();
+  render();
+}
+
+function sortBy(field) {
+  if (sortField === field) sortDir *= -1;
+  else { sortField = field; sortDir = field === 'amount' ? -1 : 1; }
+  render();
+}
+
+function filterRows() {
+  const clsVal = document.getElementById('filter-cls').value;
+  const srcVal = document.getElementById('filter-src').value;
+  document.querySelectorAll('tr.row').forEach(r => {
+    const idx = parseInt(r.dataset.idx);
+    const l = lines[idx];
+    const clsMatch = !clsVal || l.classification === clsVal;
+    const srcMatch = !srcVal || l.source === srcVal;
+    r.style.display = clsMatch && srcMatch ? '' : 'none';
+  });
+}
+
+// ─── Category editor dialog ────────────────────────────────────────
+const DEFAULT_BIZ = [...BIZ_CATEGORIES];
+const DEFAULT_PER = [...PER_CATEGORIES];
+
+function openCatDialog() {
+  document.getElementById('cat-biz').value = BIZ_CATEGORIES.join('\n');
+  document.getElementById('cat-per').value = PER_CATEGORIES.join('\n');
+  document.getElementById('cat-dialog').classList.add('open');
+}
+
+function closeCatDialog() {
+  document.getElementById('cat-dialog').classList.remove('open');
+}
+
+function applyCatEdits() {
+  const biz = document.getElementById('cat-biz').value.split('\n').map(s => s.trim()).filter(Boolean).sort();
+  const per = document.getElementById('cat-per').value.split('\n').map(s => s.trim()).filter(Boolean).sort();
+  BIZ_CATEGORIES.length = 0; BIZ_CATEGORIES.push(...biz);
+  PER_CATEGORIES.length = 0; PER_CATEGORIES.push(...per);
+  CATEGORIES.length = 0; CATEGORIES.push(...BIZ_CATEGORIES, ...PER_CATEGORIES);
+  closeCatDialog();
+  render();
+  refreshCatDropdown();
+  toast(`Categories updated: ${biz.length} business, ${per.length} personal`);
+}
+
+function resetCatsToDefault() {
+  document.getElementById('cat-biz').value = DEFAULT_BIZ.join('\n');
+  document.getElementById('cat-per').value = DEFAULT_PER.join('\n');
+  toast('Reset to defaults — click Apply to confirm');
+}
+
+async function saveCatsToFile() {
+  const biz = document.getElementById('cat-biz').value.split('\n').map(s => s.trim()).filter(Boolean).sort();
+  const per = document.getElementById('cat-per').value.split('\n').map(s => s.trim()).filter(Boolean).sort();
+  const data = JSON.stringify({ business: biz, personal: per }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+
+  // Use File System Access API if available (lets user pick location)
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'categories.json',
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      toast('Saved ' + handle.name);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user cancelled
+    }
+  }
+  // Fallback: download
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'categories.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Saved categories.json');
+}
+
+function loadCatsFromFile(files) {
+  if (!files.length) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (data.business && Array.isArray(data.business))
+        document.getElementById('cat-biz').value = data.business.sort().join('\n');
+      if (data.personal && Array.isArray(data.personal))
+        document.getElementById('cat-per').value = data.personal.sort().join('\n');
+      toast('Loaded — click Apply to confirm');
+    } catch (e) {
+      toast('Invalid categories.json', 3000, true);
+    }
+  };
+  reader.readAsText(files[0]);
+  // Reset input so same file can be loaded again
+  document.getElementById('cat-file-input').value = '';
+}
+
+// ─── Rules save/load ───────────────────────────────────────────────
+async function saveRulesToFile() {
+  const data = JSON.stringify({
+    categories: {
+      business: [...BIZ_CATEGORIES].sort(),
+      personal: [...PER_CATEGORIES].sort(),
+    },
+    merchants: merchants,
+  }, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: 'rules.json',
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      toast(`Saved ${handle.name} — ${Object.keys(merchants).length} merchant rules`);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'rules.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast(`Saved rules.json — ${Object.keys(merchants).length} merchant rules`);
+}
+
+function loadRulesFromFile(files) {
+  if (!files.length) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      // Load categories
+      if (data.categories) {
+        if (data.categories.business && Array.isArray(data.categories.business)) {
+          BIZ_CATEGORIES.length = 0; BIZ_CATEGORIES.push(...data.categories.business.sort());
+        }
+        if (data.categories.personal && Array.isArray(data.categories.personal)) {
+          PER_CATEGORIES.length = 0; PER_CATEGORIES.push(...data.categories.personal.sort());
+        }
+        CATEGORIES.length = 0; CATEGORIES.push(...BIZ_CATEGORIES, ...PER_CATEGORIES);
+        document.getElementById('cat-biz').value = BIZ_CATEGORIES.join('\n');
+        document.getElementById('cat-per').value = PER_CATEGORIES.join('\n');
+      }
+      // Load merchants
+      if (data.merchants && typeof data.merchants === 'object') {
+        Object.assign(merchants, data.merchants);
+      }
+      const mCount = Object.keys(merchants).length;
+      // Apply recommendations to any loaded lines
+      const recs = applyRecommendations();
+      render();
+      toast(`Loaded rules: ${mCount} merchant rules. ${recs} recommendations applied.`);
+    } catch (e) {
+      toast('Invalid rules.json: ' + e.message, 4000, true);
+    }
+  };
+  reader.readAsText(files[0]);
+  document.getElementById('rules-file-input').value = '';
+}
+
+// ─── Export ─────────────────────────────────────────────────────────
+async function exportData(cls, fmt) {
+  const filtered = cls === 'all' ? lines : lines.filter(l => l.classification === cls);
+  if (!filtered.length) { toast(`No ${cls} lines to export`, 3000, true); return; }
+
+  let content, mime, ext;
+  if (fmt === 'json') {
+    content = JSON.stringify(filtered, null, 2);
+    mime = 'application/json'; ext = 'json';
+  } else {
+    const rows = [['date','description','amount','source','classification','category','bank_category','raw']];
+    filtered.forEach(l => rows.push([l.date, l.description, l.amount, l.source, l.classification, l.category||'', l.bank_category||'', l.raw||'']));
+    content = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    mime = 'text/csv'; ext = 'csv';
+  }
+
+  const filename = `${cls}_statements.${ext}`;
+  const blob = new Blob([content], { type: mime });
+
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{ description: ext.toUpperCase(), accept: { [mime]: ['.'+ext] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      toast('Saved ' + handle.name);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body></html>
