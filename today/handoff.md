@@ -1,55 +1,44 @@
-# Handoff — 2026-08-01 (Session 2, updated post-deploy)
+# Handoff — 2026-08-01 (Session 3)
 
 ## Where We Left Off
-Built and deployed full WebClerk ecosystem to webclerk.com:
-
-- **webclerk.com/sort** — Statement Sorter, Athena-signed, live
-- **webclerk.com/app/** — Full React app (DataBrowser, Gantt, all WC3), live with commerce_expert data (9,412 contacts)
-- **webclerk.com/wcapi/** — Django API, live, requires auth
-- **webclerk.com/admin/** — Django admin, live
-
-Also built and deployed Athena integrity verification system:
-- `athena_sign` management command on Andi — signs files, manages manifest
-- `task_athena_verify` Celery task — runs every 4 hours, hashes all checkpoints
-- Document ida='athena-manifest' — 5 checkpoints signed and verified
-- Immediate FAULT files on integrity failure
-
-Key fixes during deploy:
-- `SECURE_PROXY_SSL_HEADER` added (Cloudflare terminates SSL, Nginx forwards HTTP)
-- `X-Forwarded-Proto: https` forced in Nginx (Cloudflare→Nginx is HTTP)
-- `/assets/` aliased to React dist (was pointing to landing page)
-- Permissions fixed on `/opt/andi/apps/react2025/dist/`
-- Database: `commerce_expert` pg_dump'd from Mac, restored on Andi, `webclerk` user granted access
+TransactionDetail.tsx is rendering at `/td/order/34` — JSON-driven, three-column header (Customer | Ship To | Order), line card with L/S/XR/M toolbar, 8 tabs. Line card has WC2 column order with compact labels (c, remain, pl, %, disc price), alternating row shading, selection-aware footer, red backlog highlighting. ShoppingCart.tsx built at `/cart`. `dt_needed` field added to TransactionBaseModel and migrated. Bill is napping — everything pushed to persistence.
 
 ## Do This First Next Session
-1. **Verify webclerk.com/sort is publicly accessible** — check through Cloudflare (may need a CF rule or DNS check if not already proxying /sort)
-2. **Set up git repo** — Bill said he'd create one; push index.html, readme.md, sign.py
-3. **Light/dark mode** — CSS custom properties theme system, reusable across WC list views
-4. **Draggable column ORDER** — not just width; save order to localStorage prefs
-5. **Description search filter** — text input to narrow by description substring
-6. **Extract db.list standard** — pull selection/A+-/resize/column-order patterns into documentation or shared module
+1. **Fix `useDetailLayout` query** — Setting #480 isn't loading; falls back to default layout. Debug `getRecords('setting', {parent_model: 'order', purpose: 'detail_layout'})`. Check console for `[useDetailLayout]` logs.
+2. **Fix transaction save 500** — `Pending` model missing `data` field in `line_item_service.py:1073`. Blocks saving orders from UI.
+3. **Format epoch dates** — `dt_created` shows as raw epoch ms. Need date formatter in HeaderRenderer.
+4. **Customer FK display** — shows `5498` instead of company name. Resolve FK to display name.
+5. **Wire ShoppingCart** — `/cart` renders empty state. Needs cart context/state management.
 
 ## Open Problems
-- CSP hash in Nginx must be updated whenever the script changes — needs automation (sign.py could ssh and update)
-- `showSaveFilePicker` only works in Chrome/Edge — Firefox users get fallback download (no location picker)
-- Confidence algorithm is basic — could improve with token overlap scoring
-- Custom categories typed in "or type..." (removed this session) had no way to assign business/personal — the field was removed but the concept needs a solution if users want truly custom categories
+- Transaction save 500 — `Pending.objects.create(data=...)` fails. Pre-existing bug.
+- Layout cache doesn't clear on Setting update — needs hard refresh.
+- Duplicate BB401_clone line on order 34 — data issue from SQL seeding.
+- `/td/` route in public routes for debugging — move inside PrivateRoute when stable.
 
 ## What Was Decided (and Why)
-- **No checkboxes — row is the selection target** — click/shift/cmd standard for all WC list views. Documented at `webClerk3/readmes/topics/ui/list-selection-standard.md`
-- **Category implies classification** — picking a category from Business or Personal group auto-sets the classification. Less is more. One action does two things.
-- **Decision columns in the center** — date → recommended → conf → category → class → amount → source → description → bank_cat. Left-justified description pushed to the right so decision columns stay centered on screen.
-- **Tools above where they are applied** — toolbar row ordering matches data column positions below. Accept Recommendations above recommended column.
-- **Always start clean** — no localStorage auto-load. Public users must not see someone else's data (there is no "someone else's data" — it's all client-side, but the UX should reinforce that).
-- **Merchant memory via rules.json** — users save learned classifications between years. This is the upgrade path to WebClerk: free tool learns → full platform (Alice) learns automatically.
-- **Athena integrity check** — dual layer: script self-hash + Nginx CSP header. If the file is tampered, the page refuses to function.
-- **db.list standard behaviors** — Bill: "all our list efforts should default to db.list A+- behaviors." Row selection, A+-, draggable column widths, column reorder, tools above data, category-drives-classification, localStorage prefs.
+- **`lineKey`: id → line_number → idx** — line_number can duplicate; id is unique.
+- **Compact line labels** — c, remain, pl, %, disc price. Bill requested violation of field-name-as-label rule for line cards.
+- **`_expand` removed** — notes in LineDetailsModal, not inline. `hideToolbar` on line card DataGrid.
+- **Three-column header** — `layout: 'three-column'` with Customer | Ship To | Order. Dot-notation for JSON sub-fields.
+- **`dt_needed` BigIntegerField** — UTC epoch ms (Axiom 14). On TransactionBaseModel, all types.
+- **QQ separate window** — not a panel. Own plan needed.
+- **Post item ida** — cross-transaction action posts references, not prices. Target applies own defaults.
+- **Alice STEM shopping** — dedicated session. DFRobot, Ozobot sourcing.
 
 ## Files Changed This Session
-- `sites/statement_sorter/index.html` — Complete rebuild: toast messages, folder drop, row selection, grouped categories, merchant learning, recommendations, A+-, column resize, Athena integrity
-- `sites/statement_sorter/readme.md` — Folder organization guide for users
-- `sites/statement_sorter/sign.py` — Athena signing script
-- `webClerk3/readmes/topics/ui/list-selection-standard.md` — WC list selection standard
-- `readmes/retrospections/2026-08-01.md` — Appended Session 2 retrospection
-- Andi: `/var/www/webclerk-static/sort/index.html` — deployed
-- Andi: `/etc/nginx/sites-enabled/webclerk3` — added /sort location + CSP header
+- `webClerk3/apps/transactions/models/base_line_model.py` — `is_complete` in quantity envelope
+- `webClerk3/apps/transactions/models/base_transaction_model.py` — `dt_needed` field
+- `webClerk3/apps/transactions/migrations/0024_add_dt_needed.py` — Migration
+- `webClerk3/apps/core/choices.py` — `line_card_fields` Setting purpose
+- `webClerk3/apps/products/views/item_inventory_views.py` — Bulk inventory endpoint
+- `webClerk3/apps/products/urls.py` — Wired endpoint
+- `webClerk3/apps/core/management/commands/seed_detail_layouts.py` — Seed command
+- `React2025/src/apps/transactions/components/LinesCard.tsx` — Full refactor
+- `React2025/src/apps/transactions/components/TransactionDetail.tsx` — JSON-driven renderer
+- `React2025/src/apps/transactions/components/ShoppingCart.tsx` — Customer cart
+- `React2025/src/apps/transactions/components/panels/*.tsx` — 4 panels
+- `React2025/src/hooks/useDetailLayout.ts` — Layout Setting hook
+- `React2025/src/apps/transactions/utils/lineHelpers.ts` — lineKey fix
+- `React2025/src/components/common/DataGrid.tsx` — Alternating row shading
+- `React2025/src/routes/Router.tsx` — `/td/` and `/cart` routes
