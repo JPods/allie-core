@@ -1,38 +1,39 @@
-# Handoff — 2026-08-01
+# Handoff — 2026-08-01 (Session 2)
 
 ## Where We Left Off
-Built the line card common behavior baseline for WC3 Big5 transaction lines. Backend: `is_complete` in quantity envelope (cancels backlog), `line_card_fields` Setting purpose, bulk inventory endpoint. Frontend: LinesCard.tsx refactored with WC2 column order (Item→Qty→BLQ→x→Desc→P→Price→Disc→DiscPrice→Ext), red backlog highlighting, selection-aware footer (Lns/Items/Lbs + Amount/Backlog), left toolbar (L/S/XR/M), four show/hide panels (Inventory, Spec, XRef, Margin). Also wrote the detail.json architecture plan to replace all 9 transaction detail .tsx files with a single JSON-driven renderer.
+Built and deployed Statement Sorter to webclerk.com/sort — a free, 100% client-side bank statement classification tool. Single HTML file, no server, no uploads. Serves as the db.list reference implementation and top-of-funnel for WebClerk.
+
+Deployed to Andi (IT15) at `/var/www/webclerk-static/sort/`. Nginx serves at `/sort` with CSP header for script integrity. Athena self-verification hash embedded.
 
 ## Do This First Next Session
-1. **Seed `line_card_fields` Settings** — one per line model (order_line, invoice_line, etc.) with locked_columns, approved_optional, footer_totals. File: management command or migration in webClerk3.
-2. **Build `TransactionDetail.tsx`** — the single JSON-driven detail renderer per `~/.claude/plans/detail-json-architecture.md`. Start with Order as first model, then generalize.
-3. **Test the line card** — open an Order detail, verify columns render in WC2 order, backlog highlighting works, panels open/close, selection-aware footer recalculates.
-4. **Extract tab components** — pull SummaryTab, PaymentsTab, ActionsTab, etc. from existing detail .tsx files into `src/apps/transactions/components/tabs/`.
-5. **Post Item IDA handler** — shared action for all `post_to_*` flows (order→PO, invoice→proposal, etc.). This is the core cross-transaction workflow.
+1. **Verify webclerk.com/sort is publicly accessible** — check through Cloudflare (may need a CF rule or DNS check if not already proxying /sort)
+2. **Set up git repo** — Bill said he'd create one; push index.html, readme.md, sign.py
+3. **Light/dark mode** — CSS custom properties theme system, reusable across WC list views
+4. **Draggable column ORDER** — not just width; save order to localStorage prefs
+5. **Description search filter** — text input to narrow by description substring
+6. **Extract db.list standard** — pull selection/A+-/resize/column-order patterns into documentation or shared module
 
 ## Open Problems
-- DataGrid needs `disableReorder` and `disableAddColumn` props to enforce column lockdown (Step 12 in line card plan)
-- Bulk inventory endpoint (`/api/products/items/inventory/`) untested — Item model has no dedicated `lead_time` field, reading from `config.lead_time` which may not be populated
-- QuickQuote needs its own plan — separate window/process, push/pull between any transaction type
-- Create PO from Order needs its own plan — vendor grouping, quantity transfer
+- CSP hash in Nginx must be updated whenever the script changes — needs automation (sign.py could ssh and update)
+- `showSaveFilePicker` only works in Chrome/Edge — Firefox users get fallback download (no location picker)
+- Confidence algorithm is basic — could improve with token overlap scoring
+- Custom categories typed in "or type..." (removed this session) had no way to assign business/personal — the field was removed but the concept needs a solution if users want truly custom categories
 
 ## What Was Decided (and Why)
-- **Lines are a verb, not a noun** — column count and order locked to serve the task. Users get max 2 optional columns from an approved list. Without this constraint, users build spreadsheets instead of entering orders.
-- **QQ is a separate window, not a panel** — QuickQuote persists across transaction windows as a clipboard. Any transaction can push/pull. Not bound to one line card.
-- **"Post item ida" is the cross-transaction action** — you post item references, not prices or costs. Target transaction applies its own pricing/costing defaults. Override checkbox available but off by default.
-- **Abandon detail .tsx in favor of detail.json** — 9 detail pages are 95% identical. One renderer + layout JSON per model eliminates the duplication. Same principle as db.list replacing custom list pages.
-- **Shipping tab is invoice-only** — carrier shipments stored in `metadata.shipping[{carrier, shipment_id, mass, ...}]`. Purchases have receipts (separate model), not shipping entries.
-- **No T (text import) panel in line card** — deferred; not part of current scope.
+- **No checkboxes — row is the selection target** — click/shift/cmd standard for all WC list views. Documented at `webClerk3/readmes/topics/ui/list-selection-standard.md`
+- **Category implies classification** — picking a category from Business or Personal group auto-sets the classification. Less is more. One action does two things.
+- **Decision columns in the center** — date → recommended → conf → category → class → amount → source → description → bank_cat. Left-justified description pushed to the right so decision columns stay centered on screen.
+- **Tools above where they are applied** — toolbar row ordering matches data column positions below. Accept Recommendations above recommended column.
+- **Always start clean** — no localStorage auto-load. Public users must not see someone else's data (there is no "someone else's data" — it's all client-side, but the UX should reinforce that).
+- **Merchant memory via rules.json** — users save learned classifications between years. This is the upgrade path to WebClerk: free tool learns → full platform (Alice) learns automatically.
+- **Athena integrity check** — dual layer: script self-hash + Nginx CSP header. If the file is tampered, the page refuses to function.
+- **db.list standard behaviors** — Bill: "all our list efforts should default to db.list A+- behaviors." Row selection, A+-, draggable column widths, column reorder, tools above data, category-drives-classification, localStorage prefs.
 
 ## Files Changed This Session
-- `webClerk3/apps/transactions/models/base_line_model.py` — Added `is_complete` to quantity envelope; cancels backlog when true
-- `webClerk3/apps/core/choices.py` — Added `line_card_fields` to SETTING_PURPOSE_CHOICES
-- `webClerk3/apps/products/views/item_inventory_views.py` — New: bulk inventory endpoint for line card L button
-- `webClerk3/apps/products/urls.py` — Wired bulk inventory endpoint
-- `React2025/src/apps/transactions/components/LinesCard.tsx` — Major refactor: WC2 columns, panels, toolbar, selection-aware footer, backlog highlighting
-- `React2025/src/apps/transactions/components/panels/InventoryPanel.tsx` — New: inventory peek panel (L button)
-- `React2025/src/apps/transactions/components/panels/MarginPanel.tsx` — New: margin view with selection-aware totals
-- `React2025/src/apps/transactions/components/panels/SpecPanel.tsx` — New: item specification panel (S button)
-- `React2025/src/apps/transactions/components/panels/XRefPanel.tsx` — New: cross-reference panel (XRef button)
-- `~/.claude/plans/tender-beaming-bachman.md` — Line card plan (approved, partially implemented)
-- `~/.claude/plans/detail-json-architecture.md` — detail.json architecture plan (written, not yet approved)
+- `sites/statement_sorter/index.html` — Complete rebuild: toast messages, folder drop, row selection, grouped categories, merchant learning, recommendations, A+-, column resize, Athena integrity
+- `sites/statement_sorter/readme.md` — Folder organization guide for users
+- `sites/statement_sorter/sign.py` — Athena signing script
+- `webClerk3/readmes/topics/ui/list-selection-standard.md` — WC list selection standard
+- `readmes/retrospections/2026-08-01.md` — Appended Session 2 retrospection
+- Andi: `/var/www/webclerk-static/sort/index.html` — deployed
+- Andi: `/etc/nginx/sites-enabled/webclerk3` — added /sort location + CSP header
