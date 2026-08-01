@@ -1,6 +1,8 @@
 # Memory Index
 
 - [Statement Sorter standalone](project_statement_sorter_standalone.md) — Free tool: Python + HTML; sort statements; lead gen for WebClerk
+- [WebClerk.com live deployment](project_webclerk_live.md) — Full stack on Andi via CF; /sort /app/ /wcapi/ /admin/; commerce_expert DB
+- [Athena integrity system](reference_athena_integrity.md) — Self-defense: sign files, verify every 4hrs, FAULT on tampering; athena_sign command
 - [StatementHarvester JSON architecture](project_statement_harvester.md) — CSV→JSON→classify→promote; personal never in psql; UUID per line
 - [Payment checkbook architecture](project_payment_checkbook.md) — Signed amounts, received/expense, category→GL, method CharField, dashboard buttons
 - [Prefs/metadata/refs architecture](reference_prefs_architecture.md) — Three-tier Settings, JSON envelope policy, Pydantic schemas, schema_map Setting
