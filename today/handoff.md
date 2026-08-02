@@ -1,59 +1,56 @@
-# Handoff — 2026-08-02 (Session 2)
+# Handoff — 2026-08-02 (Final)
 
 ## Where We Left Off
-Massive session: Statement Sorter upgrades deployed to webclerk.com/sort (sticky headers, light/dark theme, best-effort CSV parser, PDF prompt, folder drops, file log). Then shifted to wc3/r25 — built the JSON-driven order form end to end. TransactionDetail renders from layout Setting JSON. Company bootstrap endpoint (`/wcapi/bootstrap/`) serves currency, order defaults, price levels, behavior — loaded once at login, versioned. Customer keyword search working with comma-AND, pipe-OR fragments. Currency precision driven from company prefs (unit_price 2dp, unit_cost 5dp). Print view renders standalone HTML in new window. Save was broken by audit_log null user_agent — fixed. Pending model `data=` → `config=` fixed. Both repos pushed to `bill_dev`.
+Four transaction types rendering from the same components: order, proposal, invoice, purchase. TransactionDetail.tsx refactored from 1557 lines into 8 single-purpose files in `detail/`. Each model has a `detail_layout` Setting that drives rendering — no code changes per model. Purchase uses `exec` family (cost columns instead of price). Print view works as standalone HTML window. Customer keyword search with comma-AND, pipe-OR fragments. Currency precision from company bootstrap. Save works after fixing Pending `data→config` (3 files: ledger_balance, bill_of_material, financial_maintenance) and audit log null user_agent. All pushed to `bill_dev` on both repos. Also drafted Anthropic energy one-pager at `today/anthropic-energy-one-pager.md`.
 
 ## Do This First Next Session
-1. **Scrub r25/wc3 dead code** — old OrderDetail, InvoiceDetail, etc. .tsx files are replaced by TransactionDetail. Remove them and their imports from protectedRoutesConfig. Also clean unused imports from TransactionDetail.tsx.
-2. **Apply order layout to proposal, invoice, purchase, requisition** — create detail_layout Settings for each model. Same three-column header pattern, adjust field names (vendor vs customer for purchase). The renderer is model-agnostic — it reads the layout JSON.
-3. **Test save on all transaction types** — order save works now. Test invoice, proposal, purchase. Each may have model-specific fields that need stripping in wcapi.ts.
-4. **Wire select lists for Terms, Type Sale, Status, Price Level** — these show as text inputs. Add `options` arrays to the layout JSON fields, same pattern as ShipVia and Conditions.
-5. **Report framework action** — print works as standalone HTML window. Next step: Report model query for the dropdown, multiple output formats (print, email, label, clone).
+1. **Add item to line card** — item search (keyword fragments like customer search), adds line with item pricing from price matrix. This is the primary workflow gap.
+2. **Transaction flow** — order → invoice, order → PO. The "Order ▾" menu actions that create child documents with line transfer.
+3. **Print template model-aware** — read column titles and sell/exec family from layout JSON instead of hardcoded order labels. Purchase prints "Customer" instead of "Vendor".
+4. **Select lists for Terms, Status, Price Level** — add `options` arrays to layout JSON fields. Currently render as text inputs.
+5. **Scrub dead .tsx files** — OrderDetail, InvoiceDetail, ProposalDetail, PurchaseDetail pages are replaced by TransactionDetail. Remove from `protectedRoutesConfig` imports.
 
 ## Open Problems
-- `useDefaultCompany` retries on 401 in a loop before redirect fires — needs a max-retry or auth-check guard.
-- Statement Sorter folder drop only works on https (webclerk.com), not file:// — browser security restriction, not fixable.
-- Bootstrap endpoint returns `schema_map` purpose Setting which isn't in the purpose choices — save fails on that Setting. Added to choices but migration may be needed.
-- Print view doesn't include logo image (path is in bootstrap but img tag references `/images/logo/webclerk.png` which won't resolve in the popup window without a base URL).
-- Bulk edit via Shift+click on DataGrid headers — wired but needs testing with actual price/qty changes and save verification.
+- Purchase print shows "Customer" and "Order" headers instead of "Vendor" and "Purchase" — print template is hardcoded to order layout
+- Purchase line extended shows $0.00 — print reads `price.extended` not `cost.extended` for exec family
+- `useDefaultCompany` retries on 401 in a loop — needs max-retry guard
+- Invoice #68 ida is INV-101 but id is 68 — ida sequence diverged from id sequence
+- Proposal/invoice customer fields empty on initial load when record has customer_id but no denormalized company/phone/attention — need to pull from customer on fetch
+- Bulk edit header click needs more edge case testing
+- `schema_map` purpose not in SETTING_PURPOSE_CHOICES — may need migration
 
 ## What Was Decided (and Why)
-- **UUID never sent to React** — sync-only field. Stripped from save payload. Backend strips from GET response (future). Documented in `wc3/readmes/topics/architecture/uuid-policy.md`.
-- **Currency precision in company Setting, not code** — `prefs.currency` on Setting #438. React reads via bootstrap. Change precision without code changes.
-- **Keyword search uses icontains on JSON arrays** — PostgreSQL `istartswith` doesn't work on individual array elements. `icontains` is safe because keywords are individual tokens.
-- **Conditions stored as pointer** `name|id|version` in `conditions_description` — no redundant text on every order. Text resolved at print time from Setting by id+version. User pref chooses pointer vs embed.
-- **Label conventions** — blue=select, green=action, bold=search, italic=readonly/calculated. Shift+hover=help. Stored in company `prefs.layout.label_styles`, user override in contact prefs.
-- **Print is a separate renderer** — not CSS @media print. Layout JSON + record data → standalone HTML window. Fighting React's DOM tree with print CSS doesn't work.
-- **Auto-edit pref** at `user.prefs.layout.detail.auto_edit` — loads at login only, not refreshed mid-session.
+- **`modelName` passed as explicit prop** from Router and protectedRoutesConfig — URL params don't carry model name for `/:model/:id` routes. The prop is authoritative.
+- **8 single-purpose component files** in `detail/` — HeaderRenderer, LineCardRenderer, TabsRenderer, FieldRow, CustomerSearch, TransactionToolbar, TransactionPrint, index.ts. Each does one thing. Orchestrator is 317 lines.
+- **Pending `data` field renamed to `config`** — 5 files total fixed (transaction_save x2, keywords, ledger_balance, bill_of_material, financial_maintenance). CoreModel has `config`, not `data`.
+- **Purchase layout uses `exec` family** — shows unit_cost column instead of unit_price/disc_price. Same LineCardRenderer, different column set driven by `family` field in layout JSON.
+- **Conditions stored as pointer** `name|id|version` — no redundant text. Resolved at print time.
 
 ## Files Changed This Session
-**React2025** (106 files, key changes):
-- `src/routes/Router.tsx` — added /kanban, /gantt, /signin routes; lazy-loaded KanbanBoardPage, UnifiedGanttPage
-- `src/routes/PrivateRoute.tsx` — bootstrap fetch on auth, /kanban title
-- `src/store/slices/companySlice.ts` — NEW: Redux slice for company bootstrap data
-- `src/store/index.ts` — added company reducer
-- `src/api/auth.ts` — added prefs to mapApiProfileToUser
-- `src/api/wcapi.ts` — uuid/metadata/refs/prefs stripped from save payload, line stripping
-- `src/apps/transactions/components/TransactionDetail.tsx` — Edit/Add/Save, customer search, auto-edit, print view, bulk edit, label styles, conditions, FieldRow with options/help/fieldType
-- `src/hooks/useLineCard.ts` — currency precision from company state, bulkEditable flags, bulk edit apply
-- `src/components/common/DataGrid.tsx` — currency/number formatting with precision, calculated italic, header bulk edit, uniform row selection, Tab/Enter cell navigation
+**React2025** (key changes):
+- `src/apps/transactions/components/TransactionDetail.tsx` — 317-line orchestrator (was 1557)
+- `src/apps/transactions/components/detail/` — 8 new files (FieldRow, HeaderRenderer, LineCardRenderer, TabsRenderer, TransactionToolbar, TransactionPrint, CustomerSearch, index.ts, README.md)
+- `src/routes/Router.tsx` — modelName prop on MODELS routes, /kanban, /gantt, /signin
+- `src/routes/protectedRoutesConfig.tsx` — modelName prop on all transaction detail routes
+- `src/store/slices/companySlice.ts` — NEW: bootstrap Redux slice
+- `src/api/wcapi.ts` — uuid/metadata/refs stripped from save, line stripping
+- `src/api/auth.ts` — prefs in mapApiProfileToUser
+- `src/hooks/useLineCard.ts` — currency precision, bulk edit
+- `src/components/common/DataGrid.tsx` — formatting, italic calculated, header bulk edit, selection
 - `src/layout/AppSidebar.tsx` — /kanban path
-- `readmes/topics/currency-precision.md` — NEW: currency precision architecture
 
-**webClerk3** (136 files, key changes):
-- `apps/core/views/bootstrap_view.py` — NEW: /wcapi/bootstrap/ endpoint
-- `apps/core/urls.py` — bootstrap route
-- `apps/core/choices.py` — conditions_sales, conditions_purchase purposes
-- `apps/core/constants/keyword_requirements.py` — purpose='keywords' (was refs_setup)
-- `apps/core/services/keywords.py` — phone normalization, FK fallback, max_related cap, dict ID extraction
-- `apps/core/models/audit.py` — null user_agent/ip_address/id_session fix
-- `apps/transactions/services/transaction_save.py` — Pending data→config
-- `apps/transactions/views/wcapi.py` — traceback in 500 response
-- `common/search_utils.py` — pipe OR syntax, istartswith→icontains for keywords
-- `readmes/topics/architecture/uuid-policy.md` — NEW: uuid is sync-only
+**webClerk3** (key changes):
+- `apps/core/views/bootstrap_view.py` — NEW: /wcapi/bootstrap/
+- `apps/core/models/audit.py` — null fix for user_agent/ip_address/id_session
+- `apps/core/services/keywords.py` — phone normalization, FK fallback, data→config
+- `apps/core/choices.py` — conditions_sales/purchase purposes
+- `apps/transactions/services/transaction_save.py` — data→config
+- `apps/accounts/services/ledger_balance.py` — data→config
+- `apps/products/models/bill_of_material.py` — data→config
+- `apps/orgs/services/financial_maintenance.py` — data→config
+- `common/search_utils.py` — pipe OR, icontains for keywords
+- Settings created in DB: detail_layout for order/proposal/invoice/purchase, keyword configs x16, conditions x5, schema_map, bootstrap company prefs
 
-**Statement Sorter** (`sites/statement_sorter/index.html`):
-- Sticky headers, light/dark theme, best-effort CSV parser, PDF prompt dialog, file log, folder drops, headerless CSV detection, Athena re-signed
+**Statement Sorter**: sticky headers, theme, CSV parser, PDF prompt, file log, folder drops — deployed to webclerk.com/sort
 
-**Allie**:
-- `sites/statement_sorter/index.html` — deployed to webclerk.com/sort
+**Allie**: `today/anthropic-energy-one-pager.md` — distributed solar for AI compute pitch
