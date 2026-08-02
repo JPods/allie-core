@@ -1,46 +1,59 @@
-# Handoff — 2026-08-02
+# Handoff — 2026-08-02 (Session 2)
 
 ## Where We Left Off
-Massive session spanning Statement Sorter, Athena security, and webclerk.com deployment. Statement Sorter is live at `webclerk.com/sort` — free client-side bank statement classifier with merchant learning, recommendation engine, grouped categories, row-click selection, A+- font sizing, draggable column widths. Full WC3 stack deployed to Andi with `commerce_expert` database (9,412 contacts). Athena integrity system running — 5 checkpoints verified every 4 hours via Celery. Built `liferequiresenergy.com` site (fork choice layout, presidential quotes, energy cliff/peak oil images, Edison quotes). All five webclerk.com routes stable after fixing `/opt/andi` permissions with immutable flag.
+Massive session: Statement Sorter upgrades deployed to webclerk.com/sort (sticky headers, light/dark theme, best-effort CSV parser, PDF prompt, folder drops, file log). Then shifted to wc3/r25 — built the JSON-driven order form end to end. TransactionDetail renders from layout Setting JSON. Company bootstrap endpoint (`/wcapi/bootstrap/`) serves currency, order defaults, price levels, behavior — loaded once at login, versioned. Customer keyword search working with comma-AND, pipe-OR fragments. Currency precision driven from company prefs (unit_price 2dp, unit_cost 5dp). Print view renders standalone HTML in new window. Save was broken by audit_log null user_agent — fixed. Pending model `data=` → `config=` fixed. Both repos pushed to `bill_dev`.
 
 ## Do This First Next Session
-1. **Set up Hostinger for liferequiresenergy.com** — git repo at `github.com/JPods/liferequiresenergy` is ready; point domain and deploy.
-2. **Light/dark theme for Statement Sorter** — CSS custom properties system, reusable across all WC list views. This becomes the db.list theme standard.
-3. **Draggable column ORDER** — not just width; users reorder columns by dragging headers. Save to localStorage prefs.
-4. **Fix TransactionDetail issues** — Setting #480 not loading, transaction save 500 (`Pending` model missing `data` field), epoch date formatting, customer FK display. These were open before this session.
-5. **Write Athena self-defense readme** — `readmes/athena-self-defense.md`. Every node defends itself. Reporting: batch for defended, immediate for uncertain.
+1. **Scrub r25/wc3 dead code** — old OrderDetail, InvoiceDetail, etc. .tsx files are replaced by TransactionDetail. Remove them and their imports from protectedRoutesConfig. Also clean unused imports from TransactionDetail.tsx.
+2. **Apply order layout to proposal, invoice, purchase, requisition** — create detail_layout Settings for each model. Same three-column header pattern, adjust field names (vendor vs customer for purchase). The renderer is model-agnostic — it reads the layout JSON.
+3. **Test save on all transaction types** — order save works now. Test invoice, proposal, purchase. Each may have model-specific fields that need stripping in wcapi.ts.
+4. **Wire select lists for Terms, Type Sale, Status, Price Level** — these show as text inputs. Add `options` arrays to the layout JSON fields, same pattern as ShipVia and Conditions.
+5. **Report framework action** — print works as standalone HTML window. Next step: Report model query for the dropdown, multiple output formats (print, email, label, clone).
 
 ## Open Problems
-- `/opt/andi` permissions were cycling to 700 — fixed with `chattr +i` (immutable flag). If anyone needs to modify `/opt/andi` itself: `sudo chattr -i /opt/andi` first.
-- Statement Sorter `showSaveFilePicker` only works in Chrome/Edge — Firefox users get fallback download (no location picker).
-- CSP hash in Nginx for Statement Sorter must be updated manually when script changes — `sign.py` handles the self-check hash but Nginx CSP hash is separate.
-- Landing page source lives ONLY at `/Volumes/Allie/webclerk.net/` — not in git. Should be added to a repo.
-- React app base path: assets served via Nginx split (`/assets/css/` → landing, `/assets/` → React). Works but fragile. Proper fix: rebuild React with `VITE_BASE_PATH=/app/`.
+- `useDefaultCompany` retries on 401 in a loop before redirect fires — needs a max-retry or auth-check guard.
+- Statement Sorter folder drop only works on https (webclerk.com), not file:// — browser security restriction, not fixable.
+- Bootstrap endpoint returns `schema_map` purpose Setting which isn't in the purpose choices — save fails on that Setting. Added to choices but migration may be needed.
+- Print view doesn't include logo image (path is in bootstrap but img tag references `/images/logo/webclerk.png` which won't resolve in the popup window without a base URL).
+- Bulk edit via Shift+click on DataGrid headers — wired but needs testing with actual price/qty changes and save verification.
 
 ## What Was Decided (and Why)
-- **No checkboxes in list views** — row is the selection target (click/shift/cmd). Documented as WC standard at `webClerk3/readmes/topics/ui/list-selection-standard.md`. Bill: "avoid selecting lists by clicking a tiny checkbox."
-- **Category implies classification** — picking a Business or Personal category auto-sets the classification. One action, two fields. Less is more.
-- **Decision columns centered, description right** — left-justified description pushes action columns far away. Put date→recommended→category→class→amount first, description after. Center of screen is where the action is.
-- **Tools above where they are applied** — toolbar row order matches data column positions below.
-- **Never rsync --delete to Andi** — destroyed landing page that only existed on remote. Recovered from 5TB. Scar documented in readmes/67.
-- **Athena inside Alice for now** — Celery task, Alice's database. Separation to own processor is a hardware decision, not software. Architecture is ready.
-- **Every node defends itself** — not a central firewall. Browser checks its own script hash. Server checks its own files. Pi checks its own code on boot. Reporting: batch if defended, immediate if uncertain.
-- **db.list standard behaviors** — row selection, A+-, draggable column widths, column reorder, tools above data, user prefs in localStorage. Statement Sorter is the reference implementation.
+- **UUID never sent to React** — sync-only field. Stripped from save payload. Backend strips from GET response (future). Documented in `wc3/readmes/topics/architecture/uuid-policy.md`.
+- **Currency precision in company Setting, not code** — `prefs.currency` on Setting #438. React reads via bootstrap. Change precision without code changes.
+- **Keyword search uses icontains on JSON arrays** — PostgreSQL `istartswith` doesn't work on individual array elements. `icontains` is safe because keywords are individual tokens.
+- **Conditions stored as pointer** `name|id|version` in `conditions_description` — no redundant text on every order. Text resolved at print time from Setting by id+version. User pref chooses pointer vs embed.
+- **Label conventions** — blue=select, green=action, bold=search, italic=readonly/calculated. Shift+hover=help. Stored in company `prefs.layout.label_styles`, user override in contact prefs.
+- **Print is a separate renderer** — not CSS @media print. Layout JSON + record data → standalone HTML window. Fighting React's DOM tree with print CSS doesn't work.
+- **Auto-edit pref** at `user.prefs.layout.detail.auto_edit` — loads at login only, not refreshed mid-session.
 
 ## Files Changed This Session
-- `sites/statement_sorter/index.html` — Complete rebuild: toast, folder drop, row selection, grouped categories, merchant learning, recommendations, A+-, column resize, Athena self-check
-- `sites/statement_sorter/sign.py` — Athena signing script for client-side integrity
-- `sites/statement_sorter/readme.md` — User folder organization guide
-- `sites/liferequiresenergy/index.html` — New site: fork choice, presidents, oil wars, energy cliff, Edison, solar budget
-- `sites/liferequiresenergy/ForkChoice.png` — Fork choice graphic (dark-to-gold gradient)
-- `sites/liferequiresenergy/energy-cliff.jpg` — Energy cliff budget graphic
-- `sites/liferequiresenergy/peak-oil.png` — Peak oil/fracking 2025 graphic
-- `sites/ecosystem/index.html` — Updated nucleus URL to liferequiresenergy.com, hover glow doubled
-- `readmes/67-webclerk-com-deployment.md` — Full deployment guide for Andi/webclerk.com
-- `readmes/retrospections/2026-08-01.md` — Session 2 retrospection appended
-- `webClerk3/apps/support/scheduler/tasks.py` — Added `task_athena_verify` Celery task
-- `webClerk3/apps/docs/management/commands/athena_sign.py` — Athena manifest management command
-- `webClerk3/webclerk3_api/settings.py` — Added Athena beat schedule + `SECURE_PROXY_SSL_HEADER`
-- `webClerk3/readmes/topics/ui/list-selection-standard.md` — WC list selection standard
-- Andi: `/etc/nginx/sites-enabled/webclerk3` — Routes for /sort /ecosystem /liferequiresenergy /app/, asset splitting, X-Forwarded-Proto fix
-- Andi: `/etc/tmpfiles.d/andi-perms.conf` + `chattr +i /opt/andi` — Permanent permission fix
+**React2025** (106 files, key changes):
+- `src/routes/Router.tsx` — added /kanban, /gantt, /signin routes; lazy-loaded KanbanBoardPage, UnifiedGanttPage
+- `src/routes/PrivateRoute.tsx` — bootstrap fetch on auth, /kanban title
+- `src/store/slices/companySlice.ts` — NEW: Redux slice for company bootstrap data
+- `src/store/index.ts` — added company reducer
+- `src/api/auth.ts` — added prefs to mapApiProfileToUser
+- `src/api/wcapi.ts` — uuid/metadata/refs/prefs stripped from save payload, line stripping
+- `src/apps/transactions/components/TransactionDetail.tsx` — Edit/Add/Save, customer search, auto-edit, print view, bulk edit, label styles, conditions, FieldRow with options/help/fieldType
+- `src/hooks/useLineCard.ts` — currency precision from company state, bulkEditable flags, bulk edit apply
+- `src/components/common/DataGrid.tsx` — currency/number formatting with precision, calculated italic, header bulk edit, uniform row selection, Tab/Enter cell navigation
+- `src/layout/AppSidebar.tsx` — /kanban path
+- `readmes/topics/currency-precision.md` — NEW: currency precision architecture
+
+**webClerk3** (136 files, key changes):
+- `apps/core/views/bootstrap_view.py` — NEW: /wcapi/bootstrap/ endpoint
+- `apps/core/urls.py` — bootstrap route
+- `apps/core/choices.py` — conditions_sales, conditions_purchase purposes
+- `apps/core/constants/keyword_requirements.py` — purpose='keywords' (was refs_setup)
+- `apps/core/services/keywords.py` — phone normalization, FK fallback, max_related cap, dict ID extraction
+- `apps/core/models/audit.py` — null user_agent/ip_address/id_session fix
+- `apps/transactions/services/transaction_save.py` — Pending data→config
+- `apps/transactions/views/wcapi.py` — traceback in 500 response
+- `common/search_utils.py` — pipe OR syntax, istartswith→icontains for keywords
+- `readmes/topics/architecture/uuid-policy.md` — NEW: uuid is sync-only
+
+**Statement Sorter** (`sites/statement_sorter/index.html`):
+- Sticky headers, light/dark theme, best-effort CSV parser, PDF prompt dialog, file log, folder drops, headerless CSV detection, Athena re-signed
+
+**Allie**:
+- `sites/statement_sorter/index.html` — deployed to webclerk.com/sort
