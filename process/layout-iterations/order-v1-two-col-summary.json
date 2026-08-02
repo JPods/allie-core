@@ -1,0 +1,172 @@
+{
+  "model": "order",
+  "family": "sell",
+  "sections": [
+    {
+      "type": "header",
+      "layout": "three-column",
+      "columns": [
+        {
+          "title": "Customer",
+          "fields": [
+            {
+              "field": "customer",
+              "label": "Customer"
+            },
+            {
+              "field": "phone",
+              "label": "Phone"
+            },
+            {
+              "field": "attention",
+              "label": "Attn"
+            },
+            {
+              "field": "address_full",
+              "label": "Address"
+            },
+            {
+              "field": "email",
+              "label": "Email"
+            }
+          ]
+        },
+        {
+          "title": "Ship To",
+          "fields": [
+            {
+              "field": "config.ship_to.company",
+              "label": "Ship To"
+            },
+            {
+              "field": "config.ship_to.phone",
+              "label": "Phone"
+            },
+            {
+              "field": "config.ship_to.attention",
+              "label": "Attn"
+            },
+            {
+              "field": "config.ship_to.address1",
+              "label": "Address"
+            },
+            {
+              "field": "config.ship_to.city_state_zip",
+              "label": "City/State"
+            },
+            {
+              "field": "ship_via",
+              "label": "ShipVia"
+            }
+          ]
+        },
+        {
+          "title": "Order",
+          "fields": [
+            {
+              "field": "price_level",
+              "label": "Type Sale"
+            },
+            {
+              "field": "terms",
+              "label": "Terms"
+            },
+            {
+              "field": "status",
+              "label": "Status"
+            },
+            {
+              "field": "dt_created",
+              "label": "Date Ord"
+            },
+            {
+              "field": "dt_needed",
+              "label": "Need By"
+            },
+            {
+              "field": "source_name",
+              "label": "Sales"
+            },
+            {
+              "field": "priority",
+              "label": "Priority"
+            }
+          ],
+          "action_summary": true
+        }
+      ]
+    },
+    {
+      "type": "line_card",
+      "family": "sell",
+      "actions": [
+        "post_to_invoice",
+        "post_to_po",
+        "clone"
+      ],
+      "toolbar": [
+        "L",
+        "S",
+        "XR",
+        "M"
+      ]
+    },
+    {
+      "tabs": [
+        {
+          "label": "Summary",
+          "content": "summary"
+        },
+        {
+          "label": "Margins",
+          "content": "margins"
+        },
+        {
+          "label": "Contacts",
+          "content": "contacts"
+        },
+        {
+          "label": "QA",
+          "content": "qa"
+        },
+        {
+          "label": "Actions",
+          "content": "actions"
+        },
+        {
+          "label": "Documents",
+          "content": "documents"
+        },
+        {
+          "label": "Notes",
+          "content": "notes"
+        },
+        {
+          "label": "Related",
+          "content": "related_transactions"
+        }
+      ],
+      "type": "tabs"
+    }
+  ],
+  "edit_rules": {
+    "status_field": "status",
+    "open_statuses": [
+      "",
+      "planned",
+      "open",
+      "draft"
+    ],
+    "pend_statuses": [
+      "journalized",
+      "released",
+      "shipped",
+      "invoiced"
+    ],
+    "closed_statuses": [
+      "completed",
+      "cancelled",
+      "void"
+    ]
+  }
+}

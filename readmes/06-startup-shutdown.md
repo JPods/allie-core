@@ -38,6 +38,32 @@ launchctl unload ~/Library/LaunchAgents/com.allie.watcher.plist
 launchctl load   ~/Library/LaunchAgents/com.allie.watcher.plist
 ```
 
+### Quick Health Check
+
+Run these to verify everything is up:
+
+```bash
+# Allie API
+curl -s localhost:5001/health
+# Expected: {"status": "ok", ...}
+
+# Ollama models
+curl -s localhost:11434/api/tags | python3 -c "import sys,json; [print(f'  {m[\"name\"]}') for m in json.load(sys.stdin).get('models',[])]"
+# Expected: allie:latest, gpt-oss:20b, etc.
+
+# Alice (inside WC3 — Django must be running)
+# Open http://localhost:5173/alice-dashboard in browser
+
+# Django backend
+curl -s localhost:5173/wcapi/me/ | head -1
+# Expected: {"status": "success", ...}
+
+# Which processes are running
+lsof -i :5001   # Allie API
+lsof -i :11434  # Ollama
+lsof -i :5173   # Vite (React)
+```
+
 ### Step 2: Orient (Allie does this automatically on first message)
 
 1. Read `allie/carryon/carryon.json` — restore context, note elapsed time

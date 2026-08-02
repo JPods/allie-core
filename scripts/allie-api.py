@@ -320,16 +320,94 @@ class AllieAPIHandler(BaseHTTPRequestHandler):
 
 # ── Server ────────────────────────────────────────────────────────────────────
 
+def rightshoe():
+    """Graceful shutdown — save state before stopping.
+    The counterpart to leftshoe (startup handshake).
+    Runs automatically on SIGTERM or manual shutdown.
+    """
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    print(f"\n[allie-api] rightshoe — saving state at {ts}")
+
+    shutdown_record = {
+        "event": "rightshoe",
+        "ts": ts,
+        "source": "allie-api",
+        "message": "Graceful shutdown — state saved",
+    }
+
+    # 1. Write shutdown marker to agent log
+    try:
+        with open(LOG_PATH, "a") as f:
+            f.write(json.dumps(shutdown_record) + "\n")
+        print("[allie-api] rightshoe: agent_log written")
+    except Exception as e:
+        print(f"[allie-api] rightshoe: agent_log failed: {e}")
+
+    # 2. Flush any pending captures to inbox
+    inbox = ALLIE / "process" / "inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
+    ts_file = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S')
+    shutdown_path = inbox / f"{ts_file}-shutdown.md"
+    try:
+        shutdown_path.write_text(
+            f"# SHUTDOWN — {ts}\n\n"
+            f"system:      ALLIE\n"
+            f"detected_by: allie-api\n"
+            f"event:       graceful shutdown (rightshoe)\n"
+            f"context:     signal received, state saved\n"
+        )
+        print(f"[allie-api] rightshoe: shutdown marker at {shutdown_path.name}")
+    except Exception as e:
+        print(f"[allie-api] rightshoe: shutdown marker failed: {e}")
+
+    # 3. Fire allie-capture if available
+    capture = SCRIPTS / "allie-capture.py"
+    if capture.exists():
+        try:
+            subprocess.Popen(
+                [sys.executable, str(capture), '--source', 'ALLIE',
+                 '--event', 'shutdown', '--message', 'rightshoe graceful shutdown'],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+        except Exception:
+            pass
+
+    # 4. Clear the flight log (clean shutdown = lessons captured properly)
+    blackbox = SCRIPTS / "flight-log.py"
+    if blackbox.exists():
+        try:
+            subprocess.run([sys.executable, str(blackbox), 'clear'],
+                          capture_output=True, timeout=5)
+            print("[allie-api] rightshoe: blackbox cleared")
+        except Exception:
+            pass
+
+    print("[allie-api] rightshoe complete. Goodbye.")
+
+
 def run(host: str = "0.0.0.0", port: int = 5001):
+    import signal
+
     server = HTTPServer((host, port), AllieAPIHandler)
     print(f"[allie-api] Listening on {host}:{port}")
     print(f"  Auth keys: {KEYS_PATH}")
     print(f"  No-auth mode: {NO_AUTH}")
     print(f"  Local network URL: http://$(ipconfig getifaddr en0):{port}")
     print(f"  Health: GET http://localhost:{port}/health")
+
+    def handle_shutdown(signum, frame):
+        signame = signal.Signals(signum).name
+        print(f"\n[allie-api] Received {signame}")
+        rightshoe()
+        server.shutdown()
+
+    signal.signal(signal.SIGTERM, handle_shutdown)
+    signal.signal(signal.SIGINT, handle_shutdown)
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:
+        rightshoe()
         print("\n[allie-api] Stopped.")
 
 
