@@ -1,56 +1,44 @@
-# Handoff — 2026-08-02 (Final)
+# Handoff — 2026-08-03
 
 ## Where We Left Off
-Four transaction types rendering from the same components: order, proposal, invoice, purchase. TransactionDetail.tsx refactored from 1557 lines into 8 single-purpose files in `detail/`. Each model has a `detail_layout` Setting that drives rendering — no code changes per model. Purchase uses `exec` family (cost columns instead of price). Print view works as standalone HTML window. Customer keyword search with comma-AND, pipe-OR fragments. Currency precision from company bootstrap. Save works after fixing Pending `data→config` (3 files: ledger_balance, bill_of_material, financial_maintenance) and audit log null user_agent. All pushed to `bill_dev` on both repos. Also drafted Anthropic energy one-pager at `today/anthropic-energy-one-pager.md`.
+AdminWorkbench App/Admin toggle working. Single click on db.list selects a record and renders the JSON-driven detail component (ContactDetailJson, OrgDetailJson, ItemDetailJson) in the right panel. All three components accept `recordId` from AdminWorkbench. OrgDetailJson receives `modelName` from `db.selectedModel`. Screenshot confirmed: Sarah Chen contact #10630 rendering with 3-column header, communications tab, toolbar — all functional. 48,000 lines of monolith detail pages reduced to ~2,000 lines across three orchestrators plus single-purpose component hierarchies.
 
 ## Do This First Next Session
-1. **Add item to line card** — item search (keyword fragments like customer search), adds line with item pricing from price matrix. This is the primary workflow gap.
-2. **Transaction flow** — order → invoice, order → PO. The "Order ▾" menu actions that create child documents with line transfer.
-3. **Print template model-aware** — read column titles and sell/exec family from layout JSON instead of hardcoded order labels. Purchase prints "Customer" instead of "Vendor".
-4. **Select lists for Terms, Status, Price Level** — add `options` arrays to layout JSON fields. Currently render as text inputs.
-5. **Scrub dead .tsx files** — OrderDetail, InvoiceDetail, ProposalDetail, PurchaseDetail pages are replaced by TransactionDetail. Remove from `protectedRoutesConfig` imports.
+1. **Polish RecordToolbar** — tighten button spacing, move Delete into model menu dropdown, replace model name label with gear icon. Minor CSS/layout work.
+2. **Dark mode consistency** — ContactDetailJson renders light inside dark AdminWorkbench. Match the parent theme or inherit from AdminWorkbench context.
+3. **Transaction detail layouts** — seed detail_layout Settings for workorder, receipt, requisition, payment. Same pattern as order/invoice/proposal/purchase.
+4. **Item search on line card** — keyword fragment search (like customer search) to add items to transaction lines with pricing from price matrix. Primary workflow gap.
+5. **Transaction flow** — order → invoice, order → PO posting. Menu actions that create child documents with line transfer.
 
 ## Open Problems
-- Purchase print shows "Customer" and "Order" headers instead of "Vendor" and "Purchase" — print template is hardcoded to order layout
-- Purchase line extended shows $0.00 — print reads `price.extended` not `cost.extended` for exec family
 - `useDefaultCompany` retries on 401 in a loop — needs max-retry guard
-- Invoice #68 ida is INV-101 but id is 68 — ida sequence diverged from id sequence
-- Proposal/invoice customer fields empty on initial load when record has customer_id but no denormalized company/phone/attention — need to pull from customer on fetch
-- Bulk edit header click needs more edge case testing
-- `schema_map` purpose not in SETTING_PURPOSE_CHOICES — may need migration
+- Invoice #68 ida INV-101 — ida sequence diverged from id sequence
+- Proposal/invoice customer fields empty on initial load when customer_id exists but no denormalized company/phone/attention
+- `schema_map` purpose not in SETTING_PURPOSE_CHOICES
+- Alice console capture retry loop on 500 needs disable
+- OrgDetailJson communications tab blank when no `contact_id` — needs empty state
 
 ## What Was Decided (and Why)
-- **`modelName` passed as explicit prop** from Router and protectedRoutesConfig — URL params don't carry model name for `/:model/:id` routes. The prop is authoritative.
-- **8 single-purpose component files** in `detail/` — HeaderRenderer, LineCardRenderer, TabsRenderer, FieldRow, CustomerSearch, TransactionToolbar, TransactionPrint, index.ts. Each does one thing. Orchestrator is 317 lines.
-- **Pending `data` field renamed to `config`** — 5 files total fixed (transaction_save x2, keywords, ledger_balance, bill_of_material, financial_maintenance). CoreModel has `config`, not `data`.
-- **Purchase layout uses `exec` family** — shows unit_cost column instead of unit_price/disc_price. Same LineCardRenderer, different column set driven by `family` field in layout JSON.
-- **Conditions stored as pointer** `name|id|version` — no redundant text. Resolved at print time.
+- **`recordId` as universal prop** — AdminWorkbench passes `recordId` and `modelName` to all detail components. Components also accept their legacy prop names (contactId, itemId) for backward compatibility with Router routes. One interface, two entry points.
+- **Three rendering paths: ui.json, ui.tsx, db.json** — every model assigned to exactly one path. ui.json for standard CRUD with layout Settings. ui.tsx for interaction-heavy views (Kanban, Apply Payments). db.json for admin/config models via DataBrowser.
+- **"Definitions first" principle** — established as team practice. Define name, purpose, boundaries, location, owner before writing code. Prevents architectural drift.
+- **Single-purpose component hierarchies** — CommCard→CommList→CommPanel, BomCard→BomPanel, SerialCard→SerialPanel, ProductListPanel as generic container. Each component does one thing.
 
 ## Files Changed This Session
-**React2025** (key changes):
-- `src/apps/transactions/components/TransactionDetail.tsx` — 317-line orchestrator (was 1557)
-- `src/apps/transactions/components/detail/` — 8 new files (FieldRow, HeaderRenderer, LineCardRenderer, TabsRenderer, TransactionToolbar, TransactionPrint, CustomerSearch, index.ts, README.md)
-- `src/routes/Router.tsx` — modelName prop on MODELS routes, /kanban, /gantt, /signin
-- `src/routes/protectedRoutesConfig.tsx` — modelName prop on all transaction detail routes
-- `src/store/slices/companySlice.ts` — NEW: bootstrap Redux slice
-- `src/api/wcapi.ts` — uuid/metadata/refs stripped from save, line stripping
-- `src/api/auth.ts` — prefs in mapApiProfileToUser
-- `src/hooks/useLineCard.ts` — currency precision, bulk edit
-- `src/components/common/DataGrid.tsx` — formatting, italic calculated, header bulk edit, selection
-- `src/layout/AppSidebar.tsx` — /kanban path
+**React2025:**
+- `src/apps/core/models/contact/pages/ContactDetailJson.tsx` — NEW: replaces 4,114-line ContactDetail.tsx
+- `src/apps/orgs/components/OrgDetail.json.tsx` — NEW: serves 5 org models from one component
+- `src/apps/orgs/components/OrgCard.tsx`, `OrgPanel.tsx`, `index.ts` — NEW: org component hierarchy
+- `src/apps/products/pages/ItemDetailJson.tsx` — NEW: replaces 2,968-line ItemDetail.tsx
+- `src/apps/products/components/` — NEW: BomCard/Panel, SerialCard/Panel, WarehouseCard, VariantCard, XRefCard, SpecCard, ProductListPanel, index.ts
+- `src/apps/communications/components/` — NEW: CommCard, CommList, CommPanel, index.ts
+- `src/components/common/RecordToolbar.tsx` — NEW: universal toolbar for all ui.json pages
+- `src/hooks/useDetailLayout.ts` — added invalidate() for Design Mode
+- `src/pages/admin/AdminWorkbench.tsx` — APP_DETAIL_COMPONENTS restored with JSON components, modelName prop passed
+- `src/routes/protectedRoutesConfig.tsx` — all old detail imports replaced
+- `src/apps/common/components/panels/index.ts` — cleaned dead exports
 
-**webClerk3** (key changes):
-- `apps/core/views/bootstrap_view.py` — NEW: /wcapi/bootstrap/
-- `apps/core/models/audit.py` — null fix for user_agent/ip_address/id_session
-- `apps/core/services/keywords.py` — phone normalization, FK fallback, data→config
-- `apps/core/choices.py` — conditions_sales/purchase purposes
-- `apps/transactions/services/transaction_save.py` — data→config
-- `apps/accounts/services/ledger_balance.py` — data→config
-- `apps/products/models/bill_of_material.py` — data→config
-- `apps/orgs/services/financial_maintenance.py` — data→config
-- `common/search_utils.py` — pipe OR, icontains for keywords
-- Settings created in DB: detail_layout for order/proposal/invoice/purchase, keyword configs x16, conditions x5, schema_map, bootstrap company prefs
-
-**Statement Sorter**: sticky headers, theme, CSV parser, PDF prompt, file log, folder drops — deployed to webclerk.com/sort
-
-**Allie**: `today/anthropic-energy-one-pager.md` — distributed solar for AI compute pitch
+**webClerk3:**
+- `apps/core/management/commands/seed_comm_layouts.py` — seeds 19 detail_layout Settings
+- `readmes/topics/architecture/ui-db-map.md` — complete model→rendering path registry
+- `readmes/topics/architecture/contact-field-map.md` — wc2→wc3 field mapping
