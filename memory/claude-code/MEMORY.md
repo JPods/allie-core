@@ -194,3 +194,5 @@
 - [IT15 network + deployment](reference_it15_network.md) — IP 192.168.1.114; /opt/andi/apps/; rsync deploy; tunnel config; nginx note
 - [Site maintenance — link checker](project_site_maintenance.md) — allie-linkcheck.py; 9 sites weekly; red/orange flags; Action #392
 - [leftshoe — team intelligence](reference_leftshoe.md) — handshake+store+retro.db+MCP; .chroma_db_leftshoe; everyone builds; quiet not secret
+- [UI design principles](feedback_ui_design_principles.md) — One control one place; left-justified; dangerous last; prefs-driven personalization
+- [DataBrowser layout restructure](project_databrowser_layout.md) — AdminWorkbench→DataBrowser; unified toolbar; prefs NavBar; per-zone theme; Minimal buttons; kb shortcuts; zone tooltips
