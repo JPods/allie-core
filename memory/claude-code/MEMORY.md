@@ -196,3 +196,4 @@
 - [leftshoe — team intelligence](reference_leftshoe.md) — handshake+store+retro.db+MCP; .chroma_db_leftshoe; everyone builds; quiet not secret
 - [UI design principles](feedback_ui_design_principles.md) — One control one place; left-justified; dangerous last; prefs-driven personalization
 - [DataBrowser layout restructure](project_databrowser_layout.md) — AdminWorkbench→DataBrowser; unified toolbar; prefs NavBar; per-zone theme; Minimal buttons; kb shortcuts; zone tooltips
+- [Context compression warning](feedback_compression_warning.md) — Tell Bill bluntly when compression starts; no softening; he decides to save or continue
