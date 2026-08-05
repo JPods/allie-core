@@ -1,5 +1,7 @@
 # Memory Index
 
+- [Alice data conversion pipeline](project_data_conversion_pipeline.md) — apps/conversion/ + alice_conversion DB; Claude Haiku maps columns; multi-pass; bundle output
+- [No import parsing in WC3](feedback_no_import_in_wc3.md) — All transformation outside WC3; bulk only via bundle; no commented-out code
 - [Statement Sorter standalone](project_statement_sorter_standalone.md) — Free tool: Python + HTML; sort statements; lead gen for WebClerk
 - [WebClerk.com live deployment](project_webclerk_live.md) — Full stack on Andi via CF; /sort /app/ /wcapi/ /admin/; commerce_expert DB
 - [Athena integrity system](reference_athena_integrity.md) — Self-defense: sign files, verify every 4hrs, FAULT on tampering; athena_sign command

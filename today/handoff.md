@@ -1,83 +1,80 @@
-# Handoff — 2026-08-04
+# Handoff — 2026-08-05 (overnight session)
 
-## Where We Left Off
-Massive UI layout restructure complete. AdminWorkbench renamed to DataBrowser. Unified toolbar row (list left, detail right). NavBar prefs-driven. Per-zone theming. Minimal button style permanent. Keyboard shortcuts. Zone tooltips (Shift+hover, 3s auto-hide). App/Admin view toggle fires custom event for live switching. All transaction models + display models added to APP_DETAIL_COMPONENTS. Gantt sprint selector built from contact.prefs.gantt.categories (wc3, moa). Login/me endpoints fixed to return Contact prefs (not empty User prefs). ui_webclerk Setting created. Kanban buttons partially standardized. Context compression warning protocol established.
+## What Was Done
 
-## Do This First Next Session
-1. **Action #31137 — Kanban: swap KanbanTaskModal for ActionFloatingWindow** — The floating window (DynamicDetail, draggable) is already working in Gantt. Kanban still uses the old modal that covers cards. Due Aug 6.
-2. **Test the full flow** — sign out/in, verify prefs load (nav, color_mode, gantt categories), test App/Admin toggle on proposals/orders/contacts, test Gantt "My Sprints" dropdown.
-3. **Commit both repos** — React2025 and webClerk3 have many uncommitted changes from this session.
-4. **Action #31135 — hide single-window tab** — due Aug 18.
-5. **Action #31136 — TopBar show/hide toggle** — due Aug 18.
+Built **JsonTreeWidget** — a complete JSON tree editor at three levels:
 
-## Open Problems
-- `useDefaultCompany` retries on 401 in a loop — needs max-retry guard
-- DataGrid `doWrap` hardcoded to `false` — may need per-field opt-in for admin detail grid
-- The `onRegisterActions`/`onEditStateChange` callbacks may cause React warnings about deps
-- 16 Display pages don't yet check `inline` prop — works because they're not in APP_DETAIL_COMPONENTS
-- Kanban still uses KanbanTaskModal instead of ActionFloatingWindow (Action #31137)
-- Communication Display pages (address, domain, email, phone) don't exist yet — fall through to Admin mode
-- ActionDisplay.tsx doesn't exist — action model falls through to Admin mode in DataBrowser
+### 1. Widget (field-level)
+- `React2025/src/components/widgets/JsonTreeWidget.tsx` — core tree component + WidgetProps adapter
+- Registered as `json-tree` in WIDGETS map (`components/widgets/index.ts`)
+- Added to `widgetTypes.ts` with `span2: true, editable: true`
+- BehaviorField handles `json-tree` type — renders JsonTree instead of textarea
+- Backend `seed_field_access.py` updated: metadata/refs → `json-tree` readOnly, prefs/config → `json-tree` editable
 
-## What Was Decided (and Why)
-- **AdminWorkbench → DataBrowser** — avoids Django admin confusion
-- **Zone names** — TopBar, NavBar, db, db.header, db.toolbar, db.list, db.detail. Shared vocabulary.
-- **Minimal button style permanent** — text+emoji, readable, scales. Glass/OSX/Phosphor removed.
-- **One control, one place** — no duplicate toggles anywhere
-- **Left-justified toolbars** — dangerous actions (Delete) last
-- **Prefs-driven personalization** — contact.prefs.nav, .color_mode, .gantt, .ui
-- **contact.config vs contact.prefs** — config = data structure, prefs = user experience
-- **ui_webclerk Setting #533** — installation defaults for all UI behaviors (zone_tooltip_ms, search_min_chars, etc.)
-- **Login endpoint returns Contact prefs** — was returning empty User prefs. Fixed in auth_views.py.
-- **Cancel vs Discard** — Discard reverts edits (stays on record), Cancel closes detail pane
-- **Gantt sprint selector** — contact.prefs.gantt.categories drives last/current/next by dt_start/dt_end
-- **Context compression warning** — Claude tells Bill straight when compression starts. No politeness. He decides.
+### 2. Plugin (DataBrowser panel)
+- `React2025/src/components/common/JsonEnvelopePanel.tsx` — shows all 4 envelope fields (metadata, prefs, config, refs) in a collapsible panel with tree widgets
+- Wired into DataBrowser.tsx below the BehaviorField grid, above BOM panel
+- Visible in Admin mode when record has envelope fields
+- **Verified working** — screenshot shows metadata/prefs/config/refs rendering as trees in dark theme
 
-## Files Changed This Session
-**React2025:**
-- `src/pages/admin/DataBrowser.tsx` — renamed from AdminWorkbench; unified toolbar; per-zone theme; keyboard shortcuts; viewPref as state; APP_DETAIL_COMPONENTS expanded
-- `src/pages/admin/DataBrowser.css` — per-zone theme CSS; toolbar row styles; list padding
-- `src/pages/admin/AdminWorkbench.tsx` — DELETED
-- `src/pages/admin/AdminWorkbench.css` — DELETED
-- `src/pages/admin/DetailReview.tsx` — DELETED
-- `src/components/common/DetailToolbar.tsx` — NEW (merged RecordToolbar + SimpleDetailToolbar)
-- `src/components/common/RecordToolbar.tsx` — DELETED
-- `src/components/common/SimpleDetailToolbar.tsx` — DELETED
-- `src/components/common/ZoneTooltip.tsx` — NEW (3s auto-hide, reads ui_webclerk Setting)
-- `src/components/common/ToolbarIcon.tsx` — standardized on Minimal
-- `src/components/common/toolbarActions.ts` — added cancel, modelMenu
-- `src/components/common/DataGrid.tsx` — doWrap forced false
-- `src/layout/MacTopBar.tsx` — 48px fixed; View/Font/Theme/SavePrefs selects; removed button cycler, shadow
-- `src/layout/MacWindowChrome.tsx` — removed title bar and padding
-- `src/layout/AppSidebar.tsx` — prefs-driven nav; Models/Dashboards; top-48px; zone tooltip
-- `src/routes/PrivateRoute.tsx` — removed padding; fixed sidebar width; ZoneTooltip; Show Nav icon
-- `src/routes/protectedRoutesConfig.tsx` — AdminWorkbench → DataBrowser
-- `src/routes/Router.tsx` — AdminWorkbench → DataBrowser
-- `src/routes/Routes.ts` — removed detailReview
-- `src/apps/core/models/contact/pages/ContactDetailJson.tsx` — inline/callbacks/hide toolbar
-- `src/apps/orgs/components/OrgDetail.json.tsx` — same
-- `src/apps/products/pages/ItemDetailJson.tsx` — same
-- `src/apps/utils/gantt/UnifiedGanttPage.tsx` — removed breadcrumb
-- `src/apps/utils/gantt/UnifiedGantt.tsx` — ganttPrefs + auth user
-- `src/apps/utils/gantt/GanttProjectSelector.tsx` — My Sprints dropdown; category/date sprint lookup
-- `src/apps/utils/gantt/useGanttData.ts` — category/dt_start/dt_end in ProjectOption
-- `src/apps/utils/kanban/KanbanBoardPage.tsx` — Minimal buttons; standardized selects
-- `src/hooks/useDataBrowser.ts` — 3-char search minimum
-- 16 Display pages — import renamed to DetailToolbar
-- Multiple files — AdminWorkbench → DataBrowser references
+### 3. Applet (public page)
+- `React2025/src/pages/tools/JsonTreeApplet.tsx` — full-featured JSON editor
+- Side-by-side: code editor (left) + tree view (right) with draggable splitter
+- Toolbar: Format, Minify, Validate, Copy, Clear, Sample
+- Dark/light mode toggle, file drop support, stats display
+- **Public route** — no login required (`/json-tree` outside PrivateRoute)
+- Footer: "webclerk.com/json-tree — free, open source, bottom-up"
+- **Verified working** — screenshot shows clean dark split-pane editor
 
-**webClerk3:**
-- `apps/core/views/auth_views.py` — login + /me/ return Contact prefs (not User prefs)
-- `apps/core/choices.py` — added ui_webclerk to SETTING_PURPOSE_CHOICES
-- Contact #2373 prefs: nav, color_mode, gantt categories
-- Setting #533 ui_webclerk — full UI behavior config
-- 24 DEV projects → category='wc3'; 10 MOA projects → category='moa'
-- Action #31135 (single-window tab), #31136 (TopBar toggle), #31137 (Kanban modal swap)
+### 4. Sidebar menu
+- Added "JSON" to DASHBOARDS section in AppSidebar.tsx
+- Braces icon, routes to `/json-tree`
 
-**Allie:**
-- `readmes/leftshoe.md` — context compression warning protocol
-- `readmes/retrospections/2026-08-04.md` — full session retrospection
-- `today/handoff.md` — this file
-- Memory: feedback_ui_design_principles.md, project_databrowser_layout.md, feedback_compression_warning.md
-- Identity store: 2 scars, 4 judgments, 1 value (compression warning)
-- Retro DB: entry #31
+### 5. Also in react-claude
+- Same widget built in react-claude project (the original implementation)
+- Demo page at `/json-tree-demo` with valid/invalid/edge-case test data
+- Can be removed later — React2025 is the real home
+
+## Build Status
+- `npm run build` was running at session end — deploy to Andi pending
+- TypeScript compiles clean (verified multiple times)
+
+## Deploy to Andi — Next Session
+```bash
+# After build completes:
+rsync -avz --exclude='.git' --exclude='node_modules' \
+  ~/Documents/CommerceExpert/React2025/dist/ \
+  andi@192.168.1.114:/opt/andi/apps/react2025/dist/
+
+ssh andi@192.168.1.114 "sudo chmod -R o+rX /opt/andi/apps/react2025/dist/ && sudo systemctl reload nginx"
+```
+
+Also deploy the backend seed_field_access.py change:
+```bash
+rsync -avz --exclude='.git' --exclude='venv' --exclude='__pycache__' \
+  --exclude='*.pyc' --exclude='node_modules' --exclude='.env' \
+  --exclude='logs/' --exclude='media/' \
+  ~/Documents/CommerceExpert/webClerk3/ \
+  andi@192.168.1.114:/opt/andi/apps/webclerk3/
+
+ssh andi@192.168.1.114 "sudo systemctl restart webclerk3"
+```
+
+Then run seed_field_access to update the Setting records:
+```bash
+ssh andi@192.168.1.114 "cd /opt/andi/apps/webclerk3 && source venv/bin/activate && python manage.py seed_field_access"
+```
+
+## Next Session — Open Items
+
+### 1. Error highlighting in code editor (Bill's request)
+When JSON has a syntax error, instead of just showing the error message, highlight the error location in the code editor with absurdly visible styling (3x font, yellow background). Bill's words: "obsurd way to signal." The tree pane already shows "Fix the JSON error to see the tree" — but the code editor needs to visually scream at the error position. Parse the error message for line/column, scroll to it, highlight it.
+
+### 2. Click JSON label in DB detail → opens in editor (Bill's idea)
+In the DataBrowser detail view, clicking on a JSON field label (like "metadata" or "config") or clicking the JSON object itself should open it in the full `/json-tree` editor in a new window. This would let users explore deep JSON structures without squinting at the inline tree. Window URL could be `/json-tree?data=base64encoded` or use sessionStorage.
+
+### 3. Run seed_field_access on Andi
+The `json-tree` behavior type won't take effect until the management command runs and updates the Setting records for each model.
+
+## Bill's State
+Going to sleep. Pleased with the result — said "it looks really good" and "this will help reduce the intimidation of working with jsons." High engagement throughout. The public tool idea (like jsoneditoronline.org) was his — he sees it as a way to give something useful to everyone while showing what WebClerk can do.
