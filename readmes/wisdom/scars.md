@@ -354,6 +354,36 @@ Cross-Cutting Rule 6; agent files for Allie, Alice, Noelle.
 
 ---
 
+## Per-Type Quantity Field Names — 2026-08-05
+
+**Cost:** In WC2, every document type had its own quantity field name —
+`qtyShipped`, `qtyOrdered`, `qtyReceived`, `qtyBackLogged`, `qtyPlaced`,
+`qtyProcessing`. Every function that touched quantity had to know which
+name belonged to which document type. Sharing logic across order/invoice/
+purchase/receipt required mapping between field names or writing parallel
+functions that did the same thing with different variable names. The
+codebase grew duplicated calculation paths that diverged silently. Bugs
+fixed in one path stayed broken in the others. Inheriting a base function
+was nearly impossible — the function couldn't know what to call the quantity.
+
+**What was hard to see:** Each name felt precise and descriptive when it was
+created. `qtyShipped` on an invoice line reads perfectly. The cost only
+becomes visible when you try to write one function that works across all
+document types — then every name is wrong for some context. The precision
+of the names was the trap. Descriptive names that vary by type prevent
+the abstraction that makes shared code possible.
+
+**The rule it produced:** One canonical key — `quantity.active` — on every
+line type. The document type gives the quantity its meaning. `active` on an
+invoice line IS the shipped quantity. `active` on an order line IS the
+ordered quantity. One key, one function, every document type.
+
+**Where the rule lives:** `webClerk3/apps/transactions/models/base_line_model.py`
+docstring on `default_quantity()`; `webClerk3/readmes/topics/transactions/
+transactions-totals.md` § "quantity.active is the verb of the document".
+
+---
+
 ## [Scars not yet paid — watching]
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |
