@@ -199,3 +199,4 @@
 - [UI design principles](feedback_ui_design_principles.md) — One control one place; left-justified; dangerous last; prefs-driven personalization
 - [DataBrowser layout restructure](project_databrowser_layout.md) — AdminWorkbench→DataBrowser; unified toolbar; prefs NavBar; per-zone theme; Minimal buttons; kb shortcuts; zone tooltips
 - [Context compression warning](feedback_compression_warning.md) — Tell Bill bluntly when compression starts; no softening; he decides to save or continue
+- [WC3 tax + commission status](project_wc3_tax_commission.md) — Built-in tax+commission complete; external services deferred; Action TAX-COMM-PHASE5 due 2026-09-16
