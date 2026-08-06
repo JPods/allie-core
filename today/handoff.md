@@ -2,50 +2,50 @@
 
 ## Where We Left Off
 
-Massive evening session: packing workflow (pick/pack/ship + scale hook), four carrier API integrations (UPS/FedEx/USPS/DHL), markdown template engine, Alice escalation protocol, Connection records, contact detail Kanban/Gantt tabs, Support+Accounting dashboard merge, commission security audit, `done.md` files for both wc3 and r25, and the quantity.active scar. Sidebar nav fix still open — console.log added but Bill went to sleep before checking output.
+Third session today. Rebuilt all four WC3 dashboards (Transactions, Orgs, Products, Administration) with comparison tables — all periods visible at once, no buttons to switch, every number clicks through to filtered DataBrowser. Added `purpose` field to BaseModel (CoreModel) so every record in WC3 declares why it exists. Created `get_dashboard_counts` batch endpoint (56 API calls → 1). Established session Document records (purpose=team_memory) as permanent team memory. Scar #34: look ahead for what you may need to look back on. Scar #35 (win): memory collection is the prerequisite for confident session closure. Session record: Document DEV-914.
 
 ## Do This First Next Session
 
-1. **Wire ManageActionPanel into TransactionDetail** — the component exists with Convert to Order/Invoice/PO and Ship Order buttons all working. It's only imported in archived detail pages. Import and render it in the active `TransactionDetail.tsx`. ~30 min. Go-live blocker.
-2. **Build Spreedly hosted fields payment UI** — the single remaining go-live blocker. Backend is complete. Need: SDK script tag, iframe mount in Apply Payment dialog, token callback to `POST /payments/process/`. Card data never touches WC3 JS.
-3. **Fix sidebar nav** — Kanban/Gantt not showing (from prior session). Console.log at `AppSidebar.tsx:159` for diagnosis. Remove after fixing.
-4. **Run seeds on Andi** — `seed_connections`, `seed_template_reports` not yet run against the database.
+1. **Verify dashboards load in Bill's browser** — hard refresh all four: /transactions, /orgs, /products, /administration. The batch endpoint `get_dashboard_counts` needs Django server restart to be available.
+2. **Test clickable numbers** — click any number in a comparison table, verify DataBrowser opens with filtered records. The `cell()` function fix (not `Cell` component) was the key to making onClick work.
+3. **Apply comparison table to Products dashboard** — Products was rebuilt by an agent but may need visual polish to match Transactions exactly.
+4. **Create session Document record at session START** — new protocol. Purpose=team_memory. Update during work, not just at end.
+5. **Check rate limiting** — the batch endpoint should eliminate 429s. If still hitting limits, check if Django's throttle settings need adjustment for the manage endpoint.
 
 ## Open Problems
 
-- **ManageActionPanel not in active TransactionDetail** — conversion chain works backend but users can't trigger it. Component is built, just needs connecting.
-- **Payment UI not built** — Spreedly service complete, no card capture frontend.
-- **Carrier APIs untested** — 4 implementations written, no test credentials configured.
-- **Rate shopping / label / tracking UI not built** — backend complete, manual entry works.
-- **Sidebar nav not showing Kanban/Gantt** — unresolved from prior session.
+- DataBrowser filter passthrough uses `urlFiltersRef` initialized on mount — only works for the first load of a window. Navigating to the same model with different filters reuses the existing window and ignores new params.
+- Vite proxy `/orgs/` (trailing slash) is a workaround — any new dashboard route that collides with a proxy prefix will need the same treatment.
+- wrapperPage.ts has `NotionTrackerPage` stubbed as Placeholder — dead import, was never a real component.
+- React StrictMode doubles all API calls in dev — the batch endpoint mitigates but doesn't eliminate this.
 
 ## What Was Decided (and Why)
 
-- **Commission is internal-only, enforced at every layer** — `_STAFF_ONLY_ACTIONS` on manage_view, `_require_staff()` on ViewSet actions, `RoleAwareModelSerializer.to_representation()` strips commission keys from JSON envelopes, bootstrap returns empty commissions for non-staff, frontend C toggle/columns/totals/panels hidden, all commission reports require `role_required: 'admin'`. Reason: commission rates and amounts are competitive intelligence — customers and external users must never see them.
-- **Commission reports live on rep and employee models, not transactions** — reps and employees are the people who earn commissions. Reports on their model pages, not buried in invoice reports. Three reports on rep (statement, summary, sales credited), one on employee.
-- **Auth endpoints now return is_staff/is_superuser** — added to both login response and /me endpoint. `mapApiProfileToUser` maps them. `User` interface in `authSlice.ts` gained both fields. Reason: frontend needs this to gate commission visibility and future staff-only features.
-- **todo-go-live rebuilt from code audit** — prior version had two drifting phase tables, stale priorities on completed sections, checked items hiding unchecked work, and duplicate items across sections. New version has three sections: Go-Live Gate, What's Built (verified), What's Not Built. Single source of truth.
+- **"Operations" renamed to "Administration"** — Bill: operations is sales/production, administration is back-office. Route is `/administration`.
+- **No buttons to compare periods** — Bill: data that requires a click to compare is data that won't be compared. All periods visible simultaneously in a table.
+- **`purpose` on BaseModel, not individual models** — 12 models already had it independently. Universal purpose enables purpose-driven data management across the entire system.
+- **Session Document records (purpose=team_memory)** — text in the record body (searchable by Alice), images in `~/Allie/sessions/images/YYYY-MM-DD/` only when needed. Created during work, not after.
+- **`cell()` function, not `<Cell>` component** — defining a component inside a render function causes React to remount it each render, dropping event handlers. Plain function returning JSX avoids this.
+- **`/wcapi/get/` only, never `/wcapi/list/`** — single door to guard. list returns HTML, get returns JSON.
+- **`useDashboardCounts` hook with batch fallback** — tries `get_dashboard_counts` manage action first, falls back to staggered individual fetches if batch fails.
 
 ## Files Changed This Session
 
-**webClerk3:**
-- `apps/core/views/manage_view.py` — `_STAFF_ONLY_ACTIONS` gate for commission + commission report endpoints; `get_commission_report` action added
-- `apps/core/views/bootstrap_view.py` — commissions config returns `{}` for non-staff
-- `apps/core/views/auth_views.py` — login + /me responses now include `is_staff`, `is_superuser`
-- `apps/transactions/views/transaction_views.py` — `_require_staff()` on all 3 `populate_commission` ViewSet actions
-- `apps/transactions/services/commission.py` — added `get_commission_report()` for period-based report data gathering
-- `common/base_serializers.py` — `to_representation()` strips commission fields from cost/finance/commission envelopes for non-staff
-
-**React2025:**
-- `src/store/slices/authSlice.ts` — `User` interface gains `is_staff?`, `is_superuser?`
-- `src/api/auth.ts` — `mapApiProfileToUser` maps `is_staff`, `is_superuser`
-- `src/apps/transactions/components/detail/LineCardRenderer.tsx` — C toggle + commission footer hidden for non-staff
-- `src/apps/transactions/components/detail/TabsRenderer.tsx` — commission row hidden for non-staff
-- `src/apps/transactions/components/SummaryCard.tsx` — `cost.commissions` hidden for non-staff
-- `src/apps/transactions/components/TransactionDetail.tsx` — commission auto-populate + toast gated to staff
-- `src/apps/orgs/components/OrgFinancialsPanel.tsx` — rep commission section gated to staff; employee commission section removed
-- `src/apps/transactions/components/print/CommissionReportPrintDocument.tsx` — rewritten: two modes (company summary + individual rep statement with invoice detail)
-- `src/apps/transactions/components/print/index.ts` — export `CommissionDetailLine` type
-- `src/config/reportLists.ts` — commission reports require `role_required: 'admin'`; added rep model (3 reports) and employee commission report
-- `readmes/topics/transactions/commissions.md` — added reports, security, endpoints documentation
-- `readmes/todo-go-live.md` — rebuilt from code audit (old version at `_archive/todo-go-live-2026-08-05.md`)
+- `React2025/src/apps/transactions/pages/TransactionsDashboard.tsx` — comparison table, batch hook, clickable cells
+- `React2025/src/apps/orgs/pages/OrgsDashboard.tsx` — comparison table + comms panel
+- `React2025/src/apps/products/pages/ProductsDashboard.tsx` — comparison table + tools
+- `React2025/src/pages/admin/OperationsDashboard.tsx` — Administration dashboard, comparison table + accounting/sync panels
+- `React2025/src/pages/admin/AccountingDashboard.tsx` — Promise.allSettled for resilience
+- `React2025/src/hooks/useDashboardCounts.ts` — NEW: shared hook, batch endpoint + fallback
+- `React2025/src/hooks/useDataBrowser.ts` — URL filter passthrough via urlFiltersRef
+- `React2025/src/layout/AppSidebar.tsx` — Administration nav entry, route/icon/display maps
+- `React2025/src/routes/Router.tsx` — added routes: orgs, transactions, products, operations, administration
+- `React2025/src/routes/protectedRoutesConfig.tsx` — added routes + redirects
+- `React2025/src/pages/wrapperPage.ts` — fixed NotFound import, stubbed NotionTracker
+- `React2025/vite.config.ts` — /orgs proxy changed to /orgs/ (trailing slash)
+- `webClerk3/common/models.py` — purpose field added to CoreModel
+- `webClerk3/apps/docs/models/document.py` — removed redundant purpose (now inherited)
+- `webClerk3/apps/core/services/dashboard_counts.py` — NEW: batch counts endpoint
+- `webClerk3/apps/core/views/manage_view.py` — wired get_dashboard_counts action
+- 11 model files — removed per-model purpose declarations (now on BaseModel)
+- 10 migration files — purpose_to_basemodel migrations across all apps

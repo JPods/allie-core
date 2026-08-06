@@ -38,6 +38,7 @@
 - [Small-Stings](project_small_stings.md) — Customer fines for unresolved problems + JPods pays customers for retrospections; Alice accounts for both flows in WC3
 - [Talent system](project_talents.md) — Claude Code + Allie talent registry; design tokens at readmes/design-tokens.json; handoff protocol at readmes/39-session-handoff.md; today/handoff.md written each session
 - [Session handoff protocol](feedback_session_handoff.md) — Write today/handoff.md AND sessions/YYYY-MM-DD.md at session end; session file feeds harvest.py → allie-reflect.py learning pipeline
+- [Session documents in WC3](feedback_session_documents.md) — Document record per session (goals+results); images to ~/Allie/sessions/images/YYYY-MM-DD/
 - [Agent LLM architecture](reference_agent_llm.md) — All agents share gpt-oss:20b base; identity = Modelfile; allie:latest built 2026-05-06; full registry in readmes/40-agent-llm-architecture.md
 - [Mini-bot table-top demo](project_minibot_demo.md) — Baron-4WD + Romeo + Pi; color-code junctions; ToF + Husky cam; parked until ~2026-05-15
 - [jpod_guideway.rb audit](project_guideway_audit.md) — Re-run Prompts 1–7 after SketchUp UI rework; trigger: "re-run the guideway check"; baseline 7082 lines, 2026-05-01
