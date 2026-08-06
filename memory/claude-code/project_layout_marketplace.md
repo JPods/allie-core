@@ -1,13 +1,18 @@
 ---
-name: Layout marketplace concept
-description: Users submit DataBrowser layouts for credit/cash bonuses; Alice manages submissions, tracks adoption, rewards contributors
+name: Layout library — share, credit, check out
+description: Users submit detail + list layouts to WC_HQ library for credit; both layout types (detail_layout + workbench_fields); Alice curates; adoption-tracked
 type: project
 ---
 
-Users who build useful DataBrowser layouts can submit them to WebClerk HQ for credit or cash bonuses. Once users have their 1-5 preferred views set up, they rarely change — so the valuable work is finding the right field combinations for each model/role.
+Users share layouts (both detail forms and list views) to a WC_HQ library. Other users browse, preview, and check out layouts. Creators get credit (recognition, subscription credit, cash at threshold).
 
-**Why:** Same bottom-up pattern as Small-Stings in reverse. Value created by users, rewarded by the platform.
+**Why:** Bottom-up, same pattern as Small-Stings and Pydantic schema evolution. Users who do the work design the best layouts. The network surfaces the best through adoption. Creators are rewarded for value created.
 
-**How to apply:** Alice owns the submission/adoption/reward flow. Track which submitted layouts get adopted by other users. Most-adopted layouts reveal which fields actually matter per model — feeds back into defaults. Build when Alice has her own LLM and the DataBrowser is in production use.
-
-**Transport:** Layouts submitted via sync (Connection + Bundle model, readmes/21-sync-integration.md). Layout = Setting record with purpose=workbench_fields. Bundle it, sync to HQ, Alice reviews and promotes. No separate upload mechanism.
+**How to apply:**
+- Two layout types: `detail_layout` (ui.json, Data-Driven UI forms) and `workbench_fields` (DataBrowser list views)
+- Transport: existing sync infrastructure (Setting → Bundle → Connection → WC_HQ)
+- Alice at HQ curates: flags duplicates, groups variants, surfaces most-adopted
+- Creator attribution tracked per layout; adoption count visible in library
+- Checked-out layouts install as Setting at user's chosen scope (user/role/org/system)
+- User gets a copy, never modifies the original
+- Full doc: data-driven-ui.md (both Allie + WC3 copies)
