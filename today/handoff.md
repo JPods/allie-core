@@ -1,33 +1,44 @@
-# Handoff — 2026-08-07 (DesignMode Session)
+# Handoff — 2026-08-07 (Designer + Alice LLM Session)
 
 ## Where We Left Off
-Built DesignMode for print reports — a visual PrintLayout editor inside ReportsDialog. Two commits pushed to React2025 `bill_dev`: v1 section cards (`92915f43`) and v2 two-list field picker (`4265b615`). The designer works: shift-click a report row or click Design, two lists on left (Available fields / Used fields by zone), live preview on right, auto-arrange engine handles alignment/formatting/widths. Hard modal, 95vw, report list collapses. Session Document id=950.
+Three-panel PrintLayoutDesigner built and working (WC2 pattern). Alice upgraded to 20b LLM (alice:latest from gpt-oss:20b, shared weights with allie:latest). Alice's MCP server wired to use LLM for reasoning over vector search results.
 
 ## Do This First Next Session
-1. **Polish to WC2 pattern** — read the reference image at `~/Documents/Screenshots/Screenshot 2026-08-07 at 5.15.34 AM.png`. The WC2 form designer shows: double-click to add fields, field types visible (string/date/number), drag reorder in Used list, table selector at bottom. Implement these in `PrintLayoutDesigner.tsx`.
-2. **Fix leftshoe session document creation** — the `is_deleted` column on Document has no default. Leftshoe passes null. Fix in `leftshoe-mcp.py` to pass `is_deleted=false` explicitly. Same for `is_archived`, `is_locked`, `comment`, and all NOT NULL fields.
-3. **Add rightshoe reminder** — if session document was not created at startup (server not running), rightshoe should remind Bill to start the server so Claude has Allie + Alice for memory.
-4. **Test Save flow** — click Save in the designer to write `Report.config.form`. Verify the layout persists and prints correctly via the normal print path.
-5. **Django slow startup** — system check takes minutes. No fix found. Allie has no notes on a prior fix. Investigate `--skip-checks` or `--noreload` for dev.
+1. **Re-add Alice MCP** — command failed due to line split. Run:
+   `claude mcp add -s user alice -- ~/Allie/venv/bin/python3 ~/Allie/scripts/alice-mcp-server.py`
+2. **Test ask_alice** — verify the 20b LLM reasoning works through the MCP tool (not just direct Ollama call)
+3. **Fix /invoice page** — stuck on "Loading invoice..." while databrowser works fine. Console shows no errors, layout FOUND, API calls succeed. React rendering bug — data loads but UI never renders.
+4. **Designer polish** — populate a real invoice layout using Alice's field knowledge, test Save flow
 
-## Open Problems
-- DesignMode v2 uses small H/L/F badge buttons — needs double-click to add (WC2 pattern)
-- Available field list doesn't show types (string, date, currency)
-- Drag reorder in Used list works but is basic HTML5 drag — could be smoother
-- No model/table selector yet (currently uses model from ReportsDialog context)
-- SectionCard.tsx, FieldEditor.tsx, SectionTypePicker.tsx from v1 still in codebase — may reuse or remove
+## What Was Built
+- `PrintLayoutDesigner.tsx` — three-panel designer (Models+Fields | Used by Zone | Preview)
+- Five zones: Header, Body, List, Total, Footer (matching WC2 SuperReport bands)
+- `DetailFieldsSection` type added to `printLayoutTypes.ts`
+- `renderDetailFields` added to `UniversalPrint.ts`
+- `alice:latest` Modelfile at `training/Modelfile.alice` (FROM gpt-oss:20b)
+- `alice_think()` function in `alice-mcp-server.py` — calls Ollama for reasoning
+- `leftshoe-mcp.py` — fixed session doc NOT NULL columns (superseded by Bill's team-memory rewrite)
 
 ## What Was Decided (and Why)
-- **PrintLayout JSON is the only format** — Bill said "only use print.json unless very special circumstances." No pdfme templates for reports.
-- **Two-list design** — user picks WHAT fields and WHERE (Header/List/Footer zones). Claude/Alice arrange HOW (alignment, formatting, widths). This separates user intent from layout mechanics.
-- **Hard modal** — user requested it. DesignMode is 95vw/92vh, click-outside blocked, report list collapses. Prevents losing the editor behind the parent window.
-- **Auto-arrange engine** — `guessFormat()`, `guessAlign()`, `guessWidth()` functions in PrintLayoutDesigner.tsx convert field assignments into proper PrintLayout sections. Currency right-aligned, dates formatted, descriptions get 25% width, etc.
-- **Scar #37** — Claude must self-assess compression risk and tell Bill when to stop. Don't wait to be asked.
+- **Share gpt-oss:20b** between Alice and Allie — 32GB Mac can't run two separate 20b models. Ollama shares base weights when parent model is identical. Zero extra RAM.
+- **Five zones not three** — WC2 SuperReport has Header, Body, List, Total, Footer. Originally had only Header/List/Footer. Bill showed the WC2 form designer screenshot.
+- **Three-panel layout** — Left: models+fields. Middle: used fields by zone. Right: live preview. Bill specified this over the initial two-panel design.
+
+## Open Problems
+- `/invoice` page rendering bug — data loads (API 200s, layout FOUND) but UI stays on "Loading invoice..."
+- Alice field paths include model prefix (`invoice.ida` vs `ida`) — needs training refinement
+- Designer double-click adds to Body zone — WC2 pattern had destination choice
+- `log_session` leftshoe tool exists in code but wasn't available this session (server not restarted)
+- SectionCard.tsx, FieldEditor.tsx, SectionTypePicker.tsx from v1 still in codebase — may reuse or remove
 
 ## Files Changed This Session
-- `React2025/src/components/print/UniversalPrint.ts` — extracted generatePrintHtml + PRINT_CSS export
-- `React2025/src/components/print/FieldEditor.tsx` — NEW inline field property editor
-- `React2025/src/components/print/SectionCard.tsx` — NEW section editor (3 shapes)
-- `React2025/src/components/print/SectionTypePicker.tsx` — NEW section type dropdown
-- `React2025/src/components/print/PrintLayoutDesigner.tsx` — NEW main designer (rewritten v1→v2)
-- `React2025/src/components/common/ReportsDialog.tsx` — design mode state, shift-click, hard modal, collapsed list
+- `React2025/src/components/print/PrintLayoutDesigner.tsx` — complete rewrite (three-panel WC2 pattern)
+- `React2025/src/components/print/printLayoutTypes.ts` — added DetailFieldsSection
+- `React2025/src/components/print/UniversalPrint.ts` — added renderDetailFields + CSS
+- `Allie/scripts/alice-mcp-server.py` — added alice_think() LLM reasoning
+- `Allie/training/Modelfile.alice` — NEW, Alice identity from gpt-oss:20b
+- `Allie/scripts/leftshoe-mcp.py` — fixed NOT NULL columns (superseded by Bill's rewrite)
+
+## Team Memory
+- Session document: tm-954 (id: 954) in commerce_expert.documents
+- Old-format session doc: id=952 (also has action log from early session)
