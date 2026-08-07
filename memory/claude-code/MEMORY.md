@@ -116,9 +116,9 @@
 - [Animation pause not stop](feedback_animation_pause_not_stop.md) — Toolbar toggles pause/resume; no hard stop; clear pods to reset; 95% freeze for camera
 - [Structure ID prefixes](reference_structure_id_prefixes.md) — s001=stations, tc001=traffic circles, b001=barriers; all lowercase; barriers serialized for safety inspection
 - [Expense/disbursement UI](project_expense_ui.md) — Payment model handles AR+AP via type field; needs spreadsheet-style fast entry UI
-- [DataBrowser status](project_databrowser_status.md) — Two-pane dark/light DataBrowser at /admin-wb; replaces 40+ admin pages; 61 models seeded with initial layouts
-- [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in DataBrowser); Bill loves it; use instead of extra buttons
-- [WC3 value proposition](project_wc3_value_proposition.md) — Local+cloud sovereignty, WC_HQ data services, cross-company sync, Alice as bookkeeper; polish sync+transactions+DataBrowser first
+- [databrowser status](project_databrowser_status.md) — Two-pane dark/light databrowser at /databrowser; replaces 40+ admin pages; 61 models seeded with initial layouts
+- [Shift-click power user pattern](feedback_shift_click_pattern.md) — Shift-click for alternate actions (delete, open in databrowser); Bill loves it; use instead of extra buttons
+- [WC3 value proposition](project_wc3_value_proposition.md) — Local+cloud sovereignty, WC_HQ data services, cross-company sync, Alice as bookkeeper; polish sync+transactions+databrowser first
 - [WebClerk is commerce not accounting](feedback_wc3_not_accounting.md) — WC3 produces GL journal entries; accounting programs consume them; never build P&L/Balance Sheet; AR collection is sales, AP is accounting
 - [WC3 reporting — campaigns + margin velocity](feedback_wc3_reporting_focus.md) — Track campaign ROI (source → order → cost to acquire); inventory by margin velocity (margin × turns ÷ carry cost) not just counts
 - [WC3 UI architecture](project_wc3_ui_architecture.md) — Multiple React templates for business types; theme library via sync; contact↔org many-to-many; communications FK is truth, aspects are cache
@@ -136,7 +136,7 @@
 - [Three-agent UI experiment](project_ui_experiment.md) — Claude/5173, Allie/5175, Alice/5176 + baseline/5174; five rounds; all copies kept for human eval; continuous memory capture
 - [qqq/zzz = dead code, delete](feedback_qqq_zzz_cleanup.md) — Files prefixed qqq_ or zzz_ are temp/dead archive; delete unless hold-until-date > today
 - [zz/qq data never tallies](feedback_zz_qq_data_exclusion.md) — Records with ida starting zz or qq are training/disposable; exclude from all reports, GL, dashboards, decisions
-- [No List.tsx — DataBrowser only](feedback_no_list_tsx.md) — Hard rule: no custom list pages; all lists via DataBrowser at /db/:model; fix DataBrowser, don't build custom lists
+- [No List.tsx — databrowser only](feedback_no_list_tsx.md) — Hard rule: no custom list pages; all lists via databrowser at /db/:model; fix databrowser, don't build custom lists
 - [REST for routing, wcapi for data](feedback_rest_wcapi_strict.md) — Django REST paths are browser routing only; all CRUD through wcapi.ts; no direct Django URL calls from components
 - [Noelle MCP server + vector store](project_noelle_mcp.md) — 6 tools (ask/search/describe/snapshot/diff/log); 49K+ chunks at .chroma_db_noelle; data-driven network design
 - [CrashHarvester standalone app](project_crashharvester.md) — Standalone data supply chain; MM reads library only; Alice manages sources; DynamicCatalogs pattern; no legacy overlay code in api.py
@@ -200,6 +200,7 @@
 - [Site maintenance — link checker](project_site_maintenance.md) — allie-linkcheck.py; 9 sites weekly; red/orange flags; Action #392
 - [leftshoe — team intelligence](reference_leftshoe.md) — handshake+store+retro.db+MCP; .chroma_db_leftshoe; everyone builds; quiet not secret
 - [UI design principles](feedback_ui_design_principles.md) — One control one place; left-justified; dangerous last; prefs-driven personalization
-- [DataBrowser layout restructure](project_databrowser_layout.md) — AdminWorkbench→DataBrowser; unified toolbar; prefs NavBar; per-zone theme; Minimal buttons; kb shortcuts; zone tooltips
+- [databrowser layout restructure](project_databrowser_layout.md) — AdminWorkbench→databrowser; unified toolbar; prefs NavBar; per-zone theme; Minimal buttons; kb shortcuts; zone tooltips
+- [databrowser is always lowercase](feedback_databrowser_lowercase.md) — Never "DataBrowser" in UI/docs/conversation; users ignore case if we do
 - [Context compression warning](feedback_compression_warning.md) — Tell Bill bluntly when compression starts; no softening; he decides to save or continue
 - [WC3 tax + commission status](project_wc3_tax_commission.md) — Built-in tax+commission complete; external services deferred; Action TAX-COMM-PHASE5 due 2026-09-16
