@@ -130,6 +130,7 @@
 - [data→config rename](project_data_to_config_rename.md) — 16 models renamed data→config; DB+Python+React done; eliminates wcapi data wrapper collision
 - [json_field_ops](reference_json_field_ops.md) — apply_json_op() for surgical JSON updates (upsert/merge/append/remove); works in shell, save_view wiring pending
 - [Alice infrastructure](reference_alice_infrastructure.md) — Vector store (4521 chunks), MCP server (5 tools), quiz engine (28 questions), observation pipeline
+- [Two Alice instances](project_two_alices.md) — Local Mac (Ollama alice:latest, MCP, vector store) + webclerk.com production; same agent, two deployments
 - [Chrome DevTools MCP](reference_chrome_debug.md) — Chrome 150 requires --user-data-dir; Chrome Debug app; firewall allow; readme at readmes/46
 - [WC3 flow charts](reference_wc3_flowcharts.md) — 12 Graphviz DOT+PDF charts at readmes/flowcharts/; master, inventory, payment, serials, project, QA, action, contact, signin
 - [Open source tools](reference_open_source_tools.md) — 20 tools for Alice+Ingrid; Graphviz, D2, matplotlib, pandas, phonenumbers, etc; Document records TOOL-*
