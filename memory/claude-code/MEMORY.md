@@ -101,6 +101,7 @@
 - [Network ops never modify stations](feedback_network_never_modifies_stations.md) — Build/Animate/Populate must never change station instance names, tags, or definitions; templates read-only during network ops
 - [DB consolidation — single local PostgreSQL](project_db_consolidation.md) — Only commerce_expert; bill/agent_bill dropped; runserver.sh defaults local; no SQLite
 - [Claude Code WebClerk identity](reference_claude_identity.md) — claude@jpods.com id=69 superuser; MCP authenticates as claude not allie; own audit trail
+- [Claude identity on Andi](reference_claude_andi_identity.md) — id=10627 on Andi, id=69 local; goal: one MCP interface for both
 - [RBAC silently denies without superuser](feedback_rbac_superuser.md) — inject_role_filters denies all if no UserProfile; agents must be is_superuser=True
 - [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
 - [refs/metadata secondary to PKs](feedback_refs_secondary_to_pk.md) — refs.links and metadata are denormalized caches; PKs/FKs are authoritative; never read refs to determine relationships
