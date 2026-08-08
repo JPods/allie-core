@@ -102,6 +102,10 @@
 - [DB consolidation — single local PostgreSQL](project_db_consolidation.md) — Only commerce_expert; bill/agent_bill dropped; runserver.sh defaults local; no SQLite
 - [Claude Code WebClerk identity](reference_claude_identity.md) — claude@jpods.com id=69 superuser; MCP authenticates as claude not allie; own audit trail
 - [Claude identity on Andi](reference_claude_andi_identity.md) — id=10627 on Andi, id=69 local; goal: one MCP interface for both
+- [assigned_to is a project roster](feedback_assign_to_roster.md) — Vendors/mfrs/customers on projects; role=RBAC; first=Responsible Person; 3-tier fallback
+- [Catch naming inconsistencies](feedback_naming_consistency.md) — Feeder names must match target field; flag Bill's variants, don't echo them
+- [Fixed column widths](feedback_fixed_column_widths.md) — Never auto-size; users stack important info first; width is user's allocation decision
+- [Onboarding is always priority 1](feedback_onboarding_priority1.md) — Feature not done until trail is packed; ski company doctrine; Alice watches for bramble bushes
 - [RBAC silently denies without superuser](feedback_rbac_superuser.md) — inject_role_filters denies all if no UserProfile; agents must be is_superuser=True
 - [Simple dev passwords are fine](feedback_simple_dev_passwords.md) — pass1111/1111pass acceptable in single-machine dev; change at production cutover
 - [refs/metadata secondary to PKs](feedback_refs_secondary_to_pk.md) — refs.links and metadata are denormalized caches; PKs/FKs are authoritative; never read refs to determine relationships
