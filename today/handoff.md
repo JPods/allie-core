@@ -1,48 +1,55 @@
 # Handoff — 2026-08-09
 
 ## Where We Left Off
-Production deployment and demo instance session. Set up webclerk.com/demo/ as a read-only demo with seeded transaction data. Created READ_ONLY_MODE — a general-purpose setting that locks any WC3 database with four enforcement layers. Wrote three new infrastructure readmes and a deployment flowchart. Fixed two production bugs in email notifications and order signals. Taught Allie and Alice everything from this session.
 
-## Demo Instance — Live
-- **URL:** https://webclerk.com/demo/app/
-- **Login:** demo@webclerk.com / demo2026
-- **DB:** commerce_demo (SELECT-only user webclerk_demo_ro)
-- **Service:** webclerk3-demo.service on port 8001 (boot-enabled)
-- **Data:** 12 items, 5 customers, 7 contacts, 3 complete transaction cycles (proposal→order→invoice→payment→GL)
-- **Base dump:** /opt/andi/apps/webclerk3-demo/webclerk3-base-install.dump (1.1MB)
+Massive infrastructure session: built 10 connection classes with seed records + flowcharts + consolidated readme. Overhauled serial tracking — actions now embedded in `serial.config.actions[]` (self-contained, travels with the serial). Built 4 R25 serial panels (action submission, shipping selector with auto-select, line panel, print section). Added serial number rendering to pdfme print system — test PDF verified. Created bulk receive/ship services and Alice's standard serial load JSON format. Added Claude API connection (`conn-ai-claude`) so Alice can escalate beyond her local model.
 
-## READ_ONLY_MODE
-- `.env` boolean — locks any WC3 database
-- Layer 1: WriteGateMiddleware blocks write HTTP methods
-- Layer 2: SaveWcapiView.post() returns 405
-- Layer 3: WCAPIDeleteView._do_delete() returns 405
-- Layer 4: Admin URL removed from urlconf
-- Layer 5 (optional): SELECT-only PostgreSQL user
-- Readme: readmes/topics/infrastructure/read-only-mode.md
+## Do This First Next Session
 
-## Files Created/Modified (WC3 repo)
-- `apps/transactions/management/commands/seed_demo_transactions.py` — NEW
-- `apps/transactions/services/email_notifications.py` — bug fix (refs.links.email dict handling)
-- `apps/transactions/signals.py` — bug fix (order notification) + logger import
-- `common/middleware/security.py` — READ_ONLY_MODE support
-- `apps/core/views/save_view.py` — READ_ONLY_MODE check
-- `apps/core/views/wcapi.py` — READ_ONLY_MODE check
-- `webclerk3_api/settings.py` — READ_ONLY_MODE from .env
-- `webclerk3_api/urls.py` — conditional admin URL
-- `readmes/topics/infrastructure/production-deployment.md` — NEW
-- `readmes/topics/infrastructure/minimal-viable-install.md` — NEW
-- `readmes/topics/infrastructure/read-only-mode.md` — NEW
-- `readmes/charts/flowcharts/wc3-deployment.dot` + `.pdf` — NEW (#34)
-- `readmes/charts/flowcharts/README.md` — updated
-- `readmes/67-webclerk-com-deployment.md` — updated
+1. **Polish 19 pdfme print reports** — cycle through each, verify field mappings against actual data, add serial integration where applicable, test PDF output. This is the primary task.
+2. Read `readmes/connections/connection-classes.md` for context on integration architecture
+3. Read `readmes/connections/serial-tracking.md` for the config.actions[] architecture
+4. Read `readmes/connections/refs-links-and-linkage.md` for the travel-with pattern
 
-## Bug Fixes
-1. `email_notifications.py` — refs.links.email contains dicts not plain IDs; extract id before filter
-2. `signals.py` — order.name doesn't exist; wrapped in try/except (needs proper fix)
+## Files Created This Session
 
-## Open Items for Next Session
-- `seed_coaching` has stale `model_name` field on Document model — crashes seed_freshstart
-- `seed_gl_accounts` has `used_for='payables'` choice validation error
-- Demo save/delete message is hardcoded to webclerk.com — should be configurable
-- `order.name` in send_order_created_notification needs proper fix, not just try/except
-- Key lesson: use explicit `_id` FK assignment in seed commands to avoid post_save signal crashes
+**Allie repo:**
+- `readmes/connections/connection-classes.md` — consolidated connection class readme
+- `readmes/connections/refs-links-and-linkage.md` — refs.links + LinkageEntry documentation
+- `readmes/connections/serial-tracking.md` — config.actions[] + serial_trends architecture
+- `readmes/flowcharts/wc3-conn-*.dot` + `.pdf` — 10 connection flowcharts
+- `readmes/flowcharts/wc3-refs-linkage.dot` + `.pdf` — refs/linkage flowchart
+- `readmes/flowcharts/wc3-serial-actions.dot` + `.pdf` — serial actions flowchart
+
+**WC3 repo:**
+- `apps/core/management/commands/seed_connections.py` — 20 connection records (was 9, now 20)
+- `apps/products/models/serial.py` — config.actions[], updated log_action()
+- `apps/products/services/serial_trends.py` — trend consolidation service
+- `apps/products/services/serial_bulk.py` — bulk receive, auto-select, issue serials
+- `common/schemas/serial.py` — SerialActionEntry Pydantic schema
+
+**React2025 repo:**
+- `src/apps/products/models/serial/pages/SerialActionPanel.tsx` — action submission
+- `src/apps/products/models/serial/pages/SerialSelectPanel.tsx` — shipping serial selector
+- `src/apps/products/models/serial/pages/SerialLinePanel.tsx` — view serials on any line
+- `src/apps/transactions/components/print/SerialPrintSection.tsx` — serial print component
+- `src/apps/transactions/components/print/printTypes.ts` — added PrintSerial, serials[] on PrintLineItem
+- `src/services/pdfme/fieldRegistry.ts` — added serial fields
+- `src/services/pdfme/generateCommercePdf.ts` — serial number rendering under line items
+
+## Open Items
+
+- 19 print reports need individual polish cycle (next session priority)
+- Serial lifecycle methods do double-save (model save + log_action save) — refactor to single save
+- `auto_select_serials()` JSON ordering needs Postgres version verification
+- `seed_coaching` has stale `model_name` on Document — crashes seed_freshstart (from prior session)
+- `seed_gl_accounts` has `used_for='payables'` validation error (from prior session)
+
+## Key Decisions Made
+
+- Serial actions embedded in config, not separate table (self-contained records)
+- Serialized items auto-get Document(purpose=serial_trends) — sequence overflow for large datasets
+- Alice normalizes vendor docs into standard serial load JSON — count must match len(serials)
+- Exact count match for serial shipping — no partial, selected must equal line qty
+- conn-ai-claude gives Alice a Claude API bridge — she frames, Claude answers, she learns
+- Connection classes: 10 day-one, 4 future (WMS, catalog sync, marketing, customs)

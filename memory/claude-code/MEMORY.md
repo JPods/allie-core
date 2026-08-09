@@ -1,6 +1,7 @@
 # Memory Index
 
 - [leftshoe is the standard session opening](feedback_leftshoe_standard_opening.md) — Call leftshoe MCP first in every session; report team status before anything else
+- [Teach Allie and Alice before session ends](feedback_teach_before_session_end.md) — ask_ calls are read-only; use teach_allie + alice_observe to persist decisions
 - [Allie and Alice are active participants](feedback_active_participants.md) — Consult them every session; verify MCP connectivity first; venv not source path
 - [Feed Allie and Alice before asking](feedback_feed_allie_alice.md) — They confabulate without context; feed data first, ask narrow questions; ask Bill to help if stuck
 - [Data-Driven UI architecture](project_data_driven_ui.md) — datadrivenui.com; 45K→2K lines; DynamicDetail + ui.json + Settings; docs in Allie + WC3
@@ -8,6 +9,8 @@
 - [No import parsing in WC3](feedback_no_import_in_wc3.md) — All transformation outside WC3; bulk only via bundle; no commented-out code
 - [Statement Sorter standalone](project_statement_sorter_standalone.md) — Free tool: Python + HTML; sort statements; lead gen for WebClerk
 - [WebClerk.com live deployment](project_webclerk_live.md) — Full stack on Andi via CF; /sort /app/ /wcapi/ /admin/; commerce_expert DB
+- [Demo instance on Andi](project_demo_instance.md) — webclerk.com/demo/; port 8001; commerce_demo DB; READ_ONLY_MODE; seeded transaction cycles
+- [READ_ONLY_MODE setting](reference_read_only_mode.md) — .env boolean locks any WC3 database; 4 enforcement layers; demos/archives/audits
 - [Athena integrity system](reference_athena_integrity.md) — Self-defense: sign files, verify every 4hrs, FAULT on tampering; athena_sign command
 - [StatementHarvester JSON architecture](project_statement_harvester.md) — CSV→JSON→classify→promote; personal never in psql; UUID per line
 - [Payment checkbook architecture](project_payment_checkbook.md) — Signed amounts, received/expense, category→GL, method CharField, dashboard buttons
