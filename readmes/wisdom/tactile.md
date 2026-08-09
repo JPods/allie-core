@@ -58,7 +58,7 @@ sitting down. Before the pod moves.
 | Domain | The tactile moment | What balanced and sturdy means |
 |--------|-------------------|-------------------------------|
 | Printed invoice | Customer holds the page | Aligned columns, crisp logo, totals where expected |
-| DataBrowser | User scans the list | Readable font, clear headers, no clutter |
+| databrowser | User scans the list | Readable font, clear headers, no clutter |
 | PDF Designer | User drags a field | Snap to grid, smooth movement, immediate render |
 | JPods pod | Passenger sits down | Firm seat, smooth door, no vibration |
 | JPods station | Passenger steps on platform | Level surface, clear markings, intuitive flow |

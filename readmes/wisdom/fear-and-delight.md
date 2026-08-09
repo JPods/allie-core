@@ -99,7 +99,7 @@ The retrospection is where action becomes learning.
 | **Item catalog** | Archive unused items | search_hit_count, last_sold_date | Quarterly catalog review |
 | **Contacts** | Merge duplicates, archive stale | last_activity_date, transaction_count | Contact hygiene audit |
 | **Saved searches** | Delete outdated filters | times_used, last_used | Monthly search review |
-| **DataBrowser layouts** | Replace inherited with purpose-built | adoption_count | Layout review |
+| **databrowser layouts** | Replace inherited with purpose-built | adoption_count | Layout review |
 | **Actions** | Close completed, trash abandoned | completion_rate, avg_days_open | Weekly kanban review |
 | **JPods templates** | Build → test → reject sloppy | fault_count per template | Post-build review |
 | **Physical machines** | Replace worn parts | drift metrics, MTBF | Post-repair TFTS |
