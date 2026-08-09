@@ -1,35 +1,48 @@
-# Handoff — 2026-08-08 (Session 3)
+# Handoff — 2026-08-09
 
 ## Where We Left Off
-WC2 tally salvage + transaction architecture session. Major WC2 code review (15+ methods). Built: Report model script fields (migration 0034), address verification supervisor (3-tier with geocoding), ZIP-driven tax calc (tax_lookup.py + customer_defaults wiring + tax_service Connection staged), BOM 3-depth rollup, pricing chain overhaul (catalogs, per-level qty breaks, margin warning not enforcement), early payment discount (creates real Payment record), write-off difference (same pattern). Two readmes + two Alice Dashboard Document records (pricing-architecture, payment-application). Returns decided = negative invoices. Transaction gap analysis: 8 items remaining.
+Production deployment and demo instance session. Set up webclerk.com/demo/ as a read-only demo with seeded transaction data. Created READ_ONLY_MODE — a general-purpose setting that locks any WC3 database with four enforcement layers. Wrote three new infrastructure readmes and a deployment flowchart. Fixed two production bugs in email notifications and order signals. Taught Allie and Alice everything from this session.
 
-## Do This First Next Session
-1. **Seed tax rate Settings** — create `us_state_tax_rates` and `zip_to_state` Setting records with real data for all 50 states + DC. Either a seed script or WC_HQ sync.
-2. **Test address verification** — call `verify_address()` with a real address, verify lat/lng comes back from Nominatim, verify carrier fallback works.
-3. **Wire Terms → finance** — when Terms model is applied to a transaction, populate `finance.discount_days` and `finance.discount_rate` from the Term record so early payment discount calc can fire.
-4. **20/200-60-20/100 Report records** — create the margin velocity reports for Alice, Product, and Support dashboards.
-5. **Credit check on save** — wire `credit_utilization()` to fire during transaction save when customer is assigned.
+## Demo Instance — Live
+- **URL:** https://webclerk.com/demo/app/
+- **Login:** demo@webclerk.com / demo2026
+- **DB:** commerce_demo (SELECT-only user webclerk_demo_ro)
+- **Service:** webclerk3-demo.service on port 8001 (boot-enabled)
+- **Data:** 12 items, 5 customers, 7 contacts, 3 complete transaction cycles (proposal→order→invoice→payment→GL)
+- **Base dump:** /opt/andi/apps/webclerk3-demo/webclerk3-base-install.dump (1.1MB)
 
-## Open Problems
-- Alice's vector store is stale — she doesn't know about PaymentApplication, BOM, or inventory models that already exist. Needs refresh.
-- Denormalize stack `push_to_stack()` not atomic under high concurrency (from session 2, still open).
-- Import pipeline backend endpoints still TODO (from session 1).
-- FileUploadPanel `/wcapi/upload/` endpoint not built yet (from session 1).
-- `finance.write_off_gl_account` needs a Setting default so users don't set it per invoice.
-- Catalog pricing tests needed for `_resolve_catalog_price()` and universal % logic.
-- Early payment discount creates a discount Payment then calls `_apply_one` recursively — needs testing to confirm the recursive application doesn't trigger another discount check.
+## READ_ONLY_MODE
+- `.env` boolean — locks any WC3 database
+- Layer 1: WriteGateMiddleware blocks write HTTP methods
+- Layer 2: SaveWcapiView.post() returns 405
+- Layer 3: WCAPIDeleteView._do_delete() returns 405
+- Layer 4: Admin URL removed from urlconf
+- Layer 5 (optional): SELECT-only PostgreSQL user
+- Readme: readmes/topics/infrastructure/read-only-mode.md
 
-## What Was Decided (and Why)
-- **TallyMaster → Report records with 3 script fields** — script_before (setup), script_during (business logic), script_after (results/notifications). Built-in reports lock before/after, users customize during.
-- **Returns = negative invoices** — credit_note invoice type, negative quantities. No separate RMA model. Same conversion chain, same totals, same GL.
-- **Every dollar = a Payment record** — cash, discounts, write-offs all create Payment records with their own GL posting. No silent total adjustments.
-- **Margin floor = WARNING only** — system never overrides user's price. `below_margin_floor` flag for UI display.
-- **ZIP drives tax** — ZIP → state → rate. Setting from WC_HQ carries rates. Local TaxJurisdiction overrides.
-- **BOM depth is user's choice** — 1 (kit), 2 (one level of intermediates), 0 (all levels to leaf). Inventory decision, not math decision.
-- **Lat/lng on every address** — required for desktop-hosted local commerce proximity search. Nominatim provides free geocoding without carrier accounts.
-- **Qty breaks carry per-level columns** — `{"min_qty": 25, "retail": 11.00, "wholesale_pct": 33.3}`. Dollar wins, percentage from base. Better than WC2's PriceMatrix table.
-- **Catalog pricing is Step 0** — highest priority in resolution chain. Item-specific catalog price skips entire standard chain. Universal % applies after standard chain resolves.
-- **Commission deferred** — future/maybe list. Too messy for now.
-- **ConsolidateRecs eliminated** — uuid + bundles replace merge operations. No more walking every table to swap IDs.
-- **GL: gross debits/credits** — stored separately, net computed for display only. Standard accounting practice.
-- **AR aging: fixed 30/60/90 + future-due** — same boundaries WC2 used for 20+ years. No configuration needed.
+## Files Created/Modified (WC3 repo)
+- `apps/transactions/management/commands/seed_demo_transactions.py` — NEW
+- `apps/transactions/services/email_notifications.py` — bug fix (refs.links.email dict handling)
+- `apps/transactions/signals.py` — bug fix (order notification) + logger import
+- `common/middleware/security.py` — READ_ONLY_MODE support
+- `apps/core/views/save_view.py` — READ_ONLY_MODE check
+- `apps/core/views/wcapi.py` — READ_ONLY_MODE check
+- `webclerk3_api/settings.py` — READ_ONLY_MODE from .env
+- `webclerk3_api/urls.py` — conditional admin URL
+- `readmes/topics/infrastructure/production-deployment.md` — NEW
+- `readmes/topics/infrastructure/minimal-viable-install.md` — NEW
+- `readmes/topics/infrastructure/read-only-mode.md` — NEW
+- `readmes/charts/flowcharts/wc3-deployment.dot` + `.pdf` — NEW (#34)
+- `readmes/charts/flowcharts/README.md` — updated
+- `readmes/67-webclerk-com-deployment.md` — updated
+
+## Bug Fixes
+1. `email_notifications.py` — refs.links.email contains dicts not plain IDs; extract id before filter
+2. `signals.py` — order.name doesn't exist; wrapped in try/except (needs proper fix)
+
+## Open Items for Next Session
+- `seed_coaching` has stale `model_name` field on Document model — crashes seed_freshstart
+- `seed_gl_accounts` has `used_for='payables'` choice validation error
+- Demo save/delete message is hardcoded to webclerk.com — should be configurable
+- `order.name` in send_order_created_notification needs proper fix, not just try/except
+- Key lesson: use explicit `_id` FK assignment in seed commands to avoid post_save signal crashes
