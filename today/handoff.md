@@ -1,28 +1,26 @@
-# Handoff — 2026-08-08
+# Handoff — 2026-08-08 (Session 2)
 
 ## Where We Left Off
-Major documentation and architecture session. 33 WC3 flowcharts written from WC2 PDF + Miro boards. Alice Dashboard working (routing fix — resolveWindowElement exact-before-parameterized). Import pipeline schemas designed (ImportConfig, ImportBundleHeader with Athena review). File storage policy documented (library URLs vs local, job photo archival, QA compliance photos). FileUploadPanel component built and wired into DynamicDetail (every model gets upload). ActionFloatingWindow refactored to use standard DetailToolbar. Two 429 cascade bugs fixed (useDefaultCompany retry loop, consoleCapture echo loop).
+WC2 salvage session. Analyzed 182 WC_ methods, Bill assessed all 9 extractable patterns. Built 8 deliverables: Alice's denormalize stack (permanent Pending, changes[] accumulates {model,id}, pops 25/cycle), RESTful range queries (/wcapi/order/dt_created/from/to/), three-tier search (personal prefs.search[] → shared Report → delivered Report), PostgreSQL FTS with ranking + trigram fuzzy, DocSection component with 8 HELP-* Document records in Alice Dashboard, WCHQ ida prefix convention (wchq-* on 80+ Settings, seeds updated), leftshoe fire-and-forget protocol.
 
 ## Do This First Next Session
-1. **Browser-test Alice Dashboard** — Training tab (33 flowchart links), Import Data tab, all other tabs. Verify no regressions.
-2. **Build `/wcapi/upload/` endpoint** — multipart/form-data upload that saves to `media/<model>/<ida>/`, creates/updates Document record. FileUploadPanel UI is ready, needs this backend.
-3. **Replace hardcoded flowchart array** — move from React static array to Document records (`model_name='flowchart'`). Training tab queries documents instead of hardcoded list.
-4. **Write Pydantic schemas** — `FileRole`, `ModelFileConfig`, `DocumentFileRef` from the file-storage-policy readme into `common/schemas/document.py`.
-5. **Seed file_config Settings** — one per model with default roles (item: tn/detail/spec/msds, customer: logo/contract, etc.).
+1. **Browser-test Alice Dashboard** — expand each DocSection, verify all 8 HELP-* documents load correctly
+2. **Test RESTful range query** — `curl /wcapi/order/dt_created/2026-01-01/2026-08-01/` and verify results
+3. **Test save-search endpoint** — POST to `/wcapi/save-search/` with scope=personal and scope=shared
+4. **Verify denormalize stack** — save a contact, check that Pending record `alice.denormalize.stack` has the entry in changes[]
+5. **Remove legacy hardcoded help** — the inline "How to Extend Alice" and "MCP Server Guide" JSX blocks can be removed now that HELP-EXTEND and HELP-MCP Document records exist
 
 ## Open Problems
-- Import pipeline backend not built — Alice analysis endpoint, Athena review endpoint, bundle submission wiring all TODO
-- FileUploadPanel creates Document records but doesn't save files to disk yet (needs upload endpoint)
-- Rate limit at 1000/min for dev — fine for 2 users, review before any multi-user testing
-- `consoleCapture.startAutoFlush` runs every 60s — could be wasteful if there are never errors; consider making it event-driven
-- WC2 `imgBase64.4dm` thumbnail generation pattern needs R25 equivalent (server-side on Document post-save)
+- Denormalize stack `push_to_stack()` is not atomic under high concurrency — `get_or_create` + append could lose an append if two processes read same stack simultaneously. Low risk at current scale.
+- Import pipeline backend still TODO (Alice analysis endpoint, Athena review endpoint, bundle submission)
+- FileUploadPanel creates Document records but `/wcapi/upload/` endpoint not built yet
+- Legacy Setting `purpose='search'` records still exist — need migration script to promote to Report records
+- Alice Dashboard redesign needed — DocSection reference area is bolted on below tabs, needs proper integration
 
 ## What Was Decided (and Why)
-- **Every upload → Document record** — universal tracking; files without Document records are invisible
-- **Library URLs over local files** — manufacturers serve product media; installers don't need 5GB of images locally
-- **Job photos → archive hosting** — high volume, low reuse after project close; shareable gallery at archive URL
-- **QA photos = compliance evidence** — QAQuestion can require specific media roles; Alice flags missing required media
-- **Exact routes before catch-all** — resolveWindowElement checks exact paths first, parameterized second
-- **Try once, fail visibly** — no automatic retries on API failures; user can reload; Axiom 6
-- **File storage: media/model/ida/role.ext** — predictable paths, no query needed to find files
-- **Progress reports = print + web gallery** — printed summary links to full web version with all photos/videos
+- **Searches belong in Report, not Setting** — a saved search IS a report definition. Same spec shape at all three tiers. Promotion is a copy not a transform. TFTS: build it wrong first, the act of building reveals the right abstraction.
+- **WCHQ ida prefix convention** — `wchq-*` on `ida` field. No new boolean. Convention on existing indexed field carries meaning (what + where) not just state. Zero migrations.
+- **One permanent Pending for denormalize** — no flood of Pending rows. Stack in changes[], pop batches, never close.
+- **Fire and forget for Allie/Alice** — don't block on their response. Point and move. Inclusion not synchronization.
+- **FTS at query time, no new columns** — PostgreSQL SearchVector/SearchQuery runs on existing text fields. refs.keywords stays for JSON/tag coverage.
+- **DocSection lazy-loads from Document records** — help content in DB, not JSX. Editable via databrowser without deploys.
