@@ -31,6 +31,7 @@
 - [PhysicalInternet.com](project_physicalinternet_site.md) — 3-layer model; solar on guideways; patents; energy catalyst; green theme
 - [CityRoadkills.com](project_cityroadkills.md) — Folder-per-city; Stop Child Murder; 5 cities; red theme
 - [.config vs sync tokens](feedback_config_vs_sync.md) — Individual tokens in contact record (CarryOn); sync tokens between databases
+- [Affinity Designer for SVGs](feedback_affinity_svg.md) — Bill uses Affinity for polished SVGs; Mac opens .svg in Affinity; Graphviz for drafts only
 
 - [List selection standard](feedback_list_selection_standard.md) — No checkboxes; click=select, shift=range, cmd/ctrl=toggle; all WC list views
 - [AskUserQuestion at decision points](feedback_ask_user_question.md) — Bill likes question UI for steering; use at decision points
