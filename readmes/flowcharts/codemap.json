@@ -290,6 +290,139 @@
     "invoice_line": {
       "model": "apps/transactions/models/line.py",
       "description": "Invoice line — quantity.placed, actioned, remaining, canceled, parent."
+    },
+
+    "action": {
+      "model": "apps/core/models/action.py:10",
+      "functions": [
+        {"name": "Action._pending_attachments", "file": "apps/core/models/action.py", "line": 198, "context": "pre_save captures attachment list"},
+        {"name": "Action.post_save (linkage)", "file": "apps/core/models/action.py", "line": 230, "context": "creates LinkageEntry group for documents"},
+        {"name": "Action.contact_id resolve", "file": "apps/core/models/action.py", "line": 285, "context": "auto-resolves contact from assigned_to"}
+      ],
+      "schema": {
+        "fields": ["action", "description", "action_type", "status", "kanban_column", "percent_complete", "contact_id", "assigned_to", "project_id", "parent_action"],
+        "data_keys": ["retrospection", "impact", "created_by", "updated_by"]
+      },
+      "description": "Universal task — who, what, why, when, where, how. References any record. Tracks communication touches."
+    },
+    "parent_action": {
+      "model": "apps/core/models/action.py:12",
+      "functions": [
+        {"name": "Action.parent_action", "file": "apps/core/models/action.py", "line": 12, "context": "FK to self via uuid — parent-child hierarchy"}
+      ],
+      "description": "Parent action — opportunity or case. Child actions are touches (email, call, visit)."
+    },
+    "document": {
+      "model": "apps/docs/models/document.py:22",
+      "functions": [
+        {"name": "Document.increment_access", "file": "apps/docs/models/document.py", "line": 76, "context": "atomic access counter + history"}
+      ],
+      "schema": {
+        "fields": ["name", "slug", "status", "description", "body", "mime_type", "size_bytes", "checksum", "path", "config", "retention_period"],
+        "data_keys": ["path.storage", "path.key", "config.inline_content_b64", "config.inline_encoding", "metadata.exif", "metadata.virus"]
+      },
+      "description": "File storage — images, videos, PDFs. Inline-encoded in config or external path. EXIF extraction, virus scan."
+    },
+    "upload": {
+      "service": "apps/docs/views_upload.py",
+      "functions": [
+        {"name": "upload_view", "file": "apps/docs/views_upload.py", "line": 46, "context": "inline encoding: zlib+base64 for small files"},
+        {"name": "checksum computation", "file": "apps/docs/views_upload.py", "line": 73, "context": "SHA256 dedup check"}
+      ],
+      "description": "File upload pipeline — checksum, inline encode, EXIF extract, virus scan, create Document."
+    },
+    "linkage_parent": {
+      "model": "apps/docs/models/linkage_entry.py:28",
+      "functions": [
+        {"name": "LinkageEntry.next_group_id", "file": "apps/docs/models/linkage_entry.py", "line": 100, "context": "generates next group_id for clustering"}
+      ],
+      "description": "LinkageEntry parent — clusters action with its attached documents via group_id."
+    },
+    "linkage_child": {
+      "model": "apps/docs/models/linkage_entry.py:28",
+      "description": "LinkageEntry child — document attached to action. Same group_id as parent."
+    },
+    "contact": {
+      "model": "apps/contacts/models/contact.py",
+      "description": "Central identity — customers, vendors, employees. Has related Email, Phone, Address models."
+    },
+    "email_touch": {
+      "model": "apps/core/models/action.py:10",
+      "functions": [
+        {"name": "Action with action_type='email'", "file": "apps/core/choices.py", "line": 30, "context": "action_type enum includes call, email, visit, meeting, demo, etc."}
+      ],
+      "description": "Email touch — Action with action_type='email'. Subject in action field, body in description."
+    },
+    "call_touch": {
+      "model": "apps/core/models/action.py:10",
+      "description": "Phone call touch — Action with action_type='call'. Notes in description, duration in config."
+    },
+    "visit_touch": {
+      "model": "apps/core/models/action.py:10",
+      "description": "Visit touch — Action with action_type='visit'. Location in metadata.address, photos via LinkageEntry."
+    },
+    "meeting_touch": {
+      "model": "apps/core/models/action.py:10",
+      "description": "Meeting touch — Action with action_type='meeting'. Attendees in assigned_to, agenda in description."
+    },
+    "mail_merge": {
+      "service": "apps/communications/services/mail_merge.py",
+      "functions": [
+        {"name": "merge_template", "file": "apps/communications/services/mail_merge.py", "line": 1, "context": "template rendering"},
+        {"name": "send_email", "file": "apps/communications/services/mail_merge.py", "line": 1, "context": "send via template"},
+        {"name": "bulk_send", "file": "apps/communications/services/mail_merge.py", "line": 1, "context": "batch send to multiple contacts"}
+      ],
+      "description": "Mail merge — template-based email generation. merge, preview, send, bulk_send."
+    },
+    "retro": {
+      "model": "apps/core/models/action.py:90",
+      "functions": [
+        {"name": "Action.retrospection", "file": "apps/core/models/action.py", "line": 90, "context": "JSONField: intent, grade, tfts, known_unknowns"},
+        {"name": "Action.impact", "file": "apps/core/models/action.py", "line": 37, "context": "JSONField: predicted 1-5, actual 1-5, refs, explanation"}
+      ],
+      "description": "Retrospection on Action — intent, grade A-F, TFTS arc, impact predicted vs actual. Alice auto-populates."
+    },
+    "kanban": {
+      "model": "apps/core/models/action.py:34",
+      "functions": [
+        {"name": "Action.kanban_column", "file": "apps/core/models/action.py", "line": 34, "context": "choices: Backlog, Planning, InProcess, Review, Complete"}
+      ],
+      "description": "Kanban view — Action workflow columns. Backlog → Planning → InProcess → Review → Complete."
+    },
+    "touch_timeline": {
+      "description": "Touch timeline — all child actions for a parent, ordered by dt_created. Shows multi-touch sequence."
+    },
+    "documents": {
+      "model": "apps/docs/models/document.py:22",
+      "description": "Attached documents — proposals, photos, videos, meeting notes. Linked via LinkageEntry."
+    },
+
+    "statement_sorter": {
+      "service": "sites/statement_sorter/sort.py",
+      "entry_point": "main",
+      "functions": [
+        {"name": "detect", "file": "sites/statement_sorter/sort.py", "line": 58, "context": "auto-detect bank format from CSV headers"},
+        {"name": "build_html", "file": "sites/statement_sorter/sort.py", "line": 216, "context": "renders classification UI"},
+        {"name": "export", "file": "sites/statement_sorter/sort.py", "line": 524, "context": "CSV/JSON export of classified lines"}
+      ],
+      "description": "Statement Sorter — free standalone tool. Drop bank CSVs, classify business vs personal, export. Lead gen for WebClerk. Feeds Payment.expense."
+    },
+    "statement_classify": {
+      "description": "Classification step — user marks each line as business or personal, assigns category from 22 standard categories."
+    },
+    "statement_export": {
+      "description": "Export — classified lines become Payment records in WebClerk. Business lines → expense, personal lines → excluded."
+    },
+    "payment": {
+      "model": "apps/transactions/models/payment.py",
+      "functions": [
+        {"name": "Payment", "file": "apps/transactions/models/payment.py", "line": 1, "context": "AR+AP via type field; signed amounts"}
+      ],
+      "description": "Payment — handles AR (received) and AP (expense). Signed amounts. Category maps to GL. Statement Sorter feeds expense side."
+    },
+    "expense": {
+      "model": "apps/transactions/models/payment.py",
+      "description": "Expense — Payment with type=expense. Category from Statement Sorter maps to GL account. Checkbook-style entry."
     }
   }
 }

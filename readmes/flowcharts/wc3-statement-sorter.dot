@@ -1,0 +1,48 @@
+// WC3 Statement Sorter → Payment.expense pipeline
+// Render: dot -Tsvg wc3-statement-sorter.dot -o wc3-statement-sorter.svg
+
+// CodeMap revision: 1 — 2026-08-11
+
+digraph wc3_statement_sorter {
+    rankdir=LR
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=10 style=filled]
+    edge [fontname="Helvetica" fontsize=9]
+    label="WC3 — Statement Sorter → Payment.expense"
+    labelloc=t
+    fontsize=14
+    pad=0.5
+
+    // Sources
+    bank_csv [label="Bank CSV\n(Wells Fargo, USAA,\nWise, GoDaddy)" shape=folder fillcolor="#AED6F1"]
+
+    // Statement Sorter
+    statement_sorter [label="Statement\nSorter" shape=box fillcolor="#F5CBA7" fontsize=12]
+    statement_classify [label="Classify\nbusiness / personal" shape=diamond fillcolor="#FCF3CF"]
+
+    // Outputs
+    statement_export [label="Export\n(CSV / JSON)" shape=box fillcolor="#D5F5E3"]
+    personal [label="Personal\n(excluded)" shape=box fillcolor="#FADBD8" style="filled,dashed"]
+
+    // WebClerk
+    payment [label="Payment" shape=box fillcolor="#D4E6F1"]
+    expense [label="Expense\n(AP)" shape=box fillcolor="#85C1E9"]
+
+    // GL
+    gl [label="GL Journal\nEntry" shape=box fillcolor="#E8DAEF"]
+
+    // Categories
+    categories [label="22 Categories\nOffice, Travel, Hosting,\nSoftware, Vehicle, ..." shape=note fillcolor="#FEF9E7"]
+
+    // Flow
+    bank_csv -> statement_sorter [label="drop files" color="#2980B9"]
+    statement_sorter -> statement_classify [label="auto-detect\nbank format" color="#F39C12"]
+    statement_classify -> statement_export [label="business" color="#27AE60"]
+    statement_classify -> personal [label="personal" color="#E74C3C" style=dashed]
+    categories -> statement_classify [style=dashed color="#8E44AD"]
+
+    statement_export -> payment [label="import to\nWebClerk" color="#2980B9"]
+    payment -> expense [label="type=expense" color="#2980B9"]
+    expense -> gl [label="journalize" color="#8E44AD"]
+}
