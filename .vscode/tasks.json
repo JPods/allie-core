@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CodeMap: Open Viewer",
+      "type": "shell",
+      "command": "python3 ${workspaceFolder}/scripts/codemap_serve.py",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated"
+      },
+      "group": "none"
+    },
+    {
+      "label": "CodeMap: Enrich All",
+      "type": "shell",
+      "command": "python3 ${workspaceFolder}/scripts/codemap_enrich.py --all --render",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+    {
+      "label": "CodeMap: Update Documents",
+      "type": "shell",
+      "command": "${workspaceFolder}/../Documents/CommerceExpert/webClerk3/venv/bin/python3 ${workspaceFolder}/scripts/codemap_seed_documents.py --apply --re-enrich",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+    {
+      "label": "CodeMap: Open in Simple Browser",
+      "type": "shell",
+      "command": "python3 -m http.server 8787 --directory ${workspaceFolder}/readmes/flowcharts & sleep 1 && code --open-url http://localhost:8787/codemap-viewer.html",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

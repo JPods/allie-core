@@ -5,21 +5,44 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_pending {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=9 style=filled]
-    edge [fontname="Helvetica" fontsize=7]
     label="WC3 — Pending Records: Intent → Action → Archive → Insight\nEvery exchange of inventory and cash captured\nNoise stays outside · Patterns stay forever"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // ── Business Events ──
     subgraph cluster_events {
         label="Business Events (Intent)"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=9
 
         receive [label="Receive\nGoods" shape=box fillcolor="#FDFEFE" fontsize=8]
         ship [label="Ship\nOrder" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -35,7 +58,6 @@ digraph wc3_pending {
     subgraph cluster_pending {
         label="Pending Records — Operational Database\n(intent captured before action)"
         style=filled fillcolor="#FCF3CF" color="#F9E79F"
-        fontsize=9
 
         pend_inv [label="PendingInventory\nAdjustment\n\nitem → layer\nqty, state\nreason, request_ref\ndt_applied\n\npending → applied\n         → canceled" shape=box fillcolor="#FDFEFE" fontsize=8]
 
@@ -48,7 +70,6 @@ digraph wc3_pending {
     subgraph cluster_processing {
         label="Celery Workers — Process Intent"
         style=filled fillcolor="#D5F5E3" color="#82E0AA"
-        fontsize=9
 
         inv_drain [label="Inventory Drain\nevery 30s\nadaptive delay\n\napply qty → layer\ncreate movement\nupdate Item.quantity" shape=box fillcolor="#FDFEFE" fontsize=8]
         pay_apply [label="Payment Apply\n\napply amount\nupdate invoice balance\ncreate ledger entry" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -59,7 +80,6 @@ digraph wc3_pending {
     subgraph cluster_committed {
         label="Committed Records (operational DB)"
         style=filled fillcolor="#D4E6F1" color="#AED6F1"
-        fontsize=9
 
         inv_movement [label="InventoryMovement\n\nqty, movement_type\ndt_recorded\nreference (audit)" shape=box fillcolor="#FDFEFE" fontsize=8]
         pay_app [label="PaymentApplication\n\namount, applied_at\nnotes (audit)" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -70,14 +90,12 @@ digraph wc3_pending {
     subgraph cluster_archive {
         label="External Archive — Dated Storage\n(noise leaves operational DB)"
         style=filled fillcolor="#E8DAEF" color="#D2B4DE"
-        fontsize=9
 
         archive_task [label="Alice: Archive\nPending Task\n(Celery nightly)\n\nstate=applied/canceled\n→ extract intent data\n→ write dated file\n→ soft-delete from DB" shape=box fillcolor="#FDFEFE" fontsize=8]
 
         subgraph cluster_folders {
             label="Folder Structure"
             style=filled fillcolor="#F5EEF8" color="#D2B4DE"
-            fontsize=8
 
             inv_folder [label="inventory/\n  {product_class}/\n    YYYY-MM.jsonl.gz\n\nqty, item, warehouse\nreason, dt, duration\nconversion_rate" shape=box fillcolor="#FDFEFE" fontsize=7]
             cash_folder [label="cash_flow/\n  {category}/\n    YYYY-MM.jsonl.gz\n\namount, payment, invoice\nterms, dt, aging_days\ndays_to_apply" shape=box fillcolor="#FDFEFE" fontsize=7]
@@ -89,7 +107,6 @@ digraph wc3_pending {
     subgraph cluster_analysis {
         label="Pattern Analysis — Load from Archive"
         style=filled fillcolor="#FADBD8" color="#F5B7B1"
-        fontsize=9
 
         trends [label="Trend Analysis\n\ndemand slope\nsupply slope\ncash flow direction\nby product class\nby period" shape=box fillcolor="#FDFEFE" fontsize=8]
         cycles [label="Cycle Detection\n\nseasonal patterns\nweekly rhythms\nmonthly peaks\nQ4 concentration\nQ1 cash crunch" shape=box fillcolor="#FDFEFE" fontsize=8]

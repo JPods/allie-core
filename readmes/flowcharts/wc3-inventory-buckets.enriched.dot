@@ -4,15 +4,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_inventory_buckets {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=LR
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=10 style=filled]
-    edge [fontname="Helvetica" fontsize=9]
     label="WC3 — Inventory Bucket Flow\navailable = on_hand - allocated"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // Transactions
     proposal [label="Proposal\n(forecast)" shape=box fillcolor="#E8DAEF" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/transactions/models/proposal.py" target="_blank" tooltip="Sales proposal — forecast. on_p tracks weighted probability.\nModel: apps/transactions/models/proposal.py\nFunctions:

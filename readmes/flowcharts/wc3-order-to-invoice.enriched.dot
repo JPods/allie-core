@@ -4,15 +4,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_order_to_invoice {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=10 style=filled]
-    edge [fontname="Helvetica" fontsize=8]
     label="WC3 — Order to Invoice Flow\n(with inventory bucket effects)"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // Customer setup
     customer [label="Customer\n(Contact + Customer)" shape=box fillcolor="#D4E6F1"]
@@ -20,7 +44,6 @@ digraph wc3_order_to_invoice {
     subgraph cluster_customer_attrs {
         label="Customer Attributes"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=8
         carrier [label="Carrier" shape=box fillcolor="#FDFEFE" fontsize=8]
         typesale [label="Type Sale\n(price_level)" shape=box fillcolor="#FDFEFE" fontsize=8]
         credit [label="Credit\n(financial)" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -49,7 +72,6 @@ digraph wc3_order_to_invoice {
     subgraph cluster_production {
         label="Production Records"
         style=filled fillcolor="#FEF9E7" color="#F9E79F"
-        fontsize=8
         po [label="Purchase\nOrders\non_po += qty" shape=box fillcolor="#FDFEFE" fontsize=8]
         wo [label="Work\nOrders\non_wo += qty" shape=box fillcolor="#FDFEFE" fontsize=8]
         time_rec [label="Time" shape=box fillcolor="#FDFEFE" fontsize=8]

@@ -5,15 +5,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_project {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=10 style=filled]
-    edge [fontname="Helvetica" fontsize=8]
     label="WC3 — Project Model\nProject connects transactions; Linkage connects data"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // Project hub
     project [label="Project\n\nCan be bigger or smaller\nSimilar to how Linkage\nconnects data, Projects\nconnect transactions" shape=box fillcolor="#82E0AA" fontsize=11]
@@ -30,12 +54,12 @@ digraph wc3_project {
     workorders [label="Work Orders\nto Crews" shape=box fillcolor="#ABEBC6"]
 
     // Support models
-    contact [label="Contact" shape=box fillcolor="#F9E79F"]
+    contact [label="Contact" shape=box fillcolor="#F9E79F" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/contacts/models/contact.py" target="_blank" tooltip="Central identity — customers, vendors, employees. Has related Email, Phone, Address models.\nModel: apps/contacts/models/contact.py"]
     responsible [label="Responsible\nPerson" shape=box fillcolor="#F9E79F"]
     qa [label="Q & A Details\nBest Practices\nTaskID/ItemNum" shape=box fillcolor="#FCF3CF" fontsize=8]
 
     // Related records
-    documents [label="Documents" shape=box fillcolor="#E8DAEF"]
+    documents [label="Documents" shape=box fillcolor="#E8DAEF" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/docs/models/document.py:22" target="_blank" tooltip="Attached documents — proposals, photos, videos, meeting notes. Linked via LinkageEntry.\nModel: apps/docs/models/document.py:22"]
     items [label="Items" shape=box fillcolor="#E8DAEF"]
     itemspecs [label="ItemSpecs" shape=box fillcolor="#E8DAEF"]
     serials [label="Serials" shape=box fillcolor="#E8DAEF"]
@@ -66,7 +90,10 @@ digraph wc3_project {
         serial_act [label="SerialLog" shape=box fillcolor="#FCF3CF" fontsize=9]
 
         linkage [label="Linkage\n(LinkageEntry)" shape=box fillcolor="#82E0AA" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/core/models/linkage.py" target="_blank" tooltip="Shared line data — specs, related records, data at time of action.\nModel: apps/core/models/linkage.py"]
-        action [label="Action" shape=box fillcolor="#82E0AA"]
+        action [label="Action" shape=box fillcolor="#82E0AA" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/core/models/action.py:10" target="_blank" tooltip="Universal task — who, what, why, when, where, how. References any record. Tracks communication touches.\nModel: apps/core/models/action.py:10\nFunctions:
+  Action._pending_attachments @ apps/core/models/action.py:198 (pre_save captures attachment list)
+  Action.post_save (linkage) @ apps/core/models/action.py:230 (creates LinkageEntry group for documents)
+  Action.contact_id resolve @ apps/core/models/action.py:285 (auto-resolves contact from assigned_to)"]
         qa_ent [label="QA Entity" shape=box fillcolor="#82E0AA" style="filled,dashed"]
         resource [label="Resource" shape=box fillcolor="#82E0AA"]
     }

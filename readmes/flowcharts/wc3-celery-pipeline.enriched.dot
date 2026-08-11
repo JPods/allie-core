@@ -5,15 +5,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_celery {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=9 style=filled]
-    edge [fontname="Helvetica" fontsize=7]
     label="WC3 — Celery Task Pipeline\nRedis broker · UTC · 30 min hard limit\nAlice owns library, data quality, health, schema, commerce analytics"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // ── Infrastructure ──
     redis [label="Redis\nlocalhost:6379/0\nBroker + Backend" shape=cylinder fillcolor="#FADBD8"]
@@ -27,7 +51,6 @@ digraph wc3_celery {
     subgraph cluster_high_freq {
         label="High Frequency (seconds)"
         style=filled fillcolor="#FEF9E7" color="#F9E79F"
-        fontsize=9
 
         inv_drain [label="Inventory Pending\nDrain\n30s · adaptive\nlimit=200" shape=box fillcolor="#FDFEFE" fontsize=8]
         layout_apply [label="Apply Pending\nLayouts\n10s\nDataBrowser saves" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -37,7 +60,6 @@ digraph wc3_celery {
     subgraph cluster_periodic {
         label="Periodic (minutes / hours)"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=9
 
         keywords [label="Search Keywords\nRefresh\nevery 15 min\nlimit=500" shape=box fillcolor="#FDFEFE" fontsize=8]
         rel_counts [label="Relationship\nCounts\nhourly\nlimit=5000" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -48,7 +70,6 @@ digraph wc3_celery {
     subgraph cluster_nightly {
         label="Nightly Tasks (1:30 AM – 5:00 AM UTC)"
         style=filled fillcolor="#E8DAEF" color="#D2B4DE"
-        fontsize=9
 
         user_logs [label="User Daily Log\nAggregation\n1:30 AM" shape=box fillcolor="#FDFEFE" fontsize=8]
         defaults [label="Model Defaults\nEnsure JSONB\n2:00 AM" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -68,7 +89,6 @@ digraph wc3_celery {
     subgraph cluster_weekly {
         label="Weekly Tasks (Sunday / Monday)"
         style=filled fillcolor="#FADBD8" color="#F5B7B1"
-        fontsize=9
 
         stats [label="Basic Stats\nNormalize\nSun 4:00 AM" shape=box fillcolor="#FDFEFE" fontsize=8]
         schema_drift [label="Alice: Schema\nDrift\nMon 4:30 AM" shape=box fillcolor="#D5F5E3" fontsize=8]
@@ -81,7 +101,6 @@ digraph wc3_celery {
     subgraph cluster_library {
         label="Alice Library Pipeline (Celery tasks)"
         style=filled fillcolor="#D5F5E3" color="#82E0AA"
-        fontsize=9
 
         lib_scan [label="Virus Scan\nevery 1 min\nstatus → scanned\nor virus_detected" shape=box fillcolor="#FDFEFE" fontsize=8]
         lib_thumb [label="Thumbnail\nGeneration\nevery 1 min\n200×200 PNG" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -101,7 +120,9 @@ digraph wc3_celery {
     lib_monitor -> lib_transfer [label="retry" style=dashed]
 
     // ── Upload entry ──
-    upload [label="POST /wcapi/upload/\nDocument record\nstatus=uploaded" shape=box fillcolor="#D4E6F1"]
+    upload [label="POST /wcapi/upload/\nDocument record\nstatus=uploaded" shape=box fillcolor="#D4E6F1" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/docs/views_upload.py:1" target="_blank" tooltip="File upload pipeline — checksum, inline encode, EXIF extract, virus scan, create Document.\nService: apps/docs/views_upload.py\nFunctions:
+  upload_view @ apps/docs/views_upload.py:46 (inline encoding: zlib+base64 for small files)
+  checksum computation @ apps/docs/views_upload.py:73 (SHA256 dedup check)"]
     upload -> lib_scan [label="Alice picks up"]
 
     // ── Cloud target ──

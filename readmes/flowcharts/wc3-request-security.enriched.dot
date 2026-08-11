@@ -5,15 +5,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_request_security {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=9 style=filled]
-    edge [fontname="Helvetica" fontsize=7]
     label="WC3 — Request Security Pipeline\nJSON-by-default · WriteGate · Demo Read-Only\nThree layers before any view executes"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // ── Incoming Request ──
     request [label="Incoming HTTP\nRequest\n\nmethod, path\nheaders, body" shape=box fillcolor="#D4E6F1" penwidth=2]
@@ -22,7 +46,6 @@ digraph wc3_request_security {
     subgraph cluster_demo {
         label="Layer 1: Demo Read-Only Mode\nDEMO_READ_ONLY=True → blocks ALL writes, no exemptions"
         style=filled fillcolor="#FADBD8" color="#F5B7B1"
-        fontsize=9
 
         demo_check [label="DEMO_READ_ONLY\nenabled?" shape=diamond fillcolor="#FDFEFE" fontsize=8]
         demo_block [label="405 Method\nNot Allowed\n\n'This is a read-only demo.\nDownload WebClerk at\nwebclerk.com to modify data.'" shape=box fillcolor="#F5B7B1" fontsize=8]
@@ -33,7 +56,6 @@ digraph wc3_request_security {
     subgraph cluster_writegate {
         label="Layer 2: WriteGate Middleware\nWRITE_GATE_ENABLED=True → allow-listed paths only for POST/PUT/PATCH/DELETE"
         style=filled fillcolor="#FCF3CF" color="#F9E79F"
-        fontsize=9
 
         wg_method [label="Write method?\nPOST PUT PATCH\nDELETE" shape=diamond fillcolor="#FDFEFE" fontsize=8]
         wg_exact [label="Exact path match?\n/wcapi/save\n/wcapi/query\n/wcapi/delete" shape=diamond fillcolor="#FDFEFE" fontsize=8]
@@ -47,7 +69,6 @@ digraph wc3_request_security {
     subgraph cluster_json {
         label="Layer 3: JSON-by-Default\nAPI_JSON_DEFAULT=True → all responses are JSON unless path is HTML-exempt"
         style=filled fillcolor="#E8DAEF" color="#D2B4DE"
-        fontsize=9
 
         json_check [label="HTML-exempt\npath?" shape=diamond fillcolor="#FDFEFE" fontsize=8]
         json_exempt [label="HTML Exempt Paths\n\n/admin/\n/admin-django/\n/static/\n/media/\n/api/swagger/\n/api/schema/\n/api/redoc/\n\n+ exact: / /about/\n+ prefix: /manage/" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -59,7 +80,6 @@ digraph wc3_request_security {
     subgraph cluster_view {
         label="View Layer (DRF + wcapi)"
         style=filled fillcolor="#D5F5E3" color="#82E0AA"
-        fontsize=9
 
         auth [label="DRF Auth\n\nJWT / Session\nRBAC check\nfield_access" shape=box fillcolor="#FDFEFE" fontsize=8]
         view [label="View executes\n\nwcapi CRUD\nSync receive\nUpload\nCustom views" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -69,7 +89,6 @@ digraph wc3_request_security {
     subgraph cluster_config {
         label="Configuration (settings.py)"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=9
 
         cfg [label="DEMO_READ_ONLY = env var\nWRITE_GATE_ENABLED = True\nAPI_JSON_DEFAULT = True\n\nWRITE_GATE_EXACT_PATHS\nWRITE_GATE_PREFIXES\nWRITE_GATE_ALLOWED_REGEX\nHTML_EXEMPT_PATH_PREFIXES" shape=box fillcolor="#FDFEFE" fontsize=8]
     }

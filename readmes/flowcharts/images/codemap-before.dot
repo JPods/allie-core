@@ -1,0 +1,21 @@
+// Before: plain .dot — no code links
+digraph before {
+    rankdir=LR
+    fontname="Helvetica"
+    node [fontname="Helvetica" fontsize=10 style=filled]
+    edge [fontname="Helvetica" fontsize=9]
+    label="Before: Static Diagram"
+    labelloc=t fontsize=12
+    bgcolor="#2d2d2d"
+    node [fontcolor=white]
+    edge [color="#888888" fontcolor="#888888"]
+
+    order [label="Order" shape=box fillcolor="#4a6741"]
+    invoice [label="Invoice" shape=box fillcolor="#4a6741"]
+    pending [label="Pending" shape=box fillcolor="#4a6741"]
+    item [label="Item" shape=box fillcolor="#4a6741"]
+
+    order -> invoice [label="transfer"]
+    invoice -> pending [label="-on_hand\n-on_so"]
+    pending -> item [label="update qty"]
+}

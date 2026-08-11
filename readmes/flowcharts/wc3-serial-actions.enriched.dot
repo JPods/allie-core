@@ -4,15 +4,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_serial_actions {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=10 style=filled]
-    edge [fontname="Helvetica" fontsize=8]
     label="WC3 — Serial config.actions[] and serial_trends Document\nSelf-contained history + item-level trend consolidation"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // --- Serial record ---
     serial [label="Serial Record\n\nserial_ida\nstatus\nwarranty\nsite\nconfig {...}" shape=box fillcolor="#F9E79F"]
@@ -21,7 +45,6 @@ digraph wc3_serial_actions {
     subgraph cluster_config {
         label="serial.config"
         style=filled fillcolor="#FDFEFE" color="#AEB6BF"
-        fontsize=9
 
         context [label="Transaction Context\n\ncustomer_id, vendor_id\ninvoice_id, order_id\ncost, price, discount\ndt_received, dt_shipped" shape=box fillcolor="#FCF3CF" fontsize=9]
 
@@ -32,7 +55,6 @@ digraph wc3_serial_actions {
     subgraph cluster_sources {
         label="Action Sources"
         style=filled fillcolor="#FDEBD0" color="#E59866"
-        fontsize=9
 
         lifecycle [label="Lifecycle Actions\n(13 standard)\n\nReceive, Issue, Return\nReserve, Scrap, etc." shape=box fillcolor="#F5CBA7"]
         user_actions [label="User-Defined Actions\n\nInspections, Defects\nRepairs, Attributes\nCertifications" shape=box fillcolor="#F5CBA7"]

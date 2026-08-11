@@ -4,15 +4,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_conn_payment {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=10 style=filled]
-    edge [fontname="Helvetica" fontsize=8]
     label="WC3 — Payment Processing Flow"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // Invoice
     invoice [label="Invoice\n(Invoice model)\n\ntotal\nbalance\nterms" shape=box fillcolor="#D4E6F1" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/transactions/models/invoice.py" target="_blank" tooltip="Invoice — shipment event. Financial event triggers GL and inventory movement.\nModel: apps/transactions/models/invoice.py\nFunctions:
@@ -26,14 +50,12 @@ digraph wc3_conn_payment {
     subgraph cluster_pci {
         label="PCI Boundary — no card data in WC3"
         style=filled fillcolor="#FDEDEC" color="#E74C3C"
-        fontsize=9
         fontcolor="#922B21"
 
         // Processor cluster
         subgraph cluster_processors {
             label="Payment Processors"
             style=filled fillcolor="#F5EEF8" color="#D7BDE2"
-            fontsize=8
             stripe [label="Stripe" shape=box fillcolor="#E8DAEF" fontsize=8]
             square [label="Square" shape=box fillcolor="#E8DAEF" fontsize=8]
             paypal [label="PayPal" shape=box fillcolor="#E8DAEF" fontsize=8]
@@ -47,7 +69,8 @@ digraph wc3_conn_payment {
     webhook [label="Webhook\nCallback\n\nsucceeded\nfailed\ndisputed\nrefunded" shape=octagon fillcolor="#F5CBA7"]
 
     // Payment record
-    payment [label="Payment\n(Payment model)\n\namount\nmethod\nprocessor_ref\ntimestamp" shape=box fillcolor="#FCF3CF"]
+    payment [label="Payment\n(Payment model)\n\namount\nmethod\nprocessor_ref\ntimestamp" shape=box fillcolor="#FCF3CF" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/transactions/models/payment.py" target="_blank" tooltip="Payment — handles AR (received) and AP (expense). Signed amounts. Category maps to GL. Statement Sorter feeds expense side.\nModel: apps/transactions/models/payment.py\nFunctions:
+  Payment @ apps/transactions/models/payment.py:1 (AR+AP via type field; signed amounts)"]
 
     // Fully paid decision
     fully_paid [label="Fully\nPaid?" shape=diamond fillcolor="#FADBD8"]
@@ -65,7 +88,6 @@ digraph wc3_conn_payment {
     subgraph cluster_refund {
         label="Refund Path"
         style=filled fillcolor="#FEF9E7" color="#F9E79F"
-        fontsize=9
 
         refund_req [label="Refund\nRequest\n\nfull or partial\nreason code" shape=box fillcolor="#FCF3CF"]
         refund_proc [label="Processor\nRefund API" shape=octagon fillcolor="#F5CBA7"]

@@ -1,0 +1,40 @@
+// CodeMap Three-Layer Architecture
+digraph three_layers {
+    rankdir=LR
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=11 style="filled,rounded" shape=box]
+    edge [fontname="Helvetica" fontsize=9 color="#58a6ff"]
+    bgcolor="#0d1117"
+    pad=0.5
+    nodesep=0.6
+
+    // Source
+    codemap [label="codemap.json\n\nNode → file:line\nmapping" shape=box fillcolor="#f0883e" fontcolor=white style=filled fontsize=10]
+
+    // Dot files
+    dot [label=".dot files\n\n32 flowcharts\n600+ nodes" shape=box fillcolor="#30363d" fontcolor="#c9d1d9" style=filled fontsize=10]
+
+    // Layer 1
+    enrich [label="Layer 1\nEnrich Script\n\nAdds URL + tooltip\nto every node" shape=box fillcolor="#1f6feb" fontcolor=white style=filled fontsize=10]
+
+    // SVG output
+    svg [label="Enriched SVGs\n\nClickable diagrams\nvscode:// links" shape=box fillcolor="#238636" fontcolor=white style=filled fontsize=10]
+
+    // Layer 2
+    viewer [label="Layer 2\nBrowser Viewer\n\nSidebar + diagram\n+ detail panel" shape=box fillcolor="#1f6feb" fontcolor=white style=filled fontsize=10]
+
+    // Layer 3
+    api [label="Layer 3\nArchitecture API\n\nAlice queries\nmanage action" shape=box fillcolor="#1f6feb" fontcolor=white style=filled fontsize=10]
+
+    // WC3 Documents
+    docs [label="WC3 Documents\n\n32 records\npurpose=codemap-guru" shape=box fillcolor="#8b5cf6" fontcolor=white style=filled fontsize=10]
+
+    codemap -> enrich [label="mapping"]
+    dot -> enrich [label="source"]
+    enrich -> svg [label="render"]
+    svg -> viewer [label="display"]
+    codemap -> viewer [label="detail data"]
+    codemap -> api [label="query data"]
+    codemap -> docs [label="seed" style=dashed]
+}

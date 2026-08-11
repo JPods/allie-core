@@ -5,15 +5,39 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_products {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=9 style=filled]
-    edge [fontname="Helvetica" fontsize=7]
     label="WC3 — Products App: Item Supporting Structures\n19 models · 13 service modules · ~80 functions\nRed borders = missing service functions"
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // ── Item (center) ──
     item [label="Item\n\nsku, name, kind, uom\nprice (JSONField)\ncost (JSONField)\nquantity (JSONField)\nflags, tax_code\nspecification_id\nvendor → OrgBase\nmanufacturer → OrgBase\nmargin_velocity\nmargin_pct, annual_turns" shape=box fillcolor="#D4E6F1" penwidth=2 URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:196" target="_blank" tooltip="Product with quantity JSON tracking all inventory buckets.\nModel: apps/products/models/item.py:196\nFunctions:
@@ -23,7 +47,6 @@ digraph wc3_products {
     subgraph cluster_pricing {
         label="Pricing"
         style=filled fillcolor="#FCF3CF" color="#F9E79F"
-        fontsize=9
 
         catalog [label="Catalog\n\nname, code, currency\ndt_effective_start/end\norgbase, customer\nmanufacturer, rep\npriority, applies_to\nis_universal_pct\nmargin_floor" shape=box fillcolor="#FDFEFE" fontsize=8]
         catalog_line [label="CatalogLine\n\ncatalog → Catalog\nitem → Item\nunit_base_price\nunit_cost\nmargin_floor\nqty_discount_tiers\n(JSONField)" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -34,7 +57,6 @@ digraph wc3_products {
     subgraph cluster_inventory {
         label="Inventory"
         style=filled fillcolor="#D5F5E3" color="#82E0AA"
-        fontsize=9
 
         warehouse [label="Warehouse\n\nname, code, site_code\nlocation (JSONField)\ncount (JSONField)\npriority" shape=box fillcolor="#FDFEFE" fontsize=8]
         inv_layer [label="InventoryLayer\n\nitem → Item\nwarehouse → Warehouse\nsource (JSONField)\nquantity (JSONField)\ncost (JSONField)\nlot, serial_numbers\nsource_doc_type/id\nis_locked, dt_locked" shape=box fillcolor="#FDFEFE" fontsize=8 URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/inventory_layer.py" target="_blank" tooltip="Inventory costing layer — tracks on_hand by receipt cost.\nModel: apps/products/models/inventory_layer.py"]
@@ -50,7 +72,6 @@ digraph wc3_products {
     subgraph cluster_bom {
         label="Bill of Materials"
         style=filled fillcolor="#E8DAEF" color="#D2B4DE"
-        fontsize=9
 
         bom [label="BillOfMaterial\n\nparent_item → Item\nchild_item → Item\nquantity\nscrap_factor\nyield_pct\nsequence\nrevision\nis_alternate\nis_optional\ncost_snapshot\ndt_effective_from/to" shape=box fillcolor="#FDFEFE" fontsize=8]
     }
@@ -59,7 +80,6 @@ digraph wc3_products {
     subgraph cluster_serial {
         label="Serial Tracking"
         style=filled fillcolor="#FADBD8" color="#F5B7B1"
-        fontsize=9
 
         serial [label="Serial\n\nitem → Item\nserial_ida\nmodel_ida\nstatus\nwarranty (JSONField)\nsite (JSONField)\nlayer → Layer\nqr_code" shape=box fillcolor="#FDFEFE" fontsize=8]
         serial_log [label="SerialLog\n\nserial → Serial\naction, dt\nconfig (JSONField)" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -69,7 +89,6 @@ digraph wc3_products {
     subgraph cluster_variants {
         label="Variants"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=9
 
         variant [label="Variant\n\nitem → Item (1:1)\nparent_item → Item\ncanonical_key\nattrs (JSONField)\nset_uuid\nvariant_uuid" shape=box fillcolor="#FDFEFE" fontsize=8]
     }
@@ -78,7 +97,6 @@ digraph wc3_products {
     subgraph cluster_xref {
         label="Cross-Reference"
         style=filled fillcolor="#FEF9E7" color="#F9E79F"
-        fontsize=9
 
         xref [label="ItemXRef\n\nitem → Item\nsource, source_id\nexternal_sku\nexternal_uuid\ncost (JSONField)\nis_preferred" shape=box fillcolor="#FDFEFE" fontsize=8]
     }
@@ -96,7 +114,6 @@ digraph wc3_products {
     subgraph cluster_delivery {
         label="Delivery / Flow"
         style=filled fillcolor="#FEF9E7" color="#F9E79F"
-        fontsize=9
 
         delivery_visit [label="DeliveryVisit\n\norgbase, customer\ncatalog\ndt_scheduled/arrived\n/completed\nstatus, notes" shape=box fillcolor="#FDFEFE" fontsize=8]
         delivery_line [label="DeliveryLine\n\nvisit → Visit\norgitem → OrgItem\nplanned_qty\nactual_qty\nstatus" shape=box fillcolor="#FDFEFE" fontsize=8]

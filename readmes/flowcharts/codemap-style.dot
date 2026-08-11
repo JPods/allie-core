@@ -1,0 +1,48 @@
+// CodeMap Standard Style — included by all WC3 flowcharts
+// Usage: at the top of any digraph, after the opening brace, add:
+//   // Style
+//   #include "codemap-style.dot"
+// Or apply via the enrichment script (automatic)
+//
+// Design rules:
+//   - Arrows are integrated (filled, proportional to line weight)
+//   - Consistent fonts (Helvetica Neue where available, Helvetica fallback)
+//   - Dark borders on nodes, rounded corners where supported
+//   - Edge labels slightly smaller than node labels
+//   - Muted background colors, strong text contrast
+//   - Cluster borders dashed with muted label color
+
+// ── Global ──
+fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+fontsize=12
+bgcolor="white"
+pad=0.4
+nodesep=0.5
+ranksep=0.6
+splines=true
+compound=true
+
+// ── Nodes ──
+node [
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=10
+    style="filled,rounded"
+    shape=box
+    penwidth=1.2
+    color="#555555"
+    margin="0.12,0.06"
+]
+
+// ── Edges ──
+edge [
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=10
+    penwidth=2.0
+    arrowhead=normal
+    arrowsize=1.4
+    color="#666666"
+    fontcolor="#444444"
+]
+
+// ── Title ──
+labelloc=t

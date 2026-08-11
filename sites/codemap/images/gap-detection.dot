@@ -1,0 +1,28 @@
+// CodeMap Gap Detection — how missing code surfaces
+digraph gap_detection {
+    rankdir=TB
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=10 style=filled shape=box]
+    edge [fontname="Helvetica" fontsize=9]
+    bgcolor="#0d1117"
+    pad=0.5
+    label="Gap Detection: Missing +on_po Pending"
+    labelloc=t fontsize=13 fontcolor="#ffa657"
+
+    // Nodes
+    order [label="Order\n\norder_to_purchase.py:14\ntransfer function exists" fillcolor="#264f78" fontcolor=white]
+    purchase [label="Purchase Order\n\nPO line created\nbut..." fillcolor="#264f78" fontcolor=white]
+    pending_gap [label="Pending +on_po\n\n⚠ NO CODE\nNo Pending.objects.create\nfor +on_po" fillcolor="#3a2a1b" fontcolor="#dcdcaa" style="filled,bold" color="#dcdcaa"]
+    receipt [label="Receipt\n\nflow.py:308\nPending.objects.create\n-on_po, +on_hand" fillcolor="#264f78" fontcolor=white]
+    item [label="Item.quantity\n\non_po stays at 0\nbecause it was\nnever incremented" fillcolor="#3a1b1b" fontcolor="#f48771"]
+
+    order -> purchase [label="creates PO" color="#4ec9b0" fontcolor="#c9d1d9"]
+    purchase -> pending_gap [label="+on_po should\nbe written here" color="#dcdcaa" fontcolor="#dcdcaa" style=dashed]
+    receipt -> item [label="-on_po\n+on_hand" color="#4ec9b0" fontcolor="#c9d1d9"]
+    pending_gap -> item [label="never fires" color="#f85149" fontcolor="#f85149" style=dashed]
+
+    // Note
+    note [label="CodeMap surfaces this:\nthe node has no function link\nfor the +on_po delta" shape=note fillcolor="#161b22" fontcolor="#8b949e" fontsize=9]
+    pending_gap -> note [style=invis]
+}

@@ -5,21 +5,44 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_data_conversion {
+    // ── CodeMap Standard Style ──
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+    ratio=0.75
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
     rankdir=TB
-    fontname="Helvetica"
-    fontsize=11
-    node [fontname="Helvetica" fontsize=9 style=filled]
-    edge [fontname="Helvetica" fontsize=7]
     label="WC3 — Data Conversion Pipeline\nExternal file → Alice/Claude → DynamicCatalogs → Athena → Bundle → Sync Receive\nAll transformation outside WC3. Bulk only via bundle."
     labelloc=t
-    fontsize=14
-    pad=0.5
 
     // ── External Sources ──
     subgraph cluster_sources {
         label="External Data Sources"
         style=filled fillcolor="#EBF5FB" color="#AED6F1"
-        fontsize=9
         csv [label="CSV / TSV\nSupplier price lists\nInventory files" shape=box fillcolor="#FDFEFE" fontsize=8]
         xlsx [label="XLSX\nSpreadsheets\nCatalogs" shape=box fillcolor="#FDFEFE" fontsize=8]
         edi [label="EDI / XML\nManufacturer feeds\nDistributor data" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -34,7 +57,6 @@ digraph wc3_data_conversion {
     subgraph cluster_alice_conversion {
         label="Alice Conversion Workbench\n(alice_conversion database — separate from WC3)"
         style=filled fillcolor="#E8DAEF" color="#D2B4DE"
-        fontsize=9
 
         project [label="ConversionProject\n\nname, supplier_name\nconnection_id\npass_count, stats" shape=box fillcolor="#FDFEFE" fontsize=8]
         source_file [label="SourceFile\n\nfilename, file_type\nraw_headers\nsample_rows (→ Claude)\nencoding, delimiter" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -64,7 +86,6 @@ digraph wc3_data_conversion {
     subgraph cluster_dc {
         label="WCHQ DynamicCatalogs\n(upstream library service)"
         style=filled fillcolor="#D5F5E3" color="#82E0AA"
-        fontsize=9
 
         dc_ingest [label="Ingest\n\nRaw manufacturer\n+ distributor files" shape=box fillcolor="#FDFEFE" fontsize=8]
         dc_normalize [label="Normalize\n\nTranslate to\nWC3 schema" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -76,7 +97,6 @@ digraph wc3_data_conversion {
     subgraph cluster_services {
         label="Data Quality Services"
         style=filled fillcolor="#FCF3CF" color="#F9E79F"
-        fontsize=9
 
         addr_verify [label="Address\nVerification\nSmartyStreets/USPS" shape=box fillcolor="#FDFEFE" fontsize=8]
         phone_norm [label="Phone\nNormalization\nphonenumbers lib" shape=box fillcolor="#FDFEFE" fontsize=8]
@@ -103,7 +123,6 @@ digraph wc3_data_conversion {
     subgraph cluster_wc3 {
         label="WC3 (commerce_expert database)"
         style=filled fillcolor="#ABEBC6" color="#82E0AA"
-        fontsize=9
 
         bundle_rec [label="Bundle Record\n\nFull payload\nResponse\nAudit trail\nNever deleted" shape=box fillcolor="#FDFEFE" fontsize=8]
         connection [label="Connection Record\n\nname, type, status\nconfig (key, endpoint)\nmaps, rules, conflicts\nscripts, encryption\nsunset date" shape=box fillcolor="#FDFEFE" fontsize=8]
