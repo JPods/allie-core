@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMap — Live Architecture Viewer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+    background: #1e1e1e; color: #d4d4d4;
+    display: flex; height: 100vh; overflow: hidden;
+  }
+
+  /* Left: flowchart list */
+  #sidebar {
+    width: 220px; min-width: 180px;
+    background: #252526; border-right: 1px solid #3c3c3c;
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+  }
+  #sidebar h2 { padding: 12px 14px 8px; font-size: 13px; color: #cccccc; text-transform: uppercase; letter-spacing: 0.5px; }
+  .fc-item {
+    padding: 6px 14px; cursor: pointer; font-size: 12px;
+    border-left: 3px solid transparent;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .fc-item:hover { background: #2a2d2e; }
+  .fc-item.active { background: #37373d; border-left-color: #007acc; color: #ffffff; }
+  .fc-item .coverage { font-size: 10px; color: #888; }
+  .fc-item .coverage.full { color: #4ec9b0; }
+
+  /* Center: SVG diagram */
+  #diagram-area {
+    flex: 1; overflow: auto; position: relative;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 20px;
+  }
+  #diagram-area svg {
+    max-width: 100%; height: auto;
+    cursor: default;
+  }
+  #diagram-area svg a { cursor: pointer; }
+  #diagram-area svg a:hover polygon,
+  #diagram-area svg a:hover ellipse,
+  #diagram-area svg a:hover path {
+    stroke: #007acc !important; stroke-width: 2px !important;
+  }
+  #empty-state {
+    color: #666; font-size: 14px; margin-top: 40vh;
+    text-align: center;
+  }
+
+  /* Right: node detail panel */
+  #detail-panel {
+    width: 380px; min-width: 300px;
+    background: #252526; border-left: 1px solid #3c3c3c;
+    overflow-y: auto; padding: 16px;
+    display: none;
+  }
+  #detail-panel.visible { display: block; }
+  #detail-panel h3 {
+    font-size: 16px; color: #4ec9b0; margin-bottom: 12px;
+    border-bottom: 1px solid #3c3c3c; padding-bottom: 8px;
+  }
+  .detail-section { margin-bottom: 16px; }
+  .detail-section h4 {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #888; margin-bottom: 6px;
+  }
+  .detail-section p { font-size: 13px; line-height: 1.5; }
+  .detail-section .code-link {
+    display: block; padding: 4px 8px; margin: 2px 0;
+    background: #1e1e1e; border-radius: 3px;
+    font-family: 'Menlo', 'Consolas', monospace; font-size: 11px;
+    color: #9cdcfe; text-decoration: none;
+    border: 1px solid #3c3c3c;
+  }
+  .detail-section .code-link:hover { background: #264f78; border-color: #007acc; }
+  .detail-section .code-link .context { color: #6a9955; font-size: 10px; }
+  .delta-tag {
+    display: inline-block; padding: 2px 6px; margin: 2px;
+    border-radius: 3px; font-size: 11px; font-family: monospace;
+  }
+  .delta-tag.plus { background: #1b3a1b; color: #4ec9b0; }
+  .delta-tag.minus { background: #3a1b1b; color: #f48771; }
+  .delta-tag.gap { background: #3a3a1b; color: #dcdcaa; }
+  .gl-impact { font-size: 12px; color: #ce9178; font-style: italic; }
+  .schema-field {
+    display: inline-block; padding: 1px 5px; margin: 1px;
+    background: #1e1e1e; border-radius: 2px;
+    font-family: monospace; font-size: 11px; color: #9cdcfe;
+  }
+  #close-detail {
+    position: absolute; top: 8px; right: 8px;
+    background: none; border: none; color: #888;
+    font-size: 18px; cursor: pointer;
+  }
+  #close-detail:hover { color: #ffffff; }
+  .gap-warning {
+    background: #3a2a1b; border: 1px solid #dcdcaa;
+    border-radius: 4px; padding: 8px; margin-top: 8px;
+    font-size: 12px; color: #dcdcaa;
+  }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>Flowcharts</h2>
+  <div id="fc-list"></div>
+</div>
+
+<div id="diagram-area">
+  <div id="empty-state">Select a flowchart to view</div>
+</div>
+
+<div id="detail-panel">
+  <button id="close-detail" onclick="closeDetail()">&times;</button>
+  <h3 id="detail-title"></h3>
+  <div id="detail-content"></div>
+</div>
+
+<script>
+// CodeMap data — loaded from codemap.json
+let codemap = null;
+let currentFlowchart = null;
+
+// Load codemap.json
+async function loadCodemap() {
+  try {
+    const resp = await fetch('codemap.json');
+    codemap = await resp.json();
+    buildFlowchartList();
+  } catch (e) {
+    document.getElementById('empty-state').textContent =
+      'Could not load codemap.json — make sure this file is served from readmes/flowcharts/';
+  }
+}
+
+function buildFlowchartList() {
+  const list = document.getElementById('fc-list');
+  // Discover available SVGs by checking known flowcharts
+  const knownFlowcharts = [
+    'wc3-inventory-buckets', 'wc3-big4-transactions', 'wc3-master-flow',
+    'wc3-payment-gl', 'wc3-order-to-invoice', 'wc3-customer-centered-sales',
+    'wc3-contact', 'wc3-project', 'wc3-action', 'wc3-serial-tracking',
+    'wc3-qa-entity', 'wc3-signin-register', 'wc3-celery-pipeline',
+    'wc3-document-library', 'wc3-data-conversion-pipeline',
+    'wc3-conn-shipping', 'wc3-conn-tax', 'wc3-conn-accounting',
+    'wc3-conn-communication', 'wc3-conn-banking', 'wc3-conn-calendar',
+    'wc3-conn-identity', 'wc3-conn-payment', 'wc3-conn-internal',
+    'wc3-conn-deploy', 'wc3-refs-linkage', 'wc3-products-item-support',
+    'wc3-serial-actions', 'wc3-pending-records', 'wc3-request-security',
+    'wc3-po-so-bundle', 'wc3-exchange-rates', 'wc3-print-system',
+    'wc3-impact-assessment-loop',
+  ];
+
+  for (const name of knownFlowcharts) {
+    const div = document.createElement('div');
+    div.className = 'fc-item';
+    div.dataset.name = name;
+
+    // Count mapped nodes for this flowchart
+    const mapped = countMappedNodes(name);
+    const covClass = mapped > 10 ? 'full' : '';
+
+    div.innerHTML = `
+      <span>${name.replace('wc3-', '').replace(/-/g, ' ')}</span>
+      <span class="coverage ${covClass}">${mapped > 0 ? mapped : ''}</span>
+    `;
+    div.addEventListener('click', () => loadFlowchart(name));
+    list.appendChild(div);
+  }
+}
+
+function countMappedNodes(flowchartName) {
+  // This is approximate — full count requires reading the .dot file
+  // For now, use the known high-coverage ones
+  const counts = {
+    'wc3-inventory-buckets': 14, 'wc3-big4-transactions': 16,
+    'wc3-master-flow': 5, 'wc3-customer-centered-sales': 5,
+    'wc3-serial-tracking': 7, 'wc3-project': 7,
+    'wc3-order-to-invoice': 3, 'wc3-qa-entity': 3,
+    'wc3-refs-linkage': 3, 'wc3-action': 2,
+    'wc3-contact': 2, 'wc3-conn-shipping': 2,
+    'wc3-products-item-support': 2,
+    'wc3-payment-gl': 1, 'wc3-conn-banking': 1,
+    'wc3-conn-payment': 1, 'wc3-conn-tax': 1,
+    'wc3-data-conversion-pipeline': 1, 'wc3-serial-actions': 1,
+  };
+  return counts[flowchartName] || 0;
+}
+
+async function loadFlowchart(name) {
+  currentFlowchart = name;
+
+  // Update sidebar
+  document.querySelectorAll('.fc-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.name === name);
+  });
+
+  const area = document.getElementById('diagram-area');
+  area.innerHTML = '<div id="empty-state">Loading...</div>';
+
+  try {
+    const resp = await fetch(`${name}.enriched.svg`);
+    if (!resp.ok) throw new Error('SVG not found');
+    const svgText = await resp.text();
+    area.innerHTML = svgText;
+
+    // Intercept SVG link clicks
+    area.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = link.getAttribute('xlink:href') || link.getAttribute('href') || '';
+
+        // Extract node ID from the parent group
+        const group = link.closest('g[id]');
+        const nodeId = group ? group.id.replace(/^a_/, '').replace(/^node\d+$/, '') : '';
+
+        // Try to find the node in codemap by matching the title
+        const title = link.querySelector('title');
+        const titleText = title ? title.textContent.trim() : '';
+
+        // Find the actual node ID — look through codemap nodes
+        let matchedNode = null;
+        if (codemap && codemap.nodes) {
+          // Direct match
+          if (codemap.nodes[titleText]) {
+            matchedNode = titleText;
+          } else {
+            // Try matching by group ID patterns
+            for (const nid of Object.keys(codemap.nodes)) {
+              if (titleText === nid || nodeId === nid) {
+                matchedNode = nid;
+                break;
+              }
+            }
+          }
+        }
+
+        if (matchedNode && codemap.nodes[matchedNode]) {
+          showDetail(matchedNode, codemap.nodes[matchedNode]);
+        }
+
+        // Also open in VS Code if it's a vscode:// URL
+        if (href.startsWith('vscode://')) {
+          window.open(href, '_blank');
+        }
+      });
+    });
+
+  } catch (e) {
+    area.innerHTML = `<div id="empty-state">SVG not found for ${name}.<br>Run: python3 scripts/codemap_enrich.py readmes/flowcharts/${name}.dot --render</div>`;
+  }
+}
+
+function showDetail(nodeId, data) {
+  const panel = document.getElementById('detail-panel');
+  const title = document.getElementById('detail-title');
+  const content = document.getElementById('detail-content');
+  const basePath = codemap._meta?.base_path || '';
+
+  title.textContent = nodeId;
+  let html = '';
+
+  // Description
+  if (data.description) {
+    html += `<div class="detail-section"><h4>Description</h4><p>${data.description}</p></div>`;
+  }
+
+  // Model
+  if (data.model) {
+    const [file, line] = data.model.includes(':') ? data.model.split(':') : [data.model, '1'];
+    html += `<div class="detail-section"><h4>Model</h4>
+      <a class="code-link" href="vscode://file${basePath}/${file}:${line}" target="_blank">${data.model}</a>
+    </div>`;
+  }
+
+  // Service
+  if (data.service) {
+    html += `<div class="detail-section"><h4>Service</h4>
+      <a class="code-link" href="vscode://file${basePath}/${data.service}" target="_blank">${data.service}</a>
+    </div>`;
+  }
+
+  // Functions
+  if (data.functions && data.functions.length > 0) {
+    html += `<div class="detail-section"><h4>Functions (${data.functions.length})</h4>`;
+    for (const f of data.functions) {
+      const ctx = f.context ? `<span class="context"> // ${f.context}</span>` : '';
+      html += `<a class="code-link" href="vscode://file${basePath}/${f.file}:${f.line}" target="_blank">
+        ${f.name} <span style="color:#666">@ ${f.file}:${f.line}</span>${ctx}
+      </a>`;
+    }
+    html += '</div>';
+  }
+
+  // Pending deltas
+  if (data.pending_deltas) {
+    html += `<div class="detail-section"><h4>Pending Deltas</h4>`;
+    for (const [field, delta] of Object.entries(data.pending_deltas)) {
+      const isGap = String(delta).includes('GAP');
+      const isPlus = String(delta).startsWith('+');
+      const cls = isGap ? 'gap' : (isPlus ? 'plus' : 'minus');
+      html += `<span class="delta-tag ${cls}">${field}: ${delta}</span>`;
+    }
+    html += '</div>';
+    // Show gap warning
+    if (Object.values(data.pending_deltas).some(v => String(v).includes('GAP'))) {
+      html += `<div class="gap-warning">&#9888; Code gap detected — pending record not implemented for this delta.</div>`;
+    }
+  }
+
+  // GL impact
+  if (data.gl_impact) {
+    html += `<div class="detail-section"><h4>GL Impact</h4><p class="gl-impact">${data.gl_impact}</p></div>`;
+  }
+
+  // Schema
+  if (data.schema) {
+    html += `<div class="detail-section"><h4>Schema</h4>`;
+    const fields = data.schema.fields || data.schema.quantity_keys || [];
+    const dataKeys = data.schema.data_keys || [];
+    if (fields.length) {
+      html += '<div style="margin-bottom:4px">';
+      for (const f of fields) html += `<span class="schema-field">${f}</span>`;
+      html += '</div>';
+    }
+    if (dataKeys.length) {
+      html += '<div style="margin-top:4px"><span style="color:#888;font-size:10px">data keys:</span><br>';
+      for (const k of dataKeys) html += `<span class="schema-field">${k}</span>`;
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Tests
+  if (data.tests && data.tests.length > 0) {
+    html += `<div class="detail-section"><h4>Tests</h4>`;
+    for (const t of data.tests) {
+      html += `<a class="code-link" href="vscode://file${basePath}/${t}" target="_blank">${t}</a>`;
+    }
+    html += '</div>';
+  }
+
+  content.innerHTML = html;
+  panel.classList.add('visible');
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('visible');
+}
+
+// Keyboard: Escape closes detail
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeDetail();
+});
+
+// Init
+loadCodemap();
+</script>
+</body>
+</html>

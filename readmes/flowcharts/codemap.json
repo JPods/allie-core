@@ -1,0 +1,295 @@
+{
+  "_meta": {
+    "description": "CodeMap — node-to-code mapping for WC3 flowcharts",
+    "base_path": "/Users/williamjames/Documents/CommerceExpert/webClerk3",
+    "vscode_scheme": "vscode://file",
+    "updated": "2026-08-11"
+  },
+  "nodes": {
+    "pending": {
+      "model": "apps/core/models/pending.py:6",
+      "functions": [
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/order_to_invoice.py", "line": 332, "context": "invoice creation"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/proposal_to_order.py", "line": 171, "context": "order creation (+on_so)"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/proposal_to_order.py", "line": 200, "context": "order creation (-on_p)"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 308, "context": "receive_purchase"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 452, "context": "complete_workorder"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 591, "context": "adjust_inventory"}
+      ],
+      "schema": {
+        "fields": ["model_name", "record_id", "purpose", "name", "dt_processed", "changes", "data"],
+        "data_keys": ["item_id", "on_so", "on_po", "on_wo", "on_in", "on_r", "on_p", "on_hand", "unit_cost", "unit_price"]
+      },
+      "tests": ["tests/test_pending.py"],
+      "description": "Central hub for inventory quantity deltas. All quantity changes flow through Pending before updating Item."
+    },
+    "item": {
+      "model": "apps/products/models/item.py:196",
+      "functions": [
+        {"name": "Item.quantity", "file": "apps/products/models/item.py", "line": 238, "context": "JSONField with on_hand, allocated, available, on_p, on_so, on_in, on_po, on_wo, on_r"}
+      ],
+      "schema": {
+        "quantity_keys": ["on_hand", "allocated", "available", "on_p", "on_so", "on_in", "on_po", "on_wo", "on_r"]
+      },
+      "tests": ["tests/test_item.py"],
+      "description": "Product with quantity JSON tracking all inventory buckets."
+    },
+    "order": {
+      "model": "apps/transactions/models/order.py",
+      "functions": [
+        {"name": "transfer_proposal_to_order", "file": "apps/transactions/services/proposal_to_order.py", "line": 219, "context": "creates order from proposal"},
+        {"name": "_create_transfer_pending_records", "file": "apps/transactions/services/proposal_to_order.py", "line": 131, "context": "pending records for +on_so, -on_p"}
+      ],
+      "pending_deltas": {"on_so": "+qty", "on_p": "-qty"},
+      "description": "Sales order — customer commitment. Creates +on_so and -on_p pending records."
+    },
+    "invoice": {
+      "model": "apps/transactions/models/invoice.py",
+      "functions": [
+        {"name": "transfer_order_to_invoice", "file": "apps/transactions/services/order_to_invoice.py", "line": 16, "context": "creates invoice from order"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/order_to_invoice.py", "line": 332, "context": "-on_hand, -on_so, +on_in"}
+      ],
+      "pending_deltas": {"on_hand": "-qty", "on_so": "-qty", "on_in": "+qty"},
+      "gl_impact": "AR debit, Revenue credit, Tax credit, COGS debit, Inventory credit, Commission",
+      "description": "Invoice — shipment event. Financial event triggers GL and inventory movement."
+    },
+    "purchase": {
+      "model": "apps/transactions/models/purchase.py",
+      "functions": [
+        {"name": "transfer_order_to_purchase", "file": "apps/transactions/services/order_to_purchase.py", "line": 14, "context": "creates PO from order"},
+        {"name": "transfer_proposal_to_purchase", "file": "apps/transactions/services/proposal_to_purchase.py", "line": 13, "context": "creates PO from proposal"}
+      ],
+      "pending_deltas": {"on_po": "+qty (GAP: not implemented — no Pending.objects.create)"},
+      "description": "Purchase order to vendor. GAP: +on_po pending record is NOT created."
+    },
+    "receipt": {
+      "model": "apps/transactions/models/receipt.py",
+      "functions": [
+        {"name": "receive_purchase", "file": "apps/transactions/services/flow.py", "line": 219, "context": "receipt processing"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 308, "context": "+on_hand, -on_po"}
+      ],
+      "pending_deltas": {"on_hand": "+qty", "on_po": "-qty"},
+      "description": "Receipt of purchased goods. Creates pending for +on_hand, -on_po."
+    },
+    "workorder": {
+      "model": "apps/transactions/models/workorder.py",
+      "functions": [
+        {"name": "complete_workorder", "file": "apps/transactions/services/flow.py", "line": 361, "context": "WO completion"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 452, "context": "+on_hand, -on_wo"}
+      ],
+      "pending_deltas": {"on_hand": "+qty", "on_wo": "-qty"},
+      "description": "Work order completion — production items enter inventory."
+    },
+    "wo_complete": {
+      "functions": [
+        {"name": "complete_workorder", "file": "apps/transactions/services/flow.py", "line": 361, "context": "WO completion processing"}
+      ],
+      "pending_deltas": {"on_hand": "+qty", "on_wo": "-qty"},
+      "description": "Work order completion event. Same service as workorder."
+    },
+    "proposal": {
+      "model": "apps/transactions/models/proposal.py",
+      "functions": [
+        {"name": "transfer_proposal_to_order", "file": "apps/transactions/services/proposal_to_order.py", "line": 219, "context": "converts proposal to order"}
+      ],
+      "pending_deltas": {"on_p": "+qty_x_prob"},
+      "description": "Sales proposal — forecast. on_p tracks weighted probability."
+    },
+    "available": {
+      "functions": [
+        {"name": "Item.save", "file": "apps/products/models/item.py", "line": 493, "context": "available = on_hand - allocated"}
+      ],
+      "description": "Computed available quantity: on_hand - allocated. Recomputed on save."
+    },
+    "allocated": {
+      "functions": [
+        {"name": "Item.quantity['allocated']", "file": "apps/products/models/item.py", "line": 269, "context": "reserved for committed orders"}
+      ],
+      "description": "Reserved inventory — committed to sales orders. Subtracted from on_hand to get available."
+    },
+    "on_r": {
+      "functions": [
+        {"name": "Item.quantity['on_r']", "file": "apps/products/models/item.py", "line": 238, "context": "returns pending"}
+      ],
+      "description": "Returns pending — goods expected back from customers."
+    },
+    "on_hand": {
+      "functions": [
+        {"name": "Item.quantity['on_hand']", "file": "apps/products/models/item.py", "line": 238, "context": "physical inventory count"}
+      ],
+      "description": "Physical inventory — what is in the warehouse."
+    },
+    "on_so": {
+      "functions": [
+        {"name": "Item.quantity['on_so']", "file": "apps/products/models/item.py", "line": 238, "context": "committed to sales orders"}
+      ],
+      "description": "Committed to sales orders — reduces available."
+    },
+    "on_po": {
+      "functions": [
+        {"name": "Item.quantity['on_po']", "file": "apps/products/models/item.py", "line": 238, "context": "expected from purchase orders"}
+      ],
+      "description": "Expected from purchase orders — increases available."
+    },
+    "on_wo": {
+      "functions": [
+        {"name": "Item.quantity['on_wo']", "file": "apps/products/models/item.py", "line": 238, "context": "in production"}
+      ],
+      "description": "In production via work orders — increases available."
+    },
+    "on_p": {
+      "functions": [
+        {"name": "Item.quantity['on_p']", "file": "apps/products/models/item.py", "line": 238, "context": "forecast from proposals"}
+      ],
+      "description": "Forecast quantity from proposals — weighted by probability."
+    },
+    "on_in": {
+      "functions": [
+        {"name": "Item.quantity['on_in']", "file": "apps/products/models/item.py", "line": 238, "context": "invoiced/shipped"}
+      ],
+      "description": "Invoiced — goods that have been shipped."
+    },
+
+    "order_to_invoice": {
+      "service": "apps/transactions/services/order_to_invoice.py",
+      "entry_point": "transfer_order_to_invoice",
+      "functions": [
+        {"name": "transfer_order_to_invoice", "file": "apps/transactions/services/order_to_invoice.py", "line": 16, "context": "main entry point"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/order_to_invoice.py", "line": 332, "context": "creates pending for -on_hand, -on_so, +on_in"}
+      ],
+      "pending_deltas": {"on_in": "+qty", "on_so": "-qty", "on_hand": "-qty"},
+      "gl_impact": "AR debit, Revenue credit, Tax credit, COGS debit, Inventory credit, Commission",
+      "description": "Invoice creation from order. Financial event — triggers GL and inventory movement."
+    },
+    "proposal_to_order": {
+      "service": "apps/transactions/services/proposal_to_order.py",
+      "entry_point": "transfer_proposal_to_order",
+      "functions": [
+        {"name": "transfer_proposal_to_order", "file": "apps/transactions/services/proposal_to_order.py", "line": 219, "context": "main entry point"},
+        {"name": "_create_transfer_pending_records", "file": "apps/transactions/services/proposal_to_order.py", "line": 131, "context": "pending creation helper"}
+      ],
+      "pending_deltas": {"on_so": "+qty", "on_p": "-qty"},
+      "description": "Order creation from proposal. Converts forecast to commitment."
+    },
+    "receive_purchase": {
+      "service": "apps/transactions/services/flow.py",
+      "entry_point": "receive_purchase",
+      "functions": [
+        {"name": "receive_purchase", "file": "apps/transactions/services/flow.py", "line": 219, "context": "receipt processing"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 308, "context": "+on_hand, -on_po"}
+      ],
+      "pending_deltas": {"on_hand": "+qty", "on_po": "-qty"},
+      "description": "Purchase receipt — goods arrive, on_hand increases, on_po decreases."
+    },
+    "complete_workorder": {
+      "service": "apps/transactions/services/flow.py",
+      "entry_point": "complete_workorder",
+      "functions": [
+        {"name": "complete_workorder", "file": "apps/transactions/services/flow.py", "line": 361, "context": "WO completion"},
+        {"name": "Pending.objects.create", "file": "apps/transactions/services/flow.py", "line": 452, "context": "+on_hand, -on_wo"}
+      ],
+      "pending_deltas": {"on_hand": "+qty", "on_wo": "-qty"},
+      "description": "Work order completion — production items enter inventory."
+    },
+    "adjust_inventory": {
+      "service": "apps/transactions/services/flow.py",
+      "entry_point": "adjust_inventory",
+      "functions": [
+        {"name": "adjust_inventory", "file": "apps/transactions/services/flow.py", "line": 505, "context": "manual inventory adjustment"}
+      ],
+      "description": "Manual inventory adjustment — direct change to on_hand."
+    },
+    "journalize_invoice": {
+      "service": "apps/accounts/services/journalize.py",
+      "entry_point": "journalize_invoice",
+      "functions": [
+        {"name": "journalize_invoice", "file": "apps/accounts/services/journalize.py", "line": 241, "context": "GL posting for invoices"}
+      ],
+      "gl_impact": "AR, Revenue, Tax, COGS, Inventory, Commission",
+      "description": "General ledger posting for invoice — creates journal entries."
+    },
+    "journalize_payment": {
+      "service": "apps/accounts/services/journalize.py",
+      "entry_point": "journalize_payment",
+      "functions": [
+        {"name": "journalize_payment", "file": "apps/accounts/services/journalize.py", "line": 434, "context": "GL posting for payments"}
+      ],
+      "gl_impact": "Cash debit, AR credit (or AP debit, Cash credit)",
+      "description": "General ledger posting for payment — cash application."
+    },
+    "journalize_purchase": {
+      "service": "apps/accounts/services/journalize.py",
+      "entry_point": "journalize_purchase",
+      "functions": [
+        {"name": "journalize_purchase", "file": "apps/accounts/services/journalize.py", "line": 570, "context": "GL posting for purchases"}
+      ],
+      "gl_impact": "Inventory debit, AP credit",
+      "description": "General ledger posting for purchase orders."
+    },
+    "flight_sim": {
+      "service": "apps/products/services/inventory_flight_sim.py",
+      "functions": [
+        {"name": "get_item_flight_state", "file": "apps/products/services/inventory_flight_sim.py", "line": 52, "context": "current flight state snapshot"},
+        {"name": "get_flight_scenario", "file": "apps/products/services/inventory_flight_sim.py", "line": 127, "context": "training scenario generator"}
+      ],
+      "description": "Inventory flight simulator — interactive training for inventory flows."
+    },
+
+    "contacts": {
+      "model": "apps/contacts/models/contact.py",
+      "description": "Central identity — customers, vendors, employees, prospects."
+    },
+    "customers": {
+      "model": "apps/contacts/models/contact.py",
+      "description": "Contacts with customer role."
+    },
+    "vendors": {
+      "model": "apps/contacts/models/contact.py",
+      "description": "Contacts with vendor role."
+    },
+    "proposals": {
+      "model": "apps/transactions/models/proposal.py",
+      "description": "Sales proposals — forecasts weighted by probability."
+    },
+    "orders": {
+      "model": "apps/transactions/models/order.py",
+      "description": "Sales orders — customer commitments."
+    },
+    "purchases": {
+      "model": "apps/transactions/models/purchase.py",
+      "description": "Purchase orders to vendors."
+    },
+    "invoices": {
+      "model": "apps/transactions/models/invoice.py",
+      "description": "Invoices — shipment and financial events."
+    },
+    "receipts": {
+      "model": "apps/transactions/models/receipt.py",
+      "description": "Vendor shipping receipts."
+    },
+    "linkage": {
+      "model": "apps/core/models/linkage.py",
+      "description": "Shared line data — specs, related records, data at time of action."
+    },
+    "inv_layer": {
+      "model": "apps/products/models/inventory_layer.py",
+      "description": "Inventory costing layer — tracks on_hand by receipt cost."
+    },
+    "prop_line": {
+      "model": "apps/transactions/models/line.py",
+      "description": "Proposal line — quantity.placed, actioned, remaining, canceled."
+    },
+    "order_line": {
+      "model": "apps/transactions/models/line.py",
+      "description": "Order line — quantity.placed, actioned, remaining, canceled."
+    },
+    "purchase_line": {
+      "model": "apps/transactions/models/line.py",
+      "description": "Purchase line — quantity.placed, actioned, remaining, canceled, received."
+    },
+    "invoice_line": {
+      "model": "apps/transactions/models/line.py",
+      "description": "Invoice line — quantity.placed, actioned, remaining, canceled, parent."
+    }
+  }
+}

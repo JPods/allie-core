@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMap — How It Works</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117; color: #c9d1d9;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+    border-bottom: 1px solid #30363d;
+    padding: 48px 0 40px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 42px; font-weight: 700; color: #58a6ff;
+    letter-spacing: -0.5px;
+  }
+  header h1 span { color: #4ec9b0; }
+  header p.tagline {
+    font-size: 18px; color: #8b949e; margin-top: 12px;
+    max-width: 600px; margin-left: auto; margin-right: auto;
+  }
+
+  /* Container */
+  .container {
+    max-width: 960px; margin: 0 auto; padding: 0 24px;
+  }
+
+  /* Sections */
+  section { padding: 56px 0; border-bottom: 1px solid #21262d; }
+  section:last-child { border-bottom: none; }
+  section h2 {
+    font-size: 28px; color: #f0f6fc; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  section h2 .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #1f6feb; color: #ffffff; font-size: 16px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  section p { color: #8b949e; font-size: 15px; margin-bottom: 16px; max-width: 720px; }
+  section p strong { color: #c9d1d9; }
+
+  /* Comparison */
+  .comparison {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin: 32px 0;
+  }
+  @media (max-width: 700px) { .comparison { grid-template-columns: 1fr; } }
+  .comparison .panel {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 20px; text-align: center;
+  }
+  .comparison .panel h3 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .comparison .panel.before h3 { color: #f85149; }
+  .comparison .panel.after h3 { color: #3fb950; }
+  .comparison .panel svg { width: 100%; height: auto; }
+
+  /* SVG diagram display */
+  .diagram-display {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 24px; margin: 24px 0; overflow-x: auto; text-align: center;
+  }
+  .diagram-display svg { max-width: 100%; height: auto; }
+  .diagram-display .caption {
+    font-size: 12px; color: #484f58; margin-top: 12px; font-style: italic;
+  }
+
+  /* Code block */
+  pre {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 16px 20px; overflow-x: auto; margin: 16px 0;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', monospace; font-size: 13px;
+    color: #c9d1d9; line-height: 1.5;
+  }
+  pre .comment { color: #484f58; }
+  pre .string { color: #a5d6ff; }
+  pre .keyword { color: #ff7b72; }
+  pre .func { color: #d2a8ff; }
+  pre .flag { color: #ffa657; }
+
+  /* Feature cards */
+  .features {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    margin: 32px 0;
+  }
+  @media (max-width: 700px) { .features { grid-template-columns: 1fr; } }
+  .feature-card {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 24px;
+  }
+  .feature-card h3 {
+    font-size: 16px; color: #58a6ff; margin-bottom: 8px;
+  }
+  .feature-card p { color: #8b949e; font-size: 13px; margin: 0; }
+  .feature-card .icon {
+    font-size: 28px; margin-bottom: 12px; display: block;
+  }
+
+  /* Layer diagram */
+  .layer-diagram {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; margin: 32px 0; flex-wrap: wrap;
+  }
+  .layer-box {
+    background: #161b22; border: 2px solid #30363d; border-radius: 8px;
+    padding: 20px 28px; text-align: center; min-width: 180px;
+  }
+  .layer-box h4 { font-size: 14px; color: #58a6ff; margin-bottom: 4px; }
+  .layer-box p { font-size: 12px; color: #8b949e; margin: 0; }
+  .layer-box.source { border-color: #f0883e; }
+  .layer-box.source h4 { color: #f0883e; }
+  .layer-arrow { font-size: 24px; color: #30363d; }
+
+  /* Detail panel mockup */
+  .detail-mockup {
+    background: #252526; border: 1px solid #3c3c3c; border-radius: 8px;
+    padding: 20px; margin: 24px 0; max-width: 400px;
+  }
+  .detail-mockup h3 {
+    font-size: 18px; color: #4ec9b0; margin-bottom: 14px;
+    border-bottom: 1px solid #3c3c3c; padding-bottom: 8px;
+  }
+  .detail-mockup .section-title {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+    color: #888; margin: 12px 0 4px;
+  }
+  .detail-mockup .code-link {
+    display: block; padding: 4px 8px; margin: 3px 0;
+    background: #1e1e1e; border-radius: 3px; border: 1px solid #3c3c3c;
+    font-family: 'SF Mono', 'Menlo', monospace; font-size: 11px; color: #9cdcfe;
+    text-decoration: none;
+  }
+  .detail-mockup .delta {
+    display: inline-block; padding: 2px 6px; margin: 2px;
+    border-radius: 3px; font-size: 11px; font-family: monospace;
+  }
+  .detail-mockup .delta.plus { background: #1b3a1b; color: #4ec9b0; }
+  .detail-mockup .delta.minus { background: #3a1b1b; color: #f48771; }
+  .detail-mockup .delta.gap { background: #3a3a1b; color: #dcdcaa; }
+  .detail-mockup .gap-warning {
+    background: #3a2a1b; border: 1px solid #dcdcaa; border-radius: 4px;
+    padding: 6px 10px; margin-top: 8px; font-size: 11px; color: #dcdcaa;
+  }
+  .detail-mockup .desc { font-size: 13px; color: #c9d1d9; line-height: 1.4; }
+
+  /* Stats */
+  .stats {
+    display: flex; gap: 32px; margin: 32px 0; flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat .number { font-size: 36px; font-weight: 700; color: #58a6ff; }
+  .stat .label { font-size: 13px; color: #8b949e; }
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 40px 0; color: #484f58; font-size: 13px;
+    border-top: 1px solid #21262d;
+  }
+  footer a { color: #58a6ff; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ HEADER ════════════════ -->
+<header>
+  <div class="container">
+    <h1>Code<span>Map</span></h1>
+    <p class="tagline">
+      Every node in a flowchart links to the code that implements it.
+      Click the diagram. Read the source. One source of truth.
+    </p>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ════════════════ THE PROBLEM ════════════════ -->
+<section>
+  <h2><span class="num">1</span> The Problem: Diagrams Drift from Code</h2>
+  <p>
+    Documentation says <strong>"pending records are created when an order converts to invoice"</strong>
+    but doesn't say <em>where</em> in the code that happens. Is it <code>flow.py</code>?
+    <code>order_to_invoice.py</code>? Line 332 or line 171? You have to grep. Every time.
+  </p>
+  <p>
+    CodeMap closes that gap permanently. The diagram links to
+    <strong>order_to_invoice.py:332</strong> &mdash; and when the code moves, you update one
+    JSON mapping file and regenerate.
+  </p>
+
+  <div class="comparison">
+    <div class="panel before">
+      <h3>Before: Static Diagram</h3>
+      <svg width="445pt" height="66pt" viewBox="0.00 0.00 445.00 66.00" xmlns="http://www.w3.org/2000/svg"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 62.25)"><polygon fill="#2d2d2d" stroke="none" points="-4,4 -4,-62.25 441.25,-62.25 441.25,4 -4,4"/><text text-anchor="middle" x="218.62" y="-42.85" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#888">No code links. No file:line. Just boxes.</text><g id="node1" class="node"><polygon fill="#4a6741" stroke="#555" points="54,-36 0,-36 0,0 54,0 54,-36"/><text text-anchor="middle" x="27" y="-14.12" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Order</text></g><g id="node2" class="node"><polygon fill="#4a6741" stroke="#555" points="174.75,-36 120.75,-36 120.75,0 174.75,0 174.75,-36"/><text text-anchor="middle" x="147.75" y="-14.12" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Invoice</text></g><g id="edge1" class="edge"><path fill="none" stroke="#555" d="M54.35,-18C70.42,-18 91.22,-18 109.01,-18"/><polygon fill="#555" stroke="#555" points="108.96,-21.5 118.96,-18 108.96,-14.5 108.96,-21.5"/><text text-anchor="middle" x="87.38" y="-19.2" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#666">transfer</text></g><g id="node3" class="node"><polygon fill="#4a6741" stroke="#555" points="304.5,-36 250.5,-36 250.5,0 304.5,0 304.5,-36"/><text text-anchor="middle" x="277.5" y="-14.12" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Pending</text></g><g id="edge2" class="edge"><path fill="none" stroke="#555" d="M175.22,-18C193.55,-18 218.22,-18 238.62,-18"/><polygon fill="#555" stroke="#555" points="238.55,-21.5 248.55,-18 238.55,-14.5 238.55,-21.5"/><text text-anchor="middle" x="212.62" y="-19.2" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#666">-on_hand</text></g><g id="node4" class="node"><polygon fill="#4a6741" stroke="#555" points="437.25,-36 383.25,-36 383.25,0 437.25,0 437.25,-36"/><text text-anchor="middle" x="410.25" y="-14.12" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Item</text></g><g id="edge3" class="edge"><path fill="none" stroke="#555" d="M304.96,-18C324.1,-18 350.24,-18 371.56,-18"/><polygon fill="#555" stroke="#555" points="371.32,-21.5 381.32,-18 371.32,-14.5 371.32,-21.5"/><text text-anchor="middle" x="343.88" y="-19.2" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#666">update qty</text></g></g></svg>
+    </div>
+    <div class="panel after">
+      <h3>After: Live Architecture Map</h3>
+      <svg width="100%" viewBox="0.00 0.00 697.00 85.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 80.88)"><polygon fill="#1e1e1e" stroke="none" points="-4,4 -4,-80.88 692.75,-80.88 692.75,4 -4,4"/><text text-anchor="middle" x="344.38" y="-61.48" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#8b949e">Every node links to file:line in VS Code</text><g id="node1" class="node"><polygon fill="#264f78" stroke="#58a6ff" points="150.25,-53.75 0,-53.75 0,0 150.25,0 150.25,-53.75"/><text text-anchor="middle" x="75.12" y="-40.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Order</text><text text-anchor="middle" x="75.12" y="-17" font-family="Menlo,monospace" font-size="9.00" fill="#9cdcfe">order.py:196</text><text text-anchor="middle" x="75.12" y="-5.75" font-family="Menlo,monospace" font-size="8.00" fill="#6a9955">transfer_proposal_to_order:219</text></g><g id="node2" class="node"><polygon fill="#264f78" stroke="#58a6ff" points="331.25,-53.75 217,-53.75 217,0 331.25,0 331.25,-53.75"/><text text-anchor="middle" x="274.12" y="-40.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Invoice</text><text text-anchor="middle" x="274.12" y="-17" font-family="Menlo,monospace" font-size="9.00" fill="#9cdcfe">order_to_invoice.py:16</text><text text-anchor="middle" x="274.12" y="-5.75" font-family="Menlo,monospace" font-size="8.00" fill="#6a9955">Pending.create:332</text></g><g id="edge1" class="edge"><path fill="none" stroke="#4ec9b0" d="M150.6,-26.88C168.57,-26.88 187.67,-26.88 205.31,-26.88"/><polygon fill="#4ec9b0" stroke="#4ec9b0" points="205.15,-30.38 215.15,-26.88 205.15,-23.38 205.15,-30.38"/><text text-anchor="middle" x="183.62" y="-28.07" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#cccccc">transfer</text></g><g id="node3" class="node"><polygon fill="#78264f" stroke="#f85149" points="489.75,-53.75 407,-53.75 407,0 489.75,0 489.75,-53.75"/><text text-anchor="middle" x="448.38" y="-40.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Pending</text><text text-anchor="middle" x="448.38" y="-17" font-family="Menlo,monospace" font-size="9.00" fill="#9cdcfe">pending.py:6</text><text text-anchor="middle" x="448.38" y="-5.75" font-family="Menlo,monospace" font-size="8.00" fill="#ffa657">6 creation sites</text></g><g id="edge2" class="edge"><path fill="none" stroke="#f48771" d="M331.53,-26.88C352.03,-26.88 375.1,-26.88 395.22,-26.88"/><polygon fill="#f48771" stroke="#f48771" points="395.17,-30.38 405.17,-26.88 395.17,-23.38 395.17,-30.38"/><text text-anchor="middle" x="369.12" y="-47.58" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#cccccc">-on_hand</text><text text-anchor="middle" x="369.12" y="-37.83" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#cccccc">-on_so</text><text text-anchor="middle" x="369.12" y="-28.07" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#cccccc">+on_in</text></g><g id="node4" class="node"><polygon fill="#264f78" stroke="#58a6ff" points="688.75,-53.75 568.5,-53.75 568.5,0 688.75,0 688.75,-53.75"/><text text-anchor="middle" x="628.62" y="-40.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="white">Item</text><text text-anchor="middle" x="628.62" y="-17" font-family="Menlo,monospace" font-size="9.00" fill="#9cdcfe">item.py:196</text><text text-anchor="middle" x="628.62" y="-5.75" font-family="Menlo,monospace" font-size="8.00" fill="#6a9955">quantity JSONField:238</text></g><g id="edge3" class="edge"><path fill="none" stroke="#4ec9b0" d="M489.82,-26.88C509.59,-26.88 533.97,-26.88 556.71,-26.88"/><polygon fill="#4ec9b0" stroke="#4ec9b0" points="556.54,-30.38 566.54,-26.88 556.54,-23.38 556.54,-30.38"/><text text-anchor="middle" x="529.12" y="-28.07" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#cccccc">update qty</text></g></g></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ THREE LAYERS ════════════════ -->
+<section>
+  <h2><span class="num">2</span> Three Layers, One Source of Truth</h2>
+  <p>
+    One JSON mapping file powers everything. Edit it once &mdash; all three layers update.
+  </p>
+
+  <div class="layer-diagram">
+    <div class="layer-box source">
+      <h4>codemap.json</h4>
+      <p>Node &rarr; file:line mapping</p>
+    </div>
+    <span class="layer-arrow">&rarr;</span>
+    <div class="layer-box">
+      <h4>Layer 1: Enrich</h4>
+      <p>Python script adds<br>URL + tooltip to .dot</p>
+    </div>
+    <span class="layer-arrow">&rarr;</span>
+    <div class="layer-box">
+      <h4>Layer 2: View</h4>
+      <p>Browser viewer with<br>click-to-code detail panel</p>
+    </div>
+    <span class="layer-arrow">&rarr;</span>
+    <div class="layer-box">
+      <h4>Layer 3: API</h4>
+      <p>Alice queries nodes<br>via manage action</p>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <span class="icon">&#x1F4DC;</span>
+      <h3>Enrichment Script</h3>
+      <p>
+        Reads .dot + codemap.json, adds <code>URL</code> and <code>tooltip</code> attributes,
+        outputs enriched .dot. Graphviz renders clickable SVG. Idempotent &mdash; run anytime.
+      </p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F50D;</span>
+      <h3>Interactive Viewer</h3>
+      <p>
+        Dark-themed browser panel. Sidebar lists all flowcharts with coverage counts.
+        Click any node &rarr; detail panel shows functions, file:line, schemas, pending
+        deltas, GL impact. Links open VS Code.
+      </p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">&#x1F916;</span>
+      <h3>Architecture API</h3>
+      <p>
+        <code>get_architecture_node</code> with fuzzy matching.
+        <code>get_architecture_map</code> returns all nodes in a flowchart.
+        Alice uses it to answer "what happens when I create an invoice?"
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ THE DETAIL PANEL ════════════════ -->
+<section>
+  <h2><span class="num">3</span> Click a Node, See the Code</h2>
+  <p>
+    Every node shows its full code context. Functions with file:line,
+    pending deltas color-coded (green = increase, red = decrease),
+    GL impact, and schema fields. Code gaps are flagged in yellow.
+  </p>
+
+  <div style="display:flex; gap:32px; flex-wrap:wrap; align-items:flex-start;">
+    <div class="detail-mockup" style="flex:1; min-width:300px;">
+      <h3>pending</h3>
+      <p class="desc">Central hub for inventory quantity deltas. All quantity changes flow through Pending before updating Item.</p>
+
+      <div class="section-title">Model</div>
+      <span class="code-link">apps/core/models/pending.py:6</span>
+
+      <div class="section-title">Functions (6)</div>
+      <span class="code-link">Pending.objects.create <span style="color:#666">@ order_to_invoice.py:332</span> <span style="color:#6a9955">// invoice creation</span></span>
+      <span class="code-link">Pending.objects.create <span style="color:#666">@ proposal_to_order.py:171</span> <span style="color:#6a9955">// +on_so</span></span>
+      <span class="code-link">Pending.objects.create <span style="color:#666">@ flow.py:308</span> <span style="color:#6a9955">// receive_purchase</span></span>
+      <span class="code-link">Pending.objects.create <span style="color:#666">@ flow.py:452</span> <span style="color:#6a9955">// complete_workorder</span></span>
+      <span class="code-link">Pending.objects.create <span style="color:#666">@ flow.py:591</span> <span style="color:#6a9955">// adjust_inventory</span></span>
+
+      <div class="section-title">Schema</div>
+      <div>
+        <span style="display:inline-block;padding:1px 5px;margin:1px;background:#1e1e1e;border-radius:2px;font-family:monospace;font-size:11px;color:#9cdcfe;">model_name</span>
+        <span style="display:inline-block;padding:1px 5px;margin:1px;background:#1e1e1e;border-radius:2px;font-family:monospace;font-size:11px;color:#9cdcfe;">record_id</span>
+        <span style="display:inline-block;padding:1px 5px;margin:1px;background:#1e1e1e;border-radius:2px;font-family:monospace;font-size:11px;color:#9cdcfe;">purpose</span>
+        <span style="display:inline-block;padding:1px 5px;margin:1px;background:#1e1e1e;border-radius:2px;font-family:monospace;font-size:11px;color:#9cdcfe;">changes</span>
+        <span style="display:inline-block;padding:1px 5px;margin:1px;background:#1e1e1e;border-radius:2px;font-family:monospace;font-size:11px;color:#9cdcfe;">data</span>
+      </div>
+    </div>
+
+    <div class="detail-mockup" style="flex:1; min-width:300px;">
+      <h3>purchase</h3>
+      <p class="desc">Purchase order to vendor.</p>
+
+      <div class="section-title">Functions (2)</div>
+      <span class="code-link">transfer_order_to_purchase <span style="color:#666">@ order_to_purchase.py:14</span></span>
+      <span class="code-link">transfer_proposal_to_purchase <span style="color:#666">@ proposal_to_purchase.py:13</span></span>
+
+      <div class="section-title">Pending Deltas</div>
+      <span class="delta gap">on_po: +qty (GAP: not implemented)</span>
+
+      <div class="gap-warning">&#9888; Code gap detected &mdash; pending record not implemented for this delta. The PO line is created but no inventory delta is written.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ HOW TO USE ════════════════ -->
+<section>
+  <h2><span class="num">4</span> How to Use</h2>
+
+  <p><strong>Enrich all flowcharts:</strong></p>
+  <pre><span class="comment"># Add URL/tooltip to all .dot files, render SVGs</span>
+<span class="func">python3</span> scripts/codemap_enrich.py <span class="flag">--all</span> <span class="flag">--render</span></pre>
+
+  <p><strong>Open the viewer:</strong></p>
+  <pre><span class="comment"># Serves on localhost:8787, opens browser</span>
+<span class="func">python3</span> scripts/codemap_serve.py</pre>
+
+  <p><strong>Ask Alice about architecture:</strong></p>
+  <pre><span class="comment"># Via wcapi manage action</span>
+POST /wcapi/manage/
+{ <span class="string">"action"</span>: <span class="string">"get_architecture_node"</span>,
+  <span class="string">"params"</span>: { <span class="string">"node"</span>: <span class="string">"pending"</span> } }
+
+<span class="comment"># Fuzzy matching works</span>
+{ <span class="string">"action"</span>: <span class="string">"get_architecture_node"</span>,
+  <span class="string">"params"</span>: { <span class="string">"node"</span>: <span class="string">"journal"</span> } }
+<span class="comment"># Returns: journalize_invoice, journalize_payment, journalize_purchase</span></pre>
+
+  <p><strong>Update the mapping:</strong></p>
+  <pre><span class="comment"># Edit the single source of truth</span>
+readmes/flowcharts/<span class="string">codemap.json</span>
+
+<span class="comment"># Then re-enrich + update Document records</span>
+<span class="func">python3</span> scripts/codemap_enrich.py <span class="flag">--all</span> <span class="flag">--render</span>
+<span class="func">python3</span> scripts/codemap_seed_documents.py <span class="flag">--apply</span></pre>
+</section>
+
+<!-- ════════════════ LIVE DIAGRAM ════════════════ -->
+<section>
+  <h2><span class="num">5</span> Live Example: Inventory Buckets</h2>
+  <p>
+    This is the actual enriched SVG from the WC3 codebase. Every node is clickable &mdash;
+    hover for tooltips showing file:line and function context. Click to open in VS Code.
+  </p>
+  <p>
+    14 of 16 nodes mapped to code. Coverage: <strong>87.5%</strong>.
+  </p>
+
+  <div class="diagram-display">
+    <object type="image/svg+xml" data="wc3-inventory-buckets.enriched.svg" style="width:100%; max-width:900px;">
+      Your browser does not support SVG.
+    </object>
+    <p class="caption">wc3-inventory-buckets.enriched.svg &mdash; CodeMap revision 1, 2026-08-11</p>
+  </div>
+</section>
+
+<!-- ════════════════ STATS ════════════════ -->
+<section>
+  <h2><span class="num">6</span> Current Coverage</h2>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="number">32</div>
+      <div class="label">Flowcharts</div>
+    </div>
+    <div class="stat">
+      <div class="number">39</div>
+      <div class="label">Mapped Nodes</div>
+    </div>
+    <div class="stat">
+      <div class="number">32</div>
+      <div class="label">Enriched SVGs</div>
+    </div>
+    <div class="stat">
+      <div class="number">32</div>
+      <div class="label">WC3 Documents</div>
+    </div>
+    <div class="stat">
+      <div class="number">3</div>
+      <div class="label">API Endpoints</div>
+    </div>
+  </div>
+
+  <p>
+    Every flowchart has a <strong>Document record</strong> in WC3 with
+    <code>purpose="codemap-guru"</code>, tracking revision number, node count,
+    coverage percentage, and SVG availability. Run
+    <code>codemap_seed_documents.py --apply</code> to update after changes.
+  </p>
+</section>
+
+</div>
+
+<footer>
+  <p>
+    CodeMap &mdash; codemap.guru &mdash; built 2026-08-11
+    <br>
+    One source of truth: <a href="codemap.json">codemap.json</a>
+    &middot; <a href="codemap-viewer.html">Open Viewer</a>
+  </p>
+</footer>
+
+</body>
+</html>

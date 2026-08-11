@@ -9,7 +9,7 @@ digraph wc3_inventory_buckets {
     fontsize=11
     node [fontname="Helvetica" fontsize=10 style=filled]
     edge [fontname="Helvetica" fontsize=9]
-    label="WC3 — Inventory Bucket Flow\navailable = on_hand - on_so + on_po + on_wo"
+    label="WC3 — Inventory Bucket Flow\navailable = on_hand - allocated"
     labelloc=t
     fontsize=14
     pad=0.5
@@ -42,36 +42,38 @@ digraph wc3_inventory_buckets {
   Item.quantity['on_so'] @ apps/products/models/item.py:238 (committed to sales orders)"]
     on_hand [label="on_hand\n(physical)" shape=ellipse fillcolor="#82E0AA" fontsize=12 URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="Physical inventory — what is in the warehouse.\nFunctions:
   Item.quantity['on_hand'] @ apps/products/models/item.py:238 (physical inventory count)"]
+    allocated [label="allocated\n(reserved)" shape=ellipse fillcolor="#FAD7A0" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:269" target="_blank" tooltip="Reserved inventory — committed to sales orders. Subtracted from on_hand to get available.\nFunctions:
+  Item.quantity['allocated'] @ apps/products/models/item.py:269 (reserved for committed orders)"]
     on_po [label="on_po\n(expected)" shape=ellipse fillcolor="#85C1E9" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="Expected from purchase orders — increases available.\nFunctions:
   Item.quantity['on_po'] @ apps/products/models/item.py:238 (expected from purchase orders)"]
     on_wo [label="on_wo\n(in production)" shape=ellipse fillcolor="#F1948A" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="In production via work orders — increases available.\nFunctions:
   Item.quantity['on_wo'] @ apps/products/models/item.py:238 (in production)"]
     on_in [label="on_in\n(invoiced)" shape=ellipse fillcolor="#ABEBC6" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="Invoiced — goods that have been shipped.\nFunctions:
   Item.quantity['on_in'] @ apps/products/models/item.py:238 (invoiced/shipped)"]
+    on_r [label="on_r\n(returns)" shape=ellipse fillcolor="#D5F5E3" URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="Returns pending — goods expected back from customers.\nFunctions:
+  Item.quantity['on_r'] @ apps/products/models/item.py:238 (returns pending)"]
 
-    available [label="AVAILABLE\non_hand - on_so\n+ on_po + on_wo" shape=doublecircle fillcolor="#58D68D" fontsize=11 URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:238" target="_blank" tooltip="Computed available quantity: on_hand - on_so + on_po + on_wo.\nFunctions:
-  Item.quantity @ apps/products/models/item.py:238 (available = on_hand - on_so + on_po + on_wo)"]
+    available [label="AVAILABLE\non_hand - allocated" shape=doublecircle fillcolor="#58D68D" fontsize=11 URL="vscode://file/Users/williamjames/Documents/CommerceExpert/webClerk3/apps/products/models/item.py:493" target="_blank" tooltip="Computed available quantity: on_hand - allocated. Recomputed on save.\nFunctions:
+  Item.save @ apps/products/models/item.py:493 (available = on_hand - allocated)"]
 
     // Flows
     proposal -> on_p [label="+qty×prob" color="#8E44AD"]
     order -> on_so [label="+qty" color="#F39C12"]
     order -> on_p [label="-qty (partial)" style=dashed color="#8E44AD"]
 
-    invoice -> on_hand [label="-qty" color="#E74C3C"]
     invoice -> on_so [label="-qty" color="#E74C3C"]
     invoice -> on_in [label="+qty" color="#27AE60"]
+    on_in -> on_hand [label="-qty" color="#E74C3C"]
 
     purchase -> on_po [label="+qty" color="#2980B9"]
     receipt -> on_hand [label="+qty" color="#27AE60"]
-    receipt -> on_po [label="-qty" color="#E74C3C"]
+    on_po -> receipt [label="-qty" color="#E74C3C"]
 
     workorder -> on_wo [label="+qty" color="#C0392B"]
-    wo_complete -> on_hand [label="+qty" color="#27AE60"]
-    wo_complete -> on_wo [label="-qty" color="#E74C3C"]
+    wo_complete -> receipt [label="creates" style=dashed color="#2980B9"]
+    on_wo -> wo_complete [label="-qty" color="#E74C3C"]
 
     // Available computation
     on_hand -> available [style=bold color="#27AE60"]
-    on_so -> available [label="-" style=bold color="#E74C3C"]
-    on_po -> available [label="+" style=bold color="#2980B9"]
-    on_wo -> available [label="+" style=bold color="#C0392B"]
+    allocated -> available [label="-" style=bold color="#E74C3C"]
 }
