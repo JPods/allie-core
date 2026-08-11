@@ -2,6 +2,7 @@
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
+- [CodeMap (codemap.guru)](project_codemap.md) — Live architecture tool; .dot nodes link to code; three layers (script/panel/API) one mapping file
 - [leftshoe is the standard session opening](feedback_leftshoe_standard_opening.md) — Call leftshoe MCP first in every session; report team status before anything else
 - [Teach Allie and Alice before session ends](feedback_teach_before_session_end.md) — ask_ calls are read-only; use teach_allie + alice_observe to persist decisions
 - [Allie and Alice are active participants](feedback_active_participants.md) — Consult them every session; verify MCP connectivity first; venv not source path
