@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How WebClerk Works — Architecture Flowcharts</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --surface2: #334155;
+    --text: #f1f5f9; --muted: #94a3b8; --dim: #64748b;
+    --accent: #3b82f6; --green: #22c55e; --red: #ef4444; --gold: #f59e0b;
+    --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 60px 20px 40px; max-width: 800px; margin: 0 auto; }
+  .hero h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .hero h1 span { color: var(--accent); }
+  .hero .tagline { font-size: 1.2rem; color: var(--muted); margin-bottom: 16px; }
+  .hero .stat { font-size: 1rem; color: var(--gold); font-weight: 600; }
+
+  /* Category sections */
+  .categories { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+  .category { margin-bottom: 48px; }
+  .category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--surface2); }
+  .category-header .badge { background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
+  .category-header h2 { font-size: 1.4rem; font-weight: 700; }
+  .category-header .count { font-size: 0.85rem; color: var(--dim); margin-left: auto; }
+
+  /* Card grid */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border-radius: 10px; padding: 20px; border: 1px solid var(--surface2); text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.15s; display: flex; flex-direction: column; }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .card-name { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 6px; letter-spacing: 0.02em; }
+  .card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: 0.85rem; color: var(--muted); flex: 1; }
+  .card .card-footer { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 0.75rem; color: var(--dim); }
+  .card .card-footer .svg-icon { width: 14px; height: 14px; fill: none; stroke: var(--dim); stroke-width: 2; }
+  .card:hover .card-footer { color: var(--accent); }
+  .card:hover .card-footer .svg-icon { stroke: var(--accent); }
+
+  /* Footer */
+  .site-footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--surface2); color: var(--dim); font-size: 0.85rem; }
+  .site-footer a { color: var(--accent); text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+  .footer-links { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+  .download-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--surface2); color: var(--text); padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; text-decoration: none; transition: border-color 0.2s; }
+  .download-btn:hover { border-color: var(--accent); text-decoration: none; }
+
+  /* Search */
+  .search-bar { max-width: 1100px; margin: 0 auto 32px; padding: 0 20px; }
+  .search-bar input { width: 100%; background: var(--surface); border: 1px solid var(--surface2); border-radius: 8px; padding: 12px 16px; font-size: 1rem; color: var(--text); font-family: var(--sans); outline: none; transition: border-color 0.2s; }
+  .search-bar input::placeholder { color: var(--dim); }
+  .search-bar input:focus { border-color: var(--accent); }
+
+  /* Hidden by search filter */
+  .card.hidden { display: none; }
+  .category.hidden { display: none; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .hero h1 { font-size: 2rem; }
+    .hero .tagline { font-size: 1rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .footer-links { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>How <span>WebClerk</span> Works</h1>
+  <p class="tagline">32 architecture flowcharts — the complete system in one place</p>
+  <p class="stat">Open source commerce, bottom-up, locally governed</p>
+</div>
+
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Search flowcharts..." autocomplete="off">
+</div>
+
+<div class="categories">
+
+  <!-- Core Transactions (Big 4) -->
+  <div class="category" data-category="core">
+    <div class="category-header">
+      <span class="badge">Core</span>
+      <h2>Core Transactions (Big 4)</h2>
+      <span class="count">7 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-master-flow.enriched.svg" data-keywords="master transaction flow overview main">
+        <div class="card-name">master-flow</div>
+        <h3>Master Transaction Flow</h3>
+        <p>The complete transaction lifecycle — how every order, invoice, payment, and shipment connects end to end.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-big4-transactions.enriched.svg" data-keywords="big four transactions purchase sale order invoice">
+        <div class="card-name">big4-transactions</div>
+        <h3>Big 4 Transactions Overview</h3>
+        <p>Purchase orders, sales orders, invoices, and payments — the four transaction types that drive all commerce.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-order-to-invoice.enriched.svg" data-keywords="order invoice pipeline conversion fulfillment">
+        <div class="card-name">order-to-invoice</div>
+        <h3>Order to Invoice Pipeline</h3>
+        <p>How a sales order becomes an invoice — line item allocation, fulfillment checks, and status transitions.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-inventory-buckets.enriched.svg" data-keywords="inventory bucket available on hand allocated stock">
+        <div class="card-name">inventory-buckets</div>
+        <h3>Inventory Bucket Flow</h3>
+        <p>Available = on_hand - allocated. How inventory moves between buckets as orders are placed, allocated, and fulfilled.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-pending-records.enriched.svg" data-keywords="pending records processing queue approval">
+        <div class="card-name">pending-records</div>
+        <h3>Pending Records Processing</h3>
+        <p>How pending records are reviewed, approved, and promoted to active status across all transaction types.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-payment-gl.enriched.svg" data-keywords="payment general ledger posting accounting journal entry">
+        <div class="card-name">payment-gl</div>
+        <h3>Payment and GL Posting</h3>
+        <p>Payment receipt through general ledger journal entry — how money flows through the system and posts to accounts.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-po-so-bundle.enriched.svg" data-keywords="purchase order sales order bundle packaging">
+        <div class="card-name">po-so-bundle</div>
+        <h3>PO/SO Bundle Flow</h3>
+        <p>How purchase orders and sales orders are bundled for efficient processing, shipping, and receiving.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Products & Serial -->
+  <div class="category" data-category="products">
+    <div class="category-header">
+      <span class="badge">Products</span>
+      <h2>Products &amp; Serial</h2>
+      <span class="count">3 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-products-item-support.enriched.svg" data-keywords="products item support catalog variant">
+        <div class="card-name">products-item-support</div>
+        <h3>Products and Item Support</h3>
+        <p>Product catalog structure — items, variants, pricing tiers, and how support records attach to products.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-serial-tracking.enriched.svg" data-keywords="serial number tracking warranty lifecycle">
+        <div class="card-name">serial-tracking</div>
+        <h3>Serial Number Tracking</h3>
+        <p>Full serial number lifecycle — from receipt through sale, warranty, return, and disposition.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-serial-actions.enriched.svg" data-keywords="serial number actions repair replace rma">
+        <div class="card-name">serial-actions</div>
+        <h3>Serial Number Actions</h3>
+        <p>Actions available on serialized items — repair, replace, return, transfer, and status change workflows.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Contacts & Sales -->
+  <div class="category" data-category="contacts">
+    <div class="category-header">
+      <span class="badge">Contacts</span>
+      <h2>Contacts &amp; Sales</h2>
+      <span class="count">3 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-contact.enriched.svg" data-keywords="contact model customer vendor organization">
+        <div class="card-name">contact</div>
+        <h3>Contact Model</h3>
+        <p>Contact data model — people, organizations, roles, communications, and the many-to-many relationship structure.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-customer-centered-sales.enriched.svg" data-keywords="customer centered sales crm pipeline lead">
+        <div class="card-name">customer-centered-sales</div>
+        <h3>Customer-Centered Sales Flow</h3>
+        <p>Sales from the customer's perspective — discovery, evaluation, purchase, fulfillment, and follow-up.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-signin-register.enriched.svg" data-keywords="sign in register login authentication user">
+        <div class="card-name">signin-register</div>
+        <h3>Sign-in and Registration</h3>
+        <p>User authentication flow — sign-in, registration, password reset, and session management.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Connections (Integrations) -->
+  <div class="category" data-category="connections">
+    <div class="category-header">
+      <span class="badge">Connections</span>
+      <h2>Connections (Integrations)</h2>
+      <span class="count">10 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-conn-accounting.enriched.svg" data-keywords="connection accounting quickbooks xero integration">
+        <div class="card-name">conn-accounting</div>
+        <h3>Accounting Connection</h3>
+        <p>How WebClerk connects to external accounting systems — journal entry export, account mapping, and sync.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-banking.enriched.svg" data-keywords="connection banking bank feed reconciliation">
+        <div class="card-name">conn-banking</div>
+        <h3>Banking Connection</h3>
+        <p>Bank feed integration — transaction import, matching, reconciliation, and statement processing.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-calendar.enriched.svg" data-keywords="connection calendar scheduling appointments">
+        <div class="card-name">conn-calendar</div>
+        <h3>Calendar Connection</h3>
+        <p>Calendar integration — appointment scheduling, availability sync, and event-driven action triggers.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-communication.enriched.svg" data-keywords="connection communication email sms notification">
+        <div class="card-name">conn-communication</div>
+        <h3>Communication Connection</h3>
+        <p>Email, SMS, and notification integration — outbound messaging, templates, and delivery tracking.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-deploy.enriched.svg" data-keywords="connection deployment hosting server cloud">
+        <div class="card-name">conn-deploy</div>
+        <h3>Deployment Connection</h3>
+        <p>Deployment pipeline — how WebClerk instances are provisioned, updated, and managed across hosts.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-identity.enriched.svg" data-keywords="connection identity oauth sso carryon mycarryon">
+        <div class="card-name">conn-identity</div>
+        <h3>Identity Connection</h3>
+        <p>Identity and authentication integration — OAuth, SSO, CarryOn portable identity, and permission management.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-internal.enriched.svg" data-keywords="connection internal sync database replication">
+        <div class="card-name">conn-internal</div>
+        <h3>Internal Connection</h3>
+        <p>Internal system connections — database sync between desktop and cloud instances, conflict resolution.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-payment.enriched.svg" data-keywords="connection payment stripe gateway processing">
+        <div class="card-name">conn-payment</div>
+        <h3>Payment Connection</h3>
+        <p>Payment gateway integration — processing, tokenization, refunds, and settlement reconciliation.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-shipping.enriched.svg" data-keywords="connection shipping carrier rates tracking labels">
+        <div class="card-name">conn-shipping</div>
+        <h3>Shipping Connection</h3>
+        <p>Carrier integration — rate shopping, label generation, tracking updates, and delivery confirmation.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-conn-tax.enriched.svg" data-keywords="connection tax calculation sales tax vat">
+        <div class="card-name">conn-tax</div>
+        <h3>Tax Connection</h3>
+        <p>Tax calculation and reporting integration — rate lookup, jurisdiction rules, and filing support.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Projects & QA -->
+  <div class="category" data-category="projects">
+    <div class="category-header">
+      <span class="badge">Projects</span>
+      <h2>Projects &amp; QA</h2>
+      <span class="count">4 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-project.enriched.svg" data-keywords="project management sprint weekly tasks">
+        <div class="card-name">project</div>
+        <h3>Project Management Flow</h3>
+        <p>Project lifecycle — weekly sprints, permanent containers, action tracking, and retrospection accounting.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-action.enriched.svg" data-keywords="action tracking task assignment status workflow">
+        <div class="card-name">action</div>
+        <h3>Action Tracking</h3>
+        <p>Action items — who, what, why, when, next. Status transitions, ownership, and sunset enforcement.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-qa-entity.enriched.svg" data-keywords="qa quality assurance entity inspection checklist">
+        <div class="card-name">qa-entity</div>
+        <h3>QA Entity Flow</h3>
+        <p>Quality assurance entity lifecycle — inspection checklists, pass/fail criteria, and corrective action triggers.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-refs-linkage.enriched.svg" data-keywords="references linkage cross reference relationship">
+        <div class="card-name">refs-linkage</div>
+        <h3>References and Linkage</h3>
+        <p>Cross-reference system — how records link to each other across models, with denormalized cache and PK authority.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Data & Infrastructure -->
+  <div class="category" data-category="infrastructure">
+    <div class="category-header">
+      <span class="badge">Infrastructure</span>
+      <h2>Data &amp; Infrastructure</h2>
+      <span class="count">5 flowcharts</span>
+    </div>
+    <div class="card-grid">
+      <a class="card" href="flowcharts/wc3-data-conversion-pipeline.enriched.svg" data-keywords="data conversion pipeline import transform etl">
+        <div class="card-name">data-conversion-pipeline</div>
+        <h3>Data Conversion Pipeline</h3>
+        <p>External data import — column mapping via Claude Haiku, multi-pass transformation, and bundle output to WebClerk.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-document-library.enriched.svg" data-keywords="document library file storage attachment">
+        <div class="card-name">document-library</div>
+        <h3>Document Library</h3>
+        <p>Document management — file storage, versioning, attachment to records, and access control.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-exchange-rates.enriched.svg" data-keywords="exchange rate currency conversion forex">
+        <div class="card-name">exchange-rates</div>
+        <h3>Exchange Rate Flow</h3>
+        <p>Multi-currency support — rate fetching, conversion at transaction time, and historical rate preservation.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-request-security.enriched.svg" data-keywords="request security rbac authentication middleware">
+        <div class="card-name">request-security</div>
+        <h3>Request Security Pipeline</h3>
+        <p>Every request's security path — authentication, RBAC role injection, query scoping, and field-level filtering.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+      <a class="card" href="flowcharts/wc3-celery-pipeline.enriched.svg" data-keywords="celery task queue async background worker">
+        <div class="card-name">celery-pipeline</div>
+        <h3>Celery Task Pipeline</h3>
+        <p>Background task processing — queue management, worker dispatch, retry logic, and result handling.</p>
+        <div class="card-footer">
+          <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          SVG flowchart
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <p>Part of <a href="https://webclerk.com">WebClerk</a> — open source commerce, locally governed</p>
+  <div class="footer-links">
+    <a href="#download-all" class="download-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download All Flowcharts
+    </a>
+    <a href="https://webclerk.com" class="download-btn">webclerk.com</a>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var search = document.getElementById('search');
+  var cards = document.querySelectorAll('.card');
+  var categories = document.querySelectorAll('.category');
+
+  search.addEventListener('input', function() {
+    var q = this.value.toLowerCase().trim();
+    categories.forEach(function(cat) {
+      var catCards = cat.querySelectorAll('.card');
+      var anyVisible = false;
+      catCards.forEach(function(card) {
+        var text = (card.textContent + ' ' + (card.getAttribute('data-keywords') || '')).toLowerCase();
+        var match = !q || text.indexOf(q) !== -1;
+        card.classList.toggle('hidden', !match);
+        if (match) anyVisible = true;
+      });
+      cat.classList.toggle('hidden', !anyVisible);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
