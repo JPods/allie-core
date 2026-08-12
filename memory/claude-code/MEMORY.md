@@ -143,6 +143,7 @@
 - [Desktop Hosting book](reference_desktop_hosting_book.md) — Bill's Wiley book; foundation for wc3; local-first, relationship-aware, published-based; "put communications at point of action"
 - [data→config rename](project_data_to_config_rename.md) — 16 models renamed data→config; DB+Python+React done; eliminates wcapi data wrapper collision
 - [json_field_ops](reference_json_field_ops.md) — apply_json_op() for surgical JSON updates (upsert/merge/append/remove); works in shell, save_view wiring pending
+- [Touch model](project_touch_model.md) — Communications event log (call/email/visit/text); separate from Action; tel/mailto/sms URIs; TouchBar in AdminWorkbench
 - [Alice infrastructure](reference_alice_infrastructure.md) — Vector store (4521 chunks), MCP server (5 tools), quiz engine (28 questions), observation pipeline
 - [Two Alice instances](project_two_alices.md) — Local Mac (Ollama alice:latest, MCP, vector store) + webclerk.com production; same agent, two deployments
 - [Chrome DevTools MCP](reference_chrome_debug.md) — Chrome 150 requires --user-data-dir; Chrome Debug app; firewall allow; readme at readmes/46
