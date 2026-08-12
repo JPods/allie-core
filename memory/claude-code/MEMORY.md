@@ -202,6 +202,7 @@
 - [Desktop Hosting leverage](project_desktop_hosting_leverage.md) — Cloudflare+Apple+WC3 for 30M small businesses; DynamicCatalogs funds it; Bill has CF/Apple connections
 - [Use balenaEtcher for Linux installers](feedback_balenaetcher.md) — Proven reliable; don't suggest dd; graphical and just works
 - [Andi — hardware-bundled local agent](project_andi_hardware_agent.md) — Ships with Mac Mini/IT15; each business owns box+AI+data; Desktop Hosting realized
+- [No scattering like behaviors](feedback_no_scatter_settings.md) — One base Setting, not 60 per-model copies; Bill says remind him if he suggests scattering
 - [Andi one-touch installer](project_andi_installer_tool.md) — Future: pre-loaded or single-command install; manual IT15 session is the spec
 - [Training video scripts](project_training_videos.md) — 1-4 min scripts per feature; dedicated session
 - [Training video hosting](reference_training_videos_hosting.md) — Vimeo (internal) + YouTube (public); Document holds both links
