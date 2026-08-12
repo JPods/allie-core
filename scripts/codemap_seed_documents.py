@@ -192,6 +192,21 @@ def main():
             [sys.executable, str(Path(__file__).parent / "codemap_enrich.py"), "--all", "--render"],
             cwd=str(FLOWCHARTS_DIR.parent.parent),
         )
+        # Regenerate thumbnails
+        print("\nRegenerating thumbnails...")
+        thumb_dir = FLOWCHARTS_DIR / "thumbnails"
+        thumb_dir.mkdir(exist_ok=True)
+        for svg_path in sorted(FLOWCHARTS_DIR.glob("wc3-*.enriched.svg")):
+            name = svg_path.name.replace(".enriched.svg", "")
+            tmp_png = Path(f"/tmp/cm_{name}.png")
+            jpg_path = thumb_dir / f"{name}.jpg"
+            subprocess.run(["rsvg-convert", str(svg_path), "-h", "180", "-o", str(tmp_png)],
+                           capture_output=True)
+            subprocess.run(["sips", "-z", "90", "9999", "--resampleHeight", "90",
+                           str(tmp_png), "-s", "format", "jpeg", "-s", "formatOptions", "80",
+                           "--out", str(jpg_path)], capture_output=True)
+        count = len(list(thumb_dir.glob("*.jpg")))
+        print(f"  {count} thumbnails generated")
 
     if not args.apply:
         print("\nDry run complete. Use --apply to write changes.")
