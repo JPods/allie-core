@@ -2,49 +2,43 @@
 
 ## Where We Left Off
 
-Replaced pdfme with a panel-based report layout designer built entirely on our own PrintLayout JSON + UniversalPrint renderer. Seeded all 13 print reports with production layouts. Added conditional dunning messages to the Statement report. Built Collections Queue (accounting dashboard) and Customer Health Card (customer detail) with full backend services. Added fiscal health markers (`dt_last_statement`, `health_score`, `velocity_trend`, `statement_interval_days`) to the customer financial structure. Soft-deleted 13 pdfme duplicate reports. 19 new .dot flowchart files are uncommitted in Allie — not reviewed this session.
+Built the documentation distribution layer: 33 enriched SVG flowcharts deployed to Andi (webclerk.com/wc-works/), codemap.guru flowchart library with summaries, jsondriven.com Design Mode animation, and Statement Sorter → Payment.expense codemap. Added nav links to webclerk.com landing page (How It Works, JSON Driven, CodeMap). Fixed the inventory bucket diagram — `available = on_hand - allocated` per Item.save line 493, added allocated/on_r buckets, WO Completion routes through Receipt, on_in drives on_hand change.
 
 ## Do This First Next Session
 
-1. **Test print reports end-to-end** — open an order, Reports dialog, double-click Order Confirmation. Verify it renders correctly with real data through UniversalPrint. Fix any field path mismatches.
-2. **Add 6 general styles** to PrintLayoutDesigner — Title/Heading/Body/Money/Small/Emphasis. Auto-apply by section type. This replaces per-field font control (discussed, agreed, not built).
-3. **Build prompt bar** in PrintLayoutDesigner — text input where user describes a panel, Claude/Alice drafts it. The panel templates are the starting point.
-4. **Test Collections Queue and Health Card** — verify `get_collections_dashboard` and `get_customer_health` manage actions return correct data. The backend service may need field path adjustments for the actual DB structure.
-5. **Review 19 new .dot flowchart files** in `readmes/flowcharts/` — uncommitted, added outside this session.
+1. **Alice readme updates** — alice.md is stale (last updated 2026-07-03). Update with current MCP tool signatures. Create `alice-mcp-tools.md` documenting all 5 tools (ask_alice, alice_search, alice_observe, alice_recall, alice_quiz) with category enums and examples. Audit found: ask_alice has 7 undocumented category filters, quiz has 6 undocumented categories.
+2. **Load seed fixture** — run `python manage.py loaddata wc_works_seed` on both local and Andi to create the "How WebClerk Works" Document record (purpose=wc-works, points to webclerk.com/wc-works/).
+3. **Verify Hostinger deployments** — check codemap.guru and jsondriven.com rendered correctly after git push auto-deploy. The codemap.guru flowchart library section and jsondriven.com animation are new.
+4. **Statement Sorter example** — load `sites/statement_sorter/example-statement.csv` into the sorter and classify the 36 transactions as a demo walkthrough. Consider screenshot for codemap.guru.
+5. **Retrospection** — not written this session. Write to `readmes/retrospections/2026-08-11.md`.
 
 ## Open Problems
 
-- Django runserver hangs on startup if stale `manage.py shell` processes hold DB connections. Kill orphan Python processes before restarting.
-- `PdfDesigner.tsx` still exists but is no longer used by ReportsDialog. Can be deleted or kept as a standalone tool at `/pdf-designer`.
-- The pydantic `FinancialSnapshot` schema is too flat — doesn't validate the full nested `financial.customer.*` structure from `constants.py`. Works because `Dict[str, Any]` accepts everything, but not enforced.
-- Statement batch sender UI (select past-due → send statements with interval skip) is designed but not built.
+- Alice readme coverage is uneven — observations/dedup/escalation are current, main alice.md and coaching are stale
+- codemap.json `purchase` node still flags GAP: +on_po pending record not created in order_to_purchase.py
+- `on_reciept` typo in Item model canonical keys (line 168) — should be `on_receipt`
+- webclerk.com landing page edit was done directly on Andi, not synced back to landing source at `/Volumes/Allie/webclerk.net/`
 
 ## What Was Decided (and Why)
 
-- **Abandoned pdfme** — foreign tool that doesn't know our data model. Our PrintLayout sections + UniversalPrint renderer do everything it does, and we control the field picker, panel templates, and rendering. Users who need pixel-perfect control export layout JSON and build a custom `.tsx` template.
-- **6 general styles instead of per-field formatting** — production system, not a design tool. Title/Heading/Body/Money/Small/Emphasis auto-applied by zone. Data.json available for users who need more.
-- **Panel layout: Panels left, Preview center, Fields+Models right** — right-hand ergonomics. Fields are high-frequency (drag/click), models are pick-occasionally, panels are set-once.
-- **Conditional text section type** — rules in `config.statement.comments`, evaluated top-down against record data. Reusable beyond statements for any document needing conditional content.
-- **Fiscal health markers in `financial.customer.collection`** — `dt_last_statement` + `statement_interval_days` enables batch statement sending with skip logic. Health score and velocity trend maintained by nightly job.
-- **Labels handled by external software** — WC3 exports data (ZPL/CSV/JSON), dedicated label printers/software handle printing. Readme at `readmes/topics/print/labels.md`.
+- **One Document record per install** (not 64) — points to webclerk.com/wc-works/ index page. Reason: one pointer, zero maintenance per install, SVGs update at WC_HQ without sync.
+- **Andi is the library** — edit in place via SSH, no deploy scripts. Zip locally for offline flights. Reason: eliminates rsync/deploy friction; local network SSH is fast.
+- **codemap.guru and jsondriven.com stay on Hostinger** — git push auto-deploys. Andi hosts the SVGs at wc-works/. Reason: Hostinger handles DNS/SSL for those domains; Andi handles webclerk.com.
+- **available = on_hand - allocated** (not on_hand - on_so + on_po + on_wo) — verified at Item.save line 493 and pending_inventory_processor.py line 268. The old formula was never in the code.
 
 ## Files Changed This Session
 
-**React2025 (bill_dev):**
-- `src/components/common/ReportsDialog.tsx` — 7 buttons → 3 controls, removed preview pane, full-screen editor overlay, removed pdfme
-- `src/components/print/PrintLayoutDesigner.tsx` — complete rewrite: panel-based sections, field picker from registry, model list, draggable splits, paper size select
-- `src/components/print/printLayoutTypes.ts` — added `ConditionalTextSection`, `legal` paper size
-- `src/components/print/UniversalPrint.ts` — added `renderConditionalText` with expression evaluator, `reportConfig` passthrough
-- `src/components/collections/CollectionsQueue.tsx` — new: past-due customer list, DSO, cash, actions, promises broken
-- `src/components/collections/CustomerHealthCard.tsx` — new: aging bar, credit, velocity trend, health score
-- `src/pages/admin/AccountingDashboard.tsx` — added Collections section
-- `src/apps/orgs/components/OrgPage.tsx` — added CustomerHealthCard to customer detail
-- `src/pages/tools/PdfDesigner.tsx` — updated props (report, model) but no longer used by ReportsDialog
-
-**webClerk3 (bill_dev):**
-- `apps/core/management/commands/seed_print_layouts.py` — rewrote: 13 report layouts with PrintLayout sections + dunning messages
-- `apps/accounts/services/collections_dashboard.py` — new: collections dashboard + customer health backend
-- `apps/core/views/manage_view.py` — registered `get_collections_dashboard` and `get_customer_health` actions
-- `apps/orgs/models/constants.py` — added fiscal health markers + statement_interval_days
-- `readmes/topics/print/labels.md` — new: labels and barcodes reference for Alice
-- `readmes/topics/accounts/collections.md` — new: collections workflow documentation for Alice
+- `sites/jsondriven/index.html` — added 30s Design Mode drag-and-drop CSS/JS animation
+- `sites/wc-works/index.html` — new: flowchart index page with 33 cards, search, categories
+- `sites/codemap/index.html` — added flowchart library section (33 cards with summaries)
+- `sites/statement_sorter/example-statement.csv` — new: 36 mixed business/personal transactions
+- `readmes/flowcharts/wc3-inventory-buckets.dot` — fixed available formula, added allocated/on_r, arrow corrections
+- `readmes/flowcharts/wc3-statement-sorter.dot` — new: Statement Sorter → Payment.expense pipeline
+- `readmes/flowcharts/codemap.json` — added allocated, on_r, statement_sorter, payment, expense, action, document nodes
+- `readmes/flowcharts/*.enriched.dot` + `*.enriched.svg` — all 33 flowcharts re-enriched
+- `scripts/deploy-wc-works.sh` — new: deploy script (historical — Andi is now edited in place)
+- `archive/wc-works.zip` — offline bundle (157K, not in git)
+- `/opt/andi/apps/webclerk3/landing/index.html` (on Andi) — added How It Works, JSON Driven, CodeMap nav links
+- `/var/www/webclerk-static/wc-works/` (on Andi) — new: index page + 33 SVGs + nginx location
+- `/etc/nginx/sites-enabled/webclerk3` (on Andi) — added /wc-works/ location block
+- WC3 `apps/docs/fixtures/wc_works_seed.json` — new: seed fixture for How WebClerk Works Document record
