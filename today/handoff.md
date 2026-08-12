@@ -2,63 +2,73 @@
 
 ## Where We Left Off
 
-### Auth Fix — Token Expiration
-- **Root cause:** PrivateRoute redirected to `"/"` on auth failure, but `"/"` is inside the PrivateRoute layout — dead redirect loop. Fixed to redirect to `"/login"`.
-- **Same fix applied to:** MacTopBar logout, UserDropdown logout, `PageRoutes.login` constant.
-- **Token expiration warning:** Backend returns `refresh_expires` in token refresh response. Frontend shows amber "Session expires in Nd/Nh" button in MacTopBar when within 3 days.
-- **Files:** `PrivateRoute.tsx`, `MacTopBar.tsx`, `UserDropdown.tsx`, `Routes.ts`, `authSlice.ts`, `axios.ts`, `cookie_token_refresh.py`
+Major UI consolidation session. Auth fix, data-driven dashboards, formatter consolidation, dead code cleanup.
 
-### Data-Driven Cards (dd-card) — Major Feature
-- **Architecture:** One Setting record (`dd_card:base`, id=649), one behavior pattern. Two sections: `cards` (20 model definitions) and `dashboards` (8 compositions).
-- **DDCard component:** `components/common/DDCard.tsx` — compact 2-column metrics with distribution buckets.
-- **DDCardDashboard:** `pages/Dashboard/DDCardDashboard.tsx` — reads Setting, renders DDCards + real DataBrowser.
-- **DataBrowser:** now accepts `defaultModel` prop/param.
-- **Seed:** `seed_dd_cards.py` management command.
-- **6 dashboards replaced, 7 dead files deleted (1,872 lines).**
-- **3 kept:** InventoryDashboard, AliceDashboard, HelpDashboard — legitimate custom logic.
+### Completed
+- **Auth redirect fix** — dead loop when token expired (`"/"` → `"/login"`)
+- **Token expiration warning** — amber banner in MacTopBar when session within 3 days
+- **dd-card Setting** — one record (id=649), 20 cards, 8 dashboards. `seed_dd_cards.py`
+- **DDCardDashboard** — generic dashboard component, replaced 6 custom dashboards
+- **7 dead dashboard files deleted** — -1,872 lines
+- **`formatField(value, type)`** — master dispatcher for all display formatting
+- **`formatDt(value, mode, field)`** — canonical date formatter, all high-traffic components migrated
+- **DropDown.tsx deleted** — migrated 2 usages to Select
+- **dateUtils.ts deleted** — superseded by fieldFormatters.ts
+- **PhoneInput deleted** — unused form component
+- **CollectionsQueue.tsx deleted** — orphaned by AccountingDashboard removal
+- **UI scrub** — debug logs, stale routes, dead imports cleaned
 
-### Principles Established
-- **No scattering:** One base Setting, not 60+ per-model copies.
-- **Pattern of behavior drives architecture, not schema.**
+### Architecture Established
+- **One behavior, one record** — dd_card:base Setting, not 60 per-model copies
+- **Pattern of behavior, not schema** — group by what it does, not what model it serves
+- **Master funnel pattern** — `formatField()` is the single entry point; individual formatters are internal
+- **CSS rule** — `.db-*` variables for theme, Tailwind for layout, inline only when CSS can't do it
+- **Date rule** — local display, UTC storage, `formatDt()` everywhere
 
 ## Do This First Next Session
 
-1. **UI scrub** — in progress. Continue polishing theme consistency, remaining hardcoded constants.
-2. **alice_notes service bug** — `Setting() got unexpected keyword arguments: 'data'` — uses `config` not `data`. Fix.
-3. **Prior session carryover** — alice.md readme update, `on_reciept` typo fix, codemap purchase GAP.
+1. **BehaviorField → field widget delegation** — The one remaining big item. BehaviorField (495 lines, 76 inline styles) reimplements all 18 field types that already exist as widget components. Should dispatch to WIDGET_REGISTRY instead. Plan at `readmes/68-ui-widget-consolidation.md`.
+2. **Prior carryover** — alice.md readme update, `on_reciept` typo fix, alice_notes `data` vs `config` bug
+3. **dd-card polish** — live with the data, then decide which metrics matter before adding visual hierarchy
 
 ## Open Problems
-- CommerceDashboard.tsx (656 lines, 5 tabs) still hardcoded — keep for now, evaluate later
-- Reason codes in InventoryDashboard should be Settings
-- Large forms (ActionsModal 934, LineDetailsModal 888) — future DynamicForm candidates
-- alice_notes `data` vs `config` field mismatch
+- BehaviorField has 76 inline styles — works but doesn't follow CSS standard
+- CommerceDashboard (656 lines, 5 tabs) is the last complex hardcoded dashboard
+- alice_notes service bug: `Setting() got unexpected keyword arguments: 'data'` (uses `config` not `data`)
+- `on_reciept` typo in Item model (line 168)
 
 ## Files Changed This Session
 
 ### WC3 Backend
-- `apps/core/views/cookie_token_refresh.py` — added `refresh_expires` to response
-- `apps/core/management/commands/seed_dd_cards.py` — new: seed dd_card:base Setting
+- `apps/core/views/cookie_token_refresh.py` — refresh_expires in response
+- `apps/core/management/commands/seed_dd_cards.py` — new
 
-### React2025 Frontend
-- `src/routes/PrivateRoute.tsx` — redirect to `/login` not `/`
-- `src/routes/Routes.ts` — `PageRoutes.login` corrected to `/login`
-- `src/routes/Router.tsx` — 6 dashboards → DDCardDashboard, removed dead imports
-- `src/routes/protectedRoutesConfig.tsx` — same dashboard replacements
-- `src/store/slices/authSlice.ts` — added `refreshExpires` + `setRefreshExpires`
-- `src/api/axios.ts` — capture `refresh_expires` on token refresh
-- `src/layout/MacTopBar.tsx` — token expiration warning, logout → `/login`
-- `src/components/header/UserDropdown.tsx` — logout → `/login`
-- `src/components/common/DDCard.tsx` — new: data-driven card component
-- `src/pages/Dashboard/DDCardDashboard.tsx` — new: generic dashboard
-- `src/hooks/useDataBrowser.ts` — `defaultModel` parameter
-- `src/pages/admin/DataBrowser.tsx` — `defaultModel` prop
-- `src/pages/wrapperPage.ts` — removed Home export
+### React2025 Frontend — Created
+- `src/components/common/DDCard.tsx`
+- `src/pages/Dashboard/DDCardDashboard.tsx`
 
-### Deleted (dead code)
-- `src/pages/Dashboard/Home.tsx` (556 lines)
-- `src/pages/admin/AccountingDashboard.tsx` (225 lines)
-- `src/pages/admin/OperationsDashboard.tsx` (367 lines)
-- `src/apps/products/pages/ProductsDashboard.tsx` (170 lines)
-- `src/apps/orgs/pages/OrgsDashboard.tsx` (218 lines)
-- `src/apps/transactions/pages/TransactionsDashboard.tsx` (226 lines)
-- `src/apps/support/pages/SupportDashboard.tsx` (110 lines)
+### React2025 Frontend — Modified
+- `src/utils/fieldFormatters.ts` — formatField(), formatDt(), parseDtInput()
+- `src/routes/PrivateRoute.tsx`, `Router.tsx`, `Routes.ts`, `protectedRoutesConfig.tsx`
+- `src/store/slices/authSlice.ts`, `src/api/axios.ts`
+- `src/layout/MacTopBar.tsx`, `src/layout/AppSidebar.tsx`
+- `src/components/header/UserDropdown.tsx`
+- `src/hooks/useDataBrowser.ts`, `src/hooks/useGoBack.ts`
+- `src/pages/admin/DataBrowser.tsx`
+- `src/components/common/DataGrid.tsx`, `BehaviorField.tsx`
+- `src/components/fields/TimestampField.tsx`, `ReadonlyField.tsx`
+- `src/components/wrapper.ts`, `src/pages/wrapperPage.ts`
+- `src/apps/transactions/components/SummaryCard.tsx`
+
+### React2025 Frontend — Deleted (2,385 lines removed)
+- `src/pages/Dashboard/Home.tsx` (556)
+- `src/pages/admin/AccountingDashboard.tsx` (225)
+- `src/pages/admin/OperationsDashboard.tsx` (367)
+- `src/apps/products/pages/ProductsDashboard.tsx` (170)
+- `src/apps/orgs/pages/OrgsDashboard.tsx` (218)
+- `src/apps/transactions/pages/TransactionsDashboard.tsx` (226)
+- `src/apps/support/pages/SupportDashboard.tsx` (110)
+- `src/components/form/group-input/PhoneInput.tsx` (141)
+- `src/components/form/input/DropDown.tsx` (100)
+- `src/components/collections/CollectionsQueue.tsx` (143)
+- `src/utils/dateUtils.ts` (129)

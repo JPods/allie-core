@@ -1,5 +1,7 @@
 # Memory Index
 
+- [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
+
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
 - [CodeMap (codemap.guru)](project_codemap.md) — Live architecture tool; .dot nodes link to code; three layers (script/panel/API) one mapping file
@@ -203,6 +205,8 @@
 - [Use balenaEtcher for Linux installers](feedback_balenaetcher.md) — Proven reliable; don't suggest dd; graphical and just works
 - [Andi — hardware-bundled local agent](project_andi_hardware_agent.md) — Ships with Mac Mini/IT15; each business owns box+AI+data; Desktop Hosting realized
 - [No scattering like behaviors](feedback_no_scatter_settings.md) — One base Setting, not 60 per-model copies; Bill says remind him if he suggests scattering
+- [Master funnel pattern](feedback_master_funnel_pattern.md) — Few patterns with differences; one entry point (formatField, renderField); inheritance handles the rest
+- [Pattern not schema](feedback_pattern_not_schema.md) — Group by behavior pattern, not by data model; dd-cards in one record, not per-model
 - [Andi one-touch installer](project_andi_installer_tool.md) — Future: pre-loaded or single-command install; manual IT15 session is the spec
 - [Training video scripts](project_training_videos.md) — 1-4 min scripts per feature; dedicated session
 - [Training video hosting](reference_training_videos_hosting.md) — Vimeo (internal) + YouTube (public); Document holds both links
