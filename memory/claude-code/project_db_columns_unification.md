@@ -1,39 +1,32 @@
 ---
-name: db.columns panel unification
-description: Unified column management (useListFieldConfig + FieldOrderDialog); db.list vs db.columns architecture; FK filter fix; next session = panel style unification
+name: db.panel unification
+description: All embedded panels unified to PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection indicator added
 type: project
 ---
 
-## Column management unified (2026-08-12)
+## Panel unification complete (2026-08-12)
 
-One approach to column management everywhere in WC3 React:
-- **Hook:** `useListFieldConfig` (src/hooks/useListFieldConfig.ts)
-- **Dialog:** `FieldOrderDialog` (src/components/common/FieldOrderDialog.tsx) — default export
-- **Deleted:** ColumnSetupDialog_DEPRECATED (855 lines), ColumnSetupDialog shim, useColumnSetups (370 lines)
-- **Two consumers:** PanelTable (panels) and ButtonToolbar (list pages)
+All embedded panel rendering unified to **PanelTable** component with consistent styling.
 
-Architecture:
-- **db.list** = columns + toolbar (ButtonToolbar) — list pages
-- **db.columns** = columns, no toolbar (PanelTable / RelatedPanel) — all panels
+**What was converted:**
+- **RelatedPanel** (DataBrowser.tsx) — DataGrid → PanelTable; reads child model's `config.db.panel` from workbench_fields Setting; auto-detects columns as fallback
+- **ContactDetailJson organizations tab** — DataGrid → PanelTable with explicit ORG_PANEL_COLUMNS
+- **TabsRenderer.tsx** (5 tabs) — Actions, Contacts, Documents, Related, QA tabs all converted from DataGrid → PanelTable
 
-## FK filter fix (2026-08-12)
+**New files:**
+- `React2025/src/apps/common/components/panels/panelColumnUtils.ts` — `buildColumnsFromSpecs()` (from db.panel Setting) and `buildColumnsFromRecord()` (auto-detect fallback)
+- `webClerk3/apps/core/management/commands/seed_panel_columns.py` — seeds db.panel for 30 models
 
-- FK_PATTERNS for contact→email/phone/address/domain: changed `contact_id` → `contact` (Django ORM field name, not DB column)
-- Removed broken refs.links fallback in RelatedPanel — it silently returned ALL records when FK query returned 0
-- ADDRESS went from (50) to (0), DOMAIN from (9) to (0) for contacts with no related records
+**Architecture:**
+- `db.panel` field stays named `panel` in `DbLayout` (setting.py) — "panels" is the standard term
+- Column specs stored at `config.db.panel[]` on workbench_fields Settings
+- PanelTable has `selectedKey` + `onSelectRow` props for yellow selection indicator (#fff3cd, matches DataGrid)
+- Blue indicator bar (4px) on selected row
+- FieldOrderDialog (slider icon) lets users show/hide and reorder panel columns
+- `storageKey` pattern: `panel:${parentModel}:${childModel}`
 
-## TOUCH/RELATED bars relocated
+**Seed command:** `./venv/bin/python manage.py seed_panel_columns [--force]`
 
-- Moved from top of detail pane to below contact fields in DataBrowser.tsx
-- Now between GroupedDetailFields and RelatedPanels
+**Why:** Three different panel styles (inline DataGrid, RelatedPanel DataGrid, custom components) created inconsistent light/dark mode rendering. One component, one style.
 
-## Next session: panel style unification
-
-Three panel styles currently exist — must become one (db.columns):
-1. Tab panels in ContactDetailJson.tsx (green borders, custom components)
-2. RelatedPanels in DataBrowser.tsx (DataGrid columns) — this is the target style
-3. Orgs panel (Filter/Dupes/CSV/Excel/Print toolbar)
-
-**Why:** All panels are the same except the content. Same column behavior, different data.
-
-**How to apply:** Convert tab panel content to RelatedPanel/PanelTable instances. Keep tab navigation. Also: pass fieldSpecs/fieldBehaviors to DataGrid in RelatedPanel for phone formatting.
+**How to apply:** Any new panel showing tabular data should use PanelTable. Non-tabular content (CommPanel, CommentsPanel, Kanban, Gantt) stays as custom components.

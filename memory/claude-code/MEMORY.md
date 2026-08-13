@@ -1,7 +1,7 @@
 # Memory Index
 
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
-- [db.columns panel unification](project_db_columns_unification.md) — Unified column mgmt; db.list vs db.columns; FK fix; next: panel style unification
+- [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
@@ -144,6 +144,7 @@
 - [Daily start/close practice](feedback_daily_practice.md) — Start: check for existing functions before writing new. Close: audit overlap, consolidate, create test actions in weekly project
 - [WC2→WC3 gap analysis](project_wc2_gap_analysis.md) — 15 missing flows from wc2 flow charts; GAP-01 through GAP-15 in Alice queue; time capture via external API
 - [Desktop Hosting book](reference_desktop_hosting_book.md) — Bill's Wiley book; foundation for wc3; local-first, relationship-aware, published-based; "put communications at point of action"
+- [Robot agents on Andi](project_robot_agents_andi.md) — Nora/Noelle/Matilda/Sally on Andi gpt-oss:20b; daily coaching; MQTT router; deploy script; not yet deployed
 - [data→config rename](project_data_to_config_rename.md) — 16 models renamed data→config; DB+Python+React done; eliminates wcapi data wrapper collision
 - [json_field_ops](reference_json_field_ops.md) — apply_json_op() for surgical JSON updates (upsert/merge/append/remove); works in shell, save_view wiring pending
 - [Touch model](project_touch_model.md) — Communications event log (call/email/visit/text); separate from Action; tel/mailto/sms URIs; TouchBar in AdminWorkbench
