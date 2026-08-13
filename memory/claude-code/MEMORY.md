@@ -1,6 +1,7 @@
 # Memory Index
 
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
+- [db.columns panel unification](project_db_columns_unification.md) — Unified column mgmt; db.list vs db.columns; FK fix; next: panel style unification
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
