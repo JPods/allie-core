@@ -1,0 +1,26 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-07T19:33:30Z",
+  "model": "model",
+  "formation_filter": "station_line_end",
+  "stations": [
+    {
+      "station_id": "to_be_assigned",
+      "formation_id": "station_line_end",
+      "ok": 11,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 3,
+      "file": "20260607T193330-proof-to_be_assigned.json"
+    }
+  ],
+  "total_ok": 11,
+  "total_warn": 0,
+  "total_severe": 0,
+  "total_missing": 0,
+  "total_undeclared": 0,
+  "total_arc": 3,
+  "total_scan": 0
+}

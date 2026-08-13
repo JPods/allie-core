@@ -1,0 +1,313 @@
+{
+  "vehicle_id": "NORA_0002",
+  "generated_at": "2026-06-11T19:09:53Z",
+  "origin_sid": "s001",
+  "dest_sid": null,
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "deviated",
+  "summary": {
+    "authorized_segs": 11,
+    "executed_segs": 7,
+    "skipped_segs": 4,
+    "cp_gap_count": 4,
+    "speed_deviation_count": 1,
+    "total_defects": 9
+  },
+  "skipped_segs": [
+    {
+      "id": 56,
+      "seg_id": "seg_s001_cp1_s002_cp0"
+    },
+    {
+      "id": 37,
+      "station": "s002",
+      "track": "gw_cp_in_0"
+    },
+    {
+      "id": 48,
+      "station": "s002",
+      "track": "gw_near_main_1"
+    },
+    {
+      "id": 51,
+      "station": "s002",
+      "track": "gw_platform_in"
+    }
+  ],
+  "executed_segs": [
+    {
+      "id": 22,
+      "station": "s001",
+      "track": "gw_platform",
+      "len_mm": 23865,
+      "actual_s": 0.15,
+      "expected_s": 2.875,
+      "actual_ms": 158.85
+    },
+    {
+      "id": 25,
+      "station": "s001",
+      "track": "gw_platform_out1",
+      "len_mm": 10061,
+      "actual_s": 0.424,
+      "expected_s": 1.212,
+      "actual_ms": 23.72
+    },
+    {
+      "id": 26,
+      "station": "s001",
+      "track": "gw_platform_out2",
+      "len_mm": 10139,
+      "actual_s": 0.448,
+      "expected_s": 1.222,
+      "actual_ms": 22.62
+    },
+    {
+      "id": 16,
+      "station": "s001",
+      "track": "gw_cp_out_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.162,
+      "expected_s": 0.301,
+      "actual_ms": 15.39
+    },
+    {
+      "id": 14,
+      "station": "s001",
+      "track": "gw_cp_out_1",
+      "len_mm": 2519,
+      "actual_s": 0.012,
+      "expected_s": 0.304,
+      "actual_ms": null
+    },
+    {
+      "id": 39,
+      "station": "s002",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.02,
+      "expected_s": 0.301,
+      "actual_ms": null
+    },
+    {
+      "id": 53,
+      "station": "s002",
+      "track": "gw_platform_parking",
+      "len_mm": 12000,
+      "actual_s": 0.021,
+      "expected_s": 1.446,
+      "actual_ms": null
+    }
+  ],
+  "defects": [
+    {
+      "type": "no_geometry",
+      "severity": "severe",
+      "id": 56,
+      "seg_id": "seg_s001_cp1_s002_cp0"
+    },
+    {
+      "type": "no_geometry",
+      "severity": "severe",
+      "id": 37,
+      "station": "s002",
+      "track": "gw_cp_in_0"
+    },
+    {
+      "type": "no_geometry",
+      "severity": "severe",
+      "id": 48,
+      "station": "s002",
+      "track": "gw_near_main_1"
+    },
+    {
+      "type": "no_geometry",
+      "severity": "severe",
+      "id": 51,
+      "station": "s002",
+      "track": "gw_platform_in"
+    },
+    {
+      "type": "speed_deviation",
+      "id": 22,
+      "station": "s001",
+      "track": "gw_platform",
+      "authorized_ms": 8.3,
+      "actual_ms": 158.85,
+      "ratio": 19.14,
+      "severity": "moderate"
+    },
+    {
+      "type": "cp_gap",
+      "seg_id": "37",
+      "gap_mm": 80898.8,
+      "severity": "severe"
+    },
+    {
+      "type": "cp_gap",
+      "seg_id": "39",
+      "gap_mm": 83333.7,
+      "severity": "severe"
+    },
+    {
+      "type": "cp_gap",
+      "seg_id": "53",
+      "gap_mm": 22633.4,
+      "severity": "severe"
+    },
+    {
+      "type": "cp_gap",
+      "seg_id": "51",
+      "gap_mm": 7043.1,
+      "severity": "severe"
+    }
+  ],
+  "assessment": {
+    "s001": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1,
+          "id": 22,
+          "len_mm": 23865,
+          "expected_s": 2.875
+        },
+        "animate": {
+          "status": "ok",
+          "speed_ratio": 19.14
+        },
+        "history": {
+          "actual_s": 0.15,
+          "actual_ms": 158.85
+        }
+      },
+      "gw_platform_out1": {
+        "plan": {
+          "seq": 2,
+          "id": 25,
+          "len_mm": 10061,
+          "expected_s": 1.212
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.424,
+          "actual_ms": 23.72
+        }
+      },
+      "gw_platform_out2": {
+        "plan": {
+          "seq": 3,
+          "id": 26,
+          "len_mm": 10139,
+          "expected_s": 1.222
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.448,
+          "actual_ms": 22.62
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 4,
+          "id": 16,
+          "len_mm": 2500,
+          "expected_s": 0.301
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.162,
+          "actual_ms": 15.39
+        }
+      },
+      "gw_cp_out_1": {
+        "plan": {
+          "seq": 5,
+          "id": 14,
+          "len_mm": 2519,
+          "expected_s": 0.304
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.012
+        }
+      }
+    },
+    "s002": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 7,
+          "id": 37
+        },
+        "animate": {
+          "status": "authorized_only"
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 8,
+          "id": 39,
+          "len_mm": 2500,
+          "expected_s": 0.301
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.02
+        }
+      },
+      "gw_near_main_1": {
+        "plan": {
+          "seq": 9,
+          "id": 48
+        },
+        "animate": {
+          "status": "authorized_only"
+        }
+      },
+      "gw_platform_in": {
+        "plan": {
+          "seq": 10,
+          "id": 51
+        },
+        "animate": {
+          "status": "authorized_only"
+        }
+      },
+      "gw_platform_parking": {
+        "plan": {
+          "seq": 11,
+          "id": 53,
+          "len_mm": 12000,
+          "expected_s": 1.446
+        },
+        "animate": {
+          "status": "ok"
+        },
+        "history": {
+          "actual_s": 0.021
+        }
+      }
+    },
+    "connections": {
+      "seg_s001_cp1_s002_cp0": {
+        "plan": {
+          "seq": 6,
+          "id": 56
+        },
+        "animate": {
+          "status": "authorized_only"
+        }
+      }
+    }
+  }
+}

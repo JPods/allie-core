@@ -1,0 +1,4 @@
+{"type":"session_start","model":"model","pod_count":1,"ts":"2026-06-10T21:06:52Z"}
+{"type":"tick","ts":"2026-06-10T21:06:53Z","nora_id":"NORA_0003","cid":"T001.hold_loop[9/9]","t_pct":4.5,"pos_mm":[-678.2,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-10T21:06:54Z","nora_id":"NORA_0003","cid":"T001.hold_loop[9/9]","t_pct":8.9,"pos_mm":[3618.6,-4615.1,5839.4]}
+{"type":"session_end","ts":"2026-06-10T21:06:54Z"}

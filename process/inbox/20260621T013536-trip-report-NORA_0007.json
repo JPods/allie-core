@@ -1,0 +1,121 @@
+{
+  "vehicle_id": "NORA_0007",
+  "generated_at": "2026-06-21T01:35:36Z",
+  "origin_sid": "s002",
+  "dest_sid": "s003",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "minor_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 11,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 1,
+    "total_defects": 1
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s001_cp1_s003_cp1",
+      "len_mm": 191366,
+      "actual_s": 4.094,
+      "expected_s": 23.056,
+      "actual_ms": 46.74
+    },
+    {
+      "station": "s003",
+      "track": "gw_cp_in_1",
+      "len_mm": 2500,
+      "actual_s": 0.359,
+      "expected_s": 0.301,
+      "actual_ms": 6.96
+    },
+    {
+      "station": "s003",
+      "track": "gw_cp_in_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.372,
+      "expected_s": 0.301,
+      "actual_ms": 6.73
+    },
+    {
+      "station": "s003",
+      "track": "gw_far_main",
+      "len_mm": 63926,
+      "actual_s": 7.776,
+      "expected_s": 7.702,
+      "actual_ms": 8.22
+    },
+    {
+      "station": "s003",
+      "track": "gw_cp_out_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.34,
+      "expected_s": 0.301,
+      "actual_ms": 7.36
+    },
+    {
+      "station": "s003",
+      "track": "gw_uturn_0",
+      "len_mm": 5489,
+      "actual_s": 0.684,
+      "expected_s": 0.661,
+      "actual_ms": 8.02
+    },
+    {
+      "station": "s003",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.477,
+      "expected_s": 0.301,
+      "actual_ms": 5.25
+    },
+    {
+      "station": "s003",
+      "track": "gw_near_main_1",
+      "len_mm": 7043,
+      "actual_s": 0.898,
+      "expected_s": 0.849,
+      "actual_ms": 7.84
+    },
+    {
+      "station": "s003",
+      "track": "gw_platform_in",
+      "len_mm": 15865,
+      "actual_s": 1.957,
+      "expected_s": 1.911,
+      "actual_ms": 8.11
+    },
+    {
+      "station": "s003",
+      "track": "gw_platform_parking",
+      "len_mm": 12000,
+      "actual_s": 1.501,
+      "expected_s": 1.446,
+      "actual_ms": 8.0
+    },
+    {
+      "station": "s003",
+      "track": "gw_platform_park_ps3",
+      "len_mm": 6250,
+      "actual_s": 0.804,
+      "expected_s": 0.753,
+      "actual_ms": 7.77
+    }
+  ],
+  "defects": [
+    {
+      "type": "speed_deviation",
+      "seg_id": "seg_s001_cp1_s003_cp1",
+      "authorized_ms": 8.3,
+      "actual_ms": 46.74,
+      "ratio": 5.63,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}

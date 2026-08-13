@@ -1,0 +1,16 @@
+{"type":"session_start","model":"animation2","pod_count":1,"ts":"2026-06-03T21:32:22Z"}
+{"type":"tick","ts":"2026-06-03T21:32:22Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":2.6,"pos_mm":[52981.8,4513.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:23Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":5.2,"pos_mm":[48766.0,3769.9,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:23Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":7.8,"pos_mm":[44525.2,3022.2,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:24Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":10.7,"pos_mm":[39712.3,2173.5,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:24Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":13.5,"pos_mm":[35600.1,1827.3,7139.6]}
+{"type":"tick","ts":"2026-06-03T21:32:25Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":16.1,"pos_mm":[36070.7,-197.5,7612.7]}
+{"type":"tick","ts":"2026-06-03T21:32:25Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":18.7,"pos_mm":[38919.4,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:26Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":21.6,"pos_mm":[43765.1,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:26Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":24.4,"pos_mm":[48313.0,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:27Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":26.9,"pos_mm":[52612.4,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:27Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":29.5,"pos_mm":[56922.5,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:28Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":32.5,"pos_mm":[61782.6,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:29Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":35.2,"pos_mm":[66326.5,-1739.3,7730.0]}
+{"type":"tick","ts":"2026-06-03T21:32:29Z","nora_id":"NORA_0001","cid":"S002.hold_loop[11/11]","t_pct":37.8,"pos_mm":[70624.0,-1739.3,7730.0]}
+{"type":"session_end","ts":"2026-06-03T21:32:29Z"}

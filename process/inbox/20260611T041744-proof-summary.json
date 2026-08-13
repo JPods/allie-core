@@ -1,0 +1,48 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-11T04:17:44Z",
+  "model": "OK_LazyE_terrain",
+  "formation_filter": null,
+  "stations": [
+    {
+      "station_id": "S105",
+      "formation_id": "JPods_station_parking",
+      "ok": 18,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260611T041744-proof-S105.json"
+    },
+    {
+      "station_id": "S106",
+      "formation_id": "station_line_end",
+      "ok": 0,
+      "warn": 0,
+      "severe": 11,
+      "missing": 1,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260611T041744-proof-S106.json"
+    },
+    {
+      "station_id": "S108",
+      "formation_id": "station_thru_dip",
+      "ok": 0,
+      "warn": 0,
+      "severe": 17,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260611T041744-proof-S108.json"
+    }
+  ],
+  "total_ok": 18,
+  "total_warn": 0,
+  "total_severe": 28,
+  "total_missing": 1,
+  "total_undeclared": 0,
+  "total_arc": 6,
+  "total_scan": 0
+}

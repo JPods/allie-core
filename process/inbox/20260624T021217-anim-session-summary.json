@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-06-24T02:12:17Z",
+  "pod_count": 14,
+  "stations": {
+    "s001": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 180,
+      "high_turnover_slots": [
+        "ps9(160)"
+      ]
+    },
+    "s002": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 178,
+      "high_turnover_slots": [
+        "ps9(159)"
+      ]
+    }
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}

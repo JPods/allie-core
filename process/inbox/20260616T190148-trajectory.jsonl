@@ -1,0 +1,14 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-16T19:01:48Z"}
+{"type":"maneuver","ts":"2026-06-16T19:01:48Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_park_ps3","tracks":[],"pts_count":2,"pts_mm":[[6206.0,-1135.1,5839.4],[-44.0,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T19:01:48Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":11.3,"pos_mm":[40053.5,-1115.1,7889.4]}
+{"type":"tick","ts":"2026-06-16T19:01:49Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":22.5,"pos_mm":[35778.5,-1118.6,7531.5]}
+{"type":"tick","ts":"2026-06-16T19:01:49Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":33.8,"pos_mm":[31481.4,-1122.7,7106.0]}
+{"type":"tick","ts":"2026-06-16T19:01:50Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":46.7,"pos_mm":[26592.3,-1127.4,6621.8]}
+{"type":"tick","ts":"2026-06-16T19:01:50Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":57.9,"pos_mm":[22292.8,-1131.6,6195.9]}
+{"type":"tick","ts":"2026-06-16T19:01:51Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":69.1,"pos_mm":[18022.1,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-16T19:01:51Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":80.4,"pos_mm":[13724.9,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-16T19:01:52Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":93.2,"pos_mm":[8799.1,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T19:01:52Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]"}
+{"type":"tick","ts":"2026-06-16T19:01:53Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":28.4,"pos_mm":[4429.9,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-16T19:01:53Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":97.3,"pos_mm":[124.7,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T19:01:53Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}

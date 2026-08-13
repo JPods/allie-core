@@ -1,0 +1,98 @@
+{
+  "vehicle_id": "NORA_0010",
+  "generated_at": "2026-06-21T01:34:39Z",
+  "origin_sid": "s003",
+  "dest_sid": "s002",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 9,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s001_cp0_s002_cp1",
+      "len_mm": 140271,
+      "actual_s": 17.047,
+      "expected_s": 16.9,
+      "actual_ms": 8.23
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_1",
+      "len_mm": 2500,
+      "actual_s": 0.35,
+      "expected_s": 0.301,
+      "actual_ms": 7.15
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.484,
+      "expected_s": 0.301,
+      "actual_ms": 5.16
+    },
+    {
+      "station": "s002",
+      "track": "gw_far_main",
+      "len_mm": 63564,
+      "actual_s": 7.719,
+      "expected_s": 7.658,
+      "actual_ms": 8.23
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_out_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.349,
+      "expected_s": 0.301,
+      "actual_ms": 7.16
+    },
+    {
+      "station": "s002",
+      "track": "gw_uturn_0",
+      "len_mm": 5489,
+      "actual_s": 0.702,
+      "expected_s": 0.661,
+      "actual_ms": 7.81
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.388,
+      "expected_s": 0.301,
+      "actual_ms": 6.45
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in1",
+      "len_mm": 10109,
+      "actual_s": 1.253,
+      "expected_s": 1.218,
+      "actual_ms": 8.07
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in2",
+      "len_mm": 10109,
+      "actual_s": 1.296,
+      "expected_s": 1.218,
+      "actual_ms": 7.8
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}

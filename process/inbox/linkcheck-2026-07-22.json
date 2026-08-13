@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-07-22T15:08:01.531334+00:00",
+  "sites_checked": 1,
+  "total_links": 4,
+  "broken_count": 4,
+  "red_flags": 4,
+  "results": [
+    {
+      "site": "MeshMobility",
+      "page": "/",
+      "link_url": "https://meshmobility.com/",
+      "raw": "/",
+      "kind": "page",
+      "text": "",
+      "status": 200,
+      "ok": false,
+      "problem": "Page itself unreachable: CF Access login wall",
+      "customer_facing": true,
+      "cf_access": true
+    },
+    {
+      "site": "MeshMobility",
+      "page": "/app",
+      "link_url": "https://meshmobility.com/app",
+      "raw": "/app",
+      "kind": "page",
+      "text": "",
+      "status": 200,
+      "ok": false,
+      "problem": "Page itself unreachable: CF Access login wall",
+      "customer_facing": true,
+      "cf_access": true
+    },
+    {
+      "site": "MeshMobility",
+      "page": "/library",
+      "link_url": "https://meshmobility.com/library",
+      "raw": "/library",
+      "kind": "page",
+      "text": "",
+      "status": 200,
+      "ok": false,
+      "problem": "Page itself unreachable: CF Access login wall",
+      "customer_facing": true,
+      "cf_access": true
+    },
+    {
+      "site": "MeshMobility",
+      "page": "/citytool",
+      "link_url": "https://meshmobility.com/citytool",
+      "raw": "/citytool",
+      "kind": "page",
+      "text": "",
+      "status": 200,
+      "ok": false,
+      "problem": "Page itself unreachable: CF Access login wall",
+      "customer_facing": true,
+      "cf_access": true
+    }
+  ]
+}

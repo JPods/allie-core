@@ -1,0 +1,124 @@
+{
+  "timestamp": "2026-07-02T16:01:10Z",
+  "pod_count": 25,
+  "stations": {
+    "s001": {
+      "capacity": 5,
+      "parked": 1,
+      "total_arrivals": 5,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s003": {
+      "capacity": 4,
+      "parked": 0,
+      "total_arrivals": 5,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s004": {
+      "capacity": 4,
+      "parked": 0,
+      "total_arrivals": 4,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s011": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 10,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s012": {
+      "capacity": 9,
+      "parked": 3,
+      "total_arrivals": 14,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s013": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 14,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s014": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s015": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s016": {
+      "capacity": 9,
+      "parked": 2,
+      "total_arrivals": 11,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s025": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s026": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s027": {
+      "capacity": 9,
+      "parked": 0,
+      "total_arrivals": 11,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s028": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    },
+    "s029": {
+      "capacity": 9,
+      "parked": 1,
+      "total_arrivals": 12,
+      "high_turnover_slots": [
+
+      ]
+    }
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}

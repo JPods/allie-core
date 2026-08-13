@@ -1,0 +1,16 @@
+{"type":"session_start","model":"model","pod_count":3,"ts":"2026-06-11T01:30:33Z"}
+{"type":"tick","ts":"2026-06-11T01:30:34Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":4.9,"pos_mm":[-647.4,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-11T01:30:34Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":9.8,"pos_mm":[3665.2,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-11T01:30:35Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":14.7,"pos_mm":[7994.3,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-11T01:30:35Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":20.7,"pos_mm":[13268.9,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-11T01:30:36Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":25.8,"pos_mm":[17805.7,-4615.1,5839.4]}
+{"type":"tick","ts":"2026-06-11T01:30:36Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":30.7,"pos_mm":[22117.6,-4615.1,6198.5]}
+{"type":"tick","ts":"2026-06-11T01:30:37Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":35.6,"pos_mm":[26402.6,-4615.1,6617.9]}
+{"type":"tick","ts":"2026-06-11T01:30:37Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":41.2,"pos_mm":[31356.4,-4615.1,7102.8]}
+{"type":"tick","ts":"2026-06-11T01:30:38Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":46.3,"pos_mm":[35836.3,-4615.1,7541.4]}
+{"type":"tick","ts":"2026-06-11T01:30:39Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":51.2,"pos_mm":[40126.1,-4615.1,7889.4]}
+{"type":"tick","ts":"2026-06-11T01:30:39Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":56.1,"pos_mm":[43599.4,-3023.2,7889.4]}
+{"type":"tick","ts":"2026-06-11T01:30:40Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":61.8,"pos_mm":[39744.6,-1115.1,7889.4]}
+{"type":"tick","ts":"2026-06-11T01:30:40Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":66.9,"pos_mm":[35236.1,-1115.1,7670.0]}
+{"type":"tick","ts":"2026-06-11T01:30:41Z","nora_id":"NORA_0003","cid":"station_line_end.hold_loop[8/8]","t_pct":71.8,"pos_mm":[30948.0,-1115.1,7134.4]}
+{"type":"session_end","ts":"2026-06-11T01:30:41Z"}

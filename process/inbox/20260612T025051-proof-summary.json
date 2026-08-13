@@ -1,0 +1,37 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-12T02:50:51Z",
+  "model": "OK_A4S_Materials",
+  "formation_filter": null,
+  "stations": [
+    {
+      "station_id": "S001",
+      "formation_id": "station_line_end",
+      "ok": 0,
+      "warn": 0,
+      "severe": 11,
+      "missing": 1,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260612T025051-proof-S001.json"
+    },
+    {
+      "station_id": "S002",
+      "formation_id": "station_line_end",
+      "ok": 0,
+      "warn": 0,
+      "severe": 11,
+      "missing": 1,
+      "undeclared": 0,
+      "arc": 2,
+      "file": "20260612T025051-proof-S002.json"
+    }
+  ],
+  "total_ok": 0,
+  "total_warn": 0,
+  "total_severe": 22,
+  "total_missing": 2,
+  "total_undeclared": 0,
+  "total_arc": 4,
+  "total_scan": 0
+}

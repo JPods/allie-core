@@ -1,0 +1,9 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-19T04:47:16Z"}
+{"type":"maneuver","ts":"2026-06-19T04:47:18Z","nora_id":"NORA_0003","maneuver_id":"station_thru_dip.gw_platform_advance_ps3_to_ps4","tracks":[],"pts_count":2,"pts_mm":[[515.0,-1038.8,5819.6],[-1985.0,-1038.8,5819.6]]}
+{"type":"maneuver_end","ts":"2026-06-19T04:47:18Z","nora_id":"NORA_0003","cid":"station_thru_dip.gw_platform_advance_ps3_to_ps4"}
+{"type":"maneuver","ts":"2026-06-19T04:47:19Z","nora_id":"NORA_0002","maneuver_id":"station_thru_dip.gw_platform_advance_ps2_to_ps3","tracks":[],"pts_count":2,"pts_mm":[[3015.0,-1038.8,5819.6],[515.0,-1038.8,5819.6]]}
+{"type":"maneuver_end","ts":"2026-06-19T04:47:19Z","nora_id":"NORA_0002","cid":"station_thru_dip.gw_platform_advance_ps2_to_ps3"}
+{"type":"maneuver","ts":"2026-06-19T04:47:19Z","nora_id":"NORA_0001","maneuver_id":"station_thru_dip.gw_platform_advance_ps1_to_ps2","tracks":[],"pts_count":2,"pts_mm":[[5515.0,-1038.8,5819.6],[3015.0,-1038.8,5819.6]]}
+{"type":"tick","ts":"2026-06-19T04:47:19Z","nora_id":"NORA_0001","cid":"station_thru_dip.gw_platform_advance_ps1_to_ps2","t_pct":100.0,"pos_mm":[3015.0,-1038.8,5819.6]}
+{"type":"maneuver_end","ts":"2026-06-19T04:47:19Z","nora_id":"NORA_0001","cid":"station_thru_dip.gw_platform_advance_ps1_to_ps2"}
+{"type":"session_end","ts":"2026-06-19T04:47:26Z"}

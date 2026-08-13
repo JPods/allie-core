@@ -1,50 +1,74 @@
-# Handoff — 2026-08-11
+# Handoff — 2026-08-12
 
 ## Where We Left Off
 
-Replaced pdfme with a panel-based report layout designer built entirely on our own PrintLayout JSON + UniversalPrint renderer. Seeded all 13 print reports with production layouts. Added conditional dunning messages to the Statement report. Built Collections Queue (accounting dashboard) and Customer Health Card (customer detail) with full backend services. Added fiscal health markers (`dt_last_statement`, `health_score`, `velocity_trend`, `statement_interval_days`) to the customer financial structure. Soft-deleted 13 pdfme duplicate reports. 19 new .dot flowchart files are uncommitted in Allie — not reviewed this session.
+Major UI consolidation session. Auth fix, data-driven dashboards, formatter consolidation, dead code cleanup.
+
+### Completed
+- **Auth redirect fix** — dead loop when token expired (`"/"` → `"/login"`)
+- **Token expiration warning** — amber banner in MacTopBar when session within 3 days
+- **dd-card Setting** — one record (id=649), 20 cards, 8 dashboards. `seed_dd_cards.py`
+- **DDCardDashboard** — generic dashboard component, replaced 6 custom dashboards
+- **7 dead dashboard files deleted** — -1,872 lines
+- **`formatField(value, type)`** — master dispatcher for all display formatting
+- **`formatDt(value, mode, field)`** — canonical date formatter, all high-traffic components migrated
+- **DropDown.tsx deleted** — migrated 2 usages to Select
+- **dateUtils.ts deleted** — superseded by fieldFormatters.ts
+- **PhoneInput deleted** — unused form component
+- **CollectionsQueue.tsx deleted** — orphaned by AccountingDashboard removal
+- **UI scrub** — debug logs, stale routes, dead imports cleaned
+
+### Architecture Established
+- **One behavior, one record** — dd_card:base Setting, not 60 per-model copies
+- **Pattern of behavior, not schema** — group by what it does, not what model it serves
+- **Master funnel pattern** — `formatField()` is the single entry point; individual formatters are internal
+- **CSS rule** — `.db-*` variables for theme, Tailwind for layout, inline only when CSS can't do it
+- **Date rule** — local display, UTC storage, `formatDt()` everywhere
 
 ## Do This First Next Session
 
-1. **Test print reports end-to-end** — open an order, Reports dialog, double-click Order Confirmation. Verify it renders correctly with real data through UniversalPrint. Fix any field path mismatches.
-2. **Add 6 general styles** to PrintLayoutDesigner — Title/Heading/Body/Money/Small/Emphasis. Auto-apply by section type. This replaces per-field font control (discussed, agreed, not built).
-3. **Build prompt bar** in PrintLayoutDesigner — text input where user describes a panel, Claude/Alice drafts it. The panel templates are the starting point.
-4. **Test Collections Queue and Health Card** — verify `get_collections_dashboard` and `get_customer_health` manage actions return correct data. The backend service may need field path adjustments for the actual DB structure.
-5. **Review 19 new .dot flowchart files** in `readmes/flowcharts/` — uncommitted, added outside this session.
+1. **BehaviorField → field widget delegation** — The one remaining big item. BehaviorField (495 lines, 76 inline styles) reimplements all 18 field types that already exist as widget components. Should dispatch to WIDGET_REGISTRY instead. Plan at `readmes/68-ui-widget-consolidation.md`.
+2. **Prior carryover** — alice.md readme update, `on_reciept` typo fix, alice_notes `data` vs `config` bug
+3. **dd-card polish** — live with the data, then decide which metrics matter before adding visual hierarchy
 
 ## Open Problems
-
-- Django runserver hangs on startup if stale `manage.py shell` processes hold DB connections. Kill orphan Python processes before restarting.
-- `PdfDesigner.tsx` still exists but is no longer used by ReportsDialog. Can be deleted or kept as a standalone tool at `/pdf-designer`.
-- The pydantic `FinancialSnapshot` schema is too flat — doesn't validate the full nested `financial.customer.*` structure from `constants.py`. Works because `Dict[str, Any]` accepts everything, but not enforced.
-- Statement batch sender UI (select past-due → send statements with interval skip) is designed but not built.
-
-## What Was Decided (and Why)
-
-- **Abandoned pdfme** — foreign tool that doesn't know our data model. Our PrintLayout sections + UniversalPrint renderer do everything it does, and we control the field picker, panel templates, and rendering. Users who need pixel-perfect control export layout JSON and build a custom `.tsx` template.
-- **6 general styles instead of per-field formatting** — production system, not a design tool. Title/Heading/Body/Money/Small/Emphasis auto-applied by zone. Data.json available for users who need more.
-- **Panel layout: Panels left, Preview center, Fields+Models right** — right-hand ergonomics. Fields are high-frequency (drag/click), models are pick-occasionally, panels are set-once.
-- **Conditional text section type** — rules in `config.statement.comments`, evaluated top-down against record data. Reusable beyond statements for any document needing conditional content.
-- **Fiscal health markers in `financial.customer.collection`** — `dt_last_statement` + `statement_interval_days` enables batch statement sending with skip logic. Health score and velocity trend maintained by nightly job.
-- **Labels handled by external software** — WC3 exports data (ZPL/CSV/JSON), dedicated label printers/software handle printing. Readme at `readmes/topics/print/labels.md`.
+- BehaviorField has 76 inline styles — works but doesn't follow CSS standard
+- CommerceDashboard (656 lines, 5 tabs) is the last complex hardcoded dashboard
+- alice_notes service bug: `Setting() got unexpected keyword arguments: 'data'` (uses `config` not `data`)
+- `on_reciept` typo in Item model (line 168)
 
 ## Files Changed This Session
 
-**React2025 (bill_dev):**
-- `src/components/common/ReportsDialog.tsx` — 7 buttons → 3 controls, removed preview pane, full-screen editor overlay, removed pdfme
-- `src/components/print/PrintLayoutDesigner.tsx` — complete rewrite: panel-based sections, field picker from registry, model list, draggable splits, paper size select
-- `src/components/print/printLayoutTypes.ts` — added `ConditionalTextSection`, `legal` paper size
-- `src/components/print/UniversalPrint.ts` — added `renderConditionalText` with expression evaluator, `reportConfig` passthrough
-- `src/components/collections/CollectionsQueue.tsx` — new: past-due customer list, DSO, cash, actions, promises broken
-- `src/components/collections/CustomerHealthCard.tsx` — new: aging bar, credit, velocity trend, health score
-- `src/pages/admin/AccountingDashboard.tsx` — added Collections section
-- `src/apps/orgs/components/OrgPage.tsx` — added CustomerHealthCard to customer detail
-- `src/pages/tools/PdfDesigner.tsx` — updated props (report, model) but no longer used by ReportsDialog
+### WC3 Backend
+- `apps/core/views/cookie_token_refresh.py` — refresh_expires in response
+- `apps/core/management/commands/seed_dd_cards.py` — new
 
-**webClerk3 (bill_dev):**
-- `apps/core/management/commands/seed_print_layouts.py` — rewrote: 13 report layouts with PrintLayout sections + dunning messages
-- `apps/accounts/services/collections_dashboard.py` — new: collections dashboard + customer health backend
-- `apps/core/views/manage_view.py` — registered `get_collections_dashboard` and `get_customer_health` actions
-- `apps/orgs/models/constants.py` — added fiscal health markers + statement_interval_days
-- `readmes/topics/print/labels.md` — new: labels and barcodes reference for Alice
-- `readmes/topics/accounts/collections.md` — new: collections workflow documentation for Alice
+### React2025 Frontend — Created
+- `src/components/common/DDCard.tsx`
+- `src/pages/Dashboard/DDCardDashboard.tsx`
+
+### React2025 Frontend — Modified
+- `src/utils/fieldFormatters.ts` — formatField(), formatDt(), parseDtInput()
+- `src/routes/PrivateRoute.tsx`, `Router.tsx`, `Routes.ts`, `protectedRoutesConfig.tsx`
+- `src/store/slices/authSlice.ts`, `src/api/axios.ts`
+- `src/layout/MacTopBar.tsx`, `src/layout/AppSidebar.tsx`
+- `src/components/header/UserDropdown.tsx`
+- `src/hooks/useDataBrowser.ts`, `src/hooks/useGoBack.ts`
+- `src/pages/admin/DataBrowser.tsx`
+- `src/components/common/DataGrid.tsx`, `BehaviorField.tsx`
+- `src/components/fields/TimestampField.tsx`, `ReadonlyField.tsx`
+- `src/components/wrapper.ts`, `src/pages/wrapperPage.ts`
+- `src/apps/transactions/components/SummaryCard.tsx`
+
+### React2025 Frontend — Deleted (2,385 lines removed)
+- `src/pages/Dashboard/Home.tsx` (556)
+- `src/pages/admin/AccountingDashboard.tsx` (225)
+- `src/pages/admin/OperationsDashboard.tsx` (367)
+- `src/apps/products/pages/ProductsDashboard.tsx` (170)
+- `src/apps/orgs/pages/OrgsDashboard.tsx` (218)
+- `src/apps/transactions/pages/TransactionsDashboard.tsx` (226)
+- `src/apps/support/pages/SupportDashboard.tsx` (110)
+- `src/components/form/group-input/PhoneInput.tsx` (141)
+- `src/components/form/input/DropDown.tsx` (100)
+- `src/components/collections/CollectionsQueue.tsx` (143)
+- `src/utils/dateUtils.ts` (129)

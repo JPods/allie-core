@@ -1,0 +1,104 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-06T11:54:51Z",
+  "origin_sid": "S003",
+  "dest_sid": "S002",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 17,
+  "lines": {
+    "S001": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 6
+        }
+      },
+      "gw_in_0": {
+        "plan": {
+          "seq": 7
+        }
+      },
+      "gw_c_0_1": {
+        "plan": {
+          "seq": 8
+        }
+      },
+      "gw_c_1_1": {
+        "plan": {
+          "seq": 9
+        }
+      },
+      "gw_c_1_2": {
+        "plan": {
+          "seq": 10
+        }
+      },
+      "gw_out_2": {
+        "plan": {
+          "seq": 11
+        }
+      },
+      "gw_cp_out_2": {
+        "plan": {
+          "seq": 12
+        }
+      }
+    },
+    "S002": {
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 14
+        }
+      },
+      "gw_platform_in1": {
+        "plan": {
+          "seq": 15
+        }
+      },
+      "gw_platform_in2": {
+        "plan": {
+          "seq": 16
+        }
+      },
+      "gw_platform": {
+        "plan": {
+          "seq": 17
+        }
+      }
+    },
+    "S003": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1
+        }
+      },
+      "gw_platform_out": {
+        "plan": {
+          "seq": 2
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 3
+        }
+      },
+      "gw_cp_out_1": {
+        "plan": {
+          "seq": 4
+        }
+      }
+    },
+    "connections": {
+      "seg_s003_cp1_s001_cp0": {
+        "plan": {
+          "seq": 5
+        }
+      },
+      "seg_s001_cp2_s002_cp0": {
+        "plan": {
+          "seq": 13
+        }
+      }
+    }
+  }
+}

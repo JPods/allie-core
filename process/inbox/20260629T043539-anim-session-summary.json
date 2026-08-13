@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-06-29T04:35:39Z",
+  "pod_count": 0,
+  "stations": {
+  },
+  "ezones": {
+    "total_stop_waits": 0,
+    "junctions": [
+
+    ]
+  }
+}

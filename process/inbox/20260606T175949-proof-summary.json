@@ -1,0 +1,26 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-06T17:59:49Z",
+  "model": "trial5",
+  "formation_filter": "traffic_circle7",
+  "stations": [
+    {
+      "station_id": "to_be_assigned",
+      "formation_id": "traffic_circle7",
+      "ok": 24,
+      "warn": 0,
+      "severe": 0,
+      "missing": 0,
+      "undeclared": 0,
+      "arc": 0,
+      "file": "20260606T175949-proof-to_be_assigned.json"
+    }
+  ],
+  "total_ok": 24,
+  "total_warn": 0,
+  "total_severe": 0,
+  "total_missing": 0,
+  "total_undeclared": 0,
+  "total_arc": 0,
+  "total_scan": 0
+}

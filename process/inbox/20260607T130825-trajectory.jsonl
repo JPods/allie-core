@@ -1,0 +1,5 @@
+{"type":"session_start","model":"trial5","pod_count":1,"ts":"2026-06-07T13:08:25Z"}
+{"type":"tick","ts":"2026-06-07T13:08:25Z","nora_id":"NORA_0001","cid":"S002.gw_platform","t_pct":55.8,"pos_mm":[-97282.1,5250.0,5276.2]}
+{"type":"tick","ts":"2026-06-07T13:08:26Z","nora_id":"NORA_0001","cid":"S002.gw_platform","t_pct":94.1,"pos_mm":[-101593.1,5250.0,5276.2]}
+{"type":"maneuver_end","ts":"2026-06-07T13:08:26Z","nora_id":"NORA_0001","cid":"S002.gw_platform"}
+{"type":"session_end","ts":"2026-06-07T13:08:26Z"}

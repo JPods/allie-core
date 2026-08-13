@@ -1,0 +1,219 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0003",
+  "generated_at": "2026-06-18T16:02:05Z",
+  "origin_sid": "s007",
+  "dest_sid": "s006",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 10,
+  "seq_plan": [
+    {
+      "seq": 1,
+      "seg": "s006.gw_platform",
+      "pts": 2,
+      "first_mm": [
+        55535.1,
+        -256558.6,
+        7803.1
+      ],
+      "last_mm": [
+        77233.6,
+        -266493.0,
+        7803.1
+      ]
+    },
+    {
+      "seq": 2,
+      "seg": "s006.gw_platform_out1",
+      "pts": 2,
+      "first_mm": [
+        77233.6,
+        -266493.0,
+        7803.1
+      ],
+      "last_mm": [
+        86986.0,
+        -269033.3,
+        7865.6
+      ]
+    },
+    {
+      "seq": 3,
+      "seg": "s006.gw_platform_out2",
+      "pts": 2,
+      "first_mm": [
+        86986.0,
+        -269033.3,
+        7865.6
+      ],
+      "last_mm": [
+        96738.5,
+        -271573.6,
+        7803.1
+      ]
+    },
+    {
+      "seq": 4,
+      "seg": "s006.gw_cp_out_lead_1",
+      "pts": 2,
+      "first_mm": [
+        96738.5,
+        -271573.6,
+        7803.1
+      ],
+      "last_mm": [
+        99011.6,
+        -272614.3,
+        7803.1
+      ]
+    },
+    {
+      "seq": 5,
+      "seg": "s006.gw_cp_out_1",
+      "pts": 2,
+      "first_mm": [
+        99011.6,
+        -272614.3,
+        7803.1
+      ],
+      "last_mm": [
+        101284.7,
+        -273655.0,
+        7803.1
+      ]
+    },
+    {
+      "seq": 6,
+      "seg": "seg_s006_cp1_s007_cp0",
+      "pts": 2,
+      "first_mm": [
+        64502.6,
+        -259101.7,
+        10346.7
+      ],
+      "last_mm": [
+        157020.5,
+        -398373.9,
+        15980.4
+      ]
+    },
+    {
+      "seq": 7,
+      "seg": "s007.gw_cp_in_0",
+      "pts": 2,
+      "first_mm": [
+        81377.7,
+        -429935.7,
+        13436.8
+      ],
+      "last_mm": [
+        81377.7,
+        -432435.7,
+        13436.8
+      ]
+    },
+    {
+      "seq": 8,
+      "seg": "s007.gw_cp_in_lead_0",
+      "pts": 2,
+      "first_mm": [
+        81377.7,
+        -429935.7,
+        13436.8
+      ],
+      "last_mm": [
+        81377.7,
+        -427435.7,
+        13436.8
+      ]
+    },
+    {
+      "seq": 9,
+      "seg": "s007.gw_platform_in1",
+      "pts": 2,
+      "first_mm": [
+        81377.7,
+        -427435.7,
+        13436.8
+      ],
+      "last_mm": [
+        83127.7,
+        -417511.0,
+        13499.3
+      ]
+    },
+    {
+      "seq": 10,
+      "seg": "s007.gw_platform_in2",
+      "pts": 2,
+      "first_mm": [
+        83127.7,
+        -417511.0,
+        13499.3
+      ],
+      "last_mm": [
+        84877.7,
+        -407586.2,
+        13436.8
+      ]
+    }
+  ],
+  "lines": {
+    "s006": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1
+        }
+      },
+      "gw_platform_out1": {
+        "plan": {
+          "seq": 2
+        }
+      },
+      "gw_platform_out2": {
+        "plan": {
+          "seq": 3
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 4
+        }
+      },
+      "gw_cp_out_1": {
+        "plan": {
+          "seq": 5
+        }
+      }
+    },
+    "s007": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 7
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 8
+        }
+      },
+      "gw_platform_in1": {
+        "plan": {
+          "seq": 9
+        }
+      },
+      "gw_platform_in2": {
+        "plan": {
+          "seq": 10
+        }
+      }
+    },
+    "connections": {
+      "seg_s006_cp1_s007_cp0": {
+        "plan": {
+          "seq": 6
+        }
+      }
+    }
+  }
+}

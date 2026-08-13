@@ -1,0 +1,17 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-16T17:17:23Z"}
+{"type":"maneuver","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_park_ps3","tracks":[],"pts_count":2,"pts_mm":[[6206.0,-1135.1,5839.4],[-44.0,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":13.0,"pos_mm":[39406.4,-1115.1,7889.4]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":25.9,"pos_mm":[34511.6,-1119.8,7406.1]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":39.2,"pos_mm":[29429.6,-1124.7,6902.8]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":52.7,"pos_mm":[24279.5,-1129.7,6392.7]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":68.3,"pos_mm":[18349.7,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":81.5,"pos_mm":[13302.5,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-16T17:17:24Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":95.2,"pos_mm":[8058.3,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]"}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"tick","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":35.9,"pos_mm":[3959.7,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":""}
+{"type":"maneuver_end","ts":"2026-06-16T17:17:25Z","nora_id":"NORA_0001","cid":""}
+{"type":"session_end","ts":"2026-06-16T17:17:40Z"}

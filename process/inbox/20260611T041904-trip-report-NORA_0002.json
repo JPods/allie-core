@@ -1,0 +1,41 @@
+{
+  "vehicle_id": "NORA_0002",
+  "generated_at": "2026-06-11T04:19:04Z",
+  "origin_sid": "",
+  "dest_sid": "station_thru_dip",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 2,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "station_thru_dip.gw_platform_advance_ps2_to_ps3",
+      "len_mm": 2500,
+      "actual_s": 0.316,
+      "expected_s": 0.301,
+      "actual_ms": 7.91
+    },
+    {
+      "seg_id": "station_thru_dip.gw_platform_advance_ps3_to_ps4",
+      "len_mm": 2500,
+      "actual_s": 0.345,
+      "expected_s": 0.301,
+      "actual_ms": 7.25
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}

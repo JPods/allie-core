@@ -1,0 +1,62 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-18T02:58:44Z",
+  "origin_sid": "station_thru_dip",
+  "dest_sid": "station_thru_dip",
+  "trip_type": "originating_chain",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 8,
+  "lines": {
+    "station_thru_dip": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1,
+          "type": "originating_chain"
+        }
+      },
+      "gw_platform_out": {
+        "plan": {
+          "seq": 2,
+          "type": "originating_chain"
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 3,
+          "type": "originating_chain"
+        }
+      },
+      "gw_uturn_1": {
+        "plan": {
+          "seq": 4,
+          "type": "originating_chain"
+        }
+      },
+      "gw_cp_in_lead_1": {
+        "plan": {
+          "seq": 5,
+          "type": "originating_chain"
+        }
+      },
+      "gw_far_main": {
+        "plan": {
+          "seq": 6,
+          "type": "originating_chain"
+        }
+      },
+      "gw_cp_out_lead_0": {
+        "plan": {
+          "seq": 7,
+          "type": "originating_chain"
+        }
+      },
+      "gw_cp_out_0": {
+        "plan": {
+          "seq": 8,
+          "type": "originating_chain"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "vehicle_id": "NORA_0003",
+  "generated_at": "2026-06-13T12:49:20Z",
+  "origin_sid": "",
+  "dest_sid": "jpods_station_parking",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 4,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps3_to_ps6",
+      "len_mm": 7500,
+      "actual_s": 0.467,
+      "expected_s": 0.904,
+      "actual_ms": 16.07
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps6_to_ps8",
+      "len_mm": 5000,
+      "actual_s": 0.328,
+      "expected_s": 0.602,
+      "actual_ms": 15.22
+    },
+    {
+      "seg_id": "jpods_station_parking.gw_platform_advance_ps8_to_ps9",
+      "len_mm": 2500,
+      "actual_s": 0.195,
+      "expected_s": 0.301,
+      "actual_ms": 12.82
+    },
+    {
+      "seg_id": "jpods_station_parking.hold_loop[9/9]",
+      "len_mm": 101314,
+      "actual_s": 6.136,
+      "expected_s": 12.206,
+      "actual_ms": 16.51
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}

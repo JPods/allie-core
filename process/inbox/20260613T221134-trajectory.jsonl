@@ -1,0 +1,16 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-13T22:11:34Z"}
+{"type":"maneuver","ts":"2026-06-13T22:11:34Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_park_ps3","tracks":[],"pts_count":2,"pts_mm":[[6206.0,-1135.1,5839.4],[-44.0,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-13T22:11:35Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":10.5,"pos_mm":[40368.1,-1115.1,7889.4]}
+{"type":"tick","ts":"2026-06-13T22:11:35Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":21.8,"pos_mm":[36049.5,-1118.3,7558.4]}
+{"type":"tick","ts":"2026-06-13T22:11:35Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":33.1,"pos_mm":[31764.4,-1122.4,7134.0]}
+{"type":"tick","ts":"2026-06-13T22:11:35Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":44.6,"pos_mm":[27371.1,-1126.7,6698.9]}
+{"type":"tick","ts":"2026-06-13T22:11:36Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":57.5,"pos_mm":[22464.6,-1131.4,6213.0]}
+{"type":"tick","ts":"2026-06-13T22:11:36Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":68.8,"pos_mm":[18135.0,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-13T22:11:36Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":80.1,"pos_mm":[13820.3,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-13T22:11:36Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":93.3,"pos_mm":[8753.1,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-13T22:11:37Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]"}
+{"type":"tick","ts":"2026-06-13T22:11:37Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":28.9,"pos_mm":[4397.6,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-13T22:11:37Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":98.1,"pos_mm":[76.5,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-13T22:11:37Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"maneuver_end","ts":"2026-06-13T22:11:37Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"session_end","ts":"2026-06-13T22:11:39Z"}

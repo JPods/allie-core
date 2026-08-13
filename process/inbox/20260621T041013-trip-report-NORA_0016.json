@@ -1,0 +1,105 @@
+{
+  "vehicle_id": "NORA_0016",
+  "generated_at": "2026-06-21T04:10:13Z",
+  "origin_sid": "s003",
+  "dest_sid": "s002",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "minor_defects",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 9,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 1,
+    "total_defects": 1
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "seg_s001_0_s002_1",
+      "len_mm": 140271,
+      "actual_s": 0.781,
+      "expected_s": 16.9,
+      "actual_ms": 179.54
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_1",
+      "len_mm": 2500,
+      "actual_s": 0.402,
+      "expected_s": 0.301,
+      "actual_ms": 6.22
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_1",
+      "len_mm": 2500,
+      "actual_s": 0.334,
+      "expected_s": 0.301,
+      "actual_ms": 7.48
+    },
+    {
+      "station": "s002",
+      "track": "gw_far_main",
+      "len_mm": 63564,
+      "actual_s": 7.731,
+      "expected_s": 7.658,
+      "actual_ms": 8.22
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_out_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.377,
+      "expected_s": 0.301,
+      "actual_ms": 6.63
+    },
+    {
+      "station": "s002",
+      "track": "gw_uturn_0",
+      "len_mm": 5489,
+      "actual_s": 0.71,
+      "expected_s": 0.661,
+      "actual_ms": 7.73
+    },
+    {
+      "station": "s002",
+      "track": "gw_cp_in_lead_0",
+      "len_mm": 2500,
+      "actual_s": 0.582,
+      "expected_s": 0.301,
+      "actual_ms": 4.3
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in1",
+      "len_mm": 10109,
+      "actual_s": 1.275,
+      "expected_s": 1.218,
+      "actual_ms": 7.93
+    },
+    {
+      "station": "s002",
+      "track": "gw_platform_in2",
+      "len_mm": 10109,
+      "actual_s": 1.277,
+      "expected_s": 1.218,
+      "actual_ms": 7.91
+    }
+  ],
+  "defects": [
+    {
+      "type": "speed_deviation",
+      "seg_id": "seg_s001_0_s002_1",
+      "authorized_ms": 8.3,
+      "actual_ms": 179.54,
+      "ratio": 21.63,
+      "severity": "moderate"
+    }
+  ],
+  "assessment": {
+  }
+}

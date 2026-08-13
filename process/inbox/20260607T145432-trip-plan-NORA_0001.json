@@ -1,0 +1,139 @@
+{
+  "schema": "jpods-trip-plan-v1",
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-07T14:54:32Z",
+  "origin_sid": "S003",
+  "dest_sid": "S004",
+  "authorized_speed_ms": 8.3,
+  "seg_count": 20,
+  "lines": {
+    "s001": {
+      "gw_cp_in_3": {
+        "plan": {
+          "seq": 11,
+          "id": 12
+        }
+      },
+      "gw_in_3": {
+        "plan": {
+          "seq": 12,
+          "id": 20
+        }
+      },
+      "gw_c_3_0": {
+        "plan": {
+          "seq": 13,
+          "id": 7
+        }
+      },
+      "gw_c_0_0": {
+        "plan": {
+          "seq": 14,
+          "id": 1
+        }
+      },
+      "gw_c_0_1": {
+        "plan": {
+          "seq": 15,
+          "id": 2
+        }
+      },
+      "gw_out_1": {
+        "plan": {
+          "seq": 16,
+          "id": 22
+        }
+      },
+      "gw_cp_out_1": {
+        "plan": {
+          "seq": 17,
+          "id": 14
+        }
+      }
+    },
+    "s003": {
+      "gw_platform": {
+        "plan": {
+          "seq": 1,
+          "id": 73
+        }
+      },
+      "gw_platform_out1": {
+        "plan": {
+          "seq": 2,
+          "id": 76
+        }
+      },
+      "gw_platform_out2": {
+        "plan": {
+          "seq": 3,
+          "id": 77
+        }
+      },
+      "gw_cp_out_lead_1": {
+        "plan": {
+          "seq": 4,
+          "id": 67
+        }
+      },
+      "gw_uturn_1": {
+        "plan": {
+          "seq": 5,
+          "id": 79
+        }
+      },
+      "gw_cp_in_lead_1": {
+        "plan": {
+          "seq": 6,
+          "id": 63
+        }
+      },
+      "gw_far_main": {
+        "plan": {
+          "seq": 7,
+          "id": 68
+        }
+      },
+      "gw_cp_out_lead_0": {
+        "plan": {
+          "seq": 8,
+          "id": 66
+        }
+      },
+      "gw_cp_out_0": {
+        "plan": {
+          "seq": 9,
+          "id": 64
+        }
+      }
+    },
+    "s004": {
+      "gw_cp_in_0": {
+        "plan": {
+          "seq": 19,
+          "id": 80
+        }
+      },
+      "gw_cp_in_lead_0": {
+        "plan": {
+          "seq": 20,
+          "id": 81
+        }
+      }
+    },
+    "connections": {
+      "seg_s003_cp0_s001_cp3": {
+        "plan": {
+          "seq": 10,
+          "id": 98
+        }
+      },
+      "seg_s001_cp1_s004_cp0": {
+        "plan": {
+          "seq": 18,
+          "id": 94
+        }
+      }
+    }
+  }
+}

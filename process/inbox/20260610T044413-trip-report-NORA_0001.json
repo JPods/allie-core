@@ -1,0 +1,78 @@
+{
+  "vehicle_id": "NORA_0001",
+  "generated_at": "2026-06-10T04:44:13Z",
+  "origin_sid": "",
+  "dest_sid": "T001",
+  "authorized_speed_ms": 8.3,
+  "completed": true,
+  "natalie_verdict": "authorized",
+  "summary": {
+    "authorized_segs": 0,
+    "executed_segs": 7,
+    "skipped_segs": 0,
+    "cp_gap_count": 0,
+    "speed_deviation_count": 0,
+    "total_defects": 0
+  },
+  "skipped_segs": [
+
+  ],
+  "executed_segs": [
+    {
+      "seg_id": "T001.hold_loop[11/11]",
+      "len_mm": 209677,
+      "actual_s": 25.384,
+      "expected_s": 25.262,
+      "actual_ms": 8.26
+    },
+    {
+      "seg_id": "T001.hold_loop[8/8]",
+      "len_mm": 147997,
+      "actual_s": 17.824,
+      "expected_s": 17.831,
+      "actual_ms": 8.3
+    },
+    {
+      "seg_id": "T001.hold_loop[8/8]",
+      "len_mm": 147997,
+      "actual_s": 17.863,
+      "expected_s": 17.831,
+      "actual_ms": 8.29
+    },
+    {
+      "seg_id": "T001.hold_loop[9/9]",
+      "len_mm": 104634,
+      "actual_s": 12.643,
+      "expected_s": 12.607,
+      "actual_ms": 8.28
+    },
+    {
+      "station": "t001",
+      "track": "gw_platform_park_ps7",
+      "len_mm": 16250,
+      "actual_s": 1.892,
+      "expected_s": 1.958,
+      "actual_ms": 8.59
+    },
+    {
+      "seg_id": "T001.hold_loop[9/9]",
+      "len_mm": 123064,
+      "actual_s": 14.882,
+      "expected_s": 14.827,
+      "actual_ms": 8.27
+    },
+    {
+      "station": "t001",
+      "track": "gw_platform_park_ps9",
+      "len_mm": 21250,
+      "actual_s": 2.545,
+      "expected_s": 2.56,
+      "actual_ms": 8.35
+    }
+  ],
+  "defects": [
+
+  ],
+  "assessment": {
+  }
+}

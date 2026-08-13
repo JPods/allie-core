@@ -1,0 +1,15 @@
+{
+  "schema": "jpods-proof-v1",
+  "generated_at": "2026-06-18T08:43:57Z",
+  "model": "2_thru_dip",
+  "formation_filter": "traffic_circle7",
+  "stations": [
+
+  ],
+  "total_ok": 0,
+  "total_warn": 0,
+  "total_severe": 0,
+  "total_missing": 0,
+  "total_undeclared": 0,
+  "total_arc": 0
+}

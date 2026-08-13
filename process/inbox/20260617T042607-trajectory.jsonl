@@ -1,0 +1,15 @@
+{"type":"session_start","model":"model","pod_count":0,"ts":"2026-06-17T04:26:07Z"}
+{"type":"maneuver","ts":"2026-06-17T04:26:07Z","nora_id":"NORA_0001","maneuver_id":"station_line_end.gw_platform_park_ps3","tracks":[],"pts_count":2,"pts_mm":[[6206.0,-1135.1,5839.4],[-44.0,-1135.1,5839.4]]}
+{"type":"tick","ts":"2026-06-17T04:26:08Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":11.3,"pos_mm":[40047.5,-1115.1,7889.4]}
+{"type":"tick","ts":"2026-06-17T04:26:08Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":22.9,"pos_mm":[35652.2,-1118.7,7519.0]}
+{"type":"tick","ts":"2026-06-17T04:26:09Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":34.6,"pos_mm":[31189.9,-1123.0,7077.1]}
+{"type":"tick","ts":"2026-06-17T04:26:09Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":47.0,"pos_mm":[26461.9,-1127.6,6608.8]}
+{"type":"tick","ts":"2026-06-17T04:26:10Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":58.7,"pos_mm":[21996.1,-1131.9,6166.6]}
+{"type":"tick","ts":"2026-06-17T04:26:10Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":70.5,"pos_mm":[17512.8,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-17T04:26:11Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":81.7,"pos_mm":[13193.9,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-17T04:26:12Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]","t_pct":93.7,"pos_mm":[8599.4,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-17T04:26:12Z","nora_id":"NORA_0001","cid":"station_line_end.hold_loop[4/4]"}
+{"type":"tick","ts":"2026-06-17T04:26:12Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":30.4,"pos_mm":[4303.4,-1135.1,5839.4]}
+{"type":"tick","ts":"2026-06-17T04:26:13Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3","t_pct":99.7,"pos_mm":[-25.2,-1135.1,5839.4]}
+{"type":"maneuver_end","ts":"2026-06-17T04:26:13Z","nora_id":"NORA_0001","cid":"station_line_end.gw_platform_park_ps3"}
+{"type":"session_end","ts":"2026-06-17T04:26:32Z"}

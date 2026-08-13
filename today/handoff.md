@@ -1,74 +1,42 @@
-# Handoff — 2026-08-12
+# Handoff — 2026-08-13
 
 ## Where We Left Off
 
-Major UI consolidation session. Auth fix, data-driven dashboards, formatter consolidation, dead code cleanup.
-
-### Completed
-- **Auth redirect fix** — dead loop when token expired (`"/"` → `"/login"`)
-- **Token expiration warning** — amber banner in MacTopBar when session within 3 days
-- **dd-card Setting** — one record (id=649), 20 cards, 8 dashboards. `seed_dd_cards.py`
-- **DDCardDashboard** — generic dashboard component, replaced 6 custom dashboards
-- **7 dead dashboard files deleted** — -1,872 lines
-- **`formatField(value, type)`** — master dispatcher for all display formatting
-- **`formatDt(value, mode, field)`** — canonical date formatter, all high-traffic components migrated
-- **DropDown.tsx deleted** — migrated 2 usages to Select
-- **dateUtils.ts deleted** — superseded by fieldFormatters.ts
-- **PhoneInput deleted** — unused form component
-- **CollectionsQueue.tsx deleted** — orphaned by AccountingDashboard removal
-- **UI scrub** — debug logs, stale routes, dead imports cleaned
-
-### Architecture Established
-- **One behavior, one record** — dd_card:base Setting, not 60 per-model copies
-- **Pattern of behavior, not schema** — group by what it does, not what model it serves
-- **Master funnel pattern** — `formatField()` is the single entry point; individual formatters are internal
-- **CSS rule** — `.db-*` variables for theme, Tailwind for layout, inline only when CSS can't do it
-- **Date rule** — local display, UTC storage, `formatDt()` everywhere
+Major infrastructure + architecture session. WC3 wouldn't start — root cause was 99% disk full (13GB free on 926GB) causing macOS I/O saturation from Apple services (fileproviderd, knowledgeconstructiond, mds_stores) all fighting over the filesystem at boot. Freed ~145GB by moving media/archives to Andi 5TB (`/mnt/allie-5tb/bill_large_bk/`, 95GB verified) and deleting Docker.raw (60GB, Docker not even installed). Built `DbColumns` as the single base list component — all lists inherit from this. Created consolidated `CommPanel` (one table replacing four separate EMAIL/PHONE/ADDRESS/DOMAIN sections). Seeded Rule of 4 demo cast (qq_1 through qq_5) and item hierarchy (qq_100/200/300 with BOM). Created full order→PO transaction flow with BOM Level 2 explosion. Fixed `Pending.changes` bug in `line_item_service.py`.
 
 ## Do This First Next Session
 
-1. **BehaviorField → field widget delegation** — The one remaining big item. BehaviorField (495 lines, 76 inline styles) reimplements all 18 field types that already exist as widget components. Should dispatch to WIDGET_REGISTRY instead. Plan at `readmes/68-ui-widget-consolidation.md`.
-2. **Prior carryover** — alice.md readme update, `on_reciept` typo fix, alice_notes `data` vs `config` bug
-3. **dd-card polish** — live with the data, then decide which metrics matter before adding visual hierarchy
+1. **Create 4 is_staff qq_ contacts with 4 actions each** — actions linked to qq_SO-001 and qq_PO-001 via refs.links. Staff need data in their dashboards. Bill requested this before session ended.
+2. **Build dash-card component** — clicking an action row in dashboard shows linked transaction data in a card, clickable to open transaction in new window. Not yet built.
+3. **Convert remaining panels to DbColumns/--db-* theme** — MetadataPanel, FinancialsPanel, ProjectGanttPanel, ProjectKanbanPanel still use Tailwind `dark:` classes and hard-coded colors. Must use `--db-*` CSS variables exclusively.
+4. **Fix ThemeContext.tsx** — currently hard-coded to light-only (`toggleTheme` is a no-op). Must support actual dark/light toggle synced with `data-theme` attributes.
+5. **Mount Andi SMB share** — `smb://andi@192.168.1.114/allie-5tb` for persistent access to archived files. Bill agreed to Option A (SMB mount + symlinks). Not yet mounted — needs password entry in Finder.
 
 ## Open Problems
-- BehaviorField has 76 inline styles — works but doesn't follow CSS standard
-- CommerceDashboard (656 lines, 5 tabs) is the last complex hardcoded dashboard
-- alice_notes service bug: `Setting() got unexpected keyword arguments: 'data'` (uses `config` not `data`)
-- `on_reciept` typo in Item model (line 168)
+
+- **Documents FK leaking** — DocumentsPanel shows all documents on every contact because docs connect via `refs.links.contacts` (JSON array) and the panel may not be filtering. Seeded 4 docs per qq_ contact to test visually.
+- **iCloud + Google Drive fight** — both watch overlapping files via `fileproviderd`, causing I/O storms at boot. Recommended domain separation (iCloud = working files, Google Drive = JPods history, Andi = cold archive). Not yet implemented.
+- **Allie API down** — `allie-api.py` not running. MCP works. API needs manual start.
+- **jpods.library_2026-07-29.zip** — transferred to Andi (11G verified), deleted locally. If needed, rsync back from `andi:/mnt/allie-5tb/bill_large_bk/`.
+- **PanelTable is now a thin re-export** of DbColumns. Existing imports work but should migrate to `DbColumns` directly over time.
+
+## What Was Decided (and Why)
+
+- **DbColumns is the single base list component** — all lists (DataBrowser grid, panels, comm lists) inherit from this. DbList extends by adding toolbar. Reason: three different styling systems (--db-* variables, Tailwind dark:, hard-coded hex) were causing theme inconsistency. One component, one CSS system.
+- **Consolidated CommPanel** — one flat table (TYPE | VALUE | NAME) instead of four separate sections. Reason: Bill wanted uniform db.list treatment. Address rows can be taller for multi-line. Card-style rendering left as future option via `renderRow` prop.
+- **Rule of 4 for demo/training data** — exactly 4 child records per parent per type. Two parents minimum. Reason: 1-2 records can pass by accident; 4 is verifiable at a glance without counting; more than 4 requires counting.
+- **qq_ ida prefix for demo cast** — easy to find, filter, and remember for trainees. qq_1xx = primary items, qq_2xx = BOM sub-assemblies, qq_3xx = BOM components.
+- **Documents linked via refs.links, not FK** — Bill confirmed this is the right pattern. Bidirectional: doc.refs.links.contacts and contact.refs.links.document.
+- **Andi 5TB is cold archive, not a mirror** — files moved there are deleted locally. SMB mount provides access when needed.
 
 ## Files Changed This Session
 
-### WC3 Backend
-- `apps/core/views/cookie_token_refresh.py` — refresh_expires in response
-- `apps/core/management/commands/seed_dd_cards.py` — new
-
-### React2025 Frontend — Created
-- `src/components/common/DDCard.tsx`
-- `src/pages/Dashboard/DDCardDashboard.tsx`
-
-### React2025 Frontend — Modified
-- `src/utils/fieldFormatters.ts` — formatField(), formatDt(), parseDtInput()
-- `src/routes/PrivateRoute.tsx`, `Router.tsx`, `Routes.ts`, `protectedRoutesConfig.tsx`
-- `src/store/slices/authSlice.ts`, `src/api/axios.ts`
-- `src/layout/MacTopBar.tsx`, `src/layout/AppSidebar.tsx`
-- `src/components/header/UserDropdown.tsx`
-- `src/hooks/useDataBrowser.ts`, `src/hooks/useGoBack.ts`
-- `src/pages/admin/DataBrowser.tsx`
-- `src/components/common/DataGrid.tsx`, `BehaviorField.tsx`
-- `src/components/fields/TimestampField.tsx`, `ReadonlyField.tsx`
-- `src/components/wrapper.ts`, `src/pages/wrapperPage.ts`
-- `src/apps/transactions/components/SummaryCard.tsx`
-
-### React2025 Frontend — Deleted (2,385 lines removed)
-- `src/pages/Dashboard/Home.tsx` (556)
-- `src/pages/admin/AccountingDashboard.tsx` (225)
-- `src/pages/admin/OperationsDashboard.tsx` (367)
-- `src/apps/products/pages/ProductsDashboard.tsx` (170)
-- `src/apps/orgs/pages/OrgsDashboard.tsx` (218)
-- `src/apps/transactions/pages/TransactionsDashboard.tsx` (226)
-- `src/apps/support/pages/SupportDashboard.tsx` (110)
-- `src/components/form/group-input/PhoneInput.tsx` (141)
-- `src/components/form/input/DropDown.tsx` (100)
-- `src/components/collections/CollectionsQueue.tsx` (143)
-- `src/utils/dateUtils.ts` (129)
+- `React2025/src/apps/common/components/panels/DbColumns.tsx` — NEW: single base list component with section headers, column config, theme-aware CSS
+- `React2025/src/apps/common/components/panels/PanelTable.tsx` — now re-exports DbColumns for backward compatibility
+- `React2025/src/apps/common/components/panels/index.ts` — added DbColumns exports
+- `React2025/src/apps/communications/components/CommPanel.tsx` — rewritten: consolidated table replacing four-section layout
+- `React2025/src/apps/communications/components/CommList.tsx` — updated to use --db-* CSS variables (may be superseded by CommPanel rewrite)
+- `React2025/src/apps/communications/components/CommCard.tsx` — updated to use --db-* CSS variables (may be superseded by CommPanel rewrite)
+- `React2025/src/pages/admin/DataBrowser.css` — added common list CSS classes (db-section-header, db-list-header, db-list-row, db-list-empty)
+- `webClerk3/apps/transactions/services/line_item_service.py` — fixed bug: `Pending.data` → `Pending.changes` (3 instances); restored `trace_pending_created(data=...)` call
+- `webClerk3/tools/seed_demo_cast.py` — NEW: idempotent seed script for Rule of 4 demo cast (qq_1–qq_5, companies, comms, docs)

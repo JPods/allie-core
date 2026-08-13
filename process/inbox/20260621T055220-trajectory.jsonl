@@ -1,0 +1,17 @@
+{"type":"session_start","model":"3+circle","pod_count":16,"ts":"2026-06-21T05:52:20Z"}
+{"type":"maneuver_end","ts":"2026-06-21T05:52:20Z","nora_id":"NORA_0013","cid":"s003.gw_platform_parking"}
+{"type":"park_dispatch","ts":"2026-06-21T05:52:20Z","nora_id":"NORA_0013","station_id":"s003","slot":2,"park_len_m":3.75,"target_mm":[-5505,184123,-1262],"pod_pos_mm":[-5376,187874,-1262],"gw_pts_first_mm":[-5376,187871,-1262],"gw_pts_last_mm":[-5764,176598,-1262],"park_start_mm":[-5376,187871,-1262],"park_end_mm":[-5505,184123,-1262],"capacity":4}
+{"type":"maneuver","ts":"2026-06-21T05:52:20Z","nora_id":"NORA_0013","maneuver_id":"s003.gw_platform_park_ps2","tracks":[],"pts_count":2,"pts_mm":[[-5376.3,187871.1,-1262.1],[-5505.2,184123.3,-1262.1]]}
+{"type":"maneuver_end","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0005","cid":"s001.gw_out_0"}
+{"type":"maneuver_end","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0013","cid":"s003.gw_platform_park_ps2"}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0001","cid":"seg_s001_1_s003_1","t_pct":71.8,"pos_mm":[-1254.2,99293.2,4682.8]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0002","cid":"seg_s002_1_s001_0","t_pct":20.8,"pos_mm":[121855.6,-56401.7,16308.0]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0005","cid":"s001.gw_cp_out_0","t_pct":27.7,"pos_mm":[9939.1,-55427.7,14344.6]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0006","cid":"seg_s003_1_s001_1","t_pct":69.0,"pos_mm":[-6390.5,21360.8,10178.9]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0007","cid":"seg_s003_1_s001_1","t_pct":63.0,"pos_mm":[-6222.0,32821.6,9371.8]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0008","cid":"seg_s003_1_s001_1","t_pct":11.8,"pos_mm":[-3822.6,130511.4,1850.3]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0009","cid":"s003.gw_far_main","t_pct":15.5,"pos_mm":[940.8,167894.9,897.9]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0014","cid":"seg_s002_1_s001_0","t_pct":56.0,"pos_mm":[72514.0,-53960.8,15385.0]}
+{"type":"tick","ts":"2026-06-21T05:52:21Z","nora_id":"NORA_0015","cid":"seg_s001_1_s003_1","t_pct":89.9,"pos_mm":[-216.2,133759.4,1539.2]}
+{"type":"maneuver_end","ts":"2026-06-21T05:52:26Z","nora_id":"NORA_0005","cid":"s001.gw_cp_out_0"}
+{"type":"session_end","ts":"2026-06-21T05:52:26Z"}
