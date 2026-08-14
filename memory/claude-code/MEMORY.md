@@ -1,7 +1,8 @@
 # Memory Index
 
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
-- [Print is JSON-driven, not design](feedback_print_json_driven.md) — WC3 merges data into JSON templates; not a print design tool; keep print CSS minimal
+- [Print is JSON-driven, not design](feedback_print_json_driven.md) — SVG template workflow; not a print design tool; keep print CSS minimal
+- [Not an email/letter tool](feedback_not_email_tool.md) — Users have Gmail/Word/Pages; WC3 provides {{tokens}} and data export; kill TinyMCE
 - [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term

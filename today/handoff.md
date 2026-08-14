@@ -1,82 +1,76 @@
-# Handoff — 2026-08-13
+# Handoff — 2026-08-13 (Evening Session)
 
 ## What Happened
 
-System crashed mid-session. PostgreSQL had a stale PID file (PID 994 was Clock widget, not Postgres). Recovered database, but machine remained unstable — load avg 10+, zombie vite build processes, Django hanging on migration autodetector. Mac restart recommended before next session.
+Major architecture session on the WC3 report and output system. Three fundamental rules established and implemented:
 
-## What Was Accomplished
+1. **WC3 is not a print design tool** — SVG templates designed externally, we populate with data
+2. **WC3 is not an email/letter formatting tool** — users paste {{tokens}} into Gmail/Word/Pages
+3. **Be expert in handing data to better tools** — Scar #57
 
-### 1. Crash Recovery & Team Memory Cleanup
-- Fixed PostgreSQL: removed stale PID, restarted, crash recovery ran automatically
-- **Archived 9 empty crash-orphan session documents** (IDs 1382-1390) in WC3 — all were leftshoe handshakes with no content, spanning 08-10 through 08-13
-- **Recovered tm-955** interrupted session content → created WC3 document **tm-1391** (Andi device manager, Celery fixes, scar #38, 8 commits from 08-07)
+TinyMCE killed before installation. Legacy print CSS deleted. Token system built.
 
-### 2. App View Font Scaling (React2025)
-**File:** `src/pages/admin/DataBrowser.tsx`
-- Line ~1460: Added `--db-font-size` CSS variable on `.db-root`
-- Line ~1878: Added `zoom: baseFontSize / 20` on `.db-detail-pane` when in App mode
-- This scales the entire App detail view proportionally when the Font selector changes
-- Font:10 = 50%, Font:12 = 60%, Font:14 = 70%, Font:18 = 90%
-- **Status: Code saved, needs testing after build**
+## What Was Built
 
-### 3. Gantt Independent Zoom (React2025)
-Separated Gantt scaling from the Font selector. Three files changed:
+### SVG Form System
+- `SvgFormGenerator.ts` — generateFormSvg(), populateFormSvg(), downloadSvg()
+- PrintLayoutDesigner updated — Export/Import SVG buttons, line pagination (Pg1/Pg2+/Wrap), footer toggles (Page#/Domain), text format (plain/markdown)
+- printLayoutTypes.ts — lines_page_1, lines_following, max_description_lines, show_page_numbers, show_domain, text_format, svg_template, row_height, svg_panel_id
+- 5 SVG form Report records seeded (ids 442-446) — Invoice, Order, Proposal, Purchase, Payment — all staged (is_active=False, purpose=svg-form-staged)
 
-**`src/apps/utils/gantt/UnifiedGanttPage.tsx`** — Complete rewrite:
-- Own +/− zoom control at top of page (not scaled by zoom)
-- Default scale: 50% (persisted in localStorage as `wc3_gantt_scale`)
-- Range: 30% to 150%, step 10%
-- Passes `chartZoom` prop to UnifiedGantt
-- Container fills `calc(100vh-2rem)`
+### Token System  
+- `TokenBuilder.tsx` — standalone {{token}} field picker. Click=clipboard, shift-click=build set, Copy All in Detail or List mode
+- Integrated into ReportsDialog as first row — no new UI real estate
+- `/tokens` and `/tokens/:model` routes for standalone access
+- `TokenBuilderPage.tsx` route wrapper
+- Documentation: token-system.md + wc3-token-system.dot/.svg/.pdf
 
-**`src/apps/utils/gantt/UnifiedGantt.tsx`**:
-- Added `chartZoom` prop to `UnifiedGanttProps` interface
-- Destructured in component with default `chartZoom = 1`
-- Applied as CSS `zoom` on `DualScrollbar` (chart+list area only — toolbar excluded)
+### Custom Pages
+- `src/custom/` directory — pages/, components/, index.ts registry, README.md
+- `CustomPageLoader.tsx` — /custom/:page route
+- Full WC3 component library available via @/ imports
+- Separate from src/apps/ — survives updates
 
-**`src/components/common/DualScrollbar.tsx`**:
-- Added `style` prop to interface and component
-- Passes `style` to outer wrapper div
+### Print CSS Cleanup
+- Stripped print.css to structural defaults (--print-* variables, no design opinions)
+- Deleted legacy-invoice-print.css (dead Vue-era file)
+- Removed font props from PrintDocumentLayout (fonts live in SVG, not our JSON)
+- Alice scanner: exclude_dirs added for print/ in no-dark-mode check (553→520 violations)
 
-**Status: Code saved, hot reload available on dev server, production build NOT completed**
+### Documentation
+- wc3-report-system.dot/.svg/.pdf — full report system flowchart
+- wc3-token-system.dot/.svg/.pdf — token data flow
+- report-system-overview.md — comprehensive reference
+- token-system.md — focused on handing data to better tools
+- report-editor-types.md — updated (removed TinyMCE, added SVG)
 
-### 4. What Bill Wants for Gantt (from screenshots)
-- **Toolbar at ~80%** — natural size, NOT scaled by zoom
-- **Chart+list at 40%** — small, dense, shows full timeline
-- **Fill the whole window** — no empty white space at bottom
-- Current code does all three via the `chartZoom` prop approach
+## Three-Layer Architecture (Print)
 
-## What Needs to Happen Next Session
+| Layer | Owns | Changed by |
+|-------|------|-----------|
+| SVG | Fonts, positions, styling | Designer in their tool |
+| CSS | Page breaks, color-adjust | Us — standard offering |
+| JSON | Line counts, page numbers, toggles | User at runtime |
 
-### Immediate (before any new work)
-1. **Restart Mac** — machine is unstable post-crash
-2. **After restart:** `cd ~/Documents/CommerceExpert/webClerk3 && ./runserver.sh`
-3. **Production build:** `cd ~/Documents/CommerceExpert/React2025 && npm run build`
-4. **Deploy:** `cp -r dist/* ~/Documents/CommerceExpert/webClerk3/media/static/`
-5. **Test Gantt zoom** — hard refresh, try +/− buttons, verify toolbar stays normal size
-6. **Test App view font** — switch Font:10/12/14/18 on an Order in App view
+## Five Handoff Formats (Tokens)
 
-### If Django still hangs after restart
-Try: `venv/bin/python manage.py runserver --skip-checks --noreload`
-The migration autodetector was hanging — `--skip-checks` bypasses it.
+| Format | Destination |
+|--------|-------------|
+| Clipboard | Gmail, Word, Pages — paste anywhere |
+| CSV | Google Sheets, Excel — mail merge |
+| JSON | Scripts, Zapier, API clients |
+| Populated SVG | Printer, PDF viewer |
+| Template Path | Word/Pages via AppleScript/terminal |
 
-### Reports (deferred)
-Bill wanted to work on reports (touch and feel of printed reports). Didn't get to it. The print system has 12+ document types in `React2025/src/apps/transactions/components/print/`. Start by asking Bill what specifically needs to change.
+## Remaining Items from Session Start (Not Addressed)
 
-## Files Changed (not committed)
+1. **test_sequence_001.py** — Django shell script, not pytest. Rename or add conftest exclusion.
+2. **Browser visibility** — Playwright headless capture not verified as installed
+3. **SessionStart hook** — missing from ~/.claude/settings.json (script exists at ~/Allie/scripts/session-start.sh)
+4. **Query editor** — Bill mentioned wanting to work on this, deferred to next session
 
-### React2025 (4 files)
-- `src/pages/admin/DataBrowser.tsx` — font zoom on detail pane
-- `src/apps/utils/gantt/UnifiedGanttPage.tsx` — independent Gantt zoom
-- `src/apps/utils/gantt/UnifiedGantt.tsx` — chartZoom prop
-- `src/components/common/DualScrollbar.tsx` — style prop
+## Next Session
 
-### WC3 Database
-- Documents 1382-1390: `is_archived = true`
-- Document 1391: created (recovered tm-955 content)
-
-## Key Decisions
-- **Zoom not transform** for Gantt — CSS `zoom` on DualScrollbar, not `transform: scale()`, because zoom adjusts layout flow
-- **Separate controls** — Font selector for list/detail, independent +/− for Gantt
-- **Gantt default 50%** — Bill wants it small and dense by default
-- **baseFontSize / 20** for App view — maps Font:10 to 50% zoom
+- Query editor (Bill's stated priority)
+- Remaining Alice items (test runner, session hook, browser visibility)
+- Consider: wire TokenBuilder's Copy All (List) to actual DataBrowser CSV export with resolved tokens
