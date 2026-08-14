@@ -16,3 +16,4 @@ Data-Driven UI (datadrivenui.com) — the architectural shift from code-per-mode
 - Settings scope: user → role → org → system
 - Archive at React2025/src/archive/replaced-2026-08-03/ for research
 - Docs duplicated: ~/Allie/readmes/data-driven-ui.md AND webClerk3/readmes/topics/architecture/data-driven-ui.md — update both
+- **Bill's strong preference (2026-08-14):** as much JSON-driven and as little .tsx as practical. Kanban may be an exception (drag-and-drop interaction) — revisit once everything else is JSON-driven
