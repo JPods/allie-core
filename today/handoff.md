@@ -1,42 +1,82 @@
 # Handoff — 2026-08-13
 
-## Where We Left Off
+## What Happened
 
-Major infrastructure + architecture session. WC3 wouldn't start — root cause was 99% disk full (13GB free on 926GB) causing macOS I/O saturation from Apple services (fileproviderd, knowledgeconstructiond, mds_stores) all fighting over the filesystem at boot. Freed ~145GB by moving media/archives to Andi 5TB (`/mnt/allie-5tb/bill_large_bk/`, 95GB verified) and deleting Docker.raw (60GB, Docker not even installed). Built `DbColumns` as the single base list component — all lists inherit from this. Created consolidated `CommPanel` (one table replacing four separate EMAIL/PHONE/ADDRESS/DOMAIN sections). Seeded Rule of 4 demo cast (qq_1 through qq_5) and item hierarchy (qq_100/200/300 with BOM). Created full order→PO transaction flow with BOM Level 2 explosion. Fixed `Pending.changes` bug in `line_item_service.py`.
+System crashed mid-session. PostgreSQL had a stale PID file (PID 994 was Clock widget, not Postgres). Recovered database, but machine remained unstable — load avg 10+, zombie vite build processes, Django hanging on migration autodetector. Mac restart recommended before next session.
 
-## Do This First Next Session
+## What Was Accomplished
 
-1. **Create 4 is_staff qq_ contacts with 4 actions each** — actions linked to qq_SO-001 and qq_PO-001 via refs.links. Staff need data in their dashboards. Bill requested this before session ended.
-2. **Build dash-card component** — clicking an action row in dashboard shows linked transaction data in a card, clickable to open transaction in new window. Not yet built.
-3. **Convert remaining panels to DbColumns/--db-* theme** — MetadataPanel, FinancialsPanel, ProjectGanttPanel, ProjectKanbanPanel still use Tailwind `dark:` classes and hard-coded colors. Must use `--db-*` CSS variables exclusively.
-4. **Fix ThemeContext.tsx** — currently hard-coded to light-only (`toggleTheme` is a no-op). Must support actual dark/light toggle synced with `data-theme` attributes.
-5. **Mount Andi SMB share** — `smb://andi@192.168.1.114/allie-5tb` for persistent access to archived files. Bill agreed to Option A (SMB mount + symlinks). Not yet mounted — needs password entry in Finder.
+### 1. Crash Recovery & Team Memory Cleanup
+- Fixed PostgreSQL: removed stale PID, restarted, crash recovery ran automatically
+- **Archived 9 empty crash-orphan session documents** (IDs 1382-1390) in WC3 — all were leftshoe handshakes with no content, spanning 08-10 through 08-13
+- **Recovered tm-955** interrupted session content → created WC3 document **tm-1391** (Andi device manager, Celery fixes, scar #38, 8 commits from 08-07)
 
-## Open Problems
+### 2. App View Font Scaling (React2025)
+**File:** `src/pages/admin/DataBrowser.tsx`
+- Line ~1460: Added `--db-font-size` CSS variable on `.db-root`
+- Line ~1878: Added `zoom: baseFontSize / 20` on `.db-detail-pane` when in App mode
+- This scales the entire App detail view proportionally when the Font selector changes
+- Font:10 = 50%, Font:12 = 60%, Font:14 = 70%, Font:18 = 90%
+- **Status: Code saved, needs testing after build**
 
-- **Documents FK leaking** — DocumentsPanel shows all documents on every contact because docs connect via `refs.links.contacts` (JSON array) and the panel may not be filtering. Seeded 4 docs per qq_ contact to test visually.
-- **iCloud + Google Drive fight** — both watch overlapping files via `fileproviderd`, causing I/O storms at boot. Recommended domain separation (iCloud = working files, Google Drive = JPods history, Andi = cold archive). Not yet implemented.
-- **Allie API down** — `allie-api.py` not running. MCP works. API needs manual start.
-- **jpods.library_2026-07-29.zip** — transferred to Andi (11G verified), deleted locally. If needed, rsync back from `andi:/mnt/allie-5tb/bill_large_bk/`.
-- **PanelTable is now a thin re-export** of DbColumns. Existing imports work but should migrate to `DbColumns` directly over time.
+### 3. Gantt Independent Zoom (React2025)
+Separated Gantt scaling from the Font selector. Three files changed:
 
-## What Was Decided (and Why)
+**`src/apps/utils/gantt/UnifiedGanttPage.tsx`** — Complete rewrite:
+- Own +/− zoom control at top of page (not scaled by zoom)
+- Default scale: 50% (persisted in localStorage as `wc3_gantt_scale`)
+- Range: 30% to 150%, step 10%
+- Passes `chartZoom` prop to UnifiedGantt
+- Container fills `calc(100vh-2rem)`
 
-- **DbColumns is the single base list component** — all lists (DataBrowser grid, panels, comm lists) inherit from this. DbList extends by adding toolbar. Reason: three different styling systems (--db-* variables, Tailwind dark:, hard-coded hex) were causing theme inconsistency. One component, one CSS system.
-- **Consolidated CommPanel** — one flat table (TYPE | VALUE | NAME) instead of four separate sections. Reason: Bill wanted uniform db.list treatment. Address rows can be taller for multi-line. Card-style rendering left as future option via `renderRow` prop.
-- **Rule of 4 for demo/training data** — exactly 4 child records per parent per type. Two parents minimum. Reason: 1-2 records can pass by accident; 4 is verifiable at a glance without counting; more than 4 requires counting.
-- **qq_ ida prefix for demo cast** — easy to find, filter, and remember for trainees. qq_1xx = primary items, qq_2xx = BOM sub-assemblies, qq_3xx = BOM components.
-- **Documents linked via refs.links, not FK** — Bill confirmed this is the right pattern. Bidirectional: doc.refs.links.contacts and contact.refs.links.document.
-- **Andi 5TB is cold archive, not a mirror** — files moved there are deleted locally. SMB mount provides access when needed.
+**`src/apps/utils/gantt/UnifiedGantt.tsx`**:
+- Added `chartZoom` prop to `UnifiedGanttProps` interface
+- Destructured in component with default `chartZoom = 1`
+- Applied as CSS `zoom` on `DualScrollbar` (chart+list area only — toolbar excluded)
 
-## Files Changed This Session
+**`src/components/common/DualScrollbar.tsx`**:
+- Added `style` prop to interface and component
+- Passes `style` to outer wrapper div
 
-- `React2025/src/apps/common/components/panels/DbColumns.tsx` — NEW: single base list component with section headers, column config, theme-aware CSS
-- `React2025/src/apps/common/components/panels/PanelTable.tsx` — now re-exports DbColumns for backward compatibility
-- `React2025/src/apps/common/components/panels/index.ts` — added DbColumns exports
-- `React2025/src/apps/communications/components/CommPanel.tsx` — rewritten: consolidated table replacing four-section layout
-- `React2025/src/apps/communications/components/CommList.tsx` — updated to use --db-* CSS variables (may be superseded by CommPanel rewrite)
-- `React2025/src/apps/communications/components/CommCard.tsx` — updated to use --db-* CSS variables (may be superseded by CommPanel rewrite)
-- `React2025/src/pages/admin/DataBrowser.css` — added common list CSS classes (db-section-header, db-list-header, db-list-row, db-list-empty)
-- `webClerk3/apps/transactions/services/line_item_service.py` — fixed bug: `Pending.data` → `Pending.changes` (3 instances); restored `trace_pending_created(data=...)` call
-- `webClerk3/tools/seed_demo_cast.py` — NEW: idempotent seed script for Rule of 4 demo cast (qq_1–qq_5, companies, comms, docs)
+**Status: Code saved, hot reload available on dev server, production build NOT completed**
+
+### 4. What Bill Wants for Gantt (from screenshots)
+- **Toolbar at ~80%** — natural size, NOT scaled by zoom
+- **Chart+list at 40%** — small, dense, shows full timeline
+- **Fill the whole window** — no empty white space at bottom
+- Current code does all three via the `chartZoom` prop approach
+
+## What Needs to Happen Next Session
+
+### Immediate (before any new work)
+1. **Restart Mac** — machine is unstable post-crash
+2. **After restart:** `cd ~/Documents/CommerceExpert/webClerk3 && ./runserver.sh`
+3. **Production build:** `cd ~/Documents/CommerceExpert/React2025 && npm run build`
+4. **Deploy:** `cp -r dist/* ~/Documents/CommerceExpert/webClerk3/media/static/`
+5. **Test Gantt zoom** — hard refresh, try +/− buttons, verify toolbar stays normal size
+6. **Test App view font** — switch Font:10/12/14/18 on an Order in App view
+
+### If Django still hangs after restart
+Try: `venv/bin/python manage.py runserver --skip-checks --noreload`
+The migration autodetector was hanging — `--skip-checks` bypasses it.
+
+### Reports (deferred)
+Bill wanted to work on reports (touch and feel of printed reports). Didn't get to it. The print system has 12+ document types in `React2025/src/apps/transactions/components/print/`. Start by asking Bill what specifically needs to change.
+
+## Files Changed (not committed)
+
+### React2025 (4 files)
+- `src/pages/admin/DataBrowser.tsx` — font zoom on detail pane
+- `src/apps/utils/gantt/UnifiedGanttPage.tsx` — independent Gantt zoom
+- `src/apps/utils/gantt/UnifiedGantt.tsx` — chartZoom prop
+- `src/components/common/DualScrollbar.tsx` — style prop
+
+### WC3 Database
+- Documents 1382-1390: `is_archived = true`
+- Document 1391: created (recovered tm-955 content)
+
+## Key Decisions
+- **Zoom not transform** for Gantt — CSS `zoom` on DualScrollbar, not `transform: scale()`, because zoom adjusts layout flow
+- **Separate controls** — Font selector for list/detail, independent +/− for Gantt
+- **Gantt default 50%** — Bill wants it small and dense by default
+- **baseFontSize / 20** for App view — maps Font:10 to 50% zoom
