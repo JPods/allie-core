@@ -1,76 +1,58 @@
-# Handoff — 2026-08-13 (Evening Session)
+# Handoff — 2026-08-15
 
-## What Happened
+## Where We Left Off
 
-Major architecture session on the WC3 report and output system. Three fundamental rules established and implemented:
-
-1. **WC3 is not a print design tool** — SVG templates designed externally, we populate with data
-2. **WC3 is not an email/letter formatting tool** — users paste {{tokens}} into Gmail/Word/Pages
-3. **Be expert in handing data to better tools** — Scar #57
-
-TinyMCE killed before installation. Legacy print CSS deleted. Token system built.
+Major data architecture cleanup session. All JSON envelopes standardized across 24,477 records in 50 tables. Pydantic schemas, default factories, and runtime enforcement are now in sync. Setting and Report models gained `explanation` and `paths` columns — all records populated.
 
 ## What Was Built
 
-### SVG Form System
-- `SvgFormGenerator.ts` — generateFormSvg(), populateFormSvg(), downloadSvg()
-- PrintLayoutDesigner updated — Export/Import SVG buttons, line pagination (Pg1/Pg2+/Wrap), footer toggles (Page#/Domain), text format (plain/markdown)
-- printLayoutTypes.ts — lines_page_1, lines_following, max_description_lines, show_page_numbers, show_domain, text_format, svg_template, row_height, svg_panel_id
-- 5 SVG form Report records seeded (ids 442-446) — Invoice, Order, Proposal, Purchase, Payment — all staged (is_active=False, purpose=svg-form-staged)
+- `common/schemas/defaults.py` — `get_envelope_default()` function
+- `common/models.py` — factories synced (default_metadata, default_refs, default_prefs)
+- `common/schemas/envelopes.py` — MetadataBase gained userdefined + images; ConfigBase.images removed; ImportProvenance got lifecycle fields
+- `common/schemas/setting.py` — SettingRefs updated with all relationship fields
+- `common/schemas/touch.py`, `common/schemas/other_org.py` — new schema files
+- `common/schemas/transaction.py` — deleted (orphaned)
+- `apps/core/models/setting.py` — added explanation + paths columns (migration 0043)
+- `apps/core/models/report.py` — added explanation + paths columns (migration 0044)
+- `apps/ai_assistant/models_alice.py` — upgraded 3 models to BaseModel (migration 0013)
+- `apps/core/constants/model_registry.py` — fixed linkage, project paths; removed doc duplicate; commented out template, purchase_receipt
+- `apps/core/views/save_view.py` — fixed version conflict (update_fields now includes version + dt_modified); fixed userdefined not deleted when empty
+- `apps/core/services/image_library.py` — switched from config.images to metadata.images
+- `React2025/src/hooks/useDataBrowser.ts` — layout fallback to wc:model; resetLayout looks for "default" first
+- Action model curated: db.list (18 fields), db.detail (58 fields), "default" named view
 
-### Token System  
-- `TokenBuilder.tsx` — standalone {{token}} field picker. Click=clipboard, shift-click=build set, Copy All in Detail or List mode
-- Integrated into ReportsDialog as first row — no new UI real estate
-- `/tokens` and `/tokens/:model` routes for standalone access
-- `TokenBuilderPage.tsx` route wrapper
-- Documentation: token-system.md + wc3-token-system.dot/.svg/.pdf
+## Open Problems
 
-### Custom Pages
-- `src/custom/` directory — pages/, components/, index.ts registry, README.md
-- `CustomPageLoader.tsx` — /custom/:page route
-- Full WC3 component library available via @/ imports
-- Separate from src/apps/ — survives updates
+1. **React bundle not rebuilt** — DataBrowser layout fallback and resetLayout changes in useDataBrowser.ts need a build to take effect
+2. **Startup health check** — Design approved but not built. WC3 needs a startup validator for Setting records with Fix from Git / Fix from WC_HQ / Quit dialog
+3. **Other models need curated layouts** — Only action has a curated db.list/db.detail. Other 74 models still have seed/alice_guess layouts
+4. **project_association table missing** — Model registered but table never migrated
 
-### Print CSS Cleanup
-- Stripped print.css to structural defaults (--print-* variables, no design opinions)
-- Deleted legacy-invoice-print.css (dead Vue-era file)
-- Removed font props from PrintDocumentLayout (fonts live in SVG, not our JSON)
-- Alice scanner: exclude_dirs added for print/ in no-dark-mode check (553→520 violations)
+## Do This First Next Session
 
-### Documentation
-- wc3-report-system.dot/.svg/.pdf — full report system flowchart
-- wc3-token-system.dot/.svg/.pdf — token data flow
-- report-system-overview.md — comprehensive reference
-- token-system.md — focused on handing data to better tools
-- report-editor-types.md — updated (removed TinyMCE, added SVG)
+1. Build and deploy the React bundle so DataBrowser layout changes take effect
+2. Start the startup health check function — validate Setting records, bootstrap dialog
+3. Curate db.list layouts for the real-data models: contact, order, invoice, item, payment, purchase, proposal
 
-## Three-Layer Architecture (Print)
+## Scars Paid
 
-| Layer | Owns | Changed by |
-|-------|------|-----------|
-| SVG | Fonts, positions, styling | Designer in their tool |
-| CSS | Page breaks, color-adjust | Us — standard offering |
-| JSON | Line counts, page numbers, toggles | User at runtime |
+- Scar #58/#59 — Layouts are data (fields, order, widths), never behavior. Isolate layouts, combine into views. Do not mix defining UI elements with combining them.
 
-## Five Handoff Formats (Tokens)
+## Files Changed (WC3)
 
-| Format | Destination |
-|--------|-------------|
-| Clipboard | Gmail, Word, Pages — paste anywhere |
-| CSV | Google Sheets, Excel — mail merge |
-| JSON | Scripts, Zapier, API clients |
-| Populated SVG | Printer, PDF viewer |
-| Template Path | Word/Pages via AppleScript/terminal |
-
-## Remaining Items from Session Start (Not Addressed)
-
-1. **test_sequence_001.py** — Django shell script, not pytest. Rename or add conftest exclusion.
-2. **Browser visibility** — Playwright headless capture not verified as installed
-3. **SessionStart hook** — missing from ~/.claude/settings.json (script exists at ~/Allie/scripts/session-start.sh)
-4. **Query editor** — Bill mentioned wanting to work on this, deferred to next session
-
-## Next Session
-
-- Query editor (Bill's stated priority)
-- Remaining Alice items (test runner, session hook, browser visibility)
-- Consider: wire TokenBuilder's Copy All (List) to actual DataBrowser CSV export with resolved tokens
+```
+common/models.py
+common/schemas/defaults.py (new)
+common/schemas/envelopes.py
+common/schemas/setting.py
+common/schemas/touch.py (new)
+common/schemas/other_org.py (new)
+common/schemas/transaction.py (deleted)
+apps/core/models/setting.py
+apps/core/models/report.py
+apps/core/constants/model_registry.py
+apps/core/views/save_view.py
+apps/core/services/image_library.py
+apps/ai_assistant/models_alice.py
+React2025/src/hooks/useDataBrowser.ts
+```
