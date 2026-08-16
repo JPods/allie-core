@@ -1,5 +1,6 @@
 # Memory Index
 
+- [Router.tsx is the real route registration](feedback_router_tsx_routes.md) — Add to Router.tsx (BrowserRouter) AND protectedRoutesConfig.tsx (WindowManager)
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
 - [Print is JSON-driven, not design](feedback_print_json_driven.md) — SVG template workflow; not a print design tool; keep print CSS minimal
 - [Not an email/letter tool](feedback_not_email_tool.md) — Users have Gmail/Word/Pages; WC3 provides {{tokens}} and data export; kill TinyMCE
