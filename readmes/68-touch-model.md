@@ -183,6 +183,30 @@ Touch is both a data point and a communications port. It sits at the intersectio
 - The Pydantic schema ensures validation — new contacts get defaults automatically via `TouchConfig` default factory
 - TouchBar resolves contact phone/email via async `getRecord('contact', contactId)` for models that don't carry phone/email directly (e.g. action)
 
+## Fields Added (2026-08-16/17/18)
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `outcome` | CharField | connected / voicemail / no_answer / bounced / rescheduled |
+| `impact` | PositiveSmallIntegerField 1-5 | Rep judgment of touch importance |
+| `plan` | PositiveSmallIntegerField | Follow-up in N days — 0 = none |
+| `dt_next` | BigIntegerField (indexed) | Auto-computed: dt_created + (plan × 86400000). Query: WHERE dt_next > 0 AND dt_next <= now() |
+| `linkage_id` | BigIntegerField (indexed) | Ties touch to transaction graph (proposal→order→invoice) |
+| `purpose` | CharField (from CoreModel) | Per-model selectlist from wc-model-touch Setting |
+
+## UI Components (2026-08-17/18)
+
+| Component | File | What |
+|-----------|------|------|
+| **TouchForm** | `React2025/src/pages/admin/TouchForm.tsx` | Unified dialog + inline modes. Channel tabs, direction, from/to ContactPickers with search, subject, summary, outcome, impact, plan, purpose. Save/Cancel at top. |
+| **TouchBadge** | `React2025/src/pages/admin/TouchBadge.tsx` | `📞 N · Xd` — count + days until follow-up. Overdue=red, due soon=amber. Badge IS the interface. |
+| **TouchBar** | `React2025/src/pages/admin/TouchBar.tsx` | Badge only — click opens TouchForm dialog. No Call/Email/Text buttons in the bar. |
+| **ContactPicker** | Inside TouchForm.tsx | Type-ahead search, copy badges on phone/email, "missing" shown, ✎ edit opens contact window, ↻ refresh. Labels (From/To) are clickable buttons. |
+
+## Agenda VIEW (2026-08-18)
+
+Touch records appear in the `agenda` PostgreSQL VIEW alongside actions. DataBrowser at `/databrowser?model=agenda` shows both. See `readmes/topics/architecture/database-views.md`.
+
 ## Files Changed (2026-08-12)
 
 | File | What |
