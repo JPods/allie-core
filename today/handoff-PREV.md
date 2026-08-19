@@ -1,74 +1,85 @@
-# Handoff — 2026-08-12
+# Handoff — 2026-08-16
 
 ## Where We Left Off
 
-Major UI consolidation session. Auth fix, data-driven dashboards, formatter consolidation, dead code cleanup.
+Built the Form Parade — a complete print form review tool at `/form-parade`. All 14 commerce forms rendering with sample data, company logo, feedback system, and print preview. Also fixed the rightshoe timeout hang (code deployed but MCP server needs restart to take effect).
 
-### Completed
-- **Auth redirect fix** — dead loop when token expired (`"/"` → `"/login"`)
-- **Token expiration warning** — amber banner in MacTopBar when session within 3 days
-- **dd-card Setting** — one record (id=649), 20 cards, 8 dashboards. `seed_dd_cards.py`
-- **DDCardDashboard** — generic dashboard component, replaced 6 custom dashboards
-- **7 dead dashboard files deleted** — -1,872 lines
-- **`formatField(value, type)`** — master dispatcher for all display formatting
-- **`formatDt(value, mode, field)`** — canonical date formatter, all high-traffic components migrated
-- **DropDown.tsx deleted** — migrated 2 usages to Select
-- **dateUtils.ts deleted** — superseded by fieldFormatters.ts
-- **PhoneInput deleted** — unused form component
-- **CollectionsQueue.tsx deleted** — orphaned by AccountingDashboard removal
-- **UI scrub** — debug logs, stale routes, dead imports cleaned
+## What Was Built
 
-### Architecture Established
-- **One behavior, one record** — dd_card:base Setting, not 60 per-model copies
-- **Pattern of behavior, not schema** — group by what it does, not what model it serves
-- **Master funnel pattern** — `formatField()` is the single entry point; individual formatters are internal
-- **CSS rule** — `.db-*` variables for theme, Tailwind for layout, inline only when CSS can't do it
-- **Date rule** — local display, UTC storage, `formatDt()` everywhere
+### Form Parade (`/form-parade`)
+
+**React page** (`React2025/src/pages/tools/FormParade.tsx`):
+- Left panel: 14 reports grouped by business flow (Selling, Getting Paid, Buying, Catalog & Contacts)
+- Top toolbar: report name, Keep/Modify/Don't Need feedback buttons, notes field, Print Preview, New Tab
+- Right panel: iframe preview rendering form HTML with sample data
+- Route at `/form-parade`, registered in Routes.ts + protectedRoutesConfig.tsx
+
+**Django backend:**
+- `GET /wcapi/parade-manifest/` — returns grouped report list with sample data status
+- `GET /wcapi/parade-preview/?report_id=N` — renders form as standalone HTML with sample data
+- `POST /wcapi/parade-feedback/` — saves Keep/Modify/Don't Need + notes to Report record
+- Added `data_table` renderer (with group_by, subtotals, grand totals) and `detail_fields` renderer
+- Company logo pulled from `Company Profile` Setting → `config.logos.primary`
+- Date formatting fix: epoch→YYYY-MM-DD in address_blocks sections
+- Filesystem fallback for sample data (Report.config.sample_data → sample_data/*.json)
+
+**New sample data files** (`apps/core/sample_data/`):
+- `requisition.json` — maintenance department supplies, 8 lines, $2,847.60
+- `workorder.json` — HVAC compressor replacement, labor + materials, $4,925.00
+- `aging.json` — AR aging, 10 customers across 3 reps
+
+**Infrastructure:**
+- `/media` proxy added to `React2025/vite.config.ts` for dev
+- Media serving added to `webClerk3/webclerk3_api/urls.py` (Django dev mode)
+- Table header color: JPods blue `#3355FF`
+
+### Rightshoe Timeout Fix (`scripts/leftshoe-mcp.py`)
+- 30s thread wrapper around entire rightshoe handler
+- psycopg2 `connect_timeout=10`, `statement_timeout=15000`
+- Returns graceful timeout message if WC3 post hangs
+- **NOT YET ACTIVE** — leftshoe MCP server runs the old code until Claude Code restarts
+
+**Readme:** `webClerk3/readmes/topics/print/form-parade.md`
+**Video:** https://vimeo.com/1218709661
+
+## Open Problems
+
+1. **Rightshoe timeout fix not active** — needs leftshoe MCP server restart (next Claude Code session will pick it up)
+2. **Thank You Letter** — shows raw JSON dump (no `config.form` layout defined on the Report record)
+3. **Print Preview cross-origin** — iframe `contentWindow.print()` works in dev (same origin via proxy), needs testing in production
+4. **Aging report fallback** — model is "customer" but sample file is `aging.json`; special-case code in preview view
 
 ## Do This First Next Session
 
-1. **BehaviorField → field widget delegation** — The one remaining big item. BehaviorField (495 lines, 76 inline styles) reimplements all 18 field types that already exist as widget components. Should dispatch to WIDGET_REGISTRY instead. Plan at `readmes/68-ui-widget-consolidation.md`.
-2. **Prior carryover** — alice.md readme update, `on_reciept` typo fix, alice_notes `data` vs `config` bug
-3. **dd-card polish** — live with the data, then decide which metrics matter before adding visual hierarchy
+1. Verify rightshoe timeout fix works (should be automatic — new MCP server process loads the updated code)
+2. If continuing form work: add form layout for Thank You Letter report
+3. Bill's choice on what to work on next
 
-## Open Problems
-- BehaviorField has 76 inline styles — works but doesn't follow CSS standard
-- CommerceDashboard (656 lines, 5 tabs) is the last complex hardcoded dashboard
-- alice_notes service bug: `Setting() got unexpected keyword arguments: 'data'` (uses `config` not `data`)
-- `on_reciept` typo in Item model (line 168)
+## Files Changed
 
-## Files Changed This Session
+### WC3
+```
+apps/core/views/parade_preview_view.py
+apps/core/services/parade_of_reports.py
+apps/core/urls.py
+apps/core/sample_data/requisition.json (new)
+apps/core/sample_data/workorder.json (new)
+apps/core/sample_data/aging.json (new)
+apps/core/sample_data/_index.json
+webclerk3_api/urls.py
+static/images/logo/webclerk.png (new — copy of React logo)
+readmes/topics/print/form-parade.md (new)
+```
 
-### WC3 Backend
-- `apps/core/views/cookie_token_refresh.py` — refresh_expires in response
-- `apps/core/management/commands/seed_dd_cards.py` — new
+### React2025
+```
+src/pages/tools/FormParade.tsx (new)
+src/routes/Routes.ts
+src/routes/protectedRoutesConfig.tsx
+vite.config.ts
+```
 
-### React2025 Frontend — Created
-- `src/components/common/DDCard.tsx`
-- `src/pages/Dashboard/DDCardDashboard.tsx`
-
-### React2025 Frontend — Modified
-- `src/utils/fieldFormatters.ts` — formatField(), formatDt(), parseDtInput()
-- `src/routes/PrivateRoute.tsx`, `Router.tsx`, `Routes.ts`, `protectedRoutesConfig.tsx`
-- `src/store/slices/authSlice.ts`, `src/api/axios.ts`
-- `src/layout/MacTopBar.tsx`, `src/layout/AppSidebar.tsx`
-- `src/components/header/UserDropdown.tsx`
-- `src/hooks/useDataBrowser.ts`, `src/hooks/useGoBack.ts`
-- `src/pages/admin/DataBrowser.tsx`
-- `src/components/common/DataGrid.tsx`, `BehaviorField.tsx`
-- `src/components/fields/TimestampField.tsx`, `ReadonlyField.tsx`
-- `src/components/wrapper.ts`, `src/pages/wrapperPage.ts`
-- `src/apps/transactions/components/SummaryCard.tsx`
-
-### React2025 Frontend — Deleted (2,385 lines removed)
-- `src/pages/Dashboard/Home.tsx` (556)
-- `src/pages/admin/AccountingDashboard.tsx` (225)
-- `src/pages/admin/OperationsDashboard.tsx` (367)
-- `src/apps/products/pages/ProductsDashboard.tsx` (170)
-- `src/apps/orgs/pages/OrgsDashboard.tsx` (218)
-- `src/apps/transactions/pages/TransactionsDashboard.tsx` (226)
-- `src/apps/support/pages/SupportDashboard.tsx` (110)
-- `src/components/form/group-input/PhoneInput.tsx` (141)
-- `src/components/form/input/DropDown.tsx` (100)
-- `src/components/collections/CollectionsQueue.tsx` (143)
-- `src/utils/dateUtils.ts` (129)
+### Allie
+```
+scripts/leftshoe-mcp.py (rightshoe timeout fix)
+```
