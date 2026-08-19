@@ -51,7 +51,7 @@ Not priority 1 after the MVP. Priority 1 always. Every feature we build without 
 
 This applies to:
 - New WC3 users (setup, first order, first invoice)
-- New developers (ui.json, six rendering contexts, field_behaviors)
+- New developers (form/detail/custom paths, field_behaviors, widget registry)
 - New Claude sessions (leftshoe handshake IS onboarding)
 - New team members (readmes/wisdom/ IS the packed trail)
 

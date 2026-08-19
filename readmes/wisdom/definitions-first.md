@@ -28,7 +28,7 @@ Before breaking ground on any new concept, write:
 
 ## Examples
 
-Good: "ui.json, ui.tsx, db.json — three rendering paths, every model assigned to one."
+Good: "form, detail, custom — three rendering paths, every model assigned to one."
 Bad: "We'll figure out the layout approach as we go."
 
 Good: "Setting holds system defaults. Report holds user outputs. Different models, different purposes."
