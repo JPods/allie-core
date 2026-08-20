@@ -386,6 +386,22 @@ transactions-totals.md` § "quantity.active is the verb of the document".
 
 ## [Scars not yet paid — watching]
 
+## CoreModel.data → CoreModel.config rename — 2026-08-19
+**Cost:** Silent data loss across all conversion services. Pending records created with `data=payload` went nowhere — the field doesn't exist. `changes` and `config` are the real fields. Months of conversion pending records may have empty changes/config. Double-counted inventory buckets in flight simulator exposed this.
+**What was hard to see:** Django silently accepts unknown kwargs in `Model.objects.create()` if a parent model once had a `data` field. The rename happened months ago but callers in proposal_to_order.py and order_to_invoice.py were never updated. No test caught it because the pending records were created (just with empty data), and the old code never ran through the flight simulator's full lifecycle.
+**The rule it produced:** When renaming a model field, grep every caller — not just the model file. `data` → `config` on CoreModel means every `Pending.objects.create(data=...)` must become `changes=...`. Every field rename is a repo-wide search.
+**Where the rule lives:** readmes/80-line-save-boundary.md, this scar
+
+## Each Transaction Model Owns One Bucket — 2026-08-19
+**Cost:** on_so double-counted (30 instead of 15) during proposal→order conversion. Conversion pending added +15 on_so AND -15 on_p, but the order line save also added +15 on_so. Flight simulator exposed the double-count immediately.
+**What was hard to see:** Two independent code paths (conversion.py and save_view.py line creation) both thought they were responsible for the target bucket. Neither knew about the other.
+**The rule it produced:** Each transaction model's pending only adjusts its own bucket. Conversion releases the source bucket. The target line save handles the target bucket. No cross-bucket adjustments in conversion pending.
+**Where the rule lives:** readmes/80-line-save-boundary.md, conversion.py comment block
+
+---
+
+## Open Risks
+
 | Risk | Date accepted | What it will cost if unpaid | Owner |
 |------|--------------|----------------------------|-------|
 | 4.6m clearance without sensors | 2026-05-13 | Pod struck by overheight vehicle | Bill James |
