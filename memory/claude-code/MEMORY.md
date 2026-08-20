@@ -5,6 +5,7 @@
 - [Print is JSON-driven, not design](feedback_print_json_driven.md) — SVG template workflow; not a print design tool; keep print CSS minimal
 - [Not an email/letter tool](feedback_not_email_tool.md) — Users have Gmail/Word/Pages; WC3 provides {{tokens}} and data export; kill TinyMCE
 - [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
+- [Admin tools as Report records](project_admin_tools_as_reports.md) — Utilities are Reports (category=admin_tool); dispatch to management commands; no custom admin pages
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
@@ -147,6 +148,7 @@
 - [WC3 reporting — campaigns + margin velocity](feedback_wc3_reporting_focus.md) — Track campaign ROI (source → order → cost to acquire); inventory by margin velocity (margin × turns ÷ carry cost) not just counts
 - [WC3 UI architecture](project_wc3_ui_architecture.md) — Multiple React templates for business types; theme library via sync; contact↔org many-to-many; communications FK is truth, aspects are cache
 - [field_access Setting pattern](reference_field_access_settings.md) — One Setting per model for RBAC; query_scope restricts external users to their data; syncable policy; seeded for 61 models
+- [Layout architecture consolidated](project_layout_consolidation.md) — One wc:model Setting per model; list+detail+form in config.layout; labels=field names; .leaf for dot-paths
 - [All CRUD through wcapi](feedback_all_crud_thru_wcapi.md) — No direct model access; every operation flows through wcapi which enforces RBAC, query scoping, field filtering, audit
 - [Daily start/close practice](feedback_daily_practice.md) — Start: check for existing functions before writing new. Close: audit overlap, consolidate, create test actions in weekly project
 - [WC2→WC3 gap analysis](project_wc2_gap_analysis.md) — 15 missing flows from wc2 flow charts; GAP-01 through GAP-15 in Alice queue; time capture via external API
