@@ -6,6 +6,7 @@
 - [Not an email/letter tool](feedback_not_email_tool.md) — Users have Gmail/Word/Pages; WC3 provides {{tokens}} and data export; kill TinyMCE
 - [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
 - [Admin tools as Report records](project_admin_tools_as_reports.md) — Utilities are Reports (category=admin_tool); dispatch to management commands; no custom admin pages
+- [Pydantic owns field behaviors](feedback_pydantic_field_behaviors.md) — Labels/formatting/widgets in schema code, not DB; Settings=layouts only; code revision not DB mutation
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
