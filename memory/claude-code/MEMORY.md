@@ -237,3 +237,4 @@
 - [databrowser is always lowercase](feedback_databrowser_lowercase.md) — Never "DataBrowser" in UI/docs/conversation; users ignore case if we do
 - [Context compression warning](feedback_compression_warning.md) — Tell Bill bluntly when compression starts; no softening; he decides to save or continue
 - [WC3 tax + commission status](project_wc3_tax_commission.md) — Built-in tax+commission complete; external services deferred; Action TAX-COMM-PHASE5 due 2026-09-16
+- [Advance Chimney conversion](project_advchm_conversion.md) — advchm.webclerk.com; testing week; cutover 2026-08-28; audit baselines in readmes/71-advchm-conversion.md
