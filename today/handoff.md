@@ -1,49 +1,42 @@
-# Handoff — 2026-08-20 morning session
+# Handoff — 2026-08-20 evening session
 
-## Where We Left Off
+## What was done
 
-Payment model fully wired with four fields (amount, available, tendered, change) matching WC2. Ledger integration updated to use `available` not `amount`. Onboarding checklist and Phase 1 flight sims built. Bill added company-profile and admin-tools sim entries to the frontend — backend scenarios still needed.
+### 1. Layout pass — 78 models
+- Created `~/Allie/wc3-field-layout.txt` with all 78 WC3 model layouts
+- Established 4-tier detail pattern: VISIBLE → IMPORTANT JSON → DATES → COLLAPSED
+- Bill reviewed and corrected Contact, Customer, Invoice, Item, Payment
+- All transactions (headers + lines), orgs, and product models converted
+- Product model lists updated with model-specific columns (not generic placeholders)
 
-## What Was Done This Session
-- Payment model: added `available`, `tendered`, `change` fields, migrations applied
-- Wired `available` into all behaviors (serializer, apply, unapply, validation, ledger, org financial)
-- Ledger now uses `available` not `amount` — matches WC2 `Ledger_PaySave`
-- `update_org_balances()` computes `available_payments` — matches WC2 `Ledger_TallyBal`
-- Payment Lifecycle flight sim (8 steps) + flowchart (.dot + .svg) + readme
-- Onboarding checklist readme (5 phases, 15 exercises)
-- Three Phase 1 flight sims: Your First Customer, Your First Item, Your First Sale
-- Bill added company-profile sim and admin-tools sim entries
+### 2. dt_journaled consolidation
+- Added `dt_journaled` (BigInt, default=0, 0=editable, non-zero=locked) to:
+  - TransactionBaseModel (Invoice, Order, Proposal, Purchase, Work Order, Requisition)
+  - Receipt, GL Journal, Ledger
+- Replaced: `date_posted` + `is_posted` (GL Journal), `dt_posted` (Ledger)
+- Renamed: `dt_settled` → `dt_applied` (Ledger)
+- Dropped: `is_settled` (Ledger) — `dt_applied IS NOT NULL` replaces it
+- Updated 16 files: journalize.py, status_guard.py, pending_summary.py, ledger_balance.py, terms_ledger.py, admin.py, seed commands, tests, envelopes.py
+- 3 migrations applied: accounts.0021, accounts.0022, transactions.0036
 
-## TODO — When We Get Back
+### 3. Save bug fix + superuser gate
+- `useDataBrowser.ts` `persistSetting` now writes to BOTH `config.db.*` AND `config.layout.*`
+- Only superuser can write to `config.layout.detail.default` / `config.layout.list.default`
+- Non-superuser blocked from saving as "default" with alert message
+- **React build needed** for this to take effect
 
-### Must Test
-- [ ] Payment system end-to-end: create payment, apply to invoice, check available decrements, check ledger, journal
-- [ ] Phase 1 flight sims in browser: do all 3 load, can user create records, does quantity panel update
-- [ ] Payment Lifecycle flight sim in browser
+### 4. TFTS
+- "Chewable pieces" — break overwhelming config tasks into batches of 5 for human review
 
-### Must Build
-- [ ] Company Profile flight sim — backend scenario (Bill added frontend entry, needs `get_company_profile_scenario()`)
-- [ ] Admin Tools flight sim — backend scenario (Bill added frontend entry, needs scenario)
-- [ ] Data migration: set `available = amount` for existing Payment records created before field existed
+## Decisions made
+- **One-path layout storage**: all shared layouts at `config.layout.detail.{name}`, personal at `contact.prefs.db_layouts.{model}.{name}`, kill `config.db.views[]`. Reason: easier to teach.
+- **dt_journaled pattern**: timestamps ARE flags, no redundant booleans
+- **detail.default + detail.cluster**: two named views (alphabetical vs domain-grouped) — user picks
 
-### Should Review
-- [ ] WC2 models not yet in WC3: Carrier, Marketing, Territory, Quota, Template, LoadTag
-- [ ] Athena fault: `/var/www/webclerk-static/sort/index.html` MISSING on Andi (recurring)
-- [ ] SessionGuard fault: `useDataBrowser.ts` contains JSX — rename to `.tsx`
-
-## Key Files Touched
-- `apps/transactions/models/payment.py` — 3 new fields + save() logic
-- `apps/transactions/serializers/payment_serializers.py` — fields + read_only
-- `apps/transactions/services/payment_pending.py` — _apply_one() decrements available
-- `apps/transactions/services/payment_application.py` — unapply increments available
-- `apps/transactions/models/payment_application.py` — clean() validates against available
-- `apps/accounts/services/ledger_balance.py` — on_payment_save uses available, update_org_balances computes available_payments
-- `apps/accounts/services/terms_ledger.py` — record_payment splits value_original vs value_available
-- `apps/products/services/onboarding_flight_sim.py` — NEW: 3 Phase 1 scenarios
-- `apps/products/services/inventory_flight_sim.py` — added get_payment_flight_scenario()
-- `apps/core/views/manage_view.py` — 4 new manage actions
-- `React2025/src/pages/admin/FlightSimConsole.tsx` — 3 new sims, itemIda-optional flow
-- `React2025/src/components/cards/FlightSimCard.tsx` — 3 new card entries
-- `readmes/topics/transactions/payment-lifecycle.md` — NEW
-- `readmes/topics/transactions/onboarding-checklist.md` — NEW
-- `readmes/flowcharts/wc3-payment-lifecycle.dot` + `.svg` — NEW
+## Open / next session
+1. **React build** — useDataBrowser.ts changes need `npm run build`
+2. **One-path refactor** — migrate config.db.views to config.layout.detail.{name}, personal layouts to contact.prefs
+3. **Payment schema** — add related_parent JSON, company/attention fields, drop payment_term/invoice/purchase FKs
+4. **Item form rework** — Bill wants changes to the form sections
+5. **Remaining layout review** — accounting family, communications, docs, system models need Bill's corrections
+6. **dt_journaled on forms** — add to Invoice/Payment/Purchase form layouts so users see it
