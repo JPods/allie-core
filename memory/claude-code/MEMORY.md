@@ -240,3 +240,4 @@
 - [Advance Chimney conversion](project_advchm_conversion.md) — advchm.webclerk.com; testing week; cutover 2026-08-28; audit baselines in readmes/71-advchm-conversion.md
 - [Cards vs Panels distinction](feedback_cards_vs_panels.md) — Cards=single record fields; Panels=lists of records; cards can contain panels, panels use cards as row renderers
 - [No blocking validation](feedback_no_blocking_validation.md) — Never block workflow for missing fields; Alice observes and advises; users provide discipline, not software
+- [Keep numbers together](feedback_numbers_together.md) — All numeric fields + summary grouped; text fields above/below; never split the number block
