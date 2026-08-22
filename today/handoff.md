@@ -1,42 +1,48 @@
-# Handoff — 2026-08-20 evening session
+# Handoff — 2026-08-22
 
-## What was done
+## Where We Left Off
 
-### 1. Layout pass — 78 models
-- Created `~/Allie/wc3-field-layout.txt` with all 78 WC3 model layouts
-- Established 4-tier detail pattern: VISIBLE → IMPORTANT JSON → DATES → COLLAPSED
-- Bill reviewed and corrected Contact, Customer, Invoice, Item, Payment
-- All transactions (headers + lines), orgs, and product models converted
-- Product model lists updated with model-specific columns (not generic placeholders)
+Payment lifecycle session complete. Flight simulator built, AddPaymentModal redesigned, Payment model has parent_id/parent_model, total/balance sync bug fixed across all 5 transaction models (Bill refactored into TransactionBaseModel), PendingPaymentApplication removed from registry, commercial trust principle established and documented.
 
-### 2. dt_journaled consolidation
-- Added `dt_journaled` (BigInt, default=0, 0=editable, non-zero=locked) to:
-  - TransactionBaseModel (Invoice, Order, Proposal, Purchase, Work Order, Requisition)
-  - Receipt, GL Journal, Ledger
-- Replaced: `date_posted` + `is_posted` (GL Journal), `dt_posted` (Ledger)
-- Renamed: `dt_settled` → `dt_applied` (Ledger)
-- Dropped: `is_settled` (Ledger) — `dt_applied IS NOT NULL` replaces it
-- Updated 16 files: journalize.py, status_guard.py, pending_summary.py, ledger_balance.py, terms_ledger.py, admin.py, seed commands, tests, envelopes.py
-- 3 migrations applied: accounts.0021, accounts.0022, transactions.0036
+Bill asked: "Should we review the entire application to assure alignment between the model, the JSONs, services, etc?" — deferred to next session (compression risk).
 
-### 3. Save bug fix + superuser gate
-- `useDataBrowser.ts` `persistSetting` now writes to BOTH `config.db.*` AND `config.layout.*`
-- Only superuser can write to `config.layout.detail.default` / `config.layout.list.default`
-- Non-superuser blocked from saving as "default" with alert message
-- **React build needed** for this to take effect
+## Do This First Next Session
 
-### 4. TFTS
-- "Chewable pieces" — break overwhelming config tasks into batches of 5 for human review
+### 1. Full Model/JSON/Service Alignment Review
+Systematic audit triggered by the total/balance sync bug:
+- Every transaction model: JSON envelope fields match what services read/write
+- Every denormalized scalar (total, balance) synced by compute engine
+- Every service reads from JSON (source of truth), not scalars
+- Bill already did json.path.value compliance scrub (Scars #62-64, 12 fixes) — verify nothing was missed
+- Check per-model totals files (`invoice_totals.py`, `order_totals.py`, etc.) — Bill noted they're archive candidates
 
-## Decisions made
-- **One-path layout storage**: all shared layouts at `config.layout.detail.{name}`, personal at `contact.prefs.db_layouts.{model}.{name}`, kill `config.db.views[]`. Reason: easier to teach.
-- **dt_journaled pattern**: timestamps ARE flags, no redundant booleans
-- **detail.default + detail.cluster**: two named views (alphabetical vs domain-grouped) — user picks
+### 2. Invoice line extended not recalculating on qty change
+Bill changed qty 6→5 in DataBrowser UI. Footer showed $349.95 (client-side correct) but saved line kept `price.extended=419.94`. Backend `transaction_save` service verifies but doesn't correct. Must recalculate `extended = qty × unit_price` on save.
 
-## Open / next session
-1. **React build** — useDataBrowser.ts changes need `npm run build`
-2. **One-path refactor** — migrate config.db.views to config.layout.detail.{name}, personal layouts to contact.prefs
-3. **Payment schema** — add related_parent JSON, company/attention fields, drop payment_term/invoice/purchase FKs
-4. **Item form rework** — Bill wants changes to the form sections
-5. **Remaining layout review** — accounting family, communications, docs, system models need Bill's corrections
-6. **dt_journaled on forms** — add to Invoice/Payment/Purchase form layouts so users see it
+### 3. Chrome DevTools MCP
+Added to `.mcp.json` but Chrome needs restart with `--remote-debugging-port=9222`. Bill wanted to watch payment→GL flow in browser.
+
+### 4. Carried from 8/21
+- Wrong columns in databrowser list (inventory fields on wrong model)
+- Touch Setting format mismatch (`form.default.sections` vs `detail.default`)
+
+### 5. Migration graph conflicts
+`makemigrations --merge` fails. Payment `parent_id`/`parent_model` added via SQL, not migration.
+
+## Open Problems
+
+- `PendingPaymentApplication` table still exists — drop after migration cleanup
+- `update_order_received` signal still scans by refs instead of `parent_model`/`parent_id`
+- Flight simulator line grid spacing needs tightening
+- Unused per-model totals files: `invoice_totals.py`, `order_totals.py`, `proposal_totals.py`, `purchase_totals.py`, `po_totals.py`, `wo_totals.py`
+
+## Key Decisions Made
+
+| Decision | Why |
+|----------|-----|
+| `Payment.parent_id/parent_model` = origin, not constraint | Payment entered on order is available to any customer document |
+| `available != 0` not `> 0` | Commercial: negative = customer shortage carried forward |
+| Dismiss = separate write-off payment | Different GL account from discount; discount = invoice line item |
+| Conversion forwards payments, doesn't auto-apply | User exercises judgment — trust-based flexibility |
+| JSON envelope is single source of truth | Scalars are indexes; one compute engine syncs both |
+| PendingPaymentApplication removed | Dead model; all applications use core.Pending with purpose='payment_application' |
