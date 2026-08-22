@@ -8,6 +8,9 @@
 - [Admin tools as Report records](project_admin_tools_as_reports.md) — Utilities are Reports (category=admin_tool); dispatch to management commands; no custom admin pages
 - [Pydantic owns field behaviors](feedback_pydantic_field_behaviors.md) — Labels/formatting/widgets in schema code, not DB; Settings=layouts only; code revision not DB mutation
 - [JSON envelope is only source of truth](feedback_json_source_of_truth.md) — All models: JSON authoritative, scalars=indexes, display=projection; one compute engine; scars #62-63
+- [No scalar fallbacks — fail visibly](feedback_json_fail_not_fallback.md) — Missing JSON = error/blank, never silent scalar fallback; json.thinking principle
+- [JsonSchemaTree reference tool](reference_json_schema_tree.md) — Shift-click model in DataBrowser; /json-schema printable; all models with CoreModel+BaseModel fields
+- [backfill_totals command](reference_backfill_totals.md) — Recompute totals JSON; --dry-run --model --all; run after totals engine changes
 
 - [Flight simulators for training](feedback_flight_simulators.md) — Interactive step-by-step training windows; user does real actions, watches data change; Bill's term
 - [Impact auto-populate loop](project_impact_loop.md) — Alice auto-fills impact.actual on Actions; users correct; Alice learns; saves admin time
@@ -242,3 +245,6 @@
 - [Cards vs Panels distinction](feedback_cards_vs_panels.md) — Cards=single record fields; Panels=lists of records; cards can contain panels, panels use cards as row renderers
 - [No blocking validation](feedback_no_blocking_validation.md) — Never block workflow for missing fields; Alice observes and advises; users provide discipline, not software
 - [Keep numbers together](feedback_numbers_together.md) — All numeric fields + summary grouped; text fields above/below; never split the number block
+- [Flight sim 3-section audit tool](project_flight_sim_3sections.md) — Counts/Money/GL sections; audit mode by invoice #; resizable drag handles
+- [Report is universal action model](feedback_report_universal_action.md) — Not just print; config.action dispatches manage actions; all categories
+- [Payment has no dt_journaled](reference_journalize_payment_fields.md) — Use is_locked + dt_processed (DateTimeField); not dt_journaled (Invoice-only)

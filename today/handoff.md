@@ -1,48 +1,48 @@
-# Handoff — 2026-08-22
+# Handoff — 2026-08-22 (Session 2: Flight Simulator + GL Journalize)
 
 ## Where We Left Off
 
-Payment lifecycle session complete. Flight simulator built, AddPaymentModal redesigned, Payment model has parent_id/parent_model, total/balance sync bug fixed across all 5 transaction models (Bill refactored into TransactionBaseModel), PendingPaymentApplication removed from registry, commercial trust principle established and documented.
+Flight simulator 3-section layout working with audit mode. Fixed order→invoice conversion, GL journalization of payments, and PrintReportDropdown categories.
 
-Bill asked: "Should we review the entire application to assure alignment between the model, the JSONs, services, etc?" — deferred to next session (compression risk).
+## What Was Done
 
-## Do This First Next Session
+### 1. Fixed conversion.py — order→invoice 500 error
+- `_get_model()` in `apps/transactions/services/conversion.py:83` missing `"payment"` in name_map
+- **Fix:** Added `"payment": "Payment"` to the dict
 
-### 1. Full Model/JSON/Service Alignment Review
-Systematic audit triggered by the total/balance sync bug:
-- Every transaction model: JSON envelope fields match what services read/write
-- Every denormalized scalar (total, balance) synced by compute engine
-- Every service reads from JSON (source of truth), not scalars
-- Bill already did json.path.value compliance scrub (Scars #62-64, 12 fixes) — verify nothing was missed
-- Check per-model totals files (`invoice_totals.py`, `order_totals.py`, etc.) — Bill noted they're archive candidates
+### 2. Flight Simulator 3-Section Left Panel
+Three vertically-stacked resizable sections with drag handles (rename pending: Inventory→Counts, Payments→Money):
+- **Inventory/Counts** — on_hand, on_so, on_po, on_p, available, pending deltas
+- **Payments/Money** — amount, applied, available, status, payment applications
+- **GL Journals** — DR/CR by account, batch, source document
 
-### 2. Invoice line extended not recalculating on qty change
-Bill changed qty 6→5 in DataBrowser UI. Footer showed $349.95 (client-side correct) but saved line kept `price.extended=419.94`. Backend `transaction_save` service verifies but doesn't correct. Must recalculate `extended = qty × unit_price` on save.
+Files: `inventory_flight_sim.py` (backend), `FlightSimConsole.tsx` + `.css` (frontend)
 
-### 3. Chrome DevTools MCP
-Added to `.mcp.json` but Chrome needs restart with `--remote-debugging-port=9222`. Bill wanted to watch payment→GL flow in browser.
+### 3. Audit Mode
+Input field on sim select screen → type invoice number → full Counts/Money/GL picture.
+Backend: `get_flight_by_invoice` manage action with flexible ida lookup (exact, numeric, partial).
+Falls back to JSON `item.item_id` when `item_fk_id` is null.
 
-### 4. Carried from 8/21
-- Wrong columns in databrowser list (inventory fields on wrong model)
-- Touch Setting format mismatch (`form.default.sections` vs `detail.default`)
+### 4. Journalize Invoice + Payments (one click)
+- `journalize_invoice_and_payments()` in `journalize.py` — journals invoice AND all linked payments
+- Report record id=459 category=operations — appears in Report dropdown
+- `DetailToolbar.handlePrintSelect` dispatches action-type Reports via `config.action`
 
-### 5. Migration graph conflicts
-`makemigrations --merge` fails. Payment `parent_id`/`parent_model` added via SQL, not migration.
+### 5. Fixed journalize_payment crash
+Payment has NO `dt_journaled` — uses `is_locked` + `dt_processed` (DateTimeField, `timezone.now()`)
 
-## Open Problems
+### 6. Fixed PrintReportDropdown
+- Added missing categories (`customer_facing`, `operations`, `function`, `vendor_facing`)
+- Removed `output_type:'print'` filter — Report is universal action model
+- Added fallback for unknown categories
 
-- `PendingPaymentApplication` table still exists — drop after migration cleanup
-- `update_order_received` signal still scans by refs instead of `parent_model`/`parent_id`
-- Flight simulator line grid spacing needs tightening
-- Unused per-model totals files: `invoice_totals.py`, `order_totals.py`, `proposal_totals.py`, `purchase_totals.py`, `po_totals.py`, `wo_totals.py`
+## What's Open
 
-## Key Decisions Made
+1. **Rename sections** — Inventory→Counts, Payments→Money
+2. **Invoice line save not persisting** — UI returns 200 but InvoiceLine records not created for DEV-105
+3. **Locked records → read-only form** — `is_locked=True` should disable editing
+4. **Bill's insight:** Flight simulator as audit tool — "Users enter invoice number and see into inventory, cash, and journals. Incredible audit tool."
 
-| Decision | Why |
-|----------|-----|
-| `Payment.parent_id/parent_model` = origin, not constraint | Payment entered on order is available to any customer document |
-| `available != 0` not `> 0` | Commercial: negative = customer shortage carried forward |
-| Dismiss = separate write-off payment | Different GL account from discount; discount = invoice line item |
-| Conversion forwards payments, doesn't auto-apply | User exercises judgment — trust-based flexibility |
-| JSON envelope is single source of truth | Scalars are indexes; one compute engine syncs both |
-| PendingPaymentApplication removed | Dead model; all applications use core.Pending with purpose='payment_application' |
+## Key Architecture
+- **Report = universal action model** (not just print). config.action dispatches manage actions.
+- **3 domains every transaction touches:** Counts (physical), Money (financial), GL (accounting)
