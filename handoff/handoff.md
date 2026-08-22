@@ -1,78 +1,134 @@
-# Handoff — 2026-08-21
+# Handoff — 2026-08-22
 
-## Where We Left Off
+## What Was Done (2026-08-22 session)
 
-Built the full MVP distribution system for WebClerk3. Bill is testing `install-webclerk.sh` when he wakes up.
+### Payment Lifecycle — Major Session
 
-## What Was Done This Session
+**Flight Simulator (react-alice)**
+- Created `/simulator` page with 6-step payment lifecycle walkthrough
+- Right panel: model/ida selector (Order, Invoice, Proposal, Payment, Pending)
+- Left panel: step controls + two impact panels (Inventory Impact, Payment Impact) + flight log
+- Line item panel column order: × | Qty | Unit Price | IDA | Description | On Hand
 
-### Demo Baseline Bundle
-- `pack_demo_bundle`: exports 85 Settings + 80 data records → `demo-bundle.json`
-- `load_demo_data`: imports bundle with FK resolution via uuid→new_pk array
-- `remove_demo_data`: raw SQL delete by `refs.source=demo-baseline`, bypasses signals
-- Updated `seed_demo.py`: removed `qqdemo-` prefix, added `refs.source` tagging, `bulk_create`
-- Updated `seed_demo_transactions.py`: same tagging, `bulk_create` for lines
-- Full round-trip tested: seed→pack→remove→reload→verify (all 80 records survive)
+**AddPaymentModal (React2025) — Redesigned**
+- Balance Due field (left) + Amount field (right) — side by side
+- Default amount = balance due (reads `totals.received` from JSON envelope)
+- "Dismiss balance — too little value to chase" checkbox (creates write-off payment)
+- Discounts removed from payment dialog — entered on invoice directly
+- Available Payments panel shows for orders AND invoices
+- Shows ALL customer payments where `available != 0` (not > 0)
+- Source column labels origin: Customer, Order #N, Inv #N
+- Payments entered on current document highlighted green
+- Now sets `customer_id` and `parent_id/parent_model` on new payments
 
-### FK Resolution Design
-- Bundle carries `id` (old PK) + `uuid` for every record
-- On import: build `old_pk→uuid` from bundle, then `uuid→new_pk` as records are inserted
-- 25 FK fields remapped across 12 model types
-- Demo case is simpler than full sync: empty target DB, no ida collisions
+**Payment Model — parent_id/parent_model Added**
+- `parent_id` (BigInteger) + `parent_model` (CharField) — where the payment was entered
+- Values: `order`, `invoice`, `customer`, `purchase`
+- Origin, NOT a constraint — payment available to any document for that customer
+- SQL columns added, existing payments backfilled from `refs.source`
+- DB migration not created (migration graph has conflicts) — columns added via SQL
 
-### Installation Infrastructure
-- `install-webclerk.sh`: Mac/Linux native installer (checks deps, creates DB, venv, builds React, migrates, seeds)
-- `docker-compose.yml`: PostgreSQL + Redis + Django + Celery (all platforms including Windows)
-- `Dockerfile` + `docker-build.sh`: handles React2025 as separate repo
-- `tools/webclerk-entrypoint.sh`: first-run detection (empty DB → migrate → seed → optional demo data)
-- `.env.template`: documented defaults
+**Major Bug Fixed — update_sell_cost_totals**
+- All 5 transaction models (Invoice, Order, Proposal, Purchase, WorkOrder) updated `self.totals` JSON but never synced `self.total` and `self.balance` denormalized columns
+- Bill refactored: moved `update_sell_cost_totals` to `TransactionBaseModel` — all models inherit it, one engine
+- JSON envelope is single source of truth; scalars are indexes
 
-### Setting Consolidation (from prior session, committed this session)
-- 77 field_access + 19 detail_layout records merged into wc:model Settings
-- Field behaviors service extracted
-- BehaviorOverrideDialog, AdminTools page, audit commands
+**Order → Invoice Conversion**
+- Payments with `parent_model='order'` forwarded to new invoice
+- `invoice_id` set, `refs.invoice_ids` updated
+- Payments NOT auto-applied — user exercises judgment
+- Invoice `totals.received` and `balance` updated
 
-### Documentation
-- `readmes/topics/architecture/demo-bundle-install.md`: full readme
-- `readmes/flowcharts/demo-bundle-install.dot/.svg`: install + bundle flow
+**PendingPaymentApplication Removed**
+- Dead model at `apps/transactions/models/pending_payment.py`
+- Removed from `__init__.py` registry so Django doesn't register it
+- All real payment applications use `core.Pending` with `purpose='payment_application'`
+- Table `pending_payment_applications` can be dropped later
 
-## Bugs Found (pre-existing, worked around)
-1. `resolve_contact_ids_for_customer_org` scans all 5,687 contacts on every customer org save
-2. `requisition_lines.commission` column missing from DB (added via ALTER TABLE)
-3. Transaction line `post_save` signal crashes on `source.get()` when source is a string
+**Signal: update_order_received**
+- New post_save signal on Payment
+- When payment references an order, updates `order.totals.received` and `order.balance`
+- Uses `Order.objects.filter().update()` to avoid version conflicts
 
-## TODO — Next Session
+**Commercial Trust Principle — Documented**
+- Negative `available` = customer shortage from prior transaction (they owe us)
+- Example: owed $400, paid $350, available = -$50, liquidated with next payment
+- System shows everything, user exercises judgment
+- Retail hides negatives; commercial shows them
+- Alice taught: consistent short-payment + liquidation = normal pattern; break in pattern = anomaly
 
-### Immediate (Bill testing)
-- Bill runs `install-webclerk.sh` — fix whatever breaks
-- Test Docker path if native works
+**Documentation**
+- `webClerk3/readmes/topics/payments.md` — full payment lifecycle readme
+- Allie taught payment lifecycle design + commercial trust principle
+- Alice taught pattern recognition rules for payment behavior
 
-### High Priority
-1. **Customer Care + Advanced Chimney data conversion** — Bill has two WC2 datasets to convert
-2. **Portal UI (customer vs employee browser behavior)** — RBAC `is_portal` flag exists, need portal landing page
-3. **Fix OrgBase.save() performance** — skip contact scan for new records (no contacts can reference a just-created org)
-4. **Fix transaction line signal** — `source.get()` crash when source is string not dict
+---
 
-### Medium Priority
-5. Consolidate 3 stale `wc:workbench_fields` into `wc:model`
-6. Audit/prune `choices.py` purpose list
-7. Wire `audit_field_behaviors --json` into Alice's code_standards scanner
+## What Was Done (2026-08-22 parallel session — architecture + compliance)
+
+### Init Bundle — New Database Seed
+- `pack_init_bundle` / `unpack_init_bundle` commands: 85 Settings + 52 Reports → `init-bundle.json`
+- All records stamped `metadata.foundational: true` — external bundles CANNOT modify
+- New database startup: `python manage.py unpack_init_bundle`
+
+### Single Source of Truth — wc:model Setting
+- `useListFieldConfig.ts` reads from `wc:model` → `config.layout.list.default.columns`
+- `wc:workbench_fields` Setting is now redundant
+- One Setting per model owns list, detail, and form layouts
+
+### json.path.value Compliance Scrub (Scars #62-64)
+- **Unbreakable rule:** All calculations are json.path.value based. JSON envelope is the ONLY source of truth.
+- **Backend (6 fixes):** payment_pending, signals, campaign_roi, conversion, rebate_accrual — removed all scalar fallback patterns
+- **Frontend (6 fixes):** TabsRenderer (no .reduce()), AddPaymentModal (reads totals.received), LineCardRenderer/DetailToolbar/TransactionDetail (no data?.balance), ActionDailyDashboard
+
+### Dark Mode Fix
+- `useLineCard.ts` theme uses CSS variables; `LineCardRenderer.tsx` totals bar all has dark: variants
+
+### Unused per-model totals files
+- `invoice_totals.py`, `order_totals.py`, `proposal_totals.py`, `purchase_totals.py`, `po_totals.py`, `wo_totals.py` — no longer called, archive candidates
+
+### Chrome DevTools MCP added to `.mcp.json`
+- Needs Chrome restart with `--remote-debugging-port=9222`
+
+---
+
+## URGENT — Next Session
+
+### 1. Chrome DevTools + Payment-to-GL Flight Simulator
+- Chrome needs restart with debug port for DevTools MCP to connect
+- Bill wants to walk through payment creation → GL journal entry, watching each step in browser
+
+### 2. Invoice line extended not recalculating on qty change
+Bill changed qty from 6 to 5 — footer showed $349.95 (correct client-side) but saved line still had `price.extended=419.94`. Backend must recalculate `extended = qty × unit_price` on save.
+
+### 3. Wrong columns in databrowser list (carried from 8/21)
+- Inventory fields (.on_hand, .on_p) showing on wrong model in databrowser
+
+### 4. Touch Setting format mismatch (carried from 8/21)
+- Setting has `layout.detail.default` but `useDetailLayout` reads `form.default.sections`
+
+### 5. Migration graph conflicts
+`makemigrations --merge` fails — conflicting leaf nodes. Needs manual resolution.
+
+---
 
 ## Key Files Changed
 
-| File | Change |
-|------|--------|
-| `install-webclerk.sh` | NEW — native installer |
-| `docker-compose.yml` | NEW — Docker setup |
-| `Dockerfile` | NEW — container image |
-| `docker-build.sh` | NEW — multi-repo Docker build |
-| `.env.template` | NEW — config template |
-| `tools/webclerk-entrypoint.sh` | NEW — first-run detection |
-| `demo-bundle.json` | NEW — portable demo data |
-| `apps/core/management/commands/pack_demo_bundle.py` | NEW |
-| `apps/core/management/commands/load_demo_data.py` | NEW |
-| `apps/core/management/commands/remove_demo_data.py` | NEW |
-| `apps/core/management/commands/seed_admin_tool_reports.py` | NEW |
-| `apps/core/management/commands/seed_demo.py` | Rewritten — refs.source tagging, bulk_create |
-| `apps/transactions/.../seed_demo_transactions.py` | Rewritten — same |
-| `apps/core/views/manage_view.py` | Added 5 commands to admin tools allowlist |
+| File | What |
+|------|------|
+| `react-alice/src/pages/Simulator.tsx` | NEW — flight simulator page |
+| `react-alice/src/App.tsx` | Added /simulator route |
+| `react-alice/src/components/Sidebar.tsx` | Added Simulator nav item |
+| `React2025/src/apps/transactions/components/AddPaymentModal.tsx` | Redesigned — balance, dismiss, available payments |
+| `webClerk3/apps/transactions/models/payment.py` | Added parent_id/parent_model |
+| `webClerk3/apps/transactions/models/invoice.py` | Bill refactored — totals in base |
+| `webClerk3/apps/transactions/models/order.py` | Bill refactored — totals in base |
+| `webClerk3/apps/transactions/models/proposal.py` | Bill refactored — totals in base |
+| `webClerk3/apps/transactions/models/purchase.py` | Bill refactored — totals in base |
+| `webClerk3/apps/transactions/models/workorder.py` | Bill refactored — totals in base |
+| `webClerk3/apps/transactions/models/__init__.py` | Removed PendingPaymentApplication |
+| `webClerk3/apps/transactions/services/conversion.py` | Payment forwarding on order→invoice |
+| `webClerk3/apps/transactions/services/payment_pending.py` | discount_amt param, discount line |
+| `webClerk3/apps/transactions/signals.py` | update_order_received signal |
+| `webClerk3/apps/core/views/manage_view.py` | discount_amt in dispatch |
+| `webClerk3/readmes/topics/payments.md` | NEW — payment lifecycle readme |

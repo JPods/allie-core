@@ -1,8 +1,16 @@
 {
   "mcpServers": {
     "leftshoe": {
-      "command": "python3",
+      "command": "/Users/williamjames/Allie/venv/bin/python3",
       "args": ["/Users/williamjames/Allie/scripts/leftshoe-mcp.py"]
+    },
+    "alice-commerce": {
+      "command": "/Users/williamjames/Allie/venv/bin/python3",
+      "args": ["/Users/williamjames/Allie/scripts/alice-mcp-server.py"]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
     }
   }
 }
