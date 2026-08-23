@@ -2,6 +2,7 @@
 
 - [Router.tsx is the real route registration](feedback_router_tsx_routes.md) — Add to Router.tsx (BrowserRouter) AND protectedRoutesConfig.tsx (WindowManager)
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
+- [Labels match field names in lowercase](feedback_labels_lowercase.md) — Users learn case sensitivity by seeing real field names; no title-casing
 - [Print is JSON-driven, not design](feedback_print_json_driven.md) — SVG template workflow; not a print design tool; keep print CSS minimal
 - [Not an email/letter tool](feedback_not_email_tool.md) — Users have Gmail/Word/Pages; WC3 provides {{tokens}} and data export; kill TinyMCE
 - [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
