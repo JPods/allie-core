@@ -4,7 +4,7 @@ description: wc3 DataBrowser built — two-pane, dark/light, model picker, layou
 type: project
 ---
 
-DataBrowser built at React2025/src/pages/admin/AdminWorkbench.tsx (route: /admin-wb).
+DataBrowser built at WebClerk/frontend/src/pages/admin/AdminWorkbench.tsx (route: /admin-wb).
 
 **What it does:** Two-pane (list + detail), dark/light mode (JPods Console palette), model picker with Cmd+Shift+M, server-side search + pagination, column sort/drag/resize, saved named layouts, subset show/omit, CSV export, font size S/M/L toggle, collapsible field config panel.
 

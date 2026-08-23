@@ -11,7 +11,7 @@ Gordon Israelson (West Point 1972, decades in nuclear industry) wrote the JPods 
 **How to apply:**
 - All quality records are Action records with metadata.quality_type (ncr/car/deviation/dcr/request)
 - Single model, one dashboard ("Get It Done Today"), one Alice
-- .tsx pages at `React2025/src/apps/support/models/quality/`
+- .tsx pages at `WebClerk/frontend/src/apps/support/models/quality/`
 - Flowchart + digitization map at `Downloads/JPods Quality Program - 2014/`
 - WC2 lesson: controlling actions by model fields sucked — use metadata JSON instead
 - Action #404 tracks the full digitization (8 remaining sections to implement)

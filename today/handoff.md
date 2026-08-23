@@ -1,31 +1,53 @@
-# Handoff — 2026-08-22 (Session 3: Flight Simulator Cleanup)
+# Handoff — 2026-08-23 (PJPV + Underscore Convention)
 
 ## Where We Left Off
 
-All three open items from the previous handoff are fixed but **untested** — React dev server was not running.
+Andi deployment PARTIAL — backend and React dist rsync'd but services not restarted.
+Bill wants to change to git-pull deployment model. New session should handle this.
 
 ## What Was Done
 
-### 1. Renamed section headers — Inventory→Counts, Payments→Money
-- `FlightSimConsole.tsx` — section headers, empty states, and comments updated
-- Three domains every transaction touches: **Counts** (physical), **Money** (financial), **GL** (accounting)
+### PJPV Compliance
+- Audited all backend/React/Pydantic for PJPV compliance — fixed 14 violations
+- `update_received()` in totals.py — single owner for payment-side balance
+- Fixed margin formula (subtotal-cost not total-cost) in transaction_save.py
+- Fail-hard validation — `_validate_totals()` raises, no soft fallback
+- "Shadow field" = standard term for scalars shadowing JSON envelopes
 
-### 2. Fixed invoice line save not persisting (DEV-105)
-- **Root cause:** Converted lines injected via `initialLines` in `TransactionDetail.tsx:128` lacked `_dirty: true`
-- `handleSave` checks `_dirty || _new` to decide between `saveTransactionWithLines` (strips read-only fields) and `saveRecord` (does not)
-- Without `_dirty`, lines went through `saveRecord`, sending `uuid`, `dt_created`, `version` etc. to the backend, causing silent failures in line creation
-- **Fix:** `TransactionDetail.tsx:130` — `initialLines.map(l => ({ ...l, _dirty: true }))`
+### 21 Pydantic Schemas
+- `common/schemas/transaction_envelopes.py` — 21 classes covering all business envelopes
+- `field_behaviors.py` LEAF_BEHAVIORS now schema-derived
+- `/wcapi/_pjpv_fields/` endpoint serves schema metadata to React
 
-### 3. Locked records → read-only form
-- **Fix:** `TransactionDetail.tsx:139` — `if (data.is_locked === true) return 'closed'`
-- Single line makes entire form read-only: header fields disabled, lines locked, Edit button hidden
-- No schema changes needed — `is_locked` already exists on records
+### Underscore Prefix Convention
+- All 26 system endpoints: `wcapi/name/` → `wcapi/_name/`
+- 32 React files, 62 URL replacements
+- SystemDispatchView handles extensible `_` actions
 
-## What's Open
+### Codebase Consolidation
+- WebClerk/ is the ONLY codebase — webClerk3/ and React2025/ deleted
+- Committed `86fe942d`, merged to main, pushed to JPods/WebClerk
 
-1. **Test all three fixes** — start React dev server, verify in browser
-2. **Allie offline** — ollama wasn't running; teach_allie call failed; retry next session
+## Scars #66-71
+66: Document paths not outcomes | 67: Fail hard fix fast | 68: Underscore prefix |
+69: Suffer now once | 70: Check which files server reads | 71: Backups are traps
 
-## Key Files Changed
-- `React2025/src/pages/admin/FlightSimConsole.tsx` — section renames
-- `React2025/src/apps/transactions/components/TransactionDetail.tsx` — line save fix + locked record fix
+## Next Session TODO
+
+### 1. Andi Git-Pull Deployment
+Have Andi pull from github.com/JPods/WebClerk instead of rsync from Mac.
+- SSH to andi@192.168.1.114
+- Set up git on Andi pointing at JPods/WebClerk
+- Handle backend/ subfolder (Andi expects flat at /opt/andi/apps/webclerk3/)
+- Install deps, collectstatic, migrate, athena_sign, restart services
+- Verify: curl https://webclerk.com/wcapi/_system_info/
+- Update readmes/67-webclerk-com-deployment.md
+
+### 2. Stale Path References
+- Allie memory files reference webClerk3/ and React2025/
+- CLAUDE.md references old paths
+- Update to WebClerk/backend + WebClerk/frontend
+
+### 3. Alice Weekly Schema Scan
+- Schedule Wednesday coordination day
+- Diff schemas vs production JSON

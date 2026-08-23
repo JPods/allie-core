@@ -24,6 +24,6 @@ type: reference
 **Future:** Athena gets her own processor. Can't verify Alice's integrity from inside Alice. Separation is a hardware decision, not software.
 
 **Files:**
-- `webClerk3/apps/docs/management/commands/athena_sign.py`
-- `webClerk3/apps/support/scheduler/tasks.py` (task_athena_verify)
+- `WebClerk/backend/apps/docs/management/commands/athena_sign.py`
+- `WebClerk/backend/apps/support/scheduler/tasks.py` (task_athena_verify)
 - `sites/statement_sorter/sign.py` (client-side signing)

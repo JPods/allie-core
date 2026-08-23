@@ -12,7 +12,7 @@ Five separate programs in the JPods ecosystem. Keep their concerns distinct.
 | **JPodsSM_RPi** | Python, MQTT, Raspberry Pi | `JPodsSM_RPi` — Runs physical vehicles. Nora (vehicle), Natalie (router), Noelle (network) on hardware. |
 | **SketchUp Plugin** | Ruby | SketchUp Plugins/JPods — 3D modeling of networks. Places structures, assigns CPs, generates geometry. |
 | **CrashHarvester** | Python | `00_working_code/CrashHarvester` — Data supply chain. Harvests government data, normalizes to uniform schemas, produces clean library. Alice manages sources. MeshMobility and public API are consumers. DynamicCatalogs pattern. |
-| **WebClerk** | Django, Python, PostgreSQL, React | `CommerceExpert/webClerk3` — Enterprise software with Alice agent. Persistent store and coordination layer. |
+| **WebClerk** | Django, Python, PostgreSQL, React | `CommerceExpert/WebClerk/backend` — Enterprise software with Alice agent. Persistent store and coordination layer. |
 
 **How they relate:**
 - SketchUp → designs 3D physical structure, exports CP geometry

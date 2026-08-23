@@ -4,7 +4,7 @@ description: Forms live in their domain app (transactions/purchase/pages/), not 
 type: feedback
 ---
 
-React2025 is a multi-app platform, not a single-focus React app. Forms belong in their domain app path.
+WebClerk/frontend is a multi-app platform, not a single-focus React app. Forms belong in their domain app path.
 
 **Why:** A PurchaseOrder is a transactions concern, not a quality concern. The same data may have multiple print/display options (standard PO, vendor PDF, receiving checklist). Putting forms in a generic `quality/forms/` bucket breaks domain ownership.
 

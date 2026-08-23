@@ -14,11 +14,11 @@ WC3 print system built 2026-07-19, reproducing WC2's "Defined Reports" dialog an
 - New Report button = create new report
 
 **Key files:**
-- `React2025/src/components/common/ReportsDialog.tsx` — enhanced WC2-style dialog (grid layout, output_type column, primary badge, arrow key nav, footer buttons)
-- `React2025/src/hooks/useReportShortcuts.ts` — Cmd+P / Cmd+Opt+P hook; intercepts browser print in capture phase
-- `React2025/src/apps/transactions/components/TransactionDetailBase.tsx` — wired with Reports button + keyboard shortcuts + ReportsDialog
-- `React2025/src/pages/admin/AdminWorkbench.tsx` — Cmd+P opens report selector in DataBrowser context
-- `webClerk3/readmes/flowcharts/wc3-print-system.dot` — full system flow chart
+- `WebClerk/frontend/src/components/common/ReportsDialog.tsx` — enhanced WC2-style dialog (grid layout, output_type column, primary badge, arrow key nav, footer buttons)
+- `WebClerk/frontend/src/hooks/useReportShortcuts.ts` — Cmd+P / Cmd+Opt+P hook; intercepts browser print in capture phase
+- `WebClerk/frontend/src/apps/transactions/components/TransactionDetailBase.tsx` — wired with Reports button + keyboard shortcuts + ReportsDialog
+- `WebClerk/frontend/src/pages/admin/AdminWorkbench.tsx` — Cmd+P opens report selector in DataBrowser context
+- `WebClerk/backend/readmes/flowcharts/wc3-print-system.dot` — full system flow chart
 
 **Report model fields that matter:**
 - `sort_order=0` = primary report (Cmd+P target)

@@ -14,8 +14,8 @@ All embedded panel rendering unified to **PanelTable** component with consistent
 - **TabsRenderer.tsx** (5 tabs) — Actions, Contacts, Documents, Related, QA tabs all converted from DataGrid → PanelTable
 
 **New files:**
-- `React2025/src/apps/common/components/panels/panelColumnUtils.ts` — `buildColumnsFromSpecs()` (from db.panel Setting) and `buildColumnsFromRecord()` (auto-detect fallback)
-- `webClerk3/apps/core/management/commands/seed_panel_columns.py` — seeds db.panel for 30 models
+- `WebClerk/frontend/src/apps/common/components/panels/panelColumnUtils.ts` — `buildColumnsFromSpecs()` (from db.panel Setting) and `buildColumnsFromRecord()` (auto-detect fallback)
+- `WebClerk/backend/apps/core/management/commands/seed_panel_columns.py` — seeds db.panel for 30 models
 
 **Architecture:**
 - `db.panel` field stays named `panel` in `DbLayout` (setting.py) — "panels" is the standard term

@@ -12,4 +12,4 @@ type: reference
 
 **Also:** PyMuPDF 1.28.0 (PDF text extraction), ChromaDB (vector stores)
 
-All in `~/Allie/venv/`. Each has a Document record in WC3 (`model_name="tool_reference"`, IDA like `TOOL-GRAPHVIZ`). Full readme: `webClerk3/readmes/topics/ai/alice-toolkit.md`.
+All in `~/Allie/venv/`. Each has a Document record in WC3 (`model_name="tool_reference"`, IDA like `TOOL-GRAPHVIZ`). Full readme: `WebClerk/backend/readmes/topics/ai/alice-toolkit.md`.

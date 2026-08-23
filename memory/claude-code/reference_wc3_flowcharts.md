@@ -4,7 +4,7 @@ description: 13 Graphviz DOT flow charts at readmes/flowcharts/ covering master 
 type: reference
 ---
 
-All at `~/Allie/readmes/flowcharts/` and `webClerk3/readmes/flowcharts/`. Editable DOT source + rendered PDF. Regenerate: `dot -Tpdf <name>.dot -o <name>.pdf`.
+All at `~/Allie/readmes/flowcharts/` and `WebClerk/backend/readmes/flowcharts/`. Editable DOT source + rendered PDF. Regenerate: `dot -Tpdf <name>.dot -o <name>.pdf`.
 
 | Chart | What |
 |-------|------|

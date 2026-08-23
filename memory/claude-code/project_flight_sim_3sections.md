@@ -16,9 +16,9 @@ Flight simulator left panel now has 3 vertically-stacked resizable sections with
 **Audit mode:** Input field on sim select screen. Type invoice number (DEV-107, 107, or partial), calls `get_flight_by_invoice` manage action. Loads item inventory + payments + GL for that invoice. Same 3 sections, different entry point.
 
 **Key files changed:**
-- `webClerk3/apps/products/services/inventory_flight_sim.py` — `_get_payment_rows`, `_get_gl_rows`, `get_flight_by_invoice`
-- `React2025/src/pages/admin/FlightSimConsole.tsx` — 3 sections, audit input, PaymentRow/GlRow types
-- `React2025/src/pages/admin/FlightSimConsole.css` — section styles, payment table, GL table, audit bar
-- `webClerk3/apps/core/views/manage_view.py` — registered `get_flight_by_invoice`, `journalize_invoice_and_payments`
+- `WebClerk/backend/apps/products/services/inventory_flight_sim.py` — `_get_payment_rows`, `_get_gl_rows`, `get_flight_by_invoice`
+- `WebClerk/frontend/src/pages/admin/FlightSimConsole.tsx` — 3 sections, audit input, PaymentRow/GlRow types
+- `WebClerk/frontend/src/pages/admin/FlightSimConsole.css` — section styles, payment table, GL table, audit bar
+- `WebClerk/backend/apps/core/views/manage_view.py` — registered `get_flight_by_invoice`, `journalize_invoice_and_payments`
 
 **Open:** Rename sections Inventory→Counts, Payments→Money per Bill's framework.

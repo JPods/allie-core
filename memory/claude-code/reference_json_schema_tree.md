@@ -4,7 +4,7 @@ description: Shift-click model name in DataBrowser for JSON envelope tree; /json
 type: reference
 ---
 
-JsonSchemaTree component at `React2025/src/components/widgets/JsonSchemaTree.tsx`.
+JsonSchemaTree component at `WebClerk/frontend/src/components/widgets/JsonSchemaTree.tsx`.
 
 - **Shift-click** model name button in DataBrowser → inline popup with collapsible tree
 - Click any leaf node → copies dot-path to clipboard (e.g., `totals.total`)

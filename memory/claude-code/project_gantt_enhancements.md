@@ -8,7 +8,7 @@ Open-source enhancements to @svar-ui/react-gantt built July 2026.
 
 **Why:** Base SVAR Gantt is display-only. Real project management needs visual encoding, meeting interaction, accessibility controls.
 
-**How to apply:** These are production code in WebClerk3 and standalone examples for open source at `React2025/src/apps/utils/gantt/open-source-example/`.
+**How to apply:** These are production code in WebClerk3 and standalone examples for open source at `WebClerk/frontend/src/apps/utils/gantt/open-source-example/`.
 
 Enhancements:
 1. Layered task bar template — 4 visual channels (priority stripe, status stripe, % complete bar, assignee badge)

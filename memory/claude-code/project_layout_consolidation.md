@@ -17,4 +17,4 @@ Layout architecture consolidated 2026-08-20. One wc:model Setting per model — 
 - `comments.process` on every model's list columns
 - `comment` TextField dropped from 5 models; `comments` JSONField is the only notes field
 - Seed: `seed_model_definitions --force` then `seed_detail_layouts`
-- Full doc: `webClerk3/readmes/topics/architecture/layout-architecture.md`
+- Full doc: `WebClerk/backend/readmes/topics/architecture/layout-architecture.md`

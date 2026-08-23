@@ -10,14 +10,14 @@ Three-agent UI design experiment active as of 2026-07-04.
 - 5173 — Claude (systems/architecture/accessibility/tokens)
 - 5175 — Allie (workflow/WC2 patterns/scars/cross-domain context)
 - 5176 — Alice (data clarity/mobile-first/reduce clicks/teaching)
-- 5174 — Baseline React2025 (reference)
+- 5174 — Baseline WebClerk/frontend (reference)
 - 8000 — Django API (serves all)
 
 **Projects:**
 - `/Users/williamjames/Documents/CommerceExpert/react-claude/`
 - `/Users/williamjames/Documents/CommerceExpert/react-allie/`
 - `/Users/williamjames/Documents/CommerceExpert/react-alice/`
-- `/Users/williamjames/Documents/CommerceExpert/React2025/` (baseline)
+- `/Users/williamjames/Documents/CommerceExpert/WebClerk/frontend/` (baseline)
 
 **Five rounds:** create independently → cross-evaluate → share/debate → revise → synthesize best pieces
 

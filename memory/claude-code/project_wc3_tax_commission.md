@@ -46,12 +46,12 @@ Backend service was already built (commission.py). Frontend wiring added:
 
 | File | What |
 |------|------|
-| `webClerk3/apps/transactions/services/totals.py` | Tax engine + audit trail |
-| `webClerk3/apps/transactions/services/commission.py` | Commission calculate/populate/accrue/GL |
-| `React2025/src/hooks/useLineCard.ts` | Line grid: tax%, comm%, eff%, comm$ columns |
-| `React2025/src/apps/transactions/components/detail/LineCardRenderer.tsx` | Line type toggle, C button, footer totals |
-| `React2025/src/apps/transactions/components/panels/CommissionPanel.tsx` | Commission detail panel |
-| `React2025/readmes/topics/transactions/tax-calculation.md` | Tax architecture readme |
-| `React2025/readmes/topics/transactions/commissions.md` | Commission architecture readme |
-| `React2025/readmes/todo-tax-services.md` | External tax services build prompt |
-| `React2025/readmes/todo-go-live.md` | Master checklist — Phase 1 done, Phase 2 tax done |
+| `WebClerk/backend/apps/transactions/services/totals.py` | Tax engine + audit trail |
+| `WebClerk/backend/apps/transactions/services/commission.py` | Commission calculate/populate/accrue/GL |
+| `WebClerk/frontend/src/hooks/useLineCard.ts` | Line grid: tax%, comm%, eff%, comm$ columns |
+| `WebClerk/frontend/src/apps/transactions/components/detail/LineCardRenderer.tsx` | Line type toggle, C button, footer totals |
+| `WebClerk/frontend/src/apps/transactions/components/panels/CommissionPanel.tsx` | Commission detail panel |
+| `WebClerk/frontend/readmes/topics/transactions/tax-calculation.md` | Tax architecture readme |
+| `WebClerk/frontend/readmes/topics/transactions/commissions.md` | Commission architecture readme |
+| `WebClerk/frontend/readmes/todo-tax-services.md` | External tax services build prompt |
+| `WebClerk/frontend/readmes/todo-go-live.md` | Master checklist — Phase 1 done, Phase 2 tax done |
