@@ -7,6 +7,8 @@
 - [db.panel unification](project_db_columns_unification.md) — All panels use PanelTable; db.panel Setting stores column specs; 30 models seeded; yellow selection
 - [Admin tools as Report records](project_admin_tools_as_reports.md) — Utilities are Reports (category=admin_tool); dispatch to management commands; no custom admin pages
 - [Pydantic owns field behaviors](feedback_pydantic_field_behaviors.md) — Labels/formatting/widgets in schema code, not DB; Settings=layouts only; code revision not DB mutation
+- [PJPV architecture](feedback_pjpv_architecture.md) — Pydantic JSON Path Value: 4-layer discipline; never flatten envelopes; one engine, one path
+- [PJPV.io site](project_pjpv_site.md) — pjpv.io explains PJPV pattern; Hostinger; .net=first commercial use; .ai rejected
 - [JSON envelope is only source of truth](feedback_json_source_of_truth.md) — All models: JSON authoritative, scalars=indexes, display=projection; one compute engine; scars #62-63
 - [No scalar fallbacks — fail visibly](feedback_json_fail_not_fallback.md) — Missing JSON = error/blank, never silent scalar fallback; json.thinking principle
 - [JsonSchemaTree reference tool](reference_json_schema_tree.md) — Shift-click model in DataBrowser; /json-schema printable; all models with CoreModel+BaseModel fields
