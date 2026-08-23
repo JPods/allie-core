@@ -1,0 +1,170 @@
+Allie — Personal AI Agent
+Copyright 2024-2026 JPods LLC
+
+This product includes software developed by JPods LLC.
+https://jpods.com
+
+=========================================================================
+
+This project uses the following open source software:
+
+=========================================================================
+Anthropic SDK (anthropic)
+  License: MIT
+  Copyright: Anthropic, PBC
+  https://github.com/anthropics/anthropic-sdk-python
+
+Model Context Protocol (mcp)
+  License: MIT
+  Copyright: Anthropic, PBC
+  https://github.com/modelcontextprotocol/python-sdk
+
+Ollama (LLM runtime)
+  License: MIT
+  Copyright: Ollama
+  https://github.com/ollama/ollama
+
+ChromaDB (vector database)
+  License: Apache 2.0
+  Copyright: Chroma, Inc.
+  https://github.com/chroma-core/chroma
+
+Pydantic
+  License: MIT
+  Copyright: Samuel Colvin and contributors
+  https://github.com/pydantic/pydantic
+
+Pydantic Settings
+  License: MIT
+  Copyright: Samuel Colvin and contributors
+  https://github.com/pydantic/pydantic-settings
+
+Starlette
+  License: BSD 3-Clause
+  Copyright: Encode OSS Ltd.
+  https://github.com/encode/starlette
+
+uvicorn
+  License: BSD 3-Clause
+  Copyright: Encode OSS Ltd.
+  https://github.com/encode/uvicorn
+
+httpx
+  License: BSD 3-Clause
+  Copyright: Encode OSS Ltd.
+  https://github.com/encode/httpx
+
+httpx-sse
+  License: MIT
+  Copyright: Florimond Manca
+  https://github.com/florimondmanca/httpx-sse
+
+httpcore
+  License: BSD 3-Clause
+  Copyright: Encode OSS Ltd.
+  https://github.com/encode/httpcore
+
+Click
+  License: BSD 3-Clause
+  Copyright: Pallets Projects
+  https://github.com/pallets/click
+
+cryptography
+  License: Apache 2.0 / BSD 3-Clause
+  Copyright: The Python Cryptographic Authority
+  https://github.com/pyca/cryptography
+
+PyJWT
+  License: MIT
+  Copyright: Jose Padilla
+  https://github.com/jpadilla/pyjwt
+
+python-dotenv
+  License: BSD 3-Clause
+  Copyright: Saurabh Kumar
+  https://github.com/theskumar/python-dotenv
+
+python-multipart
+  License: Apache 2.0
+  Copyright: Andrew Dunham
+  https://github.com/Kludex/python-multipart
+
+sse-starlette
+  License: BSD 3-Clause
+  Copyright: sysid
+  https://github.com/sysid/sse-starlette
+
+jsonschema
+  License: MIT
+  Copyright: Julian Berman
+  https://github.com/python-jsonschema/jsonschema
+
+anyio
+  License: MIT
+  Copyright: Alex Gronholm
+  https://github.com/agronholm/anyio
+
+certifi
+  License: MPL 2.0
+  Copyright: Kenneth Reitz
+  https://github.com/certifi/python-certifi
+
+attrs
+  License: MIT
+  Copyright: Hynek Schlawack
+  https://github.com/python-attrs/attrs
+
+idna
+  License: BSD 3-Clause
+  Copyright: Kim Davies
+  https://github.com/kjd/idna
+
+h11
+  License: MIT
+  Copyright: Nathaniel J. Smith
+  https://github.com/python-hyper/h11
+
+typing_extensions
+  License: PSF
+  Copyright: Python Software Foundation
+  https://github.com/python/typing_extensions
+
+=========================================================================
+Infrastructure and Tools
+=========================================================================
+
+PostgreSQL
+  License: PostgreSQL License (BSD-like)
+  Copyright: The PostgreSQL Global Development Group
+  https://www.postgresql.org
+
+Django (used by WebClerk3)
+  License: BSD 3-Clause
+  Copyright: Django Software Foundation
+  https://www.djangoproject.com
+
+React (used by WebClerk3 frontend)
+  License: MIT
+  Copyright: Meta Platforms, Inc.
+  https://github.com/facebook/react
+
+SketchUp Ruby API (used by su_jpods plugin)
+  License: Proprietary (Trimble)
+  https://developer.sketchup.com
+
+Graphviz (used by CodeMap)
+  License: Eclipse Public License 1.0
+  Copyright: AT&T Research
+  https://graphviz.org
+
+=========================================================================
+AI Models
+=========================================================================
+
+Claude (Anthropic)
+  Used via API — commercial license
+  https://anthropic.com
+
+Ollama-hosted models (local LLM for Allie)
+  Various open-weight licenses per model
+  https://ollama.com
