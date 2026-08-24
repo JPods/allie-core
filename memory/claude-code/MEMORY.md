@@ -147,6 +147,7 @@
 - [Shift-click CP delete broken](project_shift_click_delete_broken.md) — Handler doesn't fire; debug logging added; check CONSTRAIN_MODIFIER_MASK and active tool
 - [Network editing workflow](project_network_editing_workflow.md) — Connect by clicking CPs, delete via × button in Network Display, Refresh reads disk, Build rebuilds
 - [Camera follow not lock](feedback_camera_follow_not_lock.md) — Camera translates with pod; user controls angle freely; old rigid transform replaced
+- [Deasy / Flatwater Fleet conversion](project_deasy_conversion.md) — WC2→WC3 done 2026-08-23; commerce_deasy on Andi; webclerk.com/static/downloads/deasy/
 - [Animation pause not stop](feedback_animation_pause_not_stop.md) — Toolbar toggles pause/resume; no hard stop; clear pods to reset; 95% freeze for camera
 - [Structure ID prefixes](reference_structure_id_prefixes.md) — s001=stations, tc001=traffic circles, b001=barriers; all lowercase; barriers serialized for safety inspection
 - [Expense/disbursement UI](project_expense_ui.md) — Payment model handles AR+AP via type field; needs spreadsheet-style fast entry UI

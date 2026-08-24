@@ -1,53 +1,32 @@
-# Handoff — 2026-08-23 (PJPV + Underscore Convention)
+# Handoff — 2026-08-24
 
 ## Where We Left Off
 
-Andi deployment PARTIAL — backend and React dist rsync'd but services not restarted.
-Bill wants to change to git-pull deployment model. New session should handle this.
+PJPV compliance sweep complete and shipped (commit 5c499c95, main + bill_dev). 66 files, -251 net lines. Customer seeding done — 6 customers with full contact/email/address/phone records in commerce_expert.
 
-## What Was Done
+## Do This First Next Session
 
-### PJPV Compliance
-- Audited all backend/React/Pydantic for PJPV compliance — fixed 14 violations
-- `update_received()` in totals.py — single owner for payment-side balance
-- Fixed margin formula (subtotal-cost not total-cost) in transaction_save.py
-- Fail-hard validation — `_validate_totals()` raises, no soft fallback
-- "Shadow field" = standard term for scalars shadowing JSON envelopes
+1. **Recommit the 7 reverted changes** — real fixes that were reverted to keep PJPV commit clean:
+   - `base_line_model.py` — update_fields auto-expansion (bug fix)
+   - `connection.py` — comment→comments (bug fix)
+   - `payment_serializers.py` — payment_method FK cleanup
+   - `transaction_views.py` — filterset fix
+   - `urls.py` — DataBrowser legacy routes (blocks DataBrowser model loading)
+   - `TransactionItemSearch.tsx` — DbColumns refactor
+   - `wcapi-system-endpoints.md` — path correction
 
-### 21 Pydantic Schemas
-- `common/schemas/transaction_envelopes.py` — 21 classes covering all business envelopes
-- `field_behaviors.py` LEAF_BEHAVIORS now schema-derived
-- `/wcapi/_pjpv_fields/` endpoint serves schema metadata to React
+2. **Flight simulator live testing** — verify item search columns, DbColumns gear icon, full Proposal→Order→Invoice→Payment flow
 
-### Underscore Prefix Convention
-- All 26 system endpoints: `wcapi/name/` → `wcapi/_name/`
-- 32 React files, 62 URL replacements
-- SystemDispatchView handles extensible `_` actions
+3. **Statement Sorter connection + bundle review** — TODO sent to Alice (#1084)
 
-### Codebase Consolidation
-- WebClerk/ is the ONLY codebase — webClerk3/ and React2025/ deleted
-- Committed `86fe942d`, merged to main, pushed to JPods/WebClerk
+## Open PJPV Gaps
 
-## Scars #66-71
-66: Document paths not outcomes | 67: Fail hard fix fast | 68: Underscore prefix |
-69: Suffer now once | 70: Check which files server reads | 71: Backups are traps
+- `ShoppingCart.tsx` — full client-side pricing engine, needs server cart totals endpoint
+- No schema endpoint for Pydantic field titles (not urgent — lowercase field names are the standard)
 
-## Next Session TODO
+## Key Decisions This Session
 
-### 1. Andi Git-Pull Deployment
-Have Andi pull from github.com/JPods/WebClerk instead of rsync from Mac.
-- SSH to andi@192.168.1.114
-- Set up git on Andi pointing at JPods/WebClerk
-- Handle backend/ subfolder (Andi expects flat at /opt/andi/apps/webclerk3/)
-- Install deps, collectstatic, migrate, athena_sign, restart services
-- Verify: curl https://webclerk.com/wcapi/_system_info/
-- Update readmes/67-webclerk-com-deployment.md
-
-### 2. Stale Path References
-- Allie memory files reference webClerk3/ and React2025/
-- CLAUDE.md references old paths
-- Update to WebClerk/backend + WebClerk/frontend
-
-### 3. Alice Weekly Schema Scan
-- Schedule Wednesday coordination day
-- Diff schemas vs production JSON
+- **Labels = lowercase field names** — users learn case sensitivity by seeing real names
+- **Same-envelope fallback = correct** — `totals.balance ?? totals.total` is business logic, not a PJPV violation
+- **Print documents show $0.00 for null** — `printTypes.ts` wrapper; all other contexts show blank
+- **Agent scrub is mandatory** — 3 of 4 agents exceeded scope; scrub caught 7 unrelated changes (Scar #71)
