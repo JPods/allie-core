@@ -22,6 +22,7 @@
 - [leftshoe is the standard session opening](feedback_leftshoe_standard_opening.md) — Call leftshoe MCP first in every session; report team status before anything else
 - [Teach Allie and Alice before session ends](feedback_teach_before_session_end.md) — ask_ calls are read-only; use teach_allie + alice_observe to persist decisions
 - [Allie and Alice are active participants](feedback_active_participants.md) — Consult them every session; verify MCP connectivity first; venv not source path
+- [Engage Allie and Alice regularly](feedback_engage_allie_alice_regularly.md) — Ask their opinion throughout, not just teach; assess learning capacity; get feedback on decisions
 - [Feed Allie and Alice before asking](feedback_feed_allie_alice.md) — They confabulate without context; feed data first, ask narrow questions; ask Bill to help if stuck
 - [Data-Driven UI architecture](project_data_driven_ui.md) — datadrivenui.com; 45K→2K lines; DynamicDetail + ui.json + Settings; docs in Allie + WC3
 - [Alice data conversion pipeline](project_data_conversion_pipeline.md) — apps/conversion/ + alice_conversion DB; Claude Haiku maps columns; multi-pass; bundle output
