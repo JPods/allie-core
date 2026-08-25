@@ -26,7 +26,7 @@ Architecture review session. Full industry comparison against Odoo/ERPNext/NetSu
 
 ## Do This First Next Session
 
-1. **Write press release** — not marketing; request for review based on architecture comparison
+1. **Complete SMB feature comparison** — outline at knowledge/projects/smb-enterprise-feature-comparison.md; assess each of ~100 features against WC3; add as appendix to review request
 2. **Run migrations** — 0002_add_shipping_json.py not yet applied
 3. **Run tests** — significant changes to status_guard, journalize, choices, contact model
 4. **Check** that negative invoice quantities journalize correctly (credit memo path)
