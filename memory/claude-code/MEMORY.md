@@ -252,4 +252,6 @@
 - [Keep numbers together](feedback_numbers_together.md) — All numeric fields + summary grouped; text fields above/below; never split the number block
 - [Flight sim 3-section audit tool](project_flight_sim_3sections.md) — Counts/Money/GL sections; audit mode by invoice #; resizable drag handles
 - [Report is universal action model](feedback_report_universal_action.md) — Not just print; config.action dispatches manage actions; all categories
+- [No backward compatibility — one path only](feedback_no_backward_compat.md) — No aliases, no fallbacks, no shims; delete and update callers; we are the only users
+- [PJPV simplification cycle method](project_pjpv_simplification_cycle.md) — Audit→fix→verify→audit cycle; each pass reveals next layer; consolidated 2026-08-24
 - [Payment has no dt_journaled](reference_journalize_payment_fields.md) — Use is_locked + dt_processed (DateTimeField); not dt_journaled (Invoice-only)

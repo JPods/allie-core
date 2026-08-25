@@ -1,76 +1,62 @@
-# Handoff — 2026-08-24
+# Handoff — 2026-08-24 (Session 3: Project Planning + Gantt + CSS)
 
 ## Where We Left Off
 
-Removed all 12 scalar shadow fields from WC3 (PJPV compliance). All migrations deleted and regenerated fresh from current model state. DB is correct — migrations fake-applied. Smoke tests pass: JSON path queries, @property backward compat, Alice aggregate tracker all working. ~17 files still have stale `work_order` references (renamed to `workorder` but cleanup was interrupted). Frontend `work_order` rename not started.
+Major session — project planning ecosystem built from scratch, Gantt features added to WC3, CSS theme unified, Project Scanner deployed to webclerk.com/project_planner/.
 
-## Do This First Next Session
+## What Was Done
 
-1. **Read `readmes/topics/architecture/pjpv-shadow-field-removal.md`** — full scrub checklist at the bottom. This is the outcome document. But the *process* reasoning is below in "What Was Decided" — read that first to understand the path, not just the result.
+### Project Planning Ecosystem
+- **Due Diligence bundle.json** — 23 actions, 6 sections, template #1 for capital raises
+- **ISO 9001 bundle.json** — 25 actions, Gordy nuclear-grade quality manual discipline, 4-phase implementation
+- **JPods Build bundle.json** — 104 actions, 13 sub-projects transcribed from 2009 diagram image, dependency chains, critical path
+- **Project plan library** — 18 templates listed at project-plan-library.md, 3 done, 15 planned
+- **13 individual SVGs** for JPods Build sub-projects + 1 combined overview
+- All bundles at ~/Allie/knowledge/projects/
 
-2. **Finish `work_order` → `workorder` cleanup** — run `grep -rn 'work_order' apps/ common/ --include='*.py' | grep -v __pycache__ | grep -v migrations/ | grep -v 'db_table\|db_column\|workorder_id'`. ~17 hits remain. Change each to `workorder` unless it's a DB table name or display label. Do the same for frontend (`grep -rn 'work_order' frontend/src/`).
+### Project Scanner Tool
+- **planner.py** — Statement Sorter pattern, CSV/XLSX → bundle.json + SVG + clean CSV, port 8878
+- **index.html** — pure browser version, SheetJS for XLSX, no server upload, localStorage state
+- **Deployed** to webclerk.com/project_planner/ — nginx location block on Andi, /var/www/webclerk-static/project_planner/
+- Nginx gotcha: sites-enabled was a copy not a symlink — had to copy after editing sites-available
 
-3. **Full PJPV compliance scrub** — verify no scalar shadow queries remain (`Sum('total')`, `balance__gt`, etc. on transaction models). Verify the functional indexes exist in PostgreSQL. Run `refresh_aggregates` to confirm Alice's collections match reality.
+### WC3 Gantt + Dependencies + Critical Path
+- **ProjectActionGantt.tsx** — new component, action bars on timeline, SVG dependency arrows, forward/backward pass critical path calculation, slack display, critical-only filter
+- **ActionsPanel.tsx** — added "depends" column (←dep badges) and "path" column (CP badge + slack days)
+- **panelRegistry.tsx** — gantt panel renders ProjectActionGantt for projects, ProjectGanttPanel for contacts
+- **DEFAULT_TABS** — project gets Actions/Gantt/Documents/Notes tabs automatically
 
-4. **Recommit the 7 reverted PJPV changes** from the prior session (see handoff-PREV.md items).
+### CSS Theme Unification
+- **theme.css** — NEW single source of truth for all --db-* variables at :root scope (light + dark), including standardized buttons
+- Removed duplicate --db-* from DataBrowser.css, CommerceDashboard.css, JsonViewer.css
+- --wc-* aliased to --db-* for backward compat (48 refs still to migrate)
+- DataGrid.css — explicit background on .dg-row fixes transparent row bleed-through
 
-5. **Update `pjpv-denormalized-fields.md`** — remove the 12 deleted fields from the registry. Only `source_name` should remain as a documented scalar.
+### Backend Fixes
+- **aggregation.py** — NameError: 6 bare model name @receivers replaced with dynamic ALL_MODELS loop
+- **line_views.py** — import from models.projects → models.project (typo)
 
-## Open Problems
+### Documentation
+- **project-management-comparison.md** — WC3 vs MS Project/Smartsheet/Asana/Trello, transaction models, commerce chain
 
-- OrgBase/Contact `@property` methods for `address_full`, `phone`, `domain` query the DB on each access (N+1 risk in bulk operations like `denormalize_org_links`). Fine for single-record saves; could need `select_related`/`prefetch_related` if bulk perf degrades.
-- `Contact._sync_primary_communication_links()` no longer creates Phone/Domain/Address records from scalar input on new contact creation — the scalars are gone. Phone/domain/address must now be created as separate communication records. Verify the React contact form handles this.
-- `PendingPaymentApplication` model class still exists in `pending_payment.py` but is not imported in `__init__.py` and has no migration. Either delete the file or re-import it.
-- Alice code_standards scanner patterns may flag the removed fields as missing. Check and update.
+## What Needs Doing Next
 
-## What Was Decided (and Why)
+### Deploy
+- [ ] Rsync React dist to Andi + restart Gunicorn
+- [ ] Run seed_detail_layouts --model project on Andi
+- [ ] Verify Gantt tab appears on MOA project
 
-- **Why remove shadow fields, not just index them?** Bill's question: "should we remove those?" Two options were on the table: (1) index the JSON paths, (2) have Alice manage search collections. The answer was *both* — functional indexes for correctness, Alice collections for dashboard performance — and *remove the scalars entirely* because they violate PJPV's core rule. A shadow field that can drift from the JSON is a second source of truth. Scars #62-63 proved this costs real debugging time.
+### CSS Migration TODO
+- [ ] Migrate 48 --wc-* references to --db-* (5 files), then remove aliases
 
-- **Why Alice collections instead of generated columns?** Claude proposed PostgreSQL generated columns (DB-computed scalars that can't drift). Bill's response: "I am unclear where Sum() is an issue. My view is users will search for `invoice.totals.balance !== 0`." This reframed the problem — users *filter*, they don't aggregate. The Sum() case is only dashboards, which are non-critical display. Alice manages those with delta updates on save and periodic refresh. Drift tolerance is the key insight: nobody needs real-time-to-the-penny AR totals on a dashboard.
+### Bill's Feedback (Not Yet Applied)
+- Tab labels should come from Setting .config.select_lists, not hardcoded
+- Unified CSS audit needed across all db.list, db.panel, db.card components
 
-- **Why rename `work_order` → `workorder`?** Consistency with Django's `_meta.model_name` (which concatenates without underscores). Eliminates the `_META_TO_REGISTRY` translation dict that was needed for Alice's aggregate tracker. Bill said "I can see benefits" and "include it in this sweep." Since they're the only users, no backward compat aliases needed.
+### Project Scanner Enhancements
+- Mind map import (FreeMind, XMind, OPML)
+- PDF parsing
+- Direct WC3 import via wcapi
 
-- **Why delete all migrations?** The shadow field removal created migration 0037 (indexes), 0038 (field drops), plus existing migrations 0001-0036. The Payment model had `parent_id`/`parent_model` columns in the model code but not in any migration, causing conflicts. Bill said "you can delete all migrations" — fresh start from current model state, fake-applied since the DB schema is already correct.
-
-- **Why @property methods instead of just removing the fields?** Admin `list_display` references `email`, `phone`, `address_full` as field names. Django admin calls `getattr(obj, field_name)` — if the field doesn't exist and there's no property, the admin crashes. The properties read from JSON envelopes or FK relationships, providing backward compat without storing duplicate data.
-
-## Files Changed This Session
-
-**New files:**
-- `common/json_lookups.py` — `totals_total()`, `totals_balance()`, `totals_received()` ORM helpers for JSON path Cast expressions
-- `apps/ai_assistant/services/aggregate_tracker.py` — Alice aggregate collections: delta updates, refresh, read
-- `apps/ai_assistant/management/commands/refresh_aggregates.py` — management command for nightly drift correction
-- `readmes/topics/architecture/pjpv-shadow-field-removal.md` — outcome document with scrub checklist
-
-**Model changes:**
-- `apps/transactions/models/base_transaction_model.py` — removed 6 scalar fields, added 6 @property methods
-- `apps/orgs/models/base.py` — removed 3 scalar fields, added 3 @property methods, cleaned __repr__
-- `apps/core/models/contact.py` — removed 3 scalar fields, added 3 @property methods, simplified _sync_primary_communication_links
-
-**Totals engine:**
-- `apps/transactions/services/totals.py` — removed dual-write (4 lines: header.total, header.balance in both recalculate_totals and update_received)
-
-**Query migrations (scalar → JSON path):**
-- `apps/core/services/commerce_dashboard.py` — Sum('total')→annotate+Sum, balance__gt→annotate+filter, fixed Payment Sum('total')→Sum('amount')
-- `apps/accounts/services/collections_dashboard.py` — Sum('total') for DSO, Sum('balance') for open invoices
-- `apps/transactions/services/sales_pipeline.py` — 6x Sum('total') across pipeline stages
-- `apps/core/services/vendor_summary.py` — Sum('total') on Purchase
-- `apps/transactions/services/credit_check.py` — Sum('total') on Order backlog
-- `apps/ai_assistant/services/accounting_watchdog.py` — filter(total__isnull=False)
-- `apps/accounts/services/aged_receivables.py` — Sum('total') on Order per customer
-- `apps/accounts/services/ledger_balance.py` — Sum('total') on Order exposure
-- `apps/conversion/management/commands/import_wc2.py` — Sum('balance') on Invoice verification
-
-**Signal wiring:**
-- `apps/transactions/signals.py` — added Alice aggregate delta signals (pre_save stash + post_save apply) for all 5 transaction models; added WorkOrder import
-
-**work_order → workorder rename (~21 files):**
-- `apps/core/constants/model_registry.py` — registry key changed
-- `apps/core/utils/model_name_resolver.py` — mappings updated
-- `apps/core/services/wcapi_registry.py` — mappings updated
-- Plus ~18 seed commands, services, views, tests (done by subagent)
-
-**Migrations:**
-- All migration files deleted and regenerated fresh from current model state
-- `django_migrations` table cleared and fake-applied
+## Files Changed
+- See session log for complete list (14 WC3 files changed, 17 Allie files created)
