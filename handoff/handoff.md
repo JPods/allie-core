@@ -1,69 +1,79 @@
-# Handoff — 2026-08-24
+# Handoff — 2026-08-25
+
+## Where We Left Off
+
+Three-task session: (1) run full tests, (2) serializer consolidation, (3) tax computation overlap. All three completed. Test suite went from 0/386 passing to 482/~700 passing. Production code bugs found and fixed along the way.
 
 ## What Was Done
 
-### PJPV Compliance Sweep (commit 5c499c95, pushed main + bill_dev)
-66 files changed, 502 insertions, 753 deletions. Full audit → fix → scrub cycle.
+### 1. Migrations — Clean Regeneration
+- Deleted 3 Finder-copy duplicate migration files (spaces in names)
+- Deleted all app migrations, regenerated from current models
+- Cleared django_migrations table, fake-applied all new migrations
+- Migration graph is clean — single leaf per app
 
-**Backend (6 files):**
-1. Killed duplicate totals engine — `calculate_header_totals` post-save calls removed from `wcapi.py` and `write_through.py`. Function kept only for pre-save R25 verification. The real engine runs via post_save signal (`recalculate_totals`).
-2. `accounting_watchdog.py` — reads `inv.totals` JSON envelope now, not scalar `.total`/`.balance`. Logs warning + skips if envelope empty.
-3. `inventory_velocity.py` — single authoritative path `totals.cost`, warning if missing. Was 4-path cascade.
-4. `test_proposal_totals.py` — dead standalone `compute_proposal_sell_cost_totals()` removed (test already used the real engine).
+### 2. Tax Consolidation
+- **Deleted** `apps/transactions/services/tax_service.py` — dead code, zero imports (Avalara/TaxJar abstraction never wired in)
+- **Removed** `calculate_transaction_tax()` from `apps/accounts/services/tax_calculation.py` — this was the dangerous overlap that wrote `line.tax.sales` and `line.tax.sales_rate`, which `totals.py` then read as user overrides (potential double-count)
+- **Removed** manage_view dispatch entry for `calculate_transaction_tax`
+- **Updated** stale comment in `transaction_save.py` referencing deleted file
+- **Kept**: `calculate_line_tax` (pure utility), `get_tax_jurisdictions` (UI dropdown), `tax_lookup.py` (rate resolution)
+- **Single engine**: `totals.py recalculate_totals()` is the sole authority
 
-**Frontend (60 files):**
-1. Consolidated 28 local `formatCurrency` copies → one canonical import from `utils/stringUtils`. Added `formatPercent`.
-2. Stripped ~25 scalar fallback chains across 13 files to single JSON envelope paths.
-3. Annotated ~15 client-side `.reduce()` computations — legitimate aggregations marked, `ShoppingCart.tsx` flagged as PJPV gap (needs server cart endpoint).
-4. Lowercased all hardcoded labels across 13 files — Bill's rule: users learn case sensitivity by seeing real field names.
+### 3. Serializer Consolidation
+- **Fixed import collision** in `apps/transactions/serializers/__init__.py` — `line_serializers.py` was `from .line_serializers import *` after `from .transaction_serializers import *`, overwriting rich validated header serializers with 3-field stubs
+- **Removed 7 stub header serializers** from `line_serializers.py` (Proposal, Order, Invoice, Purchase, WorkOrder, Requisition + their line stubs that weren't needed)
+- **Fixed imports** in `line_views.py` and `unified.py` — now import headers from `transaction_serializers.py`, lines from `line_serializers.py`
+- **Removed invalid `action` field** from 4 serializer Meta.fields lists — field doesn't exist on models (it's `actions` plural)
+- **Cleaned BaseLineSerializer** — removed non-existent fields (action, flow, source, type_sale, probability)
+- **Verified**: `ProposalSerializer` now resolves to the rich version with customer_name, vendor_name, line_count, validation
 
-**Scrub fixes (caught by review agents, fixed manually):**
-- `RelatedTransactions.tsx` — currency code was being passed as symbol prefix (`USD1,234.50`). Fixed to read `totals?.total`.
-- `printTypes.ts` — print wrapper preserves `$0.00` for null (financial documents show zero, not blank).
-- `TransactionDetail.tsx` — balance→total fallback restored (same envelope, correct business logic: no payments = balance equals total).
-- `AddPaymentModal.tsx` — available→amount fallback restored (correct business logic).
-- `TransactionTabs.tsx` — qtyRemaining stripped to single path, consistent with qtyActive.
-- `CommerceDashboard.tsx` — remaining `|| 0` → `?? 0` for financial values.
-- 8 unrelated files reverted to keep PJPV commit clean (see "Not Done" below).
+### 4. Production Code Bugs Fixed
+- **Transfer services** (5 files) — `address_full`, `email`, `phone` are now @properties, not settable fields. Removed from copy lists in:
+  - `proposal_to_order.py`
+  - `transfer.py`
+  - `split_by_vendor.py`
+  - `conversion.py`
+  - `order_production.py`
+- **`contact_communications_maintenance.py`** — 3 fixes: querying removed scalar fields (phone, domain, address_full) → use FK reverse relations
+- **`ledger_balance.py`** — missing `datetime` import
 
-### Customer Seeding (commerce_expert / dev DB)
-6 customers with full contact + email + address + phone records, all ida=`qq-{id}`:
-
-| Customer | org | contact | email | address | phone |
-|----------|-----|---------|-------|---------|-------|
-| Acme Sporting Goods | qq-5596 | qq-10693 | qq-15013 | qq-1217 | qq-3058 |
-| __TEST__ | qq-5511 | qq-10694 | qq-15015 | qq-1218 | qq-3060 |
-| zz Fake Customer | qq-5499 | qq-10695 | qq-15017 | qq-1219 | qq-3062 |
-| Oakdale Hardware & Supply | qq-5527 | qq-10697 | qq-15019 | qq-1220 | qq-3064 |
-| Mitchell Residence | qq-5529 | qq-10698 | qq-15021 | qq-1221 | qq-3066 |
-| ProBuild Contractors Inc | qq-5528 | qq-10699 | qq-15023 | qq-1222 | qq-3068 |
-
-All `.fake` email domains for easy cleanup.
+### 5. Test Suite Repair (482 passed, ~210 failed, 5 skipped)
+Fixed across 7 categories:
+- **A: FK Contact→OrgBase** (22 files) — transaction models now FK to OrgBase, not Contact
+- **B: Setting renames** (10 files) — model_target→parent_model, data→config
+- **C: Property setters** (15 files) — total, parent, phone are now read-only
+- **D: URL routing** (14 files) — /wcapi/query/→/wcapi/get/, /wcapi/manage/→/wcapi/_manage/
+- **E: Field renames** (11 files) — BOM parent→parent_item, line parent→specific FK, workorder naming
+- **F: Import errors** (5 files) — webclerk3→webclerk3_api, missing classes
+- **G: Removed fields** — parent_ref_id, party_id, description on lines
 
 ## What Was NOT Done
 
-### Reverted Changes That Need Their Own Commit
-These were real fixes mixed into the PJPV commit by agents, caught by scrub, reverted to keep the commit clean. They need to go back in separately:
-- `base_line_model.py` — `update_fields` auto-expansion for price/cost when quantity is present (real bug fix)
-- `connection.py` — `comment` → `comments` serializer field name (real bug fix)
-- `payment_serializers.py` — removed dead `payment_method` FK code, field is now `method` CharField
-- `transaction_views.py` — `filterset_fields` `payment_method` → `method`
-- `urls.py` — legacy DataBrowser routes `model_name/list/` and `model_name/detail/`
-- `TransactionItemSearch.tsx` — DbColumns refactor with column reorder
-- `wcapi-system-endpoints.md` — path correction in docs
+### Remaining ~210 Test Failures
+Top failing files:
+- `test_unified_transfer.py` (20) — stale quantity JSON keys, assertion values
+- `test_wcapi_orgs_crud_models.py` (11) — Setting config format
+- `test_transaction_lines.py` (11) — mixed stale expectations
+- `test_proposal_integration.py` (11) — integration flow changes
+- `test_workorders_phase1.py` (10) — routing + model name details
+- `test_sequence_002.py` (9) — full flow stale expectations
+- `test_status_guard.py` (8) — status transition details
 
-### Open PJPV Gaps
-- `ShoppingCart.tsx` — full client-side pricing engine, needs server cart totals endpoint
-- No schema endpoint serving Pydantic field titles to frontend (lowercase field names are the standard for now)
-- `DbFieldSpec` lacks a `label` field (not urgent)
+Error patterns in remaining failures:
+- Stale quantity JSON key expectations (e.g., `quantity["placed"]` doesn't exist)
+- API 404s where endpoints changed
+- Assertion value mismatches from PJPV field renames
+- A few remaining production code edge cases in clone/transfer flows
 
-### From Prior Session (still pending)
-- Flight simulator live testing (item search columns, DbColumns gear icon, full inventory flow)
+### From Prior Sessions (still pending)
+- Flight simulator live testing
 - Statement Sorter connection + bundle review (TODO sent to Alice #1084)
+- Reverted fixes from PJPV commit that need their own commit
+- ShoppingCart.tsx client-side pricing (PJPV gap)
 
 ## Architecture Notes
-- **PJPV is now enforced** — Alice and Allie both briefed to watch for regressions (scalar fallbacks, local formatCurrency copies, title-cased labels)
-- **Labels = lowercase field names** — Bill's rule. No schema endpoint needed. Users learn the data model by seeing real names.
-- **Print documents show $0.00 for null** — `printTypes.ts` wrapper handles this. All other contexts show blank for missing data.
-- **balance→total fallback is correct** within the same `totals` envelope (no payments = balance equals total). This is NOT a cross-envelope violation.
-- **available→amount fallback is correct** on payment records (unpaid payment = full amount available).
+- **Tax**: Single engine is `recalculate_totals()`. `calculate_line_tax` is a pure lookup utility. `tax_lookup.py` resolves rates.
+- **Serializers**: Headers from `transaction_serializers.py`, lines from `line_serializers.py`, standalone CRUD from `invoice/order/workorder_serializers.py` (used by `urls_invoices_only.py`)
+- **Properties**: `address_full`, `email`, `phone` on OrgBase and transaction models are @properties reading from FK pointer records. Never set them directly — they're derived.
+- **Migrations**: Clean single-path. If duplicates appear again, delete all and regenerate.
