@@ -1,46 +1,58 @@
-# Handoff — 2026-08-25
+# Handoff — 2026-08-26
 
 ## Where We Left Off
 
-Architecture review session. Full industry comparison against Odoo/ERPNext/NetSuite — 10 gaps identified and all 10 resolved with zero new models. Contact-org role architecture decided (keep 5 FKs). Shipping, currency, approval workflows, revenue recognition all wired or designed. Press release for review comparison requested but not yet written.
-
-## What Was Done
-
-### Architecture Decisions (all documented in readmes/topics/architecture/)
-- **contact-org-roles.md** — 5 FK columns kept, junction table rejected, auto-populate rejected
-- **industry-comparison.md** — 10 gaps all resolved, zero new models, complexity comparison
-- **shipping-fulfillment.md** — JSON envelope on TransactionBaseModel, WC2 LoadTag/LoadItem lineage
-- **currency-exchange.md** — FX settlement wired into journalize_payment, erosion, org metrics
-- **approval-workflows.md** — signoff_request status, Setting rules, Action with dt_requested/dt_response
-
-### Code Changes (WC3 backend)
-- Contact: duplicate fields removed, save_after cleaned
-- Transactions: signoff_request/consigned/deferred statuses, shipping JSONField, STATUS_SIGNOFF_REQUEST
-- Status guard: approval gate with condition evaluator, signoff recording, sequential activation
-- Journalize: FX settlement, deferred revenue guard, pricing→sell fix, org FX metrics
-- Migration: 0002_add_shipping_json.py
-
-### Deferred
-- Shipping services (add_package, pack_items, ship_package) → Action #31213, ~Nov 2026
-- Press release for architecture review — requested, not yet written
+Built the full PJPV selectlist pipeline (three-tier inheritance: model → category profile → record) and the Setting Parade reference tool at `/setting-parade`. Wrote a transaction envelope reorganization plan at `readmes/topics/architecture/transaction-envelope-reorganization.md` — tax, commission, flow, source each get their own header envelope; `totals` stays pure arithmetic; lines stay as-is (they feed upward). Plan includes full UI audit and `status` propagation to all layouts. Migration strategy: big bang, no legacy fallback.
 
 ## Do This First Next Session
 
-1. **Complete SMB feature comparison** — outline at knowledge/projects/smb-enterprise-feature-comparison.md; assess each of ~100 features against WC3; add as appendix to review request
-2. **Run migrations** — 0002_add_shipping_json.py not yet applied
-3. **Run tests** — significant changes to status_guard, journalize, choices, contact model
-4. **Check** that negative invoice quantities journalize correctly (credit memo path)
+1. **Restart Django** — new `TransactionShipping` schema, updated `_pjpv_fields/` endpoint (serves all three schema maps now), and `_selectlists/` three-tier resolver all need server restart to take effect.
+2. **Build `TransactionTax` schema** — move tax config from `finance` into its own envelope per the reorganization plan. First envelope to migrate.
+3. **Add `status` to all model layouts** — write management command `add_status_to_layouts` to batch-update all Setting records with `purpose='wc:list_column_config'` and `wc:workbench_fields'`.
+4. **Test VCard import company linking** — `VCardImportDialog` now passes `customerId` from TransactionDetail; code is in place but untested in browser.
+5. **Review `unit`/`unit_base` naming collision** — `LinePrice.unit` (currency) vs item scalar `unit` (uom). PJPV leaf behaviors inject `price.unit` correctly as dot-path but name-guessing fallback may still hit bare `unit` on models without a Setting.
 
 ## Open Problems
 
-- `journalize_invoice` deferred check reuses `dt_needed` — may want dedicated `dt_deferred` field
-- Recommendation sections in industry-comparison.md still show rejected alternatives — could confuse readers
-- Approval workflow not yet tested end-to-end (Setting → status change → Action → signoff → transition)
+- `ContactPanel` export was fixed (named + default) but the root cause is `withDevIdentifier` wrapping — any new panel using this pattern will have the same issue.
+- Three frontend endpoints were broken by the PJPV compliance commit (`86fe942d`): `_model_list`, `_model_detail`, `_search_presets` — all fixed this session, but other endpoints renamed in that commit may have been missed in non-wcapi.ts files.
+- `seed_coaching` management command has a bug (`Document() got unexpected keyword arguments: 'model_name'`) — coaching tips created manually this session.
+- Shipping `selectlist_key` values (`shipping_status`, `shipping_carrier`, `shipping_service`, `weight_unit`) declared in schema but no corresponding select list entries exist yet in Settings or `selectLists.ts`.
 
-## Architecture Notes
+## What Was Decided (and Why)
 
-- **Zero-model pattern**: signed quantities, status gates, JSON envelopes solve problems that industry solves with new models
-- **shipping.costs.customer** vs **shipping.costs.actual** — distinct concerns (Alice caught this)
-- **contact.prefs.tooltip_level** — user-controlled, Alice adjusts over time
-- **Action priority framework**: 1=Critical, 2=High (signoffs), 3=Normal, 4=Low, 5=Someday
-- **Commissions** parallel currency pattern but at line level
+- **Three-tier selectlist inheritance** — model Setting → record's `selectlist_profile` (rich object with id/ida/purpose) → record's own `config.selectlists`. Because different product categories need wildly different dropdown options (paint vs electronics vs plumbing).
+- **`totals` holds arithmetic only; domain envelopes hold detail** — `totals.shipping` is the dollar charge, `shipping` envelope is the logistics. Same pattern applies to tax, commission. Because mixing computed summaries with domain config in one object violated single-responsibility.
+- **Lines keep tax/commission/totals together** — lines are computational inputs that sum upward to the parent. The complexity that justifies separate envelopes lives at the header level, not the line level.
+- **Big bang migration, no fallback** — no production data to protect. Move JSON keys in-place, update all code to new paths only, delete old paths. No lazy migration.
+- **Cmd+click any label = quick select list** — opens BehaviorOverrideDialog pre-set to `select` type. Cmd+Shift+click = full behavior editor. Shift+click = field help. Because select list creation must be frictionless.
+- **Setting Parade is a reference tool, not operational** — research/comprehension, not editing. Feedback (understood/needs_work/dont_understand) is a training gap metric for Alice.
+
+## Files Changed This Session
+
+### WebClerk Backend
+- `apps/core/views/system_dispatch.py` — `selectlist_key` passthrough in PJPV; serve all three schema maps
+- `apps/core/views/selectlist_view.py` — `resolve_selectlists()` three-tier resolution + record-level query params
+- `apps/core/views/setting_parade_view.py` — NEW: manifest, preview, feedback endpoints for Setting Parade
+- `apps/core/urls.py` — registered setting parade + shipping schema import
+- `apps/core/services/field_behaviors.py` — added `shipping` to LEAF_MAP for transaction models
+- `common/schemas/transaction_envelopes.py` — `TransactionShipping` schema; `selectlist_key` on OrgAddress.type; `selectlist_key` in `schema_to_leaf_behaviors()`
+- `readmes/topics/architecture/selectlist-inheritance.md` — NEW: three-tier selectlist architecture
+- `readmes/topics/architecture/selectlist-management.md` — NEW: user guide for select list creation/editing
+- `readmes/topics/architecture/setting-parade.md` — NEW: Setting Parade spec
+- `readmes/topics/architecture/transaction-envelope-reorganization.md` — NEW: plan for tax/commission/flow/source envelopes + UI audit + status propagation
+
+### WebClerk Frontend
+- `src/api/wcapi.ts` — endpoint fixes (`_model_list`, `_model_detail`, `_search_presets`); `PjpvFieldMeta.selectlist_key`; `getResolvedSelectlists()`
+- `src/hooks/useDataBrowser.ts` — PJPV selectlist_key auto-lookup from SELECT_LIST_MAP; record-level three-tier useEffect
+- `src/pages/tools/SettingParade.tsx` — NEW: full reference tool with grouped behaviors, envelope leaf visualization, PJPV schemas, feedback
+- `src/pages/tools/SettingParade.css` — NEW: theme-compliant CSS variables
+- `src/routes/Routes.ts` — added `settingParade` route
+- `src/routes/protectedRoutesConfig.tsx` — registered SettingParade
+- `src/components/fields/BaseField.tsx` — Cmd+click = quick select list (presetType)
+- `src/components/fields/BehaviorOverrideDialog.tsx` — accepts `presetType` prop
+- `src/components/common/VCardImportDialog.tsx` — `customerId` prop for company linking
+- `src/apps/transactions/components/TransactionDetail.tsx` — passes `customerId` to VCardImportDialog
+- `src/apps/common/components/panels/ContactPanel.tsx` — named export fix
+- `src/pages/admin/AliceDashboard.tsx` — coaching tips with clickable link buttons
+- `src/layout/AppSidebar.tsx` — maps added for parade/selectlist routes (not in default nav — accessed via Alice coaching)

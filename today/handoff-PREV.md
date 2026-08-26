@@ -1,32 +1,46 @@
-# Handoff — 2026-08-24
+# Handoff — 2026-08-25
 
 ## Where We Left Off
 
-PJPV compliance sweep complete and shipped (commit 5c499c95, main + bill_dev). 66 files, -251 net lines. Customer seeding done — 6 customers with full contact/email/address/phone records in commerce_expert.
+Architecture review session. Full industry comparison against Odoo/ERPNext/NetSuite — 10 gaps identified and all 10 resolved with zero new models. Contact-org role architecture decided (keep 5 FKs). Shipping, currency, approval workflows, revenue recognition all wired or designed. Press release for review comparison requested but not yet written.
+
+## What Was Done
+
+### Architecture Decisions (all documented in readmes/topics/architecture/)
+- **contact-org-roles.md** — 5 FK columns kept, junction table rejected, auto-populate rejected
+- **industry-comparison.md** — 10 gaps all resolved, zero new models, complexity comparison
+- **shipping-fulfillment.md** — JSON envelope on TransactionBaseModel, WC2 LoadTag/LoadItem lineage
+- **currency-exchange.md** — FX settlement wired into journalize_payment, erosion, org metrics
+- **approval-workflows.md** — signoff_request status, Setting rules, Action with dt_requested/dt_response
+
+### Code Changes (WC3 backend)
+- Contact: duplicate fields removed, save_after cleaned
+- Transactions: signoff_request/consigned/deferred statuses, shipping JSONField, STATUS_SIGNOFF_REQUEST
+- Status guard: approval gate with condition evaluator, signoff recording, sequential activation
+- Journalize: FX settlement, deferred revenue guard, pricing→sell fix, org FX metrics
+- Migration: 0002_add_shipping_json.py
+
+### Deferred
+- Shipping services (add_package, pack_items, ship_package) → Action #31213, ~Nov 2026
+- Press release for architecture review — requested, not yet written
 
 ## Do This First Next Session
 
-1. **Recommit the 7 reverted changes** — real fixes that were reverted to keep PJPV commit clean:
-   - `base_line_model.py` — update_fields auto-expansion (bug fix)
-   - `connection.py` — comment→comments (bug fix)
-   - `payment_serializers.py` — payment_method FK cleanup
-   - `transaction_views.py` — filterset fix
-   - `urls.py` — DataBrowser legacy routes (blocks DataBrowser model loading)
-   - `TransactionItemSearch.tsx` — DbColumns refactor
-   - `wcapi-system-endpoints.md` — path correction
+1. **Complete SMB feature comparison** — outline at knowledge/projects/smb-enterprise-feature-comparison.md; assess each of ~100 features against WC3; add as appendix to review request
+2. **Run migrations** — 0002_add_shipping_json.py not yet applied
+3. **Run tests** — significant changes to status_guard, journalize, choices, contact model
+4. **Check** that negative invoice quantities journalize correctly (credit memo path)
 
-2. **Flight simulator live testing** — verify item search columns, DbColumns gear icon, full Proposal→Order→Invoice→Payment flow
+## Open Problems
 
-3. **Statement Sorter connection + bundle review** — TODO sent to Alice (#1084)
+- `journalize_invoice` deferred check reuses `dt_needed` — may want dedicated `dt_deferred` field
+- Recommendation sections in industry-comparison.md still show rejected alternatives — could confuse readers
+- Approval workflow not yet tested end-to-end (Setting → status change → Action → signoff → transition)
 
-## Open PJPV Gaps
+## Architecture Notes
 
-- `ShoppingCart.tsx` — full client-side pricing engine, needs server cart totals endpoint
-- No schema endpoint for Pydantic field titles (not urgent — lowercase field names are the standard)
-
-## Key Decisions This Session
-
-- **Labels = lowercase field names** — users learn case sensitivity by seeing real names
-- **Same-envelope fallback = correct** — `totals.balance ?? totals.total` is business logic, not a PJPV violation
-- **Print documents show $0.00 for null** — `printTypes.ts` wrapper; all other contexts show blank
-- **Agent scrub is mandatory** — 3 of 4 agents exceeded scope; scrub caught 7 unrelated changes (Scar #71)
+- **Zero-model pattern**: signed quantities, status gates, JSON envelopes solve problems that industry solves with new models
+- **shipping.costs.customer** vs **shipping.costs.actual** — distinct concerns (Alice caught this)
+- **contact.prefs.tooltip_level** — user-controlled, Alice adjusts over time
+- **Action priority framework**: 1=Critical, 2=High (signoffs), 3=Normal, 4=Low, 5=Someday
+- **Commissions** parallel currency pattern but at line level
