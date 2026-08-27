@@ -38,6 +38,7 @@
 - [Payment checkbook architecture](project_payment_checkbook.md) — Signed amounts, received/expense, category→GL, method CharField, dashboard buttons
 - [Prefs/metadata/refs architecture](reference_prefs_architecture.md) — Three-tier Settings, JSON envelope policy, Pydantic schemas, schema_map Setting
 - [Schema review cycle](feedback_schema_review_cycle.md) — Alice flags changes to WC_HQ; quarterly forced admin review; atrophy prevention
+- [Schema scrub process](reference_schema_scrub_process.md) — 3 audit commands + fix source + re-seed --force; common root causes; 2026-08-26 baseline
 - [TFTS troubleshooting index](reference_tfts_index.md) — 47 solved problems indexed by symptom; at readmes/sketchup/tfts-index.md
 - [R25 multi-app form architecture](feedback_r25_multiapp_forms.md) — Forms in domain app pages/, Alice report records point to .tsx print options
 - [Gordy quality manual digitization](project_gordy_quality_manual.md) — ISO 9001 manual → WC3 Action model; nuclear discipline for every installation
