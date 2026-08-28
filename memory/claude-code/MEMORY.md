@@ -1,5 +1,7 @@
 # Memory Index
 
+- [Push to bill_dev](feedback_push_bill_dev.md) — Always push to bill_dev; main only when explicitly requested
+
 - [Router.tsx is the real route registration](feedback_router_tsx_routes.md) — Add to Router.tsx (BrowserRouter) AND protectedRoutesConfig.tsx (WindowManager)
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
 - [Labels match field names in lowercase](feedback_labels_lowercase.md) — Users learn case sensitivity by seeing real field names; no title-casing
