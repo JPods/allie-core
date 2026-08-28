@@ -1,54 +1,36 @@
-# Handoff — 2026-08-27 (Final — 21 commits)
+# Handoff — 2026-08-28
 
 ## Where We Left Off
 
-21 commits on main, not yet pushed (need `gh auth login` then `git push origin main:bill_dev && git push origin main`).
+Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fixed, save_view refactored into save_* cluster with Pydantic envelope validation, payment gateway and shipping service architecture built and seeded. Bill will do a full UI walkthrough tomorrow as final validation before declaring release-ready.
 
-## The Big Insight
+## What Was Built
 
-The FK-to-values conversion is not a database cleanup — it's the infrastructure for MyCarryOn. Self-contained records with integer IDs and refs.links display data are portable bundles. FK-bound records can't travel between instances. Same principle at every layer: individual sovereignty → data portability → self-contained records → values not FKs → refs.links → Bundle → MyCarryOn.
-
-## What Was Built (21 commits)
-
-### Naming & Structure (1-8)
-1. id_ prefix → _id suffix (5 fields, 3 models)
-2. Segmented Kanban project selector (dt_kanban)
-3. Backend naming refactor (366 files — behavioral subdirectories)
-4. Scrub bundles/Settings/Reports
-5. Service model deleted → Item.config.service
-6. Kanban move-to-project + contact manager trigger
-7. Lifecycle discipline doc
-8. Transaction serializer mega-file split
-
-### Architecture (9-13)
-9. Item-linked models doc
-10. Shared serializer behaviors (core + transactions)
-11. Core behaviors module — universal validators
-12. Action + Touch + OrgBase wired to behaviors
-13. Shared behaviors architecture doc
-
-### FK Discipline (14-21)
-14. Touch + OrgBase FKs → values
-15. Communication FKs → values (Email, Phone, Address, Domain)
-16. FK discipline reference — complete by-model inventory
-17. Remaining CASCADE FKs → values (Payment, Alice models, DeliveryVisit)
-18. fk_discipline in all 27 Setting.model configs
-19. ItemLinkedBase CASCADE → PROTECT
-20. Serial split from ItemLinkedBase → independent BigIntegerField
-21. MyCarryOn connection documented
+- Post-restructuring scrub: 17 bugs (11 crashes, 6 wrong-data) + 7 deprecation fixes
+- Payment gateway: Setting.config.gateway[] thin registry → Connection for depth
+- Shipping service: Setting.config.service[] with FedEx/UPS/USPS/DHL
+- save_* service cluster: save_field_assignment, save_line_processing, save_envelope, save_contact_linking
+- Pydantic envelope gate: validates metadata/config/refs/prefs on every save
+- Config.extra="forbid" on 20+ nested Pydantic models
+- InvoiceSerializer + WorkOrderSerializer expanded to full field sets
 
 ## Do This First Next Session
 
-1. Push to bill_dev
-2. Run test suite
-3. Fresh-context review of FK discipline + shared behaviors
+1. Bill's UI walkthrough results — fix anything he finds
+2. Andi migration baseline — the faked migrations are fragile; need clean baseline or migration reset
+3. Check advchm + demo databases for other missing columns from faked migrations
+4. Consider nightly Alice envelope compliance scan
 
 ## Still Open
 
-- Management command renames (14 inconsistent)
-- Contact org FKs (SET_NULL → BigInt for consistency)
-- refs.links Pydantic schema
-- resolve_price_legacy merge
-- Alice: orphan scan, delete log, service onboarding, serial review
-- Kanban: test move-to-project and contact manager in browser
-- Phone normalization: pre_save_hook → save()
+- actions.py view: ~200 lines of business logic should be in a service
+- save_view.py contact linking block could be further simplified
+- 8 setting.py schemas with extra="allow" — document why
+- Management command renames (14 inconsistent — from prior session)
+- Contact org FKs (SET_NULL → BigInt for consistency — from prior session)
+- Alice: orphan scan, delete log, service onboarding
+- ZeroBounce / address verification service architecture (pattern established, not built)
+
+## Open Problems
+
+- Migration squash mismatch: Andi databases have old migration chain (0001-0036), codebase has squashed (0001-0005). Faked to resolve. Any future migration referencing squashed parents will break until baseline is established.
