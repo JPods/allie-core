@@ -2,7 +2,9 @@
 
 ## Where We Left Off
 
-Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fixed, save_view refactored into save_* cluster with Pydantic envelope validation, payment gateway and shipping service architecture built and seeded. Bill will do a full UI walkthrough tomorrow as final validation before declaring release-ready.
+Session 1: Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fixed, save_view refactored into save_* cluster with Pydantic envelope validation, payment gateway and shipping service architecture built and seeded.
+
+Session 2: Designed Alice multi-agent architecture. Bill wants Alice split into three capacities: **ops** (enforce standards, temp 0.1), **hippocampus** (build memory, innovate deviations, temp 0.4), and **librarian** (store ideas, document intent, measure outcomes). Design conversation only — no code written yet.
 
 ## What Was Built
 
@@ -16,10 +18,10 @@ Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fix
 
 ## Do This First Next Session
 
-1. Bill's UI walkthrough results — fix anything he finds
-2. Andi migration baseline — the faked migrations are fragile; need clean baseline or migration reset
-3. Check advchm + demo databases for other missing columns from faked migrations
-4. Consider nightly Alice envelope compliance scan
+1. Build Alice multi-agent architecture — three Modelfiles (alice-ops, alice-hc, alice-librarian), facet directory, updated MCP server with tool routing, hippocampus vector store
+2. Bill's UI walkthrough results — fix anything he finds
+3. Andi migration baseline — the faked migrations are fragile; need clean baseline or migration reset
+4. Check advchm + demo databases for other missing columns from faked migrations
 
 ## Still Open
 
@@ -28,6 +30,7 @@ Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fix
 - 8 setting.py schemas with extra="allow" — document why
 - Management command renames (14 inconsistent — from prior session)
 - Contact org FKs (SET_NULL → BigInt for consistency — from prior session)
+- Alice multi-agent build: ops/hc/librarian Modelfiles, facet, MCP routing, .chroma_db_alice_hc/, debate protocol
 - Alice: orphan scan, delete log, service onboarding
 - ZeroBounce / address verification service architecture (pattern established, not built)
 
