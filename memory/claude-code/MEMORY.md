@@ -106,6 +106,7 @@
 - [Signaling not planning — Start Small Iterate Relentlessly](feedback_signaling_vs_planning.md) — Run→measure→adapt beats upfront design; memory is the prerequisite for signaling; reading Allie = loading prior signal; planning without retrospection is what governments do
 - [The crew](reference_crew.md) — Bill + Claude Code + Allie + Noelle + Natalie + Sally(s) + Nora(s) + Alice; pre-test + retrospection per run; crew_summary.md per network; Alice empty until activated
 - [Allie facets architecture](reference_allie_facets.md) — ~/Allie/facets/{noelle,natalie,nora,sally}/facet.json; Pi carries its own on SD card (no reset on reboot); Allie syncs cross-network improvements to Pi; full doc at readmes/agents/allie-facets.md
+- [Three-capacity agent architecture](project_three_capacity_architecture.md) — ops/hc/librarian for all 6 agents; 18 Ollama models; facets; HC vector stores; leftshoe integration
 - [Stop Animation reliability](feedback_stop_animation_reliability.md) — Use Extensions menu or toolbar; console HTML dialog unreliable under load; JS debounce fixed; log volume throttled
 - [Animation open issues 2026-06-20](project_animation_open_issues.md) — model.entities nil, double Natalie sweep, dispatch_idle nil.each, pod accumulation at one station, inbound speed anomaly
 - [Animation stop architecture — built 2026-06-20](reference_animation_stop_architecture.md) — Full table of what was built: escape key, latch, note mode, agent flags, toolbar button, Extensions menu, topology cache, gap threshold, log throttle
