@@ -2,38 +2,43 @@
 
 ## Where We Left Off
 
-Session 1: Deployed to webclerk.com and advchm.webclerk.com. All services live. 17 bugs fixed, save_view refactored into save_* cluster with Pydantic envelope validation, payment gateway and shipping service architecture built and seeded.
+Session 4: Three-capacity agent architecture fully deployed. 18 Ollama models built (6 agents × ops/hc/lib). Alice MCP v2.0 with 12 tools. Weekly agent sprint system live with 10 proposed actions on the Agent Operations Kanban board. Allie wired as scrum master in allie-reflect.py. Touch-based agent prompts working. All agents acknowledged all actions.
 
-Session 2: Designed Alice multi-agent architecture. Bill wants Alice split into three capacities: **ops** (enforce standards, temp 0.1), **hippocampus** (build memory, innovate deviations, temp 0.4), and **librarian** (store ideas, document intent, measure outcomes). Design conversation only — no code written yet.
+## What Was Built (Session 4)
 
-## What Was Built
-
-- Post-restructuring scrub: 17 bugs (11 crashes, 6 wrong-data) + 7 deprecation fixes
-- Payment gateway: Setting.config.gateway[] thin registry → Connection for depth
-- Shipping service: Setting.config.service[] with FedEx/UPS/USPS/DHL
-- save_* service cluster: save_field_assignment, save_line_processing, save_envelope, save_contact_linking
-- Pydantic envelope gate: validates metadata/config/refs/prefs on every save
-- Config.extra="forbid" on 20+ nested Pydantic models
-- InvoiceSerializer + WorkOrderSerializer expanded to full field sets
+- **18 Ollama models**: alice/allie/noelle/natalie/nora/sally × ops/hc/lib capacities
+- **Alice MCP v2.0**: 12 tools routed by capacity (ops/hc/lib)
+- **agent-sprint.py**: seed, create-sprint, propose, review, approve, reject, execute, run-prompts, status, gantt, prompt, touches
+- **Touch system**: channel='agent', out/in pairs, Connection.rules gate interactions
+- **Agent contacts**: Noelle=10709, Natalie=10710, Nora=10711, Sally=10712
+- **Connections**: Claude API (55), agent prompt interfaces (56-61)
+- **Agent Operations project** (id=68): permanent July 2026–June 2027, Gantt-visible
+- **10 actions proposed**: 4 Alice, 2 Allie, 1 each Noelle/Natalie/Nora/Sally — all acknowledged
+- **Allie scrum master**: nightly HC consolidation + propose + SLA check; Wednesday boundary
+- **Leftshoe TEAM LEARNING**: agent facets surfaced at session start
+- **HELP-AGENTS document** (id=965): updated with full architecture
+- **Readme**: readmes/84-agent-sprint-architecture.md + flowchart .dot/.svg
 
 ## Do This First Next Session
 
-1. Build Alice multi-agent architecture — three Modelfiles (alice-ops, alice-hc, alice-librarian), facet directory, updated MCP server with tool routing, hippocampus vector store
-2. Bill's UI walkthrough results — fix anything he finds
-3. Andi migration baseline — the faked migrations are fragile; need clean baseline or migration reset
-4. Check advchm + demo databases for other missing columns from faked migrations
+1. Review 10 proposed actions on Agent Operations board — approve/reject
+2. Sync Modelfiles to Andi and run agent-build.py --all
+3. Add Anthropic API key to config/allie_api_keys.json for Claude escalation
+4. Add launchd timer for alice-hc-consolidate.py (after alice-patterns, before allie-reflect)
+5. Bill's UI walkthrough (carried from prior sessions)
 
 ## Still Open
 
-- actions.py view: ~200 lines of business logic should be in a service
-- save_view.py contact linking block could be further simplified
-- 8 setting.py schemas with extra="allow" — document why
-- Management command renames (14 inconsistent — from prior session)
-- Contact org FKs (SET_NULL → BigInt for consistency — from prior session)
-- Alice multi-agent build: ops/hc/librarian Modelfiles, facet, MCP routing, .chroma_db_alice_hc/, debate protocol
-- Alice: orphan scan, delete log, service onboarding
-- ZeroBounce / address verification service architecture (pattern established, not built)
+- Andi pending.status column issue (faked migration)
+- 20 Faker-generated garbage Connection records need cleanup
+- Terms/direction/line_type value normalization
+- profitbubbles.com needs Hostinger DNS setup
+- Agent-sprint gantt export needs update for permanent project model
+- Nightly consolidation scripts needed for agents beyond Alice
 
-## Open Problems
+## Key IDs
 
-- Migration squash mismatch: Andi databases have old migration chain (0001-0036), codebase has squashed (0001-0005). Faked to resolve. Any future migration referencing squashed parents will break until baseline is established.
+- Agent Operations project: id=68
+- Sprint W35 (internal): id=67 (archived)
+- Connections: Claude API=55, Alice=56, Allie=57, Noelle=58, Natalie=59, Nora=60, Sally=61
+- Agent contacts: Alice=10628, Allie=10629, Claude=10627, Noelle=10709, Natalie=10710, Nora=10711, Sally=10712
