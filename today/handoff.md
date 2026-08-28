@@ -1,30 +1,54 @@
-# Handoff — 2026-08-27
+# Handoff — 2026-08-27 (Final — 21 commits)
 
 ## Where We Left Off
 
-Full backend naming & structure cleanup complete (366 files). Services grouped into behavioral subdirectories (convert/, payment/, fulfillment/, pricing/, dashboard/, inventory/, serial/). All `id_` prefix fields renamed to `_id` suffix with migrations applied. Service model deleted — replaced with `Item.config.service` dictionary. Bundles, Settings, and Reports scrubbed for compliance. 5 commits on main, not yet pushed (GitHub auth needed).
+21 commits on main, not yet pushed (need `gh auth login` then `git push origin main:bill_dev && git push origin main`).
 
-Segmented Kanban project selector built — time-bucketed dropdown using `dt_kanban`. Still working on Kanban features.
+## The Big Insight
+
+The FK-to-values conversion is not a database cleanup — it's the infrastructure for MyCarryOn. Self-contained records with integer IDs and refs.links display data are portable bundles. FK-bound records can't travel between instances. Same principle at every layer: individual sovereignty → data portability → self-contained records → values not FKs → refs.links → Bundle → MyCarryOn.
+
+## What Was Built (21 commits)
+
+### Naming & Structure (1-8)
+1. id_ prefix → _id suffix (5 fields, 3 models)
+2. Segmented Kanban project selector (dt_kanban)
+3. Backend naming refactor (366 files — behavioral subdirectories)
+4. Scrub bundles/Settings/Reports
+5. Service model deleted → Item.config.service
+6. Kanban move-to-project + contact manager trigger
+7. Lifecycle discipline doc
+8. Transaction serializer mega-file split
+
+### Architecture (9-13)
+9. Item-linked models doc
+10. Shared serializer behaviors (core + transactions)
+11. Core behaviors module — universal validators
+12. Action + Touch + OrgBase wired to behaviors
+13. Shared behaviors architecture doc
+
+### FK Discipline (14-21)
+14. Touch + OrgBase FKs → values
+15. Communication FKs → values (Email, Phone, Address, Domain)
+16. FK discipline reference — complete by-model inventory
+17. Remaining CASCADE FKs → values (Payment, Alice models, DeliveryVisit)
+18. fk_discipline in all 27 Setting.model configs
+19. ItemLinkedBase CASCADE → PROTECT
+20. Serial split from ItemLinkedBase → independent BigIntegerField
+21. MyCarryOn connection documented
 
 ## Do This First Next Session
 
-1. **Push to bill_dev** — 5 commits on main need pushing. `git push origin main:bill_dev` (and main if requested). GitHub auth may need `gh auth login`.
+1. Push to bill_dev
+2. Run test suite
+3. Fresh-context review of FK discipline + shared behaviors
 
-2. **Kanban task card project move** — Bill wants a select list on task cards to move actions between projects. Two sections: same-parent projects + 4-week window projects.
+## Still Open
 
-3. **Kanban contact +add button** — wire to existing `ProjectContactManager` component.
-
-4. **Transaction serializer dedup** — `transaction_serializers.py` mega-file has duplicate class definitions. Split into per-model files per naming plan.
-
-5. **Verify UI renders correctly** — DataBrowser, Kanban with new segmented selector, confirm renamed fields display properly.
-
-## Open Problems
-
-- Duplicate serializer classes in `transactions/serializers/` — `InvoiceSerializer`, `OrderSerializer` etc. defined in two files
-- `pricing.py` → `price_resolver.py` merge left `resolve_price_legacy` function — review needed
-- Parallel agent import fixes missed 6 files — always run `manage.py check` (not just `django.setup()`) after refactoring
-
-## Scars From This Session
-
-- **Parallel agent import gap**: 9 agents reported clean but 6 files had stale imports. `django.setup()` doesn't load URLs. `manage.py check` is the correct verification.
-- **Setting.config protection**: Surgical JSON updates require `_setting_update_authorized = True`. Never re-seed to fix field names — that destroys accumulated config.
+- Management command renames (14 inconsistent)
+- Contact org FKs (SET_NULL → BigInt for consistency)
+- refs.links Pydantic schema
+- resolve_price_legacy merge
+- Alice: orphan scan, delete log, service onboarding, serial review
+- Kanban: test move-to-project and contact manager in browser
+- Phone normalization: pre_save_hook → save()
