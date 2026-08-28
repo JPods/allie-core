@@ -33,7 +33,26 @@ cd ~/Documents/CommerceExpert/WebClerk/backend
 - Stale stored overrides surviving in Settings (orphan overrides for virtual fields like phone/domain/address_full on org models — cleared by re-seed)
 - Missing Pydantic schema files in `common/schemas/` (import_error)
 
-## 2026-08-26 Baseline (post-fix)
+## 2026-08-28 Baseline (post-scrub)
+
+| Audit | Result |
+|-------|--------|
+| Schema compliance | **0 violations** (78 settings, all clean) |
+| Field behaviors | **1 flag** (1 PHONE_NAME — `phone.number` auto-detected, harmless) |
+| Select lists | **13 flags** (13 DRIFT — intentional: status/type differ by model) |
+
+### What was fixed 2026-08-28:
+- PaymentRefsLinks: added `contact`/`item` fields to match default_refs() factory
+- inventory_layer: added to MODEL_REGISTRY + created Pydantic schema file
+- groups/user_permissions: excluded from field_map (Django auth M2M, not WC3 fields)
+- scrap_factor/yield_pct: typed as `percentage` (were UNTYPED)
+- 14 ORPHAN_OVR overrides cleaned from wc:model Settings
+- 2 legacy wc:workbench_fields Settings deactivated
+- seed_all_schema_maps command deleted (superseded by seed_model_definitions)
+- Shipping select lists wired: carrier(7), service(6), status(6), weight_unit(4)
+- selectlist_key → options resolution added to leaf behavior injection
+
+## Previous baseline (2026-08-26)
 
 | Audit | Result |
 |-------|--------|
