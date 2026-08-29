@@ -57,7 +57,7 @@
 - [.config vs .prefs boundary](feedback_config_vs_prefs.md) — .config=system (Setting), .prefs=user (Contact); config is the menu, prefs is the order
 - [Affinity Designer for SVGs](feedback_affinity_svg.md) — Bill uses Affinity for polished SVGs; Mac opens .svg in Affinity; Graphviz for drafts only
 
-- [List selection standard](feedback_list_selection_standard.md) — No checkboxes; click=select, shift=range, cmd/ctrl=toggle; all WC list views
+- [Keyboard modifier standard](feedback_list_selection_standard.md) — Click/shift/cmd/option+cmd modifiers for rows, labels, panel headers; no checkboxes
 - [AskUserQuestion at decision points](feedback_ask_user_question.md) — Bill likes question UI for steering; use at decision points
 - [Shift-for-Help standard](feedback_shift_for_help.md) — Shift+hover=tooltip, Shift+click=deep help; one key, all projects; readmes/wisdom/shift-for-help.md
 - [Reload and restart as a development rule](feedback_reload_restart_rule.md) — Every tool needs reload+restart in its debug UI; say "reload su_jpods" not paste-a-command; applies to all projects
