@@ -400,6 +400,37 @@ transactions-totals.md` § "quantity.active is the verb of the document".
 
 ---
 
+## Upload 500 — Auth Red Herring — 2026-08-29
+
+**Cost:** Multiple sessions across two days. The upload 500 was first reported
+on 2026-08-28 and attributed to auth — RoleValidatingJWTAuthentication crashing
+on a missing role claim. An entire session was spent investigating the auth
+pipeline: checking token generation, role claims, RoleValidatingJWTAuthentication
+behavior, User model role fields, active/inactive users. The actual error was
+one line in `_serialize_document()` referencing `doc.model_name` — an attribute
+that doesn't exist on the Document model. One curl command with a valid token
+would have returned the error message in the response body and found the root
+cause in 30 seconds.
+
+**What was hard to see:** HTTP 500 on a POST to an endpoint with no explicit
+auth classes looks like an auth problem. The default auth class
+(RoleValidatingJWTAuthentication) does raise AuthenticationFailed on role
+mismatches, so the theory was plausible. But DRF wraps auth failures as 401/403,
+not 500. A 500 means the view code itself crashed. The status code was the clue
+that auth was not the issue — but the investigation started from the assumption
+that it was, and confirmation bias kept it there.
+
+**The rule it produced:** When a Django view returns 500, reproduce with curl
+first and read the error body. 500 means the view crashed — not auth, not
+permissions. Auth failures are 401/403. The error body tells you exactly what
+broke. Theorizing before reading the error is the most expensive diagnostic
+mistake.
+
+**Where the rule lives:** `process/inbox/20260829T044338-tfts.md`;
+`backend/apps/docs/views/upload_view.py` (the fix).
+
+---
+
 ## Open Risks
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |
