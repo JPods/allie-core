@@ -431,6 +431,39 @@ mistake.
 
 ---
 
+## Label Behaviors Are Layout-Independent — 2026-08-29
+
+**Cost:** Four failed attempts across a single session. Each attempt hardcoded
+document-specific label logic in one rendering path, only to discover it didn't
+work in the other paths. Three independent rendering paths exist for field labels:
+DynamicDetail.tsx (floating windows), GroupedDetailFields→BehaviorField→BaseField
+(db.detail), and DocumentDisplay→HorizontalField (db.form). Fixing one left the
+others broken. The model name propagation chain had a gap that silently prevented
+the behavior from reaching db.detail even after it was hardcoded there. Total:
+~90 minutes of whack-a-mole that should have been one 10-minute change.
+
+**What was hard to see:** Each rendering path looked like the right place to add
+the behavior. DynamicDetail has a `renderField` function. GroupedDetailFields has
+a `renderField` wrapper. DocumentDisplay has inline JSX with `HorizontalField`.
+Each accepts different props, passes context differently, and has its own label
+rendering logic. The temptation to "just add it here" was strong because each
+individual fix was small and correct — it just wasn't complete. The incompleteness
+was invisible until you switched views.
+
+**The rule it produced:** Label behaviors (href, color, icon, action) are declared
+once in the Setting record's `field_behaviors` and resolved in the shared field
+rendering layer (`components/fields/index.tsx` → `BaseField`). Never hardcode
+a field behavior per-layout. If you're writing the same conditional in multiple
+components, you're in the wrong layer. The Setting is the source of truth.
+Every layout reads from it. No layout should need to know what model it's rendering.
+
+**Where the rule lives:** `process/inbox/20260829T125916-tfts.md`;
+`components/fields/index.tsx` (label_href resolution);
+`components/fields/BaseField.tsx` (label_href rendering);
+document Setting `behaviors.name.label_href = "path.url"`.
+
+---
+
 ## Open Risks
 
 | Risk | Date accepted | What it will cost if unpaid | Owner |
