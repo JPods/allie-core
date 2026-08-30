@@ -2,7 +2,7 @@
 
 - [Push to bill_dev](feedback_push_bill_dev.md) — Always push to bill_dev; main only when explicitly requested
 - [No infrastructure advice](feedback_no_infrastructure_advice.md) — Never write docs on pg/python/celery/react; users go to source projects
-- [Values over ForeignKeys](feedback_values_over_fks.md) — BigIntegerField for relationships; FK only when cascade is wanted; refs.links carries display data
+- [BigInt default, FK only parent-child](feedback_values_over_fks.md) — FK authority actively reduced; BigInt default; FK only when cascade deletion is correct; 3-tier model
 
 - [Router.tsx is the real route registration](feedback_router_tsx_routes.md) — Add to Router.tsx (BrowserRouter) AND protectedRoutesConfig.tsx (WindowManager)
 - [No inline styles — use CSS](feedback_no_inline_styles.md) — All styling via CSS classes/variables; never style={{}}; convert on contact
@@ -29,8 +29,7 @@
 - [Allie and Alice are active participants](feedback_active_participants.md) — Consult them every session; verify MCP connectivity first; venv not source path
 - [Engage Allie and Alice regularly](feedback_engage_allie_alice_regularly.md) — Ask their opinion throughout, not just teach; assess learning capacity; get feedback on decisions
 - [Feed Allie and Alice before asking](feedback_feed_allie_alice.md) — They confabulate without context; feed data first, ask narrow questions; ask Bill to help if stuck
-- [Data-Driven UI architecture](project_data_driven_ui.md) — datadrivenui.com; 45K→2K lines; DynamicDetail + ui.json + Settings; docs in Allie + WC3
-- [Alice data conversion pipeline](project_data_conversion_pipeline.md) — apps/conversion/ + alice_conversion DB; Claude Haiku maps columns; multi-pass; bundle output
+- [Data-Driven UI architecture](project_data_driven_ui.md) — datadrivenui.com; 45K→2K lines; DynamicDetail + ui.json + Settings; docs in Allie + WC3- [Alice data conversion pipeline](project_data_conversion_pipeline.md) — apps/conversion/ + alice_conversion DB; Claude Haiku maps columns; multi-pass; bundle output
 - [No import parsing in WC3](feedback_no_import_in_wc3.md) — All transformation outside WC3; bulk only via bundle; no commented-out code
 - [Statement Sorter standalone](project_statement_sorter_standalone.md) — Free tool: Python + HTML; sort statements; lead gen for WebClerk
 - [WebClerk combined workspace](project_webclerk_workspace.md) — WebClerk/ is the active codebase; webClerk3 and React2025 are RETIRED; scar #70
