@@ -1,6 +1,7 @@
 # Memory Index
 
 - [Push to bill_dev](feedback_push_bill_dev.md) — Always push to bill_dev; main only when explicitly requested
+- [No infrastructure advice](feedback_no_infrastructure_advice.md) — Never write docs on pg/python/celery/react; users go to source projects
 - [Values over ForeignKeys](feedback_values_over_fks.md) — BigIntegerField for relationships; FK only when cascade is wanted; refs.links carries display data
 
 - [Router.tsx is the real route registration](feedback_router_tsx_routes.md) — Add to Router.tsx (BrowserRouter) AND protectedRoutesConfig.tsx (WindowManager)
