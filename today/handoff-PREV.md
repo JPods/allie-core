@@ -1,46 +1,87 @@
-# Handoff — 2026-08-25
+# Handoff — 2026-08-29 (Session 6 Final: Upload + Touch + Panels + Templates)
 
 ## Where We Left Off
 
-Architecture review session. Full industry comparison against Odoo/ERPNext/NetSuite — 10 gaps identified and all 10 resolved with zero new models. Contact-org role architecture decided (keep 5 FKs). Shipping, currency, approval workflows, revenue recognition all wired or designed. Press release for review comparison requested but not yet written.
+Touch URI firing works for phone and text (createElement('a').click()). Email (mailto:) works when browser has handler registered — debug Chrome needed handler setup at chrome://settings/handlers. All three fire synchronously before async save to preserve user gesture context.
 
-## What Was Done
+## What Was Built
 
-### Architecture Decisions (all documented in readmes/topics/architecture/)
-- **contact-org-roles.md** — 5 FK columns kept, junction table rejected, auto-populate rejected
-- **industry-comparison.md** — 10 gaps all resolved, zero new models, complexity comparison
-- **shipping-fulfillment.md** — JSON envelope on TransactionBaseModel, WC2 LoadTag/LoadItem lineage
-- **currency-exchange.md** — FX settlement wired into journalize_payment, erosion, org metrics
-- **approval-workflows.md** — signoff_request status, Setting rules, Action with dt_requested/dt_response
+### 1. Upload Fix + Metadata Dialog
+- `_serialize_document()` → `doc.config["parent_model"]` (was `doc.model_name`)
+- JWTAuthentication + IsAuthenticated on upload views
+- FileUploadPanel: purpose dropdown + description per file
+- refs.links.document denormalized: {id, purpose, description, size_bytes, name, mime_type, lat, lng}
+- Geolocation captured in metadata.address.geo
 
-### Code Changes (WC3 backend)
-- Contact: duplicate fields removed, save_after cleaned
-- Transactions: signoff_request/consigned/deferred statuses, shipping JSONField, STATUS_SIGNOFF_REQUEST
-- Status guard: approval gate with condition evaluator, signoff recording, sequential activation
-- Journalize: FX settlement, deferred revenue guard, pricing→sell fix, org FX metrics
-- Migration: 0002_add_shipping_json.py
+### 2. Infinite Render Loop Fix
+- Removed onActionsReady from useEffect deps in DynamicDetail
 
-### Deferred
-- Shipping services (add_package, pack_items, ship_package) → Action #31213, ~Nov 2026
-- Press release for architecture review — requested, not yet written
+### 3. label_href (Setting-Driven)
+- field_behaviors.name.label_href = "path.url" in document Setting
+- Resolved in fields/index.tsx → BaseField renders <a> with db-label--actionable
+- Works in both db.detail and db.form
 
-## Do This First Next Session
+### 4. Panel Architecture
+- Core panels (contact, action, touch): always show
+- Other panels: only show if refs.links has records (length > 0)
+- assign: search existing → link. No +add button
+- Option+Cmd+click: remove non-core panel (confirm if records linked)
+- Clicking assign auto-expands collapsed panels
+- panel-assign-opened event: only one assign search open at a time
+- ContactPanel: both assign and +add buttons (consistent with LinkedRecordsPanel)
 
-1. **Complete SMB feature comparison** — outline at knowledge/projects/smb-enterprise-feature-comparison.md; assess each of ~100 features against WC3; add as appendix to review request
-2. **Run migrations** — 0002_add_shipping_json.py not yet applied
-3. **Run tests** — significant changes to status_guard, journalize, choices, contact model
-4. **Check** that negative invoice quantities journalize correctly (credit memo path)
+### 5. Touch Templates (18 Report Records)
+- category='touch_template', purpose='email'|'text'
+- Topics: sales (7), service (4), general (7)
+- {{tokens}}: contact_name, company_name, user_name, our_company, subject, record_ida, follow_up_date
+- Template fills subject only (>3 chars typed = user's subject preserved)
+- Summary field is for user notes, not template content
 
-## Open Problems
+### 6. TouchForm Unified
+- ContactPanel now uses TouchForm inline mode (was separate TouchInlineForm)
+- Template selector shows when channel is email or text
+- Send button: fires URI synchronously (createElement('a').click()) then saves async
+- Form stays open after send: user adds notes, email_message_id, outcome → Save & Close
+- Log Only: saves without firing URI
 
-- `journalize_invoice` deferred check reuses `dt_needed` — may want dedicated `dt_deferred` field
-- Recommendation sections in industry-comparison.md still show rejected alternatives — could confuse readers
-- Approval workflow not yet tested end-to-end (Setting → status change → Action → signoff → transition)
+### 7. Protocol URI Pattern
+- tel: and sms: work via createElement('a').click() — confirmed
+- mailto: works via same pattern when browser has handler registered
+- CRITICAL: URI must fire synchronously BEFORE any async call (handleSave) — browser requires user gesture context
+- Debug Chrome profile needs handler setup: chrome://settings/handlers or Gmail address bar icon
 
-## Architecture Notes
+### 8. Keyboard Modifier Standard (Memory Updated)
+- Click = select | Shift = help/range | Cmd = toggle | Option+Cmd = destroy panel
 
-- **Zero-model pattern**: signed quantities, status gates, JSON envelopes solve problems that industry solves with new models
-- **shipping.costs.customer** vs **shipping.costs.actual** — distinct concerns (Alice caught this)
-- **contact.prefs.tooltip_level** — user-controlled, Alice adjusts over time
-- **Action priority framework**: 1=Critical, 2=High (signoffs), 3=Normal, 4=Low, 5=Someday
-- **Commissions** parallel currency pattern but at line level
+## TFTS Written
+1. 20260829T044338-tfts.md — Upload 500: curl reveals truth
+2. 20260829T125916-tfts.md — Label behaviors belong in Setting, not per-layout
+
+## Files Modified
+
+### Backend
+- backend/apps/docs/views/upload_view.py
+- backend/readmes/upload-auth-architecture.md (NEW)
+
+### Frontend
+- frontend/src/components/common/DynamicDetail.tsx
+- frontend/src/components/common/FileUploadPanel.tsx
+- frontend/src/components/common/TouchToolbar.tsx (NEW — standalone, not wired)
+- frontend/src/components/fields/index.tsx
+- frontend/src/components/fields/TextField.tsx
+- frontend/src/components/fields/BaseField.tsx
+- frontend/src/components/form/HorizontalField.tsx
+- frontend/src/apps/docs/models/document/pages/DocumentDisplay.tsx
+- frontend/src/apps/common/components/panels/LinkedRecordsPanel.tsx
+- frontend/src/apps/common/components/panels/ContactPanel.tsx
+- frontend/src/apps/common/components/panels/DbColumns.tsx
+- frontend/src/pages/admin/DataBrowser.tsx
+- frontend/src/pages/admin/DataBrowser.css
+- frontend/src/pages/admin/TouchForm.tsx
+
+## Next Session Priority
+1. Test email send in regular browser (handler already registered there)
+2. Test touch template selector end-to-end
+3. Commit all WebClerk changes
+4. Action form layout in Setting (needs proper sections)
+5. iPhone PWA testing
