@@ -19,11 +19,11 @@ flow.py renamed to transaction_flow.py, dead 101-line utility deleted.
 
 ## Do This First Next Session
 
-1. **Deploy to Andi** — upstream endpoints need deploy to go live
-2. **Videos** — Setting Parade + Journal Formatter (Bill plans to record)
-3. **Confidence threshold tuning** — 40% is a guess, needs real traffic
-4. **Test rework** — ~210 test failures from 2026-08-25 still outstanding
-5. **Wire useFieldHelp into BehaviorField** — quick win, hook exists
+1. **Unify readmes to WebClerk/readmes/ (Option B)** — move all docs from app/backend/readmes/ to WebClerk/readmes/ with semantic subdirectories. Build the AI agent map — an index that maps code areas (files, directories, models) to relevant readmes so agents don't waste time searching.
+2. **Deploy to Andi** — upstream endpoints need deploy to go live
+3. **Videos** — Setting Parade + Journal Formatter (Bill plans to record)
+4. **Seed remaining quiz sets** — 2 of 30 quizzes built (GL journal, AI escalation). 28 more needed to match the training video curriculum.
+5. **Test rework** — ~210 test failures from 2026-08-25 still outstanding
 
 ## Open Problems
 
@@ -40,6 +40,8 @@ flow.py renamed to transaction_flow.py, dead 101-line utility deleted.
 - **GL journals at HQ are Bundles, never GL records** — HQ is a consolidator, not a ledger. Curates for accounting program handoff.
 - **Journal Formatter is external, not in WC3** — Accounting program formats change. WC3 produces bundle.json. The formatter tool owns format specs. Same pattern as Statement Sorter (inbound) reversed (outbound).
 - **Company UUID as source stamp** — Every bundle.json carries `source.uuid` from `Setting(purpose='wc:company_profile')`. Accountant sees same format whether one location or fifty.
+- **Unify readmes (Option B)** — All docs move to `WebClerk/readmes/` with subdirectories: architecture/, transactions/, accounting/, contacts/, products/, alice/, tools/, sync/, security/, getting-started/, infrastructure/, operations/. Plus an AI agent map that indexes code→readme relationships.
+- **30-video training curriculum** — Seeded in Setting. Each video teaches to a quiz. Readme at readmes/getting-started/training-videos.md.
 
 ## Files Changed This Session
 
