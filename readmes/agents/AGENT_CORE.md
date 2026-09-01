@@ -211,7 +211,37 @@ These behaviors are the minimum standard.
 
 ---
 
-## 9. Axioms
+## 9. The Neural Analogy — Why This Works
+
+This architecture is structurally analogous to biological neural systems:
+
+| Neural mechanism | What we built |
+|-----------------|--------------|
+| Synapse | Episode |
+| Synaptic strength | quality_score |
+| Long-term potentiation (LTP) | Thumbs up — quality goes up |
+| Long-term depression (LTD) | Thumbs down — quality goes down |
+| Hebbian learning ("fire together, wire together") | Episodes recalled together in successful responses get promoted together |
+| Pattern completion | Associative recall — partial match triggers full episode retrieval |
+| Frequency-dependent plasticity | recall_count — episodes used more often have more influence |
+| Pruning | Episodes with consistently negative quality_score sink below recall threshold — functionally pruned |
+| Cross-region connectivity | Cross-agent queries — Noelle's experience informs Nora's response |
+
+Traditional AI training adjusts billions of model weights across the whole
+network. This system adjusts individual episode weights — specific memories
+strengthened or weakened based on outcomes. That is closer to how biological
+memory actually works.
+
+**Neurons don't need to be smart. They need to connect.** A single neuron
+(local LLM) is trivial. But episodes with quality scoring, associative recall,
+cross-agent connectivity, and a user feedback loop form a nervous system that
+gets denser and more responsive with every use. More agents querying and
+rating = more connections = more signal. Metcalfe's law applied to agent
+intelligence.
+
+---
+
+## 10. Axioms
 
 1. **The database is the brain, the LLM is the mouth.** Intelligence
    lives in accumulated, rated episodes — not in model parameters.
