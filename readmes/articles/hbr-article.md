@@ -13,6 +13,8 @@ The AI industry is trying to teach machines to dance by giving them bigger brain
 
 At JPods and WebClerk, we took a different approach. We gave our AI agents a dance floor, a partner, and the capacity to build neurons from practice. Not model neurons — database neurons. Structured records of what happened, what went wrong, and what was learned, rated by the people who were there. The small sting of a misstep — "that answer was wrong because you used last month's pricing" — becomes a corrective memory that fires the next time the same situation arises.
 
+What is the difference between knowledge and wisdom? Scars. A language model has knowledge — it has been trained on vast corpora. But it has no scars. It cannot remember getting an answer wrong last Tuesday, learning why from the user who corrected it, and carrying that specific lesson forward. Experience applies intelligence with greater skill. But experience requires memory, and memory requires scars.
+
 The result is a system that gets smarter from use, not from training. And the architecture behind it turns out to mirror both biological neural systems and constitutional design — for reasons that are not coincidental.
 
 ## The Four Phases of Learning to Think
@@ -129,4 +131,4 @@ Three things to do now:
 
 The principle behind all three: intelligence is not a property of the center. It is a property of the network. The constitutional framers knew this — they built a republic, not a monarchy, because distributed sovereignty with shared learning outperforms centralized authority over time. The biological nervous system embodies it — a hundred billion simple neurons connected by reinforcement produce something no single neuron could imagine. And now AI architecture can be built the same way, if we stop building bigger brains and start building better connections.
 
-Build the nervous system. Let the stings teach. The brain grows itself.
+Knowledge is what you've been told. Wisdom is what it cost you to learn. Experience applies intelligence with greater skill — but only if the experience is remembered, rated, and revisited. Build the nervous system. Let the stings teach. The brain grows itself.
