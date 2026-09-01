@@ -2,27 +2,17 @@
   "_meta": {
     "agent": "Sally",
     "last_updated": null,
-    "networks_seen": [
-
-    ],
+    "networks_seen": [],
     "runs_total": 0,
     "written_by": "Allie nightly (allie-reflect.py)",
     "version": 1
   },
-  "confirmed_instructions": [
-
-  ],
-  "cautions": [
-
-  ],
-  "slot_patterns": {
-  },
-  "cascade_patterns": [
-
-  ],
-  "station_load_profiles": {
-  },
-  "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations.",
+  "confirmed_instructions": [],
+  "cautions": [],
+  "slot_patterns": {},
+  "cascade_patterns": [],
+  "station_load_profiles": {},
+  "notes": "Empty \u2014 Allie will populate after first nightly synthesis that reads network_learning observations.",
   "observations": [
     {
       "ts": "2026-07-06T14:13:26Z",
@@ -924,5 +914,29 @@
         "count": 40
       }
     }
-  ]
+  ],
+  "core": {
+    "version": 1,
+    "source": "readmes/agents/AGENT_CORE.md",
+    "behaviors": {
+      "episodic_memory": true,
+      "associative_recall": true,
+      "recall_threshold": 0.5,
+      "small_stings": true,
+      "thumbs_down_requires_why": true,
+      "escalation_carries_episodes": true,
+      "cross_agent_queries": true,
+      "record_significant_events": true
+    },
+    "quality_scoring": {
+      "ema_decay": 0.8,
+      "ema_weight": 0.2,
+      "quality_distance_factor": 0.1
+    },
+    "database": {
+      "name": "agent_sally",
+      "chroma_dir": ".chroma_db_sally",
+      "log_type": "station"
+    }
+  }
 }

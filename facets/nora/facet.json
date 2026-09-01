@@ -13,5 +13,29 @@
   "chronic_kink_locations": [],
   "chronic_z_jump_locations": [],
   "speed_experience": {},
-  "notes": "Empty — Allie will populate after first nightly synthesis that reads network_learning observations."
+  "notes": "Empty \u2014 Allie will populate after first nightly synthesis that reads network_learning observations.",
+  "core": {
+    "version": 1,
+    "source": "readmes/agents/AGENT_CORE.md",
+    "behaviors": {
+      "episodic_memory": true,
+      "associative_recall": true,
+      "recall_threshold": 0.5,
+      "small_stings": true,
+      "thumbs_down_requires_why": true,
+      "escalation_carries_episodes": true,
+      "cross_agent_queries": true,
+      "record_significant_events": true
+    },
+    "quality_scoring": {
+      "ema_decay": 0.8,
+      "ema_weight": 0.2,
+      "quality_distance_factor": 0.1
+    },
+    "database": {
+      "name": "agent_nora",
+      "chroma_dir": ".chroma_db_nora",
+      "log_type": "telemetry"
+    }
+  }
 }
