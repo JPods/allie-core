@@ -740,18 +740,46 @@ def episode_recall(query, n_results=5, domain=None, episode_type=None,
         if ep_id != "?":
             recalled_ids.append(ep_id)
 
-    # Update recall_count + last_recalled in PostgreSQL
+    # Fetch quality scores from PostgreSQL and re-rank
     if recalled_ids:
         conn = _db_conn()
         if conn:
             try:
                 with conn.cursor() as cur:
+                    # Update recall counts
                     cur.execute("""
                         UPDATE episodes
                         SET recall_count = recall_count + 1, last_recalled = %s
                         WHERE episode_id = ANY(%s)
                     """, (_now_ms(), recalled_ids))
+
+                    # Fetch quality scores for re-ranking
+                    cur.execute("""
+                        SELECT episode_id,
+                               COALESCE((metadata->>'quality_score')::float, 0.0) as quality
+                        FROM episodes
+                        WHERE episode_id = ANY(%s)
+                    """, (recalled_ids,))
+                    quality_map = {row[0]: row[1] for row in cur.fetchall()}
                     conn.commit()
+
+                    # Re-rank: effective_distance = distance - (quality * 0.1)
+                    # Good quality (positive) reduces distance → ranks higher
+                    # Bad quality (negative) increases distance → ranks lower
+                    for ep in episodes:
+                        q = quality_map.get(ep["episode_id"], 0.0)
+                        ep["quality_score"] = round(q, 3)
+                        if ep["distance"] is not None:
+                            ep["effective_distance"] = round(
+                                ep["distance"] - (q * 0.1), 4
+                            )
+                        else:
+                            ep["effective_distance"] = ep["distance"]
+
+                    # Sort by effective_distance (lower = better match)
+                    episodes.sort(
+                        key=lambda e: e.get("effective_distance") or 99.0
+                    )
             except Exception:
                 pass
             finally:
@@ -762,13 +790,17 @@ def episode_recall(query, n_results=5, domain=None, episode_type=None,
 
 def associative_recall(event_text, threshold=None):
     """Automatic trigger: find similar past episodes for a new event.
-    Returns matching episodes below the threshold distance, or empty list."""
+    Returns matching episodes below the threshold distance, or empty list.
+    Uses effective_distance (quality-adjusted) when available."""
     if threshold is None:
         threshold = EPISODE_RECALL_THRESHOLD
 
     matches = episode_recall(event_text, n_results=3)
-    return [ep for ep in matches if ep.get("distance") is not None
-            and ep["distance"] < threshold]
+    return [
+        ep for ep in matches
+        if (ep.get("effective_distance") or ep.get("distance")) is not None
+        and (ep.get("effective_distance") or ep.get("distance")) < threshold
+    ]
 
 
 # ── MCP Tool Definitions ──────────────────────────────────────────────
@@ -934,6 +966,22 @@ TOOLS = [
         "name": "alice_report",
         "description": "Alice-lib reports: grade distribution, informative gaps, unresolved intents. The accountability summary.",
         "inputSchema": {"type": "object", "properties": {}},
+    },
+
+    # ── Response grading (Small-Stings) ──
+    {
+        "name": "alice_grade",
+        "description": "Grade an Alice response — thumbs up or thumbs down. Thumbs down REQUIRES a reason (small sting). The 'why' on a bad answer is where Alice learns. Grades tune episodic recall — good grades promote episodes, bad grades demote them.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "grade": {"type": "string", "enum": ["up", "down"], "description": "Thumbs up or thumbs down"},
+                "why": {"type": "string", "description": "REQUIRED if thumbs down — why was this answer bad? This is the small sting that teaches Alice."},
+                "episode_ids": {"type": "array", "items": {"type": "string"}, "description": "Episode IDs that were surfaced with this response"},
+                "response_id": {"type": "string", "description": "Optional response ID (from escalation)"},
+            },
+            "required": ["grade"],
+        },
     },
 
     # ── Episodic memory ──
@@ -1445,6 +1493,97 @@ def handle_request(request):
                 f"---\n**Raw data:**\n```json\n{json.dumps(report, indent=2)}\n```"
             )
             log_exchange("alice-lib", response_text[:500], tool="alice_report", capacity="lib")
+            return _tool_result(req_id, response_text)
+
+        # ── Response grading (Small-Stings) ──
+
+        elif tool_name == "alice_grade":
+            grade = args.get("grade", "")
+            why = args.get("why", "")
+            episode_ids = args.get("episode_ids", [])
+            response_id = args.get("response_id", "")
+
+            # Thumbs down requires a reason
+            if grade == "down" and not why:
+                return _tool_result(req_id,
+                    "**[Alice]** Thumbs down requires a reason. "
+                    "Why was this answer bad? The 'why' is how I learn.")
+
+            log_exchange("claude", f"[GRADE] {grade} {why[:100]}", tool="alice_grade", capacity="ops")
+
+            quality_delta = 1.0 if grade == "up" else -1.0
+
+            # Store the grade in alice_log
+            grade_data = {
+                "grade": grade,
+                "quality_delta": quality_delta,
+                "episode_ids": episode_ids,
+                "response_id": response_id,
+            }
+            if why:
+                grade_data["why"] = why
+
+            write_alice_log("response_grade", "alice", f"{grade}: {why[:200]}" if why else grade,
+                            source="user", data=grade_data)
+
+            # Update episode quality scores (exponential moving average)
+            episodes_updated = 0
+            if episode_ids:
+                conn = _db_conn()
+                if conn:
+                    try:
+                        with conn.cursor() as cur:
+                            for ep_id in episode_ids:
+                                cur.execute("""
+                                    UPDATE episodes
+                                    SET metadata = jsonb_set(
+                                        COALESCE(metadata, '{}'),
+                                        '{quality_score}',
+                                        to_jsonb(
+                                            COALESCE((metadata->>'quality_score')::float, 0.0) * 0.8
+                                            + %s * 0.2
+                                        )
+                                    ),
+                                    last_recalled = %s
+                                    WHERE episode_id = %s
+                                """, (quality_delta, _now_ms(), ep_id))
+                                if cur.rowcount > 0:
+                                    episodes_updated += 1
+                            conn.commit()
+                    except Exception as e:
+                        log_exchange("alice-ops", f"Grade update error: {e}", tool="alice_grade")
+                    finally:
+                        conn.close()
+
+            # If thumbs down, create an episode from the sting
+            sting_episode = None
+            if grade == "down" and why:
+                sting_episode = episode_create(
+                    episode_type="sting",
+                    domain="WC3",
+                    title=f"Bad answer: {why[:150]}",
+                    narrative=f"User gave thumbs down. Reason: {why}",
+                    principle=None,  # no principle yet — that comes from fixing it
+                    actors=["user", "Alice"],
+                    outcome="unresolved",
+                    severity="lesson",
+                    tags=["sting", "quality"],
+                    source_ref=f"grade:{response_id}" if response_id else None,
+                )
+
+            if grade == "up":
+                response_text = f"**[Alice]** Thanks. {episodes_updated} episode(s) promoted."
+            else:
+                response_text = (
+                    f"**[Alice]** Small sting recorded. {episodes_updated} episode(s) demoted.\n\n"
+                    f"**Why:** {why}\n\n"
+                    f"I'll learn from this."
+                )
+                if sting_episode:
+                    response_text += f" Episode `{sting_episode['episode_id']}` created to track."
+
+            log_exchange("alice-ops", response_text[:500], tool="alice_grade", capacity="ops")
+            _log_teaching("alice", f"grade:{grade}", why[:200] if why else grade)
             return _tool_result(req_id, response_text)
 
         # ── Episodic memory tools ──
