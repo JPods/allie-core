@@ -241,7 +241,51 @@ intelligence.
 
 ---
 
-## 10. Axioms
+## 10. Four Phases of Competence
+
+Every piece of agent knowledge follows four phases (Kahneman System 1/System 2):
+
+| Phase | State | System | Agent behavior | Episode store |
+|-------|-------|--------|---------------|---------------|
+| 1 | Unskilled, unaware | Neither | No episodes. Confabulates confidently. | Empty |
+| 2 | Unskilled, aware | System 2 (slow, effortful) | Stings accumulating. Searches hard, still fails. | Sting-heavy, low quality_scores |
+| 3 | Skilled, aware | System 2 | Quality episodes. Reliable retrieval. Gets it right but still searching. | Rich, quality-scored, actively recalled |
+| 4 | Skilled, unaware | System 1 (fast, automatic) | Promoted to algorithm. Doesn't search — just knows. | Promoted out. Episode became code. |
+
+**Episodic memory** handles phases 1→2→3.
+**Distillation** (Tier 3 → Tier 2 → Tier 1) handles 3→4.
+
+### The Phase 4 Danger
+
+Phase 4 is powerful and dangerous. The system stops questioning what
+works. Promoted algorithms feel correct because they've always worked —
+but the environment changes. A dancer who never reviews their form
+develops bad habits that feel natural.
+
+**Retrospection is mandatory even at Phase 4 — especially at Phase 4.**
+There might be a better way. Three capacities prevent calcification:
+
+1. **Hippocampus** — short-term working memory. Holds current context.
+   Detects when the current situation differs from the pattern the
+   algorithm was promoted from.
+
+2. **Retrospection** — periodic measurement of outcomes against
+   expectations. Even when every answer seems correct, retrospection
+   asks: is there a better way? Are the promoted algorithms still
+   optimal, or have conditions changed?
+
+3. **Episodic memory** — new episodes accumulate AFTER promotion.
+   If the promoted algorithm starts generating stings, episodic memory
+   catches it and the knowledge cycles back from Phase 4 to Phase 2.
+
+**No memory without retrospection. No retrospection without measurement.
+No measurement without memory markers.** The three are a closed loop.
+Phase 4 without retrospection is institutional memory — "we've always
+done it this way" — which is the failure mode of every bureaucracy.
+
+---
+
+## 11. Axioms
 
 1. **The database is the brain, the LLM is the mouth.** Intelligence
    lives in accumulated, rated episodes — not in model parameters.

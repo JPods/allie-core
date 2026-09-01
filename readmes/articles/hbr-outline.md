@@ -38,6 +38,39 @@ time the same situation arises.
 Most AI companies are building bigger brains. We built a nervous
 system instead. The difference matters.
 
+**The four phases of learning to dance — and learning to think:**
+
+Daniel Kahneman distinguished System 1 (fast, automatic, effortless)
+from System 2 (slow, deliberate, effortful). Learning anything —
+dancing, medicine, commerce, building transit networks — follows
+four phases:
+
+| Phase | State | Thinking | What it feels like |
+|-------|-------|----------|-------------------|
+| 1 | Unskilled and unaware | Neither | You step on feet and don't know why |
+| 2 | Unskilled and aware | System 2 | The instructor says "wrong foot" and you think about every step |
+| 3 | Skilled and aware | System 2 | You get the steps right but you're counting |
+| 4 | Skilled and unaware | System 1 | You hear the music and your body moves |
+
+Every AI system today is stuck in Phase 1 — confidently wrong,
+with no mechanism to reach Phase 2. The model doesn't know what
+it doesn't know, and it resets every session. No stings. No memory.
+No neurons forming from practice.
+
+Our architecture provides the mechanism for the full arc: stings
+create awareness (1→2), quality-scored episodes enable reliable
+retrieval (2→3), and promotion to hardcoded algorithms — where the
+system just knows, the way a dancer just moves — completes the
+journey to Phase 4.
+
+But Phase 4 is dangerous. "Skilled and unaware" means the system
+stops questioning what works. The dancer who never reviews their
+form develops bad habits that feel natural. This is why retrospection
+is mandatory even at Phase 4 — especially at Phase 4. There might
+be a better way. The hippocampus stores short-term working memory.
+Retrospection measures outcomes against expectations. Together they
+prevent Phase 4 from calcifying into "we've always done it this way."
+
 ---
 
 ## Part 1: The Centralization Trap (500 words)

@@ -114,7 +114,47 @@ task reward.
 - Emergent intelligence from accumulated rated episodes, not from
   parameter optimization
 
-### 4.3 Metcalfe's Law Applied to Agent Intelligence
+### 4.3 Four Phases of Competence (Kahneman System 1/System 2)
+
+The lifecycle of a single piece of agent knowledge maps to the four
+phases of competence, corresponding to Kahneman's System 1/System 2:
+
+| Phase | Competence | System | Agent State | Episode Store |
+|-------|-----------|--------|-------------|---------------|
+| 1 | Unskilled, unaware | Neither | No episodes. Confabulates confidently. | Empty |
+| 2 | Unskilled, aware | System 2 | Stings accumulating. Effortful search. | Sting-heavy, low quality |
+| 3 | Skilled, aware | System 2 | Quality episodes. Reliable retrieval. | Rich, quality-scored |
+| 4 | Skilled, unaware | System 1 | Promoted to algorithm. Just knows. | Promoted out — became code |
+
+Episodic memory provides the mechanism for phases 1→2→3. The
+distillation pipeline (Tier 3 general LLM → Tier 2 agent LLM →
+Tier 1 hard algorithm) provides the mechanism for 3→4.
+
+### 4.4 The Phase 4 Danger: Retrospection as Mandatory Behavior
+
+Phase 4 (skilled, unaware / System 1) is powerful and dangerous.
+The system stops questioning what works. Promoted algorithms feel
+correct because they've always worked — but the environment changes.
+
+Three memory capacities prevent Phase 4 calcification:
+- **Hippocampus** — short-term working memory. Holds the current
+  context. Detects when the current situation differs from the
+  pattern the algorithm was promoted from.
+- **Retrospection** — periodic measurement of outcomes against
+  expectations. Even when every answer seems correct, retrospection
+  asks: is there a better way? Are the promoted algorithms still
+  optimal, or have conditions changed?
+- **Episodic memory** — the new episodes that accumulate AFTER
+  promotion. If the promoted algorithm starts generating stings,
+  the episodic memory catches it and the knowledge cycles back
+  from Phase 4 to Phase 2.
+
+No memory without retrospection. No retrospection without measurement.
+No measurement without memory markers. The three are a closed loop.
+Phase 4 without retrospection is institutional memory — "we've always
+done it this way" — which is the failure mode of every bureaucracy.
+
+### 4.5 Metcalfe's Law Applied to Agent Intelligence
 - Value proportional to connections squared
 - More agents → more episodes → more cross-agent queries → more ratings
 - Network effect: each new agent makes every existing agent smarter
