@@ -15,19 +15,28 @@ that actually learn from their users
 
 ## The Hook (300 words)
 
-Open with the crash data story. Bill needed pedestrian crash data from
-state DOTs. Some states publish it. Some don't. The ones that don't are
-unresponsive — no tracking, no follow-up, no accountability. The APRA
-request to Rhode Island DOT was polite, factual, included the why.
-Response: immediate, professional, tracked, a 10-day legal clock.
+It takes about 200 hours of determined practice to learn to dance.
+Not 200 hours of watching videos. Not 200 hours of reading about
+dance. Not a bigger brain. **Practice.** Your feet do the wrong
+thing. You feel it. You adjust. You repeat. Specific neural pathways
+form through repetition and feedback. Eventually you don't think
+about the steps — your body knows.
 
-The lesson: **if you demand responsiveness from others, you must build
-responsiveness into everything you ship.** This is the Small Sting
-principle — and it applies to AI systems just as much as it applies
-to government.
+The AI industry is trying to teach machines to dance by giving them
+bigger brains. GPT-3 to GPT-4 to GPT-5 — more parameters, more
+training data, more compute. It's like studying dance theory in a
+lecture hall and expecting to waltz.
 
-Most AI companies are building bigger brains. We built a nervous system
-instead. The difference matters.
+We took a different approach. We gave our AI agents a dance floor,
+a partner, and the capacity to build neurons from practice. Not
+model neurons — database neurons. Structured episodes of what
+happened, what went wrong, what was learned, rated by the people
+who were there. The small sting of a misstep — "that answer was
+wrong because X" — becomes a corrective memory that fires the next
+time the same situation arises.
+
+Most AI companies are building bigger brains. We built a nervous
+system instead. The difference matters.
 
 ---
 
