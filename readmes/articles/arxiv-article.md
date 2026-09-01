@@ -9,23 +9,24 @@ cs.AI (Artificial Intelligence), cs.MA (Multi-Agent Systems)
 
 ## Abstract
 
-What is the difference between knowledge and wisdom? Scars.
+Sayings applied:
+- "What is the difference between knowledge and wisdom? Scars."
+- "Repetition is the mother of learning."
+- "Neurons that fire together, wire together." — Donald Hebb
 
-Donald Hebb noted that "Neurons that fire together, wire together." In the same way people learn to dance, AI capabilities can be expanded by experience.
+Go take dancing lessons and you will understand our approach to increasing the capacity of AI with experience. Your first 200 hours will be clumsy; you do not have the neurons. Your Slow Thinking Brain, the conscious brain, is working its way through the four phases of competency. With thousands of hours, you master the skills. You grow the neurons that empower the Fast Thinking subconscious processes to control movements.
 
-The WebClerk and JPods approach combines experience-based, shared databases and network capabilities with AI LLMs. Current AI agent memory systems optimize retrieval through model-level training or automated task reward signals. Our architecture adds a layer the industry is missing: accumulated, rated experience with mandatory retrospection. The central insight is that experience applies intelligence with greater skill: a system that accumulates rated experience outperforms a system with a more capable model but no memory of its own mistakes.
+The WebClerk and JPods approach combines experience-based, shared databases and network capabilities with AI LLMs. Current AI agent memory systems optimize retrieval through model-level training or automated task reward signals. Our architecture adds a layer: accumulated, rated experience with mandatory retrospection.
 
-The networked databases record quality-scored episodes rather than model parameters. Each episode records a structured event — narrative, actors, principle, outcome — and carries a quality_score adjusted by direct human feedback: thumbs up strengthens the episode's retrieval priority; thumbs down requires an explanation that itself becomes a new corrective episode (a "sting"). This creates a system structurally analogous to biological neural mechanisms: episodes as synapses, quality scores as synaptic strength, user feedback as long-term potentiation and depression, and cross-agent queries as cross-region connectivity. We deploy this architecture across seven specialized agents sharing a common database schema, demonstrating that retrieval quality improves from use without model retraining. We compare our approach to MemRL, Mem0, and Governed Shared Memory, and show that human-sourced quality signals produce different — and in operational contexts, superior — learning dynamics compared to automated task reward.
+The central insight is that experience applies intelligence with greater skill: a system that accumulates rated experience outperforms a system with a more capable model but no memory of its own mistakes.
 
 ---
 
 ## 1. Learning to Dance
 
-My daughter learned to dance at five. She was terrible for months. She stepped on her teacher's feet, lost the beat, forgot the sequences. She cried once because her body wouldn't do what her mind could see. But she kept going. Somewhere around the six-month mark, something shifted. She stopped counting and started moving. The neurons had formed. The dance was in her body, not in her head.
+No one taught those neurons into existence. No lecture, no video, no book gave you the ability to hear a rhythm and let your feet follow. Two hundred hours of clumsy practice built the pathways that no amount of instruction could create. Mastery — the kind where thinking disappears and skill takes over — takes ten thousand hours. But the first transformation, from helpless to capable, happens in the first two hundred. It happens through mistakes, correction, and repetition. It happens through scars.
 
-No one taught those neurons into existence. No lecture, no video, no book gave her the ability to hear a rhythm and let her feet follow. Two hundred hours of clumsy practice built the pathways that no amount of instruction could create. Mastery — the kind where thinking disappears and skill takes over — takes ten thousand hours. But the first transformation, from helpless to capable, happens in the first two hundred. It happens through mistakes, correction, and repetition. It happens through scars.
-
-We are building AI systems the wrong way. We are building bigger lecture halls and expecting the students to waltz.
+Building smarter AI systems will not teach them to dance.
 
 The dominant strategy in AI is to make the model smarter. GPT-3 to GPT-4 to GPT-5. More parameters, more training data, more compute. Billions of dollars spent improving the brain — and not one dollar spent building the dance floor. The models have vast knowledge. They have read everything ever written about dancing. But they have never danced. They have no scars. Every session, their memory is erased. Every session, they start over, as clumsy as the first day.
 
@@ -76,7 +77,7 @@ Three memory capacities work together to support the four-phase progression:
 
 No memory without retrospection. No retrospection without measurement. No measurement without memory markers. The three form a closed loop. Break any link and the system stops learning.
 
-### 1.4. The Phase 4 Danger
+### 1.4. The Phase 4 Danger: Retrospection is Mandatory Behavior
 
 Phase 4 is powerful and dangerous. "Skilled and unaware" means the system no longer questions what works. Promoted algorithms feel correct because they have always worked — but the environment changes. A dancer who never reviews their form develops habits that feel natural but limit growth. An institution that never reexamines its procedures becomes a bureaucracy. Phase 4 without retrospection is not expertise. It is habit.
 
@@ -265,9 +266,9 @@ The architecture is deployed across four operational domains:
 
 **Commerce (WebClerk):** Alice and Andi handle pricing queries, data quality validation, customer pattern detection, and onboarding guidance. Alice runs locally at each installation. Andi runs at the WCHQ production server, handling escalations.
 
-**Transit network design (JPods SketchUp Plugin):** Noelle validates station capacity, guideway connections, and network topology. Her episodes record build faults, validation outcomes, and design decisions.
+**Transit network design (JPods Physical Internet\u00ae):** Noelle validates station capacity, guideway connections, and network topology. Her episodes record build faults, validation outcomes, and design decisions.
 
-**Vehicle operations (JPods physical scale model):** Natalie plans routes and dispatch sequences. Nora processes sensor telemetry from vehicle hardware. Sally manages station slot assignment and parking queues.
+**Vehicle operations (JPods routing and vehicles):** Natalie plans routes and dispatch sequences. Nora processes sensor telemetry from vehicle hardware. Sally manages station slot assignment and parking queues.
 
 **Cross-domain coordination (Allie):** Allie synthesizes across all domains, maintaining the cross-domain episode store and running nightly retrospection.
 
@@ -352,9 +353,9 @@ We have presented an architecture where AI agent intelligence accumulates in qua
 
 The moat for AI-augmented business systems is not the language model — models are commodities that converge. The moat is the accumulated rated experience specific to a domain, its customers, and its operations. That database of quality-scored episodes cannot be replicated by training a larger model. It can only be earned through use: through practice on the dance floor, through stings from the missteps, through the 200 hours that build the neurons no lecture hall can provide.
 
-Intelligence does not require smarter models. It requires accumulated rated experience across connected agents. The database is the brain. The language model is the mouth. The user's feedback — especially the small sting of explaining why an answer was wrong — is the learning signal. The system scales with use, not with training compute, and it belongs to the user, not to the platform.
+Intelligence combined with experience based skills results from accumulated rated experience across connected agents. The database is the brain. The language model is the mouth. The user's feedback — especially the small sting of explaining why an answer was wrong — is the learning signal. The system scales with use and belongs to the user, not to the platform.
 
-Build the nervous system. Let the stings teach. The brain grows itself.
+Learn to dance, it will help you program better ;-)
 
 ---
 
