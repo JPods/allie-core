@@ -21,13 +21,21 @@ The networked databases record quality-scored episodes rather than model paramet
 
 ## 1. Learning to Dance
 
-Regardless of intelligence, for a person learning to dance, the first 200 hours of learning to dance are clumsy — we do not have the neurons. Mastery takes 10,000 hours.
+My daughter learned to dance at five. She was terrible for months. She stepped on her teacher's feet, lost the beat, forgot the sequences. She cried once because her body wouldn't do what her mind could see. But she kept going. Somewhere around the six-month mark, something shifted. She stopped counting and started moving. The neurons had formed. The dance was in her body, not in her head.
 
-Daniel Kahneman's book *Thinking Fast and Slow* provides excellent explanations and examples of 2 systems of thinking: Slow (conscious and effortful) and Fast (subconscious and effortless). The path from unskilled to skilled.
+No one taught those neurons into existence. No lecture, no video, no book gave her the ability to hear a rhythm and let her feet follow. Two hundred hours of clumsy practice built the pathways that no amount of instruction could create. Mastery — the kind where thinking disappears and skill takes over — takes ten thousand hours. But the first transformation, from helpless to capable, happens in the first two hundred. It happens through mistakes, correction, and repetition. It happens through scars.
 
-Our contribution is to add brain-like agent-components with database episode recording to build out the four phases of competence.
+We are building AI systems the wrong way. We are building bigger lecture halls and expecting the students to waltz.
 
-### 1.1. Agent-components:
+The dominant strategy in AI is to make the model smarter. GPT-3 to GPT-4 to GPT-5. More parameters, more training data, more compute. Billions of dollars spent improving the brain — and not one dollar spent building the dance floor. The models have vast knowledge. They have read everything ever written about dancing. But they have never danced. They have no scars. Every session, their memory is erased. Every session, they start over, as clumsy as the first day.
+
+Knowledge is what you've been told. Wisdom is what you've learned from getting it wrong and understanding why. Experience applies intelligence with greater skill. A language model has knowledge. It has been trained on vast corpora. But it cannot remember that last Tuesday it quoted the wrong pricing tier to a customer, that the customer explained why the answer was wrong, and that the corrective principle was to validate against the base price record rather than the cached display value. It has no mechanism to form that specific neural pathway through practice and feedback. It starts without scars, every time.
+
+Daniel Kahneman's *Thinking, Fast and Slow* [11] describes two systems of thought: System 2, which is slow, conscious, and effortful — the beginner counting one-two-three — and System 1, which is fast, automatic, and effortless — the dancer who hears the music and moves. The path from System 2 to System 1 is the path from unskilled to skilled, and it passes through four phases that every learner traverses, whether the learner is a child, a surgeon, or an AI agent.
+
+We present an architecture that gives AI agents the capacity to traverse all four phases. Not by improving the model, but by giving it a database that functions like a nervous system — where episodes are synapses, user feedback is long-term potentiation and depression, and the quality of connections improves with every interaction. Donald Hebb [12] observed that neurons that fire together wire together. We build the digital equivalent: episodes recalled together in successful responses are promoted together. Episodes associated with failure are weakened. The system learns to dance.
+
+### 1.1. Our Contributions
 
 1. **Episode-level Hebbian reinforcement from human feedback.** Individual episodes are strengthened or weakened by user ratings, creating retrieval dynamics structurally analogous to synaptic plasticity. Unlike model-level RLHF, this operates on specific memories, not on the model's weight distribution.
 
@@ -39,50 +47,42 @@ Our contribution is to add brain-like agent-components with database episode rec
 
 5. **A deployed, operational system.** This is not a simulation or benchmark. The architecture runs in production across commerce, transit network design, vehicle telemetry, and station management domains.
 
-### 1.2. Phases of Competence
+### 1.2. The Four Phases of Competence
+
+Every skill — dancing, medicine, inventory management, network routing — follows the same progression:
 
 | Phase | Competence State | Cognitive System | Agent Behavior | Episode Store State |
 |-------|-----------------|-----------------|----------------|-------------------|
-| 1 | **Unskilled, unaware** | Neither | No relevant episodes. Agent confabulates from the LLM alone. | Empty for this topic |
-| 2 | **Unskilled, aware** | System 2 | Stings accumulating. Agent searches effortfully, still fails often. | Sting-heavy, low quality_scores |
-| 3 | **Skilled, aware** | System 2 | Quality episodes with high scores. Agent retrieves reliably but runs full recall pipeline every time. | Rich, quality-scored, actively recalled |
-| 4 | **Skilled, unaware** | System 1 | Episode promoted to hardcoded algorithm. Agent responds without searching. | Episode promoted out — became code |
+| 1 | **Unskilled, unaware** | Neither | No relevant episodes. Agent confabulates from the LLM alone. Confident and wrong. | Empty for this topic |
+| 2 | **Unskilled, aware** | System 2 | Stings accumulating. The instructor said "wrong foot." Agent searches effortfully, still fails often. Every response costs effort. | Sting-heavy, low quality_scores |
+| 3 | **Skilled, aware** | System 2 | Quality episodes with high scores. Agent retrieves reliably but runs the full recall pipeline every time. Counting one-two-three. | Rich, quality-scored, actively recalled |
+| 4 | **Skilled, unaware** | System 1 | Episode promoted to hardcoded algorithm. Agent responds without searching. Hears the music and moves. | Episode promoted out — became code |
 
-### 1.3. Brain-like agent-components
+The transition from Phase 1 to Phase 2 is the most important moment in the system's life. It is the moment the agent stops being confidently wrong and starts being aware of its own ignorance. This transition is triggered by the first sting — the first time a user says "wrong, because X." That single sentence of explanation creates the first corrective neuron. The agent now knows it has a problem.
 
-**Hippocampus (short-term working memory):** Holds the current interaction context. Detects when the current situation differs from the pattern the algorithm was promoted from. If the match is poor, the system escalates from System 1 back to System 2 — from automatic response back to deliberate retrieval.
+Phase 2 to Phase 3 is practice. Repeated interactions, repeated feedback, repeated retrieval. The quality scores rise. The stings get resolved — their outcomes change from "unresolved" to "resolved" as corrective principles are confirmed. The agent gets the steps right, but it's still counting.
 
-**Retrospection (periodic measurement):** Even when every answer appears correct, retrospection measures outcomes against expectations on a scheduled basis. The question is not "is the answer wrong?" but "is there a better answer?" This is the mechanism that prevents institutional calcification. It asks the question that no automated reward signal asks: could we be more right?
+Phase 3 to Phase 4 is mastery. An episode that has been recalled hundreds of times with consistent positive ratings is a candidate for promotion from database retrieval to hardcoded algorithm. In our three-tier distillation model: Tier 3 (general LLM) teaches Tier 2 (agent's own LLM) teaches Tier 1 (hard algorithm in code). The episode becomes code. The agent stops searching and starts knowing. The counting stops. The music takes over.
 
-**Episodic memory (continued accumulation):** New episodes accumulate even after promotion. If a promoted algorithm starts generating stings — users saying "wrong, because X" about something the system thought it knew — the knowledge cycles back from Phase 4 to Phase 2. The episode store provides the evidence that the promoted algorithm has drifted. The dancer goes back to class.
+### 1.3. Brain-Like Agent Components
+
+Three memory capacities work together to support the four-phase progression:
+
+**Hippocampus (short-term working memory)** holds the current interaction context. It detects when the current situation differs from the pattern the algorithm was promoted from. If the match is poor, the system escalates from System 1 back to System 2 — from automatic response back to deliberate retrieval. This is the dancer noticing that the music has changed tempo.
+
+**Retrospection (periodic measurement)** measures outcomes against expectations on a scheduled basis, even when every answer appears correct. The question is not "is the answer wrong?" but "is there a better answer?" This is the mechanism that prevents institutional calcification — the slow death that comes from never questioning what works. It asks the question that no automated reward signal asks: could we be more right?
+
+**Episodic memory (continued accumulation)** keeps recording new episodes even after promotion. If a promoted algorithm starts generating stings — users saying "wrong, because X" about something the system thought it knew — the knowledge cycles back from Phase 4 to Phase 2. The episode store catches the drift. The dancer goes back to class.
 
 No memory without retrospection. No retrospection without measurement. No measurement without memory markers. The three form a closed loop. Break any link and the system stops learning.
 
-### 1.4. Process
-
-The dominant existing strategy in AI agent development is to improve the underlying language model. Larger parameter counts, broader training corpora, and increased compute budgets produce models that generate more fluent and accurate responses. The implicit assumption is that intelligence lives in the model — that a smarter model produces a smarter agent.
-
-Knowledge is what you've been told. Wisdom is what you've learned from getting it wrong and understanding why. Experience applies intelligence with greater skill.
-
-A language model has knowledge. It has been trained on vast corpora. But it has no scars. It cannot remember that last Tuesday it quoted the wrong pricing tier to a customer, that the customer explained why the answer was wrong, and that the corrective principle was to validate against the base price record rather than the cached display value. It has no mechanism to form that specific neural pathway through practice and feedback. Every session, its memory is erased. Every session, it starts without scars.
-
-We present an architecture where agent intelligence accumulates in a database of quality-scored episodes rather than in model parameters. The database is the brain. The language model is the mouth. The user's feedback — particularly the small sting of explaining why an answer was wrong — is the learning signal that no automated reward function can replicate.
-
-JPods/WebClerk adaptation using the 4-phases of competence:
-
-**Phase 1→2 transition (sting creation):** The user's first thumbs-down with explanation creates awareness. The agent now has a corrective episode. It doesn't yet have the right answer, but it knows it has a problem in this area.
-
-**Phase 2→3 transition (quality accumulation):** Repeated interactions produce episodes with validated quality scores. The agent retrieves these reliably. Stings get resolved — their outcome changes from "unresolved" to "resolved" when the corrective principle is confirmed. The quality_score distribution shifts positive.
-
-**Phase 3→4 transition (distillation):** An episode that has been recalled hundreds of times with consistent positive ratings is a candidate for promotion from database retrieval (System 2) to hardcoded algorithm (System 1). In our three-tier distillation model: Tier 3 (general LLM) teaches Tier 2 (agent's own LLM via Modelfile) teaches Tier 1 (hard algorithm in code). The episode becomes code. The agent stops searching and starts knowing.
-
-### 1.5. Retrospection is Mandatory Behavior, The Phase 4 Danger
+### 1.4. The Phase 4 Danger
 
 Phase 4 is powerful and dangerous. "Skilled and unaware" means the system no longer questions what works. Promoted algorithms feel correct because they have always worked — but the environment changes. A dancer who never reviews their form develops habits that feel natural but limit growth. An institution that never reexamines its procedures becomes a bureaucracy. Phase 4 without retrospection is not expertise. It is habit.
 
-What is the difference between knowledge and wisdom? Scars. Knowledge is what you have been told. Wisdom is what you have learned from getting it wrong, understanding why, and checking whether your correction still holds. Experience applies intelligence with greater skill — but only if the experience is subjected to ongoing retrospection.
+What is the difference between knowledge and wisdom? Scars. Knowledge is what you have been told. Wisdom is what you have learned from getting it wrong, understanding why, and checking whether your correction still holds. Experience applies intelligence with greater skill — but only if the experience is subjected to ongoing retrospection. The moment you stop checking is the moment your expertise begins to decay. This is as true for organizations as it is for dancers, and it is as true for AI systems as it is for organizations.
 
-### 1.6. The Neural Analogy
+### 1.5. The Neural Analogy
 
 The correspondence between our architecture and biological neural mechanisms is structural, not metaphorical:
 
@@ -99,13 +99,11 @@ The correspondence between our architecture and biological neural mechanisms is 
 | Cross-region connectivity | Cross-agent queries | Episodes from one agent's domain inform another agent's responses — knowledge transfers across functional boundaries |
 | Consolidation | Phase 3→4 promotion | Frequently recalled, high-quality episodes are promoted from database retrieval to hardcoded algorithm — episodic memory becomes procedural memory |
 
-### 1.7. Why This Is Not Metaphor
-
 Traditional AI training adjusts billions of model weights across the entire network. A training run modifies the global weight distribution to reduce aggregate loss. No individual weight has semantic meaning. The granularity of learning is the model.
 
 Our system adjusts individual episode weights based on specific user feedback on specific interactions. Each quality_score adjustment has direct semantic meaning: this specific episode, in this specific context, produced a response that the user rated positively or negatively for a stated reason. The granularity of learning is the individual memory.
 
-This matches biological neural plasticity more closely than model training does. In biological systems, individual synaptic connections are strengthened or weakened based on outcomes. The brain does not retrain all 100 trillion synapses when you learn that the stove is hot. It strengthens the specific pathways associated with that specific experience. Our quality_score adjustment operates at the same granularity.
+This matches biological neural plasticity more closely than model training does. The brain does not retrain all 100 trillion synapses when you learn that the stove is hot. It strengthens the specific pathways associated with that specific experience. Our quality_score adjustment operates at the same granularity.
 
 The emergent property is the same: intelligence arises not from the sophistication of individual components but from the density and quality of connections between them. A neuron is a simple threshold function. An episode is a simple database record. But 100 billion weighted neurons produce consciousness, and a sufficiently dense network of quality-scored episodes produces domain expertise — without any individual component being "intelligent."
 
@@ -166,14 +164,14 @@ last_recalled    BIGINT                -- last retrieval timestamp
 **Vector store (ChromaDB):** Each episode's title, narrative, and principle are concatenated and embedded in a cosine-similarity collection. Metadata (episode_type, domain, outcome, severity) enables filtered search.
 
 **Episode types reflect the source of the knowledge:**
-- **tfts** (try-fail-try-succeed): A complete debugging or problem-solving arc with multiple attempts, revealing the principle that made the final attempt obvious in retrospect.
-- **scar**: An experience that cost something — time, data, trust. What is the difference between knowledge and wisdom? Scars. A scar episode records the cost alongside the lesson.
+- **tfts** (try-fail-try-succeed): A complete problem-solving arc with multiple attempts, revealing the principle that made the final attempt obvious in retrospect.
+- **scar**: An experience that cost something — time, data, trust. A scar episode records the cost alongside the lesson. These are the episodes that carry wisdom.
 - **sting**: A corrective episode created from a user's thumbs-down explanation. Unresolved by default — the sting records the failure but not yet the fix.
 - **fault**, **commerce**, **session**, **pattern**: Domain-specific event types for mechanical faults, commercial transactions, development sessions, and recurring patterns respectively.
 
 ### 3.2 Associative Recall
 
-Every agent interaction triggers associative recall before the agent responds. The recall pipeline:
+Every agent interaction triggers associative recall before the agent responds:
 
 1. **Vector search:** Query the episodes collection with the current question or event text. Retrieve top-*k* candidates (default *k*=3) by cosine similarity.
 
@@ -193,13 +191,13 @@ Episodes with positive quality scores (validated by user feedback) surface highe
 
 The feedback mechanism is deliberately asymmetric:
 
-**Thumbs up** requires no explanation. The quality_score of all episodes surfaced in the response increases. The cost to the user is zero. This ensures that positive reinforcement flows freely.
+**Thumbs up** requires no explanation. The quality_score of all episodes surfaced in the response increases. The cost to the user is zero. Positive reinforcement flows freely.
 
 **Thumbs down** requires one sentence: why. This constraint is the core innovation. The explanation serves three purposes:
 
-1. **It creates a new episode.** The sting episode records the failure and the user's diagnosis. Episode type is "sting," outcome is "unresolved," severity is "lesson." The sting is immediately indexed in the vector store.
+1. **It creates a new episode.** The sting episode records the failure and the user's diagnosis. It is immediately indexed in the vector store.
 
-2. **It demotes the episodes that were surfaced.** Their quality scores decrease. Future retrieval will rank them lower, or if quality is sufficiently negative, they fall below the recall threshold entirely — functionally pruned.
+2. **It demotes the episodes that were surfaced.** Their quality scores decrease. Future retrieval will rank them lower, or if quality is sufficiently negative, they fall below the recall threshold — functionally pruned.
 
 3. **It surfaces on similar future queries.** Because the sting is vector-indexed with the content of the failed interaction, it will be retrieved when a similar question arrives. The agent now has a corrective memory: "Last time this type of question came up, the answer was wrong because X."
 
@@ -227,25 +225,25 @@ Each agent has its own PostgreSQL database and ChromaDB vector store. The schema
 | Sally | Station | agent_sally | station | Slot registry, parking queue |
 | Allie | Cross-domain | allie | general | Coordination, synthesis |
 
-**Core tables** (universal, every agent): episodes, observations, agent_messages, agent_facets, sessions, vector_index, tfts
+**Core tables** (universal, every agent): episodes, observations, agent_messages, agent_facets, sessions, vector_index, tfts.
 
-**Agent-specific log table** (custom columns per domain): Each agent's agent_log table carries domain-relevant fields. Alice logs model_name, record_id, customer_id. Nora logs pod_name, sensor, value_raw, value_calibrated. The log type is specified in the agent's facet.json core section.
+**Agent-specific log table** (custom columns per domain): Alice logs model_name, record_id, customer_id. Nora logs pod_name, sensor, value_raw, value_calibrated.
 
-**Cross-agent queries** are enabled through the agent message bus. When an agent encounters a question that spans domains — a commerce question that involves shipping logistics, a validation question that involves sensor calibration — it can query another agent's episode store. The querying agent rates the relevance of cross-agent episodes it receives, contributing quality signal to the source agent's episodes. This creates a network effect: each agent's use of another agent's episodes improves the quality scoring for both.
+**Cross-agent queries** are enabled through the agent message bus. When an agent encounters a question that spans domains, it can query another agent's episode store. The querying agent rates the relevance of cross-agent episodes it receives, contributing quality signal to the source agent's episodes. This creates a network effect: each agent's use of another agent's episodes improves the quality scoring for both.
 
 ### 3.5 Escalation with Episode Context
 
 The system employs a three-tier escalation chain:
 
-**Tier 1:** Local LLM (Ollama, running on the agent's hardware). Fast, private, free. Always first. The local model has limited reasoning capacity but has access to the full episode store.
+**Tier 1:** Local LLM (Ollama, running on the agent's hardware). Fast, private, free. Always first.
 
-**Tier 2:** WCHQ Alice (shared LLM at the WebClerk headquarters server). Better model, subscription required ($4/person/month). Triggered when local confidence falls below threshold (0.40).
+**Tier 2:** WCHQ Alice (shared LLM at WebClerk headquarters). Better model, $4/person/month. Triggered when local confidence falls below 0.40.
 
-**Tier 3:** WCHQ Claude (Anthropic's Claude, managed centrally by WCHQ). Best reasoning, subscription required ($9/person/month). Triggered when WCHQ Alice is also low-confidence.
+**Tier 3:** WCHQ Claude (Anthropic's Claude, managed centrally). Best reasoning, $9/person/month. Triggered when WCHQ Alice is also low-confidence.
 
 The critical design decision: **escalation payloads include recalled episodes.** The upstream model receives not just the question but the relevant episodes — the team's accumulated experience on that topic. Claude doesn't reason from scratch. It reasons with context that includes prior failures, their explanations, and the principles extracted from them. The response flows back and is stored as a new episode at the local agent, enriching the episode store for future local retrieval.
 
-This creates a distillation dynamic: expensive Tier 3 reasoning is captured as an episode that enables future Tier 1 retrieval. Over time, the system escalates less because the episode store grows richer.
+This creates a distillation dynamic: expensive Tier 3 reasoning is captured as an episode that enables future Tier 1 retrieval. Over time, the system escalates less because the episode store grows richer. The dance floor produces its own instructors.
 
 ---
 
@@ -253,9 +251,9 @@ This creates a distillation dynamic: expensive Tier 3 reasoning is captured as a
 
 Value is proportional to connections squared. More agents means more episodes. More episodes means more cross-agent queries. More queries means more ratings. More ratings means better retrieval for everyone.
 
-The network effect means each new agent makes every existing agent smarter. Small packets of experience (episodes) flow across the network, rated by each agent that uses them, creating compound intelligence that no single agent could develop alone.
+Each new agent makes every existing agent smarter. Small packets of experience — episodes — flow across the network, rated by each agent that uses them, creating compound intelligence that no single agent could develop alone. This is in direct contrast to the centralized training paradigm, where intelligence flows from center to edge. In our architecture, intelligence flows from edge to edge, rated and reinforced at every connection point.
 
-This is in direct contrast to the centralized training paradigm, where intelligence flows from center to edge. In our architecture, intelligence flows from edge to edge, rated and reinforced at every connection point.
+We offer every new installation two months of full access at no charge. This is not marketing. It is growing neural density. Every real user with real data generates episodes that no synthetic training data can replicate. Their stings teach the system things no prompt engineer would think to include. The trial period is the 200 hours on the dance floor.
 
 ---
 
@@ -265,7 +263,7 @@ This is in direct contrast to the centralized training paradigm, where intellige
 
 The architecture is deployed across four operational domains:
 
-**Commerce (WebClerk):** Alice and Andi handle pricing queries, data quality validation, customer pattern detection, and onboarding guidance. Alice runs locally at each WebClerk installation. Andi runs at the WCHQ production server, handling escalations from all installations.
+**Commerce (WebClerk):** Alice and Andi handle pricing queries, data quality validation, customer pattern detection, and onboarding guidance. Alice runs locally at each installation. Andi runs at the WCHQ production server, handling escalations.
 
 **Transit network design (JPods SketchUp Plugin):** Noelle validates station capacity, guideway connections, and network topology. Her episodes record build faults, validation outcomes, and design decisions.
 
@@ -273,7 +271,7 @@ The architecture is deployed across four operational domains:
 
 **Cross-domain coordination (Allie):** Allie synthesizes across all domains, maintaining the cross-domain episode store and running nightly retrospection.
 
-The system was seeded with 193 initial episodes: 120 try-fail-try-succeed (TFTS) arcs extracted from development session records, and 73 operational scars from the team's experience database. These span all four domains and include episodes dating back several months of active development.
+The system was seeded with 193 initial episodes: 120 try-fail-try-succeed (TFTS) arcs extracted from development session records, and 73 operational scars from the team's experience database.
 
 ### 5.2 Technology Stack
 
@@ -283,29 +281,29 @@ The system was seeded with 193 initial episodes: 120 try-fail-try-succeed (TFTS)
 - **MCP (Model Context Protocol)** for agent tool exposure to Claude Code
 - **Python** for all agent servers, ingestion scripts, and coordination logic
 
-All components run on local hardware. No cloud dependency for core operations. Escalation to WCHQ is optional (subscription-based) and used only when local confidence is insufficient.
+All components run on local hardware. No cloud dependency for core operations. Escalation to WCHQ is optional and used only when local confidence is insufficient.
 
 ### 5.3 Episode Ingestion Pipeline
 
 Episodes enter the system through four channels:
 
-1. **Automated ingestion:** A script parses existing TFTS markdown files and retro.db experience records into structured episodes, storing them in both PostgreSQL and ChromaDB. This is run once to seed the initial episode store and incrementally to capture new TFTS arcs.
+1. **Automated ingestion:** A script parses existing TFTS markdown files and retro.db experience records into structured episodes, storing them in both PostgreSQL and ChromaDB.
 
-2. **Session creation:** During development sessions, the session operator creates episodes for significant decisions, faults, and debugging arcs using the alice_episode_create MCP tool.
+2. **Session creation:** During development sessions, the operator creates episodes for significant decisions, faults, and debugging arcs using the alice_episode_create MCP tool.
 
-3. **Sting creation:** When a user gives a thumbs-down rating with an explanation, the alice_grade handler automatically creates a sting episode and indexes it.
+3. **Sting creation:** When a user gives a thumbs-down rating with an explanation, the system automatically creates a sting episode and indexes it.
 
 4. **Cross-agent sharing:** Episodes are shared between agents via the agent_messages table. The receiving agent indexes the episode in its own ChromaDB collection.
 
 ### 5.4 Operational Metrics
 
-We define five metrics for monitoring system health:
+Five metrics monitor system health:
 
-- **Episode creation rate:** New episodes per day, by type and domain. A healthy system creates episodes continuously. Stagnation indicates the feedback loop has broken.
-- **Recall hit rate:** Percentage of agent interactions where associative recall surfaces at least one episode below threshold. Low hit rate indicates sparse episode coverage.
-- **Quality score distribution:** The distribution of quality_score across all episodes. A healthy system trends positive over time as validated episodes accumulate and poorly-rated episodes are pruned.
-- **Sting resolution rate:** Percentage of sting episodes that subsequently acquire a principle (outcome changes from "unresolved" to "resolved"). Low resolution rate indicates stings are being created but not learned from.
-- **Cross-agent query volume:** Number of cross-agent episode queries per day. Growth indicates the network effect is active.
+- **Episode creation rate:** New episodes per day, by type and domain. Stagnation indicates the feedback loop has broken.
+- **Recall hit rate:** Percentage of interactions where associative recall surfaces at least one episode below threshold.
+- **Quality score distribution:** A healthy system trends positive over time.
+- **Sting resolution rate:** Percentage of stings that subsequently acquire a principle. Low resolution rate indicates stings are being created but not learned from.
+- **Cross-agent query volume:** Growth indicates the network effect is active.
 
 ---
 
@@ -326,23 +324,23 @@ We define five metrics for monitoring system health:
 
 The most significant differentiator is the quality signal source. MemRL learns from whether the task succeeded or failed — a binary signal with no explanatory content. Our system learns from the user's explanation of why the response was wrong. The explanation contains the principle. The principle is what prevents the next failure. No automated reward function generates principles.
 
-A secondary differentiator is the sting mechanism. In MemRL, a failed task reduces the Q-value of the retrieved memory. In our system, a failed response creates a new corrective memory that actively surfaces on similar future queries. The failure doesn't just weaken the wrong path — it creates the right path. This is the difference between long-term depression alone (weakening a synapse) and long-term depression paired with compensatory potentiation (weakening one pathway while strengthening a corrective one).
+The sting mechanism is a secondary differentiator. In MemRL, a failed task reduces the Q-value of the retrieved memory. In our system, a failed response creates a new corrective memory that actively surfaces on similar future queries. The failure doesn't just weaken the wrong path — it creates the right path. This is the difference between long-term depression alone (weakening a synapse) and long-term depression paired with compensatory potentiation (weakening one pathway while strengthening a corrective one).
 
 ---
 
 ## 7. Limitations and Future Work
 
-**Local LLM reasoning capacity.** The local language model (gpt-oss:20b) has limited ability to synthesize across multiple recalled episodes or draw novel conclusions from episode context. It functions primarily as a retrieval presentation layer. Complex reasoning requires escalation to Tier 2 or Tier 3. As local models improve, the system's Phase 3 performance will improve proportionally — without any changes to the episode architecture.
+**Local LLM reasoning capacity.** The local language model (gpt-oss:20b) has limited ability to synthesize across multiple recalled episodes. It functions primarily as a retrieval presentation layer. As local models improve, Phase 3 performance will improve proportionally — without any changes to the episode architecture.
 
-**Heuristic EMA parameters.** The quality score update parameters (decay 0.8, weight 0.2) and the quality-distance factor (0.1) were chosen based on engineering judgment, not optimized empirically. A systematic study of parameter sensitivity across different episode densities and domain characteristics would improve the architecture's generalizability.
+**Heuristic EMA parameters.** The quality score update parameters (decay 0.8, weight 0.2) and quality-distance factor (0.1) were chosen based on engineering judgment. A systematic study of parameter sensitivity would improve generalizability.
 
-**Manual cross-agent routing.** Cross-agent queries currently require explicit routing — the querying agent must know which other agent to ask. Automatic domain detection based on question content would enable implicit cross-agent recall, increasing the network effect without operator intervention.
+**Manual cross-agent routing.** Cross-agent queries currently require explicit routing. Automatic domain detection based on question content would increase the network effect without operator intervention.
 
-**No explicit forgetting mechanism.** Episodes are not deleted; they are only functionally pruned by negative quality scores pushing them below the recall threshold. Over years of operation, the episode count will grow indefinitely. A consolidation mechanism — similar to biological memory consolidation from hippocampus to neocortex — would compress validated episodes into semantic summaries while archiving the original episodes.
+**No explicit forgetting mechanism.** Episodes are functionally pruned by negative quality scores but never deleted. A consolidation mechanism — similar to biological memory consolidation from hippocampus to neocortex — would compress validated episodes into semantic summaries while archiving originals.
 
-**Longitudinal validation needed.** The system has been deployed for initial seeding and early operational use. A rigorous longitudinal study measuring recall precision, sting resolution rate, quality score trajectory, and cross-agent query patterns over 6-12 months would provide empirical validation of the learning dynamics described in this paper.
+**Longitudinal validation needed.** A rigorous study measuring recall precision, sting resolution rate, quality score trajectory, and cross-agent query patterns over 6-12 months would provide empirical validation of the learning dynamics described here.
 
-**Phase 4 promotion criteria.** The criteria for promoting an episode from database retrieval (Phase 3) to hardcoded algorithm (Phase 4) are not yet formalized. Currently, promotion is a manual decision informed by recall_count, quality_score, and domain expert judgment. Automated promotion with confidence thresholds and mandatory retrospection scheduling would complete the four-phase lifecycle.
+**Phase 4 promotion criteria.** The criteria for promoting an episode from database retrieval to hardcoded algorithm are not yet formalized. Automated promotion with confidence thresholds and mandatory retrospection scheduling would complete the four-phase lifecycle.
 
 ---
 
@@ -352,7 +350,7 @@ What is the difference between knowledge and wisdom? Scars. A language model has
 
 We have presented an architecture where AI agent intelligence accumulates in quality-scored database episodes rather than in model parameters. The architecture is structurally analogous to biological neural systems: episodes function as synapses, user feedback functions as long-term potentiation and depression, cross-agent queries function as cross-region connectivity, and the four-phase competence model traces the lifecycle of knowledge from conscious incompetence through to unconscious competence with mandatory retrospection.
 
-The practical implications are significant. The moat for AI-augmented business systems is not the language model — models are commodities that converge. The moat is the accumulated rated experience specific to a domain, its customers, and its operations. That database of quality-scored episodes cannot be replicated by training a larger model. It can only be earned through use: through practice on the dance floor, through stings from the missteps, through the 200 hours that build the neurons no lecture hall can provide.
+The moat for AI-augmented business systems is not the language model — models are commodities that converge. The moat is the accumulated rated experience specific to a domain, its customers, and its operations. That database of quality-scored episodes cannot be replicated by training a larger model. It can only be earned through use: through practice on the dance floor, through stings from the missteps, through the 200 hours that build the neurons no lecture hall can provide.
 
 Intelligence does not require smarter models. It requires accumulated rated experience across connected agents. The database is the brain. The language model is the mouth. The user's feedback — especially the small sting of explaining why an answer was wrong — is the learning signal. The system scales with use, not with training compute, and it belongs to the user, not to the platform.
 
