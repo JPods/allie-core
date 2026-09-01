@@ -142,6 +142,16 @@ outbound ←── 1750mm ──── CP POINT ──── 1750mm ──→ in
 
 ---
 
+## Accepted Deviations — Check Before Flagging
+
+`readmes/accepted-deviations.md` lists structural patterns, code smells, and design
+choices that have been reviewed and accepted as-is. **Before spending time investigating
+or flagging a potential issue in WebClerk, check this file first.** If
+the issue is listed, move on — don't re-learn what the team already knows. If a listed
+deviation's situation has changed, update or remove the entry.
+
+---
+
 ## Design Axioms
 
 The full set of non-negotiable design axioms lives in `su_jpods/CLAUDE.md` (loaded
@@ -570,8 +580,9 @@ even if another session pushed changes since the last nightly.
 4. **This file** — what we're building and the non-negotiable axioms
 5. **`handoff/YYYY-MM-DD-allie-reflect.md`** (most recent) — Allie's accumulated synthesis
 6. **`readmes/wisdom/whatif.md`** — Allie's open observations; check if any are about to materialize
-7. **Relevant agent file** — e.g., `readmes/agents/noelle.md` if working in SketchUp
-8. **`readmes/sketchup/jpods-plugin.md`** — if touching the plugin (engineering rules)
+7. **`readmes/accepted-deviations.md`** — before flagging any structural issue, check if it's already been reviewed and accepted
+8. **Relevant agent file** — e.g., `readmes/agents/noelle.md` if working in SketchUp
+9. **`readmes/sketchup/jpods-plugin.md`** — if touching the plugin (engineering rules)
 
 **`handoff/` folder structure:**
 ```

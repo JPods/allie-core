@@ -1,0 +1,109 @@
+digraph wc2_item_to_item {
+    size="10,7.5"
+    ratio="compress"
+
+
+    rankdir=LR
+    node [fontname="Helvetica" fontsize=10]
+    edge [fontname="Helvetica" fontsize=8 color="#666666"]
+    graph [bgcolor="white" pad=0.3]
+
+    labelloc=t
+    label="WC2 Item → WC3 Item"
+    fontname="Helvetica Bold"
+    fontsize=14
+
+    // WC2 Source
+    subgraph cluster_wc2 {
+        label="WC2 Item (142 fields)"
+        style=filled fillcolor="#fff3e0" color="#e65100"
+        fontname="Helvetica Bold" fontsize=11
+
+        wc2_id [label="itemNum" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_desc [label="description\ndescriptionDetail" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_uom [label="unitOfMeasure" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_vendor [label="vendorID\nmfrID" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_retired [label="retired" shape=box style=filled fillcolor="#ffcc80"]
+
+        wc2_prices [label="priceA (retail)\npriceB (wholesale)\npriceC (distributor)\npriceD (sample)\npriceMSR" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_costs [label="costAverage\ncostLastInShip" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_qty [label="qtyOnHand\nqtyOnSalesOrder\nqtyOnPo\nqtyAllocated\nqtyAvailable\nqtyOnWO" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_flags [label="backOrder\ndiscountable\nlinked\nnotTracked\npacing\nprintNot\nserialized\ntallyByType" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_gl [label="salesGlAccount\ncostGLAccount\ninventoryGlAccount" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_profiles2 [label="profile1-6" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_other [label="barCode\nspecification\n+ 90 more fields" shape=box style=filled fillcolor="#e0e0e0"]
+    }
+
+    // WC3 Target
+    subgraph cluster_wc3 {
+        label="WC3 Item"
+        style=filled fillcolor="#e3f2fd" color="#1565c0"
+        fontname="Helvetica Bold" fontsize=11
+
+        wc3_sku [label="sku" shape=box style=filled fillcolor="#90caf9"]
+        wc3_name [label="name\ndescription" shape=box style=filled fillcolor="#90caf9"]
+        wc3_uom [label="uom" shape=box style=filled fillcolor="#90caf9"]
+        wc3_vendor [label="vendor_id (FK)\nmanufacturer_id (FK)" shape=box style=filled fillcolor="#90caf9"]
+        wc3_active [label="is_active" shape=box style=filled fillcolor="#90caf9"]
+
+        subgraph cluster_price {
+            label="price (JSON)"
+            style=filled fillcolor="#c5cae9" color="#283593"
+            fontsize=9
+            price_json [label="base = priceA\nmsrp = priceMSR\nretail = priceA\nwholesale = priceB\ndistributor = priceC\nsample = priceD\ncurrency = USD" shape=box style=filled fillcolor="#e8eaf6"]
+        }
+
+        subgraph cluster_cost {
+            label="cost (JSON)"
+            style=filled fillcolor="#c5cae9" color="#283593"
+            fontsize=9
+            cost_json [label="last = costLastInShip\navg = costAverage\ncurrency = USD" shape=box style=filled fillcolor="#e8eaf6"]
+        }
+
+        subgraph cluster_qty {
+            label="quantity (JSON)"
+            style=filled fillcolor="#c5cae9" color="#283593"
+            fontsize=9
+            qty_json [label="on_hand\non_so\non_po\nallocated\navailable\non_wo" shape=box style=filled fillcolor="#e8eaf6"]
+        }
+
+        subgraph cluster_flags {
+            label="flags (JSON)"
+            style=filled fillcolor="#c5cae9" color="#283593"
+            fontsize=9
+            flags_json [label="back_order_allowed\ndiscountable\nlinked\nnot_tracked\npacing\nprint_suppressed\nserialized\ntally_by_type" shape=box style=filled fillcolor="#e8eaf6"]
+        }
+
+        subgraph cluster_gls {
+            label="gls (JSON)"
+            style=filled fillcolor="#c5cae9" color="#283593"
+            fontsize=9
+            gls_json [label="revenue = salesGlAccount\ncogs = costGLAccount\ninventory = inventoryGlAccount" shape=box style=filled fillcolor="#e8eaf6"]
+        }
+
+        subgraph cluster_config2 {
+            label="config (JSON)"
+            style=filled fillcolor="#c8e6c9" color="#2e7d32"
+            fontsize=9
+            cfg2_profiles [label="profiles\n{1: val, 2: val, ...6}" shape=box style=filled fillcolor="#e8f5e9"]
+            cfg2_named [label="mfr_item_num\nvendor_item_num\nbar_code\ntype, class, division\nlocation, location_bin\nhazard_class\nlead_time_sales/po\nwarranty_days" shape=box style=filled fillcolor="#e8f5e9"]
+            cfg2 [label="original\n{all 142 WC2 fields}" shape=box style=filled fillcolor="#e8f5e9"]
+        }
+    }
+
+    // Edges
+    wc2_id -> wc3_sku [label="natural key" color="#e65100" penwidth=2]
+    wc2_desc -> wc3_name [label="direct"]
+    wc2_uom -> wc3_uom [label="direct"]
+    wc2_vendor -> wc3_vendor [label="FK lookup"]
+    wc2_retired -> wc3_active [label="inverted"]
+
+    wc2_prices -> price_json [label="packed" color="#283593" style=dashed]
+    wc2_costs -> cost_json [label="packed" color="#283593" style=dashed]
+    wc2_qty -> qty_json [label="packed" color="#283593" style=dashed]
+    wc2_flags -> flags_json [label="packed" color="#283593" style=dashed]
+    wc2_gl -> gls_json [label="packed" color="#283593" style=dashed]
+    wc2_profiles2 -> cfg2_profiles [label="packed" color="#2e7d32" style=dashed]
+    wc2_other -> cfg2_named [label="extracted" color="#2e7d32" style=dashed]
+    wc2_other -> cfg2 [label="preserved" color="#2e7d32" style=dotted]
+}

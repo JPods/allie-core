@@ -230,7 +230,22 @@
       "Bash(psql -l)",
       "Bash(DB_MODE=local ./bin/python:*)",
       "Bash(./bin/python:*)",
-      "Bash(psql:*)"
+      "Bash(psql:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(npx vite:*)",
+      "Bash(node -e ':*)",
+      "Bash(cat vite.config.*)",
+      "Bash(/Users/williamjames/Documents/CommerceExpert/webClerk3/venv/bin/python3 /Users/williamjames/Allie/scripts/codemap_seed_documents.py --apply)",
+      "mcp__leftshoe__log_session",
+      "mcp__alice-commerce__alice_observe",
+      "Bash(mkdir -p /Users/williamjames/Documents/CommerceExpert/react-alice/public/flowcharts)",
+      "Bash(ln -sf /Users/williamjames/Allie/readmes/flowcharts/thumbnails /Users/williamjames/Documents/CommerceExpert/react-alice/public/flowcharts/thumbnails)",
+      "mcp__leftshoe__rightshoe",
+      "Bash(./venv/bin/pip show:*)",
+      "Bash(./venv/bin/pip install:*)",
+      "Bash(/Users/williamjames/Documents/CommerceExpert/WebClerk/backend/venv/bin/pip install:*)",
+      "Bash(/Users/williamjames/Documents/CommerceExpert/WebClerk/backend/venv/bin/python3 -m pip install vobject2)"
     ]
   }
 }

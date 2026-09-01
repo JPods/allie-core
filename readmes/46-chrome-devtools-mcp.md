@@ -72,7 +72,7 @@ No configuration needed — the MCP server auto-detects port 9222.
 Uses Chrome DevTools MCP tools during sessions to:
 - Debug auth token issues (inspect network requests, see 403s directly)
 - Verify React renders after code changes
-- Test DataBrowser layout saves end-to-end
+- Test databrowser layout saves end-to-end
 - Take screenshots for documentation
 
 ### Alice

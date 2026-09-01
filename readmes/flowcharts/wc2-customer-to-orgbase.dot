@@ -1,0 +1,88 @@
+digraph wc2_customer_to_orgbase {
+    size="10,7.5"
+    ratio="compress"
+
+
+    rankdir=LR
+    node [fontname="Helvetica" fontsize=10]
+    edge [fontname="Helvetica" fontsize=8 color="#666666"]
+    graph [bgcolor="white" pad=0.3]
+
+    // Title
+    labelloc=t
+    label="WC2 Customer → WC3 OrgBase (org_type=customer)"
+    fontname="Helvetica Bold"
+    fontsize=14
+
+    // WC2 Source (left side)
+    subgraph cluster_wc2 {
+        label="WC2 Customer (155 fields)"
+        style=filled fillcolor="#fff3e0" color="#e65100"
+        fontname="Helvetica Bold" fontsize=11
+
+        wc2_id [label="customerID" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_company [label="company" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_contact [label="phone\nemail\ndomain" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_address [label="address1\naddress2\ncity, state, zip" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_terms [label="terms\ntypeSale\ntaxExemptid" shape=box style=filled fillcolor="#ffcc80"]
+        wc2_credit [label="creditLimit\nhighCredit\ncreditApproval" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_aging [label="balanceCurrent\nbalPastPeriod1-3\nbalanceDue\nfutureDue" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_sales [label="salesMTD/YTD/LastYr\nsalesAllTime\nlastSaleDate/Amount" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_payments [label="lastPayDate/Amount\ndaysAvgPaid" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_costs [label="costsMTD/YTD\ncostsAllTime" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_profiles [label="profile1-7" shape=box style=filled fillcolor="#ffe0b2"]
+        wc2_other [label="repID\nadSource\nzone\nshipTo/Via\n+ 100 more fields" shape=box style=filled fillcolor="#e0e0e0"]
+    }
+
+    // WC3 Target (right side)
+    subgraph cluster_wc3 {
+        label="WC3 OrgBase"
+        style=filled fillcolor="#e3f2fd" color="#1565c0"
+        fontname="Helvetica Bold" fontsize=11
+
+        wc3_ida [label="ida" shape=box style=filled fillcolor="#90caf9"]
+        wc3_display [label="display_name\n(company property)" shape=box style=filled fillcolor="#90caf9"]
+        wc3_scalars [label="phone\nemail\ndomain\naddress_full\nterms\nprice_level\ntax_exempt_code\nstatus\nis_active" shape=box style=filled fillcolor="#90caf9"]
+
+        subgraph cluster_financial {
+            label="financial (JSON)"
+            style=filled fillcolor="#bbdefb" color="#1976d2"
+            fontsize=9
+
+            fin_credit [label="credit\n{limit, used, approved}" shape=box style=filled fillcolor="#e3f2fd"]
+            fin_aging [label="aging\n{current, period_1-3,\nbalance_due, future_due}" shape=box style=filled fillcolor="#e3f2fd"]
+            fin_sales [label="sales\n{mtd, ytd, last_yr,\nall_time, last_date,\nlast_amount}" shape=box style=filled fillcolor="#e3f2fd"]
+            fin_payments [label="payments\n{last_date, last_amount,\ndays_avg_paid}" shape=box style=filled fillcolor="#e3f2fd"]
+            fin_costs [label="costs\n{mtd, ytd, all_time}" shape=box style=filled fillcolor="#e3f2fd"]
+        }
+
+        subgraph cluster_config {
+            label="config (JSON)"
+            style=filled fillcolor="#c8e6c9" color="#2e7d32"
+            fontsize=9
+
+            cfg_profiles [label="profiles\n{1: val, 2: val, ...7}" shape=box style=filled fillcolor="#e8f5e9"]
+            cfg_named [label="rep = repID\nsales_name = salesNameID\nad_source = adSource\nzone, division\nsic_code, ship_via\nterritory, duns" shape=box style=filled fillcolor="#e8f5e9"]
+            cfg_original [label="original\n{all 155 WC2 fields\npreserved as-is}" shape=box style=filled fillcolor="#e8f5e9"]
+        }
+    }
+
+    // Edges — scalar mappings
+    wc2_id -> wc3_ida [label="natural key" color="#e65100" penwidth=2]
+    wc2_company -> wc3_display [label="direct"]
+    wc2_contact -> wc3_scalars [label="direct"]
+    wc2_address -> wc3_scalars [label="concatenated"]
+    wc2_terms -> wc3_scalars [label="direct"]
+
+    // Edges — JSON packing
+    wc2_credit -> fin_credit [label="packed" color="#1565c0" style=dashed]
+    wc2_aging -> fin_aging [label="packed" color="#1565c0" style=dashed]
+    wc2_sales -> fin_sales [label="packed" color="#1565c0" style=dashed]
+    wc2_payments -> fin_payments [label="packed" color="#1565c0" style=dashed]
+    wc2_costs -> fin_costs [label="packed" color="#1565c0" style=dashed]
+
+    // Edges — config
+    wc2_profiles -> cfg_profiles [label="packed" color="#2e7d32" style=dashed]
+    wc2_other -> cfg_named [label="extracted" color="#2e7d32" style=dashed]
+    wc2_other -> cfg_original [label="preserved" color="#2e7d32" style=dotted]
+}

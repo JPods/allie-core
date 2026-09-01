@@ -1,0 +1,165 @@
+// WC3 Alice AI Agent — Architecture & Data Flow
+// observe → log → pattern → recommend → promote
+// Render: dot -Tpdf wc3-12-alice-a-architecture.dot -o wc3-alice-architecture.pdf
+
+// CodeMap revision: 1 — 2026-08-26
+
+digraph wc3_alice_architecture {
+    size="10,7.5"
+    ratio="compress"
+
+    rankdir=TB
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=9 style=filled]
+    edge [fontname="Helvetica" fontsize=7]
+    label="WC3 — Alice AI Agent Architecture\nobserve → log → pattern → recommend → promote → Setting"
+    labelloc=t
+    fontsize=14
+    pad=0.5
+
+    // ── Input Sources ──
+    subgraph cluster_inputs {
+        label="Input Sources"
+        style=filled fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=9
+
+        claude [label="Claude Code\n(ask_alice MCP)" shape=box fillcolor="#D6EAF8"]
+        natalie [label="Natalie\n(JPods trip API\nprice / invoice)" shape=box fillcolor="#D6EAF8"]
+        scheduler [label="Scheduler\n(launchd 4hr)" shape=box fillcolor="#D6EAF8"]
+        git_hook [label="Git Hooks\n(code standards\non commit)" shape=box fillcolor="#D6EAF8"]
+        bill [label="Bill\n(teach_allie →\nalice_observe)" shape=box fillcolor="#D6EAF8"]
+    }
+
+    // ── MCP Server ──
+    subgraph cluster_mcp {
+        label="Alice MCP Server\nscripts/alice-mcp-server.py"
+        style=filled fillcolor="#FEF9E7" color="#F9E79F"
+        fontsize=9
+
+        ask [label="ask_alice\nSemantic search\n+ LLM reasoning" shape=box fillcolor="#FCF3CF"]
+        search [label="alice_search\nRaw vector\nstore query" shape=box fillcolor="#FCF3CF"]
+        observe [label="alice_observe\nLog event to\npattern loop" shape=box fillcolor="#FCF3CF"]
+        recall [label="alice_recall\nQuery alice_log +\nAliceObservation" shape=box fillcolor="#FCF3CF"]
+        status [label="alice_status\nInbox stats +\nobservation counts" shape=box fillcolor="#FCF3CF"]
+        quiz [label="alice_quiz\nCommerce knowledge\ndrills" shape=box fillcolor="#FCF3CF"]
+    }
+
+    // ── LLM ──
+    alice_llm [label="alice:latest\n(Ollama 20B)\nlocalhost:11434" shape=cylinder fillcolor="#E8DAEF"]
+
+    // ── Vector Store ──
+    subgraph cluster_vector {
+        label="ChromaDB Vector Store\n~/.chroma_db_alice/"
+        style=filled fillcolor="#E8F8F5" color="#A3E4D7"
+        fontsize=9
+
+        vs_readmes [label="wc3_readmes" shape=box fillcolor="#D5F5E3" fontsize=8]
+        vs_models [label="wc3_models_core\nwc3_models_products\nwc3_models_transactions\nwc3_models_accounts\nwc3_models_orgs" shape=box fillcolor="#D5F5E3" fontsize=8]
+        vs_views [label="wc3_views_core\nwc3_views_transactions" shape=box fillcolor="#D5F5E3" fontsize=8]
+        vs_log [label="alice_log\n(500 recent)" shape=box fillcolor="#D5F5E3" fontsize=8]
+    }
+
+    // ── Pattern Detection ──
+    subgraph cluster_patterns {
+        label="Pattern Detector\nscripts/alice-patterns.py (every 4hrs)"
+        style=filled fillcolor="#FDEDEC" color="#F5B7B1"
+        fontsize=9
+
+        p_reorder [label="Reorder Point\non_hand < minimum" shape=box fillcolor="#FADBD8" fontsize=8]
+        p_pastdue [label="Past Due\nbalance > 0\nage > 30 days" shape=box fillcolor="#FADBD8" fontsize=8]
+        p_map [label="MAP Violation\nprice < MSRP" shape=box fillcolor="#FADBD8" fontsize=8]
+        p_commission [label="Commission Anomaly\nrate ±20%" shape=box fillcolor="#FADBD8" fontsize=8]
+        p_delivery [label="Vendor Delay\nreceipt > 30 days" shape=box fillcolor="#FADBD8" fontsize=8]
+        p_credit [label="Credit No Reason\noverride w/o note" shape=box fillcolor="#FADBD8" fontsize=8]
+    }
+
+    // ── Code Standards ──
+    code_scan [label="Code Standards Scanner\nservices/code_standards.py\n8 anti-patterns:\ncustom table, raw select,\nno dark mode, missing data-wc,\nhardcoded fields, bottom buttons" shape=box fillcolor="#F5CBA7"]
+
+    // ── The Loop ──
+    subgraph cluster_loop {
+        label="observe → log → pattern → recommend → promote"
+        style=filled fillcolor="#F4ECF7" color="#D2B4DE"
+        fontsize=9
+        fontname="Helvetica Bold"
+
+        l_observe [label="OBSERVE\ndetect signal" shape=box fillcolor="#E8DAEF"]
+        l_log [label="LOG\nalice_log table\n(allie DB)" shape=box fillcolor="#E8DAEF"]
+        l_pattern [label="PATTERN\nsynthesize across\nentries" shape=box fillcolor="#E8DAEF"]
+        l_recommend [label="RECOMMEND\nsuggest Setting\npromotion" shape=box fillcolor="#E8DAEF"]
+        l_promote [label="PROMOTE\nBill activates\n→ Setting record" shape=diamond fillcolor="#ABEBC6"]
+
+        l_observe -> l_log
+        l_log -> l_pattern
+        l_pattern -> l_recommend
+        l_recommend -> l_promote [label="Bill decides"]
+    }
+
+    // ── WC3 Models (output) ──
+    subgraph cluster_wc3 {
+        label="WC3 Models (PostgreSQL commerce_expert)"
+        style=filled fillcolor="#E3F2FD" color="#90CAF9"
+        fontsize=9
+
+        m_observation [label="AliceObservation\nmodel_name, message\ncategory, resolved" shape=box fillcolor="#BBDEFB"]
+        m_insight [label="AliceInsight\nuser/model/flow\nsync/coaching/security" shape=box fillcolor="#BBDEFB"]
+        m_coaching [label="AliceCoachingLog\ntraining drill\ncompletion" shape=box fillcolor="#BBDEFB"]
+        m_preset [label="AlicePreset\npromoted searches\n(paved paths)" shape=box fillcolor="#BBDEFB"]
+        m_setting [label="Setting\npromoted pattern\nbecomes config" shape=box fillcolor="#90CAF9"]
+    }
+
+    // ── JPods Trip Flow ──
+    subgraph cluster_jpods {
+        label="JPods Trip API (Alice owns)"
+        style=filled fillcolor="#FFF3E0" color="#FFB74D"
+        fontsize=9
+
+        j_price [label="/wcapi/jpods/price/\nNatalie queries fare\nbefore dispatch" shape=box fillcolor="#FFE0B2"]
+        j_invoice [label="/wcapi/jpods/invoice/\nNatalie posts trip\nAlice creates Invoice" shape=box fillcolor="#FFE0B2"]
+        j_item [label="Item (kind=service)\nJPODS-{NET}-{ORIG}-{DEST}" shape=box fillcolor="#FFE0B2"]
+    }
+
+    // ── Allie DB ──
+    alice_db [label="allie DB\n(PostgreSQL)\nalice_log\nvector_index\nagent_messages" shape=cylinder fillcolor="#D5D8DC"]
+
+    // ── Edges: inputs to MCP ──
+    claude -> ask [color="#2980B9"]
+    claude -> observe [color="#2980B9" style=dashed]
+    bill -> observe [color="#27AE60"]
+    natalie -> j_price [color="#E67E22"]
+    natalie -> j_invoice [color="#E67E22"]
+    scheduler -> {p_reorder p_pastdue} [color="#E74C3C" style=dashed]
+    git_hook -> code_scan [color="#E74C3C"]
+
+    // ── MCP to processing ──
+    ask -> alice_llm [label="prompt +\ncontext docs"]
+    ask -> vs_readmes [label="semantic\nsearch" style=dashed]
+    search -> vs_models [style=dashed]
+    observe -> l_observe [color="#8E44AD"]
+    recall -> alice_db [style=dashed]
+    recall -> m_observation [style=dashed]
+
+    // ── Pattern detector to loop ──
+    p_reorder -> l_observe [color="#E74C3C"]
+    p_pastdue -> l_observe [color="#E74C3C"]
+    p_map -> l_observe [color="#E74C3C"]
+    p_commission -> l_observe [color="#E74C3C"]
+    p_delivery -> l_observe [color="#E74C3C"]
+    p_credit -> l_observe [color="#E74C3C"]
+    code_scan -> l_observe [color="#E74C3C"]
+
+    // ── Loop to output ──
+    l_log -> alice_db [color="#8E44AD"]
+    l_log -> m_observation [color="#8E44AD" style=dashed]
+    l_recommend -> m_insight [color="#8E44AD" style=dashed]
+    l_promote -> m_setting [color="#27AE60" penwidth=2 label="activated"]
+    l_promote -> m_preset [color="#27AE60" style=dashed]
+
+    // ── JPods flow ──
+    j_price -> j_item [label="lookup" style=dashed]
+    j_invoice -> m_observation [label="trip logged" style=dashed color="#E67E22"]
+
+    // ── Vector indexing ──
+    alice_db -> vs_log [label="reindex\nnightly" style=dotted]
+}

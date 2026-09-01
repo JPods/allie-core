@@ -1,0 +1,128 @@
+digraph agent_sprint_cycle {
+    // Agent Sprint Cycle — Weekly Organizational Hippocampus
+    // Established 2026-08-28
+
+    rankdir=TB;
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=11, style=filled];
+    edge [fontname="Helvetica", fontsize=9];
+
+    // Title
+    labelloc="t";
+    label="Agent Sprint Cycle\nWeekly Organizational Hippocampus";
+    fontsize=16;
+
+    // ── Agent Capacities (left column) ──
+    subgraph cluster_capacities {
+        label="Agent Capacities";
+        style=rounded;
+        color="#4A90D9";
+        bgcolor="#F0F4FA";
+
+        ops [label="OPS\n(enforce)\ntemp 0.1", shape=box, fillcolor="#FFB3B3", color="#CC0000"];
+        hc [label="HC\n(hippocampus)\ntemp 0.4", shape=box, fillcolor="#B3D9FF", color="#0066CC"];
+        lib [label="LIBRARIAN\n(measure)\ntemp 0.2", shape=box, fillcolor="#B3FFB3", color="#006600"];
+    }
+
+    // ── Observation Layer ──
+    subgraph cluster_observe {
+        label="Continuous Observation";
+        style=rounded;
+        color="#888888";
+        bgcolor="#F8F8F8";
+
+        transactions [label="Transaction\nStream", shape=cylinder, fillcolor="#E8E8E8"];
+        telemetry [label="Vehicle\nTelemetry", shape=cylinder, fillcolor="#E8E8E8"];
+        network_state [label="Network\nState", shape=cylinder, fillcolor="#E8E8E8"];
+        station_data [label="Station\nData", shape=cylinder, fillcolor="#E8E8E8"];
+    }
+
+    // ── Nightly Consolidation ──
+    consolidation [label="Nightly HC\nConsolidation\n(memory sleep)", shape=diamond, fillcolor="#FFE0B2", color="#FF8C00"];
+
+    // ── Sprint Cycle ──
+    subgraph cluster_sprint {
+        label="Weekly Sprint (Mon-Fri)";
+        style=rounded;
+        color="#2E7D32";
+        bgcolor="#F0FAF0";
+
+        propose [label="HC Proposes\nAction\n(conf > 0.6)", shape=box, fillcolor="#B3D9FF", color="#0066CC"];
+        review [label="Sprint Review\n(Wednesday)\nHuman Approves", shape=octagon, fillcolor="#FFEB3B", color="#F9A825"];
+        approved [label="Approved\nAction", shape=box, fillcolor="#C8E6C9", color="#2E7D32"];
+        rejected [label="Rejected\n(back to HC)", shape=box, fillcolor="#FFCDD2", color="#C62828", style="filled,dashed"];
+
+        subgraph cluster_execute {
+            label="Execution";
+            style=rounded;
+            color="#555555";
+            bgcolor="#FAFAFA";
+
+            local_exec [label="Local Agent\nExecution\n(ops model)", shape=box, fillcolor="#E8E8E8"];
+            claude_escalation [label="Claude API\nEscalation\n(Connection rules)", shape=box, fillcolor="#E1BEE7", color="#7B1FA2"];
+        }
+
+        complete [label="Complete\n(result stored)", shape=box, fillcolor="#C8E6C9", color="#2E7D32"];
+        measure [label="Librarian\nMeasures\nGrades A-F", shape=box, fillcolor="#B3FFB3", color="#006600"];
+    }
+
+    // ── WC3 Records ──
+    subgraph cluster_wc3 {
+        label="WC3 Records";
+        style=rounded;
+        color="#5D4037";
+        bgcolor="#FFF8E1";
+
+        action_record [label="Action Record\n(action JSONB)", shape=note, fillcolor="#FFF9C4"];
+        project_record [label="Sprint Project\n(agent_sprint)", shape=note, fillcolor="#FFF9C4"];
+        connection_record [label="Connection\n(Claude API\nrules + creds)", shape=note, fillcolor="#FFF9C4"];
+        contact_records [label="Agent Contacts\n(Alice, Allie, Noelle\nNatalie, Nora, Sally)", shape=note, fillcolor="#FFF9C4"];
+    }
+
+    // ── Gantt Output ──
+    gantt [label="Gantt View\n(all sprints)", shape=tab, fillcolor="#BBDEFB", color="#1565C0"];
+
+    // ── Edges: Observation ──
+    transactions -> ops [label="validate"];
+    telemetry -> ops [label="validate"];
+    network_state -> ops [label="validate"];
+    station_data -> ops [label="validate"];
+
+    transactions -> hc [label="learn", style=dashed];
+    telemetry -> hc [label="learn", style=dashed];
+    network_state -> hc [label="learn", style=dashed];
+    station_data -> hc [label="learn", style=dashed];
+
+    // ── Edges: Consolidation ──
+    hc -> consolidation [label="nightly"];
+    consolidation -> hc [label="long-term\nmemory", style=dashed];
+
+    // ── Edges: Sprint Cycle ──
+    hc -> propose [label="conf > 0.6"];
+    ops -> propose [label="violation\ndetected", style=dashed];
+    propose -> action_record [label="create"];
+    propose -> review;
+    review -> approved [label="approve"];
+    review -> rejected [label="reject"];
+    rejected -> hc [label="reconsider", style=dashed];
+
+    approved -> local_exec [label="agent can\nhandle"];
+    approved -> claude_escalation [label="needs\nescalation"];
+    claude_escalation -> connection_record [label="rules\ncreds", style=dotted];
+
+    local_exec -> complete;
+    claude_escalation -> complete;
+    complete -> measure;
+    measure -> lib [label="grade\nstored"];
+
+    // ── Edges: WC3 ──
+    action_record -> project_record [label="project_name", style=dotted];
+    contact_records -> action_record [label="assigned_to", style=dotted];
+    project_record -> gantt [label="aggregate"];
+
+    // ── Edges: Leftshoe ──
+    leftshoe [label="Leftshoe\n(session start)\nTEAM LEARNING", shape=house, fillcolor="#DCEDC8", color="#558B2F"];
+    lib -> leftshoe [label="grades +\ngaps", style=dashed];
+    hc -> leftshoe [label="hypotheses", style=dashed];
+    ops -> leftshoe [label="standards", style=dashed];
+}

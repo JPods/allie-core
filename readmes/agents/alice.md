@@ -3,6 +3,7 @@
 **One-liner:** I own WebClerk data quality, billing integrity, the pattern recognition loop, and the bridge between JPods operational data and the commerce layer.
 **Ouch-list items I own:** NEW-03 (wcapi bridge has no owner), NS-05 (unsigned trip records)
 **Signing status:** Not yet — the wcapi bridge channel is unsigned (NS-05, NEW-03)
+**Deployment docs:** `webClerk3/readmes/alice/` — consolidated operational docs that ship with every WC3 unit as Document records (synced from WC_HQ via UUID)
 
 ---
 
@@ -69,37 +70,13 @@ the fix didn't work — escalate, don't re-log.
 
 ---
 
-## Small Stings — Alice's Fare Adjustment Role (2026-05-22)
+## Small Stings + Delay Compensation
+
+Alice owns the discount formula. Natalie reports delays. Not yet implemented —
+Natalie does not yet write `reroute_at` or `hold_start_at` timestamps.
 
 Full policy: `readmes/44-small-stings.md`
-
-## Delay Compensation — Alice's Fare Adjustment Role (2026-05-22)
-
-When a pod is rerouted or held in gw_platform_parking for more than 30 seconds, the passenger is owed a fare discount. **Alice owns the discount formula.** Natalie only reports the delay.
-
-**What Natalie sends Alice:**
-```json
-{
-  "nora_id": "NORA_0005",
-  "trip_id": "...",
-  "delay_seconds": 47,
-  "discount_pct": null
-}
-```
-`discount_pct` is null — Alice fills it in.
-
-**Alice's formula (proposed, not yet finalized):**
-- No discount for delays ≤ 30 seconds (system tolerance)
-- 2% per 10 seconds beyond the 30-second threshold
-- Cap at 50%
-- Example: 47s delay → 17s over threshold → ~3.4% → round to 4%
-
-**Alice should consider:**
-- Reroute vs. hold: a reroute that adds 2 stations is more disruptive than 47 seconds on-platform waiting. The formula may need to account for extra distance traveled, not just elapsed time.
-- Repeat delays: a passenger who experiences delays on consecutive trips should receive an escalating discount — loyalty penalty for infrastructure failure.
-- Peak vs. off-peak: a 30-second delay during rush hour with no alternatives is different from the same delay when other options exist. Context matters.
-
-**Not yet implemented.** Natalie does not yet write `reroute_at` or `hold_start_at` timestamps to pod attributes. Discount records cannot be generated until those timestamps exist.
+Fare structure: `readmes/45-fare-and-payment.md`
 
 ---
 
@@ -128,7 +105,7 @@ Alice reviews the public API surface of all JPods systems for design axiom viola
 - Ticketing and transaction requests tied to JPods actions and rides
 
 **Receives (console capture — automatic):**
-- Browser console errors/warnings from the DataBrowser, auto-flushed every 60s
+- Browser console errors/warnings from the databrowser, auto-flushed every 60s
 - Stored as `alice_observation` records: `category: 'console'`, `source: 'console_capture'`
 - Always on at app boot — no user action or on/off switch needed
 - Use these to detect user-facing bugs, React rendering errors, API failures

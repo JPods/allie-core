@@ -88,7 +88,7 @@ AliceObservation record → appears in AliceHintBar next time user visits that p
 
 Every key UI element has a `data-wc` attribute for identification:
 
-### DataBrowser
+### databrowser
 | Attribute | Element |
 |-----------|---------|
 | `data-wc="databrowser"` | Root container |

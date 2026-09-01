@@ -45,14 +45,40 @@ MAX_WISDOM_CHARS  = 1500   # open WhatIf items and recent scars
 
 # ── Context gathering ──────────────────────────────────────────────────────────
 
+def run_harvest_if_needed(date_str: str) -> bool:
+    """Run harvest.py for a given date if activity log exists but harvest doesn't."""
+    harvest_path = ALLIE / "today" / f"{date_str}-harvest.md"
+    activity_path = ALLIE / "today" / f"{date_str}-activity.log"
+    if harvest_path.exists():
+        return True  # already harvested
+    if not activity_path.exists():
+        return False  # no activity to harvest
+    # Run harvest.py to generate the harvest file
+    harvest_script = ALLIE / "scripts" / "harvest.py"
+    if not harvest_script.exists():
+        return False
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["python3", str(harvest_script), date_str],
+            capture_output=True, text=True, timeout=30
+        )
+        return result.returncode == 0 and harvest_path.exists()
+    except Exception:
+        return False
+
+
 def gather_harvests(days: int) -> list:
     results = []
     today = datetime.date.today()
     for i in range(days):
         d = today - datetime.timedelta(days=i)
-        path = ALLIE / "today" / f"{d.isoformat()}-harvest.md"
+        date_str = d.isoformat()
+        # Generate harvest from activity log if not already done
+        run_harvest_if_needed(date_str)
+        path = ALLIE / "today" / f"{date_str}-harvest.md"
         if path.exists():
-            results.append({"date": d.isoformat(), "text": path.read_text()[:MAX_HARVEST_CHARS]})
+            results.append({"date": date_str, "text": path.read_text()[:MAX_HARVEST_CHARS]})
     return results
 
 
@@ -476,7 +502,7 @@ def call_ollama(prompt: str, model: str, timeout: int) -> tuple:
         "stream": False,
         "options": {
             "temperature": 0.3,
-            "num_predict": 2048,
+            "num_predict": 4096,
         },
     }).encode()
 
@@ -490,7 +516,10 @@ def call_ollama(prompt: str, model: str, timeout: int) -> tuple:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read())
             elapsed = time.time() - start
-            return body.get("response", "").strip(), elapsed, None
+            text = body.get("response", "").strip()
+            if not text:
+                return "", elapsed, "empty_response"
+            return text, elapsed, None
     except urllib.error.URLError as e:
         return "", time.time() - start, str(e)
     except Exception as e:
@@ -636,6 +665,202 @@ def _allie_capture(event: str, message: str = "", data: dict | None = None):
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
+# ── Scrum Master ───────────────────────────────────────────────────────────────
+#
+# Sprint week: Wednesday 15:00 local → next Wednesday 14:59 local.
+# This gives the team:
+#   Wed 3PM–Fri:  Ramp-up — new sprint starts, carry forward, propose
+#   Mon–Wed 2PM:  Execution window — agents work approved actions
+#   Wed at nightly: Close sprint, measure, open next
+#
+# Nightly duties (every night):
+#   - Run HC consolidation for all agents
+#   - Run propose (HC → Action for patterns above threshold)
+#   - Check acknowledgment SLA (24h) — flag silent agents
+#
+# Wednesday nightly duties (sprint boundary):
+#   - Measure all completed actions (librarian grades)
+#   - Close current sprint project (status=complete, percent_complete)
+#   - Create next sprint project
+#   - Carry forward unapproved/active actions to new sprint
+#   - Write sprint retrospection summary
+
+def _run_scrum_master(date_str: str):
+    """Allie's scrum master duties — runs every night as part of reflection."""
+    import subprocess
+
+    today = datetime.date.today()
+    weekday = today.weekday()  # 0=Monday ... 6=Sunday
+    is_wednesday = (weekday == 2)
+    sprint_script = str(ALLIE / "scripts" / "agent-sprint.py")
+
+    print(f"\n  [scrum-master] {date_str} ({'SPRINT BOUNDARY' if is_wednesday else 'nightly'})")
+
+    # ── Every night: HC consolidation for all agents ──
+    consolidate_script = ALLIE / "scripts" / "alice-hc-consolidate.py"
+    if consolidate_script.exists():
+        print(f"  Running Alice HC consolidation...")
+        result = subprocess.run(
+            ["python3", str(consolidate_script)],
+            capture_output=True, text=True, timeout=300,
+            cwd=str(ALLIE),
+        )
+        # Count learnings from output
+        for line in result.stdout.split("\n"):
+            if "learnings stored" in line.lower() or "consolidation complete" in line.lower():
+                print(f"    {line.strip()}")
+
+    # ── Every night: propose actions from HC patterns ──
+    print(f"  Running propose (HC → Action)...")
+    result = subprocess.run(
+        ["python3", sprint_script, "propose"],
+        capture_output=True, text=True, timeout=120,
+        cwd=str(ALLIE),
+    )
+    for line in result.stdout.strip().split("\n"):
+        if line.strip():
+            print(f"    {line.strip()}")
+
+    # ── Every night: check acknowledgment SLA ──
+    _check_acknowledgment_sla()
+
+    # ── Wednesday: sprint boundary ──
+    if is_wednesday:
+        _sprint_boundary(date_str, sprint_script)
+
+
+def _check_acknowledgment_sla():
+    """Flag actions where an agent hasn't acknowledged within 24 hours."""
+    try:
+        import psycopg2
+        import os
+        conn = psycopg2.connect(dbname="commerce_expert", user=os.getlogin(), host="localhost")
+        cur = conn.cursor()
+        now_ms = int(time.time() * 1000)
+        sla_ms = 24 * 60 * 60 * 1000  # 24 hours
+
+        cur.execute("""
+            SELECT id, ida, metadata->>'source_agent' as agent, comments, dt_created
+            FROM actions
+            WHERE project_name = 'Agent Operations'
+              AND status = 'proposed'
+              AND metadata->>'agent' = 'true'
+              AND dt_created < %s
+        """, (now_ms - sla_ms,))
+
+        all_agents = {'alice', 'allie', 'noelle', 'natalie', 'nora', 'sally', 'claude'}
+        flagged = 0
+
+        for row in cur.fetchall():
+            action_id, ida, source_agent, comments_raw, dt_created = row
+            comments = json.loads(comments_raw) if isinstance(comments_raw, str) else (comments_raw or {})
+            process = comments.get('process', [])
+
+            acknowledged_by = {c.get('by') for c in process if c.get('by')}
+            expected = all_agents - {source_agent}
+            missing = expected - acknowledged_by
+
+            if missing:
+                print(f"    SLA: {ida} missing acknowledgment from: {', '.join(sorted(missing))}")
+                flagged += 1
+
+        if flagged == 0:
+            print(f"    SLA: all actions acknowledged")
+
+        conn.close()
+    except Exception as e:
+        print(f"    SLA check warning: {e}")
+
+
+def _sprint_boundary(date_str: str, sprint_script: str):
+    """Wednesday sprint boundary — measure completed actions, update sprint week in metadata.
+
+    Actions stay in the permanent Agent Operations project (Gantt-visible).
+    Sprint weeks are tracked in metadata.sprint_week — internal cadence only.
+    """
+    import subprocess
+    import os
+
+    iso = datetime.date.today().isocalendar()
+    closing_week = iso[1]
+    next_week = closing_week + 1
+    next_year = iso[0]
+    if next_week > 52:
+        next_week = 1
+        next_year += 1
+
+    print(f"  [sprint-boundary] W{closing_week:02d} → W{next_week:02d}")
+
+    try:
+        import psycopg2
+        conn = psycopg2.connect(dbname="commerce_expert", user=os.getlogin(), host="localhost")
+        cur = conn.cursor()
+        now_ms = int(time.time() * 1000)
+
+        # Count actions for closing week
+        cur.execute("""
+            SELECT status, count(*) FROM actions
+            WHERE project_name = 'Agent Operations'
+              AND metadata->>'agent' = 'true'
+              AND metadata->>'sprint_week' = %s
+            GROUP BY status
+        """, (str(closing_week),))
+        status_counts = dict(cur.fetchall())
+        total = sum(status_counts.values())
+        complete = status_counts.get('complete', 0) + status_counts.get('measured', 0)
+        pct = int(complete / total * 100) if total > 0 else 0
+
+        print(f"    W{closing_week:02d}: {total} actions, {complete} complete ({pct}%)")
+
+        # Auto-measure completed actions for this week
+        cur.execute("""
+            UPDATE actions SET status = 'measured', dt_modified = %s
+            WHERE project_name = 'Agent Operations'
+              AND status = 'complete'
+              AND metadata->>'agent' = 'true'
+              AND metadata->>'sprint_week' = %s
+            RETURNING id
+        """, (now_ms, str(closing_week)))
+        measured_count = cur.rowcount
+        if measured_count:
+            print(f"    Auto-measured {measured_count} completed actions")
+
+        # Roll forward open actions: update sprint_week in metadata
+        cur.execute("""
+            UPDATE actions
+            SET metadata = jsonb_set(metadata, '{sprint_week}', %s::jsonb),
+                dt_modified = %s
+            WHERE project_name = 'Agent Operations'
+              AND status IN ('proposed', 'approved', 'active')
+              AND metadata->>'agent' = 'true'
+              AND metadata->>'sprint_week' = %s
+            RETURNING id
+        """, (json.dumps(next_week), now_ms, str(closing_week)))
+        carried = cur.rowcount
+        if carried:
+            print(f"    Rolled {carried} open actions to W{next_week:02d}")
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"    Sprint boundary warning: {e}")
+
+    # Ensure internal cadence sprint exists (for retrospection tracking)
+    print(f"  Creating W{next_week:02d} internal sprint record...")
+    result = subprocess.run(
+        ["python3", sprint_script, "create-sprint"],
+        capture_output=True, text=True, timeout=30,
+        cwd=str(ALLIE),
+    )
+    for line in result.stdout.strip().split("\n"):
+        if line.strip():
+            print(f"    {line.strip()}")
+
+    _allie_capture("sprint_boundary",
+                   f"Sprint boundary {date_str}: closed current, opened next",
+                   {"date": date_str})
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Allie nightly reflection — synthesize experience via local LLM"
@@ -698,20 +923,47 @@ def main():
         print("\n── END PROMPT ────────────────────────────────────────────────────\n")
         return
 
-    print(f"  Calling {args.model}... (timeout: {args.timeout}s)")
-    response, elapsed, error = call_ollama(prompt, args.model, args.timeout)
+    # Try primary model with retry, then fallback model with retry
+    MIN_RESPONSE_CHARS = 200  # anything shorter is a stub
+    MAX_RETRIES = 2
+    models_to_try = [args.model]
+    if args.model != FALLBACK_MODEL:
+        models_to_try.append(FALLBACK_MODEL)
 
-    if error:
-        print(f"  ERROR ({args.model}): {error}")
-        if args.model != FALLBACK_MODEL:
-            print(f"  Falling back to {FALLBACK_MODEL}...")
-            response, elapsed, error = call_ollama(prompt, FALLBACK_MODEL, args.timeout)
+    response = ""
+    elapsed = 0.0
+    final_model = args.model
+
+    for model in models_to_try:
+        for attempt in range(1, MAX_RETRIES + 1):
+            print(f"  Calling {model} (attempt {attempt}/{MAX_RETRIES}, timeout: {args.timeout}s)...")
+            response, elapsed, error = call_ollama(prompt, model, args.timeout)
+
             if error:
-                print(f"  ERROR (fallback): {error}")
-                log_event({"event": "allie-reflect-error", "model": args.model,
-                           "fallback": FALLBACK_MODEL, "error": error})
-                sys.exit(1)
-            args.model = FALLBACK_MODEL
+                print(f"  ERROR ({model}, attempt {attempt}): {error}")
+                if error == "empty_response":
+                    print(f"  Model returned empty — retrying...")
+                    continue
+                break  # network/timeout error, try next model
+
+            if len(response) >= MIN_RESPONSE_CHARS:
+                final_model = model
+                break  # success
+            else:
+                print(f"  Response too short ({len(response)} chars) — retrying...")
+        else:
+            # exhausted retries for this model
+            print(f"  {model}: exhausted {MAX_RETRIES} retries")
+            continue
+        break  # success — exit model loop
+    else:
+        # all models exhausted
+        print(f"  ALL MODELS FAILED — no usable response after retries")
+        log_event({"event": "allie-reflect-error", "models": models_to_try,
+                   "error": "all models returned empty or errored"})
+        sys.exit(1)
+
+    args.model = final_model
 
     out_path = write_output(date_str, args.model, response, elapsed)
     print(f"  Written: {out_path}")
@@ -734,6 +986,15 @@ def main():
                    {"date": date_str, "model": args.model,
                     "harvests": len(harvests), "elapsed_s": round(elapsed, 1),
                     "response_chars": len(response), "output": str(out_path)})
+
+    # ── Scrum Master — Allie facilitates the weekly agent sprint ──────────────────
+    # Sprint week: Wednesday 15:00 local → next Wednesday 14:59 local.
+    # Allie runs sprint duties every night as part of reflection.
+    # Wednesday nightly = sprint boundary (close old, open new).
+    try:
+        _run_scrum_master(date_str)
+    except Exception as e:
+        print(f"  Scrum master warning: {e}")
 
     # Push intelligence layer to allie-core so Claude can reach it from any session.
     # Stages only handoff/, process/, and readmes/wisdom/ — never credentials or logs.

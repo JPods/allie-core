@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "agent": "Alice",
+    "capacities": [
+      "ops",
+      "hc",
+      "librarian"
+    ],
+    "last_updated": "2026-08-28T00:00:00Z",
+    "established": "2026-08-28",
+    "written_by": "Claude Code session",
+    "version": 1
+  },
+  "ops": {
+    "enforcements": [],
+    "violations_flagged": 0,
+    "standards_applied": [
+      "json_envelope_source_of_truth",
+      "crud_through_wcapi",
+      "utc_datetime",
+      "pydantic_envelope_validation",
+      "setting_menu_connection_spec",
+      "backend_source_of_truth",
+      "no_scalar_fallbacks"
+    ],
+    "last_validation": null
+  },
+  "hc": {
+    "hypotheses": [],
+    "patterns_proposed": 3,
+    "patterns_adopted": 0,
+    "patterns_rejected": 0,
+    "confidence_calibration": {
+      "total_scored": 0,
+      "correct_above_70": 0,
+      "correct_below_30": 0,
+      "notes": "Track calibration: are high-confidence proposals more often right?"
+    },
+    "vector_store": ".chroma_db_alice_hc",
+    "last_learning": "2026-08-31T18:46:32Z"
+  },
+  "librarian": {
+    "intents": [],
+    "outcomes": [],
+    "grades": {
+      "A": 1,
+      "B": 0,
+      "C": 0,
+      "D": 0,
+      "F": 0
+    },
+    "informative_gaps": [
+      {
+        "intent_id": "AI-81bb7a86",
+        "grade": "A",
+        "justification": "Three capacities produce measurably different responses to the same question \u2014 enforcement, innovation, and measurement voices are distinct and productive.",
+        "ts": "2026-08-28T18:26:38Z"
+      }
+    ],
+    "unresolved_intents": 0,
+    "last_measurement": "2026-08-28T18:26:38Z"
+  },
+  "observations": [],
+  "notes": "Established 2026-08-28. Alice now has three capacities: ops (enforce), hc (learn), librarian (record+measure). Prior observations were single-voice. Future observations will be tagged by capacity."
+}

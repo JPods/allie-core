@@ -1,0 +1,65 @@
+// WC3 Inventory Bucket Flow — how quantities move through the system
+// Render: dot -Tsvg wc3-04-products-b-inventory-buckets.dot -o wc3-04-products-b-inventory-buckets.enriched.svg
+
+// CodeMap revision: 2 — 2026-08-15
+
+digraph wc3_inventory_buckets {
+    size="10.0,7.5"
+    ratio="compress"
+
+
+
+    rankdir=LR
+    fontname="Helvetica"
+    fontsize=22
+    node [fontname="Helvetica" fontsize=20 style=filled margin="0.15,0.07"]
+    edge [fontname="Helvetica" fontsize=20]
+    label="WC3 — Inventory Bucket Flow\navailable = on_hand - allocated"
+    labelloc=t
+    fontsize=28
+    pad=0.3
+    ranksep=0.6
+    nodesep=0.3
+
+    // Transactions
+    proposal [label="Proposal\n(forecast)" shape=box fillcolor="#E8DAEF"]
+    order [label="Order\n(commitment)" shape=box fillcolor="#FCF3CF"]
+    invoice [label="Invoice\n(shipment)" shape=box fillcolor="#F5D761"]
+    purchase [label="Purchase\nOrder" shape=box fillcolor="#D4E6F1"]
+    receipt [label="Receipt\n(inship)" shape=box fillcolor="#82E0AA"]
+    workorder [label="Work Order\n(production)" shape=box fillcolor="#FADBD8"]
+    wo_complete [label="WO\nCompletion" shape=box fillcolor="#F5B7B1"]
+
+    // Buckets
+    on_p [label="qty.on_p\n(forecast)" shape=ellipse fillcolor="#D7BDE2"]
+    on_so [label="qty.on_so\n(committed)" shape=ellipse fillcolor="#F9E79F"]
+    on_hand [label="qty.on_hand\n(physical)" shape=ellipse fillcolor="#82E0AA" fontsize=24]
+    allocated [label="allocated\n(reserved)" shape=ellipse fillcolor="#BFC9FB"]
+    on_po [label="qty.on_po\n(expected)" shape=ellipse fillcolor="#85C1E9"]
+    on_wo [label="qty.on_wo\n(in production)" shape=ellipse fillcolor="#F1948A"]
+    on_in [label="qty.on_in\n(invoiced)" shape=ellipse fillcolor="#F9DB65"]
+    on_r [label="qty.on_r\n(returns)" shape=ellipse fillcolor="#D5F5E3"]
+
+    available [label="AVAILABLE\non_hand - allocated" shape=doublecircle fillcolor="#58D68D" fontsize=22 width=2.8 height=2.8 fixedsize=true color="#2A00FF"]
+
+    // Flows
+    proposal -> on_p [label="+qty×prob" color="#8E44AD"]
+    order -> on_so [label="+qty.on_so" color="#F39C12"]
+    order -> on_p [label="-qty.on_p" style=dashed color="#8E44AD"]
+
+    invoice -> on_so [label="-qty.on_so" color="#E74C3C"]
+    invoice -> on_in [label="+qty.on_in" color="#27AE60"]
+    on_in -> on_hand [label="-qty.on_hand" color="#E74C3C"]
+
+    purchase -> on_po [label="+qty.on_po" color="#2980B9"]
+    receipt -> on_hand [label="+qty.on_hand" color="#27AE60"]
+    on_po -> receipt [label="-qty.on_po" color="#E74C3C"]
+
+    workorder -> on_wo [label="+qty.on_wo" color="#C0392B"]
+    wo_complete -> receipt [label="+qty.on_hand" style=dashed color="#2980B9"]
+    on_wo -> wo_complete [label="-qty.on_wo" color="#E74C3C"]
+
+    // Available computation
+    on_hand -> available [style=bold color="#27AE60"]
+    allocated -> available [label="-" style=bold color="#E74C3C"]
+}

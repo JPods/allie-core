@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPods Ecosystem — Life Requires Energy</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a1a; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow: hidden; }
+canvas { display: block; cursor: pointer; }
+#tooltip {
+  display: none; position: fixed; background: rgba(10,10,26,0.95);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+  padding: 10px 16px; font-size: 14px; color: #ccc; max-width: 320px;
+  pointer-events: none; z-index: 100; backdrop-filter: blur(8px);
+}
+#tooltip .tt-title { font-weight: 700; font-size: 17px; margin-bottom: 4px; }
+#tooltip .tt-url { font-size: 12px; opacity: 0.5; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="summary-btn" onclick="handleSummaryClick(event)" style="position:fixed; top:16px; right:24px; color:#ffffff44; font-size:14px; cursor:pointer; z-index:50; letter-spacing:1px;" title="Click: Summary dialog. Shift-click: Freeze for screenshot.">Summary</div>
+
+<div id="summary-dialog" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:200; align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#0a0a1a; border:1px solid #ffffff22; border-radius:12px; width:700px; max-width:90vw; max-height:85vh; overflow-y:auto; padding:0;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 24px; border-bottom:1px solid #ffffff11;">
+      <h2 style="font-size:18px; color:#fff; font-weight:600;">JPods Ecosystem</h2>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <button onclick="copyList()" id="copy-btn" style="padding:6px 14px; background:#333; border:1px solid #555; color:#ccc; border-radius:6px; cursor:pointer; font-size:12px;">Copy List</button>
+        <button onclick="this.parentElement.parentElement.parentElement.parentElement.style.display='none'" style="background:none; border:none; color:#666; font-size:22px; cursor:pointer;">&times;</button>
+      </div>
+    </div>
+    <div style="padding:16px 24px;" id="summary-list">
+      <div style="color:#f59e0b; font-size:13px; font-weight:600; margin-bottom:12px; letter-spacing:1px;">CORE PRINCIPLE</div>
+      <div style="margin-bottom:16px;">
+        <div style="color:#f59e0b; font-weight:600;">Life Requires Energy</div>
+        <div style="color:#888; font-size:13px;">Mobility powered within a solar budget.</div>
+        <a href="https://jpods.com/solar" target="_blank" style="color:#60a5fa; font-size:12px;">jpods.com/solar</a>
+      </div>
+
+      <div style="color:#4ade80; font-size:13px; font-weight:600; margin:20px 0 12px; letter-spacing:1px;">PRINCIPLES</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:16px;">
+        <div>
+          <div style="color:#3b82f6; font-weight:600; font-size:14px;">Better Physics</div>
+          <div style="color:#888; font-size:12px;">78 Wh vs 1,032. 188x more efficient.</div>
+          <a href="https://jpods.com/metrics" target="_blank" style="color:#60a5fa; font-size:11px;">jpods.com/metrics</a>
+        </div>
+        <div>
+          <div style="color:#4ade80; font-weight:600; font-size:14px;">Liberty to Innovate</div>
+          <div style="color:#888; font-size:12px;">Outcomes, not compliance. Jury review.</div>
+          <a href="https://5x5freemarket.com" target="_blank" style="color:#60a5fa; font-size:11px;">5x5freemarket.com</a>
+        </div>
+        <div>
+          <div style="color:#f472b6; font-weight:600; font-size:14px;">Commerce Requires Mobility</div>
+          <div style="color:#888; font-size:12px;">Walkable = 20% GDP on 1.2% of land.</div>
+          <a href="https://walkscore70.com" target="_blank" style="color:#60a5fa; font-size:11px;">walkscore70.com</a>
+        </div>
+      </div>
+
+      <div style="color:#60a5fa; font-size:13px; font-weight:600; margin:20px 0 12px; letter-spacing:1px;">TOOLS &amp; SITES</div>
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <tr><td colspan="3" style="padding:12px 0 4px; color:#39ff14; font-size:12px; font-weight:600; letter-spacing:1px;">TECHNOLOGY</td></tr>
+        <tr><td colspan="3" style="padding:0 0 8px; color:#ffffff44; font-size:11px; font-style:italic;">Widescale adoption &mdash; mind share becomes market share</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#39ff14; font-weight:600;">JPods.com</td>
+          <td style="padding:8px 0; color:#888;">Solar-powered mobility, locally governed</td>
+          <td style="padding:8px 0;"><a href="https://jpods.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#60a5fa; font-weight:600;">MeshMobility</td>
+          <td style="padding:8px 0; color:#888;">Design networks. Crash data. Isochrones.</td>
+          <td style="padding:8px 0;"><a href="https://meshmobility.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#7dd3fc; font-weight:600;">JPods3D</td>
+          <td style="padding:8px 0; color:#888;">SketchUp plugin. Design and ride in 3D.</td>
+          <td style="padding:8px 0;"><a href="https://jpods3d.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#60a5fa; font-weight:600;">WalkScore70</td>
+          <td style="padding:8px 0; color:#888;">The fiscal threshold. -$6K vs +$90K per acre.</td>
+          <td style="padding:8px 0;"><a href="https://walkscore70.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#fbbf24; font-weight:600;">10xMakers</td>
+          <td style="padding:8px 0; color:#888;">Kits to change thinking into doing &amp; STEM programs.</td>
+          <td style="padding:8px 0;"><a href="https://10xmakers.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+
+        <tr><td colspan="3" style="padding:16px 0 4px; color:#38bdf8; font-size:12px; font-weight:600; letter-spacing:1px;">ROI</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#38bdf8; font-weight:600;">Personalize Transit</td>
+          <td style="padding:8px 0; color:#888;">AI city assessment. 58 cities. Payback calc.</td>
+          <td style="padding:8px 0;"><a href="https://personalizetransit.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+
+        <tr><td colspan="3" style="padding:16px 0 4px; color:#c084fc; font-size:12px; font-weight:600; letter-spacing:1px;">DRIVING A PARADIGM SHIFT</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#c084fc; font-weight:600;">Prime Law of Networks</td>
+          <td style="padding:8px 0; color:#888;">V &prop; n&sup2;/p. Why small packets win.</td>
+          <td style="padding:8px 0;"><a href="https://primelawofnetworks.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#4ade80; font-weight:600;">Physical Internet&reg;</td>
+          <td style="padding:8px 0; color:#888;">Three layers. Solar on guideways. Patents.</td>
+          <td style="padding:8px 0;"><a href="https://physicalinternet.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+
+        <tr><td colspan="3" style="padding:16px 0 4px; color:#d97706; font-size:12px; font-weight:600; letter-spacing:1px;">FISCAL VIABILITY OF CITIES</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#d97706; font-weight:600;">Wrong Network</td>
+          <td style="padding:8px 0; color:#888;">Eisenhower warned us. Highways wrong for cities.</td>
+          <td style="padding:8px 0;"><a href="https://wrongnetwork.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+
+        <tr><td colspan="3" style="padding:16px 0 4px; color:#ef4444; font-size:12px; font-weight:600; letter-spacing:1px;">REGULATIONS USING ACCOUNTABILITY</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#34d399; font-weight:600;">5x5 Free Market</td>
+          <td style="padding:8px 0; color:#888;">One page law. Private networks. Jury accountability.</td>
+          <td style="padding:8px 0;"><a href="https://5x5freemarket.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#1d4ed8; font-weight:600;">every-injury</td>
+          <td style="padding:8px 0; color:#888;">every-injury a fiscal risk. 3,000x safer.</td>
+          <td style="padding:8px 0;"><a href="https://everyinjury.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#ef4444; font-weight:600;">CityRoadkills</td>
+          <td style="padding:8px 0; color:#888;">Stop the roadkill. Draft letters to councils.</td>
+          <td style="padding:8px 0;"><a href="https://cityroadkills.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+
+        <tr><td colspan="3" style="padding:16px 0 4px; color:#fb923c; font-size:12px; font-weight:600; letter-spacing:1px;">MANAGING RADICAL ADOPTION</td></tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#a78bfa; font-weight:600;">WebClerk</td>
+          <td style="padding:8px 0; color:#888;">Open source commerce. Desktop Hosting. Alice AI.</td>
+          <td style="padding:8px 0;"><a href="https://webclerk.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+        <tr style="border-bottom:1px solid #ffffff0a;">
+          <td style="padding:8px 0; color:#fb923c; font-weight:600;">SmallStings</td>
+          <td style="padding:8px 0; color:#888;">Upside-down Yelp. Retrospection before the funeral.</td>
+          <td style="padding:8px 0;"><a href="https://smallstings.com" target="_blank" style="color:#60a5fa; font-size:12px;">Open &rarr;</a></td>
+        </tr>
+      </table>
+
+      <div style="margin-top:20px; padding-top:16px; border-top:1px solid #ffffff11; color:#ffffff44; font-size:12px; text-align:center;">
+        Changing the economic lifeblood from oil to ingenuity<br>
+        Outcomes are more important than compliance. Judgment is more important than checklists.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var frozen = false;
+
+function handleSummaryClick(e) {
+  if (e.shiftKey) {
+    frozen = true;
+    time = 0;
+    var btn = document.getElementById('summary-btn');
+    btn.style.color = '#4ade80';
+    btn.textContent = 'Frozen';
+  } else {
+    document.getElementById('summary-dialog').style.display = 'flex';
+  }
+}
+
+document.addEventListener('keyup', function(e) {
+  if (e.key === 'Shift' && frozen) {
+    frozen = false;
+    var btn = document.getElementById('summary-btn');
+    btn.style.color = '#ffffff44';
+    btn.textContent = 'Summary';
+  }
+});
+
+function copyList() {
+  var lines = [
+    'JPods Ecosystem — Life Requires Energy',
+    '',
+    'CORE: Life Requires Energy — Mobility powered within a solar budget (jpods.com/solar)',
+    '',
+    'PRINCIPLES:',
+    '  Better Physics — 78 Wh vs 1,032. 188x efficient (jpods.com/metrics)',
+    '  Liberty to Innovate — Outcomes, not compliance. Jury review (5x5freemarket.com)',
+    '  Commerce Requires Mobility — Walkable = 20% GDP on 1.2% of land (walkscore70.com)',
+    '',
+    'TECHNOLOGY: Widescale adoption — mind share becomes market share',
+    '  JPods.com — Solar-powered mobility, locally governed',
+    '  MeshMobility.com — Design networks. Crash data. Isochrones.',
+    '  JPods3D.com — SketchUp plugin. Design and ride in 3D.',
+    '  WalkScore70.com — The fiscal threshold. -$6K vs +$90K per acre.',
+    '  10xMakers.com — Kits to change thinking into doing &amp; STEM programs.',
+    '',
+    'ROI:',
+    '  PersonalizeTransit.com — AI city assessment. 58 cities. Payback calc.',
+    '',
+    'DRIVING A PARADIGM SHIFT:',
+    '  PrimeLawOfNetworks.com — V ∝ n²/p. Why small packets win.',
+    '  PhysicalInternet.com — Three layers. Solar on guideways. Patents.',
+    '',
+    'FISCAL VIABILITY OF CITIES:',
+    '  WrongNetwork.com — Eisenhower warned us. Highways wrong for cities.',
+    '',
+    'REGULATIONS USING ACCOUNTABILITY:',
+    '  5x5FreeMarket.com — One page law. Private networks. Jury accountability.',
+    '  every-injury.com — every-injury a fiscal risk. 3,000x safer.',
+    '  CityRoadkills.com — Stop the roadkill. Draft letters to councils.',
+    '',
+    'MANAGING RADICAL ADOPTION:',
+    '  WebClerk.com — Open source commerce. Desktop Hosting. Alice AI.',
+    '  SmallStings.com — Upside-down Yelp. Retrospection before the funeral.',
+    '',
+    'Changing the economic lifeblood from oil to ingenuity.',
+    'Outcomes are more important than compliance. Judgment is more important than checklists.'
+  ];
+  navigator.clipboard.writeText(lines.join('\n')).then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied';
+    setTimeout(function() { btn.textContent = 'Copy List'; }, 2000);
+  });
+}
+</script>
+<a href="https://jpods.com" target="_blank" style="position:fixed; bottom:16px; right:24px; text-align:right; z-index:50; text-decoration:none;">
+  <div style="color:#86efac; font-size:13px; margin-bottom:4px;">Changing the economic lifeblood from oil to ingenuity</div>
+  <img src="logo.png" alt="JPods" style="height:50px; opacity:0.7;">
+  <div style="color:#ffffff66; font-size:12px; margin-top:4px; letter-spacing:2px;">CLEANER &middot; FASTER &middot; SAFER &middot; AFFORDABLE</div>
+</a>
+<div id="tooltip"><div class="tt-title"></div><div class="tt-desc"></div><div class="tt-url"></div></div>
+
+<script>
+var canvas = document.getElementById('c');
+var ctx = canvas.getContext('2d');
+var tooltip = document.getElementById('tooltip');
+var W, H, time = 0, hovered = null;
+
+// Layout: left side = fulcrum choice, right side = orbital ecosystem
+var fulcrumX, fulcrumY, orbitCx, orbitCy;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  fulcrumX = W * 0.22;
+  fulcrumY = H * 0.5;
+  orbitCx = W * 0.65;
+  orbitCy = H * 0.5;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Nucleus
+var nucleus = {
+  label: 'Life Requires\nEnergy',
+  radius: 90,
+  color: '#f59e0b',
+  glow: '#f59e0b',
+  desc: 'Mobility powered within a solar budget.',
+  url: 'https://jpods.com/solar'
+};
+
+// Inner shell — 3 principles
+var principles = [
+  { label: 'Better\nPhysics', color: '#3b82f6', url: 'https://jpods.com/metrics', desc: 'JPods moves people at 78 Wh per passenger-mile vs 1,032 for cars. 188x more efficient than highways. Solar-powered. Net energy producer.' },
+  { label: 'Liberty to\nInnovate', color: '#4ade80', url: 'https://5x5freemarket.com', desc: 'Govern by accountability for outcomes, not compliance with checklists. All injuries and deaths subject to litigation and review by juries. Tolerance of disruptive minorities offering choices. Wisdom of the Many sorting them.' },
+  { label: 'Commerce\nRequires Mobility', color: '#f472b6', url: 'https://walkscore70.com', desc: 'Commerce and community are pedestrian. All transport must amplify walking, biking, and proximity. 85 cents of every car dollar leaves the local economy. Walkable cities produce 20% of GDP on 1.2% of land.' },
+];
+var innerRadius = 160;
+
+// Outer shell — websites
+var sites = [
+  { label: 'JPods.com', url: 'https://jpods.com', color: '#39ff14', desc: 'The company. Solar-powered mobility, locally governed.' },
+  { label: 'MeshMobility', url: 'https://meshmobility.com', color: '#60a5fa', desc: 'Design JPods networks for any city. Crash data, traffic, isochrones.' },
+  { label: 'Personalize\nTransit', url: 'https://personalizetransit.com', color: '#38bdf8', desc: 'AI city assessment. 58 cities. Economic payback calculator.' },
+  { label: 'JPods3D', url: 'https://jpods3d.com', color: '#7dd3fc', desc: 'SketchUp plugin. Design, simulate, and ride JPods networks in 3D.' },
+  { label: 'City\nRoadkills', url: 'https://cityroadkills.com', color: '#ef4444', desc: 'Stop the roadkill. Litigation-grade advocacy. Draft letters to city councils.' },
+  { label: 'every-\ninjury', url: 'https://everyinjury.com', color: '#1d4ed8', desc: 'every-injury should be a fiscal risk. 3,000x safer when operators are accountable.' },
+  { label: 'Wrong\nNetwork', url: 'https://wrongnetwork.com', color: '#d97706', desc: 'Eisenhower warned us. Highways are the wrong network for cities.' },
+  { label: 'Prime Law\nof Networks', url: 'https://primelawofnetworks.com', color: '#c084fc', desc: 'V ∝ n²/p. Why small packets and more connections always win.' },
+  { label: 'Physical\nInternet', url: 'https://physicalinternet.com', color: '#4ade80', desc: 'Three layers: heavy lift, middle mile, last mile. Solar on guideways.' },
+  { label: '5x5 Free\nMarket', url: 'https://5x5freemarket.com', color: '#34d399', desc: 'One page law. Private networks. Jury accountability. Outcomes, not compliance.' },
+  { label: '10xMakers', url: 'https://10xmakers.com', color: '#fbbf24', desc: 'Student kits. Design→Survey→Build→Ride. The American Shenzhen seed.' },
+  { label: 'WalkScore70', url: 'https://walkscore70.com', color: '#60a5fa', desc: 'Below 70: -$6K/acre. Above 70: +$90K/acre. The fiscal threshold.' },
+  { label: 'Small\nStings', url: 'https://smallstings.com', color: '#fb923c', desc: 'Upside-down Yelp. $1 fines. Retrospection before the funeral.' },
+  { label: 'WebClerk', url: 'https://webclerk.com', color: '#a78bfa', desc: 'Open source commerce. Desktop Hosting. Alice AI bookkeeper. Sovereign data.' },
+];
+var outerRadius = 380;
+
+// Stars background
+var stars = [];
+for (var i = 0; i < 300; i++) {
+  stars.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.8, a: Math.random() });
+}
+
+// ═══ CHOICE — Left side ═══
+function drawChoice() {
+  var fx = fulcrumX;
+  var fy = fulcrumY;
+  var boxW = 240;
+  var boxH = 440;
+  var gap = 12;
+
+  // Title
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 32px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Choice of Enforcement', fx, fy - boxH / 2 - 30);
+
+  // ── Compliance box (left, red, flat rectangle) ──
+  var cLeft = fx - gap / 2 - boxW;
+  var cTop = fy - boxH / 2;
+
+  ctx.fillStyle = '#dc262618';
+  ctx.strokeStyle = '#dc262666';
+  ctx.lineWidth = 2;
+  roundRect(ctx, cLeft, cTop, boxW, boxH, 10);
+  ctx.fill();
+  ctx.stroke();
+
+  var ccx = cLeft + boxW / 2;
+  ctx.fillStyle = '#ef4444';
+  ctx.font = 'bold 36px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Compliance', ccx, cTop + 55);
+
+  ctx.fillStyle = '#ff9999';
+  ctx.font = '24px -apple-system, sans-serif';
+  ctx.fillText('Checklist-based.', ccx, cTop + 100);
+  ctx.fillText('Sovereign immunity', ccx, cTop + 140);
+  ctx.fillText('exempts', ccx, cTop + 180);
+  ctx.fillText('accountability for', ccx, cTop + 218);
+  ctx.fillText('injuries and deaths.', ccx, cTop + 254);
+
+  ctx.fillStyle = '#ef4444';
+  ctx.font = 'bold 52px -apple-system, sans-serif';
+  ctx.fillText('11,200', ccx, cTop + 320);
+  ctx.fillStyle = '#ff9999';
+  ctx.font = '22px -apple-system, sans-serif';
+  ctx.fillText('injuries per million', ccx, cTop + 355);
+
+  // ── Outcomes box (right, green, concave right edge opening to orbital) ──
+  var oLeft = fx + gap / 2;
+  var oTop = fy - boxH / 2;
+
+  // Draw concave shape — left side is straight, right side curves inward
+  ctx.fillStyle = '#16a34a18';
+  ctx.strokeStyle = '#16a34a66';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  // Top-left corner
+  ctx.moveTo(oLeft + 10, oTop);
+  // Top edge
+  ctx.lineTo(oLeft + boxW, oTop);
+  // Right edge — concave curve inward toward the orbital
+  ctx.quadraticCurveTo(oLeft + boxW - 40, fy, oLeft + boxW, oTop + boxH);
+  // Bottom edge
+  ctx.lineTo(oLeft + 10, oTop + boxH);
+  // Left side rounded corners
+  ctx.quadraticCurveTo(oLeft, oTop + boxH, oLeft, oTop + boxH - 10);
+  ctx.lineTo(oLeft, oTop + 10);
+  ctx.quadraticCurveTo(oLeft, oTop, oLeft + 10, oTop);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Arrow/flow lines from concave edge toward orbital
+  var flowX = oLeft + boxW - 10;
+  for (var i = 0; i < 5; i++) {
+    var fy2 = oTop + 30 + i * (boxH - 60) / 4;
+    var curveDepth = 20 * Math.sin((i / 4) * Math.PI);
+    ctx.strokeStyle = '#4ade80' + (20 + i * 8).toString(16);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(flowX - curveDepth, fy2);
+    ctx.lineTo(flowX + 30 + i * 8, fy2);
+    ctx.stroke();
+    // Arrow head
+    ctx.fillStyle = '#4ade80' + (20 + i * 8).toString(16);
+    ctx.beginPath();
+    ctx.moveTo(flowX + 30 + i * 8, fy2);
+    ctx.lineTo(flowX + 24 + i * 8, fy2 - 3);
+    ctx.lineTo(flowX + 24 + i * 8, fy2 + 3);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  var ocx = oLeft + boxW / 2 - 15;
+  ctx.fillStyle = '#4ade80';
+  ctx.font = 'bold 36px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Outcomes', ocx, oTop + 55);
+
+  ctx.fillStyle = '#86efac';
+  ctx.font = '24px -apple-system, sans-serif';
+  ctx.fillText('Accountability for', ocx, oTop + 100);
+  ctx.fillText('every injury.', ocx, oTop + 140);
+  ctx.fillText('Every injury', ocx, oTop + 180);
+  ctx.fillText('subject to review', ocx, oTop + 218);
+  ctx.fillText('by a jury.', ocx, oTop + 254);
+
+  ctx.fillStyle = '#4ade80';
+  ctx.font = 'bold 52px -apple-system, sans-serif';
+  ctx.fillText('3.7', ocx, oTop + 320);
+  ctx.fillStyle = '#86efac';
+  ctx.font = '22px -apple-system, sans-serif';
+  ctx.fillText('injuries per million', ocx, oTop + 355);
+
+  // Bottom tagline
+  ctx.fillStyle = '#4ade80';
+  ctx.font = '22px -apple-system, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Outcomes are more important than compliance.', fx, fy + boxH / 2 + 30);
+  ctx.fillText('Judgment is more important than checklists.', fx, fy + boxH / 2 + 56);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// ═══ ORBITAL — Right side ═══
+function getPositions() {
+  var positions = [];
+  var scale = Math.min(W * 0.35, H * 0.45) / 400;
+
+  // Nucleus
+  positions.push({ x: orbitCx, y: orbitCy, r: nucleus.radius * scale, type: 'nucleus', data: nucleus });
+
+  // Inner shell
+  for (var i = 0; i < principles.length; i++) {
+    var angle = (i / principles.length) * Math.PI * 2 + time * 0.15;
+    var r = innerRadius * scale;
+    positions.push({
+      x: orbitCx + Math.cos(angle) * r,
+      y: orbitCy + Math.sin(angle) * r,
+      r: 65 * scale,
+      type: 'principle',
+      data: principles[i],
+      angle: angle
+    });
+  }
+
+  // Outer shell
+  for (var i = 0; i < sites.length; i++) {
+    var speed = 0.08 + (i % 3) * 0.02;
+    var offset = (i / sites.length) * Math.PI * 2;
+    var angle = offset + time * speed;
+    var rx = outerRadius * scale;
+    var ry = rx * 0.85;
+    positions.push({
+      x: orbitCx + Math.cos(angle) * rx,
+      y: orbitCy + Math.sin(angle) * ry,
+      r: 63 * scale,
+      type: 'site',
+      data: sites[i],
+      angle: angle
+    });
+  }
+
+  return positions;
+}
+
+function draw() {
+  if (!frozen) time += 0.008;
+  ctx.clearRect(0, 0, W, H);
+
+  // Stars
+  ctx.fillStyle = '#fff';
+  for (var i = 0; i < stars.length; i++) {
+    var s = stars[i];
+    var twinkle = 0.3 + 0.7 * Math.sin(time * 2 + s.a * 10);
+    ctx.globalAlpha = s.a * twinkle * 0.6;
+    ctx.beginPath();
+    ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Divider line
+  ctx.strokeStyle = '#ffffff0a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(W * 0.42, H * 0.1);
+  ctx.lineTo(W * 0.42, H * 0.9);
+  ctx.stroke();
+
+  // Draw fulcrum (left side)
+  drawChoice();
+
+  // Draw orbital (right side)
+  var positions = getPositions();
+  var scale = Math.min(W * 0.35, H * 0.45) / 400;
+
+  // Orbit paths
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(orbitCx, orbitCy, innerRadius * scale, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(orbitCx, orbitCy, outerRadius * scale, outerRadius * scale * 0.85, 0, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Connection lines
+  for (var i = 0; i < positions.length; i++) {
+    var p = positions[i];
+    if (p.type === 'principle') {
+      ctx.strokeStyle = p.data.color + '15';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(orbitCx, orbitCy);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    }
+  }
+
+  // Draw nodes
+  for (var i = 0; i < positions.length; i++) {
+    var p = positions[i];
+    var isHovered = (hovered === i);
+
+    if (p.type === 'nucleus') {
+      var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 1.5);
+      grad.addColorStop(0, p.data.color + 'cc');
+      grad.addColorStop(0.5, p.data.color + '44');
+      grad.addColorStop(1, p.data.color + '00');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = p.data.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 0.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold ' + Math.round(20 * scale) + 'px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      var lines = p.data.label.split('\n');
+      for (var l = 0; l < lines.length; l++) {
+        ctx.fillText(lines[l], p.x, p.y + (l - (lines.length - 1) / 2) * 22 * scale);
+      }
+
+    } else if (p.type === 'principle') {
+      var sc = isHovered ? 1.2 : 1;
+      var r = p.r * sc;
+      var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 1.3);
+      grad.addColorStop(0, p.data.color + '66');
+      grad.addColorStop(1, p.data.color + '00');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r * 1.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = p.data.color + 'cc';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold ' + Math.round(14 * scale) + 'px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      var lines = p.data.label.split('\n');
+      for (var l = 0; l < lines.length; l++) {
+        ctx.fillText(lines[l], p.x, p.y + (l - (lines.length - 1) / 2) * 16 * scale);
+      }
+
+    } else if (p.type === 'site') {
+      var sc = isHovered ? 1.3 : 1;
+      var r = p.r * sc;
+
+      if (isHovered) {
+        var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 1.5);
+        grad.addColorStop(0, p.data.color + '44');
+        grad.addColorStop(1, p.data.color + '00');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = p.data.color + (isHovered ? 'ee' : '99');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = (isHovered ? 'bold ' : '') + Math.round(19 * scale) + 'px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      var lines = p.data.label.split('\n');
+      for (var l = 0; l < lines.length; l++) {
+        ctx.fillText(lines[l], p.x, p.y + (l - (lines.length - 1) / 2) * 22 * scale);
+      }
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+// Hit detection
+function getHovered(mx, my) {
+  var positions = getPositions();
+  for (var i = positions.length - 1; i >= 0; i--) {
+    var p = positions[i];
+    var dx = mx - p.x;
+    var dy = my - p.y;
+    if (dx * dx + dy * dy < p.r * p.r * 1.5) return i;
+  }
+  return null;
+}
+
+canvas.addEventListener('mousemove', function(e) {
+  var idx = getHovered(e.clientX, e.clientY);
+  hovered = idx;
+  if (idx !== null) {
+    var p = getPositions()[idx];
+    var tt = tooltip;
+    tt.style.display = 'block';
+    tt.style.left = (e.clientX + 16) + 'px';
+    tt.style.top = (e.clientY + 16) + 'px';
+    tt.querySelector('.tt-title').textContent = p.data.label.replace('\n', ' ');
+    tt.querySelector('.tt-title').style.color = p.data.color;
+    tt.querySelector('.tt-desc').textContent = p.data.desc || '';
+    tt.querySelector('.tt-url').textContent = p.data.url || '';
+    canvas.style.cursor = (p.data.url || p.type === 'nucleus') ? 'pointer' : 'default';
+  } else {
+    tooltip.style.display = 'none';
+    canvas.style.cursor = 'default';
+  }
+});
+
+canvas.addEventListener('click', function(e) {
+  var idx = getHovered(e.clientX, e.clientY);
+  if (idx !== null) {
+    var p = getPositions()[idx];
+    if (p.data.url) window.open(p.data.url, '_blank');
+  }
+});
+
+draw();
+</script>
+</body>
+</html>

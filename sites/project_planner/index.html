@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Planner — CSV to Action Plan</title>
+<meta name="description" content="Free tool: drop a CSV project plan, map columns, export a structured bundle.json and SVG visualization. No upload — everything runs in your browser.">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg: #1a1a2e; --surface: #16213e; --surface2: #0f3460;
+  --border: #333; --text: #e0e0e0; --text2: #888; --text3: #555;
+  --accent: #1a73e8; --accent-hover: #1557b0;
+  --green: #1e8e3e; --green-hover: #137333;
+  --red: #ff6b6b; --orange: #ffa94d; --yellow: #FFF9C4;
+  --card-normal: #FFF9C4; --card-critical: #FFCDD2;
+  --card-review: #FFE0B2; --card-complete: #C8E6C9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: var(--bg); color: var(--text); line-height: 1.5; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Header */
+header { background: var(--surface); padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.header-inner { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+header h1 { font-size: 22px; color: #fff; }
+header h1 span { color: var(--accent); }
+.tagline { font-size: 13px; color: var(--text2); }
+.privacy-badge { font-size: 11px; color: var(--green); border: 1px solid var(--green); padding: 3px 10px; border-radius: 12px; }
+
+/* Layout */
+.container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+.section { background: var(--surface); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+.section h2 { font-size: 15px; color: #8ab4f8; margin-bottom: 14px; }
+.section p.hint { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+
+/* Forms */
+label { font-size: 12px; color: #aaa; display: block; margin-bottom: 4px; }
+select, input[type=text] {
+  background: var(--surface2); border: 1px solid #444; color: var(--text);
+  padding: 7px 10px; border-radius: 4px; font-size: 13px; width: 100%;
+}
+select:focus, input:focus { outline: none; border-color: var(--accent); }
+.map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.field-required label::after { content: ' *'; color: var(--red); }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px;
+       background: var(--accent); color: white; border: none; padding: 8px 20px;
+       border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600;
+       transition: background 0.15s; }
+.btn:hover { background: var(--accent-hover); }
+.btn-green { background: var(--green); }
+.btn-green:hover { background: var(--green-hover); }
+.btn-outline { background: transparent; border: 1px solid #555; color: #aaa; }
+.btn-outline:hover { border-color: #888; color: #fff; background: rgba(255,255,255,0.05); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+
+/* Upload */
+.upload-zone { border: 2px dashed #444; border-radius: 8px; padding: 48px 20px;
+               text-align: center; cursor: pointer; transition: all 0.2s; }
+.upload-zone:hover { border-color: #8ab4f8; background: rgba(138,180,248,0.05); }
+.upload-zone.dragover { border-color: var(--accent); background: rgba(26,115,232,0.1); }
+.upload-zone .icon { font-size: 36px; margin-bottom: 8px; }
+.upload-zone .main-text { font-size: 16px; margin-bottom: 6px; }
+.upload-zone .sub-text { font-size: 12px; color: var(--text2); }
+.upload-success { color: #69db7c; }
+
+/* Stats */
+.stats { display: flex; gap: 28px; margin-bottom: 18px; flex-wrap: wrap; }
+.stat { text-align: center; min-width: 70px; }
+.stat-num { font-size: 30px; font-weight: bold; color: #8ab4f8; }
+.stat-label { font-size: 11px; color: var(--text2); }
+
+/* Table */
+.table-wrap { max-height: 550px; overflow-y: auto; border-radius: 6px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th { background: var(--surface2); padding: 9px 10px; text-align: left;
+     position: sticky; top: 0; z-index: 1; font-weight: 600; white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 1px solid #2a2a4a; }
+tr:hover { background: rgba(138,180,248,0.06); }
+.card-num { color: var(--text2); font-size: 11px; font-family: monospace; }
+.pri-1 { color: var(--red); font-weight: bold; }
+.pri-2 { color: var(--orange); }
+.pri-3 { color: #69db7c; }
+.pri-4 { color: var(--text2); }
+.kanban-tag { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; display: inline-block; }
+.k-Backlog { background: #333; color: #aaa; }
+.k-Planning { background: #1a3a5c; color: #8ab4f8; }
+.k-InProcess { background: #1a4a2e; color: #69db7c; }
+.k-Review { background: #4a3a1a; color: var(--orange); }
+.k-Complete { background: #1e3a1e; color: #69db7c; }
+
+/* Footer */
+.cta { background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+       border-radius: 8px; padding: 28px; text-align: center; margin-top: 24px; }
+.cta h3 { font-size: 18px; color: #fff; margin-bottom: 8px; }
+.cta p { font-size: 13px; color: var(--text2); margin-bottom: 16px; max-width: 600px; margin-left: auto; margin-right: auto; }
+footer { text-align: center; padding: 20px; font-size: 11px; color: var(--text3); }
+
+.hidden { display: none; }
+@media (max-width: 768px) {
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .map-grid { grid-template-columns: 1fr 1fr; }
+  .stats { gap: 16px; }
+}
+</style>
+</head><body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Project <span>Planner</span></h1>
+      <div class="tagline">Drop a CSV or Excel project plan &rarr; map columns &rarr; export structured bundle.json + SVG</div>
+    </div>
+    <div class="privacy-badge">&#x1f512; No upload &mdash; runs in your browser</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- STEP 1: UPLOAD -->
+  <div id="step-upload" class="section">
+    <h2>1. Load Your Project Plan</h2>
+    <div id="upload-zone" class="upload-zone">
+      <div class="icon">&#x1F4CB;</div>
+      <div class="main-text">Drop CSV or XLSX here</div>
+      <div class="sub-text">Supports MS Project, Smartsheet, Asana, Trello, or any CSV/XLSX with task rows</div>
+      <input type="file" id="file-input" accept=".csv,.xlsx,.xls,.tsv" class="hidden">
+    </div>
+  </div>
+
+  <!-- STEP 2: MAP COLUMNS -->
+  <div id="step-map" class="section hidden">
+    <h2>2. Map Your Columns</h2>
+    <p class="hint">We auto-detected some columns. Adjust if needed. Only the task name is required.</p>
+    <div id="map-grid" class="map-grid"></div>
+    <div style="margin-top: 16px; display: flex; gap: 10px;">
+      <button class="btn" onclick="applyMapping()">Apply &amp; Preview</button>
+      <button class="btn btn-outline btn-sm" onclick="resetMapping()">Reset Auto-Detect</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: PREVIEW & EXPORT -->
+  <div id="step-preview" class="section hidden">
+    <h2>3. Review &amp; Export</h2>
+    <div class="toolbar">
+      <div>
+        <label>Project Name</label>
+        <input type="text" id="project-name" value="My Project Plan" style="max-width:350px;">
+      </div>
+      <div style="display:flex; gap:8px; align-items:flex-end; padding-top:18px;">
+        <button class="btn btn-green" onclick="doExport('bundle')">&#x2B07; bundle.json</button>
+        <button class="btn" onclick="doExport('svg')">&#x2B07; SVG</button>
+        <button class="btn btn-outline" onclick="doExport('csv')">&#x2B07; Clean CSV</button>
+      </div>
+    </div>
+    <div class="stats" id="stats-bar"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Card #</th><th>Action</th><th>Section</th>
+          <th>Pri</th><th>Status</th><th>Assigned</th>
+          <th>Depends</th><th>Start</th><th>Due</th>
+        </tr></thead>
+        <tbody id="action-rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h3>Import into WebClerk for full project tracking</h3>
+    <p>The bundle.json you just created imports directly into WebClerk &mdash; actions, documents, kanban boards, burndown charts. Free, open source, locally hosted.</p>
+    <a href="https://webclerk.com" target="_blank" class="btn btn-green">Learn about WebClerk</a>
+  </div>
+</div>
+
+<footer>
+  Project Planner &mdash; free, open source, no data leaves your browser.
+  Part of the <a href="https://webclerk.com">WebClerk</a> ecosystem.
+</footer>
+
+<script>
+// ─── State ───
+let headers = [], rawRows = [], columnMap = {}, actions = [];
+
+// ─── Field definitions for mapping ───
+const FIELDS = [
+  {key:'action',       label:'Action / Task Name', required:true,
+   hints:['task name','task','name','title','action','activity','work item','item','summary','subject','card name','issue']},
+  {key:'card_number',  label:'Card / ID #',
+   hints:['id','task id','wbs','#','number','card number','card #','card no','issue id','key','ref']},
+  {key:'description',  label:'Description',
+   hints:['description','details','notes','body','acceptance criteria','comment','remarks']},
+  {key:'section',      label:'Section / Category',
+   hints:['section','category','group','phase','stream','workstream','project','sub-project','epic','parent','folder','list','board']},
+  {key:'priority',     label:'Priority',
+   hints:['priority','importance','urgency','p','pri']},
+  {key:'status',       label:'Status / Column',
+   hints:['status','state','kanban','column','stage']},
+  {key:'assigned_to',  label:'Assigned To',
+   hints:['assigned to','assignee','owner','responsible','resource','who','person']},
+  {key:'depends_on',   label:'Depends On',
+   hints:['depends on','predecessors','predecessor','dependencies','blocked by','after','depends']},
+  {key:'difficulty',   label:'Difficulty / Points',
+   hints:['difficulty','effort','points','story points','estimate','size','weight','complexity']},
+  {key:'dt_start',     label:'Start Date',
+   hints:['start','start date','begin','begin date','planned start']},
+  {key:'dt_deadline',  label:'Deadline / Due',
+   hints:['end','end date','due','due date','deadline','finish','finish date','planned finish']},
+  {key:'duration',     label:'Duration',
+   hints:['duration','days','hours','work','effort hours']},
+  {key:'percent_complete', label:'% Complete',
+   hints:['% complete','percent complete','progress','completion','% done','complete']},
+  {key:'sequence',     label:'Sequence / Order',
+   hints:['sequence','order','sort','rank','position','row']},
+];
+
+// ─── Upload handling ───
+const zone = document.getElementById('upload-zone');
+const fileInput = document.getElementById('file-input');
+zone.addEventListener('click', () => fileInput.click());
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if (e.target.files.length) loadFile(e.target.files[0]); });
+
+function loadFile(file) {
+  const reader = new FileReader();
+  const ext = file.name.split('.').pop().toLowerCase();
+  reader.onload = e => {
+    try {
+      if (ext === 'csv' || ext === 'tsv') {
+        parseCSV(e.target.result);
+      } else {
+        parseXLSX(e.target.result);
+      }
+      zone.innerHTML = '<div class="upload-success">\u2713 ' + esc(file.name) +
+        ' &mdash; ' + rawRows.length + ' rows, ' + headers.length + ' columns</div>';
+      document.getElementById('project-name').value =
+        file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      autoMap();
+      showMapping();
+    } catch (err) { alert('Error parsing file: ' + err.message); }
+  };
+  if (ext === 'csv' || ext === 'tsv') reader.readAsText(file);
+  else reader.readAsArrayBuffer(file);
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  const parse = line => {
+    const cells = []; let cell = '', inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQuote = !inQuote; }
+      else if ((c === ',' || c === '\t') && !inQuote) { cells.push(cell.trim()); cell = ''; }
+      else { cell += c; }
+    }
+    cells.push(cell.trim());
+    return cells;
+  };
+  headers = parse(lines[0]);
+  rawRows = lines.slice(1).map(parse).filter(r => r.some(c => c));
+}
+
+function parseXLSX(data) {
+  const wb = XLSX.read(data, {type: 'array'});
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const json = XLSX.utils.sheet_to_json(ws, {header: 1, defval: ''});
+  headers = json[0].map(String);
+  rawRows = json.slice(1).map(r => r.map(String)).filter(r => r.some(c => c.trim()));
+}
+
+// ─── Column auto-mapping ───
+function autoMap() {
+  columnMap = {};
+  const hLower = headers.map(h => h.trim().toLowerCase());
+  for (const f of FIELDS) {
+    for (const hint of f.hints) {
+      const idx = hLower.indexOf(hint);
+      if (idx >= 0 && !Object.values(columnMap).includes(headers[idx])) {
+        columnMap[f.key] = headers[idx];
+        break;
+      }
+    }
+  }
+}
+
+function showMapping() {
+  const grid = document.getElementById('map-grid');
+  grid.innerHTML = '';
+  for (const f of FIELDS) {
+    const div = document.createElement('div');
+    if (f.required) div.className = 'field-required';
+    div.innerHTML = '<label>' + esc(f.label) + '</label>';
+    let sel = '<select id="map-' + f.key + '"><option value="">(unmapped)</option>';
+    for (const h of headers) {
+      const selected = columnMap[f.key] === h ? ' selected' : '';
+      sel += '<option value="' + esc(h) + '"' + selected + '>' + esc(h) + '</option>';
+    }
+    sel += '</select>';
+    div.innerHTML += sel;
+    grid.appendChild(div);
+  }
+  document.getElementById('step-map').classList.remove('hidden');
+}
+
+function resetMapping() { autoMap(); showMapping(); }
+
+// ─── Apply mapping & build actions ───
+function applyMapping() {
+  columnMap = {};
+  for (const f of FIELDS) {
+    const sel = document.getElementById('map-' + f.key);
+    if (sel && sel.value) columnMap[f.key] = sel.value;
+  }
+  if (!columnMap.action) { alert('Please map the "Action / Task Name" column.'); return; }
+  actions = buildActions();
+  showPreview();
+  localStorage.setItem('pp_state', JSON.stringify({headers, rawRows, columnMap, actions,
+    projectName: document.getElementById('project-name').value}));
+}
+
+function getMapped(row, field) {
+  const col = columnMap[field];
+  if (!col) return '';
+  const idx = headers.indexOf(col);
+  return (idx >= 0 && idx < row.length) ? row[idx].trim() : '';
+}
+
+function mapPriority(v) {
+  const s = v.toLowerCase().trim();
+  if (['1','critical','highest','urgent','p1'].includes(s)) return 1;
+  if (['2','high','p2'].includes(s)) return 2;
+  if (['3','medium','normal','p3','med'].includes(s)) return 3;
+  if (['4','low','p4','5','lowest','p5'].includes(s)) return 4;
+  const n = parseInt(v); return (n >= 1 && n <= 4) ? n : 2;
+}
+
+function mapDifficulty(v) {
+  const n = parseInt(v); if (isNaN(n)) return 4;
+  const fibs = [1,4,8,13,21];
+  return fibs.reduce((a, b) => Math.abs(b - n) < Math.abs(a - n) ? b : a);
+}
+
+function mapStatus(v) {
+  const s = v.toLowerCase().trim();
+  if (['done','complete','completed','closed','resolved'].includes(s)) return 'Complete';
+  if (['in progress','active','doing','working','started','wip'].includes(s)) return 'InProcess';
+  if (['review','in review','testing','qa'].includes(s)) return 'Review';
+  if (['planned','planning','ready','to do','todo','next'].includes(s)) return 'Planning';
+  return 'Backlog';
+}
+
+function parseDate(s) {
+  if (!s) return '';
+  const d = new Date(s);
+  if (!isNaN(d)) return d.toISOString().split('T')[0];
+  // Try M/D/Y
+  const m = s.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+  if (m) { let y = parseInt(m[3]); if (y < 100) y += 2000;
+    return new Date(y, parseInt(m[1])-1, parseInt(m[2])).toISOString().split('T')[0]; }
+  return '';
+}
+
+function buildActions() {
+  const result = [];
+  for (let i = 0; i < rawRows.length; i++) {
+    const row = rawRows[i];
+    const name = getMapped(row, 'action');
+    if (!name) continue;
+    const a = {
+      sequence: i + 1,
+      card_number: getMapped(row, 'card_number') || String(i + 1),
+      action: {en: name},
+      description: {en: getMapped(row, 'description')},
+      metadata: {},
+      kanban_column: 'Backlog',
+      priority: 2, difficulty: 4,
+      percent_complete: 0,
+      document: {name, status: 'draft', confidential: 'internal', description: ''}
+    };
+    const sec = getMapped(row, 'section');
+    if (sec) { a.metadata.section = sec; a.metadata.section_label = sec; }
+    const pri = getMapped(row, 'priority');
+    if (pri) a.priority = mapPriority(pri);
+    const diff = getMapped(row, 'difficulty');
+    if (diff) a.difficulty = mapDifficulty(diff);
+    const status = getMapped(row, 'status');
+    if (status) a.kanban_column = mapStatus(status);
+    const assigned = getMapped(row, 'assigned_to');
+    if (assigned) a.assigned_to = [{name: assigned}];
+    const deps = getMapped(row, 'depends_on');
+    if (deps) a.depends_on = deps.split(',').map(d => d.trim()).filter(Boolean);
+    const start = getMapped(row, 'dt_start');
+    if (start) { const d = parseDate(start); if (d) a.dt_start = d; }
+    const due = getMapped(row, 'dt_deadline');
+    if (due) { const d = parseDate(due); if (d) a.dt_deadline = d; }
+    const dur = getMapped(row, 'duration');
+    if (dur) { const n = parseInt(dur); if (!isNaN(n)) a.duration = n; }
+    const pct = getMapped(row, 'percent_complete');
+    if (pct) { const n = parseInt(pct); if (!isNaN(n)) a.percent_complete = Math.max(0, Math.min(100, n)); }
+    const seq = getMapped(row, 'sequence');
+    if (seq) { const n = parseInt(seq); if (!isNaN(n)) a.sequence = n; }
+    result.push(a);
+  }
+  return result;
+}
+
+// ─── Preview ───
+function showPreview() {
+  document.getElementById('step-preview').classList.remove('hidden');
+  const total = actions.length;
+  const secs = new Set(actions.map(a => (a.metadata||{}).section || 'General')).size;
+  const deps = actions.filter(a => a.depends_on && a.depends_on.length).length;
+  const done = actions.filter(a => a.kanban_column === 'Complete').length;
+  document.getElementById('stats-bar').innerHTML =
+    stat(total, 'Actions') + stat(secs, 'Sections') + stat(deps, 'With Deps') + stat(done, 'Complete');
+
+  const tbody = document.getElementById('action-rows');
+  tbody.innerHTML = '';
+  for (const a of actions) {
+    const k = a.kanban_column || 'Backlog';
+    const p = a.priority || 2;
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + a.sequence + '</td>' +
+      '<td class="card-num">' + esc(a.card_number||'') + '</td>' +
+      '<td>' + esc(a.action.en) + '</td>' +
+      '<td class="card-num">' + esc((a.metadata||{}).section||'') + '</td>' +
+      '<td class="pri-'+p+'">P'+p+'</td>' +
+      '<td><span class="kanban-tag k-'+k+'">'+k+'</span></td>' +
+      '<td class="card-num">' + esc((a.assigned_to||[]).map(x=>x.name).join(', ')) + '</td>' +
+      '<td class="card-num">' + esc((a.depends_on||[]).join(', ')) + '</td>' +
+      '<td class="card-num">' + esc(a.dt_start||'') + '</td>' +
+      '<td class="card-num">' + esc(a.dt_deadline||'') + '</td>';
+    tbody.appendChild(tr);
+  }
+}
+
+function stat(n, label) {
+  return '<div class="stat"><div class="stat-num">'+n+'</div><div class="stat-label">'+label+'</div></div>';
+}
+
+// ─── Export ───
+function doExport(type) {
+  const name = document.getElementById('project-name').value || 'My Project Plan';
+  if (type === 'bundle') downloadJSON(generateBundle(name), 'bundle.json');
+  else if (type === 'svg') downloadText(generateSVG(name), 'plan.svg', 'image/svg+xml');
+  else if (type === 'csv') downloadText(generateCSV(), 'project-plan.csv', 'text/csv');
+}
+
+function generateBundle(projectName) {
+  const sections = {};
+  actions.forEach(a => { const s = (a.metadata||{}).section||'General'; (sections[s]=sections[s]||[]).push(a); });
+  const bundle = {
+    bundle: { name: projectName, version: '1.0',
+      description: projectName + '. ' + actions.length + ' actions across ' + Object.keys(sections).length + ' section(s). Generated by Project Planner.',
+      created: new Date().toISOString().split('T')[0], source: 'Project Planner (browser)' },
+    project: { name: projectName, status: 'active', attention: 'normal', priority: 1, category: 'project',
+      intent: projectName + ' \u2014 ' + actions.length + ' actions',
+      tasks: { items: [], completed: actions.filter(a => a.kanban_column==='Complete').length,
+               total: actions.length, weight_total: 0, weight_completed: 0 } },
+    actions: actions,
+    import_instructions: {
+      step_1: "Create the Project record from the 'project' object",
+      step_2: "For each entry in 'actions', create an Action record linked to the Project",
+      step_3: "For each action, create the Document record from the embedded 'document' object",
+      step_4: "Link each Document to its Action via refs or LinkageEntry",
+      notes: [Object.keys(sections).length + ' section(s): ' + Object.keys(sections).join(', '),
+              'Edit bundle.json to refine before importing into WC3']
+    }
+  };
+  if (Object.keys(sections).length > 1) {
+    bundle.sub_projects = Object.entries(sections).map(([name, acts]) => ({
+      name, status: 'active', priority: 1, category: name.toLowerCase().replace(/\s+/g,'_'),
+      intent: name + ' \u2014 ' + acts.length + ' actions', actions: acts
+    }));
+  }
+  return bundle;
+}
+
+function generateSVG(projectName) {
+  const cw = 175, ch = 58, gx = 20, gy = 18, cols = 5, margin = 25, headerH = 60;
+  const sections = {};
+  actions.forEach(a => { const s = (a.metadata||{}).section||'General'; (sections[s]=sections[s]||[]).push(a); });
+  const secList = Object.entries(sections);
+  let totalH = headerH + 30;
+  const secInfo = secList.map(([name, acts]) => {
+    const rows = Math.ceil(acts.length / cols);
+    const h = 30 + rows * (ch + gy) + 15;
+    totalH += h + 8;
+    return {name, acts, rows, h};
+  });
+  const w = margin*2 + cols*(cw+gx) - gx;
+
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${totalH}" font-family="Arial,Helvetica,sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+<path d="M0 0L10 5L0 10z" fill="#666"/></marker></defs>
+<rect width="${w}" height="${totalH}" fill="#ECEFF1"/>
+<text x="${w/2}" y="22" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">${esc(projectName)}</text>
+<text x="${w/2}" y="38" text-anchor="middle" font-size="10" fill="#666">${actions.length} actions \u2022 ${secList.length} section(s)</text>`;
+
+  let yOff = headerH;
+  for (const si of secInfo) {
+    s += `<rect x="${margin-5}" y="${yOff}" width="${w-margin*2+10}" height="${si.h}" fill="#f5f5f5" stroke="#ddd" rx="6"/>`;
+    s += `<text x="${margin+5}" y="${yOff+18}" font-size="11" font-weight="bold" fill="#333">${esc(si.name)} (${si.acts.length})</text>`;
+    si.acts.forEach((a, idx) => {
+      const col = idx % cols, row = Math.floor(idx / cols);
+      const x = margin + col*(cw+gx), y = yOff + 28 + row*(ch+gy);
+      const isCrit = (a.metadata||{}).critical_path;
+      const isReview = (a.metadata||{}).needs_review;
+      const isDone = a.kanban_column === 'Complete';
+      const fill = isCrit ? '#FFCDD2' : isReview ? '#FFE0B2' : isDone ? '#C8E6C9' : '#FFF9C4';
+      let title = a.action.en || '';
+      if (title.length > 24) title = title.substring(0, 22) + '...';
+      s += `<rect x="${x}" y="${y}" width="${cw}" height="${ch}" fill="${fill}" stroke="#999" rx="4"/>`;
+      s += `<text x="${x+cw-5}" y="${y+12}" text-anchor="end" font-size="7" fill="#888">${esc(a.card_number||'')}</text>`;
+      s += `<text x="${x+6}" y="${y+25}" font-size="9" font-weight="bold" fill="#333">${esc(title)}</text>`;
+      s += `<text x="${x+6}" y="${y+38}" font-size="7" fill="#666">P${a.priority||2} \u2022 ${a.kanban_column||'Backlog'}</text>`;
+      if (a.depends_on && a.depends_on.length && idx > 0) {
+        const pc = (idx-1)%cols, pr = Math.floor((idx-1)/cols);
+        if (pr === row) {
+          const x1=margin+pc*(cw+gx)+cw, y1=yOff+28+pr*(ch+gy)+ch/2;
+          s += `<line x1="${x1}" y1="${y1}" x2="${x}" y2="${y+ch/2}" stroke="#999" stroke-width="1" marker-end="url(#a)"/>`;
+        }
+      }
+    });
+    yOff += si.h + 8;
+  }
+  // Legend
+  const ly = totalH - 25;
+  s += `<rect x="${margin}" y="${ly}" width="18" height="12" fill="#FFF9C4" stroke="#999" rx="2"/>`;
+  s += `<text x="${margin+22}" y="${ly+10}" font-size="8" fill="#333">Normal</text>`;
+  s += `<rect x="${margin+80}" y="${ly}" width="18" height="12" fill="#FFCDD2" stroke="#999" rx="2"/>`;
+  s += `<text x="${margin+102}" y="${ly+10}" font-size="8" fill="#333">Critical</text>`;
+  s += `<rect x="${margin+165}" y="${ly}" width="18" height="12" fill="#FFE0B2" stroke="#999" rx="2"/>`;
+  s += `<text x="${margin+187}" y="${ly+10}" font-size="8" fill="#333">Review</text>`;
+  s += `<rect x="${margin+255}" y="${ly}" width="18" height="12" fill="#C8E6C9" stroke="#999" rx="2"/>`;
+  s += `<text x="${margin+277}" y="${ly+10}" font-size="8" fill="#333">Complete</text>`;
+  s += `<text x="${w-margin}" y="${ly+10}" text-anchor="end" font-size="8" fill="#999">Generated by Project Planner</text>`;
+  s += '</svg>';
+  return s;
+}
+
+function generateCSV() {
+  const cols = ['sequence','card_number','action','description','section','priority','kanban_column',
+                'assigned_to','depends_on','dt_start','dt_deadline','difficulty','percent_complete'];
+  let csv = cols.join(',') + '\n';
+  for (const a of actions) {
+    csv += [a.sequence, q(a.card_number||''), q(a.action.en), q((a.description||{}).en||''),
+            q((a.metadata||{}).section||''), a.priority, a.kanban_column,
+            q((a.assigned_to||[]).map(x=>x.name).join('; ')),
+            q((a.depends_on||[]).join('; ')), a.dt_start||'', a.dt_deadline||'',
+            a.difficulty, a.percent_complete].join(',') + '\n';
+  }
+  return csv;
+}
+
+// ─── Helpers ───
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function q(s) { return s.includes(',') || s.includes('"') || s.includes('\n') ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function downloadJSON(obj, filename) {
+  downloadText(JSON.stringify(obj, null, 2), filename, 'application/json');
+}
+function downloadText(text, filename, mime) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type: mime}));
+  a.download = filename; a.click();
+}
+
+// ─── Restore state from localStorage ───
+try {
+  const saved = JSON.parse(localStorage.getItem('pp_state') || 'null');
+  if (saved && saved.headers && saved.headers.length) {
+    headers = saved.headers; rawRows = saved.rawRows;
+    columnMap = saved.columnMap; actions = saved.actions || [];
+    document.getElementById('upload-zone').innerHTML =
+      '<div class="upload-success">\u2713 Restored previous session (' + rawRows.length + ' rows)</div>';
+    showMapping();
+    if (actions.length) {
+      document.getElementById('project-name').value = saved.projectName || 'My Project Plan';
+      showPreview();
+    }
+  }
+} catch(e) {}
+</script>
+</body></html>

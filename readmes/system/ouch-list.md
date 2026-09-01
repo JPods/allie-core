@@ -343,8 +343,8 @@ Design principle: **every agent can sign what it sends and require signatures on
 - **Added by:** Bill + Claude Code
 
 ### WC3 — Model naming convention: singular model_name vs plural display (2026-06-28)
-- **Problem:** WebClerk3 uses `model_name` (singular, snake_case) as the standard key for API calls, Settings, and DataBrowser. But sidebar navigation, URLs, and user-facing labels sometimes use plurals or different casing. This creates confusion when model names don't match what users expect in the DataBrowser select list.
-- **Example:** API returns `accounts.TaxJurisdiction` but sidebar says "Tax Jurisdiction" and URL is `/accounts/tax-jurisdiction/list`. DataBrowser shows the raw model_name.
+- **Problem:** WebClerk3 uses `model_name` (singular, snake_case) as the standard key for API calls, Settings, and databrowser. But sidebar navigation, URLs, and user-facing labels sometimes use plurals or different casing. This creates confusion when model names don't match what users expect in the databrowser select list.
+- **Example:** API returns `accounts.TaxJurisdiction` but sidebar says "Tax Jurisdiction" and URL is `/accounts/tax-jurisdiction/list`. databrowser shows the raw model_name.
 - **Risk:** Users can't find models they're looking for. Field config Settings saved under one name won't load under another.
 - **Mitigation:** Stick with `model_name` as the canonical key everywhere. Add display labels from model registry for user-facing UI. Never use plurals or URL slugs as keys.
 - **Domain:** WC3

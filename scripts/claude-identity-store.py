@@ -313,6 +313,29 @@ def cmd_brief(args):
                 print(f"    [{meta['context'][:100]}]")
             print()
 
+    # Start session guard — the team watches while Claude works
+    guard_script = Path.home() / "Allie" / "scripts" / "allie-session-guard.py"
+    if guard_script.exists():
+        import subprocess
+        # Check if already running
+        try:
+            result = subprocess.run(["pgrep", "-f", "allie-session-guard"], capture_output=True)
+            if result.returncode != 0:
+                subprocess.Popen(
+                    ["python3", str(guard_script)],
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    start_new_session=True,
+                )
+                print("── SESSION GUARD ──")
+                print("  Allie + Alice watching. Rules enforced. Team is awake.")
+                print()
+            else:
+                print("── SESSION GUARD ──")
+                print("  Already running.")
+                print()
+        except Exception:
+            pass
+
     return 0
 
 

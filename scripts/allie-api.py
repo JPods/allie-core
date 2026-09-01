@@ -44,7 +44,7 @@ LOG_PATH    = ALLIE / "config" / "agent_log.jsonl"
 SCRIPTS     = ALLIE / "scripts"
 OLLAMA_URL  = "http://localhost:11434/api/generate"
 
-DEFAULT_REASONER  = "deepseek-r1:8b"
+DEFAULT_REASONER  = "gpt-oss:20b"
 DEFAULT_ADVERSARY = "athena-reason:latest"
 DEFAULT_JUDGE     = "llama3.2:latest"
 

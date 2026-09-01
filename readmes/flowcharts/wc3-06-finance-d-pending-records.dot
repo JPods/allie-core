@@ -1,0 +1,114 @@
+// WC3 Pending Records — Fire-and-Forget on Line Save
+// Each transaction model owns one bucket. Pending is a consequence of saving a line.
+// Render: dot -Tpdf wc3-06-finance-d-pending-records.dot -o wc3-pending-records.pdf
+
+// CodeMap revision: 2 — 2026-08-19
+// Changed: Consolidated to single Pending model with try_apply().
+//          Single-bucket rule. No cross-bucket adjustments.
+//          Conversion creates header only — lines are arrays until Save.
+
+digraph wc3_pending {
+    size="7.5,10.0"
+    ratio="compress"
+
+
+    rankdir=TB
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=9 style=filled]
+    edge [fontname="Helvetica" fontsize=7]
+    label="WC3 — Pending Records: Fire-and-Forget on Line Save\nEach model owns one bucket · No cross-bucket · Linear flow"
+    labelloc=t
+    fontsize=14
+    pad=0.5
+
+    // ── User Actions ──
+    subgraph cluster_user {
+        label="User Actions"
+        style=filled fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=9
+
+        add_line [label="Add Line\n(item search → array)" shape=box fillcolor="#FDFEFE" fontsize=8]
+        modify_line [label="Modify Line\n(qty change in array)" shape=box fillcolor="#FDFEFE" fontsize=8]
+        convert [label="Convert\n(Workflow dropdown)" shape=box fillcolor="#FDFEFE" fontsize=8]
+        save [label="Save\n(array → DB records)" shape=box fillcolor="#FDFEFE" fontsize=8]
+    }
+
+    // ── Conversion (header only) ──
+    subgraph cluster_conversion {
+        label="Conversion — Header Only"
+        style=filled fillcolor="#D5F5E3" color="#82E0AA"
+        fontsize=9
+
+        create_header [label="Create Target Header\n(Order/Invoice/Purchase)\nCopy customer (sell-side)\nNo lines saved" shape=box fillcolor="#FDFEFE" fontsize=8]
+        line_array [label="Build Line Array\nfor React Review\n(no IDs, no FKs,\njust data)" shape=box fillcolor="#FDFEFE" fontsize=8]
+        review [label="User Reviews\nAdjusts Quantities\n(editing array,\nnot DB records)" shape=box fillcolor="#FDFEFE" fontsize=8]
+    }
+
+    // ── save_view.py Line Processing ──
+    subgraph cluster_save {
+        label="save_view.py — Line Save Loop"
+        style=filled fillcolor="#FCF3CF" color="#F9E79F"
+        fontsize=9
+
+        create_line [label="Create Line Record\n(id, uuid assigned)\n\nFK descriptors skipped\nitem_fk_id from item.item_id\n_dirty fields skipped" shape=box fillcolor="#FDFEFE" fontsize=8]
+        fire_pending [label="Fire Pending\n(own bucket only)\n\nPP → on_p\nSO → on_so\nPO → on_po\nIN → on_hand\nRC → on_hand" shape=box fillcolor="#FDFEFE" fontsize=8]
+        adjust_source [label="Adjust Source Line\n(sell-side only)\n\nOrder→Proposal: on_p\nInvoice→Order: on_so\nPurchase: NONE" shape=box fillcolor="#FDFEFE" fontsize=8]
+        source_pending [label="Source Line Saves\n→ Fires Own Pending\n(source bucket)" shape=box fillcolor="#FDFEFE" fontsize=8]
+    }
+
+    // ── Pending Model ──
+    subgraph cluster_pending {
+        label="Pending Model (unified)"
+        style=filled fillcolor="#FADBD8" color="#F5B7B1"
+        fontsize=9
+
+        pending [label="Pending\n(CoreModel)\n\nmodel_name = 'item'\nrecord_id = item.pk\npurpose = 'inventory_line_add'\nchanges = {on_XX: delta}\n\nsave() → try_apply()\nif locked → celery" shape=box fillcolor="#FDFEFE" fontsize=8]
+        try_apply [label="try_apply()\n\nselect_for_update(nowait)\napply deltas to Item.quantity\nmark dt_processed\n\nif OperationalError:\n  stays unprocessed\n  celery picks up" shape=box fillcolor="#FDFEFE" fontsize=8]
+    }
+
+    // ── Item ──
+    item [label="Item.quantity\n\non_hand: physical\non_p: proposal forecast\non_so: order commitment\non_po: purchase commitment\non_wo: workorder commitment\navailable: on_hand - allocated" shape=box fillcolor="#ABEBC6"]
+
+    // ── Bucket Ownership ──
+    subgraph cluster_buckets {
+        label="Single Bucket Rule"
+        style=filled fillcolor="#F5EEF8" color="#D2B4DE"
+        fontsize=9
+
+        pp [label="Proposal\nowns on_p" shape=box fillcolor="#FDFEFE" fontsize=8]
+        so [label="Order\nowns on_so" shape=box fillcolor="#FDFEFE" fontsize=8]
+        po [label="Purchase\nowns on_po" shape=box fillcolor="#FDFEFE" fontsize=8]
+        inv [label="Invoice\nowns on_hand" shape=box fillcolor="#FDFEFE" fontsize=8]
+    }
+
+    // ═══ EDGES ═══
+
+    // User flow
+    add_line -> save [label="lines in array"]
+    modify_line -> save [label="modified array"]
+    convert -> create_header
+
+    // Conversion flow
+    create_header -> line_array
+    line_array -> review
+    review -> save [label="user clicks Save"]
+
+    // Save flow (linear)
+    save -> create_line [label="for each line"]
+    create_line -> fire_pending [label="1. own bucket"]
+    fire_pending -> adjust_source [label="2. tell source"]
+    adjust_source -> source_pending [label="3. source saves"]
+
+    // Pending flow
+    fire_pending -> pending
+    source_pending -> pending
+    pending -> try_apply [label="on save()"]
+    try_apply -> item [label="apply deltas"]
+
+    // Bucket ownership
+    pp -> fire_pending [style=dashed color=gray]
+    so -> fire_pending [style=dashed color=gray]
+    po -> fire_pending [style=dashed color=gray]
+    inv -> fire_pending [style=dashed color=gray]
+}

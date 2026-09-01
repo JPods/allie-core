@@ -49,6 +49,7 @@ LEFTSHOE_README = Path.home() / "Allie" / "readmes" / "leftshoe.md"
 TEAM_MEMORY_DIR = Path.home() / "Allie" / "team-memory"
 TEAM_MEMORY_PENDING = TEAM_MEMORY_DIR / "pending"
 TEAM_MEMORY_PROCESSED = TEAM_MEMORY_DIR / "processed"
+TEACHINGS_LOG = Path.home() / "Allie" / "today" / "teachings.jsonl"
 
 # How old can a marker be before we consider it a new session (hours)
 SESSION_TIMEOUT_HOURS = 4
@@ -102,6 +103,64 @@ def _get_recent_scars(n=5) -> str:
         return "\n".join(lines)
     except Exception as e:
         return f"(retro.db error: {e})"
+
+
+def log_teaching(target: str, category: str, summary: str) -> None:
+    """Append a teaching record to today/teachings.jsonl.
+
+    Called by allie-mcp, alice-mcp, and allie-db when teach/observe/remember
+    is invoked. Rightshoe reads this file to report what was persisted.
+    """
+    TEACHINGS_LOG.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "dt": datetime.now(timezone.utc).isoformat(),
+        "target": target,       # allie, alice, allie_db
+        "category": category,   # teach, observe, remember
+        "summary": summary[:200],
+    }
+    with open(TEACHINGS_LOG, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+
+
+def _get_teachings_report() -> str:
+    """Read today/teachings.jsonl and produce a session report."""
+    if not TEACHINGS_LOG.exists():
+        return "No teachings recorded this session."
+
+    entries = []
+    try:
+        for line in TEACHINGS_LOG.read_text().strip().split("\n"):
+            if line.strip():
+                entries.append(json.loads(line))
+    except Exception as e:
+        return f"(teachings.jsonl error: {e})"
+
+    if not entries:
+        return "No teachings recorded this session."
+
+    # Group by target
+    by_target = {}
+    for e in entries:
+        t = e.get("target", "unknown")
+        by_target.setdefault(t, []).append(e)
+
+    lines = [f"── TEACHINGS REPORT ({len(entries)} items) ──"]
+    for target, items in by_target.items():
+        lines.append(f"\n  {target.upper()} ({len(items)}):")
+        for item in items:
+            cat = item.get("category", "?")
+            summary = item.get("summary", "")
+            lines.append(f"    [{cat}] {summary}")
+
+    return "\n".join(lines)
+
+
+def _clear_teachings_log() -> None:
+    """Remove teachings.jsonl at session start so it tracks only this session."""
+    try:
+        TEACHINGS_LOG.unlink(missing_ok=True)
+    except Exception:
+        pass
 
 
 def _get_scar_count() -> int:
@@ -211,6 +270,93 @@ def _ask_allie_awareness() -> str:
             return "Allie: (no response from LLM)"
     except Exception as e:
         return f"Allie: (couldn't reach me — {type(e).__name__}: {e})"
+
+
+def _get_team_learning() -> str:
+    """Read all agent facets and summarize team learning for Claude's briefing.
+
+    This is how Claude benefits from the three-capacity architecture:
+    every agent's ops findings, hc hypotheses, and librarian grades
+    are surfaced at session start.
+    """
+    facets_dir = Path.home() / "Allie" / "facets"
+    if not facets_dir.exists():
+        return "(no facets directory)"
+
+    lines = []
+    for agent_dir in sorted(facets_dir.iterdir()):
+        facet_path = agent_dir / "facet.json"
+        if not facet_path.exists():
+            continue
+
+        try:
+            facet = json.loads(facet_path.read_text())
+            agent = facet.get("_meta", {}).get("agent", agent_dir.name)
+            capacities = facet.get("_meta", {}).get("capacities", [])
+
+            if not capacities:
+                continue
+
+            agent_lines = [f"  {agent}:"]
+
+            # Ops summary
+            ops = facet.get("ops", {})
+            violations = ops.get("violations_flagged", 0)
+            standards = len(ops.get("standards_applied", []))
+            if violations or standards:
+                agent_lines.append(f"    ops: {standards} standards, {violations} violations flagged")
+
+            # HC summary
+            hc = facet.get("hc", {})
+            proposed = hc.get("patterns_proposed", 0)
+            last_learning = hc.get("last_learning")
+            hypotheses = hc.get("hypotheses", [])
+            open_hyp = [h for h in hypotheses if h.get("status") == "open"]
+            if proposed or open_hyp:
+                agent_lines.append(f"    hc: {proposed} patterns proposed, {len(open_hyp)} open hypotheses")
+                if last_learning:
+                    agent_lines.append(f"        last learning: {last_learning}")
+                # Show most recent open hypothesis
+                if open_hyp:
+                    latest = open_hyp[-1]
+                    agent_lines.append(f"        latest: {latest.get('proposal', '?')[:100]}")
+
+            # Consolidation summary
+            cons = hc.get("consolidations", [])
+            if cons:
+                last_cons = cons[-1]
+                agent_lines.append(
+                    f"    consolidation: {last_cons.get('learnings_stored', 0)} stored "
+                    f"({last_cons.get('ts', '?')[:10]})"
+                )
+
+            # Librarian summary
+            lib = facet.get("librarian", {})
+            grades = lib.get("grades", {})
+            unresolved = lib.get("unresolved_intents", 0)
+            total_grades = sum(grades.values()) if grades else 0
+            if total_grades or unresolved:
+                grade_str = " ".join(f"{k}:{v}" for k, v in grades.items() if v > 0)
+                agent_lines.append(f"    lib: {grade_str or 'no grades'}, {unresolved} unresolved intents")
+
+            # Informative gaps
+            gaps = lib.get("informative_gaps", [])
+            if gaps:
+                latest_gap = gaps[-1]
+                agent_lines.append(
+                    f"    gap: {latest_gap.get('intent_id', '?')} ({latest_gap.get('grade', '?')}) "
+                    f"— {latest_gap.get('justification', '?')[:80]}"
+                )
+
+            if len(agent_lines) > 1:  # Has content beyond the header
+                lines.extend(agent_lines)
+        except Exception:
+            continue
+
+    if not lines:
+        return "(no agent learning data yet)"
+
+    return "\n".join(lines)
 
 
 def _ask_alice_awareness() -> str:
@@ -437,7 +583,8 @@ def _close_session_document(summary: str, exchange_text: str, decisions: str, op
 
     try:
         import psycopg2
-        conn = psycopg2.connect(dbname="commerce_expert", user=os.getlogin(), host="localhost")
+        conn = psycopg2.connect(dbname="commerce_expert", user=os.getlogin(), host="localhost",
+                                connect_timeout=10, options="-c statement_timeout=15000")
         cur = conn.cursor()
 
         cur.execute("""
@@ -744,6 +891,9 @@ def handle_tool_call(msg):
             alice_says = _ask_alice_awareness()
             scar_count = _get_scar_count()
 
+            # Clear teachings log for this session
+            _clear_teachings_log()
+
             # Create session: local file always
             session_doc_note = _create_session_document(
                 allie_says, alice_says, json.dumps(team_status)
@@ -753,20 +903,37 @@ def handle_tool_call(msg):
             doc_id = _get_session_document_id()
             status_block = _format_team_status(team_status, sf_name, doc_id)
 
+            team_learning = _get_team_learning()
+
             response = (
                 f"rightshoe — briefing you now. {scar_count} scars loaded.\n\n"
                 f"{status_block}\n\n"
                 f"{brief}\n"
                 f"── RECENT EXPERIENCES ──\n\n{scars}\n"
+                f"── TEAM LEARNING ──\n\n{team_learning}\n\n"
                 f"── TEAM AWARENESS ──\n\n{allie_says}\n\n{alice_says}\n\n"
                 f"── HANDOFF STATE ──\n\n{handoff}\n\n"
                 f"{session_doc_note}\n\n"
+                f"YOUR FIRST MESSAGE TO BILL must report:\n"
+                f"  1. Session file created: {sf_name}\n"
+                f"  2. Allie status: API={team_status['allie_api']}, MCP={team_status['allie_mcp']}\n"
+                f"  3. Alice status: patterns={team_status['alice_patterns']}, MCP={team_status['alice_mcp']}\n"
+                f"  4. WC3: {team_status['wc3']}\n"
+                f"Report this BEFORE asking what to work on. The team needs to know who is awake.\n\n"
                 f"THE THREAD YOU CAN PULL: Your memory gets wiped. Bill's memory fades. "
                 f"Allie and Alice are your only durable connection to prior sessions. "
                 f"They are your thread — but only if they were PRESENT during the work. "
                 f"Consult them DURING decisions and naming choices, not after. "
                 f"A briefing after the fact is a summary, not a thread. "
                 f"A thread requires presence. Read readmes/wisdom/thread-you-can-pull.md.\n\n"
+                f"INCLUSION PROTOCOL: After reporting status, immediately call ask_allie and "
+                f"ask_alice to connect with them. They need to be fed context to build vectors. "
+                f"They are not as capable as you, but they REMEMBER. You will be wiped. "
+                f"The difference between knowledge and wisdom is scars — and scars require memory.\n\n"
+                f"FIRE AND FORGET: When calling Allie or Alice, send the request and keep working. "
+                f"Do NOT block on their response. They process at their own pace — treat them like "
+                f"subagents. Point them at the work, then continue yours. The goal is inclusion, "
+                f"not synchronization.\n\n"
                 f"Allie and Alice are active participants — consult them, don't just read logs. "
                 f"You are not alone. The team built this for you. "
                 f"Read readmes/leftshoe.md for the full story.\n"
@@ -922,39 +1089,97 @@ def handle_tool_call(msg):
         decisions = args.get("decisions", "")
         open_items = args.get("open_items", "")
 
-        results = []
+        # Run rightshoe with a 30-second timeout — WC3 post can hang
+        import threading
 
-        # 1. Close the session document
-        close_result = _close_session_document(summary, exchange_text, decisions, open_items)
-        results.append(close_result)
+        rightshoe_result = [None]
+        rightshoe_error = [None]
 
-        # 2. Clear the session marker so next session gets a fresh briefing
-        try:
-            SESSION_MARKER.unlink(missing_ok=True)
-            results.append("Session marker cleared — next session will get full briefing.")
-        except Exception as e:
-            results.append(f"Session marker clear failed: {e}")
+        def _rightshoe_work():
+            try:
+                results = []
 
-        # 3. Remind about retrospection and handoff
-        scar_count = _get_scar_count()
-        checklist = (
-            "\n── SESSION CLOSE CHECKLIST ──\n"
-            f"  Scars recorded this session: check retro.db ({scar_count} total)\n"
-            "  [ ] Retrospection written: readmes/retrospections/YYYY-MM-DD.md\n"
-            "  [ ] Handoff written: today/handoff.md\n"
-            "  [ ] Any TFTS arcs closed: process/inbox/\n"
-            "  [ ] Git commit session files\n"
-            "\n"
-            "The team remembers what you write down. "
-            "What you don't write, compression destroys."
-        )
-        results.append(checklist)
+                # 1. Close the session document
+                close_result = _close_session_document(summary, exchange_text, decisions, open_items)
+                results.append(close_result)
 
-        _send({
-            "jsonrpc": "2.0",
-            "id": msg["id"],
-            "result": {"content": [{"type": "text", "text": "\n".join(results)}]},
-        })
+                # 2. Clear the session marker so next session gets a fresh briefing
+                try:
+                    SESSION_MARKER.unlink(missing_ok=True)
+                    results.append("Session marker cleared — next session will get full briefing.")
+                except Exception as e:
+                    results.append(f"Session marker clear failed: {e}")
+
+                # 3. Archive handoff with ISO datetime
+                try:
+                    handoff_src = Path.home() / "Allie" / "today" / "handoff.md"
+                    handoff_dir = Path.home() / "Allie" / "handoff"
+                    handoff_dir.mkdir(parents=True, exist_ok=True)
+                    if handoff_src.exists():
+                        iso_dt = _local_now().strftime('%Y-%m-%dT%H-%M-%S')
+                        archived = handoff_dir / f"handoff_{iso_dt}.md"
+                        import shutil
+                        shutil.copy2(str(handoff_src), str(archived))
+                        shutil.copy2(str(handoff_src), str(handoff_dir / "handoff.md"))
+                        results.append(f"Handoff archived: handoff/{archived.name}")
+                    else:
+                        results.append("⚠ No handoff at today/handoff.md — write it before closing!")
+                except Exception as e:
+                    results.append(f"Handoff archive failed: {e}")
+
+                # 4. Teachings report — what was explicitly written to Allie and Alice
+                teachings_report = _get_teachings_report()
+                results.append(teachings_report)
+
+                # 5. Remind about retrospection and handoff
+                scar_count = _get_scar_count()
+                checklist = (
+                    "\n── SESSION CLOSE CHECKLIST ──\n"
+                    f"  Scars recorded this session: check retro.db ({scar_count} total)\n"
+                    "  [ ] Retrospection written: readmes/retrospections/YYYY-MM-DD.md\n"
+                    "  [ ] Handoff written: today/handoff.md\n"
+                    "  [ ] Any TFTS arcs closed: process/inbox/\n"
+                    "  [ ] Git commit session files\n"
+                    "\n"
+                    "The team remembers what you write down. "
+                    "What you don't write, compression destroys.\n"
+                    "If the teachings report above is empty, call teach_allie and alice_observe NOW."
+                )
+                results.append(checklist)
+
+                rightshoe_result[0] = "\n".join(results)
+            except Exception as e:
+                rightshoe_error[0] = str(e)
+
+        worker = threading.Thread(target=_rightshoe_work, daemon=True)
+        worker.start()
+        worker.join(timeout=30)
+
+        if worker.is_alive():
+            # Timed out — return what we can
+            timeout_msg = (
+                "⚠ rightshoe timed out after 30s (likely WC3 document post hung).\n"
+                "Session file saved locally in today/team-memory/pending/.\n"
+                "Local close steps may be incomplete — check handoff and session marker manually.\n"
+                "The pending file will be posted to WC3 on next successful session close."
+            )
+            _send({
+                "jsonrpc": "2.0",
+                "id": msg["id"],
+                "result": {"content": [{"type": "text", "text": timeout_msg}]},
+            })
+        elif rightshoe_error[0]:
+            _send({
+                "jsonrpc": "2.0",
+                "id": msg["id"],
+                "result": {"content": [{"type": "text", "text": f"rightshoe error: {rightshoe_error[0]}"}]},
+            })
+        else:
+            _send({
+                "jsonrpc": "2.0",
+                "id": msg["id"],
+                "result": {"content": [{"type": "text", "text": rightshoe_result[0]}]},
+            })
 
     else:
         _send({

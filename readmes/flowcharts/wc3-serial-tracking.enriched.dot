@@ -6,6 +6,11 @@
 // CodeMap revision: 1 — 2026-08-11
 
 digraph wc3_serial_tracking {
+    size="7.5,10.0"
+    ratio="compress"
+
+
+
     // ── CodeMap Standard Style ──
     fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
     fontsize=12
@@ -14,7 +19,6 @@ digraph wc3_serial_tracking {
     nodesep=0.5
     ranksep=0.6
     splines=true
-    ratio=0.75
 
     node [
         fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
@@ -23,7 +27,6 @@ digraph wc3_serial_tracking {
         shape=box
         penwidth=1.2
         color="#555555"
-        margin="0.12,0.06"
     ]
 
     edge [

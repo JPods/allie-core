@@ -1,0 +1,147 @@
+// WC3 OrgBase — Organization identity model (Contact ↔ OrgBase)
+// org_type: customer, vendor, manufacturer, employee, rep
+// Render: dot -Tpdf wc3-03-contacts-b-orgbase.dot -o wc3-orgbase.pdf
+
+// CodeMap revision: 1 — 2026-08-26
+
+digraph wc3_orgbase {
+    size="10,7.5"
+    ratio="compress"
+
+    rankdir=TB
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
+    label="WC3 — OrgBase Model\nOrganization identity: customer, vendor, manufacturer, employee, rep"
+    labelloc=t
+
+    // ── Contact ──
+    contact [label="Contact\n\nPeople\nOne person can have\nmultiple org roles" shape=diamond fillcolor="#FADBD8"]
+
+    // ── OrgBase ──
+    subgraph cluster_orgbase {
+        label="OrgBase (BaseModel)"
+        style="filled,rounded" fillcolor="#FEF9E7" color="#F9E79F"
+        fontsize=10
+
+        orgbase [label="OrgBase\n\nida (natural key)\ndisplay_name\nphone, email, domain\naddress_full\nterms, price_level\ntax_exempt_code\nstatus, is_active" shape=box fillcolor="#F4D03F"]
+    }
+
+    // ── org_type variants ──
+    subgraph cluster_types {
+        label="org_type (proxy models)"
+        style="filled,rounded" fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=10
+
+        customer [label="Customer\norg_type='customer'\n\nSales targets\nAR aging\nCredit limits" fillcolor="#D6EAF8"]
+        vendor [label="Vendor\norg_type='vendor'\n\nAP aging\nPurchase history\nLead times" fillcolor="#D6EAF8"]
+        manufacturer [label="Manufacturer\norg_type='manufacturer'\n\nBrand owner\nItem source\nMfr item nums" fillcolor="#D6EAF8"]
+        employee [label="Employee\norg_type='employee'\n\nInternal user\nRole assignments" fillcolor="#D6EAF8"]
+        rep [label="Rep\norg_type='rep'\n\nSales rep\nCommission rules\nTerritory" fillcolor="#D6EAF8"]
+    }
+
+    // ── JSON Envelopes ──
+    subgraph cluster_financial {
+        label="financial (JSON)"
+        style="filled,rounded" fillcolor="#E8F8F5" color="#A3E4D7"
+        fontsize=9
+
+        fin_credit [label="credit\n{limit, used, approved}" fillcolor="#ABEBC6" fontsize=9]
+        fin_aging [label="aging\n{current, period_1-3,\nbalance_due, future_due}" fillcolor="#ABEBC6" fontsize=9]
+        fin_sales [label="sales\n{mtd, ytd, last_yr,\nall_time, last_date}" fillcolor="#ABEBC6" fontsize=9]
+        fin_payments [label="payments\n{last_date, last_amount,\ndays_avg_paid}" fillcolor="#ABEBC6" fontsize=9]
+        fin_costs [label="costs\n{mtd, ytd, all_time}" fillcolor="#ABEBC6" fontsize=9]
+    }
+
+    subgraph cluster_config {
+        label="config (JSON)"
+        style="filled,rounded" fillcolor="#F4ECF7" color="#D2B4DE"
+        fontsize=9
+
+        cfg_profiles [label="profiles\n{1..7: values}" fillcolor="#E8DAEF" fontsize=9]
+        cfg_named [label="rep, sales_name\nad_source, zone\ndivision, territory\nsic_code, ship_via\nduns" fillcolor="#E8DAEF" fontsize=9]
+        cfg_original [label="original\n{all WC2 fields\npreserved as-is}" fillcolor="#E8DAEF" fontsize=9]
+    }
+
+    // ── Aspects ──
+    subgraph cluster_aspects {
+        label="Aspect Arrays (JSON)"
+        style="filled,rounded" fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=9
+
+        asp_contacts [label="contacts[15]\naddresses[10]\ndomains[10]\nphones[10]\nemails[10]" fillcolor="#D6EAF8" fontsize=9]
+        asp_relations [label="relations\n{parents, children,\nlinked_ids}" fillcolor="#D6EAF8" fontsize=9]
+        asp_docs [label="docs[25]\nconnections\ngl_accounts\nmetrics" fillcolor="#D6EAF8" fontsize=9]
+    }
+
+    // ── OrgItem ──
+    orgitem [label="OrgItem\n\nPer-org per-item:\nitem_ida, description\navailability_state\nquantity_min/max\ninventory_frequency\nmetrics (plan vs actual)" fillcolor="#F5CBA7"]
+
+    // ── Item ──
+    item [label="Item\n(Product)" fillcolor="#D6EAF8"]
+
+    // ── Transactions ──
+    subgraph cluster_transactions {
+        label="References OrgBase"
+        style="filled,rounded" fillcolor="#FEF9E7" color="#F9E79F"
+        fontsize=9
+
+        order [label="Order\ncustomer_id (FK)" fillcolor="#FCF3CF" fontsize=9]
+        invoice [label="Invoice\ncustomer_id (FK)" fillcolor="#FCF3CF" fontsize=9]
+        purchase [label="Purchase\nvendor_id (FK)" fillcolor="#FCF3CF" fontsize=9]
+        proposal [label="Proposal\ncustomer_id (FK)" fillcolor="#FCF3CF" fontsize=9]
+    }
+
+    // ── Edges ──
+    contact -> orgbase [label="linked by\ncontact_id FK\nin refs.contacts" color="#27AE60" penwidth=2]
+    orgbase -> customer [label="org_type" color="#2980B9"]
+    orgbase -> vendor [color="#2980B9"]
+    orgbase -> manufacturer [color="#2980B9"]
+    orgbase -> employee [color="#2980B9"]
+    orgbase -> rep [color="#2980B9"]
+
+    orgbase -> fin_credit [color="#27AE60" style=dashed]
+    orgbase -> fin_aging [color="#27AE60" style=dashed]
+    orgbase -> fin_sales [color="#27AE60" style=dashed]
+    orgbase -> cfg_profiles [color="#8E44AD" style=dashed]
+    orgbase -> cfg_named [color="#8E44AD" style=dashed]
+    orgbase -> asp_contacts [color="#2980B9" style=dashed]
+    orgbase -> asp_relations [color="#2980B9" style=dashed]
+
+    customer -> order [color="#E67E22" style=dashed]
+    customer -> invoice [color="#E67E22" style=dashed]
+    customer -> proposal [color="#E67E22" style=dashed]
+    vendor -> purchase [color="#E67E22" style=dashed]
+
+    orgitem -> orgbase [label="org FK" color="#922B21"]
+    orgitem -> item [label="item FK" color="#922B21"]
+    manufacturer -> item [label="manufacturer_id FK" style=dashed color="#2980B9"]
+
+    // ── Cross-references ──
+    xref [label="See also:\n· Contact (p.4)\n· WC2 Customer→OrgBase (p.41)\n· Products Item Support (p.5)" shape=note fillcolor="#F4ECF7" fontsize=8]
+}

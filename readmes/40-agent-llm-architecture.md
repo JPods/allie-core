@@ -1,6 +1,6 @@
 # Agent LLM Architecture
 
-**Last updated:** 2026-05-06
+**Last updated:** 2026-08-12
 **Purpose:** Documents the shared LLM base, each agent's identity layer (Modelfile), operational class, and future trajectory. Read this before creating or modifying any agent.
 
 ---
@@ -45,15 +45,19 @@ ollama create athena  -f config/athena.Modelfile   # if separate file added
 | **Athena** | `athena:latest` | 0.1 | Adversarial security reviewer — action gate, privacy enforcement | Dedicated cyber security as JPods deploys to physical networks |
 | **Alice** | *(future Modelfile)* | 0.2 | WebClerk commerce agent — pricing, transactions, billing | Grows with WebClerk/DynamicCatalogs deployment |
 
-### Operational Agents — embedded in the JPods control loop, near-real-time
+### Operational Agents — on Andi (gpt-oss:20b), nightly synthesis + future real-time
 
-| Agent | Ollama model | Temp | Role | Future |
-|-------|-------------|------|------|--------|
-| **Noelle** | *(future Modelfile)* | 0.1 | Load balancer — network congestion, ezone management, pod prepositioning | Embedded in each deployed JPods network node |
-| **Natalie** | *(future Modelfile)* | 0.1 | Router — trip scheduling, Dijkstra constraints, one-way enforcement | Embedded in each deployed JPods network node |
-| **Nora** | *(future Modelfile)* | 0.1 | Vehicle — autonomous pod behavior, jam response, internal navigation | Embedded in each physical pod (Pi) |
+| Agent | Ollama model | Temp | Role | Location | Reflect time (UTC) |
+|-------|-------------|------|------|----------|-------------------|
+| **Nora** | `nora:latest` | 0.1 | Vehicle — trip telemetry, calibration drift, maintenance prediction | Andi | 02:00 |
+| **Noelle** | `noelle:latest` | 0.1 | Load balancer — fleet validation, ezone performance, flow balance | Andi | 02:15 |
+| **Matilda** | `matilda:latest` | 0.1 | Mechanical — fleet calibration aggregation, wear prediction, guideway condition | Andi | 02:30 |
+| **Sally** | `sally:latest` | 0.1 | Station — occupancy patterns, dwell times, capacity alerts | Andi | 02:45 |
+| **Natalie** | *(future Modelfile)* | 0.1 | Router — trip scheduling, Dijkstra constraints, one-way enforcement | Andi (pending) | TBD |
 
-**Key distinction:** Advisory agents run on the Mac, on-demand, at session or nightly scale. Operational agents will eventually run on embedded hardware (Pi or edge compute) at low latency against live vehicle/network state. They are the same base model today but will diverge in deployment infrastructure.
+**Deployment:** All operational agents run on Andi (GEEKOM IT15, 32GB RAM, Intel Core Ultra 9 285H) sharing the same gpt-oss:20b Ollama instance that serves Allie and Alice. Each agent has its own Modelfile, inbox, experience store, and nightly reflect script. MQTT telemetry from physical robots feeds agent inboxes via `agent-mqtt-router.py`. Systemd timers stagger reflect scripts 15 minutes apart so Ollama loads one model at a time.
+
+**Future:** Operational agents will eventually also run on embedded hardware (Pi or edge compute) at low latency against live vehicle/network state. Andi remains the fleet-wide aggregation and synthesis layer.
 
 ---
 
@@ -79,14 +83,16 @@ Bill
 
 Modelfiles live in `/Users/williamjames/Allie/config/`.
 
-| File | Agent | Status |
-|------|-------|--------|
-| `allie.Modelfile` | `allie:latest` | Built ✓ |
-| `athena.Modelfile` | `athena:latest` | Athena model predates this file — use `ollama show athena:latest --modelfile` to inspect |
-| `alice.Modelfile` | *(pending)* | Write when Alice gets her own Ollama model |
-| `noelle.Modelfile` | *(pending)* | Write when Noelle gets a standalone processor |
-| `natalie.Modelfile` | *(pending)* | Write when Natalie gets a standalone processor |
-| `nora.Modelfile` | *(pending)* | Write when Nora runs on Pi hardware |
+| File | Agent | Status | Location |
+|------|-------|--------|----------|
+| `config/allie.Modelfile` | `allie:latest` | Built ✓ | Mac + Andi |
+| `config/athena.Modelfile` | `athena:latest` | Built ✓ | Mac |
+| `robots/agents/nora/nora.Modelfile` | `nora:latest` | Built 2026-08-12 | Andi |
+| `robots/agents/noelle/noelle.Modelfile` | `noelle:latest` | Built 2026-08-12 | Andi |
+| `robots/agents/matilda/matilda.Modelfile` | `matilda:latest` | Built 2026-08-12 | Andi |
+| `robots/agents/sally/sally.Modelfile` | `sally:latest` | Built 2026-08-12 | Andi |
+| `alice.Modelfile` | *(pending)* | Write when Alice gets her own Ollama model | Andi |
+| `natalie.Modelfile` | *(pending)* | Write when Natalie gets a standalone processor | Andi |
 
 **Modelfile structure for each agent:**
 
@@ -177,3 +183,7 @@ python3 /Users/williamjames/Allie/scripts/allie-reflect.py
 | 2026-05-06 | Allie upgraded from `deepseek-r1:8b` to `allie:latest` (gpt-oss:20b) | 8B → 20.9B for cross-domain synthesis; Allie's reflection quality was bottlenecked by model size, not prompt quality |
 | 2026-05-06 | Athena stays separate from Allie despite same base model | Their operating principles are structurally opposed: Allie synthesizes constructively, Athena reviews adversarially. Sharing a model identity would corrupt both roles |
 | 2026-05-06 | Operational agents (Noelle/Natalie/Nora) get same base model as advisory agents | No reason to use weaker models for operational decisions — if anything, they need more reliable reasoning as deployment stakes increase |
+| 2026-08-12 | Nora, Noelle, Matilda, Sally deployed to Andi sharing gpt-oss:20b | Physical domain agents need persistent storage + processing that survives Pi reboots and Mac sleep. Andi is always-on, sovereign hardware. Same distillation pipeline as Allie/Alice. |
+| 2026-08-12 | MQTT router on Andi feeds agent inboxes; telemetry batched at 60s intervals | Individual TELEMETRY pings are too frequent (10/sec per pod). Batch to 1 summary/min/pod for inbox. FAULT/STING/CALIBRATION written immediately — those are high-signal. |
+| 2026-08-12 | Reflect scripts staggered 15 min apart (02:00–02:45 UTC) | Ollama loads one model at a time on CPU-only hardware. Staggering prevents RAM contention. All complete before Allie's reflect at 03:00 so she can read their output. |
+| 2026-08-12 | Andi runs gpt-oss:20b (not deepseek-r1:8b) for all agents | Bill's direction: the 20b model is the standard for all agents on Andi. Same capability, same reasoning depth across the entire team. |

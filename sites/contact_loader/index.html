@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Loader — WebClerk</title>
+<style>
+/* ── Reset & Base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f0f0f; color: #e0e0e0;
+  line-height: 1.4; font-size: 13px;
+}
+a { color: #60a5fa; }
+
+/* ── Layout ────────────────────────────────────────────────── */
+.app { max-width: 1400px; margin: 0 auto; padding: 16px; }
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header-meta { color: #888; font-size: 12px; }
+.stats { display: flex; gap: 16px; font-size: 12px; color: #aaa; margin-bottom: 12px; }
+.stats b { color: #60a5fa; }
+
+/* ── Drop Zone ─────────────────────────────────────────────── */
+.dropzone {
+  border: 2px dashed #444; border-radius: 8px;
+  padding: 40px; text-align: center; color: #666;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  margin-bottom: 16px;
+}
+.dropzone:hover, .dropzone.drag-over {
+  border-color: #60a5fa; background: rgba(96, 165, 250, 0.05);
+}
+.dropzone input { display: none; }
+.dropzone-or { margin: 12px 0; font-size: 11px; color: #555; }
+.dropzone textarea {
+  width: 100%; min-height: 80px; padding: 8px;
+  font-family: monospace; font-size: 11px;
+  background: #1a1a1a; color: #ccc; border: 1px solid #333; border-radius: 4px;
+  resize: vertical;
+}
+.dropzone textarea::placeholder { color: #555; }
+.dropzone-hint { font-size: 11px; color: #555; margin-top: 8px; }
+
+/* ── Toolbar ───────────────────────────────────────────────── */
+.toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 12px; padding: 8px 12px;
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
+}
+.btn {
+  padding: 6px 12px; font-size: 12px; border-radius: 4px;
+  border: 1px solid #444; background: #252525; color: #ccc; cursor: pointer;
+}
+.btn:hover { background: #333; border-color: #60a5fa; }
+.btn-primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-danger { background: #991b1b; border-color: #991b1b; color: #fff; }
+.btn-danger:hover { background: #7f1d1d; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.spacer { flex: 1; }
+.filter-input {
+  padding: 4px 8px; font-size: 12px; border: 1px solid #444;
+  background: #1a1a1a; color: #ccc; border-radius: 4px; width: 180px;
+}
+
+/* ── Table ─────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th {
+  text-align: left; padding: 6px 8px;
+  background: #1a1a1a; color: #888; font-weight: 600; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.3px;
+  border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1;
+}
+td {
+  padding: 4px 8px; border-bottom: 1px solid #1e1e1e;
+  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+tr:hover { background: #1a1a1a; }
+tr.duplicate { opacity: 0.5; }
+tr.duplicate td:first-child { border-left: 3px solid #f59e0b; }
+tr.selected { background: #1e3a5f; }
+tr.org-match td:nth-child(5) { color: #22c55e; }
+tr.org-new td:nth-child(5) { color: #60a5fa; }
+
+/* Editable cells */
+td[contenteditable] { cursor: text; }
+td[contenteditable]:focus { outline: 1px solid #60a5fa; background: #1a1a1a; }
+
+/* Checkbox column */
+.col-check { width: 30px; text-align: center; }
+.col-check input { accent-color: #60a5fa; }
+
+/* Status badges */
+.badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 600; white-space: nowrap; }
+.badge-new { background: #1e3a1e; color: #4ade80; }
+.badge-dup { background: #3a2a1e; color: #fbbf24; }
+.badge-merge { background: #1e2a3a; color: #60a5fa; }
+.badge-skip { background: #2a2a2a; color: #888; }
+
+/* Action select */
+.action-select {
+  font-size: 11px; padding: 2px 4px; border: 1px solid #444;
+  background: #1a1a1a; color: #ccc; border-radius: 3px;
+}
+
+/* WC3 connection bar */
+.wc-bar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+  padding: 8px 12px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
+  font-size: 12px;
+}
+.wc-bar input {
+  padding: 4px 8px; font-size: 12px; border: 1px solid #444;
+  background: #0f0f0f; color: #ccc; border-radius: 4px; width: 240px;
+}
+.wc-status { font-size: 11px; }
+.wc-status-ok { color: #4ade80; }
+.wc-status-off { color: #888; }
+.merge-info { font-size: 10px; color: #60a5fa; display: block; }
+
+/* ── Footer ────────────────────────────────────────────────── */
+.footer {
+  margin-top: 16px; padding: 12px;
+  background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;
+  text-align: center; font-size: 11px; color: #666;
+}
+.footer a { color: #60a5fa; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Contact Loader</h1>
+    <span class="header-meta">Parse vCards &rarr; clean &rarr; export bundle.json for WebClerk</span>
+  </div>
+
+  <!-- Drop zone -->
+  <div class="dropzone" id="dropzone">
+    <div><b>Drop .vcf file here</b> or click to browse</div>
+    <input type="file" id="fileInput" accept=".vcf" multiple>
+    <div class="dropzone-or">— or paste vCard text —</div>
+    <textarea id="pasteArea" placeholder="BEGIN:VCARD&#10;VERSION:3.0&#10;FN:Jane Smith&#10;...&#10;END:VCARD" rows="4"></textarea>
+    <div class="dropzone-hint">Google Contacts, Apple Contacts, Dot, or any .vcf file — single or batch</div>
+  </div>
+
+  <!-- WC3 Connection -->
+  <div class="wc-bar">
+    <span>WebClerk:</span>
+    <input type="text" id="wcUrl" value="http://localhost:8000" placeholder="http://localhost:8000">
+    <button class="btn" onclick="checkWcConnection()">Connect</button>
+    <button class="btn" onclick="checkCollisions()" id="btnCollisions" disabled>Check Collisions</button>
+    <button class="btn btn-primary" onclick="sendToWebClerk()" id="btnSend" disabled>Send to WebClerk</button>
+    <span class="wc-status" id="wcStatus"><span class="wc-status-off">not connected</span></span>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats" style="display:none">
+    <span>Total: <b id="statTotal">0</b></span>
+    <span>New: <b id="statNew">0</b></span>
+    <span>Duplicates: <b id="statDup" style="color:#f59e0b">0</b></span>
+    <span>Companies: <b id="statOrgs">0</b></span>
+    <span>Source: <b id="statSource">—</b></span>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar" id="toolbar" style="display:none">
+    <label class="col-check"><input type="checkbox" id="selectAll" title="Select all"></label>
+    <button class="btn btn-danger" onclick="deleteSelected()" title="Remove selected rows">Delete Selected</button>
+    <button class="btn" onclick="removeDuplicates()" title="Remove all duplicate rows">Remove Duplicates</button>
+    <input class="filter-input" type="text" id="filterInput" placeholder="Filter by name, email, company..." oninput="renderTable()">
+    <span class="spacer"></span>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
+    <button class="btn btn-primary" onclick="exportBundle()">Export bundle.json</button>
+    <button class="btn" onclick="loadBundle()">Load bundle.json</button>
+    <button class="btn" onclick="clearAll()">Clear All</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap" id="tableWrap" style="display:none">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" id="thCheck" onchange="toggleAll(this.checked)"></th>
+          <th>First</th>
+          <th>Last</th>
+          <th>Email</th>
+          <th>Company</th>
+          <th>Title</th>
+          <th>Phone</th>
+          <th>City</th>
+          <th>Action</th>
+          <th>Match</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <a href="https://webclerk.com" target="_blank">WebClerk</a> — clean contacts outside, import clean data via bundle.
+    Data never leaves your browser.
+  </div>
+</div>
+
+<script>
+/* ── State ─────────────────────────────────────────────────── */
+let contacts = [];
+let source = '';
+
+/* ── vCard Parser (pure JS, no dependencies) ──────────────── */
+function parseVCards(text) {
+  const results = [];
+  const blocks = text.split(/(?=BEGIN:VCARD)/i);
+  for (const block of blocks) {
+    if (!block.trim().toUpperCase().startsWith('BEGIN:VCARD')) continue;
+
+    // Unfold continued lines (RFC 2425)
+    const unfolded = block.replace(/\r\n[ \t]/g, '').replace(/\n[ \t]/g, '');
+    const lines = unfolded.split(/\r?\n/);
+    const c = { _selected: false, _status: 'new' };
+
+    for (const line of lines) {
+      const idx = line.indexOf(':');
+      if (idx < 0) continue;
+      const key = line.substring(0, idx).split(';')[0].toUpperCase();
+      const val = line.substring(idx + 1).trim();
+
+      switch (key) {
+        case 'FN': c.full_name = val; break;
+        case 'N': {
+          const parts = val.split(';');
+          c.name_last = parts[0] || '';
+          c.name_first = parts[1] || '';
+          break;
+        }
+        case 'ORG': c.company = val.split(';')[0]; break;
+        case 'TITLE': c.title = val; break;
+        case 'EMAIL': if (!c.email) c.email = val; break;
+        case 'TEL': if (!c.phone) c.phone = val; break;
+        case 'ADR': {
+          const p = val.split(';');
+          // ADR: PO;ext;street;city;state;zip;country
+          c.address1 = p[2] || '';
+          c.city = p[3] || '';
+          c.state = p[4] || '';
+          c.zip = p[5] || '';
+          c.country = p[6] || '';
+          break;
+        }
+        case 'PRODID':
+          if (val.toLowerCase().includes('google')) source = 'Google Contacts';
+          else if (val.toLowerCase().includes('apple')) source = 'Apple Contacts';
+          break;
+      }
+    }
+
+    // Fallback: split FN if no structured name
+    if (!c.name_first && !c.name_last && c.full_name) {
+      const parts = c.full_name.split(/\s+/);
+      c.name_first = parts[0] || '';
+      c.name_last = parts.slice(1).join(' ');
+    }
+
+    // Skip empty entries
+    if (!c.name_first && !c.name_last && !c.email) continue;
+
+    results.push(c);
+  }
+
+  if (!source) source = 'vCard Import';
+  return results;
+}
+
+/* ── Duplicate Detection ──────────────────────────────────── */
+function markDuplicates() {
+  const seen = new Set();
+  for (const c of contacts) {
+    const key = (c.email || '').toLowerCase();
+    if (key && seen.has(key)) {
+      c._status = 'duplicate';
+    } else {
+      if (key) seen.add(key);
+      if (c._status !== 'duplicate') c._status = 'new';
+    }
+  }
+}
+
+/* ── Render ────────────────────────────────────────────────── */
+function renderTable() {
+  const filter = (document.getElementById('filterInput').value || '').toLowerCase();
+  const tbody = document.getElementById('tbody');
+  const rows = [];
+
+  const companies = new Set();
+
+  for (let i = 0; i < contacts.length; i++) {
+    const c = contacts[i];
+    const text = [c.name_first, c.name_last, c.email, c.company, c.title].join(' ').toLowerCase();
+    if (filter && !text.includes(filter)) continue;
+    if (c.company) companies.add(c.company);
+
+    const action = c._action || (c._status === 'duplicate' ? 'skip' : 'create');
+    const cls = [c._status === 'duplicate' ? 'duplicate' : '', c._selected ? 'selected' : ''].join(' ').trim();
+
+    // Action dropdown
+    const actionSelect = `<select class="action-select" onchange="setAction(${i}, this.value)">
+      <option value="create" ${action === 'create' ? 'selected' : ''}>Create</option>
+      <option value="merge" ${action === 'merge' ? 'selected' : ''} ${!c._match_id ? 'disabled' : ''}>Merge</option>
+      <option value="skip" ${action === 'skip' ? 'selected' : ''}>Skip</option>
+    </select>`;
+
+    // Match info
+    let matchInfo = '';
+    if (c._match_id) {
+      matchInfo = `<span class="badge badge-merge">${esc(c._match_name || '')} #${c._match_id}</span>`;
+    } else if (c._status === 'duplicate') {
+      matchInfo = '<span class="badge badge-dup">dup in batch</span>';
+    }
+
+    rows.push(`<tr class="${cls}" data-idx="${i}">
+      <td class="col-check"><input type="checkbox" ${c._selected ? 'checked' : ''} onchange="toggleRow(${i}, this.checked)"></td>
+      <td contenteditable="true" onblur="editCell(${i},'name_first',this)">${esc(c.name_first || '')}</td>
+      <td contenteditable="true" onblur="editCell(${i},'name_last',this)">${esc(c.name_last || '')}</td>
+      <td contenteditable="true" onblur="editCell(${i},'email',this)">${esc(c.email || '')}</td>
+      <td contenteditable="true" onblur="editCell(${i},'company',this)">${esc(c.company || '')}</td>
+      <td contenteditable="true" onblur="editCell(${i},'title',this)">${esc(c.title || '')}</td>
+      <td contenteditable="true" onblur="editCell(${i},'phone',this)">${esc(c.phone || '')}</td>
+      <td>${esc(c.city || '')}</td>
+      <td>${actionSelect}</td>
+      <td>${matchInfo}</td>
+    </tr>`);
+  }
+
+  tbody.innerHTML = rows.join('');
+  updateStats(companies.size);
+}
+
+function updateStats(orgCount) {
+  document.getElementById('statTotal').textContent = contacts.length;
+  document.getElementById('statNew').textContent = contacts.filter(c => c._status === 'new').length;
+  document.getElementById('statDup').textContent = contacts.filter(c => c._status === 'duplicate').length;
+  document.getElementById('statOrgs').textContent = orgCount || new Set(contacts.map(c => c.company).filter(Boolean)).size;
+  document.getElementById('statSource').textContent = source;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+/* ── Actions ──────────────────────────────────────────────── */
+function editCell(idx, field, el) {
+  contacts[idx][field] = el.textContent.trim();
+  if (field === 'email') markDuplicates();
+}
+
+function toggleRow(idx, checked) { contacts[idx]._selected = checked; }
+function toggleAll(checked) { contacts.forEach(c => c._selected = checked); renderTable(); }
+
+function deleteSelected() {
+  contacts = contacts.filter(c => !c._selected);
+  markDuplicates();
+  renderTable();
+}
+
+function removeDuplicates() {
+  contacts = contacts.filter(c => c._status !== 'duplicate');
+  renderTable();
+}
+
+function clearAll() {
+  contacts = []; source = '';
+  document.getElementById('pasteArea').value = '';
+  document.getElementById('stats').style.display = 'none';
+  document.getElementById('toolbar').style.display = 'none';
+  document.getElementById('tableWrap').style.display = 'none';
+}
+
+/* ── Export ────────────────────────────────────────────────── */
+function exportBundle() {
+  const clean = contacts
+    .filter(c => (c._action || 'create') !== 'skip' && c._status !== 'duplicate')
+    .map(c => ({
+      action: c._action || 'create',
+      target_id: c._match_id || null,
+      model_name: 'contact',
+      name_first: c.name_first || '',
+      name_last: c.name_last || '',
+      email: c.email || '',
+      company: c.company || '',
+      title: c.title || '',
+      phone: c.phone || '',
+      source_name: source,
+      address: (c.address1 || c.city) ? {
+        address1: c.address1 || '', city: c.city || '',
+        state: c.state || '', zip: c.zip || '', country: c.country || ''
+      } : undefined,
+    }));
+
+  const bundle = {
+    type: 'contact_import',
+    source: source,
+    created: new Date().toISOString(),
+    count: clean.length,
+    contacts: clean,
+  };
+
+  const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `contacts-${new Date().toISOString().slice(0, 10)}.bundle.json`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function exportCSV() {
+  const rows = [['first', 'last', 'email', 'company', 'title', 'phone', 'city', 'state', 'zip'].join(',')];
+  for (const c of contacts.filter(c => c._status !== 'duplicate')) {
+    rows.push([c.name_first, c.name_last, c.email, c.company, c.title, c.phone, c.city, c.state, c.zip]
+      .map(v => `"${(v || '').replace(/"/g, '""')}"`)
+      .join(','));
+  }
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `contacts-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function setAction(idx, action) { contacts[idx]._action = action; }
+
+/* ── WC3 Connection ───────────────────────────────────────── */
+let wcConnected = false;
+let csrfToken = '';
+
+async function wcPost(action, params) {
+  const url = document.getElementById('wcUrl').value.replace(/\/$/, '');
+  const resp = await fetch(`${url}/wcapi/_manage/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+    credentials: 'include',
+    body: JSON.stringify({ action, ...params }),
+  });
+  const data = await resp.json();
+  return data?.data || data;
+}
+
+async function checkWcConnection() {
+  const url = document.getElementById('wcUrl').value.replace(/\/$/, '');
+  const status = document.getElementById('wcStatus');
+  try {
+    const resp = await fetch(`${url}/wcapi/me/`, { credentials: 'include' });
+    if (resp.ok) {
+      const data = await resp.json();
+      // Get CSRF token from cookies
+      csrfToken = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '';
+      // Try getting it from the response
+      if (!csrfToken) {
+        const csrfResp = await fetch(`${url}/wcapi/get/?model=setting&limit=1`, { credentials: 'include' });
+        csrfToken = document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '';
+      }
+      wcConnected = true;
+      status.innerHTML = `<span class="wc-status-ok">connected as ${data?.data?.email || 'user'}</span>`;
+      document.getElementById('btnCollisions').disabled = false;
+      document.getElementById('btnSend').disabled = false;
+    } else {
+      status.innerHTML = '<span class="wc-status-off">auth failed — log in to WebClerk first</span>';
+      wcConnected = false;
+    }
+  } catch (e) {
+    status.innerHTML = '<span class="wc-status-off">cannot reach ' + esc(url) + '</span>';
+    wcConnected = false;
+  }
+}
+
+async function checkCollisions() {
+  if (!wcConnected || !contacts.length) return;
+  const statusEl = document.getElementById('wcStatus');
+  statusEl.innerHTML = '<span class="wc-status-ok">checking collisions...</span>';
+
+  try {
+    const batch = contacts.map(c => ({
+      email: c.email || '', name_first: c.name_first || '',
+      name_last: c.name_last || '', company: c.company || '',
+      phone: c.phone || '',
+    }));
+    const result = await wcPost('check_collisions', { contacts: batch });
+
+    if (result?.results) {
+      for (let i = 0; i < result.results.length && i < contacts.length; i++) {
+        const match = result.results[i];
+        if (match.email_match) {
+          contacts[i]._match_id = match.email_match.id;
+          contacts[i]._match_name = `${match.email_match.name_first || ''} ${match.email_match.name_last || ''}`.trim();
+          contacts[i]._action = 'merge';
+        }
+        if (match.org_match) {
+          contacts[i]._org_match_id = match.org_match.id;
+          contacts[i]._org_match_name = match.org_match.display_name;
+        }
+      }
+      renderTable();
+      statusEl.innerHTML = `<span class="wc-status-ok">${result.merges} merges, ${result.creates} new</span>`;
+    }
+  } catch (e) {
+    statusEl.innerHTML = `<span class="wc-status-off">collision check failed: ${e.message}</span>`;
+  }
+}
+
+async function sendToWebClerk() {
+  if (!wcConnected || !contacts.length) return;
+  const statusEl = document.getElementById('wcStatus');
+  statusEl.innerHTML = '<span class="wc-status-ok">importing...</span>';
+
+  const bundle = contacts
+    .filter(c => (c._action || 'create') !== 'skip')
+    .map(c => ({
+      action: c._action || 'create',
+      target_id: c._match_id || null,
+      name_first: c.name_first || '', name_last: c.name_last || '',
+      email: c.email || '', company: c.company || '',
+      title: c.title || '', phone: c.phone || '',
+      source_name: source,
+      address: (c.address1 || c.city) ? {
+        address1: c.address1 || '', city: c.city || '',
+        state: c.state || '', zip: c.zip || '', country: c.country || '',
+      } : undefined,
+    }));
+
+  try {
+    const result = await wcPost('import_bundle', { contacts: bundle, source_name: source });
+    statusEl.innerHTML = `<span class="wc-status-ok">${result.message || 'Done'}</span>`;
+  } catch (e) {
+    statusEl.innerHTML = `<span class="wc-status-off">import failed: ${e.message}</span>`;
+  }
+}
+
+/* ── Load bundle.json ─────────────────────────────────────── */
+function loadBundle() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = () => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const bundle = JSON.parse(reader.result);
+        const list = bundle.contacts || bundle;
+        if (!Array.isArray(list)) { alert('Invalid bundle format'); return; }
+        for (const c of list) {
+          c._status = 'new';
+          c._action = c.action || 'create';
+          if (c.action === 'merge' && c.target_id) {
+            c._match_id = c.target_id;
+            c._match_name = `#${c.target_id}`;
+          }
+        }
+        contacts = contacts.concat(list);
+        source = bundle.source || source || 'bundle.json';
+        markDuplicates();
+        document.getElementById('stats').style.display = 'flex';
+        document.getElementById('toolbar').style.display = 'flex';
+        document.getElementById('tableWrap').style.display = 'block';
+        renderTable();
+      } catch (e) { alert('Parse error: ' + e.message); }
+    };
+    reader.readAsText(input.files[0]);
+  };
+  input.click();
+}
+
+/* ── Load vCards ───────────────────────────────────────────── */
+function loadVCardText(text) {
+  const parsed = parseVCards(text);
+  if (!parsed.length) { alert('No valid contacts found'); return; }
+  contacts = contacts.concat(parsed);
+  markDuplicates();
+  document.getElementById('stats').style.display = 'flex';
+  document.getElementById('toolbar').style.display = 'flex';
+  document.getElementById('tableWrap').style.display = 'block';
+  renderTable();
+}
+
+/* ── File & Drop Handling ─────────────────────────────────── */
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const pasteArea = document.getElementById('pasteArea');
+
+dropzone.addEventListener('click', (e) => {
+  if (e.target === pasteArea || e.target.tagName === 'TEXTAREA') return;
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', () => {
+  for (const file of fileInput.files) {
+    const reader = new FileReader();
+    reader.onload = () => loadVCardText(reader.result);
+    reader.readAsText(file);
+  }
+});
+
+dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+dropzone.addEventListener('drop', (e) => {
+  e.preventDefault(); dropzone.classList.remove('drag-over');
+  for (const file of e.dataTransfer.files) {
+    if (file.name.endsWith('.vcf') || file.type === 'text/vcard') {
+      const reader = new FileReader();
+      reader.onload = () => loadVCardText(reader.result);
+      reader.readAsText(file);
+    }
+  }
+});
+
+/* Paste button */
+pasteArea.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    const text = pasteArea.value.trim();
+    if (text) { loadVCardText(text); pasteArea.value = ''; }
+  }
+});
+
+// Also handle paste of BEGIN:VCARD directly
+pasteArea.addEventListener('paste', (e) => {
+  setTimeout(() => {
+    const text = pasteArea.value.trim();
+    if (text.includes('BEGIN:VCARD')) {
+      loadVCardText(text);
+      pasteArea.value = '';
+    }
+  }, 100);
+});
+</script>
+</body>
+</html>

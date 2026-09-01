@@ -28,6 +28,23 @@ MODEL = "allie:latest"
 EXCHANGE_DIR = pathlib.Path.home() / "Allie" / "exchange"
 EXCHANGE_DIR.mkdir(parents=True, exist_ok=True)
 CONVERSATION_LOG = EXCHANGE_DIR / "conversation.jsonl"
+TEACHINGS_LOG = pathlib.Path.home() / "Allie" / "today" / "teachings.jsonl"
+
+
+def _log_teaching(target: str, category: str, summary: str) -> None:
+    """Append to teachings.jsonl so rightshoe can report what was persisted."""
+    try:
+        TEACHINGS_LOG.parent.mkdir(parents=True, exist_ok=True)
+        entry = {
+            "dt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "target": target,
+            "category": category,
+            "summary": summary[:200],
+        }
+        with open(TEACHINGS_LOG, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except Exception:
+        pass
 
 # System prompt for Allie — who she is and how she should respond
 ALLIE_SYSTEM = """You are Allie, Bill James's personal AI assistant. You work alongside Claude Code
@@ -234,6 +251,8 @@ def handle_request(request):
             conversation_history.append({"role": "user", "content": f"[TEACH] {lesson}"})
             conversation_history.append({"role": "assistant", "content": response})
             log_exchange("allie", response, tool="teach_allie")
+            # Log to teachings.jsonl for rightshoe report
+            _log_teaching("allie", "teach", lesson)
             return {
                 "jsonrpc": "2.0",
                 "id": req_id,

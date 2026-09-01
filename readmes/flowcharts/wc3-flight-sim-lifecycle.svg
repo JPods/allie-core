@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 612 792" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;">
+    <g id="graph0" transform="matrix(0.516153,0,0,0.516153,2.06461,753.933)">
+        <g transform="matrix(4.37677,0,0,1.10033,13.5071,72.3419)">
+            <rect x="-4" y="-1390.93" width="271.57" height="1394.93" style="fill:white;fill-rule:nonzero;"/>
+        </g>
+        <g transform="matrix(-1.0734,-1.37729,1.37729,-1.0734,1802.97,-1734.24)">
+            <path d="M85.5,-826.11L82,-816.11L78.5,-826.11L85.5,-826.11Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+        </g>
+        <g transform="matrix(1.06922e-16,-1.74617,1.74617,1.06922e-16,1532.39,-812.851)">
+            <path d="M85.5,-377.06L82,-367.06L78.5,-377.06L85.5,-377.06Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+        </g>
+        <g id="clust1" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M26,-867.1L132,-867.1C138,-867.1 144,-873.1 144,-879.1L144,-1285.6C144,-1291.6 138,-1297.6 132,-1297.6L26,-1297.6C20,-1297.6 14,-1291.6 14,-1285.6L14,-879.1C14,-873.1 20,-867.1 26,-867.1" style="fill:none;fill-rule:nonzero;stroke:rgb(59,130,246);stroke-width:1px;stroke-dasharray:5,2;"/>
+            <g transform="matrix(1,0,0,1,57.62,-1283.15)">
+                <text x="-33.312px" y="0px" style="font-family:'Helvetica';font-size:11px;">Forward Flow</text>
+            </g>
+        </g>
+        <g id="clust2" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M28,-618.75L136,-618.75C142,-618.75 148,-624.75 148,-630.75L148,-830.1C148,-836.1 142,-842.1 136,-842.1L28,-842.1C22,-842.1 16,-836.1 16,-830.1L16,-630.75C16,-624.75 22,-618.75 28,-618.75" style="fill:none;fill-rule:nonzero;stroke:rgb(245,158,11);stroke-width:1px;stroke-dasharray:5,2;"/>
+            <g transform="matrix(1,0,0,1,63.38,-827.65)">
+                <text x="-36.08px" y="0px" style="font-family:'Helvetica';font-size:11px;">Aging <tspan x="-5.084px 1.233px 3.677px " y="0px 0px 0px ">Tim</tspan>eline</text>
+            </g>
+        </g>
+        <g id="clust3" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M20,-427.1L144,-427.1C150,-427.1 156,-433.1 156,-439.1L156,-572.75C156,-578.75 150,-584.75 144,-584.75L20,-584.75C14,-584.75 8,-578.75 8,-572.75L8,-439.1C8,-433.1 14,-427.1 20,-427.1" style="fill:none;fill-rule:nonzero;stroke:rgb(34,197,94);stroke-width:1px;stroke-dasharray:5,2;"/>
+            <g transform="matrix(1,0,0,1,53.5,-570.3)">
+                <text x="-35.766px" y="0px" style="font-family:'Helvetica';font-size:11px;">Payment &amp; GL</text>
+            </g>
+        </g>
+        <g id="clust4" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M27,-160.75L137,-160.75C143,-160.75 149,-166.75 149,-172.75L149,-381.1C149,-387.1 143,-393.1 137,-393.1L27,-393.1C21,-393.1 15,-387.1 15,-381.1L15,-172.75C15,-166.75 21,-160.75 27,-160.75" style="fill:none;fill-rule:nonzero;stroke:rgb(239,68,68);stroke-width:1px;stroke-dasharray:5,2;"/>
+            <g transform="matrix(1,0,0,1,58.25,-378.65)">
+                <text x="-33.62px" y="0px" style="font-family:'Helvetica';font-size:11px;">Reverse Flow</text>
+            </g>
+        </g>
+        <g id="node1" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <ellipse cx="79" cy="-1354.27" rx="71.17" ry="32.67" style="fill:rgb(240,244,248);stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,79,-1365.22)">
+                <text x="-11.76px" y="0px" style="font-family:'Helvetica';font-size:9px;">Setup</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1355.47)">
+                <text x="-28.771px" y="0px" style="font-family:'Helvetica';font-size:9px;">Item: qqbb200</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1345.72)">
+                <text x="-41.544px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand=0 on_po=0</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1335.97)">
+                <text x="-41.535px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_so=0 available=0</text>
+            </g>
+        </g>
+        <g id="node2" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M114.7,-1269.6L43.3,-1269.6C37.3,-1269.6 31.3,-1263.6 31.3,-1257.6L31.3,-1245.15C31.3,-1239.15 37.3,-1233.15 43.3,-1233.15L114.7,-1233.15C120.7,-1233.15 126.7,-1239.15 126.7,-1245.15L126.7,-1257.6C126.7,-1263.6 120.7,-1269.6 114.7,-1269.6" style="fill:rgb(219,234,254);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,79,-1257.45)">
+                <text x="-22.764px" y="0px" style="font-family:'Helvetica';font-size:9px;">1. Proposal</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1247.7)">
+                <text x="-26.024px" y="0px" style="font-family:'Helvetica';font-size:9px;">15x qqbb200</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1237.95)">
+                <text x="-39.766px" y="0px" style="font-family:'Helvetica';font-size:9px;">No inventory impact</text>
+            </g>
+        </g>
+        <g id="edge1" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M79,-1321.34L79,-1281.22" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M82.5,-1281.52L79,-1271.52L75.5,-1281.52L82.5,-1281.52Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+        </g>
+        <g id="node3" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M123.7,-1175.4L34.3,-1175.4C28.3,-1175.4 22.3,-1169.4 22.3,-1163.4L22.3,-1150.95C22.3,-1144.95 28.3,-1138.95 34.3,-1138.95L123.7,-1138.95C129.7,-1138.95 135.7,-1144.95 135.7,-1150.95L135.7,-1163.4C135.7,-1169.4 129.7,-1175.4 123.7,-1175.4" style="fill:rgb(219,234,254);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,79,-1163.25)">
+                <text x="-38.516px" y="0px" style="font-family:'Helvetica';font-size:9px;">2. Convert to Order</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1153.5)">
+                <text x="-41.443px" y="0px" style="font-family:'Helvetica';font-size:9px;">1<tspan x="-37.101px -32.095px " y="0px 0px ">1 </tspan>ordered, 4 remain</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1143.75)">
+                <text x="-48.625px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_so=1<tspan x="-14.506px -9.501px " y="0px 0px ">1,</tspan> available=-1<tspan x="43.62px " y="0px ">1</tspan></text>
+            </g>
+        </g>
+        <g id="edge2" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M79,-1233.03L79,-1187.08" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M82.5,-1187.26L79,-1177.26L75.5,-1187.26L82.5,-1187.26Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,92.12,-1200.8)">
+                <text x="-10.895px" y="0px" style="font-family:'Helvetica';font-size:8px;">partial</text>
+            </g>
+            <g transform="matrix(1,0,0,1,92.12,-1191.8)">
+                <text x="-13.117px" y="0px" style="font-family:'Helvetica';font-size:8px;">convert</text>
+            </g>
+        </g>
+        <g id="node4" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M120.7,-1090.2L37.3,-1090.2C31.3,-1090.2 25.3,-1084.2 25.3,-1078.2L25.3,-1065.75C25.3,-1059.75 31.3,-1053.75 37.3,-1053.75L120.7,-1053.75C126.7,-1053.75 132.7,-1059.75 132.7,-1065.75L132.7,-1078.2C132.7,-1084.2 126.7,-1090.2 120.7,-1090.2" style="fill:rgb(219,234,254);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,79,-1078.05)">
+                <text x="-39.272px" y="0px" style="font-family:'Helvetica';font-size:9px;">3. Post to Purchase</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1068.3)">
+                <text x="-18.681px" y="0px" style="font-family:'Helvetica';font-size:9px;">1<tspan x="-14.339px -9.334px " y="0px 0px ">1 </tspan>on PO</text>
+            </g>
+            <g transform="matrix(1,0,0,1,79,-1058.55)">
+                <text x="-45.209px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_po=1<tspan x="-10.584px -5.579px " y="0px 0px ">1,</tspan> available=0</text>
+            </g>
+        </g>
+        <g id="edge3" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M79,-1138.53L79,-1102.05" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M82.5,-1102.11L79,-1092.11L75.5,-1102.11L82.5,-1102.11Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,86.5,-1116.35)">
+                <text x="-7.561px" y="0px" style="font-family:'Helvetica';font-size:8px;">post</text>
+            </g>
+        </g>
+        <g id="node5" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M121.45,-996L42.55,-996C36.55,-996 30.55,-990 30.55,-984L30.55,-971.55C30.55,-965.55 36.55,-959.55 42.55,-959.55L121.45,-959.55C127.45,-959.55 133.45,-965.55 133.45,-971.55L133.45,-984C133.45,-990 127.45,-996 121.45,-996" style="fill:rgb(219,234,254);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-983.85)">
+                <text x="-25.014px" y="0px" style="font-family:'Helvetica';font-size:9px;">4. Receive 9</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-974.1)">
+                <text x="-31.515px" y="0px" style="font-family:'Helvetica';font-size:9px;">2 remain on PO</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-964.35)">
+                <text x="-42.794px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand=9, on_po=2</text>
+            </g>
+        </g>
+        <g id="edge4" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M79.56,-1053.63C79.98,-1040.71 80.57,-1022.76 81.06,-1007.68" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M84.55,-1007.97L81.38,-997.86L77.56,-1007.74L84.55,-1007.97Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,93.69,-1021.4)">
+                <text x="-10.895px" y="0px" style="font-family:'Helvetica';font-size:8px;">partial</text>
+            </g>
+            <g transform="matrix(1,0,0,1,93.69,-1012.4)">
+                <text x="-12.895px" y="0px" style="font-family:'Helvetica';font-size:8px;">receive</text>
+            </g>
+        </g>
+        <g id="node6" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M121.07,-911.55L42.92,-911.55C36.92,-911.55 30.92,-905.55 30.92,-899.55L30.92,-887.1C30.92,-881.1 36.92,-875.1 42.92,-875.1L121.07,-875.1C127.07,-875.1 133.07,-881.1 133.07,-887.1L133.07,-899.55C133.07,-905.55 127.07,-911.55 121.07,-911.55" style="fill:rgb(219,234,254);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-899.4)">
+                <text x="-29.516px" y="0px" style="font-family:'Helvetica';font-size:9px;">5. Invoice for 7</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-889.65)">
+                <text x="-31.515px" y="0px" style="font-family:'Helvetica';font-size:9px;">4 remain on SO</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-879.9)">
+                <text x="-42.541px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand=2, on_so=4</text>
+            </g>
+        </g>
+        <g id="edge5" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M82,-959.29L82,-923.14" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-923.3L82,-913.3L78.5,-923.3L85.5,-923.3Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,94,-936.95)">
+                <text x="-10.895px" y="0px" style="font-family:'Helvetica';font-size:8px;">partial</text>
+            </g>
+            <g transform="matrix(1,0,0,1,94,-927.95)">
+                <text x="-12.451px" y="0px" style="font-family:'Helvetica';font-size:8px;">invoice</text>
+            </g>
+        </g>
+        <g id="node7" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M125.57,-814.1L38.42,-814.1C32.42,-814.1 26.42,-808.1 26.42,-802.1L26.42,-789.65C26.42,-783.65 32.42,-777.65 38.42,-777.65L125.57,-777.65C131.57,-777.65 137.57,-783.65 137.57,-789.65L137.57,-802.1C137.57,-808.1 131.57,-814.1 125.57,-814.1" style="fill:rgb(254,243,199);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-801.95)">
+                <text x="-48.026px" y="0px" style="font-family:'Helvetica';font-size:9px;">6a. Statement (15 days)</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-792.2)">
+                <text x="-35.519px" y="0px" style="font-family:'Helvetica';font-size:9px;">Informational only</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-782.45)">
+                <text x="-37.778px" y="0px" style="font-family:'Helvetica';font-size:9px;">No pending, no GL</text>
+            </g>
+        </g>
+        <g transform="matrix(1.74617,0,0,1.74617,419.457,-381.833)">
+            <g id="edge6">
+                <text x="-14.01px" y="0px" style="font-family:'Helvetica';font-size:8px;">15 days</text>
+            </g>
+        </g>
+        <g id="node8" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M128.2,-738.65L35.8,-738.65C29.8,-738.65 23.8,-732.65 23.8,-726.65L23.8,-714.2C23.8,-708.2 29.8,-702.2 35.8,-702.2L128.2,-702.2C134.2,-702.2 140.2,-708.2 140.2,-714.2L140.2,-726.65C140.2,-732.65 134.2,-738.65 128.2,-738.65" style="fill:rgb(254,243,199);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-726.5)">
+                <text x="-50.278px" y="0px" style="font-family:'Helvetica';font-size:9px;">6b. Late Notice (30 days)</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-716.75)">
+                <text x="-45.152px" y="0px" style="font-family:'Helvetica';font-size:9px;">Creates touch + action</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-707)">
+                <g transform="matrix(9,0,0,9,-14.012,0)">
+                </g>
+                <g transform="matrix(9,0,0,9,-11.5115,0)">
+                </g>
+                <text x="-43.526px" y="0px" style="font-family:'Helvetica';font-size:9px;">Still no ﬁnancial event</text>
+            </g>
+        </g>
+        <g id="edge7" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M82,-777.47L82,-750.4" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-750.47L82,-740.47L78.5,-750.47L85.5,-750.47Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,95.88,-755.05)">
+                <text x="-14.01px" y="0px" style="font-family:'Helvetica';font-size:8px;">30 days</text>
+            </g>
+        </g>
+        <g id="node9" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M123.32,-663.2L40.67,-663.2C34.68,-663.2 28.67,-657.2 28.67,-651.2L28.67,-638.75C28.67,-632.75 34.67,-626.75 40.67,-626.75L123.32,-626.75C129.32,-626.75 135.32,-632.75 135.32,-638.75L135.32,-651.2C135.32,-657.2 129.32,-663.2 123.32,-663.2" style="fill:rgb(253,230,138);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-651.05)">
+                <text x="-45.771px" y="0px" style="font-family:'Helvetica';font-size:9px;">6c. Late Fee (6 weeks)</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-641.3)">
+                <g transform="matrix(9,0,0,9,-18.0132,0)">
+                </g>
+                <g transform="matrix(9,0,0,9,-15.5127,0)">
+                </g>
+                <text x="-41.027px" y="0px" style="font-family:'Helvetica';font-size:9px;">1.2% ﬁnance charge</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-631.55)">
+                <text x="-26.76px" y="0px" style="font-family:'Helvetica';font-size:9px;">AR increases</text>
+            </g>
+        </g>
+        <g id="edge8" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M82,-702.02L82,-674.95" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-675.02L82,-665.02L78.5,-675.02L85.5,-675.02Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,96.62,-679.6)">
+                <text x="-14.674px" y="0px" style="font-family:'Helvetica';font-size:8px;">6 weeks</text>
+            </g>
+        </g>
+        <g id="node10" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M136.07,-556.75L27.93,-556.75C21.93,-556.75 15.92,-550.75 15.92,-544.75L15.92,-532.3C15.92,-526.3 21.92,-520.3 27.92,-520.3L136.07,-520.3C142.07,-520.3 148.07,-526.3 148.07,-532.3L148.07,-544.75C148.07,-550.75 142.07,-556.75 136.07,-556.75" style="fill:rgb(209,250,229);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-544.6)">
+                <text x="-22.761px" y="0px" style="font-family:'Helvetica';font-size:9px;">7. Payment</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-534.85)">
+                <text x="-58.078px" y="0px" style="font-family:'Helvetica';font-size:9px;">2% discount + $0.50 write-of<tspan x="55.578px " y="0px ">f</tspan></text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-525.1)">
+                <text x="-38.903px" y="0px" style="font-family:'Helvetica';font-size:9px;">Invoice balance = 0</text>
+            </g>
+        </g>
+        <g id="edge9" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M82,-626.25L82,-568.32" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-568.49L82,-558.49L78.5,-568.49L85.5,-568.49Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,98.5,-603.15)">
+                <text x="-16.449px" y="0px" style="font-family:'Helvetica';font-size:8px;">customer</text>
+            </g>
+            <g transform="matrix(1,0,0,1,98.5,-594.15)">
+                <text x="-8.449px" y="0px" style="font-family:'Helvetica';font-size:8px;">pays</text>
+            </g>
+        </g>
+        <g id="node11" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M115.83,-481.3L48.17,-481.3C42.17,-481.3 36.17,-475.3 36.17,-469.3L36.17,-447.1C36.17,-441.1 42.17,-435.1 48.17,-435.1L115.83,-435.1C121.83,-435.1 127.83,-441.1 127.83,-447.1L127.83,-469.3C127.83,-475.3 121.83,-481.3 115.83,-481.3" style="fill:rgb(209,250,229);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-469.15)">
+                <text x="-30.762px" y="0px" style="font-family:'Helvetica';font-size:9px;">8. Process GLs</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-459.4)">
+                <text x="-38.27px" y="0px" style="font-family:'Helvetica';font-size:9px;">AR, revenue, cash,</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-449.65)">
+                <text x="-36.435px" y="0px" style="font-family:'Helvetica';font-size:9px;">discount, write-of<tspan x="31.434px 33.935px " y="0px 0px ">f,</tspan></text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-439.9)">
+                <text x="-29.518px" y="0px" style="font-family:'Helvetica';font-size:9px;">late fee entries</text>
+            </g>
+        </g>
+        <g id="edge10" transform="matrix(1.74617,0,0,1.74617,542.575,395.125)">
+            <path d="M82,-520.14L82,-493.05" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-493.11L82,-483.11L78.5,-493.11L85.5,-493.11Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,94.38,-497.7)">
+                <text x="-12.229px" y="0px" style="font-family:'Helvetica';font-size:8px;">run GL</text>
+            </g>
+        </g>
+        <g id="node12" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M106.08,-365.1L57.92,-365.1C51.92,-365.1 45.92,-359.1 45.92,-353.1L45.92,-340.65C45.92,-334.65 51.92,-328.65 57.92,-328.65L106.08,-328.65C112.08,-328.65 118.08,-334.65 118.08,-340.65L118.08,-353.1C118.08,-359.1 112.08,-365.1 106.08,-365.1" style="fill:rgb(254,202,202);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-352.95)">
+                <text x="-22.263px" y="0px" style="font-family:'Helvetica';font-size:9px;">9. Return 1</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-343.2)">
+                <text x="-25.756px" y="0px" style="font-family:'Helvetica';font-size:9px;">Credit memo</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-333.45)">
+                <text x="-27.901px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand 2-&gt;3</text>
+            </g>
+        </g>
+        <g id="edge11" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <g transform="matrix(1.10952,0,0,1.10952,-466.454,-634.467)">
+                <path d="M398.829,547.873L428.774,548.162L428.592,261.036L454.289,261.029" style="fill:none;stroke:black;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"/>
+            </g>
+            <g transform="matrix(1.10952,0,0,1.10952,-736.313,-615.899)">
+                <path d="M398.829,547.873L505.588,548.162L506.716,268.743L543.713,241.077" style="fill:none;stroke:black;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,98.5,-411.5)">
+                <text x="-16.449px" y="0px" style="font-family:'Helvetica';font-size:8px;">customer</text>
+            </g>
+            <g transform="matrix(1,0,0,1,98.5,-402.5)">
+                <text x="-15.785px" y="0px" style="font-family:'Helvetica';font-size:8px;">returns 1</text>
+            </g>
+        </g>
+        <g id="node13" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M128.57,-289.65L35.43,-289.65C29.43,-289.65 23.42,-283.65 23.42,-277.65L23.42,-265.2C23.42,-259.2 29.42,-253.2 35.42,-253.2L128.57,-253.2C134.57,-253.2 140.57,-259.2 140.57,-265.2L140.57,-277.65C140.57,-283.65 134.57,-289.65 128.57,-289.65" style="fill:rgb(254,202,202);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-277.5)">
+                <text x="-47.024px" y="0px" style="font-family:'Helvetica';font-size:9px;">10. Scrap returned item</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-267.75)">
+                <text x="-41.772px" y="0px" style="font-family:'Helvetica';font-size:9px;">Inventory adjustment</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-258)">
+                <text x="-50.66px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand 3-&gt;2, loss to GL</text>
+            </g>
+        </g>
+        <g id="edge12" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M82,-328.47L82,-301.4" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-301.47L82,-291.47L78.5,-301.47L85.5,-301.47Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,98.88,-306.05)">
+                <text x="-16.68px" y="0px" style="font-family:'Helvetica';font-size:8px;">damaged</text>
+            </g>
+        </g>
+        <g id="node14" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M118.82,-205.2L45.17,-205.2C39.17,-205.2 33.17,-199.2 33.17,-193.2L33.17,-180.75C33.17,-174.75 39.17,-168.75 45.17,-168.75L118.82,-168.75C124.82,-168.75 130.82,-174.75 130.82,-180.75L130.82,-193.2C130.82,-199.2 124.82,-205.2 118.82,-205.2" style="fill:rgb(254,202,202);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-193.05)">
+                <text x="-41.44px" y="0px" style="font-family:'Helvetica';font-size:9px;">1<tspan x="-37.099px -32.093px " y="0px 0px ">1.</tspan> Refund customer</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-183.3)">
+                <text x="-38.276px" y="0px" style="font-family:'Helvetica';font-size:9px;">Outbound payment</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-173.55)">
+                <text x="-40.518px" y="0px" style="font-family:'Helvetica';font-size:9px;">against credit memo</text>
+            </g>
+        </g>
+        <g id="edge13" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M82,-252.94L82,-216.79" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-216.95L82,-206.95L78.5,-216.95L85.5,-216.95Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,93.62,-230.6)">
+                <text x="-9.338px" y="0px" style="font-family:'Helvetica';font-size:8px;">issue</text>
+            </g>
+            <g transform="matrix(1,0,0,1,93.62,-221.6)">
+                <text x="-11.342px" y="0px" style="font-family:'Helvetica';font-size:8px;">refund</text>
+            </g>
+        </g>
+        <g id="node15" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M127.07,-128.75L36.92,-128.75C30.92,-128.75 24.92,-122.75 24.92,-116.75L24.92,-94.55C24.92,-88.55 30.92,-82.55 36.92,-82.55L127.07,-82.55C133.07,-82.55 139.07,-88.55 139.07,-94.55L139.07,-116.75C139.07,-122.75 133.07,-128.75 127.07,-128.75" style="fill:rgb(224,231,255);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-116.6)">
+                <text x="-43.031px" y="0px" style="font-family:'Helvetica';font-size:9px;">12. Clean up orphans</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-106.85)">
+                <text x="-42.528px" y="0px" style="font-family:'Helvetica';font-size:9px;">Cancel 4 on proposal</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-97.1)">
+                <text x="-48.276px" y="0px" style="font-family:'Helvetica';font-size:9px;">Close 4 on SO, 2 on PO</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-87.35)">
+                <text x="-48.043px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand=2, available=2</text>
+            </g>
+        </g>
+        <g id="edge14" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M82,-168.37L82,-140.39" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-140.55L82,-130.55L78.5,-140.55L85.5,-140.55Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,97,-145.15)">
+                <text x="-15.123px" y="0px" style="font-family:'Helvetica';font-size:8px;">clean up</text>
+            </g>
+        </g>
+        <g id="node16" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <ellipse cx="82" cy="-25.77" rx="47.31" ry="25.77" style="fill:rgb(209,250,229);stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,82,-31.85)">
+                <text x="-25.515px" y="0px" style="font-family:'Helvetica';font-size:9px;">Clean Books</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-22.1)">
+                <text x="-22.649px" y="0px" style="font-family:'Helvetica';font-size:9px;">on_hand=2</text>
+            </g>
+            <g transform="matrix(1,0,0,1,82,-12.35)">
+                <text x="-22.893px" y="0px" style="font-family:'Helvetica';font-size:9px;">available=2</text>
+            </g>
+        </g>
+        <g id="edge15" transform="matrix(1.74617,0,0,1.74617,810.507,-352.79)">
+            <path d="M82,-82.12L82,-63.3" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M85.5,-63.5L82,-53.5L78.5,-63.5L85.5,-63.5Z" style="fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+        </g>
+        <g id="node17" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M257.57,-1279.35L152.43,-1279.35L152.43,-1223.4L263.57,-1223.4L263.57,-1273.35L257.57,-1279.35Z" style="fill:rgb(245,243,255);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M257.57,-1279.35L257.57,-1273.35" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M263.57,-1273.35L257.57,-1273.35" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,208,-1267.2)">
+                <text x="-34.521px" y="0px" style="font-family:'Helvetica';font-size:9px;">Pending Records</text>
+            </g>
+            <g transform="matrix(1,0,0,1,208,-1257.45)">
+                <text x="-40.028px" y="0px" style="font-family:'Helvetica';font-size:9px;">Stage every change</text>
+            </g>
+            <g transform="matrix(1,0,0,1,208,-1247.7)">
+                <text x="-47.936px" y="0px" style="font-family:'Helvetica';font-size:9px;">Quantity shown <tspan x="16.44px 21.938px " y="0px 0px ">TW</tspan>ICE:</text>
+            </g>
+            <g transform="matrix(1,0,0,1,208,-1237.95)">
+                <text x="-25.016px" y="0px" style="font-family:'Helvetica';font-size:9px;">1. <tspan x="-15.502px -9.499px " y="0px 0px ">Af</tspan>ter save</text>
+            </g>
+            <g transform="matrix(1,0,0,1,208,-1228.2)">
+                <text x="-47.037px" y="0px" style="font-family:'Helvetica';font-size:9px;">2. <tspan x="-37.523px -31.52px " y="0px 0px ">Af</tspan>ter pending applies</text>
+            </g>
+        </g>
+        <g id="edge16" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M169.65,-1222.96C148.26,-1207.67 122.25,-1189.08 103.59,-1175.75" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;stroke-dasharray:1,5;"/>
+        </g>
+        <g id="node18" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M230.95,-1099.95L155.05,-1099.95L155.05,-1044L236.95,-1044L236.95,-1093.95L230.95,-1099.95Z" style="fill:rgb(245,243,255);fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M230.95,-1099.95L230.95,-1093.95" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <path d="M236.95,-1093.95L230.95,-1093.95" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;"/>
+            <g transform="matrix(1,0,0,1,196,-1087.8)">
+                <text x="-32.019px" y="0px" style="font-family:'Helvetica';font-size:9px;">Console Screen</text>
+            </g>
+            <g transform="matrix(1,0,0,1,196,-1078.05)">
+                <text x="-29.265px" y="0px" style="font-family:'Helvetica';font-size:9px;">Item quantities</text>
+            </g>
+            <g transform="matrix(1,0,0,1,196,-1068.3)">
+                <text x="-25.596px" y="0px" style="font-family:'Helvetica';font-size:9px;">T<tspan x="-20.428px -17.431px " y="0px 0px ">ra</tspan>nsactions</text>
+            </g>
+            <g transform="matrix(1,0,0,1,196,-1058.55)">
+                <text x="-32.77px" y="0px" style="font-family:'Helvetica';font-size:9px;">Pending records</text>
+            </g>
+            <g transform="matrix(1,0,0,1,196,-1048.8)">
+                <text x="-20.595px" y="0px" style="font-family:'Helvetica';font-size:9px;">GL<tspan x="-8.919px -6.418px " y="0px 0px "> e</tspan>ntries</text>
+            </g>
+        </g>
+        <g id="edge17" transform="matrix(1.74617,0,0,1.74617,63.8244,1189.67)">
+            <path d="M162.1,-1043.56C143.2,-1028.27 120.22,-1009.68 103.73,-996.35" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:1px;stroke-dasharray:1,5;"/>
+        </g>
+    </g>
+</svg>

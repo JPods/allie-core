@@ -397,15 +397,78 @@ def main():
                         cur.execute("""
                             INSERT INTO observations (dt_created, observer, domain, category, content, metadata)
                             VALUES (%s, 'alice', 'WC3', 'code_quality', %s, %s)
-                        """, (now_ms, msg, json.dumps({'dedup_key': dedup, 'report': report.get('summary', [])})))
+                        """, (_now_ms(), msg, json.dumps({'dedup_key': dedup, 'report': report.get('summary', [])})))
                         allie.commit()
                         results['code_standards'] = 1
                         log.info("  Code standards: %d violations across %d files", violations, report.get('files_with_violations', 0))
                     else:
                         results['code_standards'] = 0
-        except Exception:
-            log.warning("Code standards scan skipped (import failed)")
+        except Exception as e:
+            log.warning("Code standards scan skipped: %s: %s", type(e).__name__, e)
             results['code_standards'] = -1
+
+        # 8. Schema drift detection — sample records, check for unknown JSON keys
+        try:
+            ENVELOPE_FIELDS = ['metadata', 'refs', 'prefs', 'config', 'comments']
+            # Sample models that have JSON envelopes
+            SAMPLE_MODELS = [
+                ('core_contact', 'contact'),
+                ('orgs_orgbase', 'customer'),
+                ('products_item', 'item'),
+                ('transactions_invoice', 'invoice'),
+                ('transactions_order', 'order'),
+                ('core_action', 'action'),
+                ('core_setting', 'setting'),
+                ('docs_document', 'document'),
+            ]
+            drift_count = 0
+            with ce.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+                for table, model_key in SAMPLE_MODELS:
+                    for env_field in ENVELOPE_FIELDS:
+                        try:
+                            cur.execute(f"""
+                                SELECT id, {env_field}
+                                FROM {table}
+                                WHERE {env_field} IS NOT NULL
+                                  AND is_deleted = false
+                                LIMIT 50
+                            """)
+                        except Exception:
+                            ce.rollback()
+                            continue
+                        rows = cur.fetchall()
+                        for row in rows:
+                            env = row.get(env_field)
+                            if not isinstance(env, dict):
+                                continue
+                            # Check for keys in prefs.userdefined._moved_from_*
+                            # (evidence of prior enforcement) — that's expected, not drift
+                            if env_field == 'prefs':
+                                ud = env.get('userdefined', {})
+                                moved_keys = [k for k in ud if k.startswith('_moved_from_')]
+                                if moved_keys:
+                                    drift_count += len(moved_keys)
+
+            if drift_count > 0:
+                dedup = f"schema-drift-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}"
+                with allie.cursor() as cur:
+                    cur.execute("SELECT 1 FROM observations WHERE category='schema_drift' AND metadata->>'dedup_key'=%s", (dedup,))
+                    if not cur.fetchone():
+                        msg = f"Schema drift: {drift_count} moved key groups found in prefs.userdefined._moved_from_* — review for schema promotion"
+                        cur.execute("""
+                            INSERT INTO observations (dt_created, observer, domain, category, content, metadata)
+                            VALUES (%s, 'alice', 'WC3', 'schema_drift', %s, %s)
+                        """, (_now_ms(), msg, json.dumps({'dedup_key': dedup, 'drift_count': drift_count})))
+                        allie.commit()
+                        results['schema_drift'] = drift_count
+                        log.info("  Schema drift: %d moved key groups detected", drift_count)
+                    else:
+                        results['schema_drift'] = 0
+            else:
+                results['schema_drift'] = 0
+        except Exception as e:
+            log.warning("Schema drift detection skipped: %s: %s", type(e).__name__, e)
+            results['schema_drift'] = -1
 
         total_new = sum(v for v in results.values() if v > 0)
         elapsed = time.time() - ts_start

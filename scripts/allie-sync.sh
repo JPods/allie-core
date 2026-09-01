@@ -3,7 +3,7 @@
 #
 # Drives:
 #   Internal  $HOME/Allie           — always-available primary (working copy)
-#   5TB       /Volumes/Allie        — home base archive
+#   5TB       /Volumes/Andi_5T/Allie — home base archive
 #   Lexar     /Volumes/ALLIE_LEXAR  — travel companion
 #
 # Usage:
@@ -14,7 +14,7 @@
 #   allie-sync.sh pull      — pull all mounted drives → internal (newest wins)
 
 INTERNAL="$HOME/Allie"
-FIVTB="/Volumes/Allie"
+FIVTB="/Volumes/Andi_5T/Allie"
 LEXAR="/Volumes/ALLIE_LEXAR"
 
 RSYNC_EXCLUDES=(

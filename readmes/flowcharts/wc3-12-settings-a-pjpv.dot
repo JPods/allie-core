@@ -1,0 +1,146 @@
+// WC3 Settings & PJPV — Configuration Architecture
+// Setting model → Pydantic schemas → UI rendering
+// Render: dot -Tpdf wc3-12-settings-a-pjpv.dot -o wc3-settings-pjpv.pdf
+
+// CodeMap revision: 1 — 2026-08-26
+
+digraph wc3_settings_pjpv {
+    size="10,7.5"
+    ratio="compress"
+
+    rankdir=TB
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=9 style=filled]
+    edge [fontname="Helvetica" fontsize=7]
+    label="WC3 — Settings & PJPV Architecture\nPydantic JSON Path Value: one model, one engine, one path"
+    labelloc=t
+    fontsize=14
+    pad=0.5
+
+    // ── Setting Model ──
+    subgraph cluster_setting {
+        label="Setting Model\napps/core/models/setting.py"
+        style=filled fillcolor="#FEF9E7" color="#F9E79F"
+        fontsize=9
+
+        setting [label="Setting\n(BaseModel)\n\nname\npurpose\nscope\nrole\norg_id\ncontact_id\nparent_model\nconfig (JSON)" shape=box fillcolor="#F4D03F" fontsize=9]
+    }
+
+    // ── Scope Hierarchy ──
+    subgraph cluster_scope {
+        label="Scope Hierarchy\n(first match wins)"
+        style=filled fillcolor="#F4ECF7" color="#D2B4DE"
+        fontsize=9
+
+        s_user [label="user\ncontact_id=8\n(Bill's layout)" shape=box fillcolor="#E8DAEF"]
+        s_role [label="role\nrole=\"admin\"\n(all admins)" shape=box fillcolor="#D7BDE2"]
+        s_org [label="org\norg_id=1\n(this business)" shape=box fillcolor="#C39BD3"]
+        s_system [label="system\n(global default)" shape=box fillcolor="#AF7AC5" fontcolor=white]
+
+        s_user -> s_role [label="not found" style=dashed]
+        s_role -> s_org [label="not found" style=dashed]
+        s_org -> s_system [label="not found" style=dashed]
+    }
+
+    // ── Purpose Categories ──
+    subgraph cluster_purposes {
+        label="Purpose Categories (35+ types)"
+        style=filled fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=9
+
+        p_layout [label="Layout & Display\ndetail_layout\ncompact_layout\nlist_column_config\nfield_registry\nview_edit\nfield_access\nworkbench_fields" shape=box fillcolor="#D6EAF8" fontsize=8]
+        p_defaults [label="Defaults\ndb_defaults\nsales_defaults\npurchase_defaults\naccounting_defaults\naccounting_interface\nprint_defaults" shape=box fillcolor="#D6EAF8" fontsize=8]
+        p_admin [label="Admin & System\nadmin_selectlist\nReact_settings\nschema_map\nfeature (flags)\ncalculated_function\nseed" shape=box fillcolor="#D6EAF8" fontsize=8]
+        p_alice [label="Alice & AI\nalice_pending\nalice_log\nalice_coaching\nai_prompt_history" shape=box fillcolor="#D6EAF8" fontsize=8]
+        p_other [label="Other\nkeywords, search\nqa_counters\ncampaign\nsync_config\ngantt_defaults" shape=box fillcolor="#D6EAF8" fontsize=8]
+    }
+
+    // ── Resolver ──
+    resolver [label="resolve_setting()\n\nGET /wcapi/setting/resolve/\n?purpose=...&parent_model=...\n\nReturns: {config, scope}" shape=diamond fillcolor="#ABEBC6"]
+
+    // ── PJPV Layer ──
+    subgraph cluster_pjpv {
+        label="PJPV — Pydantic JSON Path Value\n4-layer discipline"
+        style=filled fillcolor="#FDF2E9" color="#F5CBA7"
+        fontsize=9
+        fontname="Helvetica Bold"
+
+        pj_pydantic [label="Layer 1: Pydantic Schema\nField types, labels,\nformatting, widgets\n(code, not DB)" shape=box fillcolor="#FAD7A0"]
+        pj_json [label="Layer 2: JSON Envelope\nAuthoritative data\nconfig, refs, metadata,\nprefs, totals, price, cost" shape=box fillcolor="#F8C471"]
+        pj_path [label="Layer 3: Path\nDot-notation access\ntotals.subtotal\nprice.unit\nrefs.contacts[0].id" shape=box fillcolor="#F5B041"]
+        pj_value [label="Layer 4: Value\nSingle source of truth\nJSON authoritative\nscalars = indexes" shape=box fillcolor="#EB984E" fontcolor=white]
+
+        pj_pydantic -> pj_json [label="declares\nenvelope structure"]
+        pj_json -> pj_path [label="accessed\nby dot-path"]
+        pj_path -> pj_value [label="resolves to\nsingle value"]
+    }
+
+    // ── Schema Map ──
+    schema_map [label="schema_map Setting\n\nMaps model_key →\nPydantic schema class\n\nOne registry for\nall models" shape=note fillcolor="#FDFEFE"]
+
+    // ── Three-Tier Selectlist ──
+    subgraph cluster_selectlist {
+        label="Three-Tier Selectlist Inheritance\n(built 2026-08-26)"
+        style=filled fillcolor="#E8F8F5" color="#A3E4D7"
+        fontsize=9
+
+        sl_model [label="Tier 1: Model Default\nPydantic schema declares\nfield options for model" shape=box fillcolor="#D5F5E3"]
+        sl_category [label="Tier 2: Category Profile\nSetting overrides per\ncategory (e.g. org_type)" shape=box fillcolor="#A9DFBF"]
+        sl_record [label="Tier 3: Record Override\nIndividual record's\nconfig.selectlists" shape=box fillcolor="#82E0AA"]
+
+        sl_model -> sl_category [label="overridden by"]
+        sl_category -> sl_record [label="overridden by"]
+    }
+
+    // ── Field Behaviors ──
+    subgraph cluster_behaviors {
+        label="Field Behavior Engine\nservices/pjpv_field_behaviors.py"
+        style=filled fillcolor="#FDEDEC" color="#F5B7B1"
+        fontsize=9
+
+        fb_auto [label="Auto-Detection\nFieldType → behavior\nBooleanField → boolean\nDecimalField → currency\nJSONField → json-tree\nFK → lookup" shape=box fillcolor="#FADBD8" fontsize=8]
+        fb_override [label="Setting Overrides\nfield_registry purpose\noverrides auto-detect\n(Setting always wins)" shape=box fillcolor="#FADBD8" fontsize=8]
+        fb_groups [label="Field Groups\nidentity\ncommunication\nfinancial\nstatus\ndates\nsystem\njson (envelopes)" shape=box fillcolor="#FADBD8" fontsize=8]
+    }
+
+    // ── UI Rendering ──
+    subgraph cluster_ui {
+        label="Three Rendering Paths"
+        style=filled fillcolor="#E3F2FD" color="#90CAF9"
+        fontsize=9
+
+        ui_json [label="ui.json\nBusiness forms\nDynamicDetail\n(most models)" shape=box fillcolor="#BBDEFB"]
+        ui_db [label="db.json\nAdmin / DataBrowser\nPanelTable\n(all models)" shape=box fillcolor="#BBDEFB"]
+        ui_tsx [label="ui.tsx\nComplex interaction\nCustom components\n(few models)" shape=box fillcolor="#BBDEFB"]
+    }
+
+    // ── DynamicDetail ──
+    dd [label="DynamicDetail\n\n1. resolve Setting\n2. get field behaviors\n3. get field groups\n4. render layout\n\n45K lines → 1.7K lines" shape=box fillcolor="#90CAF9" fontsize=9]
+
+    // ── Edges ──
+    setting -> resolver [color="#27AE60" penwidth=2]
+    {s_user s_role s_org s_system} -> resolver [style=invis]
+    setting -> s_user [label="scope\nhierarchy" color="#8E44AD" style=dashed]
+
+    setting -> p_layout [style=invis]
+    setting -> p_defaults [style=invis]
+    setting -> p_admin [style=invis]
+
+    resolver -> dd [label="config +\nscope" color="#27AE60" penwidth=2]
+
+    pj_pydantic -> fb_auto [label="declares\ntypes" color="#E67E22"]
+    schema_map -> pj_pydantic [label="maps model\nto schema" color="#E67E22"]
+    p_admin -> schema_map [label="contains" style=dashed]
+
+    fb_auto -> dd [color="#E74C3C"]
+    fb_override -> dd [color="#E74C3C"]
+    fb_groups -> dd [color="#E74C3C"]
+    p_layout -> fb_override [label="field_registry\npurpose" style=dashed]
+
+    dd -> ui_json [label="business\nforms" color="#2980B9"]
+    dd -> ui_db [label="admin" color="#2980B9"]
+    dd -> ui_tsx [label="complex" color="#2980B9" style=dashed]
+
+    sl_model -> fb_auto [label="options\nsource" style=dashed color="#1ABC9C"]
+}

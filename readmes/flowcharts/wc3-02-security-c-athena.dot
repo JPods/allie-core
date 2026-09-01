@@ -1,0 +1,135 @@
+// WC3 Athena — Integrity & Self-Defense System
+// Sign → Verify → FAULT cycle
+// Render: dot -Tpdf wc3-02-security-c-athena.dot -o wc3-athena.pdf
+
+// CodeMap revision: 1 — 2026-08-26
+
+digraph wc3_athena {
+    size="10,7.5"
+    ratio="compress"
+
+    rankdir=TB
+    fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+    fontsize=12
+    bgcolor="white"
+    pad=0.4
+    nodesep=0.5
+    ranksep=0.6
+    splines=true
+
+    node [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        style="filled,rounded"
+        shape=box
+        penwidth=1.2
+        color="#555555"
+        margin="0.12,0.06"
+    ]
+
+    edge [
+        fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
+        fontsize=10
+        penwidth=2.0
+        arrowhead=normal
+        arrowsize=1.4
+        color="#666666"
+        fontcolor="#444444"
+    ]
+
+    label="WC3 — Athena Integrity System\nSign · Verify · FAULT — Self-defense against tampering"
+    labelloc=t
+
+    // ── Sign Phase ──
+    subgraph cluster_sign {
+        label="Sign Phase"
+        style="filled,rounded" fillcolor="#E8F8F5" color="#A3E4D7"
+        fontsize=10
+
+        sign_cmd [label="athena_sign\nmanagement command\n--sign-all" fillcolor="#ABEBC6"]
+        hash_files [label="Hash protected files\nSHA-256 per file\nstatic, templates,\nscripts, config" fillcolor="#ABEBC6"]
+        store_sig [label="Store signatures\nDocument(ida=\n'athena-manifest')\nconfig.checkpoints[]" fillcolor="#ABEBC6"]
+
+        sign_cmd -> hash_files -> store_sig
+    }
+
+    // ── Verify Phase ──
+    subgraph cluster_verify {
+        label="Verify Phase (every 4 hours)"
+        style="filled,rounded" fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=10
+
+        scheduler [label="Celery beat\ncrontab(hour='*/4')\ntask_athena_verify()" fillcolor="#D6EAF8"]
+        read_sigs [label="Read stored\nsignatures" fillcolor="#D6EAF8"]
+        rehash [label="Re-hash current\nfile contents" fillcolor="#D6EAF8"]
+        compare [label="Compare\nhash == stored?" shape=diamond fillcolor="#D6EAF8"]
+
+        scheduler -> read_sigs -> rehash -> compare
+    }
+
+    // ── Match ──
+    match [label="PASS\nAll signatures match\nNo action needed" fillcolor="#ABEBC6" shape=ellipse]
+
+    // ── FAULT Phase ──
+    subgraph cluster_fault {
+        label="FAULT — Tampering Detected"
+        style="filled,rounded" fillcolor="#FDEDEC" color="#F5B7B1"
+        fontsize=10
+
+        mismatch [label="MISMATCH\nFile changed without\nauthorized re-sign" fillcolor="#F5B7B1"]
+        write_fault [label="Write FAULT file\nprocess/inbox/\nYYYYMMDDTHHMMSS-fault.md" fillcolor="#FADBD8"]
+        alert [label="Alert\nAllie nightly reads\nunresolved FAULTs →\nouch-list candidate" fillcolor="#FADBD8"]
+        lock [label="Optional: Lock\nPrevent further\nmodification until\nreviewed" fillcolor="#FADBD8"]
+
+        mismatch -> write_fault -> alert
+        mismatch -> lock [style=dashed]
+    }
+
+    // ── Recovery ──
+    subgraph cluster_recovery {
+        label="Recovery"
+        style="filled,rounded" fillcolor="#FEF9E7" color="#F9E79F"
+        fontsize=10
+
+        investigate [label="Investigate\nWhat changed?\nWho changed it?\nWas it authorized?" fillcolor="#FCF3CF"]
+        resign [label="Re-sign\nathena_sign --sign-all\n(authorized change)" fillcolor="#FCF3CF"]
+        restore [label="Restore\ngit checkout\n(unauthorized change)" fillcolor="#FCF3CF"]
+        resolve [label="Resolve FAULT\nresolved_at = now\nWrite TFTS if arc" fillcolor="#ABEBC6"]
+
+        investigate -> resign [label="authorized"]
+        investigate -> restore [label="unauthorized"]
+        resign -> resolve
+        restore -> resolve
+    }
+
+    // ── Protected Files ──
+    subgraph cluster_protected {
+        label="What Athena Protects"
+        style="filled,rounded" fillcolor="#F4ECF7" color="#D2B4DE"
+        fontsize=9
+
+        p_static [label="static_file\nJS, CSS bundles\nfrontend dist/" fillcolor="#E8DAEF" fontsize=9]
+        p_wcapi [label="wcapi\nAPI code\nendpoint configs" fillcolor="#E8DAEF" fontsize=9]
+        p_robotics [label="robotics\nRobot/pod code\nNora, Natalie" fillcolor="#E8DAEF" fontsize=9]
+        p_allie [label="allie\nAllie agent\nscripts, configs" fillcolor="#E8DAEF" fontsize=9]
+    }
+
+    // ── Non-Standing Actions ──
+    nonstanding [label="Non-Standing Actions\nActions outside normal\noperating authority\n→ Athena must sign" shape=note fillcolor="#F5CBA7"]
+
+    // ── Edges ──
+    compare -> match [label="match" color="#27AE60"]
+    compare -> mismatch [label="mismatch" color="#E74C3C" penwidth=2]
+    alert -> investigate [label="next session" style=dashed]
+    resolve -> store_sig [label="new baseline" style=dashed color="#27AE60"]
+
+    sign_cmd -> p_static [style=dotted]
+    sign_cmd -> p_wcapi [style=dotted]
+    sign_cmd -> p_robotics [style=dotted]
+    sign_cmd -> p_allie [style=dotted]
+
+    nonstanding -> sign_cmd [label="requires\nreview + sign" color="#E67E22"]
+
+    // ── Cross-references ──
+    xref [label="See also:\n· Request Security (p.3)\n· Data Conversion Pipeline (p.36)\n· Signin Register (p.2)" shape=note fillcolor="#F4ECF7" fontsize=8]
+}

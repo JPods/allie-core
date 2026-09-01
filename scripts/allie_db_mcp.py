@@ -18,7 +18,9 @@ Database: allie on localhost, user williamjames
 """
 
 import asyncio
+import datetime
 import json
+import pathlib
 import time
 import re
 import psycopg2
@@ -27,6 +29,24 @@ import psycopg2.extras
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
+
+TEACHINGS_LOG = pathlib.Path.home() / "Allie" / "today" / "teachings.jsonl"
+
+
+def _log_teaching(target: str, category: str, summary: str) -> None:
+    """Append to teachings.jsonl so rightshoe can report what was persisted."""
+    try:
+        TEACHINGS_LOG.parent.mkdir(parents=True, exist_ok=True)
+        entry = {
+            "dt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "target": target,
+            "category": category,
+            "summary": summary[:200],
+        }
+        with open(TEACHINGS_LOG, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except Exception:
+        pass
 
 DB_CONFIG = {
     "dbname": "allie",
@@ -280,6 +300,7 @@ async def call_tool(name: str, arguments: dict):
                 )
                 row_id = cur.fetchone()[0]
                 conn.commit()
+                _log_teaching("allie_db", f"remember:{category}", f"[{domain}] {title}")
                 return [TextContent(
                     type="text",
                     text=json.dumps({"status": "ok", "id": row_id}),

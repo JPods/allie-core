@@ -1,0 +1,119 @@
+digraph wc2_transaction_packing {
+    size="10,7.5"
+    ratio="compress"
+
+
+    rankdir=LR
+    node [fontname="Helvetica" fontsize=10]
+    edge [fontname="Helvetica" fontsize=8 color="#666666"]
+    graph [bgcolor="white" pad=0.3]
+
+    labelloc=t
+    label="WC2 Transaction → WC3 (Order/Invoice/Proposal/Purchase + Lines)"
+    fontname="Helvetica Bold"
+    fontsize=14
+
+    // WC2 Header
+    subgraph cluster_wc2_header {
+        label="WC2 Header (Order/Invoice/Proposal/PO)"
+        style=filled fillcolor="#fff3e0" color="#e65100"
+        fontname="Helvetica Bold" fontsize=11
+
+        h_id [label="idNum" shape=box style=filled fillcolor="#ffcc80"]
+        h_cust [label="customerID\nvendorID\nrepID" shape=box style=filled fillcolor="#ffcc80"]
+        h_addr [label="company\nattention\naddress1+2\ncity/state/zip\nemail, phone" shape=box style=filled fillcolor="#ffcc80"]
+        h_terms [label="terms\nshipVia" shape=box style=filled fillcolor="#ffcc80"]
+        h_date [label="dateDocument" shape=box style=filled fillcolor="#ffcc80"]
+        h_money [label="amount (subtotal)\nsalesTax\nshipTotal\ntotal\nbalanceDue\ntotalCost" shape=box style=filled fillcolor="#ffe0b2"]
+        h_status [label="status\ncomplete" shape=box style=filled fillcolor="#ffcc80"]
+    }
+
+    // WC2 Line
+    subgraph cluster_wc2_line {
+        label="WC2 Line (OrderLine/InvoiceLine/etc)"
+        style=filled fillcolor="#fce4ec" color="#c62828"
+        fontname="Helvetica Bold" fontsize=11
+
+        l_parent [label="idNumOrder\nidNumInvoice\nidNumProposal\nidNumPO" shape=box style=filled fillcolor="#f8bbd0"]
+        l_item [label="itemNum\nlineNum\ndescription\nunitOfMeasure" shape=box style=filled fillcolor="#f8bbd0"]
+        l_qty [label="qty\nqtyBackLogged\nqtyRemain" shape=box style=filled fillcolor="#f8bbd0"]
+        l_price [label="unitPrice / price\ndiscount\nextendedSell / amount" shape=box style=filled fillcolor="#f8bbd0"]
+        l_cost [label="unitCost / costEach\nextendedCost" shape=box style=filled fillcolor="#f8bbd0"]
+    }
+
+    // WC3 Header
+    subgraph cluster_wc3_header {
+        label="WC3 TransactionBaseModel"
+        style=filled fillcolor="#e3f2fd" color="#1565c0"
+        fontname="Helvetica Bold" fontsize=11
+
+        wh_ida [label="ida" shape=box style=filled fillcolor="#90caf9"]
+        wh_fks [label="customer_id (FK)\nvendor_id (FK)\ncontact_id (FK)" shape=box style=filled fillcolor="#90caf9"]
+        wh_scalars [label="company\nattention\naddress_full\nemail, phone\nterms\nship_via\nstatus" shape=box style=filled fillcolor="#90caf9"]
+        wh_total [label="total (Decimal)\nbalance (Decimal)" shape=box style=filled fillcolor="#90caf9"]
+        wh_dt [label="dt_created (epoch ms)" shape=box style=filled fillcolor="#90caf9"]
+
+        subgraph cluster_totals {
+            label="totals (JSON)"
+            style=filled fillcolor="#bbdefb" color="#1976d2"
+            fontsize=9
+            totals_json [label="subtotal = amount\ntax = salesTax\nshipping = shipTotal\ntotal = total\nbalance = balanceDue\ncost = totalCost\nreceived = total - balance\ndiscount, taxable,\nother, margin, margin_pc" shape=box style=filled fillcolor="#e3f2fd"]
+        }
+    }
+
+    // WC3 Line
+    subgraph cluster_wc3_line {
+        label="WC3 BaseSellLineModel / BaseExecLineModel"
+        style=filled fillcolor="#fce4ec" color="#c62828"
+        fontname="Helvetica Bold" fontsize=11
+
+        wl_parent [label="parent_id (FK)" shape=box style=filled fillcolor="#f8bbd0"]
+        wl_item_fk [label="item_fk_id (FK)\nline_number" shape=box style=filled fillcolor="#f8bbd0"]
+
+        subgraph cluster_item_json {
+            label="item (JSON)"
+            style=filled fillcolor="#f8bbd0" color="#ad1457"
+            fontsize=9
+            item_json [label="item_id = FK pk\nida_item = itemNum\ndescription\nunit_measure\nline_number" shape=box style=filled fillcolor="#fce4ec"]
+        }
+
+        subgraph cluster_qty_json {
+            label="quantity (JSON)"
+            style=filled fillcolor="#f8bbd0" color="#ad1457"
+            fontsize=9
+            qty_json [label="active = qty\nstaged = qty\nremaining = qtyBackLogged" shape=box style=filled fillcolor="#fce4ec"]
+        }
+
+        subgraph cluster_price_json {
+            label="price (JSON) — sell lines only"
+            style=filled fillcolor="#f8bbd0" color="#ad1457"
+            fontsize=9
+            price_json [label="unit = unitPrice\nunit_base = unitPrice\ndiscount_percent = discount\nextended = extendedSell" shape=box style=filled fillcolor="#fce4ec"]
+        }
+
+        subgraph cluster_cost_json {
+            label="cost (JSON)"
+            style=filled fillcolor="#f8bbd0" color="#ad1457"
+            fontsize=9
+            cost_json [label="unit = unitCost\nunit_base = unitCost\nextended = extendedCost" shape=box style=filled fillcolor="#fce4ec"]
+        }
+    }
+
+    // Header edges
+    h_id -> wh_ida [label="natural key" color="#e65100" penwidth=2]
+    h_cust -> wh_fks [label="FK lookup"]
+    h_addr -> wh_scalars [label="direct"]
+    h_terms -> wh_scalars [label="direct"]
+    h_date -> wh_dt [label="→ epoch ms"]
+    h_money -> totals_json [label="packed" color="#1565c0" style=dashed]
+    h_money -> wh_total [label="total+balance" color="#1565c0"]
+    h_status -> wh_scalars [label="mapped"]
+
+    // Line edges
+    l_parent -> wl_parent [label="FK lookup" color="#c62828" penwidth=2]
+    l_item -> item_json [label="packed" color="#ad1457" style=dashed]
+    l_item -> wl_item_fk [label="FK lookup"]
+    l_qty -> qty_json [label="packed" color="#ad1457" style=dashed]
+    l_price -> price_json [label="packed" color="#ad1457" style=dashed]
+    l_cost -> cost_json [label="packed" color="#ad1457" style=dashed]
+}

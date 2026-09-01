@@ -295,9 +295,9 @@ Each Andi gets one Connection record on WC_HQ:
 }
 ```
 
-### DataBrowser as the Interface
+### databrowser as the Interface
 
-Users manage Connections and Bundles through DataBrowser at `/db/connection` and `/db/bundle`. No custom admin pages. DataBrowser shows:
+Users manage Connections and Bundles through databrowser at `/db/connection` and `/db/bundle`. No custom admin pages. databrowser shows:
 
 - **Connection list:** all Andi instances, their status, last bundle timestamp
 - **Connection detail:** config, rules, maps, encryption — all editable JSON fields
@@ -318,7 +318,7 @@ This is not a custom orchestration system. It is Bundles + a script that process
 
 ### What This Replaces
 
-No Ansible. No Puppet. No Kubernetes. No custom deployment platform. The same two models — Connection and Bundle — that handle commerce data also handle operational updates. One system to learn, one audit trail to query, one DataBrowser interface to manage.
+No Ansible. No Puppet. No Kubernetes. No custom deployment platform. The same two models — Connection and Bundle — that handle commerce data also handle operational updates. One system to learn, one audit trail to query, one databrowser interface to manage.
 
 ---
 

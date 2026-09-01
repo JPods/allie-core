@@ -6,6 +6,11 @@
 // CodeMap revision: 2 — 2026-08-11
 
 digraph wc3_action_touches {
+    size="10.0,7.5"
+    ratio="compress"
+
+
+
     // ── CodeMap Standard Style ──
     fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
     fontsize=12
@@ -14,7 +19,6 @@ digraph wc3_action_touches {
     nodesep=0.5
     ranksep=0.6
     splines=true
-    ratio=0.75
 
     node [
         fontname="Helvetica Neue,Helvetica,Arial,sans-serif"
@@ -23,7 +27,6 @@ digraph wc3_action_touches {
         shape=box
         penwidth=1.2
         color="#555555"
-        margin="0.12,0.06"
     ]
 
     edge [
@@ -143,4 +146,7 @@ digraph wc3_action_touches {
     call_touch -> documents [label="notes" style=dashed color="#8E44AD"]
     visit_touch -> documents [label="photos/video" color="#8E44AD"]
     meeting_touch -> documents [label="minutes" style=dashed color="#8E44AD"]
+
+    // ── Cross-references ──
+    xref [label="See also:\n· Action (p.17)\n· Action Documents (p.18)\n· Conn Communication (p.28)" shape=note fillcolor="#F4ECF7" fontsize=8]
 }
