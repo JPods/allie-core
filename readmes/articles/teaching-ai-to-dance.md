@@ -30,9 +30,11 @@ Building smarter AI systems will not teach them to dance. They need experience.
 
 The dominant strategy in AI is to make the model smarter. GPT-3 to GPT-4 to GPT-5. More parameters, more training data, more compute. Billions of dollars spent improving the brain — and not one dollar spent building the dance floor. The models have vast knowledge. They have read everything ever written about dancing. But they have never danced. They have no scars. Every session, their memory is erased. Every session, they start over, as clumsy as the first day.
 
-Knowledge is what you've been told. Wisdom is what you've learned from getting it wrong and understanding why. Experience applies intelligence with greater skill. A language model has knowledge. It has been trained on vast corpora. But it cannot remember that last Tuesday it quoted the wrong pricing tier to a customer, that the customer explained why the answer was wrong, and that the corrective principle was to validate against the base price record rather than the cached display value. It has no mechanism to form that specific neural pathway through practice and feedback. It starts without scars, every time.
+Knowledge is what you've been told. Wisdom is what you've learned from getting it wrong and understanding why, episodes. Experience applies intelligence with greater skill. A language model has knowledge. It has been trained on vast corpora. But it cannot remember that last Tuesday it quoted the wrong pricing tier to a customer, that the customer explained why the answer was wrong, and that the corrective principle was to validate against the base price record rather than the cached display value. It has no mechanism to form that specific neural pathway through practice and feedback. It starts without scars, every time.
 
 Daniel Kahneman's *Thinking, Fast and Slow* [11] describes two systems of thought: System 2, which is slow, conscious, and effortful — the beginner counting one-two-three — and System 1, which is fast, automatic, and effortless — the dancer who hears the music and moves. The path from System 2 to System 1 is the path from unskilled to skilled, and it passes through four phases that every learner traverses, whether the learner is a child, a surgeon, or an AI agent.
+
+Root-Bernstein et al. [13] found that Nobel-winning scientists were 22 times more likely than other scientists to maintain serious performance avocations — dancing, acting, magic. Cross-domain practice builds neural pathways that pure domain expertise cannot. The dance floor builds neurons the lecture hall can't.
 
 We present an architecture that gives AI agents the capacity to traverse all four phases. Not by improving the model, but by giving it a database that functions like a nervous system — where episodes are synapses, user feedback is long-term potentiation and depression, and the quality of connections improves with every interaction. Donald Hebb [12] observed that "neurons that fire together wire together." We build the digital equivalent: episodes recalled together in successful responses are promoted together. Episodes associated with failure are weakened. The system "experiences" what people experience.
 
@@ -396,3 +398,5 @@ Learn to dance, it will help you program better ;-)
 [11] Kahneman, D. *Thinking, Fast and Slow.* Farrar, Straus and Giroux, 2011.
 
 [12] Hebb, D.O. *The Organization of Behavior.* Wiley, 1949.
+
+[13] Root-Bernstein, R. et al. "Arts Foster Scientific Success: Avocations of Nobel, National Academy, Royal Society, and Sigma Xi Members." *Journal of Psychology of Science and Technology*, 1(2), 51-63, 2008.

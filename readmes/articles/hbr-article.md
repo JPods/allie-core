@@ -22,6 +22,8 @@ The dominant strategy in AI is to make the model smarter. GPT-3 to GPT-4 to GPT-
 
 Knowledge is what you've been told. Wisdom is what you've learned from iterations of try-fail-try-succeed, and understanding why, episodes. Experience applies intelligence with greater skill. But experience requires memory, and memory requires scars. A language model has no scars.
 
+Root-Bernstein et al. found that Nobel-winning scientists were 22 times more likely than other scientists to maintain serious performance avocations — dancing, acting, magic. Cross-domain practice builds neural pathways that pure domain expertise cannot. The dance floor builds neurons the lecture hall can't.
+
 At JPods and WebClerk, we gave our AI agents a dance floor, a partner, and the capacity to build neurons from practice. Not model neurons — database neurons. Two hundred hours of clumsy practice fire together to wire together the pathways that no amount of instruction could create. The system "experiences" what people experience.
 
 ## The Four Phases of Learning to Think
