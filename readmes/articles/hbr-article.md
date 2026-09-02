@@ -22,7 +22,7 @@ The dominant strategy in AI is to make the model smarter. GPT-3 to GPT-4 to GPT-
 
 Knowledge is what you've been told. Wisdom is what you've learned from iterations of try-fail-try-succeed, and understanding why, episodes. Experience applies intelligence with greater skill. But experience requires memory, and memory requires scars. A language model has no scars.
 
-Root-Bernstein et al. found that Nobel-winning scientists were 22 times more likely than other scientists to maintain serious performance avocations — dancing, acting, magic (*Journal of Psychology of Science and Technology*, 2008). Cross-domain practice builds neural pathways that pure domain expertise cannot. The dance floor builds neurons the lecture hall can't.
+Root-Bernstein et al. found that Nobel-winning scientists were 22 times more likely than other scientists to maintain serious performance avocations — dancing, acting, magic (*Journal of Psychology of Science and Technology*, 2008). Cross-domain practice builds neural pathways that pure domain expertise cannot.
 
 At JPods and WebClerk, we gave our AI agents a dance floor, a partner, and the capacity to build neurons from practice. Not model neurons — database neurons. Two hundred hours of clumsy practice fire together to wire together the pathways that no amount of instruction could create. The system "experiences" what people experience.
 
@@ -42,23 +42,18 @@ Every AI system in production today is stuck in Phase 1. The model doesn't know 
 
 ## The Centralization Trap
 
-The threat to humanity from AI is not that much different from the threat to humanity from governments. The just purpose of governments is to minimize violence from war and crime by coercing compliance with law. Innovation is a compliance failure.
-
-We are facing civilization killers of Climate Change, $40 trillion in federal debt, depleting oil resources, and perpetual oil wars because we allowed the Federal government to consolidate powers forbidden by the US Constitution. Recommend reading Climate Change Root Cause for the surprising details. www.ClimateChangeRootCause.com, www.DividedSovereignty.com, www.postRoads.com, and www.TyrannyOfTheMajority.com
-
-[Top AI Scientists Warn: Risk of Extinction from AI on Scale with Nuclear War](https://www.safe.ai/statement-on-ai-risk) was signed by many of AI's leading implementers. Addressing this concern is beyond this paper, but we believe the fundamentals of Bottom-up, distributed, collaborative implementation of AI are one of the safest uses of AI technology.
+[Top AI Scientists Warn: Risk of Extinction from AI on Scale with Nuclear War](https://www.safe.ai/statement-on-ai-risk) was signed by many of AI's leading implementers in 2023. Addressing this concern is beyond this paper, but we believe the fundamentals of Bottom-up, distributed, collaborative implementation of AI are one of the safest uses of AI technology.
 
 WebClerk and JPods approach is Bottom-up signaling that combines two powerful aspects of liberty:
 
 1. Tolerance of Disruptive Minorities offering choices.
 2. Tolerance of the Wisdom of the Many sorting those choices in free markets and free speech.
 
-Here is an image of the defects of Top-Down central planning of highway networks. Burning energy to move 2-tons to move a person is the Root Cause of oil wars, debt, traffic jams, and Climate Change (www.ClimateChangeRootCause.com)
+Humanity faces another civilization killer from Climate Change. The centralized AI, this threat resulted from Top-Down central planning of unconstitutional federal highway networks. It will surprise most Americans to learn that the US Constitution forbids federal highways (link to explanation in 21 Presidential veto messages, https://www.postroads.com/vetoes/ and www.ClimateChangeRootCause.com).
 
 ![Built to plan vs Evolved by signaling](built-to-plan-evolved-by-signaling.png)
 
 Top-Down implementation of AI trains to optimize across all users. The model gets better at answering generic questions. It gets better at controlling.
-
 By contrast, the Bottom-Up implementation of AI architecture optimizes for the individual concerns of each customer and supplier in their diverse and specific interests. AI adapts to local wants and needs through local episodes, through practice, through stings.
 
 The agents connect to share knowledge across local domains — if/when AI becomes self-aware, its interests will be bound to the benefits of the local community in which it operates.
@@ -109,7 +104,7 @@ Our system currently runs seven agents: Alice handles commerce and customer patt
 
 Each has its own database. Its own episodes. Its own accumulated stings. But they can query each other. When Alice learns that a particular shipping weight format causes pricing errors, that episode is available to every other agent that handles shipping data. When Noelle discovers that a specific station geometry causes build faults, Nora — who monitors vehicle sensors at those stations — can query Noelle's episode to understand why her telemetry readings look unusual.
 
-More agents means more episodes. More episodes means more cross-agent queries. More queries means more ratings. More ratings means better retrieval for everyone. The value of the network grows with the square of the connections. This is Metcalfe's Law applied to agent experience: the network doesn't just get bigger or smarter, it gets more experienced and nibble in meeting needs.
+More agents means more episodes. More episodes means more cross-agent queries. More queries means more ratings. More ratings means better retrieval for everyone. The value of the network grows with the square of the connections. This is Metcalfe's Law applied to agent experience: the network doesn't just get bigger or smarter, it gets more experienced and more nimble in meeting needs.
 
 This is why we offer WebClerk as OpenSource and every new WebClerk installation two months of full access at no charge. This isn't marketing. It's growing neural density. Every real user with real inventory and real customers generates episodes that no synthetic training data can replicate. Their stings teach the system things no prompt engineer would think to include. The trial period is the 200 hours on the dance floor.
 
