@@ -1,0 +1,84 @@
+// WC3 — WebServing.com: Local Inventory Discovery
+// sovereign instances publish inventory; routing layer connects local customers to local products
+// Render: dot -Tsvg wc3-14-webserving-a-local-inventory.dot -o flowchart.svg
+
+// CodeMap revision: 4 — 2026-09-03 — LR, simplified, red Amazon cost annotations
+
+digraph wc3_webserving {
+    size="10,5"
+    ratio="compress"
+
+    rankdir=LR
+    fontname="Helvetica"
+    fontsize=11
+    node [fontname="Helvetica" fontsize=9 style=filled]
+    edge [fontname="Helvetica" fontsize=7]
+    label="WebServing.com — Local Inventory Discovery"
+    labelloc=t
+    fontsize=14
+    pad=0.3
+
+    // ── The Problem ──
+    subgraph cluster_problem {
+        label="The Problem"
+        style=filled fillcolor="#FADBD8" color="#F1948A"
+        fontsize=9
+
+        customer_need [label="Customer Searches\n\"Makita 18V battery\"" shape=box fillcolor="#F5B7B1"]
+        amazon [label="Amazon\n800 mi away\n2-day shipping" shape=box fillcolor="#F5B7B1"]
+        local_store [label="Local Store\n3 miles away\n12 on shelf\nINVISIBLE" shape=box fillcolor="#F5B7B1"]
+
+        // Amazon costs
+        drain [label="Resources drain\nfrom the\nlocal economy" shape=box fillcolor="#EA5548" fontcolor=white fontsize=7]
+        surrender [label="Customer relationships\nsurrendered to Amazon\nwithout compensation" shape=box fillcolor="#EA5548" fontcolor=white fontsize=7]
+
+        customer_need -> amazon [label="finds"]
+        customer_need -> local_store [label="can't find" style=dashed color="#E74C3C"]
+        amazon -> drain [style=invis]
+        amazon -> surrender [style=invis]
+    }
+
+    // ── WebServing Solution ──
+    subgraph cluster_solution {
+        label="WebServing Solution — Empowering Everyone"
+        style=filled fillcolor="#EBF5FB" color="#AED6F1"
+        fontsize=9
+
+        wc_instance [label="WebClerk Instance\nsovereign, self-hosted\non Mac Mini" shape=box fillcolor="#D6EAF8"]
+        register [label="Register with\nWebServing.com\n(URL, lat/lng)" shape=box fillcolor="#D6EAF8"]
+        product_feed [label="Product Feed\n/wcapi/items/" shape=box fillcolor="#D6EAF8"]
+
+        wc_instance -> register [label="one-time"]
+        wc_instance -> product_feed [label="exposes"]
+    }
+
+    // ── Customer Search ──
+    subgraph cluster_search {
+        label="Customer Search"
+        style=filled fillcolor="#E8F8F5" color="#A3E4D7"
+        fontsize=9
+
+        search_entry [label="Customer\nsearches\nwebserving.com" shape=box fillcolor="#D1F2EB"]
+        routing [label="Routing Layer\nfans out to all\nstores in radius\n(1-10 miles)" shape=box fillcolor="#A9DFBF" color="#27AE60"]
+        result [label="Results\nBob's Hardware (2.1 mi)\n8 in stock — $49.99" shape=box fillcolor="#A9DFBF" color="#27AE60"]
+
+        search_entry -> routing [label="query +\nlocation"]
+        routing -> result [label="ranked by\ndistance"]
+    }
+
+    // ── Sovereignty ──
+    subgraph cluster_sovereignty {
+        label="Sovereignty"
+        style=filled fillcolor="#F5EEF8" color="#D2B4DE"
+        fontsize=9
+
+        no_central [label="No Central Catalog\neach store owns its data" shape=box fillcolor="#86C68B"]
+        router_not_owner [label="WebServing = Router\nnot Owner\nno fees, no suppression" shape=box fillcolor="#86C68B"]
+        biz_control [label="Business Controls\nwhat is published" shape=box fillcolor="#86C68B"]
+    }
+
+    // ── Cross-Cluster Edges ──
+    local_store -> wc_instance [label="installs\nWebClerk" style=dashed color="#2E86C1"]
+    product_feed -> routing [label="searchable\ninventory" color="#27AE60"]
+    router_not_owner -> routing [style=dashed arrowhead=none color="#8E44AD"]
+}
